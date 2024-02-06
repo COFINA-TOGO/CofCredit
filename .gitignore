@@ -1,3 +1,5 @@
+.scribe/*
+/.scribe/*
 /.phpunit.cache
 /node_modules
 /public/build

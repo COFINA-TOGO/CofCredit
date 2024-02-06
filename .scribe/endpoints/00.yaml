@@ -1,0 +1,151 @@
+name: Authentification
+description: |-
+
+  Endpoints pour gérer l_authentification
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/auth/login
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+
+        Endpoints pour gérer l_authentification
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Connecte un utilisateur'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|VllEQEqmdEP8Rgfd6M90ZiWdgbXWWs5GJNXjjk2Cef3b3979'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: "L'email de l'utilsateur."
+        required: true
+        example: charles.gamligo@cofinacorp.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      password:
+        name: password
+        description: "Le mot de passe complet de l'utilisateur."
+        required: true
+        example: password
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanBodyParameters:
+      email: charles.gamligo@cofinacorp.com
+      password: password
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|VllEQEqmdEP8Rgfd6M90ZiWdgbXWWs5GJNXjjk2Cef3b3979'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/auth/show
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+
+        Endpoints pour gérer l_authentification
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Affiche l'utilisateur connecté"
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|VllEQEqmdEP8Rgfd6M90ZiWdgbXWWs5GJNXjjk2Cef3b3979'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|VllEQEqmdEP8Rgfd6M90ZiWdgbXWWs5GJNXjjk2Cef3b3979'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: api/auth/logout
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+
+        Endpoints pour gérer l_authentification
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Déconnecte l'utilisateur connecté"
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|VllEQEqmdEP8Rgfd6M90ZiWdgbXWWs5GJNXjjk2Cef3b3979'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 204
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|VllEQEqmdEP8Rgfd6M90ZiWdgbXWWs5GJNXjjk2Cef3b3979'
+    controller: null
+    method: null
+    route: null
+    custom: []

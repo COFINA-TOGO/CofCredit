@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'si_profile_id',
+        'activated',
+        'password_change_required'
     ];
 
     /**
@@ -42,4 +46,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function toArray()
+    {
+        $data = parent::toArray();
+        $data["created_at"] = Carbon::parse($data["created_at"])->format("d/m/yy H:i:s");
+        $data["updated_at"] = Carbon::parse($data["updated_at"])->format("d/m/yy H:i:s");
+        $data["email_verified_at"] = Carbon::parse($data["email_verified_at"])->format("d/m/yy H:i:s");
+        return $data;
+    }
 }
