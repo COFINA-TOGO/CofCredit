@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\TypeOfApplicantController;
+use App\Http\Controllers\TypeOfCreditController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +31,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put("/update-password", [UserController::class, "update_password"])->name("update-password");
         Route::put("/{id}", [UserController::class, "update"])->name("update");
         Route::delete("/{id}", [UserController::class, "destroy"])->name("destroy");
-        Route::delete("/{id}", [UserController::class, "destroy"])->name("destroy");
+    });
+    Route::prefix("type-of-applicant")->name("type-of-applicant.")->group(function () {
+        Route::get("/", [TypeOfApplicantController::class, "index"])->name("index");
+        Route::get("/{id}", [TypeOfApplicantController::class, "show"])->name("show");
+        Route::post("/", [TypeOfApplicantController::class, "store"])->name("store");
+        Route::put("/{id}", [TypeOfApplicantController::class, "update"])->name("update");
+        Route::delete("/{id}", [TypeOfApplicantController::class, "destroy"])->name("destroy");
+    });
+    Route::prefix("type-of-credit")->name("type-of-credit.")->group(function () {
+        Route::get("/", [TypeOfCreditController::class, "index"])->name("index");
+        Route::get("/{id}", [TypeOfCreditController::class, "show"])->name("show");
+        Route::post("/", [TypeOfCreditController::class, "store"])->name("store");
+        Route::put("/{id}", [TypeOfCreditController::class, "update"])->name("update");
+        Route::delete("/{id}", [TypeOfCreditController::class, "destroy"])->name("destroy");
     });
 });

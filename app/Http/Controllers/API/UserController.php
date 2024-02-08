@@ -34,12 +34,13 @@ class UserController extends Controller
      * @queryParam  activated                   int     Filtrer par statut d'activation                 No-example
      * @queryParam  password_change_required    int     Filtrer par statut de mot de passe à changer    No-example
      *
+     * @queryParam  paginate                    int     Utiliser la pagination.                         Example: 0
+     *
      * @response 200
      */
     public function index(Request $request)
     {
         if (($authorisation = Gate::inspect('viewAny', User::class))->allowed()) {
-            $connectedUser = $request->user();
             $userList = User::query();
             if ($search = $request->search) {
                 $userList->where('name', 'LIKE', "%$search%")
