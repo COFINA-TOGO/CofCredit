@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\TypeOfApplicantController;
 use App\Http\Controllers\TypeOfCreditController;
+use App\Http\Controllers\TypeOfGuaranteeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,4 +47,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put("/{id}", [TypeOfCreditController::class, "update"])->name("update");
         Route::delete("/{id}", [TypeOfCreditController::class, "destroy"])->name("destroy");
     });
+    Route::prefix("type-of-guarantee")->name("type-of-guarantee.")->group(function () {
+        Route::get("/", [TypeOfGuaranteeController::class, "index"])->name("index");
+        Route::get("/{id}", [TypeOfGuaranteeController::class, "show"])->name("show");
+        Route::post("/", [TypeOfGuaranteeController::class, "store"])->name("store");
+        Route::put("/{id}", [TypeOfGuaranteeController::class, "update"])->name("update");
+        Route::delete("/{id}", [TypeOfGuaranteeController::class, "destroy"])->name("destroy");
+    });
+
 });

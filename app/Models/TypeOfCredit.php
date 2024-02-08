@@ -16,7 +16,6 @@ class TypeOfCredit extends Model
 
     protected $fillable = [
         "name",
-        "slug",
         "type_of_applicant_id",
         "min_month",
         "max_month",

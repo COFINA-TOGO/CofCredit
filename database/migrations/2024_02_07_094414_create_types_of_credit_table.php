@@ -13,10 +13,10 @@ return new class extends Migration {
         Schema::create('types_of_credit', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug')->unique();
             $table->integer('min_month');
             $table->integer('max_month');
             $table->foreignId('type_of_applicant_id')->constrained(table: 'types_of_applicant', column: 'id')->cascadeOnDelete();
+            $table->unique(["name", "min_month", "max_month"]);
             $table->timestamps();
         });
     }

@@ -15,7 +15,6 @@ class TypeOfApplicant extends Model
 
     protected $fillable = [
         "name",
-        "slug",
     ];
 
     public function toArray()

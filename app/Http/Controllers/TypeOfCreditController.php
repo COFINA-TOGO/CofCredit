@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 /**
  * @group Type de crédit
  *
- * EndPoints pour gérer les type de crédit
+ * EndPoints pour gérer les types de crédit
  */
 class TypeOfCreditController extends Controller
 {
@@ -23,12 +23,11 @@ class TypeOfCreditController extends Controller
     /**
      * Affiche les types de crédit
      *
-     * @queryParam  name                        string  Filtrer par username.                           No-example
-     * @queryParam  slug                        string  Filtrer par slug.                               No-example
+     * @queryParam  name                        string  Filtrer par nom.                           No-example
      * @queryParam  type_of_applicant_id        int     Filtrer par type de demandeur de crédit.        No-example
      *
-     * @queryParam  paginate                    int     Utiliser la pagination.                         Example: 0
      * @queryParam  with_type_of_applicant      int     Afficher le demandeur.                          Example: 0
+     * @queryParam  paginate                    int     Utiliser la pagination.                         Example: 0
      *
      * @response 200
      */
@@ -39,12 +38,11 @@ class TypeOfCreditController extends Controller
             if ($search = $request->search) {
                 $typeOfCreditList
                     ->where('name', 'LIKE', "%$search%")
-                    ->orWhere('slug', 'LIKE', "%$search%")
                     ->orWhere('type_of_applicant_id', 'LIKE', "%$search%")
                 ;
             }
 
-            foreach (["name", "slug", "type_of_applicant_id"] as $filter) {
+            foreach (["name", "type_of_applicant_id"] as $filter) {
                 if (isset($request[$filter]) && $request[$filter]) {
                     $typeOfCreditList->where($filter, $request[$filter]);
                 }
@@ -115,26 +113,24 @@ class TypeOfCreditController extends Controller
             $requestData = $request->all();
 
             $validator = Validator::make($requestData, [
-                'name' => 'required|unique:types_of_credit',
+                'name' => 'required|min:2',
                 'min_month' => 'required|numeric|min:0',
-                'max_month' => 'required|numeric|min:0',
+                'max_month' => 'required|numeric|min:1',
             ]);
             if ($validator->fails()) {
                 return $this->responseError($validator->errors(), 400);
             } else {
-                $requestData["slug"] = Str::slug($requestData["name"] . "-" . $requestData["min_month"] . "-" . $requestData["max_month"]);
-                $validator = Validator::make($requestData, [
-                    'slug' => 'unique:types_of_credit',
-                ]);
-                if ($validator->fails()) {
-                    return $this->responseError($validator->errors(), 400);
-                } else {
-                    $typeOfCredit = TypeOfCredit::create($requestData);
-                    $typeOfCredit->load("type_of_applicant");
-                    return $this->responseOk([
-                        "typeOfCredit" => $typeOfCredit
-                    ], status: 201);
+                if ($requestData["min_month"] > $requestData["max_month"]) {
+                    return $this->responseError(["min_month" => "Le mois minimum doit être inférieur au mois maximum"]);
                 }
+                if (TypeOfCredit::where('name', $requestData["name"])->where('min_month', $requestData["min_month"])->where('min_month', $requestData["min_month"])->exists()) {
+                    return $this->responseError(["typeOfCredit" => "Le type de crédit existe déjà"]);
+                }
+                $typeOfCredit = TypeOfCredit::create($requestData);
+                $typeOfCredit->load("type_of_applicant");
+                return $this->responseOk([
+                    "typeOfCredit" => $typeOfCredit
+                ], status: 201);
             }
         } else {
             return $this->responseError(["auth" => [$authorisation->message()]], 403);
@@ -169,19 +165,11 @@ class TypeOfCreditController extends Controller
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
                 } else {
-                    $requestData["slug"] = Str::slug($requestData["name"] . "-" . $requestData["min_month"] . "-" . $requestData["max_month"]);
-                    $validator = Validator::make($requestData, [
-                        'slug' => 'unique:types_of_credit,slug,' . $id,
+                    $typeOfCredit->update($requestData);
+                    $typeOfCredit->load("type_of_applicant");
+                    return $this->responseOk([
+                        "typeOfCredit" => $typeOfCredit
                     ]);
-                    if ($validator->fails()) {
-                        return $this->responseError($validator->errors(), 400);
-                    } else {
-                        $typeOfCredit->update($requestData);
-                        $typeOfCredit->load("type_of_applicant");
-                        return $this->responseOk([
-                            "typeOfCredit" => $typeOfCredit
-                        ]);
-                    }
                 }
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);

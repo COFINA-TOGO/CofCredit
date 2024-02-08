@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 /**
  * @group Type de demandeur
  *
- * EndPoints pour gérer les type de demandeur de crédit
+ * EndPoints pour gérer les types de demandeur de crédit
  */
 class TypeOfApplicantController extends Controller
 {
@@ -22,8 +22,7 @@ class TypeOfApplicantController extends Controller
     /**
      * Affiche les types de demandeur de crédit
      *
-     * @queryParam  name                        string  Filtrer par username.           No-example
-     * @queryParam  slug                        string  Filtrer par slug.               No-example
+     * @queryParam  name                        string  Filtrer par nom.           No-example
      *
      * @queryParam  with_types_of_credit        int     Afficher les types de crédit.   Example: 0
      * @queryParam  paginate                    int     Utiliser la pagination.         Example: 0
@@ -37,11 +36,10 @@ class TypeOfApplicantController extends Controller
             if ($search = $request->search) {
                 $typeOfApplicantList
                     ->where('name', 'LIKE', "%$search%")
-                    ->orWhere('slug', 'LIKE', "%$search%")
                 ;
             }
 
-            foreach (["name", "slug"] as $filter) {
+            foreach (["name"] as $filter) {
                 if (isset($request[$filter]) && $request[$filter]) {
                     $typeOfApplicantList->where($filter, $request[$filter]);
                 }
@@ -107,15 +105,12 @@ class TypeOfApplicantController extends Controller
     {
         if (($authorisation = Gate::inspect('create', TypeOfApplicant::class))->allowed()) {
             $requestData = $request->all();
-            $requestData["slug"] = isset($requestData["name"]) ? Str::slug($requestData["name"]) : "";
             $validator = Validator::make($requestData, [
                 'name' => 'required|unique:types_of_applicant',
-                'slug' => 'unique:types_of_applicant',
             ]);
             if ($validator->fails()) {
                 return $this->responseError($validator->errors(), 400);
             } else {
-                $requestData["slug"] = Str::slug($requestData["name"]);
                 $typeOfApplicant = TypeOfApplicant::create($requestData);
                 $typeOfApplicant->load("types_of_credit");
                 return $this->responseOk([
@@ -143,15 +138,12 @@ class TypeOfApplicantController extends Controller
         if ($typeOfApplicant) {
             if (($authorisation = Gate::inspect('update', $typeOfApplicant))->allowed()) {
                 $requestData = $request->all();
-                $requestData["slug"] = isset($requestData["name"]) ? Str::slug($requestData["name"]) : "";
                 $validator = Validator::make($requestData, [
                     'name' => 'required|unique:types_of_applicant,name,' . $id,
-                    'slug' => 'required|unique:types_of_applicant,slug,' . $id,
                 ]);
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
                 } else {
-                    $requestData["slug"] = Str::slug($requestData["name"]);
                     $typeOfApplicant->update($requestData);
                     $typeOfApplicant->load("types_of_credit");
                     return $this->responseOk([
