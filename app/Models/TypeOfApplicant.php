@@ -29,4 +29,9 @@ class TypeOfApplicant extends Model
     {
         return $this->hasMany(TypeOfCredit::class, "type_of_applicant_id", "id");
     }
+
+    public function verbals_trials(): HasMany
+    {
+        return $this->hasMany(VerbalTrial::class, 'type_of_applicant_id', 'id');
+    }
 }

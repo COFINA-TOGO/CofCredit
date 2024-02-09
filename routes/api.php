@@ -5,6 +5,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\TypeOfApplicantController;
 use App\Http\Controllers\TypeOfCreditController;
 use App\Http\Controllers\TypeOfGuaranteeController;
+use App\Http\Controllers\VerbalTrialController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,5 +55,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put("/{id}", [TypeOfGuaranteeController::class, "update"])->name("update");
         Route::delete("/{id}", [TypeOfGuaranteeController::class, "destroy"])->name("destroy");
     });
-
+    Route::prefix("verbal-trial")->name("verbal-trial.")->group(function () {
+        Route::get("/", [VerbalTrialController::class, "index"])->name("index");
+        Route::get("/{id}", [VerbalTrialController::class, "show"])->name("show");
+        Route::post("/", [VerbalTrialController::class, "store"])->name("store");
+        Route::put("/{id}", [VerbalTrialController::class, "update"])->name("update");
+        Route::delete("/{id}", [VerbalTrialController::class, "destroy"])->name("destroy");
+    });
 });

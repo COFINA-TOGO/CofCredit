@@ -25,6 +25,7 @@ class TypeOfApplicantController extends Controller
      * @queryParam  name                        string  Filtrer par nom.           No-example
      *
      * @queryParam  with_types_of_credit        int     Afficher les types de crédit.   Example: 0
+     * @queryParam  with_verbals_trials         int     Afficher les PV.                Example: 0
      * @queryParam  paginate                    int     Utiliser la pagination.         Example: 0
      *
      * @response 200
@@ -45,7 +46,7 @@ class TypeOfApplicantController extends Controller
                 }
             }
 
-            foreach (["with_types_of_credit" => "types_of_credit"] as $key => $value) {
+            foreach (["with_types_of_credit" => "types_of_credit", "with_verbals_trials" => "types_of_credit.verbals_trials"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
                     $typeOfApplicantList->with($value);
                 }
@@ -70,6 +71,7 @@ class TypeOfApplicantController extends Controller
      * @urlParam    id                          int required    L'ID du type de demandeur de crédit.    Example: 1
      *
      * @queryParam  with_types_of_credit        int             Afficher les types de crédit.           Example: 0
+     * @queryParam  with_verbals_trials         int             Afficher les PV.                        Example: 0
      *
      * @response 200
      */
@@ -79,7 +81,7 @@ class TypeOfApplicantController extends Controller
         if ($typeOfApplicant) {
             if (($authorisation = Gate::inspect('view', $typeOfApplicant))->allowed()) {
                 $suplementList = [];
-                foreach (["with_types_of_applicant" => "types_of_credit"] as $key => $value) {
+                foreach (["with_types_of_applicant" => "types_of_credit", "with_verbals_trials" => "types_of_credit.verbals_trials"] as $key => $value) {
                     if (isset($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }
@@ -112,7 +114,7 @@ class TypeOfApplicantController extends Controller
                 return $this->responseError($validator->errors(), 400);
             } else {
                 $typeOfApplicant = TypeOfApplicant::create($requestData);
-                $typeOfApplicant->load("types_of_credit");
+                $typeOfApplicant->load(["types_of_credit", "verbals_trials"]);
                 return $this->responseOk([
                     "typeOfApplicant" => $typeOfApplicant
                 ], status: 201);
@@ -145,7 +147,7 @@ class TypeOfApplicantController extends Controller
                     return $this->responseError($validator->errors(), 400);
                 } else {
                     $typeOfApplicant->update($requestData);
-                    $typeOfApplicant->load("types_of_credit");
+                    $typeOfApplicant->load(["types_of_credit", "verbals_trials"]);
                     return $this->responseOk([
                         "typeOfApplicant" => $typeOfApplicant
                     ]);

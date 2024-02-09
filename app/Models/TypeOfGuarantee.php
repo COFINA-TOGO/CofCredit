@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TypeOfGuarantee extends Model
 {
@@ -22,5 +23,10 @@ class TypeOfGuarantee extends Model
         $data["created_at"] = Carbon::parse($data["created_at"])->format("d/m/yy H:i:s");
         $data["updated_at"] = Carbon::parse($data["updated_at"])->format("d/m/yy H:i:s");
         return $data;
+    }
+
+    public function guarantee(): HasMany
+    {
+        return $this->hasMany(Guarantee::class, 'type_of_guarantee_id', 'id');
     }
 }

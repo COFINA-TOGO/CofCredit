@@ -27,6 +27,7 @@ class TypeOfCreditController extends Controller
      * @queryParam  type_of_applicant_id        int     Filtrer par type de demandeur de crédit.        No-example
      *
      * @queryParam  with_type_of_applicant      int     Afficher le demandeur.                          Example: 0
+     * @queryParam  with_verbals_trials         int     Afficher les PV.                                Example: 0
      * @queryParam  paginate                    int     Utiliser la pagination.                         Example: 0
      *
      * @response 200
@@ -48,7 +49,7 @@ class TypeOfCreditController extends Controller
                 }
             }
 
-            foreach (["with_type_of_applicant" => "type_of_applicant"] as $key => $value) {
+            foreach (["with_type_of_applicant" => "type_of_applicant", "with_verbals_trials" => "verbals_trials"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
                     $typeOfCreditList->with($value);
                 }
@@ -70,9 +71,10 @@ class TypeOfCreditController extends Controller
     /**
      * Affiche un type de crédit
      *
-     * @urlParam    id                          int required    L'ID du type de crédit.  Example: 1
+     * @urlParam    id                          int required    L'ID du type de crédit.     Example: 1
      *
-     * @queryParam  with_type_of_applicant      int             Afficher le demandeur.   Example: 0
+     * @queryParam  with_type_of_applicant      int             Afficher le demandeur.      Example: 0
+     * @queryParam  with_verbals_trials         int             Afficher les PV.            Example: 0
      *
      * @response 200
      */
@@ -82,7 +84,7 @@ class TypeOfCreditController extends Controller
         if ($typeOfCredit) {
             if (($authorisation = Gate::inspect('view', $typeOfCredit))->allowed()) {
                 $suplementList = [];
-                foreach (["with_type_of_applicant" => "type_of_applicant"] as $key => $value) {
+                foreach (["with_type_of_applicant" => "type_of_applicant", "with_verbals_trials" => "verbals_trials"] as $key => $value) {
                     if (isset($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }
@@ -127,7 +129,7 @@ class TypeOfCreditController extends Controller
                     return $this->responseError(["typeOfCredit" => "Le type de crédit existe déjà"]);
                 }
                 $typeOfCredit = TypeOfCredit::create($requestData);
-                $typeOfCredit->load("type_of_applicant");
+                $typeOfCredit->load(["type_of_applicant", "verbals_trials"]);
                 return $this->responseOk([
                     "typeOfCredit" => $typeOfCredit
                 ], status: 201);
@@ -166,7 +168,7 @@ class TypeOfCreditController extends Controller
                     return $this->responseError($validator->errors(), 400);
                 } else {
                     $typeOfCredit->update($requestData);
-                    $typeOfCredit->load("type_of_applicant");
+                    $typeOfCredit->load(["type_of_applicant", "verbals_trials"]);
                     return $this->responseOk([
                         "typeOfCredit" => $typeOfCredit
                     ]);

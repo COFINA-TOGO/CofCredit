@@ -2,26 +2,21 @@
 
 namespace App\Models;
 
-use App\Models\TypeOfApplicant;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class TypeOfCredit extends Model
+class Guarantee extends Model
 {
     use HasFactory;
 
-    protected $table = "types_of_credit";
-
     protected $fillable = [
-        "name",
-        "type_of_applicant_id",
-        "min_month",
-        "max_month",
+        "verbal_trial_id",
+        "value",
+        "type_of_guarantee_id",
+        "comment",
     ];
-
     public function toArray()
     {
         $data = parent::toArray();
@@ -30,13 +25,13 @@ class TypeOfCredit extends Model
         return $data;
     }
 
-    public function type_of_applicant(): BelongsTo
+    public function verbal_trial(): BelongsTo
     {
-        return $this->belongsTo(TypeOfApplicant::class, "type_of_applicant_id", "id");
+        return $this->belongsTo(VerbalTrial::class, "verbal_trial_id", "id");
     }
 
-    public function verbals_trials(): HasMany
+    public function type_of_guarantee(): BelongsTo
     {
-        return $this->hasMany(VerbalTrial::class, 'type_of_credit_id', 'id');
+        return $this->belongsTo(TypeOfGuarantee::class, "type_of_guarantee_id", "id");
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Applicant;
 use App\Models\User;
+use App\Models\VerbalTrial;
 use Illuminate\Auth\Access\Response;
 
-class ApplicantPolicy
+class VerbalTrialPolicy
 {
     public function before(User $connectedUser, string $ability)
     {
@@ -20,7 +20,7 @@ class ApplicantPolicy
         return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
-    public function view(User $connectedUser, Applicant $applicant)
+    public function view(User $connectedUser, VerbalTrial $verbalTrial)
     {
         return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
@@ -30,12 +30,12 @@ class ApplicantPolicy
         return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
-    public function update(User $connectedUser, Applicant $applicant)
+    public function update(User $connectedUser, VerbalTrial $verbalTrial)
     {
         return $this->create($connectedUser);
     }
 
-    public function delete(User $connectedUser, Applicant $applicant)
+    public function delete(User $connectedUser, VerbalTrial $verbalTrial)
     {
         return $this->create($connectedUser);
     }
