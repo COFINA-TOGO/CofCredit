@@ -7,33 +7,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Guarantee extends Model
+class Pledge extends Model
 {
     use HasFactory;
 
+    protected $table = "pledges";
+
     protected $fillable = [
-        "verbal_trial_id",
-        "value",
-        "expiration_date",
-        "type_of_guarantee_id",
-        "comment",
+        "contract_id",
+        "type",
+        "comment"
     ];
+
     public function toArray()
     {
         $data = parent::toArray();
         $data["created_at"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
         $data["updated_at"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
-        $data["expiration_date"] = Carbon::parse($data["expiration_date"])->format("d/m/Y");
         return $data;
     }
 
-    public function verbal_trial(): BelongsTo
+    public function contract(): BelongsTo
     {
-        return $this->belongsTo(VerbalTrial::class, "verbal_trial_id", "id");
-    }
-
-    public function type_of_guarantee(): BelongsTo
-    {
-        return $this->belongsTo(TypeOfGuarantee::class, "type_of_guarantee_id", "id");
+        return $this->belongsTo(Contract::class, "contract_id", "id");
     }
 }

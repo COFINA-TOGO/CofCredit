@@ -14,20 +14,20 @@ return new class extends Migration {
             $table->id();
             $table->string("committee_id")->unique();
             $table->date("committee_date");
-            $table->enum("civility", ["mr", "mme", "mlle"]);
-            $table->string("applicant_name");
+            $table->enum("civility", ["Mr", "Mme", "Mlle"]);
+            $table->string("applicant_first_name");
+            $table->string("applicant_last_name");
             $table->string("account_number");
             $table->string("activity");
             $table->string("purpose_of_financing");
             $table->foreignId('type_of_credit_id')->constrained(table: 'types_of_credit', column: 'id')->cascadeOnDelete();
-            $table->bigInteger('amount');
+            $table->decimal('amount', 30, 10);
             $table->integer('duration');
             $table->enum('periodicity', ['mensual', 'quarterly', "semi-annual", "annual", 'in-fine']);
-            $table->decimal('taf');
-            $table->decimal('due_amount');
-            $table->float('administrative_fees_percentage');
-            $table->decimal('insurance_premium');
-            $table->float('line_review_bonus');
+            $table->float('taf');
+            $table->decimal('due_amount', 30, 10);
+            $table->decimal('administrative_fees_percentage', 30, 10);
+            $table->decimal('insurance_premium', 30, 10);
             $table->timestamps();
         });
     }

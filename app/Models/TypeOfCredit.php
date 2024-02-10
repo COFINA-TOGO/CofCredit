@@ -25,8 +25,8 @@ class TypeOfCredit extends Model
     public function toArray()
     {
         $data = parent::toArray();
-        $data["created_at"] = Carbon::parse($data["created_at"])->format("d/m/yy H:i:s");
-        $data["updated_at"] = Carbon::parse($data["updated_at"])->format("d/m/yy H:i:s");
+        $data["created_at"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
+        $data["updated_at"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
         return $data;
     }
 

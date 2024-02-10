@@ -1,4 +1,6 @@
 .scribe
+template
+metronic_laravel_v8.2.3/
 /.phpunit.cache
 /node_modules
 /public/build

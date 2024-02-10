@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\GuarantorController;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\TypeOfApplicantController;
-use App\Http\Controllers\TypeOfCreditController;
-use App\Http\Controllers\TypeOfGuaranteeController;
-use App\Http\Controllers\VerbalTrialController;
+use App\Http\Controllers\API\ContractController;
+use App\Http\Controllers\API\TypeOfApplicantController;
+use App\Http\Controllers\API\TypeOfCreditController;
+use App\Http\Controllers\API\TypeOfGuaranteeController;
+use App\Http\Controllers\API\VerbalTrialController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,12 +22,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('auth/login', [AuthController::class, "login"])->name("auth.login");
-Route::prefix("/auth")->name("auth.")->middleware('auth:sanctum')->group(function () {
-    Route::get('show', [AuthController::class, "show"])->name("show");
-    Route::delete('logout', [AuthController::class, "logout"])->name("logout");
-});
+Route::get("/contract/word/{id}", [ContractController::class, "word"])->name("free.contract.word");
+Route::get("/contract/promissory-note/{id}", [ContractController::class, "promissory_note"])->name("free.contract.promissory-note");
+Route::get("/guarantor/word/{id}", [GuarantorController::class, "word"])->name("free.guarantor.word");
+Route::get("/guarantor/promissory-note/{id}", [GuarantorController::class, "promissory_note"])->name("free.guarantor.promissory-note");
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix("/auth")->name("auth.")->group(function () {
+        Route::get('show', [AuthController::class, "show"])->name("show");
+        Route::delete('logout', [AuthController::class, "logout"])->name("logout");
+    });
     Route::prefix("user")->name("user.")->group(function () {
         Route::get("/", [UserController::class, "index"])->name("index");
         Route::get("/{id}", [UserController::class, "show"])->name("show");
@@ -62,4 +68,23 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put("/{id}", [VerbalTrialController::class, "update"])->name("update");
         Route::delete("/{id}", [VerbalTrialController::class, "destroy"])->name("destroy");
     });
+    Route::prefix("contract")->name("contract.")->group(function () {
+        Route::get("/", [ContractController::class, "index"])->name("index");
+        // Route::get("/word/{id}", [ContractController::class, "word"])->name("word");
+        // Route::get("/promissory-note/{id}", [ContractController::class, "promissory_note"])->name("promissory-note");
+        Route::get("/{id}", [ContractController::class, "show"])->name("show");
+        Route::post("/", [ContractController::class, "store"])->name("store");
+        Route::put("/{id}", [ContractController::class, "update"])->name("update");
+        Route::delete("/{id}", [ContractController::class, "destroy"])->name("destroy");
+    });
+    Route::prefix("guarantor")->name("guarantor.")->group(function () {
+        Route::get("/", [GuarantorController::class, "index"])->name("index");
+        // Route::get("/word/{id}", [GuarantorController::class, "word"])->name("word");
+        // Route::get("/promissory-note/{id}", [GuarantorController::class, "promissory_note"])->name("promissory-note");
+        Route::get("/{id}", [GuarantorController::class, "show"])->name("show");
+        Route::post("/", [GuarantorController::class, "store"])->name("store");
+        Route::put("/{id}", [GuarantorController::class, "update"])->name("update");
+        Route::delete("/{id}", [GuarantorController::class, "destroy"])->name("destroy");
+    });
 });
+

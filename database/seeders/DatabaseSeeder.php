@@ -3,10 +3,17 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Company;
+use App\Models\Contract;
+use App\Models\Guarantee;
+use App\Models\Guarantor;
+use App\Models\IndividualBusiness;
 use App\Models\TypeOfApplicant;
 use App\Models\TypeOfCredit;
 use App\Models\TypeOfGuarantee;
 use App\Models\User;
+use App\Models\VerbalTrial;
+use DB;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Dotenv;
 
@@ -27,7 +34,7 @@ class DatabaseSeeder extends Seeder
         $physical_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Physique"])->first();
         $moral_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Morale"])->first();
 
-        TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR FACTURE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
+        $typeOfCredit = TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR FACTURE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id])->first();
         TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR FACTURE ", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
         TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR LOYER", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
         TypeOfCredit::factory(1)->create(["name" => "AVANCE MARCHE/BC", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
@@ -72,8 +79,39 @@ class DatabaseSeeder extends Seeder
         TypeOfGuarantee::factory(1)->create(["name" => "Hypothèque"]);
         TypeOfGuarantee::factory(1)->create(["name" => "Nantissement de Dépôt à terme (DAT)"]);
 
-        $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
+        $verbalTrial = VerbalTrial::factory(1)->create(["type_of_credit_id" => $typeOfCredit->id])->first();
+        Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+        // $contract = Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "individual_business"])->first();
+        // IndividualBusiness::factory(1)->create([
+        //     "contract_id" => $contract->id,
+        //     "denomination" => "ganam style",
+        //     "corporate_purpose" => "pme",
+        //     "head_office_address" => "Lomé",
+        //     "rccm_number" => "R2D2",
+        //     "phone_number" => "+228 90 90 90 90"
+        // ]);
 
+        $verbalTrial = VerbalTrial::factory(1)->create(["type_of_credit_id" => $typeOfCredit->id])->first();
+        Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+        $contract = Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "company"])->first();
+        Company::factory(1)->create([
+            "contract_id" => $contract->id,
+            "denomination" => "ganam style",
+            "legal_status" => "pme",
+            "head_office_address" => "Lomé",
+            "rccm_number" => "R2D2",
+            "phone_number" => "+228 90 90 90 90"
+        ]);
+
+        $verbalTrial = VerbalTrial::factory(1)->create(["type_of_credit_id" => $typeOfCredit->id])->first();
+        Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+        $contract = Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular"])->first();
+        Guarantor::factory(1)->create(["contract_id" => $contract->id]);
+
+
+        $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
+        DB::update("update personal_access_tokens set TOKEN = '8fb55a1d50842403ddc4ea7dc0c80a5d2e44eeb029f1077341babd46b68fe0ba' where ID = 1");
+        $plainTextToken = "1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644";
         $file = public_path('../.env');
         $lines = file($file);
 

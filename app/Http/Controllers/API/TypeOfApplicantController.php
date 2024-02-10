@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
 use App\Models\TypeOfApplicant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 /**
  * @group Type de demandeur
@@ -22,7 +22,7 @@ class TypeOfApplicantController extends Controller
     /**
      * Affiche les types de demandeur de crédit
      *
-     * @queryParam  name                        string  Filtrer par nom.           No-example
+     * @queryParam  name                        string  Filtrer par nom.                No-example
      *
      * @queryParam  with_types_of_credit        int     Afficher les types de crédit.   Example: 0
      * @queryParam  with_verbals_trials         int     Afficher les PV.                Example: 0
