@@ -1,13 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
-use App\Models\Company;
-use App\Models\Contract;
-use App\Models\IndividualBusiness;
-use App\Models\Pledge;
+use App\Models\CAT;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -18,17 +14,17 @@ use Rmunate\Utilities\SpellNumber;
 
 
 /**
- * @group Contrat
+ * @group CAT
  *
- * EndPoints pour gérer les contrats
+ * EndPoints pour gérer les CAT
  */
-class ContractController extends Controller
+class CATController extends Controller
 {
 
     use CustomResponseTrait;
 
     /**
-     * Affiche les contrats
+     * Affiche les CAT
      *
      * @queryParam  verbal_trial_id                                         int                 Filtrer par ID du PV.                                                   No-example
      * @queryParam  representative_birth_date                               string              Filtrer par date de naissance du demandeur.                             No-example
@@ -55,8 +51,8 @@ class ContractController extends Controller
      */
     public function index(Request $request)
     {
-        if (($authorisation = Gate::inspect('viewAny', Contract::class))->allowed()) {
-            $contractList = Contract::query();
+        if (($authorisation = Gate::inspect('viewAny', CAT::class))->allowed()) {
+            $contractList = CAT::query();
             if ($search = $request->search) {
                 $contractList
                     ->where('verbal_trial_id', 'LIKE', "%$search%")
@@ -115,7 +111,7 @@ class ContractController extends Controller
      */
     public function show(Request $request, int $id)
     {
-        $contract = Contract::find($id);
+        $contract = CAT::find($id);
         if ($contract) {
             if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
                 $suplementList = [];
@@ -143,7 +139,7 @@ class ContractController extends Controller
      */
     public function word(Request $request, int $id)
     {
-        $contract = Contract::find($id);
+        $contract = CAT::find($id);
         if ($contract) {
             // if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
             $templatePath = ($contract->has_pledges == "false") ? "../storage/app/public/templates/contracts/$contract->type/contract_$contract->type.docx" : "../storage/app/public/templates/contracts/$contract->type/with_pledge/contract_$contract->type" . "_with_pledge.docx";
@@ -228,7 +224,7 @@ class ContractController extends Controller
             // return $data;
 
             // Enregistrez les modifications dans un nouveau fichier
-            $outputFilePath = public_path("Contrat-" . $contract->verbal_trial->committee_id . ".docx");
+            $outputFilePath = public_path("CAT-" . $contract->verbal_trial->committee_id . ".docx");
             $templateProcessor->saveAs($outputFilePath);
 
             return response()->download($outputFilePath)->deleteFileAfterSend(true);
@@ -249,7 +245,7 @@ class ContractController extends Controller
      */
     public function promissory_note(Request $request, int $id)
     {
-        $contract = Contract::find($id);
+        $contract = CAT::find($id);
         if ($contract) {
             // if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
             // $contract->load(["verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"]);
@@ -344,7 +340,7 @@ class ContractController extends Controller
      */
     public function store(Request $request)
     {
-        if (($authorisation = Gate::inspect('create', Contract::class))->allowed()) {
+        if (($authorisation = Gate::inspect('create', CAT::class))->allowed()) {
             $requestData = $request->all();
             $validator = Validator::make($requestData, [
                 'verbal_trial_id' => "required|exists:verbals_trials,id|unique:contracts",
@@ -369,7 +365,7 @@ class ContractController extends Controller
             DB::beginTransaction();
             try {
                 $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
-                $contract = Contract::create($requestData);
+                $contract = CAT::create($requestData);
                 if ($requestData["type"] == "company") {
                     $validator = Validator::make($requestData, [
                         'company_denomination' => "required|min:2",
@@ -474,7 +470,7 @@ class ContractController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $contract = Contract::find($id);
+        $contract = CAT::find($id);
         if ($contract) {
             if (($authorisation = Gate::inspect('update', $contract))->allowed()) {
                 $requestData = $request->all();
@@ -519,7 +515,7 @@ class ContractController extends Controller
      */
     public function destroy(int $id)
     {
-        $contract = Contract::find($id);
+        $contract = CAT::find($id);
         if ($contract) {
             if (($authorisation = Gate::inspect('delete', $contract))->allowed()) {
                 if ($contract->delete()) {
