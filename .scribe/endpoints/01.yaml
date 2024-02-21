@@ -1,0 +1,835 @@
+name: Contrat
+description: |-
+
+  EndPoints pour gérer les contrat
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/contract/word/{id}'
+    metadata:
+      groupName: Contrat
+      groupDescription: |-
+
+        EndPoints pour gérer les contrat
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Télécharge la version word d'un contrat"
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du contrat."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/contract/promissory-note/{id}'
+    metadata:
+      groupName: Contrat
+      groupDescription: |-
+
+        EndPoints pour gérer les contrat
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Télécharge le billet à ordre d'un contrat"
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du contrat."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/contract
+    metadata:
+      groupName: Contrat
+      groupDescription: |-
+
+        EndPoints pour gérer les contrat
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Affiche les contrats'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      verbal_trial_id:
+        name: verbal_trial_id
+        description: 'Filtrer par ID du PV.'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      representative_birth_date:
+        name: representative_birth_date
+        description: 'Filtrer par date de naissance du demandeur.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      representative_birth_place:
+        name: representative_birth_place
+        description: 'Filtrer par lieu de naissance du demandeur.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      representative_nationality:
+        name: representative_nationality
+        description: 'Filtrer par nationalité du demandeur.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      representative_home_address:
+        name: representative_home_address
+        description: 'Filtrer par addresse du domicile du demandeur.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      representative_type_of_identity_document:
+        name: representative_type_of_identity_document
+        description: "Filtrer par type de la pièce d'indentité du demandeur."
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      representative_number_of_identity_document:
+        name: representative_number_of_identity_document
+        description: "Filtrer par numéro de la pièce d'indentité du demandeur."
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      representative_date_of_issue_of_identity_document:
+        name: representative_date_of_issue_of_identity_document
+        description: "Filtrer par date de délivrance de la pièce d'identité du demandeur."
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      representative_phone_number:
+        name: representative_phone_number
+        description: 'Filtrer par numéro de téléphone du demandeur.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      risk_premium_percentage:
+        name: risk_premium_percentage
+        description: 'Filtrer par prime de risque (en pourcentage) du crédit du demandeur.'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      total_amount_of_interest:
+        name: total_amount_of_interest
+        description: 'Filtrer par montant total des intérêts du crédit du demandeur.'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      number_of_due_dates:
+        name: number_of_due_dates
+        description: "Filtrer par nombre d'échéance."
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      type:
+        name: type
+        description: 'Filtrer par type de contract.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      has_pledges:
+        name: has_pledges
+        description: 'Filtrer par type de présence de gage'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      with_verbal_trial:
+        name: with_verbal_trial
+        description: 'Afficher le PV.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_type_of_credit:
+        name: with_type_of_credit
+        description: 'Afficher le type de crédit.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_type_of_applicant:
+        name: with_type_of_applicant
+        description: 'Afficher le type de demandeur.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_guarantees:
+        name: with_guarantees
+        description: 'Afficher les garanties.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      paginate:
+        name: paginate
+        description: 'Utiliser la pagination.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanQueryParameters:
+      with_verbal_trial: 0
+      with_type_of_credit: 0
+      with_type_of_applicant: 0
+      with_guarantees: 0
+      paginate: 0
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/contract/{id}'
+    metadata:
+      groupName: Contrat
+      groupDescription: |-
+
+        EndPoints pour gérer les contrat
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Affiche un contrat'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du contrat."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters:
+      with_verbal_trial:
+        name: with_verbal_trial
+        description: 'Afficher le PV.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_type_of_credit:
+        name: with_type_of_credit
+        description: 'Afficher le type de crédit.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_type_of_applicant:
+        name: with_type_of_applicant
+        description: 'Afficher le type de demandeur.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_guarantees:
+        name: with_guarantees
+        description: 'Afficher les garanties.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanQueryParameters:
+      with_verbal_trial: 0
+      with_type_of_credit: 0
+      with_type_of_applicant: 0
+      with_guarantees: 0
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/contract
+    metadata:
+      groupName: Contrat
+      groupDescription: |-
+
+        EndPoints pour gérer les contrat
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Créer un nouveau contrat'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      verbal_trial_id:
+        name: verbal_trial_id
+        description: "L'ID du PV."
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_birth_date:
+        name: representative_birth_date
+        description: 'La date de naissance du demandeur.'
+        required: false
+        example: '1988-05-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_birth_place:
+        name: representative_birth_place
+        description: 'Le lieu de naissance du demandeur.'
+        required: false
+        example: Lomé
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_nationality:
+        name: representative_nationality
+        description: 'La nationalité du demandeur.'
+        required: false
+        example: Togolaise
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_home_address:
+        name: representative_home_address
+        description: "L'addresse du domicile du demandeur."
+        required: false
+        example: 'Zip 85'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_type_of_identity_document:
+        name: representative_type_of_identity_document
+        description: "Le type de la pièce d'indentité du demandeur."
+        required: false
+        example: cni
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_number_of_identity_document:
+        name: representative_number_of_identity_document
+        description: "Le numéro de la pièce d'indentité du demandeur."
+        required: false
+        example: CND-4D8-84S-52S
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_date_of_issue_of_identity_document:
+        name: representative_date_of_issue_of_identity_document
+        description: "La date de délivrance de la pièce d'identité du demandeur."
+        required: false
+        example: '2020-01-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_phone_number:
+        name: representative_phone_number
+        description: 'Le numéro de téléphone du demandeur.'
+        required: false
+        example: '+228 90 90 90 90'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      risk_premium_percentage:
+        name: risk_premium_percentage
+        description: 'La prime de risque (en pourcentage) du crédit du demandeur.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      total_amount_of_interest:
+        name: total_amount_of_interest
+        description: 'Le montant total des intérêts du crédit du demandeur.'
+        required: false
+        example: 152369
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      number_of_due_dates:
+        name: number_of_due_dates
+        description: "Le nombre d'échéance du crédit."
+        required: false
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      type:
+        name: type
+        description: 'Le type du contrat.'
+        required: false
+        example: company
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      has_pledges:
+        name: has_pledges
+        description: 'La présence de gage.'
+        required: false
+        example: '0'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanBodyParameters:
+      verbal_trial_id: 1
+      representative_birth_date: '1988-05-01'
+      representative_birth_place: Lomé
+      representative_nationality: Togolaise
+      representative_home_address: 'Zip 85'
+      representative_type_of_identity_document: cni
+      representative_number_of_identity_document: CND-4D8-84S-52S
+      representative_date_of_issue_of_identity_document: '2020-01-01'
+      representative_phone_number: '+228 90 90 90 90'
+      risk_premium_percentage: 2
+      total_amount_of_interest: 152369
+      number_of_due_dates: 3
+      type: company
+      has_pledges: '0'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/contract/{id}'
+    metadata:
+      groupName: Contrat
+      groupDescription: |-
+
+        EndPoints pour gérer les contrat
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Mettre à jour un contrat'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du contrat."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      verbal_trial_id:
+        name: verbal_trial_id
+        description: "L'ID du PV."
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_birth_date:
+        name: representative_birth_date
+        description: 'La date de naissance du demandeur.'
+        required: false
+        example: '1988-05-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_birth_place:
+        name: representative_birth_place
+        description: 'Le lieu de naissance du demandeur.'
+        required: false
+        example: Lomé
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_nationality:
+        name: representative_nationality
+        description: 'La nationalité du demandeur.'
+        required: false
+        example: Togolaise
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_home_address:
+        name: representative_home_address
+        description: "L'addresse du domicile du demandeur."
+        required: false
+        example: 'Zip 85'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_type_of_identity_document:
+        name: representative_type_of_identity_document
+        description: "Le type de la pièce d'indentité du demandeur."
+        required: false
+        example: cni
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_number_of_identity_document:
+        name: representative_number_of_identity_document
+        description: "Le numéro de la pièce d'indentité du demandeur."
+        required: false
+        example: CND-4D8-84S-52S
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_date_of_issue_of_identity_document:
+        name: representative_date_of_issue_of_identity_document
+        description: "La date de délivrance de la pièce d'identité du demandeur."
+        required: false
+        example: '2020-01-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      representative_phone_number:
+        name: representative_phone_number
+        description: 'Le numéro de téléphone du demandeur.'
+        required: false
+        example: '+228 90 90 90 90'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      risk_premium_percentage:
+        name: risk_premium_percentage
+        description: 'La prime de risque (en pourcentage) du crédit du demandeur.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      total_amount_of_interest:
+        name: total_amount_of_interest
+        description: 'Le montant total des intérêts du crédit du demandeur.'
+        required: false
+        example: 152369
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      number_of_due_dates:
+        name: number_of_due_dates
+        description: "Le nombre d'échéance du crédit."
+        required: false
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      type:
+        name: type
+        description: 'Le type du contrat.'
+        required: false
+        example: company
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanBodyParameters:
+      verbal_trial_id: 1
+      representative_birth_date: '1988-05-01'
+      representative_birth_place: Lomé
+      representative_nationality: Togolaise
+      representative_home_address: 'Zip 85'
+      representative_type_of_identity_document: cni
+      representative_number_of_identity_document: CND-4D8-84S-52S
+      representative_date_of_issue_of_identity_document: '2020-01-01'
+      representative_phone_number: '+228 90 90 90 90'
+      risk_premium_percentage: 2
+      total_amount_of_interest: 152369
+      number_of_due_dates: 3
+      type: company
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/contract/{id}'
+    metadata:
+      groupName: Contrat
+      groupDescription: |-
+
+        EndPoints pour gérer les contrat
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Supprime un contrat'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du contrat."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 204
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []

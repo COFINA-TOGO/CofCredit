@@ -1,6 +1,3 @@
-.scribe
-template
-metronic_laravel_v8.2.3/
 /.phpunit.cache
 /node_modules
 /public/build
@@ -19,7 +16,47 @@ npm-debug.log
 yarn-error.log
 /.fleet
 /.idea
-/.vscode
-resources/views/scribe
-/resources/views/scribe
-public/docs/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+
+/cypress/videos/
+/cypress/screenshots/
+
+# 👉 Custom Git ignores
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/*.code-snippets
+!.vscode/tours
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.yarn
+
+# iconify dist files
+resources/js/plugins/iconify/icons.css
+
+# Ignore MSW script
+public/mockServiceWorker.js
+
+# Env files
+.env*
+!.env.example

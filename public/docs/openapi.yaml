@@ -1,0 +1,2345 @@
+openapi: 3.0.3
+info:
+  title: 'Document de CofCredit'
+  description: "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supléments"
+  version: 1.0.0
+servers:
+  -
+    url: 'http://cofcredit.cofina.localhost'
+paths:
+  /api/auth/login:
+    post:
+      summary: 'Connecte un utilisateur'
+      operationId: connecteUnUtilisateur
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Authentification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: "L'email de l'utilsateur."
+                  example: charles.gamligo@cofinacorp.com
+                password:
+                  type: string
+                  description: "Le mot de passe complet de l'utilisateur."
+                  example: password
+              required:
+                - email
+                - password
+  /api/auth/show:
+    get:
+      summary: "Affiche l'utilisateur connecté"
+      operationId: afficheLutilisateurConnect
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Authentification
+  /api/auth/logout:
+    delete:
+      summary: "Déconnecte l'utilisateur connecté"
+      operationId: dconnecteLutilisateurConnect
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - Authentification
+  '/api/guarantor/word/{id}':
+    get:
+      summary: "Télécharge la version word d'une caution"
+      operationId: tlchargeLaVersionWordDuneCaution
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Caution
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du caution."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/guarantor/promissory-note/{id}':
+    get:
+      summary: "Télécharge le billet à ordre d'une caution"
+      operationId: tlchargeLeBilletOrdreDuneCaution
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Caution
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du caution."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/guarantor:
+    get:
+      summary: 'Affiche les cautions'
+      operationId: afficheLesCautions
+      description: ''
+      parameters:
+        -
+          in: query
+          name: contract_id
+          description: 'Filtrer par ID du contract.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par ID du contract.'
+            example: null
+        -
+          in: query
+          name: first_name
+          description: 'Filtrer par prénom de la caution.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par prénom de la caution.'
+            example: null
+        -
+          in: query
+          name: last_name
+          description: 'Filtrer par nom de la caution.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par nom de la caution.'
+            example: null
+        -
+          in: query
+          name: birth_date
+          description: 'Filtrer par date de naissance de la caution.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par date de naissance de la caution.'
+            example: null
+        -
+          in: query
+          name: birth_place
+          description: 'Filtrer par lieu de naissance de la caution.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par lieu de naissance de la caution.'
+            example: null
+        -
+          in: query
+          name: nationality
+          description: 'Filtrer par nationalité de la caution'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par nationalité de la caution'
+            example: null
+        -
+          in: query
+          name: home_address
+          description: 'Filtrer par addresse de domicile de la caution'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par addresse de domicile de la caution'
+            example: null
+        -
+          in: query
+          name: type_of_identity_document
+          description: "Filtrer par type de la pièce d'indentité de la caution."
+          example: null
+          required: false
+          schema:
+            type: string
+            description: "Filtrer par type de la pièce d'indentité de la caution."
+            example: null
+        -
+          in: query
+          name: number_of_identity_document
+          description: "Filtrer par numéro de la pièce d'indentité de la caution."
+          example: null
+          required: false
+          schema:
+            type: string
+            description: "Filtrer par numéro de la pièce d'indentité de la caution."
+            example: null
+        -
+          in: query
+          name: date_of_issue_of_identity_document
+          description: "Filtrer par date de délivrance de la pièce d'identité de la caution."
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: "Filtrer par date de délivrance de la pièce d'identité de la caution."
+            example: null
+        -
+          in: query
+          name: function
+          description: 'Filtrer par fonction de la caution'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par fonction de la caution'
+            example: null
+        -
+          in: query
+          name: phone_number
+          description: 'Filtrer par numéro de téléphone de la caution'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par numéro de téléphone de la caution'
+            example: null
+        -
+          in: query
+          name: with_contract
+          description: 'Afficher le contrat.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le contrat.'
+            example: 0
+        -
+          in: query
+          name: with_verbal_trial
+          description: 'Afficher le PV.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le PV.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_credit
+          description: 'Afficher le type de crédit.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de crédit.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_applicant
+          description: 'Afficher le type de demandeur.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de demandeur.'
+            example: 0
+        -
+          in: query
+          name: with_guarantees
+          description: 'Afficher les garanties.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les garanties.'
+            example: 0
+        -
+          in: query
+          name: paginate
+          description: 'Utiliser la pagination.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Utiliser la pagination.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Caution
+    post:
+      summary: 'Créer une nouvelLa caution'
+      operationId: crerUneNouvelLaCaution
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Caution
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contract_id:
+                  type: integer
+                  description: 'ID du contract.'
+                  example: 1
+                civility:
+                  type: string
+                  description: 'Civilité de la caution.'
+                  example: Mr
+                first_name:
+                  type: string
+                  description: 'Prénom de la caution.'
+                  example: Charles
+                last_name:
+                  type: string
+                  description: 'Nom de la caution.'
+                  example: Xavier
+                birth_date:
+                  type: string
+                  description: 'Date de naissance de la caution.'
+                  example: '2000-03-03'
+                birth_place:
+                  type: string
+                  description: 'Lieu de naissance de la caution.'
+                  example: 'Los Afagnan'
+                nationality:
+                  type: string
+                  description: 'Nationalité de la caution'
+                  example: Togolaise
+                home_address:
+                  type: string
+                  description: 'Addresse de domicile de la caution'
+                  example: Adewi
+                type_of_identity_document:
+                  type: string
+                  description: "Type de la pièce d'indentité de la caution."
+                  example: cni
+                number_of_identity_document:
+                  type: string
+                  description: "Numéro de la pièce d'indentité de la caution."
+                  example: BP785632
+                date_of_issue_of_identity_document:
+                  type: string
+                  description: "Date de délivrance de la pièce d'identité de la caution."
+                  example: '2022-03-03'
+                function:
+                  type: string
+                  description: 'Fonction de la caution'
+                  example: 'Agent CIA'
+                phone_number:
+                  type: string
+                  description: 'Numéro de téléphone de la caution'
+                  example: '+01 587-45-632-15'
+  '/api/guarantor/{id}':
+    get:
+      summary: 'Affiche une caution'
+      operationId: afficheUneCaution
+      description: ''
+      parameters:
+        -
+          in: query
+          name: with_contract
+          description: 'Afficher le contrat.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le contrat.'
+            example: 0
+        -
+          in: query
+          name: with_verbal_trial
+          description: 'Afficher le PV.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le PV.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_credit
+          description: 'Afficher le type de crédit.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de crédit.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_applicant
+          description: 'Afficher le type de demandeur.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de demandeur.'
+            example: 0
+        -
+          in: query
+          name: with_guarantees
+          description: 'Afficher les garanties.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les garanties.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Caution
+    put:
+      summary: 'Mettre à jour une caution'
+      operationId: mettreJourUneCaution
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Caution
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contract_id:
+                  type: integer
+                  description: 'ID du contract.'
+                  example: 1
+                civility:
+                  type: string
+                  description: 'Civilité de la caution.'
+                  example: Mr
+                first_name:
+                  type: string
+                  description: 'Prénom de la caution.'
+                  example: Charles
+                last_name:
+                  type: string
+                  description: 'Nom de la caution.'
+                  example: Xavier
+                birth_date:
+                  type: string
+                  description: 'Date de naissance de la caution.'
+                  example: '2000-03-03'
+                birth_place:
+                  type: string
+                  description: 'Lieu de naissance de la caution.'
+                  example: 'Los Afagnan'
+                nationality:
+                  type: string
+                  description: 'Nationalité de la caution'
+                  example: Togolaise
+                home_address:
+                  type: string
+                  description: 'Addresse de domicile de la caution'
+                  example: Adewi
+                type_of_identity_document:
+                  type: string
+                  description: "Type de la pièce d'indentité de la caution."
+                  example: cni
+                number_of_identity_document:
+                  type: string
+                  description: "Numéro de la pièce d'indentité de la caution."
+                  example: BP785632
+                date_of_issue_of_identity_document:
+                  type: string
+                  description: "Date de délivrance de la pièce d'identité de la caution."
+                  example: '2022-03-03'
+                function:
+                  type: string
+                  description: 'Fonction de la caution'
+                  example: 'Agent CIA'
+                phone_number:
+                  type: string
+                  description: 'Numéro de téléphone de la caution'
+                  example: '+01 587-45-632-15'
+    delete:
+      summary: 'Supprime une caution'
+      operationId: supprimeUneCaution
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - Caution
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du caution."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/contract/word/{id}':
+    get:
+      summary: "Télécharge la version word d'un contrat"
+      operationId: tlchargeLaVersionWordDunContrat
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Contrat
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du contrat."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/contract/promissory-note/{id}':
+    get:
+      summary: "Télécharge le billet à ordre d'un contrat"
+      operationId: tlchargeLeBilletOrdreDunContrat
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Contrat
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du contrat."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/contract:
+    get:
+      summary: 'Affiche les contrats'
+      operationId: afficheLesContrats
+      description: ''
+      parameters:
+        -
+          in: query
+          name: verbal_trial_id
+          description: 'Filtrer par ID du PV.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par ID du PV.'
+            example: null
+        -
+          in: query
+          name: representative_birth_date
+          description: 'Filtrer par date de naissance du demandeur.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par date de naissance du demandeur.'
+            example: null
+        -
+          in: query
+          name: representative_birth_place
+          description: 'Filtrer par lieu de naissance du demandeur.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par lieu de naissance du demandeur.'
+            example: null
+        -
+          in: query
+          name: representative_nationality
+          description: 'Filtrer par nationalité du demandeur.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par nationalité du demandeur.'
+            example: null
+        -
+          in: query
+          name: representative_home_address
+          description: 'Filtrer par addresse du domicile du demandeur.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par addresse du domicile du demandeur.'
+            example: null
+        -
+          in: query
+          name: representative_type_of_identity_document
+          description: "Filtrer par type de la pièce d'indentité du demandeur."
+          example: null
+          required: false
+          schema:
+            type: string
+            description: "Filtrer par type de la pièce d'indentité du demandeur."
+            example: null
+        -
+          in: query
+          name: representative_number_of_identity_document
+          description: "Filtrer par numéro de la pièce d'indentité du demandeur."
+          example: null
+          required: false
+          schema:
+            type: string
+            description: "Filtrer par numéro de la pièce d'indentité du demandeur."
+            example: null
+        -
+          in: query
+          name: representative_date_of_issue_of_identity_document
+          description: "Filtrer par date de délivrance de la pièce d'identité du demandeur."
+          example: null
+          required: false
+          schema:
+            type: string
+            description: "Filtrer par date de délivrance de la pièce d'identité du demandeur."
+            example: null
+        -
+          in: query
+          name: representative_phone_number
+          description: 'Filtrer par numéro de téléphone du demandeur.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par numéro de téléphone du demandeur.'
+            example: null
+        -
+          in: query
+          name: risk_premium_percentage
+          description: 'Filtrer par prime de risque (en pourcentage) du crédit du demandeur.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par prime de risque (en pourcentage) du crédit du demandeur.'
+            example: null
+        -
+          in: query
+          name: total_amount_of_interest
+          description: 'Filtrer par montant total des intérêts du crédit du demandeur.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par montant total des intérêts du crédit du demandeur.'
+            example: null
+        -
+          in: query
+          name: number_of_due_dates
+          description: "Filtrer par nombre d'échéance."
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: "Filtrer par nombre d'échéance."
+            example: null
+        -
+          in: query
+          name: type
+          description: 'Filtrer par type de contract.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par type de contract.'
+            example: null
+        -
+          in: query
+          name: has_pledges
+          description: 'Filtrer par type de présence de gage'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par type de présence de gage'
+            example: null
+        -
+          in: query
+          name: with_verbal_trial
+          description: 'Afficher le PV.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le PV.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_credit
+          description: 'Afficher le type de crédit.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de crédit.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_applicant
+          description: 'Afficher le type de demandeur.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de demandeur.'
+            example: 0
+        -
+          in: query
+          name: with_guarantees
+          description: 'Afficher les garanties.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les garanties.'
+            example: 0
+        -
+          in: query
+          name: paginate
+          description: 'Utiliser la pagination.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Utiliser la pagination.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Contrat
+    post:
+      summary: 'Créer un nouveau contrat'
+      operationId: crerUnNouveauContrat
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Contrat
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verbal_trial_id:
+                  type: integer
+                  description: "L'ID du PV."
+                  example: 1
+                representative_birth_date:
+                  type: string
+                  description: 'La date de naissance du demandeur.'
+                  example: '1988-05-01'
+                representative_birth_place:
+                  type: string
+                  description: 'Le lieu de naissance du demandeur.'
+                  example: Lomé
+                representative_nationality:
+                  type: string
+                  description: 'La nationalité du demandeur.'
+                  example: Togolaise
+                representative_home_address:
+                  type: string
+                  description: "L'addresse du domicile du demandeur."
+                  example: 'Zip 85'
+                representative_type_of_identity_document:
+                  type: string
+                  description: "Le type de la pièce d'indentité du demandeur."
+                  example: cni
+                representative_number_of_identity_document:
+                  type: string
+                  description: "Le numéro de la pièce d'indentité du demandeur."
+                  example: CND-4D8-84S-52S
+                representative_date_of_issue_of_identity_document:
+                  type: string
+                  description: "La date de délivrance de la pièce d'identité du demandeur."
+                  example: '2020-01-01'
+                representative_phone_number:
+                  type: string
+                  description: 'Le numéro de téléphone du demandeur.'
+                  example: '+228 90 90 90 90'
+                risk_premium_percentage:
+                  type: integer
+                  description: 'La prime de risque (en pourcentage) du crédit du demandeur.'
+                  example: 2
+                total_amount_of_interest:
+                  type: integer
+                  description: 'Le montant total des intérêts du crédit du demandeur.'
+                  example: 152369
+                number_of_due_dates:
+                  type: integer
+                  description: "Le nombre d'échéance du crédit."
+                  example: 3
+                type:
+                  type: string
+                  description: 'Le type du contrat.'
+                  example: company
+                has_pledges:
+                  type: string
+                  description: 'La présence de gage.'
+                  example: '0'
+  '/api/contract/{id}':
+    get:
+      summary: 'Affiche un contrat'
+      operationId: afficheUnContrat
+      description: ''
+      parameters:
+        -
+          in: query
+          name: with_verbal_trial
+          description: 'Afficher le PV.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le PV.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_credit
+          description: 'Afficher le type de crédit.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de crédit.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_applicant
+          description: 'Afficher le type de demandeur.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de demandeur.'
+            example: 0
+        -
+          in: query
+          name: with_guarantees
+          description: 'Afficher les garanties.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les garanties.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Contrat
+    put:
+      summary: 'Mettre à jour un contrat'
+      operationId: mettreJourUnContrat
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Contrat
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verbal_trial_id:
+                  type: integer
+                  description: "L'ID du PV."
+                  example: 1
+                representative_birth_date:
+                  type: string
+                  description: 'La date de naissance du demandeur.'
+                  example: '1988-05-01'
+                representative_birth_place:
+                  type: string
+                  description: 'Le lieu de naissance du demandeur.'
+                  example: Lomé
+                representative_nationality:
+                  type: string
+                  description: 'La nationalité du demandeur.'
+                  example: Togolaise
+                representative_home_address:
+                  type: string
+                  description: "L'addresse du domicile du demandeur."
+                  example: 'Zip 85'
+                representative_type_of_identity_document:
+                  type: string
+                  description: "Le type de la pièce d'indentité du demandeur."
+                  example: cni
+                representative_number_of_identity_document:
+                  type: string
+                  description: "Le numéro de la pièce d'indentité du demandeur."
+                  example: CND-4D8-84S-52S
+                representative_date_of_issue_of_identity_document:
+                  type: string
+                  description: "La date de délivrance de la pièce d'identité du demandeur."
+                  example: '2020-01-01'
+                representative_phone_number:
+                  type: string
+                  description: 'Le numéro de téléphone du demandeur.'
+                  example: '+228 90 90 90 90'
+                risk_premium_percentage:
+                  type: integer
+                  description: 'La prime de risque (en pourcentage) du crédit du demandeur.'
+                  example: 2
+                total_amount_of_interest:
+                  type: integer
+                  description: 'Le montant total des intérêts du crédit du demandeur.'
+                  example: 152369
+                number_of_due_dates:
+                  type: integer
+                  description: "Le nombre d'échéance du crédit."
+                  example: 3
+                type:
+                  type: string
+                  description: 'Le type du contrat.'
+                  example: company
+    delete:
+      summary: 'Supprime un contrat'
+      operationId: supprimeUnContrat
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - Contrat
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du contrat."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/verbal-trial:
+    get:
+      summary: 'Affiche les Procès verbaux'
+      operationId: afficheLesProcsVerbaux
+      description: ''
+      parameters:
+        -
+          in: query
+          name: committee_id
+          description: 'Filtrer par ID du procès verbal'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par ID du procès verbal'
+            example: null
+        -
+          in: query
+          name: committee_date
+          description: 'Filtrer par date du procès verbal'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par date du procès verbal'
+            example: null
+        -
+          in: query
+          name: civility
+          description: 'Filtrer par civilité'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par civilité'
+            example: null
+        -
+          in: query
+          name: applicant_first_name
+          description: 'Filtrer par prénom du demandeur'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par prénom du demandeur'
+            example: null
+        -
+          in: query
+          name: applicant_last_name
+          description: 'Filtrer par nom du demandeur'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par nom du demandeur'
+            example: null
+        -
+          in: query
+          name: account_number
+          description: 'Filtrer par numéro de compte'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par numéro de compte'
+            example: null
+        -
+          in: query
+          name: activity
+          description: 'Filtrer par activé'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par activé'
+            example: null
+        -
+          in: query
+          name: purpose_of_financing
+          description: 'Filtrer par objet du financement'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par objet du financement'
+            example: null
+        -
+          in: query
+          name: type_of_credit_id
+          description: 'Filtrer par ID du type de credit'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par ID du type de credit'
+            example: null
+        -
+          in: query
+          name: amount
+          description: 'Filtrer par montant'
+          example: null
+          required: false
+          schema:
+            type: number
+            description: 'Filtrer par montant'
+            example: null
+        -
+          in: query
+          name: duration
+          description: 'Filtrer par durée en mois'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par durée en mois'
+            example: null
+        -
+          in: query
+          name: periodicity
+          description: 'Filtrer par periodicité'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par periodicité'
+            example: null
+        -
+          in: query
+          name: taf
+          description: 'Filtrer par TAF'
+          example: null
+          required: false
+          schema:
+            type: number
+            description: 'Filtrer par TAF'
+            example: null
+        -
+          in: query
+          name: due_amount
+          description: "Filtrer par montant d'une échéance"
+          example: null
+          required: false
+          schema:
+            type: number
+            description: "Filtrer par montant d'une échéance"
+            example: null
+        -
+          in: query
+          name: administrative_fees_percentage
+          description: 'Filtrer par frais de dossier(pourcentage)'
+          example: null
+          required: false
+          schema:
+            type: number
+            description: 'Filtrer par frais de dossier(pourcentage)'
+            example: null
+        -
+          in: query
+          name: insurance_premium
+          description: "Filtrer par prime d'assurance"
+          example: null
+          required: false
+          schema:
+            type: number
+            description: "Filtrer par prime d'assurance"
+            example: null
+        -
+          in: query
+          name: with_type_of_credit
+          description: 'Afficher le type de crédit.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de crédit.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_applicant
+          description: 'Afficher le type de demandeur du type de crédit.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de demandeur du type de crédit.'
+            example: 1
+        -
+          in: query
+          name: with_guarantees
+          description: 'Afficher les garanties.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les garanties.'
+            example: 1
+        -
+          in: query
+          name: with_contract
+          description: 'Afficher le contrat.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le contrat.'
+            example: 1
+        -
+          in: query
+          name: paginate
+          description: 'Utiliser la pagination.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Utiliser la pagination.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Procès Verbal'
+    post:
+      summary: 'Créer un nouveau procès verbal'
+      operationId: crerUnNouveauProcsVerbal
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Procès Verbal'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                committee_id:
+                  type: string
+                  description: "L'ID comitée venant de créditFlow"
+                  example: CFNTG-044-13-12-23-01212
+                committee_date:
+                  type: string
+                  description: 'La date du comitée'
+                  example: '2024-02-09'
+                civility:
+                  type: string
+                  description: 'La Civilité'
+                  example: Mr
+                applicant_first_name:
+                  type: string
+                  description: 'Le prénnom du demandeur'
+                  example: Cesar
+                applicant_last_name:
+                  type: string
+                  description: 'Le nom du demandeur'
+                  example: Endure
+                account_number:
+                  type: string
+                  description: 'Le numéro de compte'
+                  example: '012345678901'
+                activity:
+                  type: string
+                  description: "L'activé"
+                  example: "Homme d'affaire"
+                purpose_of_financing:
+                  type: string
+                  description: "L'objet du financement"
+                  example: 'Achat nouveau locaux'
+                type_of_credit_id:
+                  type: integer
+                  description: "L'ID du type de credit"
+                  example: 1
+                amount:
+                  type: number
+                  description: 'Le montant'
+                  example: 10000000.0
+                duration:
+                  type: integer
+                  description: 'La durée en mois'
+                  example: 12
+                periodicity:
+                  type: string
+                  description: 'La periodicité'
+                  example: mensual
+                taf:
+                  type: number
+                  description: 'La TAF'
+                  example: 1.0
+                due_amount:
+                  type: number
+                  description: "Le montant d'une échéance"
+                  example: 500000.0
+                administrative_fees_percentage:
+                  type: number
+                  description: 'Les frais de dossier(pourcentage)'
+                  example: 45000.0
+                insurance_premium:
+                  type: number
+                  description: "La prime d'assurance"
+                  example: 45000.0
+  '/api/verbal-trial/{id}':
+    get:
+      summary: 'Affiche un procès verbal'
+      operationId: afficheUnProcsVerbal
+      description: ''
+      parameters:
+        -
+          in: query
+          name: with_type_of_credit
+          description: 'Afficher le type de crédit.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de crédit.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_applicant
+          description: 'Afficher le type de demandeur du type de crédit.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de demandeur du type de crédit.'
+            example: 1
+        -
+          in: query
+          name: with_guarantees
+          description: 'Afficher les garanties.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les garanties.'
+            example: 1
+        -
+          in: query
+          name: with_contract
+          description: 'Afficher le contrat.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le contrat.'
+            example: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Procès Verbal'
+    put:
+      summary: 'Mettre à jour un procès verbal'
+      operationId: mettreJourUnProcsVerbal
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Procès Verbal'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                committee_id:
+                  type: string
+                  description: "L'ID comitée venant de créditFlow"
+                  example: CFNTG-044-13-12-23-01212
+                committee_date:
+                  type: string
+                  description: 'La date du comitée'
+                  example: '2024-02-09'
+                civility:
+                  type: string
+                  description: 'La Civilité'
+                  example: Mme
+                applicant_first_name:
+                  type: string
+                  description: 'Le prénnom du demandeur'
+                  example: Cesar
+                applicant_last_name:
+                  type: string
+                  description: 'Le nom du demandeur'
+                  example: Endure
+                account_number:
+                  type: string
+                  description: 'Le numéro de compte'
+                  example: '012345678901'
+                activity:
+                  type: string
+                  description: "L'activé"
+                  example: "Femme d'affaire"
+                purpose_of_financing:
+                  type: string
+                  description: "L'objet du financement"
+                  example: 'Achat nouveau locaux'
+                type_of_credit_id:
+                  type: integer
+                  description: "L'ID du type de credit"
+                  example: 3
+                amount:
+                  type: number
+                  description: 'Le montant'
+                  example: 0.0
+                duration:
+                  type: integer
+                  description: 'La durée en mois'
+                  example: 12
+                periodicity:
+                  type: string
+                  description: 'La periodicité'
+                  example: quarterly
+                taf:
+                  type: number
+                  description: 'La TAF'
+                  example: 1.0
+                due_amount:
+                  type: number
+                  description: "Le montant d'une échéance"
+                  example: 500000.0
+                administrative_fees_percentage:
+                  type: number
+                  description: 'Les frais de dossier(pourcentage)'
+                  example: 45000.0
+                insurance_premium:
+                  type: number
+                  description: "La prime d'assurance"
+                  example: 45000.0
+    delete:
+      summary: 'Supprime un procès verbal'
+      operationId: supprimeUnProcsVerbal
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - 'Procès Verbal'
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du procès verbal."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/type-of-guarantee:
+    get:
+      summary: 'Affiche les types de garantie'
+      operationId: afficheLesTypesDeGarantie
+      description: ''
+      parameters:
+        -
+          in: query
+          name: name
+          description: 'Filtrer par nom.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par nom.'
+            example: null
+        -
+          in: query
+          name: paginate
+          description: 'Utiliser la pagination.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Utiliser la pagination.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de Garantie'
+    post:
+      summary: 'Créer un nouveau type de garantie'
+      operationId: crerUnNouveauTypeDeGarantie
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de Garantie'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Le nom du type de garantie.'
+                  example: BFR
+              required:
+                - name
+  '/api/type-of-guarantee/{id}':
+    get:
+      summary: 'Affiche un type de garantie'
+      operationId: afficheUnTypeDeGarantie
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de Garantie'
+    put:
+      summary: 'Mettre à jour un type de garantie'
+      operationId: mettreJourUnTypeDeGarantie
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de Garantie'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Le nom du type de garantie.'
+                  example: BFR
+              required:
+                - name
+    delete:
+      summary: 'Supprime un type de garantie'
+      operationId: supprimeUnTypeDeGarantie
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - 'Type de Garantie'
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du type de garantie."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/type-of-credit:
+    get:
+      summary: 'Affiche les types de crédit'
+      operationId: afficheLesTypesDeCrdit
+      description: ''
+      parameters:
+        -
+          in: query
+          name: name
+          description: 'Filtrer par nom.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par nom.'
+            example: null
+        -
+          in: query
+          name: type_of_applicant_id
+          description: 'Filtrer par type de demandeur de crédit.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par type de demandeur de crédit.'
+            example: null
+        -
+          in: query
+          name: with_type_of_applicant
+          description: 'Afficher le demandeur.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le demandeur.'
+            example: 0
+        -
+          in: query
+          name: with_verbals_trials
+          description: 'Afficher les PV.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les PV.'
+            example: 0
+        -
+          in: query
+          name: paginate
+          description: 'Utiliser la pagination.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Utiliser la pagination.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de crédit'
+    post:
+      summary: 'Créer un nouveau type de crédit'
+      operationId: crerUnNouveauTypeDeCrdit
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de crédit'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Le nom du type de crédit.'
+                  example: BFR
+                min_month:
+                  type: integer
+                  description: 'Le nombre de mois minimum du type de crédit'
+                  example: 0
+                max_month:
+                  type: integer
+                  description: 'Le nombre de mois maximum du type de crédit'
+                  example: 6
+                type_of_applicant_id:
+                  type: integer
+                  description: "L'identifiant du type de demandeur de crédit."
+                  example: 1
+              required:
+                - name
+                - min_month
+                - max_month
+                - type_of_applicant_id
+  '/api/type-of-credit/{id}':
+    get:
+      summary: 'Affiche un type de crédit'
+      operationId: afficheUnTypeDeCrdit
+      description: ''
+      parameters:
+        -
+          in: query
+          name: with_type_of_applicant
+          description: 'Afficher le demandeur.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le demandeur.'
+            example: 0
+        -
+          in: query
+          name: with_verbals_trials
+          description: 'Afficher les PV.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les PV.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de crédit'
+    put:
+      summary: 'Mettre à jour un type de crédit'
+      operationId: mettreJourUnTypeDeCrdit
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de crédit'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Le nom du type de crédit.'
+                  example: BFR
+                min_month:
+                  type: integer
+                  description: 'Le nombre de mois minimum du type de crédit'
+                  example: 0
+                max_month:
+                  type: integer
+                  description: 'Le nombre de mois maximum du type de crédit'
+                  example: 6
+                type_of_applicant_id:
+                  type: integer
+                  description: "L'identifiant du type de demandeur de crédit."
+                  example: 1
+              required:
+                - name
+                - min_month
+                - max_month
+                - type_of_applicant_id
+    delete:
+      summary: 'Supprime un type de crédit'
+      operationId: supprimeUnTypeDeCrdit
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - 'Type de crédit'
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du type de crédit."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/type-of-applicant:
+    get:
+      summary: 'Affiche les types de demandeur de crédit'
+      operationId: afficheLesTypesDeDemandeurDeCrdit
+      description: ''
+      parameters:
+        -
+          in: query
+          name: name
+          description: 'Filtrer par nom.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par nom.'
+            example: null
+        -
+          in: query
+          name: with_types_of_credit
+          description: 'Afficher les types de crédit.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les types de crédit.'
+            example: 0
+        -
+          in: query
+          name: with_verbals_trials
+          description: 'Afficher les PV.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les PV.'
+            example: 0
+        -
+          in: query
+          name: paginate
+          description: 'Utiliser la pagination.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Utiliser la pagination.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de demandeur'
+    post:
+      summary: 'Créer un nouveau type de demandeur de crédit'
+      operationId: crerUnNouveauTypeDeDemandeurDeCrdit
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de demandeur'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Le nom du type de demandeur de crédit.'
+                  example: mawena
+              required:
+                - name
+  '/api/type-of-applicant/{id}':
+    get:
+      summary: 'Affiche un type de demandeur de crédit'
+      operationId: afficheUnTypeDeDemandeurDeCrdit
+      description: ''
+      parameters:
+        -
+          in: query
+          name: with_types_of_credit
+          description: 'Afficher les types de crédit.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les types de crédit.'
+            example: 0
+        -
+          in: query
+          name: with_verbals_trials
+          description: 'Afficher les PV.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les PV.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de demandeur'
+    put:
+      summary: 'Mettre à jour un type de demandeur de crédit'
+      operationId: mettreJourUnTypeDeDemandeurDeCrdit
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Type de demandeur'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Le nom du type de demandeur de crédit.'
+                  example: mawena
+              required:
+                - name
+    delete:
+      summary: 'Supprime un type de demandeur de crédit'
+      operationId: supprimeUnTypeDeDemandeurDeCrdit
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - 'Type de demandeur'
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du type de demandeur de crédit."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/user:
+    get:
+      summary: 'Affiche les utilisateurs'
+      operationId: afficheLesUtilisateurs
+      description: ''
+      parameters:
+        -
+          in: query
+          name: name
+          description: 'Filtrer par username.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par username.'
+            example: null
+        -
+          in: query
+          name: full_name
+          description: 'Filtrer par nom complet.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par nom complet.'
+            example: null
+        -
+          in: query
+          name: email
+          description: 'Filtrer par email.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par email.'
+            example: null
+        -
+          in: query
+          name: profile
+          description: 'Filtrer par profil.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par profil.'
+            example: null
+        -
+          in: query
+          name: activated
+          description: "Filtrer par statut d'activation"
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: "Filtrer par statut d'activation"
+            example: null
+        -
+          in: query
+          name: password_change_required
+          description: 'Filtrer par statut de mot de passe à changer'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par statut de mot de passe à changer'
+            example: null
+        -
+          in: query
+          name: paginate
+          description: 'Utiliser la pagination.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Utiliser la pagination.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Utilisateur
+    post:
+      summary: 'Créer un nouvel utilisateur'
+      operationId: crerUnNouvelUtilisateur
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "Le username de l'utilsateur."
+                  example: mawena
+                full_name:
+                  type: string
+                  description: "Le nom complet de l'utilisateur."
+                  example: 'Charles GAMLIGO'
+                profile:
+                  type: string
+                  description: "Le profil de l'utilisateur."
+                  example: admin
+                activated:
+                  type: integer
+                  description: "Le statut d'activation de l'utilisateur"
+                  example: 1
+                password:
+                  type: string
+                  description: "Le mot de passe de l'utilisateur."
+                  example: password
+                password_change_required:
+                  type: integer
+                  description: "Le statut d'activation de l'utilisateur"
+                  example: 1
+              required:
+                - name
+                - full_name
+                - profile
+                - activated
+                - password
+                - password_change_required
+  '/api/user/{id}':
+    get:
+      summary: 'Affiche un utilisateur'
+      operationId: afficheUnUtilisateur
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Utilisateur
+    put:
+      summary: 'Mettre à jour un utilisateur'
+      operationId: mettreJourUnUtilisateur
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "Le username de l'utilsateur."
+                  example: mawena
+                full_name:
+                  type: string
+                  description: "Le nom complet de l'utilisateur."
+                  example: 'Charles GAMLIGO'
+                profile:
+                  type: string
+                  description: "Le profil de l'utilisateur."
+                  example: admin
+                email:
+                  type: string
+                  description: "L'email de l'utilisateur."
+                  example: gamligocharles@gmail.com
+                activated:
+                  type: integer
+                  description: "Le statut d'activation de l'utilisateur"
+                  example: 1
+                password:
+                  type: string
+                  description: "Le mot de passe de l'utilisateur."
+                  example: null
+                password_change_required:
+                  type: integer
+                  description: "Le statut d'activation de l'utilisateur"
+                  example: 1
+              required:
+                - name
+                - full_name
+                - profile
+                - email
+                - activated
+                - password_change_required
+    delete:
+      summary: 'Supprime un utilisateur'
+      operationId: supprimeUnUtilisateur
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - Utilisateur
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID de l'utilisateur."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/user/update-password:
+    put:
+      summary: "Mettre à jour le mot de passe de l'utilisateur connecté utilisateur"
+      operationId: mettreJourLeMotDePasseDeLutilisateurConnectUtilisateur
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                  description: "L'ancien mot de passe de l'utilisateur."
+                  example: null
+                new_password:
+                  type: string
+                  description: "Le nouveau mot de passe de l'utilisateur."
+                  example: null
+                new_password_confirmation:
+                  type: string
+                  description: "La confirmation du nouveau mot de passe de l'utilisateur."
+                  example: null
+              required:
+                - old_password
+                - new_password
+                - new_password_confirmation
+tags:
+  -
+    name: Authentification
+    description: "\nEndpoints pour gérer l_authentification"
+  -
+    name: Caution
+    description: "\nEndPoints pour gérer les cautions"
+  -
+    name: Contrat
+    description: "\nEndPoints pour gérer les contrat"
+  -
+    name: 'Procès Verbal'
+    description: "\nEndPoints pour gérer les Procès verbaux"
+  -
+    name: 'Type de Garantie'
+    description: "\nEndPoints pour gérer les types de garanties"
+  -
+    name: 'Type de crédit'
+    description: "\nEndPoints pour gérer les types de crédit"
+  -
+    name: 'Type de demandeur'
+    description: "\nEndPoints pour gérer les types de demandeur de crédit"
+  -
+    name: Utilisateur
+    description: "\nEndPoints pour gérer les utilisateurs"
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: 'Vous pouvez récupérer votre token en visitant votre tableau de bord et en cliquant sur <b>1|VllEQEqmdEP8Rgfd6M90ZiWdgbXWWs5GJNXjjk2Cef3b3979</b>.'
+security:
+  -
+    default: []

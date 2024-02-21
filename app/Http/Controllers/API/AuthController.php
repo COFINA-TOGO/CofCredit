@@ -69,7 +69,7 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        if ($request->user()->currentAccessToken()->delete()) {
+        if ($request->user()->currentuserToken()->delete()) {
             return $this->responseOk(["messages" => ["Deconnexion complète"]]);
         } else {
             return $this->responseError(["errors" => ["Erreur durant la deconnexion"]]);

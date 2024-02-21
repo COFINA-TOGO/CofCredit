@@ -1,0 +1,2270 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "http:\/\/cofcredit.cofina.localhost"
+        }
+    ],
+    "info": {
+        "name": "Document de CofCredit",
+        "_postman_id": "69b4f05e-e003-4414-8578-1caa34ecfa77",
+        "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Authentification",
+            "description": "\nEndpoints pour g\u00e9rer l_authentification",
+            "item": [
+                {
+                    "name": "Connecte un utilisateur",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/auth\/login",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/auth\/login"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"charles.gamligo@cofinacorp.com\",\"password\":\"password\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche l'utilisateur connect\u00e9",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/auth\/show",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/auth\/show"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "D\u00e9connecte l'utilisateur connect\u00e9",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/auth\/logout",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/auth\/logout"
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Caution",
+            "description": "\nEndPoints pour g\u00e9rer les cautions",
+            "item": [
+                {
+                    "name": "T\u00e9l\u00e9charge la version word d'une caution",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/guarantor\/word\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/guarantor\/word\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du caution."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge le billet \u00e0 ordre d'une caution",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/guarantor\/promissory-note\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/guarantor\/promissory-note\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du caution."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche les cautions",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/guarantor",
+                            "query": [
+                                {
+                                    "key": "contract_id",
+                                    "value": "",
+                                    "description": "Filtrer par ID du contract.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "first_name",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9nom de la caution.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "last_name",
+                                    "value": "",
+                                    "description": "Filtrer par nom de la caution.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "birth_date",
+                                    "value": "",
+                                    "description": "Filtrer par date de naissance de la caution.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "birth_place",
+                                    "value": "",
+                                    "description": "Filtrer par lieu de naissance de la caution.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "nationality",
+                                    "value": "",
+                                    "description": "Filtrer par nationalit\u00e9 de la caution",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "home_address",
+                                    "value": "",
+                                    "description": "Filtrer par addresse de domicile de la caution",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "type_of_identity_document",
+                                    "value": "",
+                                    "description": "Filtrer par type de la pi\u00e8ce d'indentit\u00e9 de la caution.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "number_of_identity_document",
+                                    "value": "",
+                                    "description": "Filtrer par num\u00e9ro de la pi\u00e8ce d'indentit\u00e9 de la caution.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "date_of_issue_of_identity_document",
+                                    "value": "",
+                                    "description": "Filtrer par date de d\u00e9livrance de la pi\u00e8ce d'identit\u00e9 de la caution.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "function",
+                                    "value": "",
+                                    "description": "Filtrer par fonction de la caution",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "phone_number",
+                                    "value": "",
+                                    "description": "Filtrer par num\u00e9ro de t\u00e9l\u00e9phone de la caution",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_contract",
+                                    "value": "",
+                                    "description": "Afficher le contrat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_verbal_trial",
+                                    "value": "",
+                                    "description": "Afficher le PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_credit",
+                                    "value": "",
+                                    "description": "Afficher le type de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "",
+                                    "description": "Afficher le type de demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les garanties.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "paginate",
+                                    "value": "",
+                                    "description": "Utiliser la pagination.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/guarantor?contract_id=&first_name=&last_name=&birth_date=&birth_place=&nationality=&home_address=&type_of_identity_document=&number_of_identity_document=&date_of_issue_of_identity_document=&function=&phone_number=&with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche une caution",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/guarantor\/:id",
+                            "query": [
+                                {
+                                    "key": "with_contract",
+                                    "value": "",
+                                    "description": "Afficher le contrat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_verbal_trial",
+                                    "value": "",
+                                    "description": "Afficher le PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_credit",
+                                    "value": "",
+                                    "description": "Afficher le type de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "",
+                                    "description": "Afficher le type de demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les garanties.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/guarantor\/:id?with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du caution."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er une nouvelLa caution",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/guarantor",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/guarantor"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"contract_id\":1,\"civility\":\"Mr\",\"first_name\":\"Charles\",\"last_name\":\"Xavier\",\"birth_date\":\"2000-03-03\",\"birth_place\":\"Los Afagnan\",\"nationality\":\"Togolaise\",\"home_address\":\"Adewi\",\"type_of_identity_document\":\"cni\",\"number_of_identity_document\":\"BP785632\",\"date_of_issue_of_identity_document\":\"2022-03-03\",\"function\":\"Agent CIA\",\"phone_number\":\"+01 587-45-632-15\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour une caution",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/guarantor\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/guarantor\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du caution."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"contract_id\":1,\"civility\":\"Mr\",\"first_name\":\"Charles\",\"last_name\":\"Xavier\",\"birth_date\":\"2000-03-03\",\"birth_place\":\"Los Afagnan\",\"nationality\":\"Togolaise\",\"home_address\":\"Adewi\",\"type_of_identity_document\":\"cni\",\"number_of_identity_document\":\"BP785632\",\"date_of_issue_of_identity_document\":\"2022-03-03\",\"function\":\"Agent CIA\",\"phone_number\":\"+01 587-45-632-15\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Supprime une caution",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/guarantor\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/guarantor\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du caution."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Contrat",
+            "description": "\nEndPoints pour g\u00e9rer les contrat",
+            "item": [
+                {
+                    "name": "T\u00e9l\u00e9charge la version word d'un contrat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract\/word\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/contract\/word\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du contrat."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge le billet \u00e0 ordre d'un contrat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract\/promissory-note\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/contract\/promissory-note\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du contrat."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche les contrats",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract",
+                            "query": [
+                                {
+                                    "key": "verbal_trial_id",
+                                    "value": "",
+                                    "description": "Filtrer par ID du PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_birth_date",
+                                    "value": "",
+                                    "description": "Filtrer par date de naissance du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_birth_place",
+                                    "value": "",
+                                    "description": "Filtrer par lieu de naissance du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_nationality",
+                                    "value": "",
+                                    "description": "Filtrer par nationalit\u00e9 du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_home_address",
+                                    "value": "",
+                                    "description": "Filtrer par addresse du domicile du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_type_of_identity_document",
+                                    "value": "",
+                                    "description": "Filtrer par type de la pi\u00e8ce d'indentit\u00e9 du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_number_of_identity_document",
+                                    "value": "",
+                                    "description": "Filtrer par num\u00e9ro de la pi\u00e8ce d'indentit\u00e9 du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_date_of_issue_of_identity_document",
+                                    "value": "",
+                                    "description": "Filtrer par date de d\u00e9livrance de la pi\u00e8ce d'identit\u00e9 du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_phone_number",
+                                    "value": "",
+                                    "description": "Filtrer par num\u00e9ro de t\u00e9l\u00e9phone du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "risk_premium_percentage",
+                                    "value": "",
+                                    "description": "Filtrer par prime de risque (en pourcentage) du cr\u00e9dit du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "total_amount_of_interest",
+                                    "value": "",
+                                    "description": "Filtrer par montant total des int\u00e9r\u00eats du cr\u00e9dit du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "number_of_due_dates",
+                                    "value": "",
+                                    "description": "Filtrer par nombre d'\u00e9ch\u00e9ance.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "type",
+                                    "value": "",
+                                    "description": "Filtrer par type de contract.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "has_pledges",
+                                    "value": "",
+                                    "description": "Filtrer par type de pr\u00e9sence de gage",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_verbal_trial",
+                                    "value": "",
+                                    "description": "Afficher le PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_credit",
+                                    "value": "",
+                                    "description": "Afficher le type de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "",
+                                    "description": "Afficher le type de demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les garanties.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "paginate",
+                                    "value": "",
+                                    "description": "Utiliser la pagination.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche un contrat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract\/:id",
+                            "query": [
+                                {
+                                    "key": "with_verbal_trial",
+                                    "value": "",
+                                    "description": "Afficher le PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_credit",
+                                    "value": "",
+                                    "description": "Afficher le type de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "",
+                                    "description": "Afficher le type de demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les garanties.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/contract\/:id?with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du contrat."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er un nouveau contrat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/contract"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"verbal_trial_id\":1,\"representative_birth_date\":\"1988-05-01\",\"representative_birth_place\":\"Lom\u00e9\",\"representative_nationality\":\"Togolaise\",\"representative_home_address\":\"Zip 85\",\"representative_type_of_identity_document\":\"cni\",\"representative_number_of_identity_document\":\"CND-4D8-84S-52S\",\"representative_date_of_issue_of_identity_document\":\"2020-01-01\",\"representative_phone_number\":\"+228 90 90 90 90\",\"risk_premium_percentage\":2,\"total_amount_of_interest\":152369,\"number_of_due_dates\":3,\"type\":\"company\",\"has_pledges\":\"0\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour un contrat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/contract\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du contrat."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"verbal_trial_id\":1,\"representative_birth_date\":\"1988-05-01\",\"representative_birth_place\":\"Lom\u00e9\",\"representative_nationality\":\"Togolaise\",\"representative_home_address\":\"Zip 85\",\"representative_type_of_identity_document\":\"cni\",\"representative_number_of_identity_document\":\"CND-4D8-84S-52S\",\"representative_date_of_issue_of_identity_document\":\"2020-01-01\",\"representative_phone_number\":\"+228 90 90 90 90\",\"risk_premium_percentage\":2,\"total_amount_of_interest\":152369,\"number_of_due_dates\":3,\"type\":\"company\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Supprime un contrat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/contract\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du contrat."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Proc\u00e8s Verbal",
+            "description": "\nEndPoints pour g\u00e9rer les Proc\u00e8s verbaux",
+            "item": [
+                {
+                    "name": "Affiche les Proc\u00e8s verbaux",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/verbal-trial",
+                            "query": [
+                                {
+                                    "key": "committee_id",
+                                    "value": "",
+                                    "description": "Filtrer par ID du proc\u00e8s verbal",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "committee_date",
+                                    "value": "",
+                                    "description": "Filtrer par date du proc\u00e8s verbal",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "civility",
+                                    "value": "",
+                                    "description": "Filtrer par civilit\u00e9",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "applicant_first_name",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9nom du demandeur",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "applicant_last_name",
+                                    "value": "",
+                                    "description": "Filtrer par nom du demandeur",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "account_number",
+                                    "value": "",
+                                    "description": "Filtrer par num\u00e9ro de compte",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "activity",
+                                    "value": "",
+                                    "description": "Filtrer par activ\u00e9",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "purpose_of_financing",
+                                    "value": "",
+                                    "description": "Filtrer par objet du financement",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "type_of_credit_id",
+                                    "value": "",
+                                    "description": "Filtrer par ID du type de credit",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "amount",
+                                    "value": "",
+                                    "description": "Filtrer par montant",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "duration",
+                                    "value": "",
+                                    "description": "Filtrer par dur\u00e9e en mois",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "periodicity",
+                                    "value": "",
+                                    "description": "Filtrer par periodicit\u00e9",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "taf",
+                                    "value": "",
+                                    "description": "Filtrer par TAF",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "due_amount",
+                                    "value": "",
+                                    "description": "Filtrer par montant d'une \u00e9ch\u00e9ance",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "administrative_fees_percentage",
+                                    "value": "",
+                                    "description": "Filtrer par frais de dossier(pourcentage)",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "insurance_premium",
+                                    "value": "",
+                                    "description": "Filtrer par prime d'assurance",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_credit",
+                                    "value": "",
+                                    "description": "Afficher le type de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "1",
+                                    "description": "Afficher le type de demandeur du type de cr\u00e9dit.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "with_guarantees",
+                                    "value": "1",
+                                    "description": "Afficher les garanties.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "with_contract",
+                                    "value": "1",
+                                    "description": "Afficher le contrat.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "paginate",
+                                    "value": "",
+                                    "description": "Utiliser la pagination.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_contract=1&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche un proc\u00e8s verbal",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/verbal-trial\/:id",
+                            "query": [
+                                {
+                                    "key": "with_type_of_credit",
+                                    "value": "",
+                                    "description": "Afficher le type de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "1",
+                                    "description": "Afficher le type de demandeur du type de cr\u00e9dit.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "with_guarantees",
+                                    "value": "1",
+                                    "description": "Afficher les garanties.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "with_contract",
+                                    "value": "1",
+                                    "description": "Afficher le contrat.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/verbal-trial\/:id?with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_contract=1",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du proc\u00e8s verbal."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er un nouveau proc\u00e8s verbal",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/verbal-trial",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/verbal-trial"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"committee_id\":\"CFNTG-044-13-12-23-01212\",\"committee_date\":\"2024-02-09\",\"civility\":\"Mr\",\"applicant_first_name\":\"Cesar\",\"applicant_last_name\":\"Endure\",\"account_number\":\"012345678901\",\"activity\":\"Homme d'affaire\",\"purpose_of_financing\":\"Achat nouveau locaux\",\"type_of_credit_id\":1,\"amount\":10000000,\"duration\":12,\"periodicity\":\"mensual\",\"taf\":1,\"due_amount\":500000,\"administrative_fees_percentage\":45000,\"insurance_premium\":45000}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour un proc\u00e8s verbal",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/verbal-trial\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/verbal-trial\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du proc\u00e8s verbal."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"committee_id\":\"CFNTG-044-13-12-23-01212\",\"committee_date\":\"2024-02-09\",\"civility\":\"Mme\",\"applicant_first_name\":\"Cesar\",\"applicant_last_name\":\"Endure\",\"account_number\":\"012345678901\",\"activity\":\"Femme d'affaire\",\"purpose_of_financing\":\"Achat nouveau locaux\",\"type_of_credit_id\":3,\"amount\":0,\"duration\":12,\"periodicity\":\"quarterly\",\"taf\":1,\"due_amount\":500000,\"administrative_fees_percentage\":45000,\"insurance_premium\":45000}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Supprime un proc\u00e8s verbal",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/verbal-trial\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/verbal-trial\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "7",
+                                    "description": "L'ID du proc\u00e8s verbal"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Type de Garantie",
+            "description": "\nEndPoints pour g\u00e9rer les types de garanties",
+            "item": [
+                {
+                    "name": "Affiche les types de garantie",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-guarantee",
+                            "query": [
+                                {
+                                    "key": "name",
+                                    "value": "",
+                                    "description": "Filtrer par nom.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "paginate",
+                                    "value": "",
+                                    "description": "Utiliser la pagination.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/type-of-guarantee?name=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche un type de garantie",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-guarantee\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/type-of-guarantee\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du type de garantie."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er un nouveau type de garantie",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-guarantee",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/type-of-guarantee"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"BFR\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour un type de garantie",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-guarantee\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/type-of-guarantee\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du type de garantie."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"BFR\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Supprime un type de garantie",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-guarantee\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/type-of-guarantee\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du type de garantie"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Type de cr\u00e9dit",
+            "description": "\nEndPoints pour g\u00e9rer les types de cr\u00e9dit",
+            "item": [
+                {
+                    "name": "Affiche les types de cr\u00e9dit",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-credit",
+                            "query": [
+                                {
+                                    "key": "name",
+                                    "value": "",
+                                    "description": "Filtrer par nom.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "type_of_applicant_id",
+                                    "value": "",
+                                    "description": "Filtrer par type de demandeur de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "",
+                                    "description": "Afficher le demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_verbals_trials",
+                                    "value": "",
+                                    "description": "Afficher les PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "paginate",
+                                    "value": "",
+                                    "description": "Utiliser la pagination.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/type-of-credit?name=&type_of_applicant_id=&with_type_of_applicant=&with_verbals_trials=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche un type de cr\u00e9dit",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-credit\/:id",
+                            "query": [
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "",
+                                    "description": "Afficher le demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_verbals_trials",
+                                    "value": "",
+                                    "description": "Afficher les PV.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/type-of-credit\/:id?with_type_of_applicant=&with_verbals_trials=",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du type de cr\u00e9dit."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er un nouveau type de cr\u00e9dit",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-credit",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/type-of-credit"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"BFR\",\"min_month\":0,\"max_month\":6,\"type_of_applicant_id\":1}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour un type de cr\u00e9dit",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-credit\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/type-of-credit\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du type de cr\u00e9dit."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"BFR\",\"min_month\":0,\"max_month\":6,\"type_of_applicant_id\":1}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Supprime un type de cr\u00e9dit",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-credit\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/type-of-credit\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "11",
+                                    "description": "L'ID du type de cr\u00e9dit"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Type de demandeur",
+            "description": "\nEndPoints pour g\u00e9rer les types de demandeur de cr\u00e9dit",
+            "item": [
+                {
+                    "name": "Affiche les types de demandeur de cr\u00e9dit",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-applicant",
+                            "query": [
+                                {
+                                    "key": "name",
+                                    "value": "",
+                                    "description": "Filtrer par nom.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_types_of_credit",
+                                    "value": "",
+                                    "description": "Afficher les types de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_verbals_trials",
+                                    "value": "",
+                                    "description": "Afficher les PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "paginate",
+                                    "value": "",
+                                    "description": "Utiliser la pagination.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/type-of-applicant?name=&with_types_of_credit=&with_verbals_trials=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche un type de demandeur de cr\u00e9dit",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-applicant\/:id",
+                            "query": [
+                                {
+                                    "key": "with_types_of_credit",
+                                    "value": "",
+                                    "description": "Afficher les types de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_verbals_trials",
+                                    "value": "",
+                                    "description": "Afficher les PV.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/type-of-applicant\/:id?with_types_of_credit=&with_verbals_trials=",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du type de demandeur de cr\u00e9dit."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er un nouveau type de demandeur de cr\u00e9dit",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-applicant",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/type-of-applicant"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"mawena\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour un type de demandeur de cr\u00e9dit",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-applicant\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/type-of-applicant\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du type de demandeur de cr\u00e9dit."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"mawena\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Supprime un type de demandeur de cr\u00e9dit",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/type-of-applicant\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/type-of-applicant\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "12",
+                                    "description": "L'ID du type de demandeur de cr\u00e9dit"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Utilisateur",
+            "description": "\nEndPoints pour g\u00e9rer les utilisateurs",
+            "item": [
+                {
+                    "name": "Affiche les utilisateurs",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/user",
+                            "query": [
+                                {
+                                    "key": "name",
+                                    "value": "",
+                                    "description": "Filtrer par username.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "full_name",
+                                    "value": "",
+                                    "description": "Filtrer par nom complet.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "",
+                                    "description": "Filtrer par email.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "profile",
+                                    "value": "",
+                                    "description": "Filtrer par profil.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "activated",
+                                    "value": "",
+                                    "description": "Filtrer par statut d'activation",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "password_change_required",
+                                    "value": "",
+                                    "description": "Filtrer par statut de mot de passe \u00e0 changer",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "paginate",
+                                    "value": "",
+                                    "description": "Utiliser la pagination.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/user?name=&full_name=&email=&profile=&activated=&password_change_required=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche un utilisateur",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/user\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/user\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID de l'utilisateur."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er un nouvel utilisateur",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/user",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/user"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"mawena\",\"full_name\":\"Charles GAMLIGO\",\"profile\":\"admin\",\"activated\":1,\"password\":\"password\",\"password_change_required\":1}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour le mot de passe de l'utilisateur connect\u00e9 utilisateur",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/user\/update-password",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/user\/update-password"
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"old_password\":null,\"new_password\":null,\"new_password_confirmation\":null}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour un utilisateur",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/user\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/user\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID de l'utilisateur."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"mawena\",\"full_name\":\"Charles GAMLIGO\",\"profile\":\"admin\",\"email\":\"gamligocharles@gmail.com\",\"activated\":1,\"password_change_required\":1}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Supprime un utilisateur",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/user\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/user\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "9",
+                                    "description": "L'ID de l'utilisateur"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "Authorization",
+                "type": "string"
+            }
+        ]
+    }
+}
