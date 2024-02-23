@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\TypeOfCredit;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -34,6 +35,8 @@ class VerbalTrialFactory extends Factory
             "due_amount" => 500000,
             "administrative_fees_percentage" => 45000,
             "insurance_premium" => 452580,
+            "tax_fee_interest_rate" => $this->faker->randomFloat(2, 0, 100),
+            "caf_id" => User::inRandomOrder()->where("profile", "caf")->first()->id ?? 1,
         ];
     }
 }

@@ -1,3 +1,4 @@
+public/docs
 /.phpunit.cache
 /node_modules
 /public/build
@@ -51,8 +52,6 @@ dist-ssr
 *.sw?
 .yarn
 
-# iconify dist files
-resources/js/plugins/iconify/icons.css
 
 # Ignore MSW script
 public/mockServiceWorker.js

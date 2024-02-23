@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -19,12 +20,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'si_profile_id',
-        'activated',
-        'password_change_required'
+        "name",
+        "email",
+        "full_name",
+        "profile",
+        "email_verified_at",
+        "password",
+        "si_profile_id",
+        "activated",
+        "password_change_required",
     ];
 
     /**
@@ -54,5 +58,10 @@ class User extends Authenticatable
         $data["updated_at"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
         $data["email_verified_at"] = Carbon::parse($data["email_verified_at"])->format("d/m/Y H:i:s");
         return $data;
+    }
+
+    public function verbal_trial(): HasMany
+    {
+        return $this->hasMany(VerbalTrial::class, 'caf_id', "id");
     }
 }

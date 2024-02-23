@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "69b4f05e-e003-4414-8578-1caa34ecfa77",
+        "_postman_id": "1bccd306-28e6-4555-8d12-27303ba4dbb7",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -538,7 +538,7 @@
         },
         {
             "name": "Contrat",
-            "description": "\nEndPoints pour g\u00e9rer les contrat",
+            "description": "\nEndPoints pour g\u00e9rer les contrats",
             "item": [
                 {
                     "name": "T\u00e9l\u00e9charge la version word d'un contrat",
@@ -1060,6 +1060,18 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "tax_fee_interest_rate",
+                                    "value": "",
+                                    "description": "Fiilter par taux d'int\u00e9r\u00eat hors taxe(%)",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "caf_id",
+                                    "value": "",
+                                    "description": "Filtrer par ID du CAF",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "with_type_of_credit",
                                     "value": "",
                                     "description": "Afficher le type de cr\u00e9dit.",
@@ -1084,13 +1096,19 @@
                                     "disabled": false
                                 },
                                 {
+                                    "key": "with_caf",
+                                    "value": "1",
+                                    "description": "Afficher le CAF.",
+                                    "disabled": false
+                                },
+                                {
                                     "key": "paginate",
                                     "value": "",
                                     "description": "Utiliser la pagination.",
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_contract=1&paginate="
+                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_contract=1&with_caf=1&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -1145,9 +1163,15 @@
                                     "value": "1",
                                     "description": "Afficher le contrat.",
                                     "disabled": false
+                                },
+                                {
+                                    "key": "with_caf",
+                                    "value": "1",
+                                    "description": "Afficher le CAF.",
+                                    "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/verbal-trial\/:id?with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_contract=1",
+                            "raw": "{{baseUrl}}\/api\/verbal-trial\/:id?with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_contract=1&with_caf=1",
                             "variable": [
                                 {
                                     "id": "id",
@@ -1202,7 +1226,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"committee_id\":\"CFNTG-044-13-12-23-01212\",\"committee_date\":\"2024-02-09\",\"civility\":\"Mr\",\"applicant_first_name\":\"Cesar\",\"applicant_last_name\":\"Endure\",\"account_number\":\"012345678901\",\"activity\":\"Homme d'affaire\",\"purpose_of_financing\":\"Achat nouveau locaux\",\"type_of_credit_id\":1,\"amount\":10000000,\"duration\":12,\"periodicity\":\"mensual\",\"taf\":1,\"due_amount\":500000,\"administrative_fees_percentage\":45000,\"insurance_premium\":45000}"
+                            "raw": "{\"committee_id\":\"CFNTG-044-13-12-23-01212\",\"committee_date\":\"2024-02-09\",\"civility\":\"Mr\",\"applicant_first_name\":\"Cesar\",\"applicant_last_name\":\"Endure\",\"account_number\":\"012345678901\",\"activity\":\"Homme d'affaire\",\"purpose_of_financing\":\"Achat nouveau locaux\",\"type_of_credit_id\":1,\"amount\":10000000,\"duration\":12,\"periodicity\":\"mensual\",\"taf\":10,\"due_amount\":500000,\"administrative_fees_percentage\":2.5,\"insurance_premium\":45000,\"tax_fee_interest_rate\":10,\"caf_id\":4}"
                         },
                         "description": ""
                     },
@@ -1245,7 +1269,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"committee_id\":\"CFNTG-044-13-12-23-01212\",\"committee_date\":\"2024-02-09\",\"civility\":\"Mme\",\"applicant_first_name\":\"Cesar\",\"applicant_last_name\":\"Endure\",\"account_number\":\"012345678901\",\"activity\":\"Femme d'affaire\",\"purpose_of_financing\":\"Achat nouveau locaux\",\"type_of_credit_id\":3,\"amount\":0,\"duration\":12,\"periodicity\":\"quarterly\",\"taf\":1,\"due_amount\":500000,\"administrative_fees_percentage\":45000,\"insurance_premium\":45000}"
+                            "raw": "{\"committee_id\":\"CFNTG-044-13-12-23-01212\",\"committee_date\":\"2024-02-09\",\"civility\":\"Mr\",\"applicant_first_name\":\"Cesar\",\"applicant_last_name\":\"Endure\",\"account_number\":\"012345678901\",\"activity\":\"Homme d'affaire\",\"purpose_of_financing\":\"Achat nouveau locaux\",\"type_of_credit_id\":1,\"amount\":10000000,\"duration\":12,\"periodicity\":\"mensual\",\"taf\":10,\"due_amount\":500000,\"administrative_fees_percentage\":2.5,\"insurance_premium\":45000,\"tax_fee_interest_rate\":10,\"caf_id\":4}"
                         },
                         "description": ""
                     },
@@ -1270,7 +1294,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "7",
+                                    "value": "6",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -1479,7 +1503,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "1",
+                                    "value": "18",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -1719,7 +1743,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "11",
+                                    "value": "19",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -1953,7 +1977,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "12",
+                                    "value": "8",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]

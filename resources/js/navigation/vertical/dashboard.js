@@ -1,25 +1,23 @@
 export default [
   {
-    title: 'VP',
+    title: 'VP COMMITTEE',
     icon: { icon: 'tabler-align-box-left-top' },
     children: [
       {
         title: 'Add',
-        to: 'dashboards-analytics',
+        to: 'pv-add',
       },
       {
         title: 'Waiting for contract',
-        to: 'dashboards-crm',
+        to: 'pv',
         badgeContent: '3',
         badgeClass: 'bg-global-primary',
       },
       {
         title: 'Historical',
-        to: 'dashboards-ecommerce',
+        to: 'pv-historical',
       },
     ],
-    badgeContent: '3',
-    badgeClass: 'bg-global-primary',
   }, {
     title: 'Dashboards',
     icon: { icon: 'tabler-smart-home' },

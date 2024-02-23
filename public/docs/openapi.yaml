@@ -1212,6 +1212,26 @@ paths:
             example: null
         -
           in: query
+          name: tax_fee_interest_rate
+          description: "Fiilter par taux d'intérêt hors taxe(%)"
+          example: null
+          required: false
+          schema:
+            type: number
+            description: "Fiilter par taux d'intérêt hors taxe(%)"
+            example: null
+        -
+          in: query
+          name: caf_id
+          description: 'Filtrer par ID du CAF'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par ID du CAF'
+            example: null
+        -
+          in: query
           name: with_type_of_credit
           description: 'Afficher le type de crédit.'
           example: 0
@@ -1249,6 +1269,16 @@ paths:
           schema:
             type: integer
             description: 'Afficher le contrat.'
+            example: 1
+        -
+          in: query
+          name: with_caf
+          description: 'Afficher le CAF.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le CAF.'
             example: 1
         -
           in: query
@@ -1308,7 +1338,7 @@ paths:
                   example: Mr
                 applicant_first_name:
                   type: string
-                  description: 'Le prénnom du demandeur'
+                  description: 'Le prénom du demandeur'
                   example: Cesar
                 applicant_last_name:
                   type: string
@@ -1344,20 +1374,28 @@ paths:
                   example: mensual
                 taf:
                   type: number
-                  description: 'La TAF'
-                  example: 1.0
+                  description: 'La TAF(%)'
+                  example: 10.0
                 due_amount:
                   type: number
                   description: "Le montant d'une échéance"
                   example: 500000.0
                 administrative_fees_percentage:
                   type: number
-                  description: 'Les frais de dossier(pourcentage)'
-                  example: 45000.0
+                  description: 'Les frais de dossier(%)'
+                  example: 2.5
                 insurance_premium:
                   type: number
                   description: "La prime d'assurance"
                   example: 45000.0
+                tax_fee_interest_rate:
+                  type: number
+                  description: "Le taux d'intérêt hors taxe(%)"
+                  example: 10.0
+                caf_id:
+                  type: integer
+                  description: "L'ID du CAF"
+                  example: 4
   '/api/verbal-trial/{id}':
     get:
       summary: 'Affiche un procès verbal'
@@ -1404,6 +1442,16 @@ paths:
             type: integer
             description: 'Afficher le contrat.'
             example: 1
+        -
+          in: query
+          name: with_caf
+          description: 'Afficher le CAF.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le CAF.'
+            example: 1
       responses:
         200:
           description: ''
@@ -1449,10 +1497,10 @@ paths:
                 civility:
                   type: string
                   description: 'La Civilité'
-                  example: Mme
+                  example: Mr
                 applicant_first_name:
                   type: string
-                  description: 'Le prénnom du demandeur'
+                  description: 'Le prénom du demandeur'
                   example: Cesar
                 applicant_last_name:
                   type: string
@@ -1465,7 +1513,7 @@ paths:
                 activity:
                   type: string
                   description: "L'activé"
-                  example: "Femme d'affaire"
+                  example: "Homme d'affaire"
                 purpose_of_financing:
                   type: string
                   description: "L'objet du financement"
@@ -1473,11 +1521,11 @@ paths:
                 type_of_credit_id:
                   type: integer
                   description: "L'ID du type de credit"
-                  example: 3
+                  example: 1
                 amount:
                   type: number
                   description: 'Le montant'
-                  example: 0.0
+                  example: 10000000.0
                 duration:
                   type: integer
                   description: 'La durée en mois'
@@ -1485,23 +1533,31 @@ paths:
                 periodicity:
                   type: string
                   description: 'La periodicité'
-                  example: quarterly
+                  example: mensual
                 taf:
                   type: number
-                  description: 'La TAF'
-                  example: 1.0
+                  description: 'La TAF(%)'
+                  example: 10.0
                 due_amount:
                   type: number
                   description: "Le montant d'une échéance"
                   example: 500000.0
                 administrative_fees_percentage:
                   type: number
-                  description: 'Les frais de dossier(pourcentage)'
-                  example: 45000.0
+                  description: 'Les frais de dossier(%)'
+                  example: 2.5
                 insurance_premium:
                   type: number
                   description: "La prime d'assurance"
                   example: 45000.0
+                tax_fee_interest_rate:
+                  type: number
+                  description: "Le taux d'intérêt hors taxe(%)"
+                  example: 10.0
+                caf_id:
+                  type: integer
+                  description: "L'ID du CAF"
+                  example: 4
     delete:
       summary: 'Supprime un procès verbal'
       operationId: supprimeUnProcsVerbal
@@ -2318,7 +2374,7 @@ tags:
     description: "\nEndPoints pour gérer les cautions"
   -
     name: Contrat
-    description: "\nEndPoints pour gérer les contrat"
+    description: "\nEndPoints pour gérer les contrats"
   -
     name: 'Procès Verbal'
     description: "\nEndPoints pour gérer les Procès verbaux"

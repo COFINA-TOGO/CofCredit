@@ -53,7 +53,6 @@ const login = async () => {
         errors.value = response._data.errors
       },
     })
-    console.log(res);
     const { userToken } = res.data
 
     const userAbilityRules = [

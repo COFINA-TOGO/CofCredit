@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         User::factory(1)->create(["profile" => "operation"]);
         User::factory(1)->create(["profile" => "legal"]);
         User::factory(1)->create(["profile" => "dex"]);
+        User::factory(1)->create(["profile" => "caf"]);
 
         $physical_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Physique"])->first();
         $moral_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Morale"])->first();
@@ -109,8 +110,17 @@ class DatabaseSeeder extends Seeder
         Guarantor::factory(1)->create(["contract_id" => $contract->id]);
 
 
+        // VerbalTrial::factory(50)->create(["type_of_credit_id" => $typeOfCredit->id])->each(function ($verbalTrial) {
+        //     Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+        //     Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular"])->each(function ($contract) {
+        //         Guarantor::factory(1)->create(["contract_id" => $contract->id]);
+        //     });
+        // });
+
+        $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
         $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
         DB::update("update personal_access_tokens set TOKEN = '8fb55a1d50842403ddc4ea7dc0c80a5d2e44eeb029f1077341babd46b68fe0ba' where ID = 1");
+        DB::update("update personal_access_tokens set TOKEN = '773aef8678b480f3ae90b30c317996be3c1993c317aa5311e4484222b983715a' where ID = 2");
         $plainTextToken = "1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644";
         $file = public_path('../.env');
         $lines = file($file);
