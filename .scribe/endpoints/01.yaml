@@ -1,7 +1,7 @@
 name: Contrat
 description: |-
 
-  EndPoints pour gérer les contrat
+  EndPoints pour gérer les contrats
 endpoints:
   -
     httpMethods:
@@ -11,7 +11,7 @@ endpoints:
       groupName: Contrat
       groupDescription: |-
 
-        EndPoints pour gérer les contrat
+        EndPoints pour gérer les contrats
       subgroup: ''
       subgroupDescription: ''
       title: "Télécharge la version word d'un contrat"
@@ -63,7 +63,7 @@ endpoints:
       groupName: Contrat
       groupDescription: |-
 
-        EndPoints pour gérer les contrat
+        EndPoints pour gérer les contrats
       subgroup: ''
       subgroupDescription: ''
       title: "Télécharge le billet à ordre d'un contrat"
@@ -115,7 +115,7 @@ endpoints:
       groupName: Contrat
       groupDescription: |-
 
-        EndPoints pour gérer les contrat
+        EndPoints pour gérer les contrats
       subgroup: ''
       subgroupDescription: ''
       title: 'Affiche les contrats'
@@ -333,7 +333,7 @@ endpoints:
       groupName: Contrat
       groupDescription: |-
 
-        EndPoints pour gérer les contrat
+        EndPoints pour gérer les contrats
       subgroup: ''
       subgroupDescription: ''
       title: 'Affiche un contrat'
@@ -425,7 +425,7 @@ endpoints:
       groupName: Contrat
       groupDescription: |-
 
-        EndPoints pour gérer les contrat
+        EndPoints pour gérer les contrats
       subgroup: ''
       subgroupDescription: ''
       title: 'Créer un nouveau contrat'
@@ -607,7 +607,7 @@ endpoints:
       groupName: Contrat
       groupDescription: |-
 
-        EndPoints pour gérer les contrat
+        EndPoints pour gérer les contrats
       subgroup: ''
       subgroupDescription: ''
       title: 'Mettre à jour un contrat'
@@ -789,7 +789,7 @@ endpoints:
       groupName: Contrat
       groupDescription: |-
 
-        EndPoints pour gérer les contrat
+        EndPoints pour gérer les contrats
       subgroup: ''
       subgroupDescription: ''
       title: 'Supprime un contrat'

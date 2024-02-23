@@ -23,7 +23,6 @@ export const useApi = createFetch({
     },
     afterFetch(ctx) {
       const { data, response } = ctx
-
       // Parse data if it's JSON
       let parsedData = null
       try {
@@ -32,7 +31,6 @@ export const useApi = createFetch({
       catch (error) {
         console.error(error)
       }
-
       return { data: parsedData, response }
     },
   },

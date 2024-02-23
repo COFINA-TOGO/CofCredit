@@ -32,6 +32,8 @@ class VerbalTrial extends Model
         'due_amount',
         'administrative_fees_percentage',
         'insurance_premium',
+        'tax_fee_interest_rate',
+        'caf_id',
     ];
 
     public function toArray()
@@ -55,5 +57,10 @@ class VerbalTrial extends Model
     public function contract(): HasOne
     {
         return $this->hasOne(Contract::class, 'verbal_trial_id', 'id');
+    }
+
+    public function caf(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'caf_id', "id");
     }
 }

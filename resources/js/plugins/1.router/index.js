@@ -32,13 +32,6 @@ const router = createRouter({
   ],
 })
 
-console.log([
-  ...redirects,
-  ...[
-    ...routes,
-  ].map(route => recursiveLayouts(route)),
-])
-
 setupGuards(router)
 export { router }
 export default function (app) {

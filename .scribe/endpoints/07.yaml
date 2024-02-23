@@ -169,6 +169,24 @@ endpoints:
         enumValues: []
         exampleWasSpecified: false
         custom: []
+      tax_fee_interest_rate:
+        name: tax_fee_interest_rate
+        description: "Fiilter par taux d'intérêt hors taxe(%)"
+        required: false
+        example: null
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      caf_id:
+        name: caf_id
+        description: 'Filtrer par ID du CAF'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
       with_type_of_credit:
         name: with_type_of_credit
         description: 'Afficher le type de crédit.'
@@ -205,6 +223,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_caf:
+        name: with_caf
+        description: 'Afficher le CAF.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       paginate:
         name: paginate
         description: 'Utiliser la pagination.'
@@ -219,6 +246,7 @@ endpoints:
       with_type_of_applicant: 1
       with_guarantees: 1
       with_contract: 1
+      with_caf: 1
       paginate: 0
     bodyParameters: []
     cleanBodyParameters: []
@@ -307,11 +335,21 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_caf:
+        name: with_caf
+        description: 'Afficher le CAF.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
     cleanQueryParameters:
       with_type_of_credit: 0
       with_type_of_applicant: 1
       with_guarantees: 1
       with_contract: 1
+      with_caf: 1
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -384,7 +422,7 @@ endpoints:
         custom: []
       applicant_first_name:
         name: applicant_first_name
-        description: 'Le prénnom du demandeur'
+        description: 'Le prénom du demandeur'
         required: false
         example: Cesar
         type: string
@@ -465,9 +503,9 @@ endpoints:
         custom: []
       taf:
         name: taf
-        description: 'La TAF'
+        description: 'La TAF(%)'
         required: false
-        example: 1.0
+        example: 10.0
         type: number
         enumValues: []
         exampleWasSpecified: true
@@ -483,9 +521,9 @@ endpoints:
         custom: []
       administrative_fees_percentage:
         name: administrative_fees_percentage
-        description: 'Les frais de dossier(pourcentage)'
+        description: 'Les frais de dossier(%)'
         required: false
-        example: 45000.0
+        example: 2.5
         type: number
         enumValues: []
         exampleWasSpecified: true
@@ -496,6 +534,24 @@ endpoints:
         required: false
         example: 45000.0
         type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      tax_fee_interest_rate:
+        name: tax_fee_interest_rate
+        description: "Le taux d'intérêt hors taxe(%)"
+        required: false
+        example: 10.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      caf_id:
+        name: caf_id
+        description: "L'ID du CAF"
+        required: false
+        example: 4
+        type: integer
         enumValues: []
         exampleWasSpecified: true
         custom: []
@@ -512,10 +568,12 @@ endpoints:
       amount: 10000000.0
       duration: 12
       periodicity: mensual
-      taf: 1.0
+      taf: 10.0
       due_amount: 500000.0
-      administrative_fees_percentage: 45000.0
+      administrative_fees_percentage: 2.5
       insurance_premium: 45000.0
+      tax_fee_interest_rate: 10.0
+      caf_id: 4
     fileParameters: []
     responses:
       -
@@ -589,14 +647,14 @@ endpoints:
         name: civility
         description: 'La Civilité'
         required: false
-        example: Mme
+        example: Mr
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
       applicant_first_name:
         name: applicant_first_name
-        description: 'Le prénnom du demandeur'
+        description: 'Le prénom du demandeur'
         required: false
         example: Cesar
         type: string
@@ -625,7 +683,7 @@ endpoints:
         name: activity
         description: "L'activé"
         required: false
-        example: "Femme d'affaire"
+        example: "Homme d'affaire"
         type: string
         enumValues: []
         exampleWasSpecified: true
@@ -643,7 +701,7 @@ endpoints:
         name: type_of_credit_id
         description: "L'ID du type de credit"
         required: false
-        example: 3
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: true
@@ -652,7 +710,7 @@ endpoints:
         name: amount
         description: 'Le montant'
         required: false
-        example: 0.0
+        example: 10000000.0
         type: number
         enumValues: []
         exampleWasSpecified: true
@@ -670,16 +728,16 @@ endpoints:
         name: periodicity
         description: 'La periodicité'
         required: false
-        example: quarterly
+        example: mensual
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
       taf:
         name: taf
-        description: 'La TAF'
+        description: 'La TAF(%)'
         required: false
-        example: 1.0
+        example: 10.0
         type: number
         enumValues: []
         exampleWasSpecified: true
@@ -695,9 +753,9 @@ endpoints:
         custom: []
       administrative_fees_percentage:
         name: administrative_fees_percentage
-        description: 'Les frais de dossier(pourcentage)'
+        description: 'Les frais de dossier(%)'
         required: false
-        example: 45000.0
+        example: 2.5
         type: number
         enumValues: []
         exampleWasSpecified: true
@@ -711,23 +769,43 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      tax_fee_interest_rate:
+        name: tax_fee_interest_rate
+        description: "Le taux d'intérêt hors taxe(%)"
+        required: false
+        example: 10.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      caf_id:
+        name: caf_id
+        description: "L'ID du CAF"
+        required: false
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
     cleanBodyParameters:
       committee_id: CFNTG-044-13-12-23-01212
       committee_date: '2024-02-09'
-      civility: Mme
+      civility: Mr
       applicant_first_name: Cesar
       applicant_last_name: Endure
       account_number: '012345678901'
-      activity: "Femme d'affaire"
+      activity: "Homme d'affaire"
       purpose_of_financing: 'Achat nouveau locaux'
-      type_of_credit_id: 3
-      amount: 0.0
+      type_of_credit_id: 1
+      amount: 10000000.0
       duration: 12
-      periodicity: quarterly
-      taf: 1.0
+      periodicity: mensual
+      taf: 10.0
       due_amount: 500000.0
-      administrative_fees_percentage: 45000.0
+      administrative_fees_percentage: 2.5
       insurance_premium: 45000.0
+      tax_fee_interest_rate: 10.0
+      caf_id: 4
     fileParameters: []
     responses:
       -
@@ -769,13 +847,13 @@ endpoints:
         name: id
         description: "L'ID du procès verbal"
         required: true
-        example: 7
+        example: 6
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 7
+      id: 6
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

@@ -129,7 +129,7 @@ class UserController extends Controller
             $validator = Validator::make($requestData, [
                 'name' => 'required|unique:users',
                 'full_name' => 'required|unique:users',
-                "profile" => 'required|in:admin,credit_admin,head_credit,operation,legal,dex',
+                "profile" => 'required|in:admin,credit_admin,head_credit,operation,legal,dex,daf',
                 'email' => 'required|unique:users',
                 "activated" => 'required|boolean',
                 "password" => 'required|min:8',
@@ -177,7 +177,7 @@ class UserController extends Controller
                     'name' => 'required',
                     'full_name' => 'required|unique:users,full_name,' . $id,
                     'email' => 'required|unique:users,email,' . $id,
-                    "profile" => 'required|in:admin,credit_admin,head_credit,operation,legal,dex',
+                    "profile" => 'required|in:admin,credit_admin,head_credit,operation,legal,dex,daf',
                     "password" => 'min:8',
                     "activated" => 'required|boolean',
                     "password_change_required" => 'required|boolean',

@@ -1,0 +1,1 @@
+ajouter le champ taux d'interêt hors taxe aux pv(facultatif duranant l'insertion et la mise à jour, mais prends 17 si non précisé dans cas de store, et ne change en cas update)

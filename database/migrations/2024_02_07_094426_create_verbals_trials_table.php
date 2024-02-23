@@ -28,6 +28,8 @@ return new class extends Migration {
             $table->decimal('due_amount', 30, 10);
             $table->decimal('administrative_fees_percentage', 30, 10);
             $table->decimal('insurance_premium', 30, 10);
+            $table->float('tax_fee_interest_rate');
+            $table->foreignId('caf_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -30,9 +30,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-4.29.0.js"></script>
+    <script src="../docs/js/tryitout-4.32.0.js"></script>
 
-    <script src="../docs/js/theme-default-4.29.0.js"></script>
+    <script src="../docs/js/theme-default-4.32.0.js"></script>
 
 </head>
 
@@ -261,7 +261,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: February 19, 2024</li>
+        <li>Last updated: February 23, 2024</li>
     </ul>
 </div>
 
@@ -2304,7 +2304,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 
                 <h1 id="contrat">Contrat</h1>
 
-    <p>EndPoints pour gérer les contrat</p>
+    <p>EndPoints pour gérer les contrats</p>
 
                                 <h2 id="contrat-GETapi-contract-word--id-">Télécharge la version word d&#039;un contrat</h2>
 
@@ -3927,7 +3927,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/verbal-trial?with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_contract=1&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/verbal-trial?with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_contract=1&amp;with_caf=1&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3943,6 +3943,7 @@ const params = {
     "with_type_of_applicant": "1",
     "with_guarantees": "1",
     "with_contract": "1",
+    "with_caf": "1",
     "paginate": "0",
 };
 Object.keys(params)
@@ -4228,6 +4229,28 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 <p>Filtrer par prime d'assurance</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>tax_fee_interest_rate</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="tax_fee_interest_rate"                data-endpoint="GETapi-verbal-trial"
+               value=""
+               data-component="query">
+    <br>
+<p>Fiilter par taux d'intérêt hors taxe(%)</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>caf_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="caf_id"                data-endpoint="GETapi-verbal-trial"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par ID du CAF</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_type_of_credit</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -4272,6 +4295,17 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 <p>Afficher le contrat. Example: <code>1</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_caf</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_caf"                data-endpoint="GETapi-verbal-trial"
+               value="1"
+               data-component="query">
+    <br>
+<p>Afficher le CAF. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>paginate</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -4298,7 +4332,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/verbal-trial/1?with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_contract=1" \
+    --get "http://cofcredit.cofina.localhost/api/verbal-trial/1?with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_contract=1&amp;with_caf=1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4314,6 +4348,7 @@ const params = {
     "with_type_of_applicant": "1",
     "with_guarantees": "1",
     "with_contract": "1",
+    "with_caf": "1",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4477,6 +4512,17 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
     <br>
 <p>Afficher le contrat. Example: <code>1</code></p>
             </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_caf</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_caf"                data-endpoint="GETapi-verbal-trial--id-"
+               value="1"
+               data-component="query">
+    <br>
+<p>Afficher le CAF. Example: <code>1</code></p>
+            </div>
                 </form>
 
                     <h2 id="proces-verbal-POSTapi-verbal-trial">Créer un nouveau procès verbal</h2>
@@ -4510,10 +4556,12 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
     \"amount\": 10000000,
     \"duration\": 12,
     \"periodicity\": \"mensual\",
-    \"taf\": 1,
+    \"taf\": 10,
     \"due_amount\": 500000,
-    \"administrative_fees_percentage\": 45000,
-    \"insurance_premium\": 45000
+    \"administrative_fees_percentage\": 2.5,
+    \"insurance_premium\": 45000,
+    \"tax_fee_interest_rate\": 10,
+    \"caf_id\": 4
 }"
 </code></pre></div>
 
@@ -4542,10 +4590,12 @@ let body = {
     "amount": 10000000,
     "duration": 12,
     "periodicity": "mensual",
-    "taf": 1,
+    "taf": 10,
     "due_amount": 500000,
-    "administrative_fees_percentage": 45000,
-    "insurance_premium": 45000
+    "administrative_fees_percentage": 2.5,
+    "insurance_premium": 45000,
+    "tax_fee_interest_rate": 10,
+    "caf_id": 4
 };
 
 fetch(url, {
@@ -4688,7 +4738,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
                value="Cesar"
                data-component="body">
     <br>
-<p>Le prénnom du demandeur Example: <code>Cesar</code></p>
+<p>Le prénom du demandeur Example: <code>Cesar</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>applicant_last_name</code></b>&nbsp;&nbsp;
@@ -4784,10 +4834,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="taf"                data-endpoint="POSTapi-verbal-trial"
-               value="1"
+               value="10"
                data-component="body">
     <br>
-<p>La TAF Example: <code>1</code></p>
+<p>La TAF(%) Example: <code>10</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>due_amount</code></b>&nbsp;&nbsp;
@@ -4806,10 +4856,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="administrative_fees_percentage"                data-endpoint="POSTapi-verbal-trial"
-               value="45000"
+               value="2.5"
                data-component="body">
     <br>
-<p>Les frais de dossier(pourcentage) Example: <code>45000</code></p>
+<p>Les frais de dossier(%) Example: <code>2.5</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>insurance_premium</code></b>&nbsp;&nbsp;
@@ -4821,6 +4871,28 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
                data-component="body">
     <br>
 <p>La prime d'assurance Example: <code>45000</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>tax_fee_interest_rate</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="tax_fee_interest_rate"                data-endpoint="POSTapi-verbal-trial"
+               value="10"
+               data-component="body">
+    <br>
+<p>Le taux d'intérêt hors taxe(%) Example: <code>10</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>caf_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="caf_id"                data-endpoint="POSTapi-verbal-trial"
+               value="4"
+               data-component="body">
+    <br>
+<p>L'ID du CAF Example: <code>4</code></p>
         </div>
         </form>
 
@@ -4845,20 +4917,22 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
     --data "{
     \"committee_id\": \"CFNTG-044-13-12-23-01212\",
     \"committee_date\": \"2024-02-09\",
-    \"civility\": \"Mme\",
+    \"civility\": \"Mr\",
     \"applicant_first_name\": \"Cesar\",
     \"applicant_last_name\": \"Endure\",
     \"account_number\": \"012345678901\",
-    \"activity\": \"Femme d\'affaire\",
+    \"activity\": \"Homme d\'affaire\",
     \"purpose_of_financing\": \"Achat nouveau locaux\",
-    \"type_of_credit_id\": 3,
-    \"amount\": 0,
+    \"type_of_credit_id\": 1,
+    \"amount\": 10000000,
     \"duration\": 12,
-    \"periodicity\": \"quarterly\",
-    \"taf\": 1,
+    \"periodicity\": \"mensual\",
+    \"taf\": 10,
     \"due_amount\": 500000,
-    \"administrative_fees_percentage\": 45000,
-    \"insurance_premium\": 45000
+    \"administrative_fees_percentage\": 2.5,
+    \"insurance_premium\": 45000,
+    \"tax_fee_interest_rate\": 10,
+    \"caf_id\": 4
 }"
 </code></pre></div>
 
@@ -4877,20 +4951,22 @@ const headers = {
 let body = {
     "committee_id": "CFNTG-044-13-12-23-01212",
     "committee_date": "2024-02-09",
-    "civility": "Mme",
+    "civility": "Mr",
     "applicant_first_name": "Cesar",
     "applicant_last_name": "Endure",
     "account_number": "012345678901",
-    "activity": "Femme d'affaire",
+    "activity": "Homme d'affaire",
     "purpose_of_financing": "Achat nouveau locaux",
-    "type_of_credit_id": 3,
-    "amount": 0,
+    "type_of_credit_id": 1,
+    "amount": 10000000,
     "duration": 12,
-    "periodicity": "quarterly",
-    "taf": 1,
+    "periodicity": "mensual",
+    "taf": 10,
     "due_amount": 500000,
-    "administrative_fees_percentage": 45000,
-    "insurance_premium": 45000
+    "administrative_fees_percentage": 2.5,
+    "insurance_premium": 45000,
+    "tax_fee_interest_rate": 10,
+    "caf_id": 4
 };
 
 fetch(url, {
@@ -5031,10 +5107,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="civility"                data-endpoint="PUTapi-verbal-trial--id-"
-               value="Mme"
+               value="Mr"
                data-component="body">
     <br>
-<p>La Civilité Example: <code>Mme</code></p>
+<p>La Civilité Example: <code>Mr</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>applicant_first_name</code></b>&nbsp;&nbsp;
@@ -5045,7 +5121,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
                value="Cesar"
                data-component="body">
     <br>
-<p>Le prénnom du demandeur Example: <code>Cesar</code></p>
+<p>Le prénom du demandeur Example: <code>Cesar</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>applicant_last_name</code></b>&nbsp;&nbsp;
@@ -5075,10 +5151,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="activity"                data-endpoint="PUTapi-verbal-trial--id-"
-               value="Femme d'affaire"
+               value="Homme d'affaire"
                data-component="body">
     <br>
-<p>L'activé Example: <code>Femme d'affaire</code></p>
+<p>L'activé Example: <code>Homme d'affaire</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>purpose_of_financing</code></b>&nbsp;&nbsp;
@@ -5097,10 +5173,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="type_of_credit_id"                data-endpoint="PUTapi-verbal-trial--id-"
-               value="3"
+               value="1"
                data-component="body">
     <br>
-<p>L'ID du type de credit Example: <code>3</code></p>
+<p>L'ID du type de credit Example: <code>1</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>amount</code></b>&nbsp;&nbsp;
@@ -5108,10 +5184,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="amount"                data-endpoint="PUTapi-verbal-trial--id-"
-               value="0"
+               value="10000000"
                data-component="body">
     <br>
-<p>Le montant Example: <code>0</code></p>
+<p>Le montant Example: <code>10000000</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>duration</code></b>&nbsp;&nbsp;
@@ -5130,10 +5206,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="periodicity"                data-endpoint="PUTapi-verbal-trial--id-"
-               value="quarterly"
+               value="mensual"
                data-component="body">
     <br>
-<p>La periodicité Example: <code>quarterly</code></p>
+<p>La periodicité Example: <code>mensual</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>taf</code></b>&nbsp;&nbsp;
@@ -5141,10 +5217,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="taf"                data-endpoint="PUTapi-verbal-trial--id-"
-               value="1"
+               value="10"
                data-component="body">
     <br>
-<p>La TAF Example: <code>1</code></p>
+<p>La TAF(%) Example: <code>10</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>due_amount</code></b>&nbsp;&nbsp;
@@ -5163,10 +5239,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="administrative_fees_percentage"                data-endpoint="PUTapi-verbal-trial--id-"
-               value="45000"
+               value="2.5"
                data-component="body">
     <br>
-<p>Les frais de dossier(pourcentage) Example: <code>45000</code></p>
+<p>Les frais de dossier(%) Example: <code>2.5</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>insurance_premium</code></b>&nbsp;&nbsp;
@@ -5178,6 +5254,28 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
                data-component="body">
     <br>
 <p>La prime d'assurance Example: <code>45000</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>tax_fee_interest_rate</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="tax_fee_interest_rate"                data-endpoint="PUTapi-verbal-trial--id-"
+               value="10"
+               data-component="body">
+    <br>
+<p>Le taux d'intérêt hors taxe(%) Example: <code>10</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>caf_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="caf_id"                data-endpoint="PUTapi-verbal-trial--id-"
+               value="4"
+               data-component="body">
+    <br>
+<p>L'ID du CAF Example: <code>4</code></p>
         </div>
         </form>
 
@@ -5195,7 +5293,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/verbal-trial/7" \
+    "http://cofcredit.cofina.localhost/api/verbal-trial/6" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5203,7 +5301,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/verbal-trial/7"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/6"
 );
 
 const headers = {
@@ -5314,10 +5412,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-verbal-trial--id-"
-               value="7"
+               value="6"
                data-component="url">
     <br>
-<p>L'ID du procès verbal Example: <code>7</code></p>
+<p>L'ID du procès verbal Example: <code>6</code></p>
             </div>
                     </form>
 
@@ -5950,7 +6048,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/1" \
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/18" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5958,7 +6056,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/1"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/18"
 );
 
 const headers = {
@@ -6069,10 +6167,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-guarantee--id-"
-               value="1"
+               value="18"
                data-component="url">
     <br>
-<p>L'ID du type de garantie Example: <code>1</code></p>
+<p>L'ID du type de garantie Example: <code>18</code></p>
             </div>
                     </form>
 
@@ -6848,7 +6946,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-credit/11" \
+    "http://cofcredit.cofina.localhost/api/type-of-credit/19" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6856,7 +6954,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-credit/11"
+    "http://cofcredit.cofina.localhost/api/type-of-credit/19"
 );
 
 const headers = {
@@ -6967,10 +7065,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-credit--id-"
-               value="11"
+               value="19"
                data-component="url">
     <br>
-<p>L'ID du type de crédit Example: <code>11</code></p>
+<p>L'ID du type de crédit Example: <code>19</code></p>
             </div>
                     </form>
 
@@ -7657,7 +7755,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/12" \
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/8" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -7665,7 +7763,7 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/12"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/8"
 );
 
 const headers = {
@@ -7776,10 +7874,10 @@ Vous pouvez consulter la console des outils de développement pour obtenir des i
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-applicant--id-"
-               value="12"
+               value="8"
                data-component="url">
     <br>
-<p>L'ID du type de demandeur de crédit Example: <code>12</code></p>
+<p>L'ID du type de demandeur de crédit Example: <code>8</code></p>
             </div>
                     </form>
 
