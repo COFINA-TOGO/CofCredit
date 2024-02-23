@@ -100,6 +100,7 @@ const {
   },
 }))
 const cafList = computed(() => cafListData.value.data)
+
 const refForm = ref()
 const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
@@ -131,7 +132,6 @@ const onSubmit = () => {
       if (res.status == 201) {
         router.push("/pv")
       } else {
-        console.log(res.errors)
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
             pvError.value[key] += message + "\n"

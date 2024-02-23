@@ -4,20 +4,16 @@ import { paginationMeta } from '@api-utils/paginationMeta'
 
 const headers = [
   {
-    title: 'Nom client',
-    key: 'applicant_last_name',
+    title: 'Numéro comitée',
+    key: 'committee_id',
   },
   {
     title: 'Prénom client',
     key: 'applicant_first_name',
   },
   {
-    title: 'Numéro comitée',
-    key: 'committee_id',
-  },
-  {
-    title: 'CAF',
-    key: 'caf.full_name',
+    title: 'Nom client',
+    key: 'applicant_last_name',
   },
   {
     title: 'Type Credit',
@@ -30,6 +26,10 @@ const headers = [
   {
     title: 'Durée',
     key: 'duration',
+  },
+  {
+    title: 'CAF',
+    key: 'caf.full_name',
   },
   {
     title: 'Actions',
@@ -55,13 +55,9 @@ const status = ref([
 ])
 const itemsPerPage = ref(8)
 const page = ref(1)
-const sortBy = ref()
-const orderBy = ref()
 
 const updateOptions = options => {
   page.value = options.page
-  sortBy.value = options.sortBy[0]?.key
-  orderBy.value = options.sortBy[0]?.order
 }
 
 const {
@@ -70,19 +66,22 @@ const {
 } = await useApi(createUrl('/verbal-trial', {
   query: {
     search: searchQuery,
-    page,
+    page: page,
     with_caf: 1,
     with_type_of_credit: 1,
   },
 }))
 
-const pvList = computed(() => pvData.value.data)
-const totalPv = computed(() => pvData.value.total)
 
 const deletePv = async id => {
   await $api(`verbal-trial/${id}`, { method: 'DELETE' })
   fetchPv()
 }
+
+const pvList = computed(() => pvData.value.data)
+const totalPv = computed(() => pvData.value.total)
+const lastPage = computed(() => pvData.value.last_page)
+// Math.min(Math.ceil(totalPv / itemsPerPage), 5)
 </script>
 
 <template>
@@ -93,7 +92,7 @@ const deletePv = async id => {
         <VRow>
           <VCardText>
             <h2>
-              Liste des Procès verbaux
+              Liste des Procès verbaux en attente de contrat
             </h2>
           </VCardText>
         </VRow>
@@ -141,8 +140,8 @@ const deletePv = async id => {
 
 
       <!-- 👉 Datatable  -->
-      <VDataTableServer v-model:page="page" :headers="headers" :items="pvList" :items-length="totalPv"
-        class="text-no-wrap" @update:options="updateOptions">
+      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers" :items="pvList"
+        :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
         <!-- Actions -->
         <template #item.actions="{ item }">
           <IconBtn @click="$router.push('/pv/' + item.id)">
@@ -168,8 +167,8 @@ const deletePv = async id => {
               {{ paginationMeta({ page, itemsPerPage }, totalPv) }}
             </p>
 
-            <VPagination v-model="page" :length="Math.min(Math.ceil(totalPv / itemsPerPage), 5)"
-              :total-visible="$vuetify.display.xs ? 1 : Math.min(Math.ceil(totalPv / itemsPerPage), 5)">
+            <VPagination v-model="page" :length="lastPage"
+              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)">
               <template #prev="slotProps">
                 <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
                   Précedent

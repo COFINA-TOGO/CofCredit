@@ -58,10 +58,7 @@ const removeProduct = id => {
       <div class="ma-sm-4">
         <div class="d-flex align-center mb-6">
           <!-- 👉 Logo -->
-          <VNodeRenderer
-            :nodes="themeConfig.app.logo"
-            class="me-3"
-          />
+          <VNodeRenderer :nodes="themeConfig.app.logo" class="me-3" />
 
           <!-- 👉 Title -->
           <h6 class="font-weight-bold text-capitalize text-h4">
@@ -85,53 +82,30 @@ const removeProduct = id => {
       <div class="mt-4 ma-sm-4">
         <!-- 👉 Invoice Id -->
         <h6 class="d-flex align-center font-weight-medium justify-sm-end text-xl mb-3">
-          <span
-            class="me-3 text-h4"
-            style="inline-size: 6rem;"
-          >Invoice</span>
+          <span class="me-3 text-h4" style="inline-size: 6rem;">Invoice</span>
 
           <span>
-            <AppTextField
-              v-model="invoice.id"
-              disabled
-              prefix="#"
-              density="compact"
-              style="inline-size: 9.5rem;"
-            />
+            <AppTextField v-model="invoice.id" disabled prefix="#" density="compact" style="inline-size: 9.5rem;" />
           </span>
         </h6>
 
         <!-- 👉 Issue Date -->
         <div class="d-flex align-center justify-sm-end mb-3">
-          <span
-            class="me-3"
-            style="inline-size: 6rem;"
-          >Date Issued</span>
+          <span class="me-3" style="inline-size: 6rem;">Date Issued</span>
 
           <span style="inline-size: 9.5rem;">
-            <AppDateTimePicker
-              v-model="invoice.issuedDate"
-              density="compact"
-              placeholder="YYYY-MM-DD"
-              :config="{ position: 'auto right' }"
-            />
+            <AppDateTimePicker v-model="invoice.issuedDate" density="compact" placeholder="YYYY-MM-DD"
+              :config="{ position: 'auto right' }" />
           </span>
         </div>
 
         <!-- 👉 Due Date -->
         <div class="d-flex align-center justify-sm-end mb-0">
-          <span
-            class="me-3"
-            style="inline-size: 6rem;"
-          >Due Date</span>
+          <span class="me-3" style="inline-size: 6rem;">Due Date</span>
 
           <span style="min-inline-size: 9.5rem;">
-            <AppDateTimePicker
-              v-model="invoice.dueDate"
-              density="compact"
-              placeholder="YYYY-MM-DD"
-              :config="{ position: 'auto right' }"
-            />
+            <AppDateTimePicker v-model="invoice.dueDate" density="compact" placeholder="YYYY-MM-DD"
+              :config="{ position: 'auto right' }" />
           </span>
         </div>
       </div>
@@ -141,34 +115,20 @@ const removeProduct = id => {
     <VDivider />
 
     <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row gap-y-5 gap-4">
-      <div
-        class="ma-sm-4"
-        style="inline-size: 15.5rem;"
-      >
+      <div class="ma-sm-4" style="inline-size: 15.5rem;">
         <h6 class="text-base font-weight-medium mb-6">
           Invoice To:
         </h6>
 
-        <AppSelect
-          v-model="invoice.client"
-          :items="clients"
-          item-title="name"
-          item-value="name"
-          placeholder="Select Client"
-          return-object
-          class="mb-6"
-          density="compact"
-        />
+        <AppSelect v-model="invoice.client" :items="clients" item-title="name" item-value="name"
+          placeholder="Select Client" return-object class="mb-6" density="compact" />
         <p class="mb-1">
           {{ invoice.client.name }}
         </p>
         <p class="mb-1">
           {{ invoice.client.company }}
         </p>
-        <p
-          v-if="invoice.client.address"
-          class="mb-1"
-        >
+        <p v-if="invoice.client.address" class="mb-1">
           {{ invoice.client.address }}, {{ invoice.client.country }}
         </p>
         <p class="mb-1">
@@ -239,16 +199,8 @@ const removeProduct = id => {
 
     <!-- 👉 Add purchased products -->
     <VCardText class="add-products-form">
-      <div
-        v-for="(product, index) in props.data.purchasedProducts"
-        :key="product.title"
-        class="my-4 ma-sm-4"
-      >
-        <InvoiceProductEdit
-          :id="index"
-          :data="product"
-          @remove-product="removeProduct"
-        />
+      <div v-for="(product, index) in props.data.purchasedProducts" :key="product.title" class="my-4 ma-sm-4">
+        <InvoiceProductEdit :id="index" :data="product" @remove-product="removeProduct" />
       </div>
 
       <div class="mt-4 ma-sm-4">
@@ -267,17 +219,10 @@ const removeProduct = id => {
           <h6 class="text-sm font-weight-medium me-10">
             Salesperson:
           </h6>
-          <AppTextField
-            v-model="salesperson"
-            style="inline-size: 10rem;"
-            placeholder="John Doe"
-          />
+          <AppTextField v-model="salesperson" style="inline-size: 10rem;" placeholder="John Doe" />
         </div>
 
-        <AppTextField
-          v-model="thanksNote"
-          placeholder="Message"
-        />
+        <AppTextField v-model="thanksNote" placeholder="Message" />
       </div>
 
       <div class="mx-sm-4 my-4">
@@ -341,11 +286,7 @@ const removeProduct = id => {
       <p class="font-weight-medium text-sm text-high-emphasis mb-2">
         Note:
       </p>
-      <AppTextarea
-        v-model="note"
-        placeholder="Write note here..."
-        :rows="2"
-      />
+      <AppTextarea v-model="note" placeholder="Write note here..." :rows="2" />
     </VCardText>
   </VCard>
 </template>

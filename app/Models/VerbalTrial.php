@@ -41,6 +41,14 @@ class VerbalTrial extends Model
         $data = parent::toArray();
         $data["created_at"] = Carbon::parse($data["created_at"])->format('d/m/Y H:i:s');
         $data["updated_at"] = Carbon::parse($data["updated_at"])->format('d/m/Y H:i:s');
+        $data["type_of_credit_id"] = (int) $data["type_of_credit_id"];
+        $data["amount"] = (float) $data["amount"];
+        $data["taf"] = (float) $data["taf"];
+        $data["due_amount"] = (float) $data["due_amount"];
+        $data["administrative_fees_percentage"] = (float) $data["administrative_fees_percentage"];
+        $data["insurance_premium"] = (float) $data["insurance_premium"];
+        $data["tax_fee_interest_rate"] = (float) $data["tax_fee_interest_rate"];
+        $data["caf_id"] = (int) $data["caf_id"];
         return $data;
     }
 

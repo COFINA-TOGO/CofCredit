@@ -1,7 +1,7 @@
-# Authentification des requêtes
+# Authenticating requests
 
-Pour authentifier les requêtes, incluez un en-tête **`Authorization`** avec la valeur **`"Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"`**.
+To authenticate requests, include an **`Authorization`** header with the value **`"Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"`**.
 
-Toutes les points d'accès authentifiés sont marqués d'un badge `requiert une authentification` dans la documentation ci-dessous.
+All authenticated endpoints are marked with a `requires authentication` badge in the documentation below.
 
 Vous pouvez récupérer votre token en visitant votre tableau de bord et en cliquant sur <b>1|VllEQEqmdEP8Rgfd6M90ZiWdgbXWWs5GJNXjjk2Cef3b3979</b>.

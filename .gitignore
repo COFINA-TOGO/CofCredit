@@ -53,8 +53,6 @@ dist-ssr
 .yarn
 
 
-# Ignore MSW script
-public/mockServiceWorker.js
 
 # Env files
 .env*

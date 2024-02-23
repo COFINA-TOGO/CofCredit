@@ -48,6 +48,7 @@ class VerbalTrialController extends Controller
      * @queryParam  with_type_of_credit                 int             Afficher le type de crédit.                             Example: 0
      * @queryParam  with_type_of_applicant              int             Afficher le type de demandeur du type de crédit.        Example: 1
      * @queryParam  with_guarantees                     int             Afficher les garanties.                                 Example: 1
+     * @queryParam  with_type_of_guarantees             int             Afficher les types des garanties.                       Example: 1
      * @queryParam  with_contract                       int             Afficher le contrat.                                    Example: 1
      * @queryParam  with_caf                            int             Afficher le CAF.                                        Example: 1
      * @queryParam  paginate                            int             Utiliser la pagination.                                 Example: 0
@@ -86,7 +87,7 @@ class VerbalTrialController extends Controller
                 }
             }
 
-            foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_contract" => "contract", "with_caf" => "caf"] as $key => $value) {
+            foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
                     $verbalTrialList->with($value);
                 }
@@ -108,13 +109,14 @@ class VerbalTrialController extends Controller
     /**
      * Affiche un procès verbal
      *
-     * @urlParam    id                          int required    L'ID du procès verbal.                                          Example: 1
+     * @urlParam    id                                  int required    L'ID du procès verbal.                                          Example: 1
      *
-     * @queryParam  with_type_of_credit         int             Afficher le type de crédit.                                     Example: 0
-     * @queryParam  with_type_of_applicant      int             Afficher le type de demandeur du type de crédit.                Example: 1
-     * @queryParam  with_guarantees             int             Afficher les garanties.                                         Example: 1
-     * @queryParam  with_contract               int             Afficher le contrat.                                            Example: 1
-     * @queryParam  with_caf                    int             Afficher le CAF.                                                Example: 1
+     * @queryParam  with_type_of_credit                 int             Afficher le type de crédit.                                     Example: 0
+     * @queryParam  with_type_of_applicant              int             Afficher le type de demandeur du type de crédit.                Example: 1
+     * @queryParam  with_guarantees                     int             Afficher les garanties.                                         Example: 1
+     * @queryParam  with_type_of_guarantees             int             Afficher les types des garanties.                               Example: 1
+     * @queryParam  with_contract                       int             Afficher le contrat.                                            Example: 1
+     * @queryParam  with_caf                            int             Afficher le CAF.                                                Example: 1
      *
      * @response 200
      */
@@ -124,7 +126,7 @@ class VerbalTrialController extends Controller
         if ($verbalTrial) {
             if (($authorisation = Gate::inspect('view', $verbalTrial))->allowed()) {
                 $suplementList = [];
-                foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_contract" => "contract", "with_caf" => "caf"] as $key => $value) {
+                foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf"] as $key => $value) {
                     if (isset($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }
@@ -288,7 +290,7 @@ class VerbalTrialController extends Controller
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
                 } else {
-                    if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists) {
+                    if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
                         DB::beginTransaction();
                         try {
                             $verbalTrial->update($requestData);

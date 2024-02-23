@@ -78,7 +78,7 @@ const topicsChartConfig = {
         fontSize: '13px',
       },
       formatter(val) {
-        return `${ val }%`
+        return `${val}%`
       },
     },
   },
@@ -148,7 +148,7 @@ const timeSpendingChartConfig = {
   dataLabels: {
     enabled: false,
     formatter(val) {
-      return `${ Number.parseInt(val) }%`
+      return `${Number.parseInt(val)}%`
     },
   },
   legend: { show: false },
@@ -166,7 +166,7 @@ const timeSpendingChartConfig = {
             fontWeight: 500,
             offsetY: -15,
             formatter(val) {
-              return `${ Number.parseInt(val) }%`
+              return `${Number.parseInt(val)}%`
             },
           },
           name: { offsetY: 20 },
@@ -232,52 +232,30 @@ const topicsData = [
   <div>
     <VRow class="py-6">
       <!-- 👉 Welcome -->
-      <VCol
-        cols="12"
-        md="8"
-        :class="$vuetify.display.mdAndUp ? 'border-e' : 'border-b'"
-      >
+      <VCol cols="12" md="8" :class="$vuetify.display.mdAndUp ? 'border-e' : 'border-b'">
         <div class="pe-3">
           <h3 class="text-h3 text-high-emphasis mb-1">
             Welcome back,<span class="font-weight-medium"> Felecia 👋🏻 </span>
           </h3>
 
-          <div
-            class="mb-2 text-wrap"
-            style="max-inline-size: 400px;"
-          >
+          <div class="mb-2 text-wrap" style="max-inline-size: 400px;">
             Your progress this week is Awesome. let's keep it up
             and get a lot of points reward!
           </div>
 
           <div class="d-flex justify-space-between flex-wrap gap-4 flex-column flex-md-row">
-            <div
-              v-for="{ title, value, icon, color } in [
-                { title: 'Hours Spent', value: '34h', icon: 'custom-laptop', color: 'primary' },
-                { title: 'Test Results', value: '82%', icon: 'custom-lightbulb', color: 'info' },
-                { title: 'Course Completed', value: '14', icon: 'custom-check', color: 'warning' },
-              ]"
-              :key="title"
-            >
+            <div v-for="{ title, value, icon, color } in [
+              { title: 'Hours Spent', value: '34h', icon: 'custom-laptop', color: 'primary' },
+              { title: 'Test Results', value: '82%', icon: 'custom-lightbulb', color: 'info' },
+              { title: 'Course Completed', value: '14', icon: 'custom-check', color: 'warning' },
+            ]" :key="title">
               <div class="d-flex">
-                <VAvatar
-                  variant="tonal"
-                  :color="color"
-                  rounded
-                  size="54"
-                  class="text-primary me-4"
-                >
-                  <VIcon
-                    :icon="icon"
-                    size="38"
-                  />
+                <VAvatar variant="tonal" :color="color" rounded size="54" class="text-primary me-4">
+                  <VIcon :icon="icon" size="38" />
                 </VAvatar>
                 <div>
                   <span class="text-base">{{ title }}</span>
-                  <h4
-                    class="text-h4 font-weight-medium"
-                    :class="`text-${color}`"
-                  >
+                  <h4 class="text-h4 font-weight-medium" :class="`text-${color}`">
                     {{ value }}
                   </h4>
                 </div>
@@ -288,10 +266,7 @@ const topicsData = [
       </VCol>
 
       <!-- 👉 Time Spendings -->
-      <VCol
-        cols="12"
-        md="4"
-      >
+      <VCol cols="12" md="4">
         <div class="d-flex justify-space-between align-center">
           <div class="d-flex flex-column ps-3">
             <h5 class="text-h5 text-high-emphasis mb-2 text-no-wrap">
@@ -302,22 +277,14 @@ const topicsData = [
               231<span class="text-h4 text-medium-emphasis">h</span> 14<span class="text-h4 text-medium-emphasis">m</span>
             </div>
             <div>
-              <VChip
-                color="success"
-                label
-              >
+              <VChip color="success" label>
                 +18.4%
               </VChip>
             </div>
           </div>
           <div>
-            <VueApexCharts
-              type="donut"
-              height="150"
-              width="150"
-              :options="timeSpendingChartConfig"
-              :series="timeSpendingChartSeries"
-            />
+            <VueApexCharts type="donut" height="150" width="150" :options="timeSpendingChartConfig"
+              :series="timeSpendingChartSeries" />
           </div>
         </div>
       </VCol>
@@ -325,10 +292,7 @@ const topicsData = [
 
     <VRow class="match-height">
       <!-- 👉 Topics you are interested in -->
-      <VCol
-        cols="12"
-        md="8"
-      >
+      <VCol cols="12" md="8">
         <!-- 👉 Topic You are Interested in -->
         <VCard>
           <VCardItem title="Topic you are interested in">
@@ -339,44 +303,18 @@ const topicsData = [
 
           <VCardText>
             <VRow>
-              <VCol
-                cols="12"
-                md="6"
-              >
+              <VCol cols="12" md="6">
                 <div>
-                  <VueApexCharts
-                    type="bar"
-                    height="260"
-                    :options="topicsChartConfig"
-                    :series="topicsChartSeries"
-                  />
+                  <VueApexCharts type="bar" height="260" :options="topicsChartConfig" :series="topicsChartSeries" />
                 </div>
               </VCol>
 
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <div
-                  class="d-flex flex-wrap gap-x-4 gap-y-10 mx-auto"
-                  style="inline-size: 300px;"
-                >
-                  <div
-                    v-for="topic in topicsData"
-                    :key="topic.title"
-                    class="d-flex gap-x-4"
-                  >
-                    <VBadge
-                      dot
-                      inline
-                      class="mt-1 custom-badge"
-                      :color="topic.color"
-                    />
+              <VCol cols="12" md="6">
+                <div class="d-flex flex-wrap gap-x-4 gap-y-10 mx-auto" style="inline-size: 300px;">
+                  <div v-for="topic in topicsData" :key="topic.title" class="d-flex gap-x-4">
+                    <VBadge dot inline class="mt-1 custom-badge" :color="topic.color" />
                     <div>
-                      <div
-                        class="text-body-1"
-                        style="min-inline-size: 90px;"
-                      >
+                      <div class="text-body-1" style="min-inline-size: 90px;">
                         {{ topic.title }}
                       </div>
                       <h4 class="text-h4">
@@ -392,38 +330,22 @@ const topicsData = [
       </VCol>
 
       <!-- 👉 Popular Instructors  -->
-      <VCol
-        cols="12"
-        md="4"
-        sm="6"
-      >
+      <VCol cols="12" md="4" sm="6">
         <AcademyCardPopularInstructors />
       </VCol>
 
       <!-- 👉 Academy Top Courses  -->
-      <VCol
-        cols="12"
-        md="4"
-        sm="6"
-      >
+      <VCol cols="12" md="4" sm="6">
         <AcademyCardTopCourses />
       </VCol>
 
       <!-- 👉 Academy Upcoming Webinar -->
-      <VCol
-        cols="12"
-        md="4"
-        sm="6"
-      >
+      <VCol cols="12" md="4" sm="6">
         <AcademyUpcomingWebinar />
       </VCol>
 
       <!-- 👉 Academy Assignment Progress  -->
-      <VCol
-        cols="12"
-        md="4"
-        sm="6"
-      >
+      <VCol cols="12" md="4" sm="6">
         <AcademyAssignmentProgress />
       </VCol>
 
