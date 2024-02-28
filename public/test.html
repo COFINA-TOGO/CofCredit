@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // URL des fichiers à télécharger
+        const urls = [
+            'http://cofcredit.cofina.localhost/test.html',
+            'http://cofcredit.cofina.localhost/test.html',
+        ];
+
+        // Fonction pour télécharger un fichier à partir de son URL
+        async function telechargerFichier(url) {
+            const reponse = await fetch(url);
+            const contenu = await reponse.blob(); // Convertir la réponse en blob (binaire)
+            const lien = document.createElement('a'); // Créer un élément <a> pour le lien de téléchargement
+            lien.href = URL.createObjectURL(contenu); // Créer une URL locale pour le contenu blob
+            lien.download = url.substring(url.lastIndexOf('/') + 1); // Définir le nom de fichier pour le téléchargement
+            lien.style.display = 'none'; // Cacher le lien
+            document.body.appendChild(lien); // Ajouter le lien au corps du document
+            lien.click(); // Simuler un clic sur le lien pour déclencher le téléchargement
+            URL.revokeObjectURL(lien.href); // Libérer l'URL locale
+            document.body.removeChild(lien); // Supprimer le lien du corps du document une fois le téléchargement terminé
+        }
+
+        // Fonction pour télécharger tous les fichiers
+        async function telechargerTousLesFichiers() {
+            for (const url of urls) {
+                await telechargerFichier(url); // Télécharger chaque fichier en séquence
+            }
+        }
+        // Appeler la fonction pour télécharger tous les fichiers
+        telechargerTousLesFichiers();
+
+    </script>
+</body>
+
+</html>

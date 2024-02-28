@@ -7,7 +7,8 @@ const $api = ofetch.create({
     options.headers = {
       ...options.headers,
       Accept: 'application/json',
-    };
+    }
+
     const userToken = useCookie('userToken').value
     if (userToken) {
       options.headers = {

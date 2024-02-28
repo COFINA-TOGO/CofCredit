@@ -1,107 +1,147 @@
 <script setup>
-
 const router = useRouter()
-const route = useRoute("pv-id")
+const route = useRoute("vertalTrial-id")
 
 const frenchMensuality = {
   "mensual": "Mensuelle",
   "quarterly": "Trimestrielle",
   "semi-annual": "Semestrielle",
   "annual": "Annuel",
-  "in-fine": "À la fin"
+  "in-fine": "À la fin",
 }
 
-const { data: pv } = await useApi(`/verbal-trial/${Number(route.params.id)}?with_caf=1&with_type_of_credit=1&with_type_of_guarantees=1`)
+const { data: vertalTrial } = await useApi(`/verbal-trial/${Number(route.params.id)}?with_caf=1&with_type_of_credit=1&with_type_of_guarantees=1`)
 
-if (pv.value.status == 200) {
-  pv.value = pv.value.data.verbalTrial
+if (vertalTrial.value.status == 200) {
+  vertalTrial.value = vertalTrial.value.data.verbalTrial
 } else {
-  router.push("/pv")
+  router.push("/vertalTrial")
+}
+
+const tableData = [
+  { "title": "Montant", "value": String(vertalTrial.value.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Durée", "value": vertalTrial.value.duration + " mois" },
+  { "title": "Périodicité", "value": frenchMensuality[vertalTrial.value.periodicity] },
+  { "title": "Taux d'intérêt HT", "value": vertalTrial.value.tax_fee_interest_rate + "%" },
+  { "title": "TAF", "value": vertalTrial.value.taf +"%" },
+  { "title": "Echéance TTC", "value": String(vertalTrial.value.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Frais de dossier", "value": String((vertalTrial.value.amount * vertalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Prime d'assurance", "value": String(vertalTrial.value.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+]
+
+if (vertalTrial.duration > 13) {
+  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
 }
 </script>
 
 <template>
-  <section v-if="pv">
+  <section v-if="vertalTrial">
     <VRow>
       <VCol cols="12">
         <VCard>
           <!-- SECTION Header -->
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
+            <VCol cols="11">
+              <VBtn to="/pv">
+                Retour
+              </VBtn>
+            </VCol>
+            <VCol cols="1">
+              <VBtn :to="{ name: 'pv-edit-id', params: { id: vertalTrial.id } }">
+                Modifier
+              </VBtn>
+            </VCol>
             <VCol cols="12">
-              <h2 class="text-center">COMITE : Dossier #{{ pv.committee_id }} </h2>
+              <h2 class="text-center">
+                vertalTrial N°{{ vertalTrial.committee_id }}
+              </h2>
             </VCol>
             <VCol cols="6">
-              <p style="font-size: 20px">CAF</p>
-              <p style="font-size: 20px">Emprunteur</p>
-              <p style="font-size: 20px">N° de compte</p>
-              <p style="font-size: 20px">Activité</p>
-              <p style="font-size: 20px">Objet du financement</p>
-              <p style="font-size: 20px">Type de concours solicité</p>
+              <p style="font-size: 20px">
+                CAF
+              </p>
+              <p style="font-size: 20px">
+                Emprunteur
+              </p>
+              <p style="font-size: 20px">
+                N° de compte
+              </p>
+              <p style="font-size: 20px">
+                Activité
+              </p>
+              <p style="font-size: 20px">
+                Objet du financement
+              </p>
+              <p style="font-size: 20px">
+                Type de concours solicité
+              </p>
               <br>
-              <p style="font-size: 20px">Date de validation: {{ pv.created_at }}</p>
+              <p style="font-size: 20px">
+                Date de validation: {{ vertalTrial.created_at }}
+              </p>
             </VCol>
             <VCol cols="6">
-              <p style="font-size: 20px">: {{ pv.caf.full_name }}</p>
-              <p style="font-size: 20px">: <strong> {{ pv.applicant_last_name + " " + pv.applicant_first_name
-              }}</strong></p>
-              <p style="font-size: 20px">: {{ pv.account_number }}</p>
-              <p style="font-size: 20px">: {{ pv.activity }}</p>
-              <p style="font-size: 20px">: {{ pv.purpose_of_financing }}</p>
-              <p style="font-size: 20px">: {{ pv.type_of_credit.name }}</p>
+              <p style="font-size: 20px">
+                : {{ vertalTrial.caf.full_name }}
+              </p>
+              <p style="font-size: 20px">
+                : <strong> {{ vertalTrial.applicant_last_name + " " + vertalTrial.applicant_first_name
+                }}</strong>
+              </p>
+              <p style="font-size: 20px">
+                : {{ vertalTrial.account_number }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ vertalTrial.activity }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ vertalTrial.purpose_of_financing }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ vertalTrial.type_of_credit.name }}
+              </p>
             </VCol>
           </VCardText>
 
-          <VDivider />
-          <!-- 👉 SECTION Caracteristic -->
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="12">
               <h2>CARACTERISTIQUES</h2>
             </VCol>
-            <VCol cols="6">
-              <p class="ml-12">
-              <ul>
-                <p style="font-size: 20px">==>Montant :</p>
-                <p style="font-size: 20px">==>Durée :</p>
-                <p style="font-size: 20px">==>Périodicité :</p>
-                <p style="font-size: 20px">==>Taux d'intérêt HT :</p>
-                <p style="font-size: 20px">==>TAF :</p>
-                <p style="font-size: 20px">==>Echéance TTC :</p>
-                <p style="font-size: 20px">==>Frais de dossier ({{ pv.administrative_fees_percentage }}%) :</p>
-                <p style="font-size: 20px">==>Prime d'assurance :</p>
-                <p v-if="pv.duration > 11" style="font-size: 20px">==>Prime de révision de ligne :</p>
-              </ul>
-              </p>
-            </VCol>
-            <VCol cols="4">
-              <p style="font-size: 20px">{{ String(pv.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA</p>
-              <p style="font-size: 20px">{{ pv.duration }} mois</p>
-              <p style="font-size: 20px">{{ frenchMensuality[pv.periodicity] }}</p>
-              <p style="font-size: 20px">{{ pv.tax_fee_interest_rate }}%</p>
-              <p style="font-size: 20px">{{ pv.taf }}%</p>
-              <p style="font-size: 20px">{{ String(pv.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA</p>
-              <p style="font-size: 20px">{{ String((pv.amount * pv.administrative_fees_percentage) /
-                100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA</p>
-              <p style="font-size: 20px">{{ String(pv.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
-                CFA
-              </p>
-              <p v-if="pv.duration > 11" style="font-size: 20px">1% du capital restant dû après 13 mois</p>
+            <VCol cols="12">
+              <VTable class="text-no-wrap">
+                <tbody>
+                  <tr
+                    v-for="item in tableData"
+                    :key="item.key"
+                  >
+                    <td colspan="5">
+                      {{ item.title }}
+                    </td>
+                    <td colspan="1">
+                      {{ item.value }}
+                    </td>
+                  </tr>
+                </tbody>
+              </VTable>
             </VCol>
           </VCardText>
 
-          <!-- 👉 Table -->
-          <VDivider />
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="12">
               <h2>GARANTIES A RECUEILLIR</h2>
             </VCol>
             <VCol cols="12">
-              <p class="ml-6">
-              <ul>
-                <li style="font-size: 20px" v-for="(item, index) in pv.guarantees" :key="index">
-                  {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
-                  CFA : {{ item.comment }}
-                </li>
-              </ul>
+              <p>
+                <ul>
+                  <li
+                    v-for="(item, index) in vertalTrial.guarantees"
+                    :key="index"
+                    style="font-size: 20px"
+                  >
+                    {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
+                    CFA : {{ item.comment }}
+                  </li>
+                </ul>
               </p>
             </VCol>
           </VCardText>

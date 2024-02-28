@@ -11,6 +11,13 @@ const frenchMensuality = {
   "in-fine": "À la fin",
 }
 
+const documentTypeList = {
+  "cni": 'Carte d\'identité nationale',
+  "passport": 'Passeport',
+  "residence_certificate": 'Certificat de résidence',
+  "driving_licence": 'Permise de conduire',
+}
+
 const {
   data: contract,
 } = await useApi(createUrl(`/contract/${route.params.id}`, {
@@ -26,6 +33,21 @@ if (contract.value.status == 200) {
 } else {
   router.push("/contract")
 }
+
+const tableData = [
+  { "title": "Montant", "value": String(contract.value.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Durée", "value": contract.value.verbal_trial.duration + " mois" },
+  { "title": "Périodicité", "value": frenchMensuality[contract.value.verbal_trial.periodicity] },
+  { "title": "Taux d'intérêt HT", "value": contract.value.verbal_trial.tax_fee_interest_rate + "%" },
+  { "title": "TAF", "value": contract.value.verbal_trial.taf +"%" },
+  { "title": "Echéance TTC", "value": String(contract.value.verbal_trial.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Frais de dossier", "value": String((contract.value.verbal_trial.amount * contract.value.verbal_trial.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Prime d'assurance", "value": String(contract.value.verbal_trial.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+]
+
+if (contract.value.verbal_trial.duration > 13) {
+  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
+}
 </script>
 
 <template>
@@ -33,11 +55,20 @@ if (contract.value.status == 200) {
     <VRow>
       <VCol cols="12">
         <VCard>
-          <!-- SECTION Header -->
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
+            <VCol cols="11">
+              <VBtn to="/contract">
+                Retour
+              </VBtn>
+            </VCol>
+            <VCol cols="1">
+              <VBtn :to="{ name: 'contract-edit-id', params: { id: contract.id } }">
+                Modifier
+              </VBtn>
+            </VCol>
             <VCol cols="12">
               <h2 class="text-center">
-                COMITE : Dossier #{{ contract.verbal_trial.committee_id }}
+                Contrat N°{{ contract.verbal_trial.committee_id }}
               </h2>
             </VCol>
             <VCol cols="6">
@@ -88,93 +119,29 @@ if (contract.value.status == 200) {
             </VCol>
           </VCardText>
 
-          <VDivider />
-          <!-- 👉 SECTION Caracteristic -->
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="12">
               <h2>CARACTERISTIQUES</h2>
             </VCol>
-            <VCol cols="6">
-              <p>
-                <ul>
-                  <p style="font-size: 20px">
-                    ==>Montant :
-                  </p>
-                  <p style="font-size: 20px">
-                    ==>Durée :
-                  </p>
-                  <p style="font-size: 20px">
-                    ==>Périodicité :
-                  </p>
-                  <p style="font-size: 20px">
-                    ==>Taux d'intérêt HT :
-                  </p>
-                  <p style="font-size: 20px">
-                    ==>TAF :
-                  </p>
-                  <p style="font-size: 20px">
-                    ==>Echéance TTC :
-                  </p>
-                  <p style="font-size: 20px">
-                    ==>Frais de dossier ({{ contract.verbal_trial.administrative_fees_percentage
-                    }}%) :
-                  </p>
-                  <p style="font-size: 20px">
-                    ==>Prime d'assurance :
-                  </p>
-                  <p
-                    v-if="contract.verbal_trial.duration > 11"
-                    style="font-size: 20px"
+            <VCol cols="12">
+              <VTable class="text-no-wrap">
+                <tbody>
+                  <tr
+                    v-for="item in tableData"
+                    :key="item.key"
                   >
-                    ==>Prime de révision de ligne :
-                  </p>
-                </ul>
-              </p>
-            </VCol>
-            <VCol cols="4">
-              <p style="font-size: 20px">
-                {{ String(contract.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                }} F CFA
-              </p>
-              <p style="font-size: 20px">
-                {{ contract.verbal_trial.duration }} mois
-              </p>
-              <p style="font-size: 20px">
-                {{ frenchMensuality[contract.verbal_trial.periodicity] }}
-              </p>
-              <p style="font-size: 20px">
-                {{ contract.verbal_trial.tax_fee_interest_rate }}%
-              </p>
-              <p style="font-size: 20px">
-                {{ contract.verbal_trial.taf }}%
-              </p>
-              <p style="font-size: 20px">
-                {{ String(contract.verbal_trial.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                }} F CFA
-              </p>
-              <p style="font-size: 20px">
-                {{ String((contract.verbal_trial.amount *
-                  contract.verbal_trial.administrative_fees_percentage) /
-                  100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
-              </p>
-              <p style="font-size: 20px">
-                : {{
-                  String(contract.verbal_trial.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-                }} F
-                CFA
-              </p>
-              <p
-                v-if="contract.verbal_trial.duration > 11"
-                style="font-size: 20px"
-              >
-                1% du capital restant dû après 13
-                mois
-              </p>
+                    <td colspan="5">
+                      {{ item.title }}
+                    </td>
+                    <td colspan="1">
+                      {{ item.value }}
+                    </td>
+                  </tr>
+                </tbody>
+              </VTable>
             </VCol>
           </VCardText>
 
-          <!-- 👉 Table -->
-          <VDivider />
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="12">
               <h2>GARANTIES A RECUEILLIR</h2>
@@ -195,7 +162,63 @@ if (contract.value.status == 200) {
             </VCol>
           </VCardText>
 
-          <VDivider />
+          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
+            <VCol cols="12">
+              <h2>Informations suplémentaires du client</h2>
+            </VCol>
+            <VCol cols="6">
+              <p style="font-size: 20px">
+                Date de naissance
+              </p>
+              <p style="font-size: 20px">
+                Lieu de naissance
+              </p>
+              <p style="font-size: 20px">
+                Nationnalité
+              </p>
+              <p style="font-size: 20px">
+                Addresse du domicile
+              </p>
+              <p style="font-size: 20px">
+                Type de la pièce d'identité
+              </p>
+              <p style="font-size: 20px">
+                Numéro de la pièce d'identité
+              </p>
+              <p style="font-size: 20px">
+                Date de délivrance de la pièce d'identité
+              </p>
+              <p style="font-size: 20px">
+                Numéro de téléphone
+              </p>
+            </VCol>
+            <VCol cols="6">
+              <p style="font-size: 20px">
+                : {{ contract.representative_birth_date }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ contract.representative_birth_place }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ contract.representative_nationality }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ contract.representative_home_address }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ documentTypeList[contract.representative_type_of_identity_document] }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ contract.representative_number_of_identity_document }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ contract.representative_date_of_issue_of_identity_document }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ contract.representative_phone_number }}
+              </p>
+            </VCol>
+          </VCardText>
         </VCard>
       </VCol>
     </VRow>

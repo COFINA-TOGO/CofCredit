@@ -1,20 +1,20 @@
-name: 'Procès Verbal'
+name: Caution
 description: |-
 
-  EndPoints pour gérer les Procès verbaux
+  EndPoints pour gérer les cautions
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/verbal-trial
+    uri: api/guarantor
     metadata:
-      groupName: 'Procès Verbal'
+      groupName: Caution
       groupDescription: |-
 
-        EndPoints pour gérer les Procès verbaux
+        EndPoints pour gérer les cautions
       subgroup: ''
       subgroupDescription: ''
-      title: 'Affiche les Procès verbaux'
+      title: 'Affiche les cautions'
       description: ''
       authenticated: true
       custom: []
@@ -25,167 +25,131 @@ endpoints:
     urlParameters: []
     cleanUrlParameters: []
     queryParameters:
-      committee_id:
-        name: committee_id
-        description: 'Filtrer par ID du procès verbal'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      committee_date:
-        name: committee_date
-        description: 'Filtrer par date du procès verbal'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      civility:
-        name: civility
-        description: 'Filtrer par civilité'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      applicant_first_name:
-        name: applicant_first_name
-        description: 'Filtrer par prénom du demandeur'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      applicant_last_name:
-        name: applicant_last_name
-        description: 'Filtrer par nom du demandeur'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      account_number:
-        name: account_number
-        description: 'Filtrer par numéro de compte'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      activity:
-        name: activity
-        description: 'Filtrer par activé'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      purpose_of_financing:
-        name: purpose_of_financing
-        description: 'Filtrer par objet du financement'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      type_of_credit_id:
-        name: type_of_credit_id
-        description: 'Filtrer par ID du type de credit'
+      contract_id:
+        name: contract_id
+        description: 'Filtrer par ID du contract.'
         required: false
         example: null
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      amount:
-        name: amount
-        description: 'Filtrer par montant'
-        required: false
-        example: null
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      duration:
-        name: duration
-        description: 'Filtrer par durée en mois'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      periodicity:
-        name: periodicity
-        description: 'Filtrer par periodicité'
+      first_name:
+        name: first_name
+        description: 'Filtrer par prénom de la caution.'
         required: false
         example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      taf:
-        name: taf
-        description: 'Filtrer par TAF'
+      last_name:
+        name: last_name
+        description: 'Filtrer par nom de la caution.'
         required: false
         example: null
-        type: number
+        type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      due_amount:
-        name: due_amount
-        description: "Filtrer par montant d'une échéance"
+      birth_date:
+        name: birth_date
+        description: 'Filtrer par date de naissance de la caution.'
         required: false
         example: null
-        type: number
+        type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      administrative_fees_percentage:
-        name: administrative_fees_percentage
-        description: 'Filtrer par frais de dossier(pourcentage)'
+      birth_place:
+        name: birth_place
+        description: 'Filtrer par lieu de naissance de la caution.'
         required: false
         example: null
-        type: number
+        type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      insurance_premium:
-        name: insurance_premium
-        description: "Filtrer par prime d'assurance"
+      nationality:
+        name: nationality
+        description: 'Filtrer par nationalité de la caution'
         required: false
         example: null
-        type: number
+        type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      tax_fee_interest_rate:
-        name: tax_fee_interest_rate
-        description: "Fiilter par taux d'intérêt hors taxe(%)"
+      home_address:
+        name: home_address
+        description: 'Filtrer par addresse de domicile de la caution'
         required: false
         example: null
-        type: number
+        type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      caf_id:
-        name: caf_id
-        description: 'Filtrer par ID du CAF'
+      type_of_identity_document:
+        name: type_of_identity_document
+        description: "Filtrer par type de la pièce d'identité de la caution."
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      number_of_identity_document:
+        name: number_of_identity_document
+        description: "Filtrer par numéro de la pièce d'identité de la caution."
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      date_of_issue_of_identity_document:
+        name: date_of_issue_of_identity_document
+        description: "Filtrer par date de délivrance de la pièce d'identité de la caution."
         required: false
         example: null
         type: integer
         enumValues: []
         exampleWasSpecified: false
+        custom: []
+      function:
+        name: function
+        description: 'Filtrer par fonction de la caution'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      phone_number:
+        name: phone_number
+        description: 'Filtrer par numéro de téléphone de la caution'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      with_contract:
+        name: with_contract
+        description: 'Afficher le contrat.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_verbal_trial:
+        name: with_verbal_trial
+        description: 'Afficher le PV.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
         custom: []
       with_type_of_credit:
         name: with_type_of_credit
@@ -198,9 +162,9 @@ endpoints:
         custom: []
       with_type_of_applicant:
         name: with_type_of_applicant
-        description: 'Afficher le type de demandeur du type de crédit.'
+        description: 'Afficher le type de demandeur.'
         required: false
-        example: 1
+        example: 0
         type: integer
         enumValues: []
         exampleWasSpecified: true
@@ -208,42 +172,6 @@ endpoints:
       with_guarantees:
         name: with_guarantees
         description: 'Afficher les garanties.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_type_of_guarantees:
-        name: with_type_of_guarantees
-        description: 'Afficher les types des garanties.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_contract:
-        name: with_contract
-        description: 'Afficher le contrat.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_caf:
-        name: with_caf
-        description: 'Afficher le CAF.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      has_contract:
-        name: has_contract
-        description: 'Filtrer par présence de contrat'
         required: false
         example: 0
         type: integer
@@ -260,13 +188,11 @@ endpoints:
         exampleWasSpecified: true
         custom: []
     cleanQueryParameters:
+      with_contract: 0
+      with_verbal_trial: 0
       with_type_of_credit: 0
-      with_type_of_applicant: 1
-      with_guarantees: 1
-      with_type_of_guarantees: 1
-      with_contract: 1
-      with_caf: 1
-      has_contract: 0
+      with_type_of_applicant: 0
+      with_guarantees: 0
       paginate: 0
     bodyParameters: []
     cleanBodyParameters: []
@@ -290,15 +216,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/verbal-trial/{id}'
+    uri: 'api/guarantor/download/{id}'
     metadata:
-      groupName: 'Procès Verbal'
+      groupName: Caution
       groupDescription: |-
 
-        EndPoints pour gérer les Procès verbaux
+        EndPoints pour gérer les cautions
       subgroup: ''
       subgroupDescription: ''
-      title: 'Affiche un procès verbal'
+      title: "Télécharge la version word d'une caution"
       description: ''
       authenticated: true
       custom: []
@@ -309,7 +235,111 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du procès verbal."
+        description: "L'ID du caution."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/guarantor/promissory-note/download/{id}'
+    metadata:
+      groupName: Caution
+      groupDescription: |-
+
+        EndPoints pour gérer les cautions
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Télécharge le billet à ordre d'une caution"
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du caution."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/guarantor/{id}'
+    metadata:
+      groupName: Caution
+      groupDescription: |-
+
+        EndPoints pour gérer les cautions
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Affiche une caution'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du caution."
         required: true
         example: 1
         type: integer
@@ -319,6 +349,24 @@ endpoints:
     cleanUrlParameters:
       id: 1
     queryParameters:
+      with_contract:
+        name: with_contract
+        description: 'Afficher le contrat.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_verbal_trial:
+        name: with_verbal_trial
+        description: 'Afficher le PV.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       with_type_of_credit:
         name: with_type_of_credit
         description: 'Afficher le type de crédit.'
@@ -330,9 +378,9 @@ endpoints:
         custom: []
       with_type_of_applicant:
         name: with_type_of_applicant
-        description: 'Afficher le type de demandeur du type de crédit.'
+        description: 'Afficher le type de demandeur.'
         required: false
-        example: 1
+        example: 0
         type: integer
         enumValues: []
         exampleWasSpecified: true
@@ -341,45 +389,17 @@ endpoints:
         name: with_guarantees
         description: 'Afficher les garanties.'
         required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_type_of_guarantees:
-        name: with_type_of_guarantees
-        description: 'Afficher les types des garanties.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_contract:
-        name: with_contract
-        description: 'Afficher le contrat.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_caf:
-        name: with_caf
-        description: 'Afficher le CAF.'
-        required: false
-        example: 1
+        example: 0
         type: integer
         enumValues: []
         exampleWasSpecified: true
         custom: []
     cleanQueryParameters:
+      with_contract: 0
+      with_verbal_trial: 0
       with_type_of_credit: 0
-      with_type_of_applicant: 1
-      with_guarantees: 1
-      with_type_of_guarantees: 1
-      with_contract: 1
-      with_caf: 1
+      with_type_of_applicant: 0
+      with_guarantees: 0
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -402,15 +422,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/verbal-trial
+    uri: api/guarantor
     metadata:
-      groupName: 'Procès Verbal'
+      groupName: Caution
       groupDescription: |-
 
-        EndPoints pour gérer les Procès verbaux
+        EndPoints pour gérer les cautions
       subgroup: ''
       subgroupDescription: ''
-      title: 'Créer un nouveau procès verbal'
+      title: 'Créer une nouvelLa caution'
       description: ''
       authenticated: true
       custom: []
@@ -423,187 +443,137 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      committee_id:
-        name: committee_id
-        description: "L'ID comitée venant de créditFlow"
-        required: false
-        example: CFNTG-044-13-12-23-01212
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      committee_date:
-        name: committee_date
-        description: 'La date du comitée'
-        required: false
-        example: '2024-02-09'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      civility:
-        name: civility
-        description: 'La Civilité'
-        required: false
-        example: Mr
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      applicant_first_name:
-        name: applicant_first_name
-        description: 'Le prénom du demandeur'
-        required: false
-        example: Cesar
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      applicant_last_name:
-        name: applicant_last_name
-        description: 'Le nom du demandeur'
-        required: false
-        example: Endure
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      account_number:
-        name: account_number
-        description: 'Le numéro de compte'
-        required: false
-        example: '012345678901'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      activity:
-        name: activity
-        description: "L'activé"
-        required: false
-        example: "Homme d'affaire"
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      purpose_of_financing:
-        name: purpose_of_financing
-        description: "L'objet du financement"
-        required: false
-        example: 'Achat nouveau locaux'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      type_of_credit_id:
-        name: type_of_credit_id
-        description: "L'ID du type de credit"
+      contract_id:
+        name: contract_id
+        description: 'ID du contract.'
         required: false
         example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      amount:
-        name: amount
-        description: 'Le montant'
+      civility:
+        name: civility
+        description: 'Civilité de la caution.'
         required: false
-        example: 10000000.0
-        type: number
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      duration:
-        name: duration
-        description: 'La durée en mois'
-        required: false
-        example: 12
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      periodicity:
-        name: periodicity
-        description: 'La periodicité'
-        required: false
-        example: mensual
+        example: Mr
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      taf:
-        name: taf
-        description: 'La TAF(%)'
+      first_name:
+        name: first_name
+        description: 'Prénom de la caution.'
         required: false
-        example: 10.0
-        type: number
+        example: Charles
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      due_amount:
-        name: due_amount
-        description: "Le montant d'une échéance"
+      last_name:
+        name: last_name
+        description: 'Nom de la caution.'
         required: false
-        example: 500000.0
-        type: number
+        example: Xavier
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      administrative_fees_percentage:
-        name: administrative_fees_percentage
-        description: 'Les frais de dossier(%)'
+      birth_date:
+        name: birth_date
+        description: 'Date de naissance de la caution.'
         required: false
-        example: 2.5
-        type: number
+        example: '2000-03-03'
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      insurance_premium:
-        name: insurance_premium
-        description: "La prime d'assurance"
+      birth_place:
+        name: birth_place
+        description: 'Lieu de naissance de la caution.'
         required: false
-        example: 45000.0
-        type: number
+        example: 'Los Afagnan'
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      tax_fee_interest_rate:
-        name: tax_fee_interest_rate
-        description: "Le taux d'intérêt hors taxe(%)"
+      nationality:
+        name: nationality
+        description: 'Nationalité de la caution'
         required: false
-        example: 10.0
-        type: number
+        example: Togolaise
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      caf_id:
-        name: caf_id
-        description: "L'ID du CAF"
+      home_address:
+        name: home_address
+        description: 'Addresse de domicile de la caution'
         required: false
-        example: 4
-        type: integer
+        example: Adewi
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      type_of_identity_document:
+        name: type_of_identity_document
+        description: "Type de la pièce d'identité de la caution."
+        required: false
+        example: cni
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      number_of_identity_document:
+        name: number_of_identity_document
+        description: "Numéro de la pièce d'identité de la caution."
+        required: false
+        example: BP785632
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      date_of_issue_of_identity_document:
+        name: date_of_issue_of_identity_document
+        description: "Date de délivrance de la pièce d'identité de la caution."
+        required: false
+        example: '2022-03-03'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      function:
+        name: function
+        description: 'Fonction de la caution'
+        required: false
+        example: 'Agent CIA'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      phone_number:
+        name: phone_number
+        description: 'Numéro de téléphone de la caution'
+        required: false
+        example: '+01 587-45-632-15'
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
     cleanBodyParameters:
-      committee_id: CFNTG-044-13-12-23-01212
-      committee_date: '2024-02-09'
+      contract_id: 1
       civility: Mr
-      applicant_first_name: Cesar
-      applicant_last_name: Endure
-      account_number: '012345678901'
-      activity: "Homme d'affaire"
-      purpose_of_financing: 'Achat nouveau locaux'
-      type_of_credit_id: 1
-      amount: 10000000.0
-      duration: 12
-      periodicity: mensual
-      taf: 10.0
-      due_amount: 500000.0
-      administrative_fees_percentage: 2.5
-      insurance_premium: 45000.0
-      tax_fee_interest_rate: 10.0
-      caf_id: 4
+      first_name: Charles
+      last_name: Xavier
+      birth_date: '2000-03-03'
+      birth_place: 'Los Afagnan'
+      nationality: Togolaise
+      home_address: Adewi
+      type_of_identity_document: cni
+      number_of_identity_document: BP785632
+      date_of_issue_of_identity_document: '2022-03-03'
+      function: 'Agent CIA'
+      phone_number: '+01 587-45-632-15'
     fileParameters: []
     responses:
       -
@@ -624,15 +594,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/verbal-trial/{id}'
+    uri: 'api/guarantor/{id}'
     metadata:
-      groupName: 'Procès Verbal'
+      groupName: Caution
       groupDescription: |-
 
-        EndPoints pour gérer les Procès verbaux
+        EndPoints pour gérer les cautions
       subgroup: ''
       subgroupDescription: ''
-      title: 'Mettre à jour un procès verbal'
+      title: 'Mettre à jour une caution'
       description: ''
       authenticated: true
       custom: []
@@ -643,199 +613,149 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du procès verbal."
+        description: "L'ID du caution."
         required: true
-        example: '1'
-        type: string
+        example: 1
+        type: integer
         enumValues: []
         exampleWasSpecified: true
         custom: []
     cleanUrlParameters:
-      id: '1'
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      committee_id:
-        name: committee_id
-        description: "L'ID comitée venant de créditFlow"
-        required: false
-        example: CFNTG-044-13-12-23-01212
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      committee_date:
-        name: committee_date
-        description: 'La date du comitée'
-        required: false
-        example: '2024-02-09'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      civility:
-        name: civility
-        description: 'La Civilité'
-        required: false
-        example: Mr
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      applicant_first_name:
-        name: applicant_first_name
-        description: 'Le prénom du demandeur'
-        required: false
-        example: Cesar
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      applicant_last_name:
-        name: applicant_last_name
-        description: 'Le nom du demandeur'
-        required: false
-        example: Endure
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      account_number:
-        name: account_number
-        description: 'Le numéro de compte'
-        required: false
-        example: '012345678901'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      activity:
-        name: activity
-        description: "L'activé"
-        required: false
-        example: "Homme d'affaire"
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      purpose_of_financing:
-        name: purpose_of_financing
-        description: "L'objet du financement"
-        required: false
-        example: 'Achat nouveau locaux'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      type_of_credit_id:
-        name: type_of_credit_id
-        description: "L'ID du type de credit"
+      contract_id:
+        name: contract_id
+        description: 'ID du contract.'
         required: false
         example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      amount:
-        name: amount
-        description: 'Le montant'
+      civility:
+        name: civility
+        description: 'Civilité de la caution.'
         required: false
-        example: 10000000.0
-        type: number
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      duration:
-        name: duration
-        description: 'La durée en mois'
-        required: false
-        example: 12
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      periodicity:
-        name: periodicity
-        description: 'La periodicité'
-        required: false
-        example: mensual
+        example: Mr
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      taf:
-        name: taf
-        description: 'La TAF(%)'
+      first_name:
+        name: first_name
+        description: 'Prénom de la caution.'
         required: false
-        example: 10.0
-        type: number
+        example: Charles
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      due_amount:
-        name: due_amount
-        description: "Le montant d'une échéance"
+      last_name:
+        name: last_name
+        description: 'Nom de la caution.'
         required: false
-        example: 500000.0
-        type: number
+        example: Xavier
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      administrative_fees_percentage:
-        name: administrative_fees_percentage
-        description: 'Les frais de dossier(%)'
+      birth_date:
+        name: birth_date
+        description: 'Date de naissance de la caution.'
         required: false
-        example: 2.5
-        type: number
+        example: '2000-03-03'
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      insurance_premium:
-        name: insurance_premium
-        description: "La prime d'assurance"
+      birth_place:
+        name: birth_place
+        description: 'Lieu de naissance de la caution.'
         required: false
-        example: 45000.0
-        type: number
+        example: 'Los Afagnan'
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      tax_fee_interest_rate:
-        name: tax_fee_interest_rate
-        description: "Le taux d'intérêt hors taxe(%)"
+      nationality:
+        name: nationality
+        description: 'Nationalité de la caution'
         required: false
-        example: 10.0
-        type: number
+        example: Togolaise
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      caf_id:
-        name: caf_id
-        description: "L'ID du CAF"
+      home_address:
+        name: home_address
+        description: 'Addresse de domicile de la caution'
         required: false
-        example: 4
-        type: integer
+        example: Adewi
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      type_of_identity_document:
+        name: type_of_identity_document
+        description: "Type de la pièce d'identité de la caution."
+        required: false
+        example: cni
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      number_of_identity_document:
+        name: number_of_identity_document
+        description: "Numéro de la pièce d'identité de la caution."
+        required: false
+        example: BP785632
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      date_of_issue_of_identity_document:
+        name: date_of_issue_of_identity_document
+        description: "Date de délivrance de la pièce d'identité de la caution."
+        required: false
+        example: '2022-03-03'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      function:
+        name: function
+        description: 'Fonction de la caution'
+        required: false
+        example: 'Agent CIA'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      phone_number:
+        name: phone_number
+        description: 'Numéro de téléphone de la caution'
+        required: false
+        example: '+01 587-45-632-15'
+        type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
     cleanBodyParameters:
-      committee_id: CFNTG-044-13-12-23-01212
-      committee_date: '2024-02-09'
+      contract_id: 1
       civility: Mr
-      applicant_first_name: Cesar
-      applicant_last_name: Endure
-      account_number: '012345678901'
-      activity: "Homme d'affaire"
-      purpose_of_financing: 'Achat nouveau locaux'
-      type_of_credit_id: 1
-      amount: 10000000.0
-      duration: 12
-      periodicity: mensual
-      taf: 10.0
-      due_amount: 500000.0
-      administrative_fees_percentage: 2.5
-      insurance_premium: 45000.0
-      tax_fee_interest_rate: 10.0
-      caf_id: 4
+      first_name: Charles
+      last_name: Xavier
+      birth_date: '2000-03-03'
+      birth_place: 'Los Afagnan'
+      nationality: Togolaise
+      home_address: Adewi
+      type_of_identity_document: cni
+      number_of_identity_document: BP785632
+      date_of_issue_of_identity_document: '2022-03-03'
+      function: 'Agent CIA'
+      phone_number: '+01 587-45-632-15'
     fileParameters: []
     responses:
       -
@@ -856,15 +776,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/verbal-trial/{id}'
+    uri: 'api/guarantor/{id}'
     metadata:
-      groupName: 'Procès Verbal'
+      groupName: Caution
       groupDescription: |-
 
-        EndPoints pour gérer les Procès verbaux
+        EndPoints pour gérer les cautions
       subgroup: ''
       subgroupDescription: ''
-      title: 'Supprime un procès verbal'
+      title: 'Supprime une caution'
       description: ''
       authenticated: true
       custom: []
@@ -875,15 +795,15 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du procès verbal"
+        description: "L'ID du caution."
         required: true
-        example: 18
+        example: 1
         type: integer
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         custom: []
     cleanUrlParameters:
-      id: 18
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

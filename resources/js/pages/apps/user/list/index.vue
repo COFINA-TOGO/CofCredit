@@ -233,8 +233,15 @@ const widgetData = ref([
     <!-- 👉 Widgets -->
     <div class="d-flex mb-6">
       <VRow>
-        <template v-for="(data, id) in widgetData" :key="id">
-          <VCol cols="12" md="3" sm="6">
+        <template
+          v-for="(data, id) in widgetData"
+          :key="id"
+        >
+          <VCol
+            cols="12"
+            md="3"
+            sm="6"
+          >
             <VCard>
               <VCardText>
                 <div class="d-flex justify-space-between">
@@ -243,14 +250,25 @@ const widgetData = ref([
                     <div>
                       <h4 class="text-h4">
                         {{ data.value }}
-                        <span class="text-base " :class="data.change > 0 ? 'text-success' : 'text-error'">({{
+                        <span
+                          class="text-base "
+                          :class="data.change > 0 ? 'text-success' : 'text-error'"
+                        >({{
                           prefixWithPlus(data.change) }}%)</span>
                       </h4>
                     </div>
                     <span class="text-sm">{{ data.desc }}</span>
                   </div>
-                  <VAvatar :color="data.iconColor" variant="tonal" rounded size="38">
-                    <VIcon :icon="data.icon" size="26" />
+                  <VAvatar
+                    :color="data.iconColor"
+                    variant="tonal"
+                    rounded
+                    size="38"
+                  >
+                    <VIcon
+                      :icon="data.icon"
+                      size="26"
+                    />
                   </VAvatar>
                 </div>
               </VCardText>
@@ -260,23 +278,53 @@ const widgetData = ref([
       </VRow>
     </div>
 
-    <VCard title="Filters" class="mb-6">
+    <VCard
+      title="Filters"
+      class="mb-6"
+    >
       <VCardText>
         <VRow>
           <!-- 👉 Select Role -->
-          <VCol cols="12" sm="4">
-            <AppSelect v-model="selectedRole" label="Select Role" placeholder="Select Role" :items="roles" clearable
-              clear-icon="tabler-x" />
+          <VCol
+            cols="12"
+            sm="4"
+          >
+            <AppSelect
+              v-model="selectedRole"
+              label="Select Role"
+              placeholder="Select Role"
+              :items="roles"
+              clearable
+              clear-icon="tabler-x"
+            />
           </VCol>
           <!-- 👉 Select Plan -->
-          <VCol cols="12" sm="4">
-            <AppSelect v-model="selectedPlan" label="Select Plan" placeholder="Select Plan" :items="plans" clearable
-              clear-icon="tabler-x" />
+          <VCol
+            cols="12"
+            sm="4"
+          >
+            <AppSelect
+              v-model="selectedPlan"
+              label="Select Plan"
+              placeholder="Select Plan"
+              :items="plans"
+              clearable
+              clear-icon="tabler-x"
+            />
           </VCol>
           <!-- 👉 Select Status -->
-          <VCol cols="12" sm="4">
-            <AppSelect v-model="selectedStatus" label="Select Status" placeholder="Select Status" :items="status"
-              clearable clear-icon="tabler-x" />
+          <VCol
+            cols="12"
+            sm="4"
+          >
+            <AppSelect
+              v-model="selectedStatus"
+              label="Select Status"
+              placeholder="Select Status"
+              :items="status"
+              clearable
+              clear-icon="tabler-x"
+            />
           </VCol>
         </VRow>
       </VCardText>
@@ -284,29 +332,45 @@ const widgetData = ref([
     <VCard>
       <VCardText class="d-flex flex-wrap py-4 gap-4">
         <div class="me-3 d-flex gap-3">
-          <AppSelect :model-value="itemsPerPage" :items="[
-            { value: 10, title: '10' },
-            { value: 25, title: '25' },
-            { value: 50, title: '50' },
-            { value: 100, title: '100' },
-            { value: -1, title: 'All' },
-          ]" style="inline-size: 6.25rem;" @update:model-value="itemsPerPage = parseInt($event, 10)" />
+          <AppSelect
+            :model-value="itemsPerPage"
+            :items="[
+              { value: 10, title: '10' },
+              { value: 25, title: '25' },
+              { value: 50, title: '50' },
+              { value: 100, title: '100' },
+              { value: -1, title: 'All' },
+            ]"
+            style="inline-size: 6.25rem;"
+            @update:model-value="itemsPerPage = parseInt($event, 10)"
+          />
         </div>
         <VSpacer />
 
         <div class="app-user-search-filter d-flex align-center flex-wrap gap-4">
           <!-- 👉 Search  -->
           <div style="inline-size: 10rem;">
-            <AppTextField v-model="searchQuery" placeholder="Search" density="compact" />
+            <AppTextField
+              v-model="searchQuery"
+              placeholder="Search"
+              density="compact"
+            />
           </div>
 
           <!-- 👉 Export button -->
-          <VBtn variant="tonal" color="secondary" prepend-icon="tabler-screen-share">
+          <VBtn
+            variant="tonal"
+            color="secondary"
+            prepend-icon="tabler-screen-share"
+          >
             Export
           </VBtn>
 
           <!-- 👉 Add user button -->
-          <VBtn prepend-icon="tabler-plus" @click="isAddNewUserDrawerVisible = true">
+          <VBtn
+            prepend-icon="tabler-plus"
+            @click="isAddNewUserDrawerVisible = true"
+          >
             Add New User
           </VBtn>
         </div>
@@ -315,20 +379,36 @@ const widgetData = ref([
       <VDivider />
 
       <!-- SECTION datatable -->
-      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :items="users"
-        :items-length="totalUsers" :headers="headers" class="text-no-wrap" @update:options="updateOptions">
+      <VDataTableServer
+        v-model:items-per-page="itemsPerPage"
+        v-model:page="page"
+        :items="users"
+        :items-length="totalUsers"
+        :headers="headers"
+        class="text-no-wrap"
+        @update:options="updateOptions"
+      >
         <!-- User -->
         <template #item.user="{ item }">
           <div class="d-flex align-center">
-            <VAvatar size="34" :variant="!item.avatar ? 'tonal' : undefined"
-              :color="!item.avatar ? resolveUserRoleVariant(item.role).color : undefined" class="me-3">
-              <VImg v-if="item.avatar" :src="item.avatar" />
+            <VAvatar
+              size="34"
+              :variant="!item.avatar ? 'tonal' : undefined"
+              :color="!item.avatar ? resolveUserRoleVariant(item.role).color : undefined"
+              class="me-3"
+            >
+              <VImg
+                v-if="item.avatar"
+                :src="item.avatar"
+              />
               <span v-else>{{ avatarText(item.fullName) }}</span>
             </VAvatar>
             <div class="d-flex flex-column">
               <h6 class="text-base">
-                <RouterLink :to="{ name: 'apps-user-view-id', params: { id: item.id } }"
-                  class="font-weight-medium text-link">
+                <RouterLink
+                  :to="{ name: 'apps-user-view-id', params: { id: item.id } }"
+                  class="font-weight-medium text-link"
+                >
                   {{ item.fullName }}
                 </RouterLink>
               </h6>
@@ -340,8 +420,15 @@ const widgetData = ref([
         <!-- 👉 Role -->
         <template #item.role="{ item }">
           <div class="d-flex align-center gap-4">
-            <VAvatar :size="30" :color="resolveUserRoleVariant(item.role).color" variant="tonal">
-              <VIcon :size="20" :icon="resolveUserRoleVariant(item.role).icon" />
+            <VAvatar
+              :size="30"
+              :color="resolveUserRoleVariant(item.role).color"
+              variant="tonal"
+            >
+              <VIcon
+                :size="20"
+                :icon="resolveUserRoleVariant(item.role).icon"
+              />
             </VAvatar>
             <span class="text-capitalize">{{ item.role }}</span>
           </div>
@@ -354,7 +441,12 @@ const widgetData = ref([
 
         <!-- Status -->
         <template #item.status="{ item }">
-          <VChip :color="resolveUserStatusVariant(item.status)" size="small" label class="text-capitalize">
+          <VChip
+            :color="resolveUserStatusVariant(item.status)"
+            size="small"
+            label
+            class="text-capitalize"
+          >
             {{ item.status }}
           </VChip>
         </template>
@@ -369,8 +461,16 @@ const widgetData = ref([
             <VIcon icon="tabler-edit" />
           </IconBtn>
 
-          <VBtn icon variant="text" size="small" color="medium-emphasis">
-            <VIcon size="24" icon="tabler-dots-vertical" />
+          <VBtn
+            icon
+            variant="text"
+            size="small"
+            color="medium-emphasis"
+          >
+            <VIcon
+              size="24"
+              icon="tabler-dots-vertical"
+            />
             <VMenu activator="parent">
               <VList>
                 <VListItem :to="{ name: 'apps-user-view-id', params: { id: item.id } }">
@@ -407,16 +507,29 @@ const widgetData = ref([
               {{ paginationMeta({ page, itemsPerPage }, totalUsers) }}
             </p>
 
-            <VPagination v-model="page" :length="Math.ceil(totalUsers / itemsPerPage)"
-              :total-visible="$vuetify.display.xs ? 1 : Math.ceil(totalUsers / itemsPerPage)">
+            <VPagination
+              v-model="page"
+              :length="Math.ceil(totalUsers / itemsPerPage)"
+              :total-visible="$vuetify.display.xs ? 1 : Math.ceil(totalUsers / itemsPerPage)"
+            >
               <template #prev="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
                   Previous
                 </VBtn>
               </template>
 
               <template #next="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
                   Next
                 </VBtn>
               </template>
@@ -427,6 +540,9 @@ const widgetData = ref([
       <!-- SECTION -->
     </VCard>
     <!-- 👉 Add New User -->
-    <AddNewUserDrawer v-model:isDrawerOpen="isAddNewUserDrawerVisible" @user-data="addNewUser" />
+    <AddNewUserDrawer
+      v-model:isDrawerOpen="isAddNewUserDrawerVisible"
+      @user-data="addNewUser"
+    />
   </section>
 </template>

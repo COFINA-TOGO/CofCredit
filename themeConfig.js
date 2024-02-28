@@ -4,38 +4,28 @@ import { defineThemeConfig } from '@core'
 import { Skins } from '@core/enums'
 
 // ❗ Logo SVG must be imported with ?raw suffix
-import logo from '@images/logo.svg?raw'
+import logo from '@images/logo.png'
 import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layouts/enums'
 
 export const { themeConfig, layoutConfig } = defineThemeConfig({
   app: {
-    title: 'vuexy',
-    logo: h('div', { innerHTML: logo, style: 'line-height:0; color: rgb(var(--v-global-theme-primary))' }),
+    title: '',
+    logo: h('img', { src: logo, alt: 'app-logo' }),
     contentWidth: ContentWidth.Boxed,
     contentLayoutNav: AppContentLayoutNav.Vertical,
     overlayNavFromBreakpoint: breakpointsVuetify.md + 16,
     i18n: {
-      enable: true,
-      defaultLocale: 'en',
+      enable: false,
+      defaultLocale: 'fr',
       langConfig: [
-        {
-          label: 'English',
-          i18nLang: 'en',
-          isRTL: false,
-        },
         {
           label: 'French',
           i18nLang: 'fr',
           isRTL: false,
         },
-        {
-          label: 'Arabic',
-          i18nLang: 'ar',
-          isRTL: true,
-        },
       ],
     },
-    theme: 'system',
+    theme: 'light',
     skin: Skins.Default,
     iconRenderer: VIcon,
   },
@@ -46,7 +36,7 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
   footer: { type: FooterType.Static },
   verticalNav: {
     isVerticalNavCollapsed: false,
-    defaultNavItemIconProps: { icon: 'tabler-circle', size: 10 },
+    defaultNavItemIconProps: { icon: 'tabler-circle', size: 20 },
     isVerticalNavSemiDark: false,
   },
   horizontalNav: {

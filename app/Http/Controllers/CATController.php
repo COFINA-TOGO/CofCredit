@@ -31,8 +31,8 @@ class CATController extends Controller
      * @queryParam  representative_birth_place                              string              Filtrer par lieu de naissance du demandeur.                             No-example
      * @queryParam  representative_nationality                              string              Filtrer par nationalité du demandeur.                                   No-example
      * @queryParam  representative_home_address                             string              Filtrer par addresse du domicile du demandeur.                          No-example
-     * @queryParam  representative_type_of_identity_document                string              Filtrer par type de la pièce d'indentité du demandeur.                  No-example
-     * @queryParam  representative_number_of_identity_document              string              Filtrer par numéro de la pièce d'indentité du demandeur.                No-example
+     * @queryParam  representative_type_of_identity_document                string              Filtrer par type de la pièce d'identité du demandeur.                  No-example
+     * @queryParam  representative_number_of_identity_document              string              Filtrer par numéro de la pièce d'identité du demandeur.                No-example
      * @queryParam  representative_date_of_issue_of_identity_document       string              Filtrer par date de délivrance de la pièce d'identité du demandeur.     No-example
      * @queryParam  representative_phone_number                             string              Filtrer par numéro de téléphone du demandeur.                           No-example
      * @queryParam  risk_premium_percentage                                 int                 Filtrer par prime de risque (en pourcentage) du crédit du demandeur.    No-example
@@ -326,8 +326,8 @@ class CATController extends Controller
      * @bodyParam   representative_birth_place                              string              Le lieu de naissance du demandeur.                                      Example: Lomé
      * @bodyParam   representative_nationality                              string              La nationalité du demandeur.                                            Example: Togolaise
      * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
-     * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'indentité du demandeur.                           Example: cni
-     * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'indentité du demandeur.                         Example: CND-4D8-84S-52S
+     * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'identité du demandeur.                           Example: cni
+     * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'identité du demandeur.                         Example: CND-4D8-84S-52S
      * @bodyParam   representative_date_of_issue_of_identity_document       string              La date de délivrance de la pièce d'identité du demandeur.              Example: 2020-01-01
      * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
      * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
@@ -456,8 +456,8 @@ class CATController extends Controller
      * @bodyParam   representative_birth_place                              string              Le lieu de naissance du demandeur.                                      Example: Lomé
      * @bodyParam   representative_nationality                              string              La nationalité du demandeur.                                            Example: Togolaise
      * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
-     * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'indentité du demandeur.                           Example: cni
-     * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'indentité du demandeur.                         Example: CND-4D8-84S-52S
+     * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'identité du demandeur.                           Example: cni
+     * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'identité du demandeur.                         Example: CND-4D8-84S-52S
      * @bodyParam   representative_date_of_issue_of_identity_document       string              La date de délivrance de la pièce d'identité du demandeur.              Example: 2020-01-01
      * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
      * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2

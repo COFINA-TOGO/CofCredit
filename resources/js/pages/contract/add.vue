@@ -208,12 +208,12 @@ const onSubmit = () => {
                 <VCol cols="12" md="6" lg="4">
                   <AppSelect :items="documentTypeList" v-model="contractData.representative_type_of_identity_document"
                     :error-messages="pvError.representative_type_of_identity_document"
-                    label="Type de la pièce d'indentité" placeholder="Ex: Passeport" :rules="[requiredValidator]" />
+                    label="Type de la pièce d'identité" placeholder="Ex: Passeport" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="contractData.representative_number_of_identity_document"
                     :error-messages="pvError.representative_number_of_identity_document"
-                    label="Numéro de la pièce d'indentité" placeholder="Ex: 251012345678" :rules="[requiredValidator]" />
+                    label="Numéro de la pièce d'identité" placeholder="Ex: 251012345678" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
                   <AppDateTimePicker v-model="contractData.representative_date_of_issue_of_identity_document"

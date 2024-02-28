@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "f911bca5-c895-4c57-9b24-e97f52e0ffc0",
+        "_postman_id": "73cb68d0-028d-422f-8193-afdb27ea298f",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -125,86 +125,6 @@
             "description": "\nEndPoints pour g\u00e9rer les cautions",
             "item": [
                 {
-                    "name": "T\u00e9l\u00e9charge la version word d'une caution",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/guarantor\/word\/:id",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/guarantor\/word\/:id",
-                            "variable": [
-                                {
-                                    "id": "id",
-                                    "key": "id",
-                                    "value": "1",
-                                    "description": "L'ID du caution."
-                                }
-                            ]
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [],
-                            "code": 200,
-                            "body": "{}",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "T\u00e9l\u00e9charge le billet \u00e0 ordre d'une caution",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/guarantor\/promissory-note\/:id",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/guarantor\/promissory-note\/:id",
-                            "variable": [
-                                {
-                                    "id": "id",
-                                    "key": "id",
-                                    "value": "1",
-                                    "description": "L'ID du caution."
-                                }
-                            ]
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [],
-                            "code": 200,
-                            "body": "{}",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
                     "name": "Affiche les cautions",
                     "request": {
                         "url": {
@@ -256,13 +176,13 @@
                                 {
                                     "key": "type_of_identity_document",
                                     "value": "",
-                                    "description": "Filtrer par type de la pi\u00e8ce d'indentit\u00e9 de la caution.",
+                                    "description": "Filtrer par type de la pi\u00e8ce d'identit\u00e9 de la caution.",
                                     "disabled": true
                                 },
                                 {
                                     "key": "number_of_identity_document",
                                     "value": "",
-                                    "description": "Filtrer par num\u00e9ro de la pi\u00e8ce d'indentit\u00e9 de la caution.",
+                                    "description": "Filtrer par num\u00e9ro de la pi\u00e8ce d'identit\u00e9 de la caution.",
                                     "disabled": true
                                 },
                                 {
@@ -321,6 +241,86 @@
                                 }
                             ],
                             "raw": "{{baseUrl}}\/api\/guarantor?contract_id=&first_name=&last_name=&birth_date=&birth_place=&nationality=&home_address=&type_of_identity_document=&number_of_identity_document=&date_of_issue_of_identity_document=&function=&phone_number=&with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge la version word d'une caution",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/guarantor\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/guarantor\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du caution."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge le billet \u00e0 ordre d'une caution",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/guarantor\/promissory-note\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/guarantor\/promissory-note\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du caution."
+                                }
+                            ]
                         },
                         "method": "GET",
                         "header": [
@@ -545,49 +545,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/contract\/word\/:id",
+                            "path": "api\/test\/contract\/download\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/contract\/word\/:id",
-                            "variable": [
-                                {
-                                    "id": "id",
-                                    "key": "id",
-                                    "value": "1",
-                                    "description": "L'ID du contrat."
-                                }
-                            ]
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [],
-                            "code": 200,
-                            "body": "{}",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "T\u00e9l\u00e9charge le billet \u00e0 ordre d'un contrat",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/contract\/promissory-note\/:id",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/contract\/promissory-note\/:id",
+                            "raw": "{{baseUrl}}\/api\/test\/contract\/download\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -660,13 +620,13 @@
                                 {
                                     "key": "representative_type_of_identity_document",
                                     "value": "",
-                                    "description": "Filtrer par type de la pi\u00e8ce d'indentit\u00e9 du demandeur.",
+                                    "description": "Filtrer par type de la pi\u00e8ce d'identit\u00e9 du demandeur.",
                                     "disabled": true
                                 },
                                 {
                                     "key": "representative_number_of_identity_document",
                                     "value": "",
-                                    "description": "Filtrer par num\u00e9ro de la pi\u00e8ce d'indentit\u00e9 du demandeur.",
+                                    "description": "Filtrer par num\u00e9ro de la pi\u00e8ce d'identit\u00e9 du demandeur.",
                                     "disabled": true
                                 },
                                 {
@@ -742,13 +702,31 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "with_type_of_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les types des garanties.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_company",
+                                    "value": "",
+                                    "description": "Afficher les informations de la soci\u00e9t\u00e9",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_individual_business",
+                                    "value": "",
+                                    "description": "Afficher les informations de l'entreprise individuelle",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "paginate",
                                     "value": "",
                                     "description": "Utiliser la pagination.",
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&paginate="
+                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_company=&with_individual_business=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -781,6 +759,46 @@
                             "path": "api\/contract\/download\/:id",
                             "query": [],
                             "raw": "{{baseUrl}}\/api\/contract\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du contrat."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge le billet \u00e0 ordre d'un contrat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract\/promissory-note\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/contract\/promissory-note\/download\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -849,9 +867,27 @@
                                     "value": "",
                                     "description": "Afficher les garanties.",
                                     "disabled": true
+                                },
+                                {
+                                    "key": "with_company",
+                                    "value": "",
+                                    "description": "Afficher les informations de la soci\u00e9t\u00e9",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_individual_business",
+                                    "value": "",
+                                    "description": "Afficher les informations de l'entreprise individuelle",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les types des garanties.",
+                                    "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/contract\/:id?with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=",
+                            "raw": "{{baseUrl}}\/api\/contract\/:id?with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_company=&with_individual_business=&with_type_of_guarantees=",
                             "variable": [
                                 {
                                     "id": "id",
@@ -1364,7 +1400,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "18",
+                                    "value": "4",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -1573,7 +1609,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "14",
+                                    "value": "5",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -1813,7 +1849,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "16",
+                                    "value": "6",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -2047,7 +2083,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "6",
+                                    "value": "7",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -2321,7 +2357,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "8",
+                                    "value": "20",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

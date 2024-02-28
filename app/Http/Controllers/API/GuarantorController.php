@@ -33,8 +33,8 @@ class GuarantorController extends Controller
      * @queryParam  birth_place                             string              Filtrer par lieu de naissance de la caution.                            No-example
      * @queryParam  nationality                             string              Filtrer par nationalité de la caution                                   No-example
      * @queryParam  home_address                            string              Filtrer par addresse de domicile de la caution                          No-example
-     * @queryParam  type_of_identity_document               string              Filtrer par type de la pièce d'indentité de la caution.                 No-example
-     * @queryParam  number_of_identity_document             string              Filtrer par numéro de la pièce d'indentité de la caution.               No-example
+     * @queryParam  type_of_identity_document               string              Filtrer par type de la pièce d'identité de la caution.                 No-example
+     * @queryParam  number_of_identity_document             string              Filtrer par numéro de la pièce d'identité de la caution.               No-example
      * @queryParam  date_of_issue_of_identity_document      int                 Filtrer par date de délivrance de la pièce d'identité de la caution.    No-example
      * @queryParam  function                                int                 Filtrer par fonction de la caution                                      No-example
      * @queryParam  phone_number                            int                 Filtrer par numéro de téléphone de la caution                           No-example
@@ -135,7 +135,7 @@ class GuarantorController extends Controller
      *
      * @response 200
      */
-    public function word(Request $request, int $id)
+    public function download(Request $request, int $id)
     {
         $guarantor = Guarantor::find($id);
         if ($guarantor) {
@@ -275,8 +275,8 @@ class GuarantorController extends Controller
      * @bodyParam  birth_place                              string              Lieu de naissance de la caution.                                        Example: Los Afagnan
      * @bodyParam  nationality                              string              Nationalité de la caution                                               Example: Togolaise
      * @bodyParam  home_address                             string              Addresse de domicile de la caution                                      Example: Adewi
-     * @bodyParam  type_of_identity_document                string              Type de la pièce d'indentité de la caution.                             Example: cni
-     * @bodyParam  number_of_identity_document              string              Numéro de la pièce d'indentité de la caution.                           Example: BP785632
+     * @bodyParam  type_of_identity_document                string              Type de la pièce d'identité de la caution.                             Example: cni
+     * @bodyParam  number_of_identity_document              string              Numéro de la pièce d'identité de la caution.                           Example: BP785632
      * @bodyParam  date_of_issue_of_identity_document       string              Date de délivrance de la pièce d'identité de la caution.                Example: 2022-03-03
      * @bodyParam  function                                 string              Fonction de la caution                                                  Example: Agent CIA
      * @bodyParam  phone_number                             string              Numéro de téléphone de la caution                                       Example: +01 587-45-632-15
@@ -329,8 +329,8 @@ class GuarantorController extends Controller
      * @bodyParam  birth_place                              string              Lieu de naissance de la caution.                                        Example: Los Afagnan
      * @bodyParam  nationality                              string              Nationalité de la caution                                               Example: Togolaise
      * @bodyParam  home_address                             string              Addresse de domicile de la caution                                      Example: Adewi
-     * @bodyParam  type_of_identity_document                string              Type de la pièce d'indentité de la caution.                             Example: cni
-     * @bodyParam  number_of_identity_document              string              Numéro de la pièce d'indentité de la caution.                           Example: BP785632
+     * @bodyParam  type_of_identity_document                string              Type de la pièce d'identité de la caution.                             Example: cni
+     * @bodyParam  number_of_identity_document              string              Numéro de la pièce d'identité de la caution.                           Example: BP785632
      * @bodyParam  date_of_issue_of_identity_document       string              Date de délivrance de la pièce d'identité de la caution.                Example: 2022-03-03
      * @bodyParam  function                                 string              Fonction de la caution                                                  Example: Agent CIA
      * @bodyParam  phone_number                             string              Numéro de téléphone de la caution                                       Example: +01 587-45-632-15

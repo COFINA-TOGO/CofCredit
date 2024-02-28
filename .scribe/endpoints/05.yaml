@@ -1,20 +1,20 @@
-name: 'Type de crédit'
+name: 'Type de Garantie'
 description: |-
 
-  EndPoints pour gérer les types de crédit
+  EndPoints pour gérer les types de garanties
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/type-of-credit
+    uri: api/type-of-guarantee
     metadata:
-      groupName: 'Type de crédit'
+      groupName: 'Type de Garantie'
       groupDescription: |-
 
-        EndPoints pour gérer les types de crédit
+        EndPoints pour gérer les types de garanties
       subgroup: ''
       subgroupDescription: ''
-      title: 'Affiche les types de crédit'
+      title: 'Affiche les types de garantie'
       description: ''
       authenticated: true
       custom: []
@@ -34,33 +34,6 @@ endpoints:
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      type_of_applicant_id:
-        name: type_of_applicant_id
-        description: 'Filtrer par type de demandeur de crédit.'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      with_type_of_applicant:
-        name: with_type_of_applicant
-        description: 'Afficher le demandeur.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_verbals_trials:
-        name: with_verbals_trials
-        description: 'Afficher les PV.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
       paginate:
         name: paginate
         description: 'Utiliser la pagination.'
@@ -71,8 +44,6 @@ endpoints:
         exampleWasSpecified: true
         custom: []
     cleanQueryParameters:
-      with_type_of_applicant: 0
-      with_verbals_trials: 0
       paginate: 0
     bodyParameters: []
     cleanBodyParameters: []
@@ -96,15 +67,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/type-of-credit/{id}'
+    uri: 'api/type-of-guarantee/{id}'
     metadata:
-      groupName: 'Type de crédit'
+      groupName: 'Type de Garantie'
       groupDescription: |-
 
-        EndPoints pour gérer les types de crédit
+        EndPoints pour gérer les types de garanties
       subgroup: ''
       subgroupDescription: ''
-      title: 'Affiche un type de crédit'
+      title: 'Affiche un type de garantie'
       description: ''
       authenticated: true
       custom: []
@@ -115,7 +86,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du type de crédit."
+        description: "L'ID du type de garantie."
         required: true
         example: 1
         type: integer
@@ -124,28 +95,8 @@ endpoints:
         custom: []
     cleanUrlParameters:
       id: 1
-    queryParameters:
-      with_type_of_applicant:
-        name: with_type_of_applicant
-        description: 'Afficher le demandeur.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_verbals_trials:
-        name: with_verbals_trials
-        description: 'Afficher les PV.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-    cleanQueryParameters:
-      with_type_of_applicant: 0
-      with_verbals_trials: 0
+    queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -168,15 +119,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/type-of-credit
+    uri: api/type-of-guarantee
     metadata:
-      groupName: 'Type de crédit'
+      groupName: 'Type de Garantie'
       groupDescription: |-
 
-        EndPoints pour gérer les types de crédit
+        EndPoints pour gérer les types de garanties
       subgroup: ''
       subgroupDescription: ''
-      title: 'Créer un nouveau type de crédit'
+      title: 'Créer un nouveau type de garantie'
       description: ''
       authenticated: true
       custom: []
@@ -191,45 +142,15 @@ endpoints:
     bodyParameters:
       name:
         name: name
-        description: 'Le nom du type de crédit.'
+        description: 'Le nom du type de garantie.'
         required: true
         example: BFR
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      min_month:
-        name: min_month
-        description: 'Le nombre de mois minimum du type de crédit'
-        required: true
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      max_month:
-        name: max_month
-        description: 'Le nombre de mois maximum du type de crédit'
-        required: true
-        example: 6
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      type_of_applicant_id:
-        name: type_of_applicant_id
-        description: "L'identifiant du type de demandeur de crédit."
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
     cleanBodyParameters:
       name: BFR
-      min_month: 0
-      max_month: 6
-      type_of_applicant_id: 1
     fileParameters: []
     responses:
       -
@@ -250,15 +171,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/type-of-credit/{id}'
+    uri: 'api/type-of-guarantee/{id}'
     metadata:
-      groupName: 'Type de crédit'
+      groupName: 'Type de Garantie'
       groupDescription: |-
 
-        EndPoints pour gérer les types de crédit
+        EndPoints pour gérer les types de garanties
       subgroup: ''
       subgroupDescription: ''
-      title: 'Mettre à jour un type de crédit'
+      title: 'Mettre à jour un type de garantie'
       description: ''
       authenticated: true
       custom: []
@@ -269,7 +190,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du type de crédit."
+        description: "L'ID du type de garantie."
         required: true
         example: '1'
         type: string
@@ -283,45 +204,15 @@ endpoints:
     bodyParameters:
       name:
         name: name
-        description: 'Le nom du type de crédit.'
+        description: 'Le nom du type de garantie.'
         required: true
         example: BFR
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      min_month:
-        name: min_month
-        description: 'Le nombre de mois minimum du type de crédit'
-        required: true
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      max_month:
-        name: max_month
-        description: 'Le nombre de mois maximum du type de crédit'
-        required: true
-        example: 6
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      type_of_applicant_id:
-        name: type_of_applicant_id
-        description: "L'identifiant du type de demandeur de crédit."
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
     cleanBodyParameters:
       name: BFR
-      min_month: 0
-      max_month: 6
-      type_of_applicant_id: 1
     fileParameters: []
     responses:
       -
@@ -342,15 +233,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/type-of-credit/{id}'
+    uri: 'api/type-of-guarantee/{id}'
     metadata:
-      groupName: 'Type de crédit'
+      groupName: 'Type de Garantie'
       groupDescription: |-
 
-        EndPoints pour gérer les types de crédit
+        EndPoints pour gérer les types de garanties
       subgroup: ''
       subgroupDescription: ''
-      title: 'Supprime un type de crédit'
+      title: 'Supprime un type de garantie'
       description: ''
       authenticated: true
       custom: []
@@ -361,15 +252,15 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du type de crédit"
+        description: "L'ID du type de garantie"
         required: true
-        example: 16
+        example: 5
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 16
+      id: 5
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

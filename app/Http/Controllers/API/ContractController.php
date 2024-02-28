@@ -35,8 +35,8 @@ class ContractController extends Controller
      * @queryParam  representative_birth_place                              string              Filtrer par lieu de naissance du demandeur.                             No-example
      * @queryParam  representative_nationality                              string              Filtrer par nationalité du demandeur.                                   No-example
      * @queryParam  representative_home_address                             string              Filtrer par addresse du domicile du demandeur.                          No-example
-     * @queryParam  representative_type_of_identity_document                string              Filtrer par type de la pièce d'indentité du demandeur.                  No-example
-     * @queryParam  representative_number_of_identity_document              string              Filtrer par numéro de la pièce d'indentité du demandeur.                No-example
+     * @queryParam  representative_type_of_identity_document                string              Filtrer par type de la pièce d'identité du demandeur.                  No-example
+     * @queryParam  representative_number_of_identity_document              string              Filtrer par numéro de la pièce d'identité du demandeur.                No-example
      * @queryParam  representative_date_of_issue_of_identity_document       string              Filtrer par date de délivrance de la pièce d'identité du demandeur.     No-example
      * @queryParam  representative_phone_number                             string              Filtrer par numéro de téléphone du demandeur.                           No-example
      * @queryParam  risk_premium_percentage                                 int                 Filtrer par prime de risque (en pourcentage) du crédit du demandeur.    No-example
@@ -50,6 +50,9 @@ class ContractController extends Controller
      * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                          Example: 0
      * @queryParam  with_caf                                                int                 Afficher le caf en charge du dossier.                                   Example: 0
      * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                 Example: 0
+     * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
+     * @queryParam  with_company                                            int                 Afficher les informations de la société                                 Example: 0
+     * @queryParam  with_individual_business                                int                 Afficher les informations de l'entreprise individuelle                  Example: 0
      * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
      * @queryParam  paginate                                                int                 Utiliser la pagination.                                                 Example: 0
      *
@@ -85,7 +88,7 @@ class ContractController extends Controller
             }
 
 
-            foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee"] as $key => $value) {
+            foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
                     $contractList->with($value);
                 }
@@ -114,6 +117,8 @@ class ContractController extends Controller
      * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                          Example: 0
      * @queryParam  with_caf                                                int                 Afficher le CAF en charge du dossier.                                   Example: 0
      * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                 Example: 0
+     * @queryParam  with_company                                            int                 Afficher les informations de la société                                 Example: 0
+     * @queryParam  with_individual_business                                int                 Afficher les informations de l'entreprise individuelle                  Example: 0
      * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
      *
      * @response 200
@@ -124,7 +129,7 @@ class ContractController extends Controller
         if ($contract) {
             if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
                 $suplementList = [];
-                foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee"] as $key => $value) {
+                foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business"] as $key => $value) {
                     if (isset($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }
@@ -146,7 +151,7 @@ class ContractController extends Controller
      *
      * @response 200
      */
-    public function word(Request $request, int $id)
+    public function download(Request $request, int $id)
     {
         $contract = Contract::find($id);
         if ($contract) {
@@ -335,8 +340,8 @@ class ContractController extends Controller
      * @bodyParam   representative_birth_place                              string              Le lieu de naissance du demandeur.                                      Example: Lomé
      * @bodyParam   representative_nationality                              string              La nationalité du demandeur.                                            Example: Togolaise
      * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
-     * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'indentité du demandeur.                           Example: cni
-     * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'indentité du demandeur.                         Example: CND-4D8-84S-52S
+     * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'identité du demandeur.                           Example: cni
+     * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'identité du demandeur.                         Example: CND-4D8-84S-52S
      * @bodyParam   representative_date_of_issue_of_identity_document       string              La date de délivrance de la pièce d'identité du demandeur.              Example: 2020-01-01
      * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
      * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
@@ -467,8 +472,8 @@ class ContractController extends Controller
      * @bodyParam   representative_birth_place                              string              Le lieu de naissance du demandeur.                                      Example: Lomé
      * @bodyParam   representative_nationality                              string              La nationalité du demandeur.                                            Example: Togolaise
      * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
-     * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'indentité du demandeur.                           Example: cni
-     * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'indentité du demandeur.                         Example: CND-4D8-84S-52S
+     * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'identité du demandeur.                           Example: cni
+     * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'identité du demandeur.                         Example: CND-4D8-84S-52S
      * @bodyParam   representative_date_of_issue_of_identity_document       string              La date de délivrance de la pièce d'identité du demandeur.              Example: 2020-01-01
      * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
      * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2

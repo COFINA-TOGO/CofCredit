@@ -1,124 +1,20 @@
-name: Caution
+name: Utilisateur
 description: |-
 
-  EndPoints pour gérer les cautions
+  EndPoints pour gérer les utilisateurs
 endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/guarantor/word/{id}'
+    uri: api/user
     metadata:
-      groupName: Caution
+      groupName: Utilisateur
       groupDescription: |-
 
-        EndPoints pour gérer les cautions
+        EndPoints pour gérer les utilisateurs
       subgroup: ''
       subgroupDescription: ''
-      title: "Télécharge la version word d'une caution"
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: "L'ID du caution."
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: '{}'
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/guarantor/promissory-note/{id}'
-    metadata:
-      groupName: Caution
-      groupDescription: |-
-
-        EndPoints pour gérer les cautions
-      subgroup: ''
-      subgroupDescription: ''
-      title: "Télécharge le billet à ordre d'une caution"
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: "L'ID du caution."
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: '{}'
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/guarantor
-    metadata:
-      groupName: Caution
-      groupDescription: |-
-
-        EndPoints pour gérer les cautions
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Affiche les cautions'
+      title: 'Affiche les utilisateurs'
       description: ''
       authenticated: true
       custom: []
@@ -129,158 +25,59 @@ endpoints:
     urlParameters: []
     cleanUrlParameters: []
     queryParameters:
-      contract_id:
-        name: contract_id
-        description: 'Filtrer par ID du contract.'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      first_name:
-        name: first_name
-        description: 'Filtrer par prénom de la caution.'
+      name:
+        name: name
+        description: 'Filtrer par username.'
         required: false
         example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      last_name:
-        name: last_name
-        description: 'Filtrer par nom de la caution.'
+      full_name:
+        name: full_name
+        description: 'Filtrer par nom complet.'
         required: false
         example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      birth_date:
-        name: birth_date
-        description: 'Filtrer par date de naissance de la caution.'
+      email:
+        name: email
+        description: 'Filtrer par email.'
         required: false
         example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      birth_place:
-        name: birth_place
-        description: 'Filtrer par lieu de naissance de la caution.'
+      profile:
+        name: profile
+        description: 'Filtrer par profil.'
         required: false
         example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      nationality:
-        name: nationality
-        description: 'Filtrer par nationalité de la caution'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      home_address:
-        name: home_address
-        description: 'Filtrer par addresse de domicile de la caution'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      type_of_identity_document:
-        name: type_of_identity_document
-        description: "Filtrer par type de la pièce d'indentité de la caution."
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      number_of_identity_document:
-        name: number_of_identity_document
-        description: "Filtrer par numéro de la pièce d'indentité de la caution."
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      date_of_issue_of_identity_document:
-        name: date_of_issue_of_identity_document
-        description: "Filtrer par date de délivrance de la pièce d'identité de la caution."
+      activated:
+        name: activated
+        description: "Filtrer par statut d'activation"
         required: false
         example: null
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      function:
-        name: function
-        description: 'Filtrer par fonction de la caution'
+      password_change_required:
+        name: password_change_required
+        description: 'Filtrer par statut de mot de passe à changer'
         required: false
         example: null
         type: integer
         enumValues: []
         exampleWasSpecified: false
-        custom: []
-      phone_number:
-        name: phone_number
-        description: 'Filtrer par numéro de téléphone de la caution'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      with_contract:
-        name: with_contract
-        description: 'Afficher le contrat.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_verbal_trial:
-        name: with_verbal_trial
-        description: 'Afficher le PV.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_type_of_credit:
-        name: with_type_of_credit
-        description: 'Afficher le type de crédit.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_type_of_applicant:
-        name: with_type_of_applicant
-        description: 'Afficher le type de demandeur.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_guarantees:
-        name: with_guarantees
-        description: 'Afficher les garanties.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
         custom: []
       paginate:
         name: paginate
@@ -292,11 +89,6 @@ endpoints:
         exampleWasSpecified: true
         custom: []
     cleanQueryParameters:
-      with_contract: 0
-      with_verbal_trial: 0
-      with_type_of_credit: 0
-      with_type_of_applicant: 0
-      with_guarantees: 0
       paginate: 0
     bodyParameters: []
     cleanBodyParameters: []
@@ -320,15 +112,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/guarantor/{id}'
+    uri: 'api/user/{id}'
     metadata:
-      groupName: Caution
+      groupName: Utilisateur
       groupDescription: |-
 
-        EndPoints pour gérer les cautions
+        EndPoints pour gérer les utilisateurs
       subgroup: ''
       subgroupDescription: ''
-      title: 'Affiche une caution'
+      title: 'Affiche un utilisateur'
       description: ''
       authenticated: true
       custom: []
@@ -339,7 +131,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du caution."
+        description: "L'ID de l'utilisateur."
         required: true
         example: 1
         type: integer
@@ -348,58 +140,8 @@ endpoints:
         custom: []
     cleanUrlParameters:
       id: 1
-    queryParameters:
-      with_contract:
-        name: with_contract
-        description: 'Afficher le contrat.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_verbal_trial:
-        name: with_verbal_trial
-        description: 'Afficher le PV.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_type_of_credit:
-        name: with_type_of_credit
-        description: 'Afficher le type de crédit.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_type_of_applicant:
-        name: with_type_of_applicant
-        description: 'Afficher le type de demandeur.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_guarantees:
-        name: with_guarantees
-        description: 'Afficher les garanties.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-    cleanQueryParameters:
-      with_contract: 0
-      with_verbal_trial: 0
-      with_type_of_credit: 0
-      with_type_of_applicant: 0
-      with_guarantees: 0
+    queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -422,15 +164,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/guarantor
+    uri: api/user
     metadata:
-      groupName: Caution
+      groupName: Utilisateur
       groupDescription: |-
 
-        EndPoints pour gérer les cautions
+        EndPoints pour gérer les utilisateurs
       subgroup: ''
       subgroupDescription: ''
-      title: 'Créer une nouvelLa caution'
+      title: 'Créer un nouvel utilisateur'
       description: ''
       authenticated: true
       custom: []
@@ -443,137 +185,67 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      contract_id:
-        name: contract_id
-        description: 'ID du contract.'
-        required: false
+      name:
+        name: name
+        description: "Le username de l'utilsateur."
+        required: true
+        example: mawena
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      full_name:
+        name: full_name
+        description: "Le nom complet de l'utilisateur."
+        required: true
+        example: 'Charles GAMLIGO'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      profile:
+        name: profile
+        description: "Le profil de l'utilisateur."
+        required: true
+        example: admin
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      activated:
+        name: activated
+        description: "Le statut d'activation de l'utilisateur"
+        required: true
         example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      civility:
-        name: civility
-        description: 'Civilité de la caution.'
-        required: false
-        example: Mr
+      password:
+        name: password
+        description: "Le mot de passe de l'utilisateur."
+        required: true
+        example: password
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      first_name:
-        name: first_name
-        description: 'Prénom de la caution.'
-        required: false
-        example: Charles
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      last_name:
-        name: last_name
-        description: 'Nom de la caution.'
-        required: false
-        example: Xavier
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      birth_date:
-        name: birth_date
-        description: 'Date de naissance de la caution.'
-        required: false
-        example: '2000-03-03'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      birth_place:
-        name: birth_place
-        description: 'Lieu de naissance de la caution.'
-        required: false
-        example: 'Los Afagnan'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      nationality:
-        name: nationality
-        description: 'Nationalité de la caution'
-        required: false
-        example: Togolaise
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      home_address:
-        name: home_address
-        description: 'Addresse de domicile de la caution'
-        required: false
-        example: Adewi
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      type_of_identity_document:
-        name: type_of_identity_document
-        description: "Type de la pièce d'indentité de la caution."
-        required: false
-        example: cni
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      number_of_identity_document:
-        name: number_of_identity_document
-        description: "Numéro de la pièce d'indentité de la caution."
-        required: false
-        example: BP785632
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      date_of_issue_of_identity_document:
-        name: date_of_issue_of_identity_document
-        description: "Date de délivrance de la pièce d'identité de la caution."
-        required: false
-        example: '2022-03-03'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      function:
-        name: function
-        description: 'Fonction de la caution'
-        required: false
-        example: 'Agent CIA'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      phone_number:
-        name: phone_number
-        description: 'Numéro de téléphone de la caution'
-        required: false
-        example: '+01 587-45-632-15'
-        type: string
+      password_change_required:
+        name: password_change_required
+        description: "Le statut d'activation de l'utilisateur"
+        required: true
+        example: 1
+        type: integer
         enumValues: []
         exampleWasSpecified: true
         custom: []
     cleanBodyParameters:
-      contract_id: 1
-      civility: Mr
-      first_name: Charles
-      last_name: Xavier
-      birth_date: '2000-03-03'
-      birth_place: 'Los Afagnan'
-      nationality: Togolaise
-      home_address: Adewi
-      type_of_identity_document: cni
-      number_of_identity_document: BP785632
-      date_of_issue_of_identity_document: '2022-03-03'
-      function: 'Agent CIA'
-      phone_number: '+01 587-45-632-15'
+      name: mawena
+      full_name: 'Charles GAMLIGO'
+      profile: admin
+      activated: 1
+      password: password
+      password_change_required: 1
     fileParameters: []
     responses:
       -
@@ -594,15 +266,87 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/guarantor/{id}'
+    uri: api/user/update-password
     metadata:
-      groupName: Caution
+      groupName: Utilisateur
       groupDescription: |-
 
-        EndPoints pour gérer les cautions
+        EndPoints pour gérer les utilisateurs
       subgroup: ''
       subgroupDescription: ''
-      title: 'Mettre à jour une caution'
+      title: "Mettre à jour le mot de passe de l'utilisateur connecté utilisateur"
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      old_password:
+        name: old_password
+        description: "L'ancien mot de passe de l'utilisateur."
+        required: true
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      new_password:
+        name: new_password
+        description: "Le nouveau mot de passe de l'utilisateur."
+        required: true
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      new_password_confirmation:
+        name: new_password_confirmation
+        description: "La confirmation du nouveau mot de passe de l'utilisateur."
+        required: true
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+    cleanBodyParameters:
+      old_password: null
+      new_password: null
+      new_password_confirmation: null
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/user/{id}'
+    metadata:
+      groupName: Utilisateur
+      groupDescription: |-
+
+        EndPoints pour gérer les utilisateurs
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Mettre à jour un utilisateur'
       description: ''
       authenticated: true
       custom: []
@@ -613,149 +357,88 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du caution."
+        description: "L'ID de l'utilisateur."
+        required: true
+        example: '1'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: "Le username de l'utilsateur."
+        required: true
+        example: mawena
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      full_name:
+        name: full_name
+        description: "Le nom complet de l'utilisateur."
+        required: true
+        example: 'Charles GAMLIGO'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      profile:
+        name: profile
+        description: "Le profil de l'utilisateur."
+        required: true
+        example: admin
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      email:
+        name: email
+        description: "L'email de l'utilisateur."
+        required: true
+        example: gamligocharles@gmail.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      activated:
+        name: activated
+        description: "Le statut d'activation de l'utilisateur"
         required: true
         example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: true
         custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      contract_id:
-        name: contract_id
-        description: 'ID du contract.'
+      password:
+        name: password
+        description: "Le mot de passe de l'utilisateur."
         required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      password_change_required:
+        name: password_change_required
+        description: "Le statut d'activation de l'utilisateur"
+        required: true
         example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      civility:
-        name: civility
-        description: 'Civilité de la caution.'
-        required: false
-        example: Mr
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      first_name:
-        name: first_name
-        description: 'Prénom de la caution.'
-        required: false
-        example: Charles
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      last_name:
-        name: last_name
-        description: 'Nom de la caution.'
-        required: false
-        example: Xavier
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      birth_date:
-        name: birth_date
-        description: 'Date de naissance de la caution.'
-        required: false
-        example: '2000-03-03'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      birth_place:
-        name: birth_place
-        description: 'Lieu de naissance de la caution.'
-        required: false
-        example: 'Los Afagnan'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      nationality:
-        name: nationality
-        description: 'Nationalité de la caution'
-        required: false
-        example: Togolaise
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      home_address:
-        name: home_address
-        description: 'Addresse de domicile de la caution'
-        required: false
-        example: Adewi
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      type_of_identity_document:
-        name: type_of_identity_document
-        description: "Type de la pièce d'indentité de la caution."
-        required: false
-        example: cni
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      number_of_identity_document:
-        name: number_of_identity_document
-        description: "Numéro de la pièce d'indentité de la caution."
-        required: false
-        example: BP785632
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      date_of_issue_of_identity_document:
-        name: date_of_issue_of_identity_document
-        description: "Date de délivrance de la pièce d'identité de la caution."
-        required: false
-        example: '2022-03-03'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      function:
-        name: function
-        description: 'Fonction de la caution'
-        required: false
-        example: 'Agent CIA'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      phone_number:
-        name: phone_number
-        description: 'Numéro de téléphone de la caution'
-        required: false
-        example: '+01 587-45-632-15'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
     cleanBodyParameters:
-      contract_id: 1
-      civility: Mr
-      first_name: Charles
-      last_name: Xavier
-      birth_date: '2000-03-03'
-      birth_place: 'Los Afagnan'
-      nationality: Togolaise
-      home_address: Adewi
-      type_of_identity_document: cni
-      number_of_identity_document: BP785632
-      date_of_issue_of_identity_document: '2022-03-03'
-      function: 'Agent CIA'
-      phone_number: '+01 587-45-632-15'
+      name: mawena
+      full_name: 'Charles GAMLIGO'
+      profile: admin
+      email: gamligocharles@gmail.com
+      activated: 1
+      password_change_required: 1
     fileParameters: []
     responses:
       -
@@ -776,15 +459,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/guarantor/{id}'
+    uri: 'api/user/{id}'
     metadata:
-      groupName: Caution
+      groupName: Utilisateur
       groupDescription: |-
 
-        EndPoints pour gérer les cautions
+        EndPoints pour gérer les utilisateurs
       subgroup: ''
       subgroupDescription: ''
-      title: 'Supprime une caution'
+      title: 'Supprime un utilisateur'
       description: ''
       authenticated: true
       custom: []
@@ -795,15 +478,15 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du caution."
+        description: "L'ID de l'utilisateur"
         required: true
-        example: 1
+        example: 20
         type: integer
         enumValues: []
-        exampleWasSpecified: true
+        exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 1
+      id: 20
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

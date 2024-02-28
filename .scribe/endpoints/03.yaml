@@ -1,20 +1,20 @@
-name: Utilisateur
+name: 'Type de demandeur'
 description: |-
 
-  EndPoints pour gérer les utilisateurs
+  EndPoints pour gérer les types de demandeur de crédit
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/user
+    uri: api/type-of-applicant
     metadata:
-      groupName: Utilisateur
+      groupName: 'Type de demandeur'
       groupDescription: |-
 
-        EndPoints pour gérer les utilisateurs
+        EndPoints pour gérer les types de demandeur de crédit
       subgroup: ''
       subgroupDescription: ''
-      title: 'Affiche les utilisateurs'
+      title: 'Affiche les types de demandeur de crédit'
       description: ''
       authenticated: true
       custom: []
@@ -27,57 +27,30 @@ endpoints:
     queryParameters:
       name:
         name: name
-        description: 'Filtrer par username.'
+        description: 'Filtrer par nom.'
         required: false
         example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      full_name:
-        name: full_name
-        description: 'Filtrer par nom complet.'
+      with_types_of_credit:
+        name: with_types_of_credit
+        description: 'Afficher les types de crédit.'
         required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      email:
-        name: email
-        description: 'Filtrer par email.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      profile:
-        name: profile
-        description: 'Filtrer par profil.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      activated:
-        name: activated
-        description: "Filtrer par statut d'activation"
-        required: false
-        example: null
+        example: 0
         type: integer
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         custom: []
-      password_change_required:
-        name: password_change_required
-        description: 'Filtrer par statut de mot de passe à changer'
+      with_verbals_trials:
+        name: with_verbals_trials
+        description: 'Afficher les PV.'
         required: false
-        example: null
+        example: 0
         type: integer
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         custom: []
       paginate:
         name: paginate
@@ -89,6 +62,8 @@ endpoints:
         exampleWasSpecified: true
         custom: []
     cleanQueryParameters:
+      with_types_of_credit: 0
+      with_verbals_trials: 0
       paginate: 0
     bodyParameters: []
     cleanBodyParameters: []
@@ -112,15 +87,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/user/{id}'
+    uri: 'api/type-of-applicant/{id}'
     metadata:
-      groupName: Utilisateur
+      groupName: 'Type de demandeur'
       groupDescription: |-
 
-        EndPoints pour gérer les utilisateurs
+        EndPoints pour gérer les types de demandeur de crédit
       subgroup: ''
       subgroupDescription: ''
-      title: 'Affiche un utilisateur'
+      title: 'Affiche un type de demandeur de crédit'
       description: ''
       authenticated: true
       custom: []
@@ -131,7 +106,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID de l'utilisateur."
+        description: "L'ID du type de demandeur de crédit."
         required: true
         example: 1
         type: integer
@@ -140,8 +115,28 @@ endpoints:
         custom: []
     cleanUrlParameters:
       id: 1
-    queryParameters: []
-    cleanQueryParameters: []
+    queryParameters:
+      with_types_of_credit:
+        name: with_types_of_credit
+        description: 'Afficher les types de crédit.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_verbals_trials:
+        name: with_verbals_trials
+        description: 'Afficher les PV.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanQueryParameters:
+      with_types_of_credit: 0
+      with_verbals_trials: 0
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -164,15 +159,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/user
+    uri: api/type-of-applicant
     metadata:
-      groupName: Utilisateur
+      groupName: 'Type de demandeur'
       groupDescription: |-
 
-        EndPoints pour gérer les utilisateurs
+        EndPoints pour gérer les types de demandeur de crédit
       subgroup: ''
       subgroupDescription: ''
-      title: 'Créer un nouvel utilisateur'
+      title: 'Créer un nouveau type de demandeur de crédit'
       description: ''
       authenticated: true
       custom: []
@@ -187,65 +182,15 @@ endpoints:
     bodyParameters:
       name:
         name: name
-        description: "Le username de l'utilsateur."
+        description: 'Le nom du type de demandeur de crédit.'
         required: true
         example: mawena
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      full_name:
-        name: full_name
-        description: "Le nom complet de l'utilisateur."
-        required: true
-        example: 'Charles GAMLIGO'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      profile:
-        name: profile
-        description: "Le profil de l'utilisateur."
-        required: true
-        example: admin
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      activated:
-        name: activated
-        description: "Le statut d'activation de l'utilisateur"
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      password:
-        name: password
-        description: "Le mot de passe de l'utilisateur."
-        required: true
-        example: password
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      password_change_required:
-        name: password_change_required
-        description: "Le statut d'activation de l'utilisateur"
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
     cleanBodyParameters:
       name: mawena
-      full_name: 'Charles GAMLIGO'
-      profile: admin
-      activated: 1
-      password: password
-      password_change_required: 1
     fileParameters: []
     responses:
       -
@@ -266,87 +211,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: api/user/update-password
+    uri: 'api/type-of-applicant/{id}'
     metadata:
-      groupName: Utilisateur
+      groupName: 'Type de demandeur'
       groupDescription: |-
 
-        EndPoints pour gérer les utilisateurs
+        EndPoints pour gérer les types de demandeur de crédit
       subgroup: ''
       subgroupDescription: ''
-      title: "Mettre à jour le mot de passe de l'utilisateur connecté utilisateur"
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      old_password:
-        name: old_password
-        description: "L'ancien mot de passe de l'utilisateur."
-        required: true
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      new_password:
-        name: new_password
-        description: "Le nouveau mot de passe de l'utilisateur."
-        required: true
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      new_password_confirmation:
-        name: new_password_confirmation
-        description: "La confirmation du nouveau mot de passe de l'utilisateur."
-        required: true
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-    cleanBodyParameters:
-      old_password: null
-      new_password: null
-      new_password_confirmation: null
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: '{}'
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - PUT
-    uri: 'api/user/{id}'
-    metadata:
-      groupName: Utilisateur
-      groupDescription: |-
-
-        EndPoints pour gérer les utilisateurs
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Mettre à jour un utilisateur'
+      title: 'Mettre à jour un type de demandeur de crédit'
       description: ''
       authenticated: true
       custom: []
@@ -357,7 +230,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID de l'utilisateur."
+        description: "L'ID du type de demandeur de crédit."
         required: true
         example: '1'
         type: string
@@ -371,74 +244,15 @@ endpoints:
     bodyParameters:
       name:
         name: name
-        description: "Le username de l'utilsateur."
+        description: 'Le nom du type de demandeur de crédit.'
         required: true
         example: mawena
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      full_name:
-        name: full_name
-        description: "Le nom complet de l'utilisateur."
-        required: true
-        example: 'Charles GAMLIGO'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      profile:
-        name: profile
-        description: "Le profil de l'utilisateur."
-        required: true
-        example: admin
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      email:
-        name: email
-        description: "L'email de l'utilisateur."
-        required: true
-        example: gamligocharles@gmail.com
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      activated:
-        name: activated
-        description: "Le statut d'activation de l'utilisateur"
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      password:
-        name: password
-        description: "Le mot de passe de l'utilisateur."
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        custom: []
-      password_change_required:
-        name: password_change_required
-        description: "Le statut d'activation de l'utilisateur"
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
     cleanBodyParameters:
       name: mawena
-      full_name: 'Charles GAMLIGO'
-      profile: admin
-      email: gamligocharles@gmail.com
-      activated: 1
-      password_change_required: 1
     fileParameters: []
     responses:
       -
@@ -459,15 +273,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/user/{id}'
+    uri: 'api/type-of-applicant/{id}'
     metadata:
-      groupName: Utilisateur
+      groupName: 'Type de demandeur'
       groupDescription: |-
 
-        EndPoints pour gérer les utilisateurs
+        EndPoints pour gérer les types de demandeur de crédit
       subgroup: ''
       subgroupDescription: ''
-      title: 'Supprime un utilisateur'
+      title: 'Supprime un type de demandeur de crédit'
       description: ''
       authenticated: true
       custom: []
@@ -478,15 +292,15 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID de l'utilisateur"
+        description: "L'ID du type de demandeur de crédit"
         required: true
-        example: 8
+        example: 7
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 8
+      id: 7
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

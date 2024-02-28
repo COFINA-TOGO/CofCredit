@@ -88,14 +88,14 @@
                     <a href="#caution">Caution</a>
                 </li>
                                     <ul id="tocify-subheader-caution" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="caution-GETapi-guarantor-word--id-">
-                                <a href="#caution-GETapi-guarantor-word--id-">Télécharge la version word d'une caution</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="caution-GETapi-guarantor-promissory-note--id-">
-                                <a href="#caution-GETapi-guarantor-promissory-note--id-">Télécharge le billet à ordre d'une caution</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="caution-GETapi-guarantor">
+                                                    <li class="tocify-item level-2" data-unique="caution-GETapi-guarantor">
                                 <a href="#caution-GETapi-guarantor">Affiche les cautions</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="caution-GETapi-guarantor-download--id-">
+                                <a href="#caution-GETapi-guarantor-download--id-">Télécharge la version word d'une caution</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="caution-GETapi-guarantor-promissory-note-download--id-">
+                                <a href="#caution-GETapi-guarantor-promissory-note-download--id-">Télécharge le billet à ordre d'une caution</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="caution-GETapi-guarantor--id-">
                                 <a href="#caution-GETapi-guarantor--id-">Affiche une caution</a>
@@ -116,17 +116,17 @@
                     <a href="#contrat">Contrat</a>
                 </li>
                                     <ul id="tocify-subheader-contrat" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="contrat-GETapi-contract-word--id-">
-                                <a href="#contrat-GETapi-contract-word--id-">Télécharge la version word d'un contrat</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="contrat-GETapi-contract-promissory-note--id-">
-                                <a href="#contrat-GETapi-contract-promissory-note--id-">Télécharge le billet à ordre d'un contrat</a>
+                                                    <li class="tocify-item level-2" data-unique="contrat-GETapi-test-contract-download--id-">
+                                <a href="#contrat-GETapi-test-contract-download--id-">Télécharge la version word d'un contrat</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="contrat-GETapi-contract">
                                 <a href="#contrat-GETapi-contract">Affiche les contrats</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="contrat-GETapi-contract-download--id-">
                                 <a href="#contrat-GETapi-contract-download--id-">Télécharge la version word d'un contrat</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="contrat-GETapi-contract-promissory-note-download--id-">
+                                <a href="#contrat-GETapi-contract-promissory-note-download--id-">Télécharge le billet à ordre d'un contrat</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="contrat-GETapi-contract--id-">
                                 <a href="#contrat-GETapi-contract--id-">Affiche un contrat</a>
@@ -713,289 +713,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
     <p>EndPoints pour gérer les cautions</p>
 
-                                <h2 id="caution-GETapi-guarantor-word--id-">Télécharge la version word d&#039;une caution</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-GETapi-guarantor-word--id-">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/guarantor/word/1" \
-    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/guarantor/word/1"
-);
-
-const headers = {
-    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-guarantor-word--id-">
-            <blockquote>
-            <p>Example response (200):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-guarantor-word--id-" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-guarantor-word--id-"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-guarantor-word--id-"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-guarantor-word--id-" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-guarantor-word--id-">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-guarantor-word--id-" data-method="GET"
-      data-path="api/guarantor/word/{id}"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-guarantor-word--id-', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-guarantor-word--id-"
-                    onclick="tryItOut('GETapi-guarantor-word--id-');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-guarantor-word--id-"
-                    onclick="cancelTryOut('GETapi-guarantor-word--id-');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-guarantor-word--id-"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/guarantor/word/{id}</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-guarantor-word--id-"
-               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
-               data-component="header">
-    <br>
-<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-guarantor-word--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-guarantor-word--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-guarantor-word--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>L'ID du caution. Example: <code>1</code></p>
-            </div>
-                    </form>
-
-                    <h2 id="caution-GETapi-guarantor-promissory-note--id-">Télécharge le billet à ordre d&#039;une caution</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-GETapi-guarantor-promissory-note--id-">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/guarantor/promissory-note/1" \
-    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/guarantor/promissory-note/1"
-);
-
-const headers = {
-    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-guarantor-promissory-note--id-">
-            <blockquote>
-            <p>Example response (200):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-guarantor-promissory-note--id-" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-guarantor-promissory-note--id-"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-guarantor-promissory-note--id-"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-guarantor-promissory-note--id-" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-guarantor-promissory-note--id-">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-guarantor-promissory-note--id-" data-method="GET"
-      data-path="api/guarantor/promissory-note/{id}"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-guarantor-promissory-note--id-', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-guarantor-promissory-note--id-"
-                    onclick="tryItOut('GETapi-guarantor-promissory-note--id-');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-guarantor-promissory-note--id-"
-                    onclick="cancelTryOut('GETapi-guarantor-promissory-note--id-');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-guarantor-promissory-note--id-"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/guarantor/promissory-note/{id}</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-guarantor-promissory-note--id-"
-               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
-               data-component="header">
-    <br>
-<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-guarantor-promissory-note--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-guarantor-promissory-note--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-guarantor-promissory-note--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>L'ID du caution. Example: <code>1</code></p>
-            </div>
-                    </form>
-
-                    <h2 id="caution-GETapi-guarantor">Affiche les cautions</h2>
+                                <h2 id="caution-GETapi-guarantor">Affiche les cautions</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -1220,7 +938,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="query">
     <br>
-<p>Filtrer par type de la pièce d'indentité de la caution.</p>
+<p>Filtrer par type de la pièce d'identité de la caution.</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>number_of_identity_document</code></b>&nbsp;&nbsp;
@@ -1231,7 +949,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="query">
     <br>
-<p>Filtrer par numéro de la pièce d'indentité de la caution.</p>
+<p>Filtrer par numéro de la pièce d'identité de la caution.</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>date_of_issue_of_identity_document</code></b>&nbsp;&nbsp;
@@ -1333,6 +1051,288 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Utiliser la pagination. Example: <code>0</code></p>
             </div>
                 </form>
+
+                    <h2 id="caution-GETapi-guarantor-download--id-">Télécharge la version word d&#039;une caution</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-guarantor-download--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://cofcredit.cofina.localhost/api/guarantor/download/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/guarantor/download/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-guarantor-download--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-guarantor-download--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-guarantor-download--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-guarantor-download--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-guarantor-download--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-guarantor-download--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-guarantor-download--id-" data-method="GET"
+      data-path="api/guarantor/download/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-guarantor-download--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-guarantor-download--id-"
+                    onclick="tryItOut('GETapi-guarantor-download--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-guarantor-download--id-"
+                    onclick="cancelTryOut('GETapi-guarantor-download--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-guarantor-download--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/guarantor/download/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-guarantor-download--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-guarantor-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-guarantor-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-guarantor-download--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>L'ID du caution. Example: <code>1</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="caution-GETapi-guarantor-promissory-note-download--id-">Télécharge le billet à ordre d&#039;une caution</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-guarantor-promissory-note-download--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://cofcredit.cofina.localhost/api/guarantor/promissory-note/download/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/guarantor/promissory-note/download/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-guarantor-promissory-note-download--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-guarantor-promissory-note-download--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-guarantor-promissory-note-download--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-guarantor-promissory-note-download--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-guarantor-promissory-note-download--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-guarantor-promissory-note-download--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-guarantor-promissory-note-download--id-" data-method="GET"
+      data-path="api/guarantor/promissory-note/download/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-guarantor-promissory-note-download--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-guarantor-promissory-note-download--id-"
+                    onclick="tryItOut('GETapi-guarantor-promissory-note-download--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-guarantor-promissory-note-download--id-"
+                    onclick="cancelTryOut('GETapi-guarantor-promissory-note-download--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-guarantor-promissory-note-download--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/guarantor/promissory-note/download/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-guarantor-promissory-note-download--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-guarantor-promissory-note-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-guarantor-promissory-note-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-guarantor-promissory-note-download--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>L'ID du caution. Example: <code>1</code></p>
+            </div>
+                    </form>
 
                     <h2 id="caution-GETapi-guarantor--id-">Affiche une caution</h2>
 
@@ -1799,7 +1799,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="cni"
                data-component="body">
     <br>
-<p>Type de la pièce d'indentité de la caution. Example: <code>cni</code></p>
+<p>Type de la pièce d'identité de la caution. Example: <code>cni</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>number_of_identity_document</code></b>&nbsp;&nbsp;
@@ -1810,7 +1810,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="BP785632"
                data-component="body">
     <br>
-<p>Numéro de la pièce d'indentité de la caution. Example: <code>BP785632</code></p>
+<p>Numéro de la pièce d'identité de la caution. Example: <code>BP785632</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>date_of_issue_of_identity_document</code></b>&nbsp;&nbsp;
@@ -2117,7 +2117,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="cni"
                data-component="body">
     <br>
-<p>Type de la pièce d'indentité de la caution. Example: <code>cni</code></p>
+<p>Type de la pièce d'identité de la caution. Example: <code>cni</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>number_of_identity_document</code></b>&nbsp;&nbsp;
@@ -2128,7 +2128,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="BP785632"
                data-component="body">
     <br>
-<p>Numéro de la pièce d'indentité de la caution. Example: <code>BP785632</code></p>
+<p>Numéro de la pièce d'identité de la caution. Example: <code>BP785632</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>date_of_issue_of_identity_document</code></b>&nbsp;&nbsp;
@@ -2309,7 +2309,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
     <p>EndPoints pour gérer les contrats</p>
 
-                                <h2 id="contrat-GETapi-contract-word--id-">Télécharge la version word d&#039;un contrat</h2>
+                                <h2 id="contrat-GETapi-test-contract-download--id-">Télécharge la version word d&#039;un contrat</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -2317,13 +2317,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-GETapi-contract-word--id-">
+<span id="example-requests-GETapi-test-contract-download--id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract/word/1" \
+    --get "http://cofcredit.cofina.localhost/api/test/contract/download/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2331,7 +2331,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/contract/word/1"
+    "http://cofcredit.cofina.localhost/api/test/contract/download/1"
 );
 
 const headers = {
@@ -2347,7 +2347,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-GETapi-contract-word--id-">
+<span id="example-responses-GETapi-test-contract-download--id-">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
@@ -2356,43 +2356,43 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{}</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-contract-word--id-" hidden>
+<span id="execution-results-GETapi-test-contract-download--id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-contract-word--id-"></span>:
+                id="execution-response-status-GETapi-test-contract-download--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-contract-word--id-"
+    <pre class="json"><code id="execution-response-content-GETapi-test-contract-download--id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-contract-word--id-" hidden>
+<span id="execution-error-GETapi-test-contract-download--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-contract-word--id-">
+    <pre><code id="execution-error-message-GETapi-test-contract-download--id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-contract-word--id-" data-method="GET"
-      data-path="api/contract/word/{id}"
+<form id="form-GETapi-test-contract-download--id-" data-method="GET"
+      data-path="api/test/contract/download/{id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-contract-word--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-test-contract-download--id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-contract-word--id-"
-                    onclick="tryItOut('GETapi-contract-word--id-');">Try it out ⚡
+                    id="btn-tryout-GETapi-test-contract-download--id-"
+                    onclick="tryItOut('GETapi-test-contract-download--id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-contract-word--id-"
-                    onclick="cancelTryOut('GETapi-contract-word--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-test-contract-download--id-"
+                    onclick="cancelTryOut('GETapi-test-contract-download--id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-contract-word--id-"
+                    id="btn-executetryout-GETapi-test-contract-download--id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -2400,7 +2400,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/contract/word/{id}</code></b>
+            <b><code>api/test/contract/download/{id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -2408,7 +2408,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-contract-word--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-test-contract-download--id-"
                value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
                data-component="header">
     <br>
@@ -2419,7 +2419,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-contract-word--id-"
+                              name="Content-Type"                data-endpoint="GETapi-test-contract-download--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -2430,7 +2430,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-contract-word--id-"
+                              name="Accept"                data-endpoint="GETapi-test-contract-download--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -2442,148 +2442,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-contract-word--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>L'ID du contrat. Example: <code>1</code></p>
-            </div>
-                    </form>
-
-                    <h2 id="contrat-GETapi-contract-promissory-note--id-">Télécharge le billet à ordre d&#039;un contrat</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-GETapi-contract-promissory-note--id-">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract/promissory-note/1" \
-    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/contract/promissory-note/1"
-);
-
-const headers = {
-    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-contract-promissory-note--id-">
-            <blockquote>
-            <p>Example response (200):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-contract-promissory-note--id-" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-contract-promissory-note--id-"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-contract-promissory-note--id-"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-contract-promissory-note--id-" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-contract-promissory-note--id-">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-contract-promissory-note--id-" data-method="GET"
-      data-path="api/contract/promissory-note/{id}"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-contract-promissory-note--id-', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-contract-promissory-note--id-"
-                    onclick="tryItOut('GETapi-contract-promissory-note--id-');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-contract-promissory-note--id-"
-                    onclick="cancelTryOut('GETapi-contract-promissory-note--id-');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-contract-promissory-note--id-"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/contract/promissory-note/{id}</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-contract-promissory-note--id-"
-               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
-               data-component="header">
-    <br>
-<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-contract-promissory-note--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-contract-promissory-note--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-contract-promissory-note--id-"
+               step="any"               name="id"                data-endpoint="GETapi-test-contract-download--id-"
                value="1"
                data-component="url">
     <br>
@@ -2605,7 +2464,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/contract?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_type_of_guarantees=0&amp;with_company=0&amp;with_individual_business=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2622,6 +2481,9 @@ const params = {
     "with_type_of_applicant": "0",
     "with_caf": "0",
     "with_guarantees": "0",
+    "with_type_of_guarantees": "0",
+    "with_company": "0",
+    "with_individual_business": "0",
     "paginate": "0",
 };
 Object.keys(params)
@@ -2794,7 +2656,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="query">
     <br>
-<p>Filtrer par type de la pièce d'indentité du demandeur.</p>
+<p>Filtrer par type de la pièce d'identité du demandeur.</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>representative_number_of_identity_document</code></b>&nbsp;&nbsp;
@@ -2805,7 +2667,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="query">
     <br>
-<p>Filtrer par numéro de la pièce d'indentité du demandeur.</p>
+<p>Filtrer par numéro de la pièce d'identité du demandeur.</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>representative_date_of_issue_of_identity_document</code></b>&nbsp;&nbsp;
@@ -2938,6 +2800,39 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="query">
     <br>
 <p>Afficher les garanties. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_type_of_guarantees</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_type_of_guarantees"                data-endpoint="GETapi-contract"
+               value="0"
+               data-component="query">
+    <br>
+<p>Afficher les types des garanties. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_company</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_company"                data-endpoint="GETapi-contract"
+               value="0"
+               data-component="query">
+    <br>
+<p>Afficher les informations de la société Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_individual_business</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_individual_business"                data-endpoint="GETapi-contract"
+               value="0"
+               data-component="query">
+    <br>
+<p>Afficher les informations de l'entreprise individuelle Example: <code>0</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>paginate</code></b>&nbsp;&nbsp;
@@ -3093,6 +2988,147 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                    <h2 id="contrat-GETapi-contract-promissory-note-download--id-">Télécharge le billet à ordre d&#039;un contrat</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-contract-promissory-note-download--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://cofcredit.cofina.localhost/api/contract/promissory-note/download/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/contract/promissory-note/download/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-contract-promissory-note-download--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-contract-promissory-note-download--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-contract-promissory-note-download--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-contract-promissory-note-download--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-contract-promissory-note-download--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-contract-promissory-note-download--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-contract-promissory-note-download--id-" data-method="GET"
+      data-path="api/contract/promissory-note/download/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-contract-promissory-note-download--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-contract-promissory-note-download--id-"
+                    onclick="tryItOut('GETapi-contract-promissory-note-download--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-contract-promissory-note-download--id-"
+                    onclick="cancelTryOut('GETapi-contract-promissory-note-download--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-contract-promissory-note-download--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/contract/promissory-note/download/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-contract-promissory-note-download--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-contract-promissory-note-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-contract-promissory-note-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-contract-promissory-note-download--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>L'ID du contrat. Example: <code>1</code></p>
+            </div>
+                    </form>
+
                     <h2 id="contrat-GETapi-contract--id-">Affiche un contrat</h2>
 
 <p>
@@ -3107,7 +3143,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract/1?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0" \
+    --get "http://cofcredit.cofina.localhost/api/contract/1?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_company=0&amp;with_individual_business=0&amp;with_type_of_guarantees=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3124,6 +3160,9 @@ const params = {
     "with_type_of_applicant": "0",
     "with_caf": "0",
     "with_guarantees": "0",
+    "with_company": "0",
+    "with_individual_business": "0",
+    "with_type_of_guarantees": "0",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -3297,6 +3336,39 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="query">
     <br>
 <p>Afficher les garanties. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_company</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_company"                data-endpoint="GETapi-contract--id-"
+               value="0"
+               data-component="query">
+    <br>
+<p>Afficher les informations de la société Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_individual_business</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_individual_business"                data-endpoint="GETapi-contract--id-"
+               value="0"
+               data-component="query">
+    <br>
+<p>Afficher les informations de l'entreprise individuelle Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_type_of_guarantees</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_type_of_guarantees"                data-endpoint="GETapi-contract--id-"
+               value="0"
+               data-component="query">
+    <br>
+<p>Afficher les types des garanties. Example: <code>0</code></p>
             </div>
                 </form>
 
@@ -3527,7 +3599,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="cni"
                data-component="body">
     <br>
-<p>Le type de la pièce d'indentité du demandeur. Example: <code>cni</code></p>
+<p>Le type de la pièce d'identité du demandeur. Example: <code>cni</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>representative_number_of_identity_document</code></b>&nbsp;&nbsp;
@@ -3538,7 +3610,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="CND-4D8-84S-52S"
                data-component="body">
     <br>
-<p>Le numéro de la pièce d'indentité du demandeur. Example: <code>CND-4D8-84S-52S</code></p>
+<p>Le numéro de la pièce d'identité du demandeur. Example: <code>CND-4D8-84S-52S</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>representative_date_of_issue_of_identity_document</code></b>&nbsp;&nbsp;
@@ -3856,7 +3928,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="cni"
                data-component="body">
     <br>
-<p>Le type de la pièce d'indentité du demandeur. Example: <code>cni</code></p>
+<p>Le type de la pièce d'identité du demandeur. Example: <code>cni</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>representative_number_of_identity_document</code></b>&nbsp;&nbsp;
@@ -3867,7 +3939,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="CND-4D8-84S-52S"
                data-component="body">
     <br>
-<p>Le numéro de la pièce d'indentité du demandeur. Example: <code>CND-4D8-84S-52S</code></p>
+<p>Le numéro de la pièce d'identité du demandeur. Example: <code>CND-4D8-84S-52S</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>representative_date_of_issue_of_identity_document</code></b>&nbsp;&nbsp;
@@ -5497,7 +5569,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/verbal-trial/18" \
+    "http://cofcredit.cofina.localhost/api/verbal-trial/4" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5505,7 +5577,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/verbal-trial/18"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/4"
 );
 
 const headers = {
@@ -5616,10 +5688,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-verbal-trial--id-"
-               value="18"
+               value="4"
                data-component="url">
     <br>
-<p>L'ID du procès verbal Example: <code>18</code></p>
+<p>L'ID du procès verbal Example: <code>4</code></p>
             </div>
                     </form>
 
@@ -6252,7 +6324,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/14" \
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/5" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6260,7 +6332,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/14"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/5"
 );
 
 const headers = {
@@ -6371,10 +6443,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-guarantee--id-"
-               value="14"
+               value="5"
                data-component="url">
     <br>
-<p>L'ID du type de garantie Example: <code>14</code></p>
+<p>L'ID du type de garantie Example: <code>5</code></p>
             </div>
                     </form>
 
@@ -7150,7 +7222,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-credit/16" \
+    "http://cofcredit.cofina.localhost/api/type-of-credit/6" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -7158,7 +7230,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-credit/16"
+    "http://cofcredit.cofina.localhost/api/type-of-credit/6"
 );
 
 const headers = {
@@ -7269,10 +7341,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-credit--id-"
-               value="16"
+               value="6"
                data-component="url">
     <br>
-<p>L'ID du type de crédit Example: <code>16</code></p>
+<p>L'ID du type de crédit Example: <code>6</code></p>
             </div>
                     </form>
 
@@ -7959,7 +8031,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/6" \
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/7" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -7967,7 +8039,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/6"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/7"
 );
 
 const headers = {
@@ -8078,10 +8150,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-applicant--id-"
-               value="6"
+               value="7"
                data-component="url">
     <br>
-<p>L'ID du type de demandeur de crédit Example: <code>6</code></p>
+<p>L'ID du type de demandeur de crédit Example: <code>7</code></p>
             </div>
                     </form>
 
@@ -9086,7 +9158,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/user/8" \
+    "http://cofcredit.cofina.localhost/api/user/20" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -9094,7 +9166,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/user/8"
+    "http://cofcredit.cofina.localhost/api/user/20"
 );
 
 const headers = {
@@ -9205,10 +9277,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-user--id-"
-               value="8"
+               value="20"
                data-component="url">
     <br>
-<p>L'ID de l'utilisateur Example: <code>8</code></p>
+<p>L'ID de l'utilisateur Example: <code>20</code></p>
             </div>
                     </form>
 

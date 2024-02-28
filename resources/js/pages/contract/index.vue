@@ -1,9 +1,10 @@
+<!-- eslint-disable camelcase -->
 <script setup>
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 
 const isDialogVisible = ref(false)
-const pvIdToDelete = ref(0);
+const pvIdToDelete = ref(0)
 
 const headers = [
   {
@@ -40,8 +41,10 @@ const headers = [
     sortable: false,
   },
 ]
+
 const selectedStatus = ref()
 const searchQuery = ref('')
+
 const status = ref([
   {
     title: 'Scheduled',
@@ -56,6 +59,7 @@ const status = ref([
     value: 'Inactive',
   },
 ])
+
 const itemsPerPage = ref(8)
 const page = ref(1)
 
@@ -71,8 +75,11 @@ const {
     search: searchQuery,
     page: page,
     with_type_of_credit: 1,
+    with_company: 1,
+    with_individual_business: 1,
   },
 }))
+
 const pvList = computed(() => pvData.value.data)
 const totalPv = computed(() => pvData.value.total)
 const lastPage = computed(() => pvData.value.last_page)
@@ -88,42 +95,49 @@ const deleteContract = async id => {
   fetchPv()
 }
 
-const downloadFile = async (id) => {
-  const url = `/api/contract/word/${id}`
-  fetch(url)
+const downloadFile = async (url, fileName) => {
+  const userToken = useCookie('userToken').value
+
+  fetch(url, {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+  })
     .then(response => {
       // Vérifier si la requête a réussi (statut 200)
       if (!response.ok) {
-        throw new Error('La requête a échoué');
+        throw new Error('La requête a échoué')
       }
+
       // Récupérer le contenu du fichier sous forme de blob
-      return response.blob();
+      return response.blob()
     })
     .then(blob => {
       // Créer un objet de type File à partir du blob
-      const fichier = new File([blob], "contract", { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const fichier = new File([blob], "contract", { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
 
       // Enregistrer le fichier
       // Créer un objet de type URL à partir du blob
-      const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob)
 
       // Créer un élément de lien
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = "contract";
+      const link = document.createElement('a')
+
+      link.href = url
+      link.download = fileName
 
       // Ajouter le lien à la page
-      document.body.appendChild(link);
+      document.body.appendChild(link)
 
       // Simuler un clic sur le lien pour déclencher le téléchargement
-      link.click();
+      link.click()
 
       // Nettoyer l'URL objet après le téléchargement
-      URL.revokeObjectURL(url);
+      URL.revokeObjectURL(url)
     })
     .catch(error => {
-      console.error('Erreur lors de la requête:', error);
-    });
+      console.error('Erreur lors de la requête:', error)
+    })
 
 }
 
@@ -146,13 +160,24 @@ const downloadFile = async (id) => {
     </VCard>
 
     <!-- 👉 pvs -->
-    <VCard title="Filtres" class="mb-6">
+    <VCard
+      title="Filtres"
+      class="mb-6"
+    >
       <VCardText>
         <VRow>
           <!-- 👉 Select Status -->
-          <VCol cols="12" sm="4">
-            <AppSelect v-model="selectedStatus" placeholder="Type de crédit" :items="status" clearable
-              clear-icon="tabler-x" />
+          <VCol
+            cols="12"
+            sm="4"
+          >
+            <AppSelect
+              v-model="selectedStatus"
+              placeholder="Type de crédit"
+              :items="status"
+              clearable
+              clear-icon="tabler-x"
+            />
           </VCol>
         </VRow>
       </VCardText>
@@ -162,21 +187,38 @@ const downloadFile = async (id) => {
       <div class="d-flex flex-wrap gap-4 mx-5">
         <div class="d-flex align-center">
           <!-- 👉 Search  -->
-          <AppTextField v-model="searchQuery" placeholder="Rechercher un pv" density="compact" style="inline-size: 200px;"
-            class="me-3" />
+          <AppTextField
+            v-model="searchQuery"
+            placeholder="Rechercher un pv"
+            density="compact"
+            style="inline-size: 200px;"
+            class="me-3"
+          />
         </div>
 
         <VSpacer />
         <div class="d-flex gap-4 flex-wrap align-center">
           <!-- 👉 Export button -->
-          <VBtn variant="tonal" color="secondary" prepend-icon="tabler-upload">
+          <VBtn
+            variant="tonal"
+            color="secondary"
+            prepend-icon="tabler-upload"
+          >
             Export
           </VBtn>
 
-          <VBtn color="primary" prepend-icon="tabler-plus" @click="$router.push('/contract/add')">
+          <VBtn
+            color="primary"
+            prepend-icon="tabler-plus"
+            @click="$router.push('/contract/add')"
+          >
             Ajouter un contrat
           </VBtn>
-          <VBtn color="primary" prepend-icon="tabler-refresh" @click="fetchPv()">
+          <VBtn
+            color="primary"
+            prepend-icon="tabler-refresh"
+            @click="fetchPv"
+          >
             Recharger
           </VBtn>
         </div>
@@ -186,8 +228,15 @@ const downloadFile = async (id) => {
 
 
       <!-- 👉 Datatable  -->
-      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers" :items="pvList"
-        :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
+      <VDataTableServer
+        v-model:items-per-page="itemsPerPage"
+        v-model:page="page"
+        :headers="headers"
+        :items="pvList"
+        :items-length="totalPv"
+        class="text-no-wrap"
+        @update:options="updateOptions"
+      >
         <!-- Type -->
         <template #item.type="{ item }">
           {{ typeList[item.type] }}
@@ -200,13 +249,45 @@ const downloadFile = async (id) => {
           <IconBtn @click="$router.push('/contract/edit/' + item.id)">
             <VIcon icon="tabler-edit" />
           </IconBtn>
-          <IconBtn @click="downloadFile(item.id)">
-            <VIcon icon="tabler-download" />
-          </IconBtn>
           <IconBtn @click="pvIdToDelete = item.id; isDialogVisible = true">
             <VIcon icon="tabler-trash" />
           </IconBtn>
+          <VBtn
+            icon
+            variant="text"
+            size="small"
+            color="medium-emphasis"
+          >
+            <VIcon
+              size="24"
+              icon="tabler-dots-vertical"
+            />
+            <VMenu activator="parent">
+              <VList>
+                <VListItem :to="{ name: 'contract-guarantor-id', params: { id: item.id } }">
+                  <template #prepend>
+                    <VIcon icon="tabler-users" />
+                  </template>
 
+                  <VListItemTitle>Garants</VListItemTitle>
+                </VListItem>
+
+                <VListItem @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}`)">
+                  <template #prepend>
+                    <VIcon icon="tabler-download" />
+                  </template>
+                  <VListItemTitle>Contrat</VListItemTitle>
+                </VListItem>
+
+                <VListItem @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}`)">
+                  <template #prepend>
+                    <VIcon icon="tabler-download" />
+                  </template>
+                  <VListItemTitle>Billet à ordre</VListItemTitle>
+                </VListItem>
+              </VList>
+            </VMenu>
+          </VBtn>
         </template>
 
         <template #bottom>
@@ -217,16 +298,29 @@ const downloadFile = async (id) => {
               {{ paginationMeta({ page, itemsPerPage }, totalPv) }}
             </p>
 
-            <VPagination v-model="page" :length="lastPage"
-              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)">
+            <VPagination
+              v-model="page"
+              :length="lastPage"
+              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
+            >
               <template #prev="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
                   Précedent
                 </VBtn>
               </template>
 
               <template #next="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
                   Suivant
                 </VBtn>
               </template>
@@ -236,8 +330,11 @@ const downloadFile = async (id) => {
       </VDataTableServer>
     </VCard>
 
-    <VDialog v-model="isDialogVisible" persistent class="v-dialog-sm">
-
+    <VDialog
+      v-model="isDialogVisible"
+      persistent
+      class="v-dialog-sm"
+    >
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 
@@ -248,7 +345,11 @@ const downloadFile = async (id) => {
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isDialogVisible = false"
+          >
             Annuler
           </VBtn>
           <VBtn @click="deleteContract(pvIdToDelete); isDialogVisible = false">

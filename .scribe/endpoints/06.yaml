@@ -1,20 +1,20 @@
-name: 'Type de Garantie'
+name: 'Procès Verbal'
 description: |-
 
-  EndPoints pour gérer les types de garanties
+  EndPoints pour gérer les Procès verbaux
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/type-of-guarantee
+    uri: api/verbal-trial
     metadata:
-      groupName: 'Type de Garantie'
+      groupName: 'Procès Verbal'
       groupDescription: |-
 
-        EndPoints pour gérer les types de garanties
+        EndPoints pour gérer les Procès verbaux
       subgroup: ''
       subgroupDescription: ''
-      title: 'Affiche les types de garantie'
+      title: 'Affiche les Procès verbaux'
       description: ''
       authenticated: true
       custom: []
@@ -25,14 +25,230 @@ endpoints:
     urlParameters: []
     cleanUrlParameters: []
     queryParameters:
-      name:
-        name: name
-        description: 'Filtrer par nom.'
+      committee_id:
+        name: committee_id
+        description: 'Filtrer par ID du procès verbal'
         required: false
         example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
+        custom: []
+      committee_date:
+        name: committee_date
+        description: 'Filtrer par date du procès verbal'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      civility:
+        name: civility
+        description: 'Filtrer par civilité'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      applicant_first_name:
+        name: applicant_first_name
+        description: 'Filtrer par prénom du demandeur'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      applicant_last_name:
+        name: applicant_last_name
+        description: 'Filtrer par nom du demandeur'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      account_number:
+        name: account_number
+        description: 'Filtrer par numéro de compte'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      activity:
+        name: activity
+        description: 'Filtrer par activé'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      purpose_of_financing:
+        name: purpose_of_financing
+        description: 'Filtrer par objet du financement'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      type_of_credit_id:
+        name: type_of_credit_id
+        description: 'Filtrer par ID du type de credit'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      amount:
+        name: amount
+        description: 'Filtrer par montant'
+        required: false
+        example: null
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      duration:
+        name: duration
+        description: 'Filtrer par durée en mois'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      periodicity:
+        name: periodicity
+        description: 'Filtrer par periodicité'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      taf:
+        name: taf
+        description: 'Filtrer par TAF'
+        required: false
+        example: null
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      due_amount:
+        name: due_amount
+        description: "Filtrer par montant d'une échéance"
+        required: false
+        example: null
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      administrative_fees_percentage:
+        name: administrative_fees_percentage
+        description: 'Filtrer par frais de dossier(pourcentage)'
+        required: false
+        example: null
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      insurance_premium:
+        name: insurance_premium
+        description: "Filtrer par prime d'assurance"
+        required: false
+        example: null
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      tax_fee_interest_rate:
+        name: tax_fee_interest_rate
+        description: "Fiilter par taux d'intérêt hors taxe(%)"
+        required: false
+        example: null
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      caf_id:
+        name: caf_id
+        description: 'Filtrer par ID du CAF'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      with_type_of_credit:
+        name: with_type_of_credit
+        description: 'Afficher le type de crédit.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_type_of_applicant:
+        name: with_type_of_applicant
+        description: 'Afficher le type de demandeur du type de crédit.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_guarantees:
+        name: with_guarantees
+        description: 'Afficher les garanties.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_type_of_guarantees:
+        name: with_type_of_guarantees
+        description: 'Afficher les types des garanties.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_contract:
+        name: with_contract
+        description: 'Afficher le contrat.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_caf:
+        name: with_caf
+        description: 'Afficher le CAF.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      has_contract:
+        name: has_contract
+        description: 'Filtrer par présence de contrat'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
         custom: []
       paginate:
         name: paginate
@@ -44,6 +260,13 @@ endpoints:
         exampleWasSpecified: true
         custom: []
     cleanQueryParameters:
+      with_type_of_credit: 0
+      with_type_of_applicant: 1
+      with_guarantees: 1
+      with_type_of_guarantees: 1
+      with_contract: 1
+      with_caf: 1
+      has_contract: 0
       paginate: 0
     bodyParameters: []
     cleanBodyParameters: []
@@ -67,15 +290,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/type-of-guarantee/{id}'
+    uri: 'api/verbal-trial/{id}'
     metadata:
-      groupName: 'Type de Garantie'
+      groupName: 'Procès Verbal'
       groupDescription: |-
 
-        EndPoints pour gérer les types de garanties
+        EndPoints pour gérer les Procès verbaux
       subgroup: ''
       subgroupDescription: ''
-      title: 'Affiche un type de garantie'
+      title: 'Affiche un procès verbal'
       description: ''
       authenticated: true
       custom: []
@@ -86,7 +309,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du type de garantie."
+        description: "L'ID du procès verbal."
         required: true
         example: 1
         type: integer
@@ -95,8 +318,68 @@ endpoints:
         custom: []
     cleanUrlParameters:
       id: 1
-    queryParameters: []
-    cleanQueryParameters: []
+    queryParameters:
+      with_type_of_credit:
+        name: with_type_of_credit
+        description: 'Afficher le type de crédit.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_type_of_applicant:
+        name: with_type_of_applicant
+        description: 'Afficher le type de demandeur du type de crédit.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_guarantees:
+        name: with_guarantees
+        description: 'Afficher les garanties.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_type_of_guarantees:
+        name: with_type_of_guarantees
+        description: 'Afficher les types des garanties.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_contract:
+        name: with_contract
+        description: 'Afficher le contrat.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_caf:
+        name: with_caf
+        description: 'Afficher le CAF.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanQueryParameters:
+      with_type_of_credit: 0
+      with_type_of_applicant: 1
+      with_guarantees: 1
+      with_type_of_guarantees: 1
+      with_contract: 1
+      with_caf: 1
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -119,15 +402,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/type-of-guarantee
+    uri: api/verbal-trial
     metadata:
-      groupName: 'Type de Garantie'
+      groupName: 'Procès Verbal'
       groupDescription: |-
 
-        EndPoints pour gérer les types de garanties
+        EndPoints pour gérer les Procès verbaux
       subgroup: ''
       subgroupDescription: ''
-      title: 'Créer un nouveau type de garantie'
+      title: 'Créer un nouveau procès verbal'
       description: ''
       authenticated: true
       custom: []
@@ -140,17 +423,187 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      name:
-        name: name
-        description: 'Le nom du type de garantie.'
-        required: true
-        example: BFR
+      committee_id:
+        name: committee_id
+        description: "L'ID comitée venant de créditFlow"
+        required: false
+        example: CFNTG-044-13-12-23-01212
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      committee_date:
+        name: committee_date
+        description: 'La date du comitée'
+        required: false
+        example: '2024-02-09'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      civility:
+        name: civility
+        description: 'La Civilité'
+        required: false
+        example: Mr
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      applicant_first_name:
+        name: applicant_first_name
+        description: 'Le prénom du demandeur'
+        required: false
+        example: Cesar
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      applicant_last_name:
+        name: applicant_last_name
+        description: 'Le nom du demandeur'
+        required: false
+        example: Endure
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      account_number:
+        name: account_number
+        description: 'Le numéro de compte'
+        required: false
+        example: '012345678901'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      activity:
+        name: activity
+        description: "L'activé"
+        required: false
+        example: "Homme d'affaire"
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      purpose_of_financing:
+        name: purpose_of_financing
+        description: "L'objet du financement"
+        required: false
+        example: 'Achat nouveau locaux'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      type_of_credit_id:
+        name: type_of_credit_id
+        description: "L'ID du type de credit"
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      amount:
+        name: amount
+        description: 'Le montant'
+        required: false
+        example: 10000000.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      duration:
+        name: duration
+        description: 'La durée en mois'
+        required: false
+        example: 12
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      periodicity:
+        name: periodicity
+        description: 'La periodicité'
+        required: false
+        example: mensual
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      taf:
+        name: taf
+        description: 'La TAF(%)'
+        required: false
+        example: 10.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      due_amount:
+        name: due_amount
+        description: "Le montant d'une échéance"
+        required: false
+        example: 500000.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      administrative_fees_percentage:
+        name: administrative_fees_percentage
+        description: 'Les frais de dossier(%)'
+        required: false
+        example: 2.5
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      insurance_premium:
+        name: insurance_premium
+        description: "La prime d'assurance"
+        required: false
+        example: 45000.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      tax_fee_interest_rate:
+        name: tax_fee_interest_rate
+        description: "Le taux d'intérêt hors taxe(%)"
+        required: false
+        example: 10.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      caf_id:
+        name: caf_id
+        description: "L'ID du CAF"
+        required: false
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
     cleanBodyParameters:
-      name: BFR
+      committee_id: CFNTG-044-13-12-23-01212
+      committee_date: '2024-02-09'
+      civility: Mr
+      applicant_first_name: Cesar
+      applicant_last_name: Endure
+      account_number: '012345678901'
+      activity: "Homme d'affaire"
+      purpose_of_financing: 'Achat nouveau locaux'
+      type_of_credit_id: 1
+      amount: 10000000.0
+      duration: 12
+      periodicity: mensual
+      taf: 10.0
+      due_amount: 500000.0
+      administrative_fees_percentage: 2.5
+      insurance_premium: 45000.0
+      tax_fee_interest_rate: 10.0
+      caf_id: 4
     fileParameters: []
     responses:
       -
@@ -171,15 +624,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/type-of-guarantee/{id}'
+    uri: 'api/verbal-trial/{id}'
     metadata:
-      groupName: 'Type de Garantie'
+      groupName: 'Procès Verbal'
       groupDescription: |-
 
-        EndPoints pour gérer les types de garanties
+        EndPoints pour gérer les Procès verbaux
       subgroup: ''
       subgroupDescription: ''
-      title: 'Mettre à jour un type de garantie'
+      title: 'Mettre à jour un procès verbal'
       description: ''
       authenticated: true
       custom: []
@@ -190,7 +643,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du type de garantie."
+        description: "L'ID du procès verbal."
         required: true
         example: '1'
         type: string
@@ -202,17 +655,187 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      name:
-        name: name
-        description: 'Le nom du type de garantie.'
-        required: true
-        example: BFR
+      committee_id:
+        name: committee_id
+        description: "L'ID comitée venant de créditFlow"
+        required: false
+        example: CFNTG-044-13-12-23-01212
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      committee_date:
+        name: committee_date
+        description: 'La date du comitée'
+        required: false
+        example: '2024-02-09'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      civility:
+        name: civility
+        description: 'La Civilité'
+        required: false
+        example: Mr
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      applicant_first_name:
+        name: applicant_first_name
+        description: 'Le prénom du demandeur'
+        required: false
+        example: Cesar
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      applicant_last_name:
+        name: applicant_last_name
+        description: 'Le nom du demandeur'
+        required: false
+        example: Endure
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      account_number:
+        name: account_number
+        description: 'Le numéro de compte'
+        required: false
+        example: '012345678901'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      activity:
+        name: activity
+        description: "L'activé"
+        required: false
+        example: "Homme d'affaire"
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      purpose_of_financing:
+        name: purpose_of_financing
+        description: "L'objet du financement"
+        required: false
+        example: 'Achat nouveau locaux'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      type_of_credit_id:
+        name: type_of_credit_id
+        description: "L'ID du type de credit"
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      amount:
+        name: amount
+        description: 'Le montant'
+        required: false
+        example: 10000000.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      duration:
+        name: duration
+        description: 'La durée en mois'
+        required: false
+        example: 12
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      periodicity:
+        name: periodicity
+        description: 'La periodicité'
+        required: false
+        example: mensual
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      taf:
+        name: taf
+        description: 'La TAF(%)'
+        required: false
+        example: 10.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      due_amount:
+        name: due_amount
+        description: "Le montant d'une échéance"
+        required: false
+        example: 500000.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      administrative_fees_percentage:
+        name: administrative_fees_percentage
+        description: 'Les frais de dossier(%)'
+        required: false
+        example: 2.5
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      insurance_premium:
+        name: insurance_premium
+        description: "La prime d'assurance"
+        required: false
+        example: 45000.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      tax_fee_interest_rate:
+        name: tax_fee_interest_rate
+        description: "Le taux d'intérêt hors taxe(%)"
+        required: false
+        example: 10.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      caf_id:
+        name: caf_id
+        description: "L'ID du CAF"
+        required: false
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
     cleanBodyParameters:
-      name: BFR
+      committee_id: CFNTG-044-13-12-23-01212
+      committee_date: '2024-02-09'
+      civility: Mr
+      applicant_first_name: Cesar
+      applicant_last_name: Endure
+      account_number: '012345678901'
+      activity: "Homme d'affaire"
+      purpose_of_financing: 'Achat nouveau locaux'
+      type_of_credit_id: 1
+      amount: 10000000.0
+      duration: 12
+      periodicity: mensual
+      taf: 10.0
+      due_amount: 500000.0
+      administrative_fees_percentage: 2.5
+      insurance_premium: 45000.0
+      tax_fee_interest_rate: 10.0
+      caf_id: 4
     fileParameters: []
     responses:
       -
@@ -233,15 +856,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/type-of-guarantee/{id}'
+    uri: 'api/verbal-trial/{id}'
     metadata:
-      groupName: 'Type de Garantie'
+      groupName: 'Procès Verbal'
       groupDescription: |-
 
-        EndPoints pour gérer les types de garanties
+        EndPoints pour gérer les Procès verbaux
       subgroup: ''
       subgroupDescription: ''
-      title: 'Supprime un type de garantie'
+      title: 'Supprime un procès verbal'
       description: ''
       authenticated: true
       custom: []
@@ -252,15 +875,15 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "L'ID du type de garantie"
+        description: "L'ID du procès verbal"
         required: true
-        example: 14
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 14
+      id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

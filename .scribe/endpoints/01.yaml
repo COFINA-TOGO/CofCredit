@@ -6,7 +6,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/contract/word/{id}'
+    uri: 'api/test/contract/download/{id}'
     metadata:
       groupName: Contrat
       groupDescription: |-
@@ -15,58 +15,6 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: "Télécharge la version word d'un contrat"
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: "L'ID du contrat."
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: '{}'
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/contract/promissory-note/{id}'
-    metadata:
-      groupName: Contrat
-      groupDescription: |-
-
-        EndPoints pour gérer les contrats
-      subgroup: ''
-      subgroupDescription: ''
-      title: "Télécharge le billet à ordre d'un contrat"
       description: ''
       authenticated: true
       custom: []
@@ -176,7 +124,7 @@ endpoints:
         custom: []
       representative_type_of_identity_document:
         name: representative_type_of_identity_document
-        description: "Filtrer par type de la pièce d'indentité du demandeur."
+        description: "Filtrer par type de la pièce d'identité du demandeur."
         required: false
         example: null
         type: string
@@ -185,7 +133,7 @@ endpoints:
         custom: []
       representative_number_of_identity_document:
         name: representative_number_of_identity_document
-        description: "Filtrer par numéro de la pièce d'indentité du demandeur."
+        description: "Filtrer par numéro de la pièce d'identité du demandeur."
         required: false
         example: null
         type: string
@@ -300,6 +248,33 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_type_of_guarantees:
+        name: with_type_of_guarantees
+        description: 'Afficher les types des garanties.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_company:
+        name: with_company
+        description: 'Afficher les informations de la société'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_individual_business:
+        name: with_individual_business
+        description: "Afficher les informations de l'entreprise individuelle"
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       paginate:
         name: paginate
         description: 'Utiliser la pagination.'
@@ -315,6 +290,9 @@ endpoints:
       with_type_of_applicant: 0
       with_caf: 0
       with_guarantees: 0
+      with_type_of_guarantees: 0
+      with_company: 0
+      with_individual_business: 0
       paginate: 0
     bodyParameters: []
     cleanBodyParameters: []
@@ -347,6 +325,58 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: "Télécharge la version word d'un contrat"
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du contrat."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/contract/promissory-note/download/{id}'
+    metadata:
+      groupName: Contrat
+      groupDescription: |-
+
+        EndPoints pour gérer les contrats
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Télécharge le billet à ordre d'un contrat"
       description: ''
       authenticated: true
       custom: []
@@ -464,12 +494,42 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_company:
+        name: with_company
+        description: 'Afficher les informations de la société'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_individual_business:
+        name: with_individual_business
+        description: "Afficher les informations de l'entreprise individuelle"
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      with_type_of_guarantees:
+        name: with_type_of_guarantees
+        description: 'Afficher les types des garanties.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
     cleanQueryParameters:
       with_verbal_trial: 0
       with_type_of_credit: 0
       with_type_of_applicant: 0
       with_caf: 0
       with_guarantees: 0
+      with_company: 0
+      with_individual_business: 0
+      with_type_of_guarantees: 0
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -560,7 +620,7 @@ endpoints:
         custom: []
       representative_type_of_identity_document:
         name: representative_type_of_identity_document
-        description: "Le type de la pièce d'indentité du demandeur."
+        description: "Le type de la pièce d'identité du demandeur."
         required: false
         example: cni
         type: string
@@ -569,7 +629,7 @@ endpoints:
         custom: []
       representative_number_of_identity_document:
         name: representative_number_of_identity_document
-        description: "Le numéro de la pièce d'indentité du demandeur."
+        description: "Le numéro de la pièce d'identité du demandeur."
         required: false
         example: CND-4D8-84S-52S
         type: string
@@ -752,7 +812,7 @@ endpoints:
         custom: []
       representative_type_of_identity_document:
         name: representative_type_of_identity_document
-        description: "Le type de la pièce d'indentité du demandeur."
+        description: "Le type de la pièce d'identité du demandeur."
         required: false
         example: cni
         type: string
@@ -761,7 +821,7 @@ endpoints:
         custom: []
       representative_number_of_identity_document:
         name: representative_number_of_identity_document
-        description: "Le numéro de la pièce d'indentité du demandeur."
+        description: "Le numéro de la pièce d'identité du demandeur."
         required: false
         example: CND-4D8-84S-52S
         type: string

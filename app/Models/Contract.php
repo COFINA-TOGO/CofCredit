@@ -30,7 +30,7 @@ class Contract extends Model
         'has_pledges',
     ];
 
-    protected $with = ['company', 'individual_business'];
+    // protected $with = ['company', 'individual_business'];
 
 
     public function toArray()

@@ -91,6 +91,7 @@ declare module 'vue-router/auto/routes' {
     'contract-id': RouteRecordInfo<'contract-id', '/contract/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'contract-add': RouteRecordInfo<'contract-add', '/contract/add', Record<never, never>, Record<never, never>>,
     'contract-edit-id': RouteRecordInfo<'contract-edit-id', '/contract/edit/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    'contract-guarantor-id': RouteRecordInfo<'contract-guarantor-id', '/contract/guarantor/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'dashboards-analytics': RouteRecordInfo<'dashboards-analytics', '/dashboards/analytics', Record<never, never>, Record<never, never>>,
     'dashboards-crm': RouteRecordInfo<'dashboards-crm', '/dashboards/crm', Record<never, never>, Record<never, never>>,
     'dashboards-ecommerce': RouteRecordInfo<'dashboards-ecommerce', '/dashboards/ecommerce', Record<never, never>, Record<never, never>>,
