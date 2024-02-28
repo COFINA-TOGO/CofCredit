@@ -43,12 +43,14 @@ class ContractController extends Controller
      * @queryParam  total_amount_of_interest                                int                 Filtrer par montant total des intérêts du crédit du demandeur.          No-example
      * @queryParam  number_of_due_dates                                     int                 Filtrer par nombre d'échéance.                                          No-example
      * @queryParam  type                                                    string              Filtrer par type de contract.                                           No-example
-     * @queryParam  has_pledges                                             int                 Filtrer par type de présence de gage                                    No-example
+     * @queryParam  has_pledges                                             int                 Filtrer par présence de gage                                            No-example
      *
      * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
      * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
      * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                          Example: 0
+     * @queryParam  with_caf                                                int                 Afficher le caf en charge du dossier.                                   Example: 0
      * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                 Example: 0
+     * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
      * @queryParam  paginate                                                int                 Utiliser la pagination.                                                 Example: 0
      *
      * @response 200
@@ -82,7 +84,8 @@ class ContractController extends Controller
                 }
             }
 
-            foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees"] as $key => $value) {
+
+            foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
                     $contractList->with($value);
                 }
@@ -109,7 +112,9 @@ class ContractController extends Controller
      * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
      * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
      * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                          Example: 0
+     * @queryParam  with_caf                                                int                 Afficher le CAF en charge du dossier.                                   Example: 0
      * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                 Example: 0
+     * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
      *
      * @response 200
      */
@@ -119,7 +124,7 @@ class ContractController extends Controller
         if ($contract) {
             if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
                 $suplementList = [];
-                foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees"] as $key => $value) {
+                foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee"] as $key => $value) {
                     if (isset($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }
@@ -360,7 +365,7 @@ class ContractController extends Controller
                 'total_amount_of_interest' => 'required|numeric',
                 'number_of_due_dates' => 'required|numeric',
                 'type' => 'required|in:particular,company,individual_business',
-                'has_pledges' => 'required|in:true,false',
+                'has_pledges' => 'required|boolean',
             ]);
             if ($validator->fails()) {
                 return $this->responseError($validator->errors(), 400);
@@ -418,23 +423,25 @@ class ContractController extends Controller
                     $relationList[] = "individual_business";
                 }
 
-                if ($requestData["has_pledges"] == "true") {
-                    $validator = Validator::make($requestData, [
-                        "pledges" => "required|array|min:1",
-                        "pledges.*.type" => "required|in:vehicle,stock",
-                        "pledges.*.comment" => "required|min:2"
-                    ]);
-                    if ($validator->fails()) {
-                        return $this->responseError($validator->errors(), 400);
-                    }
-                    foreach ($requestData["pledges"] as $pledge) {
-                        Pledge::create([
-                            "contract_id" => $contract->id,
-                            "type" => $pledge["type"],
-                            "comment" => $pledge["comment"],
+                if (isset($requestData["has_pledges"])) {
+                    if ($requestData["has_pledges"]) {
+                        $validator = Validator::make($requestData, [
+                            "pledges" => "required|array|min:1",
+                            "pledges.*.type" => "required|in:vehicle,stock",
+                            "pledges.*.comment" => "required|min:2"
                         ]);
+                        if ($validator->fails()) {
+                            return $this->responseError($validator->errors(), 400);
+                        }
+                        foreach ($requestData["pledges"] as $pledge) {
+                            Pledge::create([
+                                "contract_id" => $contract->id,
+                                "type" => $pledge["type"],
+                                "comment" => $pledge["comment"],
+                            ]);
+                        }
+                        $relationList[] = "pledges";
                     }
-                    $relationList[] = "pledges";
                 }
                 $contract->load($relationList);
             } catch (\Exception $e) {
@@ -476,10 +483,10 @@ class ContractController extends Controller
     {
         $contract = Contract::find($id);
         if ($contract) {
-            if (($authorisation = Gate::inspect('update', $contract))->allowed()) {
+            if (($authorisation = Gate::inspect('update', Contract::class))->allowed()) {
                 $requestData = $request->all();
                 $validator = Validator::make($requestData, [
-                    'verbal_trial_id' => "required|exists:verbals_trials,id|unique:contracts,verbal_trial_id,$id",
+                    'verbal_trial_id' => "required|exists:verbals_trials,id|unique:contracts,verbal_trial_id," . $id,
                     'representative_birth_date' => 'required|date',
                     'representative_birth_place' => 'required|min:2',
                     'representative_nationality' => 'required|min:2',
@@ -492,16 +499,95 @@ class ContractController extends Controller
                     'total_amount_of_interest' => 'required|numeric',
                     'number_of_due_dates' => 'required|numeric',
                     'type' => 'required|in:particular,company,individual_business',
+                    'has_pledges' => 'required|boolean',
                 ]);
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
-                } else {
-                    $contract->update($requestData);
-                    $contract->load(["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"]);
-                    return $this->responseOk([
-                        "contract" => $contract
-                    ]);
                 }
+
+                DB::beginTransaction();
+                try {
+                    $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
+                    $contract->update($requestData);
+                    $contract->company?->delete();
+                    $contract->individual_business?->delete();
+                    if ($requestData["type"] == "company") {
+                        $validator = Validator::make($requestData, [
+                            'company_denomination' => "required|min:2",
+                            'company_legal_status' => "required|min:2",
+                            'company_head_office_address' => "required|min:2",
+                            'company_rccm_number' => "required|min:2",
+                            'company_phone_number' => "required|min:2",
+                        ]);
+
+                        if ($validator->fails()) {
+                            return $this->responseError($validator->errors(), 400);
+                        } else {
+                            Company::create([
+                                "contract_id" => $contract->id,
+                                "denomination" => $requestData["company_denomination"],
+                                "legal_status" => $requestData["company_legal_status"],
+                                "head_office_address" => $requestData["company_head_office_address"],
+                                "rccm_number" => $requestData["company_rccm_number"],
+                                "phone_number" => $requestData["company_phone_number"],
+                            ]);
+                        }
+
+                        $relationList[] = "company";
+                    } elseif ($requestData["type"] == "individual_business") {
+                        $validator = Validator::make($requestData, [
+                            'individual_business_denomination' => "required|min:2",
+                            'individual_business_corporate_purpose' => "required|min:2",
+                            'individual_business_head_office_address' => "required|min:2",
+                            'individual_business_rccm_number' => "required|min:2",
+                            'individual_business_phone_number' => "required|min:2",
+                        ]);
+
+                        if ($validator->fails()) {
+                            return $this->responseError($validator->errors(), 400);
+                        } else {
+                            IndividualBusiness::create([
+                                "contract_id" => $contract->id,
+                                "denomination" => $requestData["individual_business_denomination"],
+                                "corporate_purpose" => $requestData["individual_business_corporate_purpose"],
+                                "head_office_address" => $requestData["individual_business_head_office_address"],
+                                "rccm_number" => $requestData["individual_business_rccm_number"],
+                                "phone_number" => $requestData["individual_business_phone_number"],
+                            ]);
+                        }
+
+                        $relationList[] = "individual_business";
+                    }
+
+                    if (isset($requestData["has_pledges"])) {
+                        if ($requestData["has_pledges"]) {
+                            $validator = Validator::make($requestData, [
+                                "pledges" => "required|array|min:1",
+                                "pledges.*.type" => "required|in:vehicle,stock",
+                                "pledges.*.comment" => "required|min:2"
+                            ]);
+                            if ($validator->fails()) {
+                                return $this->responseError($validator->errors(), 400);
+                            }
+                            foreach ($requestData["pledges"] as $pledge) {
+                                Pledge::create([
+                                    "contract_id" => $contract->id,
+                                    "type" => $pledge["type"],
+                                    "comment" => $pledge["comment"],
+                                ]);
+                            }
+                            $relationList[] = "pledges";
+                        }
+                    }
+                    $contract->load($relationList);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    throw $e;
+                }
+                DB::commit(); // Valider les opérations
+                return $this->responseOk([
+                    "contract" => $contract
+                ], status: 201);
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }

@@ -3,37 +3,36 @@ import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 
 const isDialogVisible = ref(false)
-const idToDelete = ref(0);
-
+const pvIdToDelete = ref(0);
 
 const headers = [
   {
     title: 'Numéro comitée',
-    key: 'committee_id',
+    key: 'verbal_trial.committee_id',
   },
   {
     title: 'Prénom client',
-    key: 'applicant_first_name',
+    key: 'verbal_trial.applicant_first_name',
   },
   {
     title: 'Nom client',
-    key: 'applicant_last_name',
+    key: 'verbal_trial.applicant_last_name',
+  },
+  {
+    title: 'Type de contrat',
+    key: 'type',
   },
   {
     title: 'Type Credit',
-    key: 'type_of_credit.name',
+    key: 'verbal_trial.type_of_credit.name',
   },
   {
     title: 'Montant',
-    key: 'amount',
+    key: 'verbal_trial.amount',
   },
   {
     title: 'Durée',
-    key: 'duration',
-  },
-  {
-    title: 'CAF',
-    key: 'caf.full_name',
+    key: 'verbal_trial.duration',
   },
   {
     title: 'Actions',
@@ -67,25 +66,67 @@ const updateOptions = options => {
 const {
   data: pvData,
   execute: fetchPv,
-} = await useApi(createUrl('/verbal-trial', {
+} = await useApi(createUrl('/contract', {
   query: {
     search: searchQuery,
     page: page,
-    has_contract: 1,
-    with_caf: 1,
     with_type_of_credit: 1,
   },
 }))
-
-
-const apiDelete = async id => {
-  await $api(`verbal-trial/${id}`, { method: 'DELETE' })
-  fetchPv()
-}
-
 const pvList = computed(() => pvData.value.data)
 const totalPv = computed(() => pvData.value.total)
 const lastPage = computed(() => pvData.value.last_page)
+
+const typeList = {
+  "company": 'Société',
+  "individual_business": 'Entreprise Individuel',
+  "particular": 'Particulier',
+}
+
+const deleteContract = async id => {
+  await $api(`contract/${id}`, { method: 'DELETE' })
+  fetchPv()
+}
+
+const downloadFile = async (id) => {
+  const url = `/api/contract/word/${id}`
+  fetch(url)
+    .then(response => {
+      // Vérifier si la requête a réussi (statut 200)
+      if (!response.ok) {
+        throw new Error('La requête a échoué');
+      }
+      // Récupérer le contenu du fichier sous forme de blob
+      return response.blob();
+    })
+    .then(blob => {
+      // Créer un objet de type File à partir du blob
+      const fichier = new File([blob], "contract", { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+
+      // Enregistrer le fichier
+      // Créer un objet de type URL à partir du blob
+      const url = URL.createObjectURL(blob);
+
+      // Créer un élément de lien
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = "contract";
+
+      // Ajouter le lien à la page
+      document.body.appendChild(link);
+
+      // Simuler un clic sur le lien pour déclencher le téléchargement
+      link.click();
+
+      // Nettoyer l'URL objet après le téléchargement
+      URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+      console.error('Erreur lors de la requête:', error);
+    });
+
+}
+
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
 </script>
 
@@ -97,7 +138,7 @@ const lastPage = computed(() => pvData.value.last_page)
         <VRow>
           <VCardText>
             <h2>
-              Liste des Procès verbaux avec contrat
+              Liste des contrats
             </h2>
           </VCardText>
         </VRow>
@@ -132,8 +173,8 @@ const lastPage = computed(() => pvData.value.last_page)
             Export
           </VBtn>
 
-          <VBtn color="primary" prepend-icon="tabler-plus" @click="$router.push('/pv/add')">
-            Ajouter un PV
+          <VBtn color="primary" prepend-icon="tabler-plus" @click="$router.push('/contract/add')">
+            Ajouter un contrat
           </VBtn>
           <VBtn color="primary" prepend-icon="tabler-refresh" @click="fetchPv()">
             Recharger
@@ -147,18 +188,22 @@ const lastPage = computed(() => pvData.value.last_page)
       <!-- 👉 Datatable  -->
       <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers" :items="pvList"
         :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
-        <!-- Actions -->
+        <!-- Type -->
+        <template #item.type="{ item }">
+          {{ typeList[item.type] }}
+        </template>
+
         <template #item.actions="{ item }">
-          <IconBtn @click="$router.push('/pv/' + item.id)">
+          <IconBtn @click="$router.push('/contract/' + item.id)">
             <VIcon icon=" tabler-eye" />
           </IconBtn>
-          <IconBtn @click="$router.push('/pv/edit/' + item.id)">
+          <IconBtn @click="$router.push('/contract/edit/' + item.id)">
             <VIcon icon="tabler-edit" />
           </IconBtn>
-          <IconBtn @click="$router.push('/pv/download/' + item.id)">
+          <IconBtn @click="downloadFile(item.id)">
             <VIcon icon="tabler-download" />
           </IconBtn>
-          <IconBtn @click="idToDelete = item.id; isDialogVisible = true">
+          <IconBtn @click="pvIdToDelete = item.id; isDialogVisible = true">
             <VIcon icon="tabler-trash" />
           </IconBtn>
 
@@ -190,6 +235,7 @@ const lastPage = computed(() => pvData.value.last_page)
         </template>
       </VDataTableServer>
     </VCard>
+
     <VDialog v-model="isDialogVisible" persistent class="v-dialog-sm">
 
       <!-- Dialog close btn -->
@@ -198,14 +244,14 @@ const lastPage = computed(() => pvData.value.last_page)
       <!-- Dialog Content -->
       <VCard title="Suppression">
         <VCardText>
-          Etes vous sûr de vouloir supprimer ce pv?
+          Etes vous sûr de vouloir supprimer ce contrat?
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
           <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
             Annuler
           </VBtn>
-          <VBtn @click="apiDelete(idToDelete); isDialogVisible = false">
+          <VBtn @click="deleteContract(pvIdToDelete); isDialogVisible = false">
             Supprimer
           </VBtn>
         </VCardText>

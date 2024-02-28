@@ -214,6 +214,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_type_of_guarantees:
+        name: with_type_of_guarantees
+        description: 'Afficher les types des garanties.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       with_contract:
         name: with_contract
         description: 'Afficher le contrat.'
@@ -232,6 +241,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      has_contract:
+        name: has_contract
+        description: 'Filtrer par présence de contrat'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       paginate:
         name: paginate
         description: 'Utiliser la pagination.'
@@ -245,8 +263,10 @@ endpoints:
       with_type_of_credit: 0
       with_type_of_applicant: 1
       with_guarantees: 1
+      with_type_of_guarantees: 1
       with_contract: 1
       with_caf: 1
+      has_contract: 0
       paginate: 0
     bodyParameters: []
     cleanBodyParameters: []
@@ -326,6 +346,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_type_of_guarantees:
+        name: with_type_of_guarantees
+        description: 'Afficher les types des garanties.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       with_contract:
         name: with_contract
         description: 'Afficher le contrat.'
@@ -348,6 +377,7 @@ endpoints:
       with_type_of_credit: 0
       with_type_of_applicant: 1
       with_guarantees: 1
+      with_type_of_guarantees: 1
       with_contract: 1
       with_caf: 1
     bodyParameters: []
@@ -847,13 +877,13 @@ endpoints:
         name: id
         description: "L'ID du procès verbal"
         required: true
-        example: 20
+        example: 18
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 20
+      id: 18
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

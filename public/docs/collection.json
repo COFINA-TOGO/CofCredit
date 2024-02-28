@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "c8981551-c162-4824-b465-336ca9dc9110",
+        "_postman_id": "f911bca5-c895-4c57-9b24-e97f52e0ffc0",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -708,7 +708,7 @@
                                 {
                                     "key": "has_pledges",
                                     "value": "",
-                                    "description": "Filtrer par type de pr\u00e9sence de gage",
+                                    "description": "Filtrer par pr\u00e9sence de gage",
                                     "disabled": true
                                 },
                                 {
@@ -730,6 +730,12 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "with_caf",
+                                    "value": "",
+                                    "description": "Afficher le caf en charge du dossier.",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "with_guarantees",
                                     "value": "",
                                     "description": "Afficher les garanties.",
@@ -742,7 +748,47 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&paginate="
+                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge la version word d'un contrat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/contract\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du contrat."
+                                }
+                            ]
                         },
                         "method": "GET",
                         "header": [
@@ -793,13 +839,19 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "with_caf",
+                                    "value": "",
+                                    "description": "Afficher le CAF en charge du dossier.",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "with_guarantees",
                                     "value": "",
                                     "description": "Afficher les garanties.",
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/contract\/:id?with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=",
+                            "raw": "{{baseUrl}}\/api\/contract\/:id?with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=",
                             "variable": [
                                 {
                                     "id": "id",
@@ -1090,6 +1142,12 @@
                                     "disabled": false
                                 },
                                 {
+                                    "key": "with_type_of_guarantees",
+                                    "value": "1",
+                                    "description": "Afficher les types des garanties.",
+                                    "disabled": false
+                                },
+                                {
                                     "key": "with_contract",
                                     "value": "1",
                                     "description": "Afficher le contrat.",
@@ -1102,13 +1160,19 @@
                                     "disabled": false
                                 },
                                 {
+                                    "key": "has_contract",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de contrat",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "paginate",
                                     "value": "",
                                     "description": "Utiliser la pagination.",
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_contract=1&with_caf=1&paginate="
+                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1&has_contract=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -1159,6 +1223,12 @@
                                     "disabled": false
                                 },
                                 {
+                                    "key": "with_type_of_guarantees",
+                                    "value": "1",
+                                    "description": "Afficher les types des garanties.",
+                                    "disabled": false
+                                },
+                                {
                                     "key": "with_contract",
                                     "value": "1",
                                     "description": "Afficher le contrat.",
@@ -1171,7 +1241,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/verbal-trial\/:id?with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_contract=1&with_caf=1",
+                            "raw": "{{baseUrl}}\/api\/verbal-trial\/:id?with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1",
                             "variable": [
                                 {
                                     "id": "id",
@@ -1294,7 +1364,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "20",
+                                    "value": "18",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -1503,7 +1573,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "19",
+                                    "value": "14",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -1743,7 +1813,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "7",
+                                    "value": "16",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -1977,7 +2047,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "1",
+                                    "value": "6",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -2251,7 +2321,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "8",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

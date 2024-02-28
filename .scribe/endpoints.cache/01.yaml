@@ -250,7 +250,7 @@ endpoints:
         custom: []
       has_pledges:
         name: has_pledges
-        description: 'Filtrer par type de présence de gage'
+        description: 'Filtrer par présence de gage'
         required: false
         example: null
         type: integer
@@ -284,6 +284,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_caf:
+        name: with_caf
+        description: 'Afficher le caf en charge du dossier.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       with_guarantees:
         name: with_guarantees
         description: 'Afficher les garanties.'
@@ -306,8 +315,61 @@ endpoints:
       with_verbal_trial: 0
       with_type_of_credit: 0
       with_type_of_applicant: 0
+      with_caf: 0
       with_guarantees: 0
       paginate: 0
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/contract/download/{id}'
+    metadata:
+      groupName: Contrat
+      groupDescription: |-
+
+        EndPoints pour gérer les contrats
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Télécharge la version word d'un contrat"
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du contrat."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -386,6 +448,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_caf:
+        name: with_caf
+        description: 'Afficher le CAF en charge du dossier.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       with_guarantees:
         name: with_guarantees
         description: 'Afficher les garanties.'
@@ -399,6 +470,7 @@ endpoints:
       with_verbal_trial: 0
       with_type_of_credit: 0
       with_type_of_applicant: 0
+      with_caf: 0
       with_guarantees: 0
     bodyParameters: []
     cleanBodyParameters: []

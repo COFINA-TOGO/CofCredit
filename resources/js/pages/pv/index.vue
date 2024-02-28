@@ -2,6 +2,10 @@
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 
+const isDialogVisible = ref(false)
+const idToDelete = ref(0);
+
+
 const headers = [
   {
     title: 'Numéro comitée',
@@ -67,13 +71,14 @@ const {
   query: {
     search: searchQuery,
     page: page,
+    has_contract: 0,
     with_caf: 1,
     with_type_of_credit: 1,
   },
 }))
 
 
-const deletePv = async id => {
+const apiDelete = async id => {
   await $api(`verbal-trial/${id}`, { method: 'DELETE' })
   fetchPv()
 }
@@ -153,7 +158,7 @@ const lastPage = computed(() => pvData.value.last_page)
           <IconBtn @click="$router.push('/pv/download/' + item.id)">
             <VIcon icon="tabler-download" />
           </IconBtn>
-          <IconBtn @click="deletePv(item.id)">
+          <IconBtn @click="idToDelete = item.id; isDialogVisible = true">
             <VIcon icon="tabler-trash" />
           </IconBtn>
 
@@ -185,5 +190,26 @@ const lastPage = computed(() => pvData.value.last_page)
         </template>
       </VDataTableServer>
     </VCard>
+    <VDialog v-model="isDialogVisible" persistent class="v-dialog-sm">
+
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
+
+      <!-- Dialog Content -->
+      <VCard title="Suppression">
+        <VCardText>
+          Etes vous sûr de vouloir supprimer ce pv?
+        </VCardText>
+
+        <VCardText class="d-flex justify-end gap-3 flex-wrap">
+          <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
+            Annuler
+          </VBtn>
+          <VBtn @click="apiDelete(idToDelete); isDialogVisible = false">
+            Supprimer
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
   </div>
 </template>

@@ -70,7 +70,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::prefix("contract")->name("contract.")->group(function () {
         Route::get("/", [ContractController::class, "index"])->name("index");
-        // Route::get("/word/{id}", [ContractController::class, "word"])->name("word");
+        Route::get("/download/{id}", [ContractController::class, "word"])->name("word");
         // Route::get("/promissory-note/{id}", [ContractController::class, "promissory_note"])->name("promissory-note");
         Route::get("/{id}", [ContractController::class, "show"])->name("show");
         Route::post("/", [ContractController::class, "store"])->name("store");

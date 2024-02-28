@@ -1,5 +1,6 @@
 <script setup>
 
+const router = useRouter()
 const route = useRoute("pv-edit-id")
 
 const civilityItemList = [
@@ -17,7 +18,6 @@ const periodicityItemList = [
 
 const {
   data: typeOfCreditListData,
-  execute: fetchTypeOfCreditList,
 } = await useApi(createUrl('/type-of-credit', {
   query: {
     "paginate": 0
@@ -36,7 +36,7 @@ const {
 }))
 const cafList = computed(() => cafListData.value.data)
 
-const getResetPvError = () => {
+const getEmptyError = () => {
   return {
     "committee_id": "",
     "committee_date": "",
@@ -59,37 +59,17 @@ const getResetPvError = () => {
   }
 }
 
-const pvError = ref({
-  "committee_id": "",
-  "committee_date": "",
-  "caf_id": "",
-  "civility": "",
-  "applicant_first_name": "",
-  "applicant_last_name": "",
-  "account_number": "",
-  "activity": "",
-  "purpose_of_financing": "",
-  "type_of_credit_id": "",
-  "amount": "",
-  "duration": "",
-  "periodicity": "",
-  "due_amount": "",
-  "insurance_premium": "",
-  "administrative_fees_percentage": "",
-  "taf": "",
-  "tax_fee_interest_rate": "",
-})
+const pvError = ref(getEmptyError())
 
 const {
   data: pvData,
-  execute: fetchPv,
 } = await useApi(createUrl(`/verbal-trial/${route.params.id}`, {
   query: {
     with_caf: 1,
     with_type_of_credit: 1,
   },
 }))
-let pv = computed(() => pvData.value.data.verbalTrial)
+var pv = ref(pvData.value.data.verbalTrial)
 
 const refForm = ref()
 const onSubmit = () => {
@@ -118,8 +98,8 @@ const onSubmit = () => {
           tax_fee_interest_rate: pv.value.tax_fee_interest_rate,
         },
       })
-      pvError.value = getResetPvError();
-      if (res.status == 201) {
+      pvError.value = getEmptyError();
+      if (res.status == 200) {
         router.push(`/pv/${route.params.id}`)
       } else {
         for (const key in res.errors) {
@@ -248,6 +228,9 @@ const onSubmit = () => {
           <VCol cols="12">
             <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
               <div class="d-flex flex-column justify-center">
+                <VBtn to="../">
+                  Retour
+                </VBtn>
               </div>
               <div class="d-flex gap-4 align-center flex-wrap">
                 <VBtn type="reset" variant="tonal" color="primary">

@@ -1,12 +1,7 @@
 <script setup>
-import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
-import { themeConfig } from '@themeConfig'
-import InvoiceAddPaymentDrawer from '@/views/apps/invoice/InvoiceAddPaymentDrawer.vue'
-import InvoiceSendInvoiceDrawer from '@/views/apps/invoice/InvoiceSendInvoiceDrawer.vue'
 
 const router = useRouter()
 const route = useRoute("pv-id")
-const { data: invoiceData } = await useApi(`/apps/invoice/5036`)
 
 const frenchMensuality = {
   "mensual": "Mensuelle",
@@ -26,7 +21,7 @@ if (pv.value.status == 200) {
 </script>
 
 <template>
-  <section v-if="invoiceData">
+  <section v-if="pv">
     <VRow>
       <VCol cols="12">
         <VCard>
@@ -63,33 +58,33 @@ if (pv.value.status == 200) {
               <h2>CARACTERISTIQUES</h2>
             </VCol>
             <VCol cols="6">
-              <p class="ml-6">
+              <p class="ml-12">
               <ul>
-                <li style="font-size: 20px">Montant</li>
-                <li style="font-size: 20px">Durée</li>
-                <li style="font-size: 20px">Périodicité</li>
-                <li style="font-size: 20px">Taux d'intérêt HT</li>
-                <li style="font-size: 20px">TAF</li>
-                <li style="font-size: 20px">Echéance TTC</li>
-                <li style="font-size: 20px">Frais de dossier ({{ pv.administrative_fees_percentage }}%)</li>
-                <li style="font-size: 20px">Prime d'assurance</li>
-                <li v-if="pv.duration > 11" style="font-size: 20px">Prime de révision de ligne</li>
+                <p style="font-size: 20px">==>Montant :</p>
+                <p style="font-size: 20px">==>Durée :</p>
+                <p style="font-size: 20px">==>Périodicité :</p>
+                <p style="font-size: 20px">==>Taux d'intérêt HT :</p>
+                <p style="font-size: 20px">==>TAF :</p>
+                <p style="font-size: 20px">==>Echéance TTC :</p>
+                <p style="font-size: 20px">==>Frais de dossier ({{ pv.administrative_fees_percentage }}%) :</p>
+                <p style="font-size: 20px">==>Prime d'assurance :</p>
+                <p v-if="pv.duration > 11" style="font-size: 20px">==>Prime de révision de ligne :</p>
               </ul>
               </p>
             </VCol>
             <VCol cols="4">
-              <div style="font-size: 20px">: {{ String(pv.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA</div>
-              <div style="font-size: 20px">: {{ pv.duration }} mois</div>
-              <div style="font-size: 20px">: {{ frenchMensuality[pv.periodicity] }}</div>
-              <div style="font-size: 20px">: {{ pv.tax_fee_interest_rate }}%</div>
-              <div style="font-size: 20px">: {{ pv.taf }}%</div>
-              <div style="font-size: 20px">: {{ pv.due_amount }} F CFA</div>
-              <div style="font-size: 20px">: {{ String((pv.amount * pv.administrative_fees_percentage) /
-                100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA</div>
-              <div style="font-size: 20px">: {{ String(pv.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
+              <p style="font-size: 20px">{{ String(pv.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA</p>
+              <p style="font-size: 20px">{{ pv.duration }} mois</p>
+              <p style="font-size: 20px">{{ frenchMensuality[pv.periodicity] }}</p>
+              <p style="font-size: 20px">{{ pv.tax_fee_interest_rate }}%</p>
+              <p style="font-size: 20px">{{ pv.taf }}%</p>
+              <p style="font-size: 20px">{{ String(pv.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA</p>
+              <p style="font-size: 20px">{{ String((pv.amount * pv.administrative_fees_percentage) /
+                100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA</p>
+              <p style="font-size: 20px">{{ String(pv.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
                 CFA
-              </div>
-              <div v-if="pv.duration > 11" style="font-size: 20px">: 1% du capital restant dû après 13 mois</div>
+              </p>
+              <p v-if="pv.duration > 11" style="font-size: 20px">1% du capital restant dû après 13 mois</p>
             </VCol>
           </VCardText>
 

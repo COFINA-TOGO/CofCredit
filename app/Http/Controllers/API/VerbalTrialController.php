@@ -26,32 +26,33 @@ class VerbalTrialController extends Controller
     /**
      * Affiche les Procès verbaux
      *
-     * @queryParam  committee_id                        string          Filtrer par ID du procès verbal                         No-example
-     * @queryParam  committee_date                      string          Filtrer par date du procès verbal                       No-example
-     * @queryParam  civility                            string          Filtrer par civilité                                    No-example
-     * @queryParam  applicant_first_name                string          Filtrer par prénom du demandeur                         No-example
-     * @queryParam  applicant_last_name                 string          Filtrer par nom du demandeur                            No-example
-     * @queryParam  account_number                      string          Filtrer par numéro de compte                            No-example
-     * @queryParam  activity                            string          Filtrer par activé                                      No-example
-     * @queryParam  purpose_of_financing                string          Filtrer par objet du financement                        No-example
-     * @queryParam  type_of_credit_id                   int             Filtrer par ID du type de credit                        No-example
-     * @queryParam  amount                              float           Filtrer par montant                                     No-example
-     * @queryParam  duration                            int             Filtrer par durée en mois                               No-example
-     * @queryParam  periodicity                         string          Filtrer par periodicité                                 No-example
-     * @queryParam  taf                                 float           Filtrer par TAF                                         No-example
-     * @queryParam  due_amount                          float           Filtrer par montant d'une échéance                      No-example
-     * @queryParam  administrative_fees_percentage      float           Filtrer par frais de dossier(pourcentage)               No-example
-     * @queryParam  insurance_premium                   float           Filtrer par prime d'assurance                           No-example
-     * @queryParam  tax_fee_interest_rate               float           Fiilter par taux d'intérêt hors taxe(%)                 No-example
-     * @queryParam  caf_id                              int             Filtrer par ID du CAF                                   No-example
+     * @queryParam  committee_id                                            string              Filtrer par ID du procès verbal                                         No-example
+     * @queryParam  committee_date                                          string              Filtrer par date du procès verbal                                       No-example
+     * @queryParam  civility                                                string              Filtrer par civilité                                                    No-example
+     * @queryParam  applicant_first_name                                    string              Filtrer par prénom du demandeur                                         No-example
+     * @queryParam  applicant_last_name                                     string              Filtrer par nom du demandeur                                            No-example
+     * @queryParam  account_number                                          string              Filtrer par numéro de compte                                            No-example
+     * @queryParam  activity                                                string              Filtrer par activé                                                      No-example
+     * @queryParam  purpose_of_financing                                    string              Filtrer par objet du financement                                        No-example
+     * @queryParam  type_of_credit_id                                       int                 Filtrer par ID du type de credit                                        No-example
+     * @queryParam  amount                                                  float               Filtrer par montant                                                     No-example
+     * @queryParam  duration                                                int                 Filtrer par durée en mois                                               No-example
+     * @queryParam  periodicity                                             string              Filtrer par periodicité                                                 No-example
+     * @queryParam  taf                                                     float               Filtrer par TAF                                                         No-example
+     * @queryParam  due_amount                                              float               Filtrer par montant d'une échéance                                      No-example
+     * @queryParam  administrative_fees_percentage                          float               Filtrer par frais de dossier(pourcentage)                               No-example
+     * @queryParam  insurance_premium                                       float               Filtrer par prime d'assurance                                           No-example
+     * @queryParam  tax_fee_interest_rate                                   float               Fiilter par taux d'intérêt hors taxe(%)                                 No-example
+     * @queryParam  caf_id                                                  int                 Filtrer par ID du CAF                                                   No-example
      *
-     * @queryParam  with_type_of_credit                 int             Afficher le type de crédit.                             Example: 0
-     * @queryParam  with_type_of_applicant              int             Afficher le type de demandeur du type de crédit.        Example: 1
-     * @queryParam  with_guarantees                     int             Afficher les garanties.                                 Example: 1
-     * @queryParam  with_type_of_guarantees             int             Afficher les types des garanties.                       Example: 1
-     * @queryParam  with_contract                       int             Afficher le contrat.                                    Example: 1
-     * @queryParam  with_caf                            int             Afficher le CAF.                                        Example: 1
-     * @queryParam  paginate                            int             Utiliser la pagination.                                 Example: 0
+     * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
+     * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur du type de crédit.                        Example: 1
+     * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                 Example: 1
+     * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 1
+     * @queryParam  with_contract                                           int                 Afficher le contrat.                                                    Example: 1
+     * @queryParam  with_caf                                                int                 Afficher le CAF.                                                        Example: 1
+     * @queryParam  has_contract                                            int                 Filtrer par présence de contrat                                         Example: 0
+     * @queryParam  paginate                                                int                 Utiliser la pagination.                                 Example: 0
      *
      * @response 200
      */
@@ -84,6 +85,16 @@ class VerbalTrialController extends Controller
             foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "insurance_premium", "caf_id"] as $filter) {
                 if (isset($request[$filter]) && $request[$filter]) {
                     $verbalTrialList->where($filter, $request[$filter]);
+                }
+            }
+
+
+            if (isset($request["has_contract"])) {
+                $has_contract = (int) $request["has_contract"];
+                if ($has_contract == 1) {
+                    $verbalTrialList->whereHas('contract');
+                } else if ($has_contract == 0) {
+                    $verbalTrialList->whereDoesntHave('contract');
                 }
             }
 

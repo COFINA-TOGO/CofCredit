@@ -15,14 +15,15 @@ import vuetify from 'vite-plugin-vuetify'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [// Docs: https://github.com/posva/unplugin-vue-router
-  // ℹ️ This plugin should be placed before vue plugin
+    // ℹ️ This plugin should be placed before vue plugin
     VueRouter({
       getRouteName: routeNode => {
-      // Convert pascal case to kebab case
+        // Convert pascal case to kebab case
         return getPascalCaseRouteName(routeNode)
           .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
           .toLowerCase()
       },
+
 
       beforeWriteFiles: root => {
         root.insert('/apps/email/:filter', '/resources/js/pages/apps/email/index.vue')
@@ -62,7 +63,7 @@ export default defineConfig({
       dts: true,
       resolvers: [
         componentName => {
-        // Auto import `VueApexCharts`
+          // Auto import `VueApexCharts`
           if (componentName === 'VueApexCharts')
             return { name: 'default', from: 'vue3-apexcharts', as: 'VueApexCharts' }
         },

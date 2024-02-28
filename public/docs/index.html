@@ -125,6 +125,9 @@
                                                                                 <li class="tocify-item level-2" data-unique="contrat-GETapi-contract">
                                 <a href="#contrat-GETapi-contract">Affiche les contrats</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="contrat-GETapi-contract-download--id-">
+                                <a href="#contrat-GETapi-contract-download--id-">Télécharge la version word d'un contrat</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="contrat-GETapi-contract--id-">
                                 <a href="#contrat-GETapi-contract--id-">Affiche un contrat</a>
                             </li>
@@ -261,7 +264,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: February 23, 2024</li>
+        <li>Last updated: February 28, 2024</li>
     </ul>
 </div>
 
@@ -2602,7 +2605,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/contract?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2617,6 +2620,7 @@ const params = {
     "with_verbal_trial": "0",
     "with_type_of_credit": "0",
     "with_type_of_applicant": "0",
+    "with_caf": "0",
     "with_guarantees": "0",
     "paginate": "0",
 };
@@ -2878,7 +2882,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="query">
     <br>
-<p>Filtrer par type de présence de gage</p>
+<p>Filtrer par présence de gage</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_verbal_trial</code></b>&nbsp;&nbsp;
@@ -2914,6 +2918,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Afficher le type de demandeur. Example: <code>0</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_caf</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_caf"                data-endpoint="GETapi-contract"
+               value="0"
+               data-component="query">
+    <br>
+<p>Afficher le caf en charge du dossier. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_guarantees</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -2937,6 +2952,147 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                 </form>
 
+                    <h2 id="contrat-GETapi-contract-download--id-">Télécharge la version word d&#039;un contrat</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-contract-download--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://cofcredit.cofina.localhost/api/contract/download/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/contract/download/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-contract-download--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-contract-download--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-contract-download--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-contract-download--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-contract-download--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-contract-download--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-contract-download--id-" data-method="GET"
+      data-path="api/contract/download/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-contract-download--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-contract-download--id-"
+                    onclick="tryItOut('GETapi-contract-download--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-contract-download--id-"
+                    onclick="cancelTryOut('GETapi-contract-download--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-contract-download--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/contract/download/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-contract-download--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-contract-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-contract-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-contract-download--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>L'ID du contrat. Example: <code>1</code></p>
+            </div>
+                    </form>
+
                     <h2 id="contrat-GETapi-contract--id-">Affiche un contrat</h2>
 
 <p>
@@ -2951,7 +3107,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract/1?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0" \
+    --get "http://cofcredit.cofina.localhost/api/contract/1?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2966,6 +3122,7 @@ const params = {
     "with_verbal_trial": "0",
     "with_type_of_credit": "0",
     "with_type_of_applicant": "0",
+    "with_caf": "0",
     "with_guarantees": "0",
 };
 Object.keys(params)
@@ -3118,6 +3275,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="query">
     <br>
 <p>Afficher le type de demandeur. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_caf</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_caf"                data-endpoint="GETapi-contract--id-"
+               value="0"
+               data-component="query">
+    <br>
+<p>Afficher le CAF en charge du dossier. Example: <code>0</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_guarantees</code></b>&nbsp;&nbsp;
@@ -3927,7 +4095,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/verbal-trial?with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_contract=1&amp;with_caf=1&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/verbal-trial?with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_type_of_guarantees=1&amp;with_contract=1&amp;with_caf=1&amp;has_contract=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3942,8 +4110,10 @@ const params = {
     "with_type_of_credit": "0",
     "with_type_of_applicant": "1",
     "with_guarantees": "1",
+    "with_type_of_guarantees": "1",
     "with_contract": "1",
     "with_caf": "1",
+    "has_contract": "0",
     "paginate": "0",
 };
 Object.keys(params)
@@ -4284,6 +4454,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Afficher les garanties. Example: <code>1</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_type_of_guarantees</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_type_of_guarantees"                data-endpoint="GETapi-verbal-trial"
+               value="1"
+               data-component="query">
+    <br>
+<p>Afficher les types des garanties. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_contract</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -4304,6 +4485,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="query">
     <br>
 <p>Afficher le CAF. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>has_contract</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="has_contract"                data-endpoint="GETapi-verbal-trial"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de contrat Example: <code>0</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>paginate</code></b>&nbsp;&nbsp;
@@ -4332,7 +4524,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/verbal-trial/1?with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_contract=1&amp;with_caf=1" \
+    --get "http://cofcredit.cofina.localhost/api/verbal-trial/1?with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_type_of_guarantees=1&amp;with_contract=1&amp;with_caf=1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4347,6 +4539,7 @@ const params = {
     "with_type_of_credit": "0",
     "with_type_of_applicant": "1",
     "with_guarantees": "1",
+    "with_type_of_guarantees": "1",
     "with_contract": "1",
     "with_caf": "1",
 };
@@ -4500,6 +4693,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="query">
     <br>
 <p>Afficher les garanties. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_type_of_guarantees</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_type_of_guarantees"                data-endpoint="GETapi-verbal-trial--id-"
+               value="1"
+               data-component="query">
+    <br>
+<p>Afficher les types des garanties. Example: <code>1</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_contract</code></b>&nbsp;&nbsp;
@@ -5293,7 +5497,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/verbal-trial/20" \
+    "http://cofcredit.cofina.localhost/api/verbal-trial/18" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5301,7 +5505,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/verbal-trial/20"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/18"
 );
 
 const headers = {
@@ -5412,10 +5616,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-verbal-trial--id-"
-               value="20"
+               value="18"
                data-component="url">
     <br>
-<p>L'ID du procès verbal Example: <code>20</code></p>
+<p>L'ID du procès verbal Example: <code>18</code></p>
             </div>
                     </form>
 
@@ -6048,7 +6252,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/19" \
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/14" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6056,7 +6260,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/19"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/14"
 );
 
 const headers = {
@@ -6167,10 +6371,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-guarantee--id-"
-               value="19"
+               value="14"
                data-component="url">
     <br>
-<p>L'ID du type de garantie Example: <code>19</code></p>
+<p>L'ID du type de garantie Example: <code>14</code></p>
             </div>
                     </form>
 
@@ -6946,7 +7150,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-credit/7" \
+    "http://cofcredit.cofina.localhost/api/type-of-credit/16" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6954,7 +7158,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-credit/7"
+    "http://cofcredit.cofina.localhost/api/type-of-credit/16"
 );
 
 const headers = {
@@ -7065,10 +7269,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-credit--id-"
-               value="7"
+               value="16"
                data-component="url">
     <br>
-<p>L'ID du type de crédit Example: <code>7</code></p>
+<p>L'ID du type de crédit Example: <code>16</code></p>
             </div>
                     </form>
 
@@ -7755,7 +7959,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/1" \
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/6" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -7763,7 +7967,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/1"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/6"
 );
 
 const headers = {
@@ -7874,10 +8078,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-applicant--id-"
-               value="1"
+               value="6"
                data-component="url">
     <br>
-<p>L'ID du type de demandeur de crédit Example: <code>1</code></p>
+<p>L'ID du type de demandeur de crédit Example: <code>6</code></p>
             </div>
                     </form>
 
@@ -8882,7 +9086,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/user/2" \
+    "http://cofcredit.cofina.localhost/api/user/8" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -8890,7 +9094,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/user/2"
+    "http://cofcredit.cofina.localhost/api/user/8"
 );
 
 const headers = {
@@ -9001,10 +9205,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-user--id-"
-               value="2"
+               value="8"
                data-component="url">
     <br>
-<p>L'ID de l'utilisateur Example: <code>2</code></p>
+<p>L'ID de l'utilisateur Example: <code>8</code></p>
             </div>
                     </form>
 
