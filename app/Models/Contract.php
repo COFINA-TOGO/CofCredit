@@ -28,6 +28,7 @@ class Contract extends Model
         "number_of_due_dates",
         'type',
         'has_pledges',
+        'creator_id',
     ];
 
     // protected $with = ['company', 'individual_business'];
@@ -67,5 +68,10 @@ class Contract extends Model
     public function pledges(): HasMany
     {
         return $this->hasMany(Pledge::class, "contract_id", "id");
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, "creator_id", "id");
     }
 }

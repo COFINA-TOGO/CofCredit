@@ -30,6 +30,7 @@
     "chart.js": "^4.4.0",
     "cookie-es": "^1.0.0",
     "eslint-import-resolver-custom-alias": "^1.3.2",
+    "js-file-downloader": "^1.1.25",
     "jwt-decode": "^3.1.2",
     "mapbox-gl": "2.15.0",
     "ofetch": "^1.3.3",
@@ -84,6 +85,7 @@
     "eslint-plugin-sonarjs": "^0.21.0",
     "eslint-plugin-unicorn": "^48.0.1",
     "eslint-plugin-vue": "^9.17.0",
+    "laravel-vite-plugin": "^0.8.0",
     "msw": "^1.3.2",
     "postcss-html": "^1.5.0",
     "postcss-scss": "^4.0.9",
@@ -102,8 +104,7 @@
     "vite-plugin-vue-devtools": "1.0.0-rc.5",
     "vite-plugin-vue-layouts": "^0.8.0",
     "vite-plugin-vuetify": "1.0.2",
-    "vue-shepherd": "^3.0.0",
-    "laravel-vite-plugin": "^0.8.0"
+    "vue-shepherd": "^3.0.0"
   },
   "resolutions": {
     "postcss": "^8",

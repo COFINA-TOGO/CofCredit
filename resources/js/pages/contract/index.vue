@@ -2,6 +2,8 @@
 <script setup>
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
+import { $api } from '@/utils/api'
+import JsFileDownloader from 'js-file-downloader'
 
 const isDialogVisible = ref(false)
 const pvIdToDelete = ref(0)
@@ -90,55 +92,24 @@ const typeList = {
   "particular": 'Particulier',
 }
 
-const deleteContract = async id => {
-  await $api(`contract/${id}`, { method: 'DELETE' })
-  fetchPv()
-}
-
 const downloadFile = async (url, fileName) => {
   const userToken = useCookie('userToken').value
 
-  fetch(url, {
-    headers: {
-      Authorization: `Bearer ${userToken}`,
-    },
-  })
-    .then(response => {
-      // Vérifier si la requête a réussi (statut 200)
-      if (!response.ok) {
-        throw new Error('La requête a échoué')
-      }
-
-      // Récupérer le contenu du fichier sous forme de blob
-      return response.blob()
-    })
-    .then(blob => {
-      // Créer un objet de type File à partir du blob
-      const fichier = new File([blob], "contract", { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-
-      // Enregistrer le fichier
-      // Créer un objet de type URL à partir du blob
-      const url = URL.createObjectURL(blob)
-
-      // Créer un élément de lien
-      const link = document.createElement('a')
-
-      link.href = url
-      link.download = fileName
-
-      // Ajouter le lien à la page
-      document.body.appendChild(link)
-
-      // Simuler un clic sur le lien pour déclencher le téléchargement
-      link.click()
-
-      // Nettoyer l'URL objet après le téléchargement
-      URL.revokeObjectURL(url)
-    })
-    .catch(error => {
-      console.error('Erreur lors de la requête:', error)
+  try {
+    const downloader = new JsFileDownloader({
+      url: url,
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+      forceDesktopMode: true, // Forcer le téléchargement sur les appareils mobiles
     })
 
+    await downloader.download(fileName)
+    
+    console.log('Téléchargement réussi')
+  } catch (error) {
+    console.error('Erreur lors du téléchargement:', error)
+  }
 }
 
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
@@ -279,7 +250,7 @@ const downloadFile = async (url, fileName) => {
                   <VListItemTitle>Contrat</VListItemTitle>
                 </VListItem>
 
-                <VListItem @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}`)">
+                <VListItem @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}`);">
                   <template #prepend>
                     <VIcon icon="tabler-download" />
                   </template>

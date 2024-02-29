@@ -51,6 +51,7 @@ class VerbalTrialController extends Controller
      * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 1
      * @queryParam  with_contract                                           int                 Afficher le contrat.                                                    Example: 1
      * @queryParam  with_caf                                                int                 Afficher le CAF.                                                        Example: 1
+     * @queryParam  with_creator                                            int                 Afficher le créateur du pv.                                             Example: 0
      * @queryParam  has_contract                                            int                 Filtrer par présence de contrat                                         Example: 0
      * @queryParam  paginate                                                int                 Utiliser la pagination.                                 Example: 0
      *
@@ -78,11 +79,10 @@ class VerbalTrialController extends Controller
                     ->orWhere('due_amount', 'LIKE', "%$search%")
                     ->orWhere('administrative_fees_percentage', 'LIKE', "%$search%")
                     ->orWhere('insurance_premium', 'LIKE', "%$search%")
-                    ->orWhere('caf_id', 'LIKE', "%$search%")
                 ;
             }
 
-            foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "insurance_premium", "caf_id"] as $filter) {
+            foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "insurance_premium", "caf_id", "creator_id"] as $filter) {
                 if (isset($request[$filter]) && $request[$filter]) {
                     $verbalTrialList->where($filter, $request[$filter]);
                 }
@@ -98,7 +98,7 @@ class VerbalTrialController extends Controller
                 }
             }
 
-            foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf"] as $key => $value) {
+            foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf", "with_creator" => "creator"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
                     $verbalTrialList->with($value);
                 }
@@ -137,7 +137,7 @@ class VerbalTrialController extends Controller
         if ($verbalTrial) {
             if (($authorisation = Gate::inspect('view', $verbalTrial))->allowed()) {
                 $suplementList = [];
-                foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf"] as $key => $value) {
+                foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf", "with_creator" => "creator"] as $key => $value) {
                     if (isset($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }
@@ -211,6 +211,7 @@ class VerbalTrialController extends Controller
                 if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
                     DB::beginTransaction();
                     try {
+                        $requestData["creator_id"] = $request->user()->id;
                         $verbalTrial = VerbalTrial::create($requestData);
                         if (isset($requestData["guarantees"])) {
                             foreach ($requestData["guarantees"] as $guarantee) {
@@ -304,6 +305,7 @@ class VerbalTrialController extends Controller
                     if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
                         DB::beginTransaction();
                         try {
+                            $requestData["creator_id"] = $request->user()->id;
                             $verbalTrial->update($requestData);
                             $verbalTrial->guarantees()->delete();
                             if (isset($requestData["guarantees"])) {

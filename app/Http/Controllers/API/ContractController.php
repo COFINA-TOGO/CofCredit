@@ -54,6 +54,7 @@ class ContractController extends Controller
      * @queryParam  with_company                                            int                 Afficher les informations de la société                                 Example: 0
      * @queryParam  with_individual_business                                int                 Afficher les informations de l'entreprise individuelle                  Example: 0
      * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
+     * @queryParam  with_creator                                            int                 Afficher le créateur du contrat.                                        Example: 0
      * @queryParam  paginate                                                int                 Utiliser la pagination.                                                 Example: 0
      *
      * @response 200
@@ -64,7 +65,6 @@ class ContractController extends Controller
             $contractList = Contract::query();
             if ($search = $request->search) {
                 $contractList
-                    ->where('verbal_trial_id', 'LIKE', "%$search%")
                     ->orWhere('representative_birth_date', 'LIKE', "%$search%")
                     ->orWhere('representative_birth_place', 'LIKE', "%$search%")
                     ->orWhere('representative_nationality', 'LIKE', "%$search%")
@@ -81,14 +81,14 @@ class ContractController extends Controller
                 ;
             }
 
-            foreach (["verbal_trial_id", "representative_birth_date", "representative_birth_place", "representative_nationality", "representative_home_address", "representative_type_of_identity_document", "representative_number_of_identity_document", "representative_date_of_issue_of_identity_document", "representative_phone_number", "risk_premium_percentage", "total_amount_of_interest", "number_of_due_dates", "type", "has_pledges"] as $filter) {
+            foreach (["verbal_trial_id", "representative_birth_date", "representative_birth_place", "representative_nationality", "representative_home_address", "representative_type_of_identity_document", "representative_number_of_identity_document", "representative_date_of_issue_of_identity_document", "representative_phone_number", "risk_premium_percentage", "total_amount_of_interest", "number_of_due_dates", "type", "has_pledges", "creator_id"] as $filter) {
                 if (isset($request[$filter]) && $request[$filter]) {
                     $contractList->where($filter, $request[$filter]);
                 }
             }
 
 
-            foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business"] as $key => $value) {
+            foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_creator" => "creator"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
                     $contractList->with($value);
                 }
@@ -242,10 +242,6 @@ class ContractController extends Controller
             $templateProcessor->saveAs($outputFilePath);
 
             return response()->download($outputFilePath)->deleteFileAfterSend(true);
-            // return $this->responseOk(["contract" => $contract]);
-            // } else {
-            //     return $this->responseError(["auth" => [$authorisation->message()]], 403);
-            // }
         } else {
             return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
         }
@@ -379,6 +375,7 @@ class ContractController extends Controller
             DB::beginTransaction();
             try {
                 $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
+                $requestData["creator_id"] = $request->user()->id;
                 $contract = Contract::create($requestData);
                 if ($requestData["type"] == "company") {
                     $validator = Validator::make($requestData, [
@@ -513,6 +510,7 @@ class ContractController extends Controller
                 DB::beginTransaction();
                 try {
                     $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
+                    $requestData["creator_id"] = $request->user()->id;
                     $contract->update($requestData);
                     $contract->company?->delete();
                     $contract->individual_business?->delete();

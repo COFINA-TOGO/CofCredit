@@ -34,6 +34,7 @@ class VerbalTrial extends Model
         'insurance_premium',
         'tax_fee_interest_rate',
         'caf_id',
+        'creator_id',
     ];
 
     public function toArray()
@@ -70,5 +71,10 @@ class VerbalTrial extends Model
     public function caf(): BelongsTo
     {
         return $this->belongsTo(User::class, 'caf_id', "id");
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, "creator_id", "id");
     }
 }

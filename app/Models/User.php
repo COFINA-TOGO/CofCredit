@@ -64,4 +64,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(VerbalTrial::class, 'caf_id', "id");
     }
+
+    public function verbals_trials(): HasMany
+    {
+        return $this->hasMany(VerbalTrial::class, "creator_id", "id");
+    }
+    public function contracts(): HasMany
+    {
+        return $this->hasMany(Contract::class, "creator_id", "id");
+    }
 }

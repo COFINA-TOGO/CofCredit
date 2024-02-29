@@ -26,6 +26,7 @@ return new class extends Migration {
             $table->integer('number_of_due_dates');
             $table->enum('type', ['particular', 'company', 'individual_business']);
             $table->boolean("has_pledges")->default(0);
+            $table->foreignId("creator_id")->constrained(table: "users", column: "id")->cascadeOnDelete();
             $table->timestamps();
         });
     }
