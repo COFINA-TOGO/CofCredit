@@ -2,7 +2,6 @@
 <script setup>
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
-import { $api } from '@/utils/api'
 import JsFileDownloader from 'js-file-downloader'
 
 const isDialogVisible = ref(false)
@@ -14,12 +13,12 @@ const headers = [
     key: 'verbal_trial.committee_id',
   },
   {
-    title: 'Prénom client',
-    key: 'verbal_trial.applicant_first_name',
+    title: 'Admin Crédit',
+    key: 'creator.full_name',
   },
   {
     title: 'Nom client',
-    key: 'verbal_trial.applicant_last_name',
+    key: 'verbal_trial.applicant_full_name',
   },
   {
     title: 'Type de contrat',
@@ -79,6 +78,7 @@ const {
     with_type_of_credit: 1,
     with_company: 1,
     with_individual_business: 1,
+    with_creator: 1,
   },
 }))
 
@@ -95,17 +95,20 @@ const typeList = {
 const downloadFile = async (url, fileName) => {
   const userToken = useCookie('userToken').value
 
-  try {
-    const downloader = new JsFileDownloader({
-      url: url,
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-      forceDesktopMode: true, // Forcer le téléchargement sur les appareils mobiles
-    })
+  url = "http://cofcredit.cofina.localhost/api/test/contract/download/1"
 
-    await downloader.download(fileName)
-    
+  // url = "http://cofcredit.cofina.localhost/test.docx"
+
+  try {
+    new JsFileDownloader({ 
+      url: url,
+      headers: [
+        { name: 'Authorization', value: `Bearer ${userToken}` },
+      ],
+      nameCallback: function(name) {
+        return fileName
+      },
+    })
     console.log('Téléchargement réussi')
   } catch (error) {
     console.error('Erreur lors du téléchargement:', error)
@@ -208,9 +211,12 @@ const downloadFile = async (url, fileName) => {
         class="text-no-wrap"
         @update:options="updateOptions"
       >
-        <!-- Type -->
         <template #item.type="{ item }">
           {{ typeList[item.type] }}
+        </template>
+
+        <template #item.verbal_trial.amount="{ item }">
+          {{ String(item.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
         </template>
 
         <template #item.actions="{ item }">
@@ -243,14 +249,14 @@ const downloadFile = async (url, fileName) => {
                   <VListItemTitle>Garants</VListItemTitle>
                 </VListItem>
 
-                <VListItem @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}`)">
+                <VListItem @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
                   <template #prepend>
                     <VIcon icon="tabler-download" />
                   </template>
                   <VListItemTitle>Contrat</VListItemTitle>
                 </VListItem>
 
-                <VListItem @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}`);">
+                <VListItem @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
                   <template #prepend>
                     <VIcon icon="tabler-download" />
                   </template>

@@ -37,6 +37,7 @@ class VerbalTrialFactory extends Factory
             "insurance_premium" => $this->faker->randomFloat(0, 85000, 850000),
             "tax_fee_interest_rate" => $this->faker->randomFloat(0, 0, 100),
             "caf_id" => User::inRandomOrder()->where("profile", "caf")->first()->id ?? 1,
+            "creator_id" => User::where('profile', 'credit_analyst')->inRandomOrder()->first()->id ?? 1,
         ];
     }
 }

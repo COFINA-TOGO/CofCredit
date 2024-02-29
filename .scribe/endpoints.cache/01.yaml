@@ -277,6 +277,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_creator:
+        name: with_creator
+        description: 'Afficher le créateur du contrat.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       paginate:
         name: paginate
         description: 'Utiliser la pagination.'
@@ -295,6 +304,7 @@ endpoints:
       with_type_of_guarantees: 0
       with_company: 0
       with_individual_business: 0
+      with_creator: 0
       paginate: 0
     bodyParameters: []
     cleanBodyParameters: []

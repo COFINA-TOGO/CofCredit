@@ -241,6 +241,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_creator:
+        name: with_creator
+        description: 'Afficher le créateur du pv.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       has_contract:
         name: has_contract
         description: 'Filtrer par présence de contrat'
@@ -266,6 +275,7 @@ endpoints:
       with_type_of_guarantees: 1
       with_contract: 1
       with_caf: 1
+      with_creator: 0
       has_contract: 0
       paginate: 0
     bodyParameters: []
@@ -877,13 +887,13 @@ endpoints:
         name: id
         description: "L'ID du procès verbal"
         required: true
-        example: 4
+        example: 15
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 4
+      id: 15
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

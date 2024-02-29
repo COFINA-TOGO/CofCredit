@@ -25,12 +25,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $admin = User::factory(1)->create(["full_name" => "admin", "name" => "admin", "email" => "charles.gamligo@cofinacorp.com", "profile" => "admin", "activated" => true, "password_change_required" => false, "password" => "Coftg2021"])->first();
-        User::factory(1)->create(["profile" => "credit_admin"]);
-        User::factory(1)->create(["profile" => "head_credit"]);
-        User::factory(1)->create(["profile" => "operation"]);
-        User::factory(1)->create(["profile" => "legal"]);
-        User::factory(1)->create(["profile" => "dex"]);
-        User::factory(1)->create(["profile" => "caf"]);
+        $credit_analyst = User::factory(1)->create(["profile" => "credit_analyst"])->first();
+        $credit_admin = User::factory(1)->create(["profile" => "credit_admin"])->first();
+        $head_credit = User::factory(1)->create(["profile" => "head_credit"])->first();
+        $operation = User::factory(1)->create(["profile" => "operation"])->first();
+        $legal = User::factory(1)->create(["profile" => "legal"])->first();
+        $dex = User::factory(1)->create(["profile" => "dex"])->first();
+        $caf = User::factory(1)->create(["profile" => "caf"])->first();
 
         $physical_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Physique"])->first();
         $moral_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Morale"])->first();
@@ -80,9 +81,9 @@ class DatabaseSeeder extends Seeder
         TypeOfGuarantee::factory(1)->create(["name" => "Hypothèque"]);
         TypeOfGuarantee::factory(1)->create(["name" => "Nantissement de Dépôt à terme (DAT)"]);
 
-        $verbalTrial = VerbalTrial::factory(1)->create(["type_of_credit_id" => $typeOfCredit->id])->first();
+        $verbalTrial = VerbalTrial::factory(1)->create(["type_of_credit_id" => $typeOfCredit->id, "creator_id" => $credit_analyst->id])->first();
         Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-        // $contract = Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "individual_business"])->first();
+        // $contract = Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "individual_business", "creator_id" => $credit_admin->id])->first();
         // IndividualBusiness::factory(1)->create([
         //     "contract_id" => $contract->id,
         //     "denomination" => "ganam style",
@@ -92,9 +93,9 @@ class DatabaseSeeder extends Seeder
         //     "phone_number" => "+228 90 90 90 90"
         // ]);
 
-        $verbalTrial = VerbalTrial::factory(1)->create(["type_of_credit_id" => $typeOfCredit->id])->first();
+        $verbalTrial = VerbalTrial::factory(1)->create(["type_of_credit_id" => $typeOfCredit->id, "creator_id" => $credit_analyst->id])->first();
         Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-        $contract = Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "company"])->first();
+        $contract = Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "company", "creator_id" => $credit_admin->id])->first();
         Company::factory(1)->create([
             "contract_id" => $contract->id,
             "denomination" => "ganam style",
@@ -104,15 +105,15 @@ class DatabaseSeeder extends Seeder
             "phone_number" => "+228 90 90 90 90"
         ]);
 
-        $verbalTrial = VerbalTrial::factory(1)->create(["type_of_credit_id" => $typeOfCredit->id])->first();
+        $verbalTrial = VerbalTrial::factory(1)->create(["type_of_credit_id" => $typeOfCredit->id, "creator_id" => $credit_analyst->id])->first();
         Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-        $contract = Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular"])->first();
+        $contract = Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->first();
         Guarantor::factory(1)->create(["contract_id" => $contract->id]);
 
 
-        // VerbalTrial::factory(40)->create(["type_of_credit_id" => $typeOfCredit->id])->each(function ($verbalTrial) {
+        // VerbalTrial::factory(40)->create(["type_of_credit_id" => $typeOfCredit->id, "creator_id" => $credit_analyst->id])->each(function ($verbalTrial) {
         //     Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-        //     Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular"])->each(function ($contract) {
+        //     Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
         //         Guarantor::factory(1)->create(["contract_id" => $contract->id]);
         //     });
         // });

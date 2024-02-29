@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "73cb68d0-028d-422f-8193-afdb27ea298f",
+        "_postman_id": "4bf92f40-ebf9-4a1d-a6eb-d45ff47f93a7",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -720,13 +720,19 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "with_creator",
+                                    "value": "",
+                                    "description": "Afficher le cr\u00e9ateur du contrat.",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "paginate",
                                     "value": "",
                                     "description": "Utiliser la pagination.",
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_company=&with_individual_business=&paginate="
+                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_company=&with_individual_business=&with_creator=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -1196,6 +1202,12 @@
                                     "disabled": false
                                 },
                                 {
+                                    "key": "with_creator",
+                                    "value": "",
+                                    "description": "Afficher le cr\u00e9ateur du pv.",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "has_contract",
                                     "value": "",
                                     "description": "Filtrer par pr\u00e9sence de contrat",
@@ -1208,7 +1220,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1&has_contract=&paginate="
+                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1&with_creator=&has_contract=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -1400,7 +1412,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "4",
+                                    "value": "15",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -1609,7 +1621,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "5",
+                                    "value": "2",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -1849,7 +1861,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "6",
+                                    "value": "7",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -2083,7 +2095,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "7",
+                                    "value": "17",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -2357,7 +2369,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "20",
+                                    "value": "10",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

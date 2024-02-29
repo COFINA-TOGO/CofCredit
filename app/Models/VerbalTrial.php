@@ -37,6 +37,8 @@ class VerbalTrial extends Model
         'creator_id',
     ];
 
+    protected $appends = ["applicant_full_name"];
+
     public function toArray()
     {
         $data = parent::toArray();
@@ -76,5 +78,10 @@ class VerbalTrial extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, "creator_id", "id");
+    }
+
+    public function getApplicantFullNameAttribute()
+    {
+        return $this->applicant_first_name . " " . $this->applicant_last_name;
     }
 }

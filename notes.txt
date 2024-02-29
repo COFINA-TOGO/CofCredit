@@ -1,0 +1,9 @@
+
+pour les pv en attente de contrat il faut afficher une sorte de compte à rebourd qui affiche le temps passé depuis la création du pv sans avois mis en place le contrat
+pour les pv dans l'historique il faut afficher le temps entre le commité et la mise en place du pv
+
+
+
+le head crédit aura un dashboard lui resençant les informations suivantes:
+    -la durée entre le commitée et la mise en place du pv
+    -la durée de mise en place d'un contrat

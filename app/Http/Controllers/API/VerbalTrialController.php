@@ -44,6 +44,7 @@ class VerbalTrialController extends Controller
      * @queryParam  insurance_premium                                       float               Filtrer par prime d'assurance                                           No-example
      * @queryParam  tax_fee_interest_rate                                   float               Fiilter par taux d'intérêt hors taxe(%)                                 No-example
      * @queryParam  caf_id                                                  int                 Filtrer par ID du CAF                                                   No-example
+     * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
      *
      * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
      * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur du type de crédit.                        Example: 1

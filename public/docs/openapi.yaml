@@ -809,6 +809,16 @@ paths:
             example: 0
         -
           in: query
+          name: with_creator
+          description: 'Afficher le créateur du contrat.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le créateur du contrat.'
+            example: 0
+        -
+          in: query
           name: paginate
           description: 'Utiliser la pagination.'
           example: 0
@@ -1396,6 +1406,16 @@ paths:
             type: integer
             description: 'Afficher le CAF.'
             example: 1
+        -
+          in: query
+          name: with_creator
+          description: 'Afficher le créateur du pv.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le créateur du pv.'
+            example: 0
         -
           in: query
           name: has_contract

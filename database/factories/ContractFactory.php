@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\VerbalTrial;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -31,6 +32,7 @@ class ContractFactory extends Factory
             "total_amount_of_interest" => 14785236,
             "number_of_due_dates" => $this->faker->numberBetween(1, 25),
             "type" => $this->faker->randomElement(['particular', 'company', 'individual_business']),
+            "creator_id" => User::where('profile', 'credit_admin')->inRandomOrder()->first()->id ?? 1,
         ];
     }
 }

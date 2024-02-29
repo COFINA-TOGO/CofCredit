@@ -4,15 +4,15 @@ export default [
     icon: { icon: 'tabler-align-box-left-top' },
     children: [
       {
-        title: 'Add',
+        title: 'Ajouter',
         to: 'pv-add',
       },
       {
-        title: 'Waiting for contract',
+        title: 'En attente de contrat',
         to: 'pv',
       },
       {
-        title: 'Historical',
+        title: 'Historique',
         to: 'pv-historical',
 
         // badgeContent: historicalVpCount.value,
@@ -25,11 +25,19 @@ export default [
     icon: { icon: 'tabler-align-box-left-top' },
     children: [
       {
-        title: 'Add',
+        title: 'Ajouter',
         to: 'contract-add',
       },
       {
-        title: 'contract',
+        title: 'En attente de signature',
+        to: 'contract',
+      },
+      {
+        title: 'En attente de CAT',
+        to: 'contract',
+      },
+      {
+        title: 'Historique',
         to: 'contract',
       },
     ],

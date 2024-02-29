@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Rmunate\Utilities\SpellNumber;
@@ -35,8 +36,8 @@ class ContractController extends Controller
      * @queryParam  representative_birth_place                              string              Filtrer par lieu de naissance du demandeur.                             No-example
      * @queryParam  representative_nationality                              string              Filtrer par nationalité du demandeur.                                   No-example
      * @queryParam  representative_home_address                             string              Filtrer par addresse du domicile du demandeur.                          No-example
-     * @queryParam  representative_type_of_identity_document                string              Filtrer par type de la pièce d'identité du demandeur.                  No-example
-     * @queryParam  representative_number_of_identity_document              string              Filtrer par numéro de la pièce d'identité du demandeur.                No-example
+     * @queryParam  representative_type_of_identity_document                string              Filtrer par type de la pièce d'identité du demandeur.                   No-example
+     * @queryParam  representative_number_of_identity_document              string              Filtrer par numéro de la pièce d'identité du demandeur.                 No-example
      * @queryParam  representative_date_of_issue_of_identity_document       string              Filtrer par date de délivrance de la pièce d'identité du demandeur.     No-example
      * @queryParam  representative_phone_number                             string              Filtrer par numéro de téléphone du demandeur.                           No-example
      * @queryParam  risk_premium_percentage                                 int                 Filtrer par prime de risque (en pourcentage) du crédit du demandeur.    No-example
@@ -44,6 +45,7 @@ class ContractController extends Controller
      * @queryParam  number_of_due_dates                                     int                 Filtrer par nombre d'échéance.                                          No-example
      * @queryParam  type                                                    string              Filtrer par type de contract.                                           No-example
      * @queryParam  has_pledges                                             int                 Filtrer par présence de gage                                            No-example
+     * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
      *
      * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
      * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
@@ -241,7 +243,8 @@ class ContractController extends Controller
             $outputFilePath = public_path("Contrat-" . $contract->verbal_trial->committee_id . ".docx");
             $templateProcessor->saveAs($outputFilePath);
 
-            return response()->download($outputFilePath)->deleteFileAfterSend(true);
+            // return response()->file($outputFilePath);
+            return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]);
         } else {
             return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
         }
