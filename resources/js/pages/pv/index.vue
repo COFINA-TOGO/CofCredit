@@ -1,10 +1,12 @@
+<!-- eslint-disable camelcase -->
 <script setup>
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 
 const isDialogVisible = ref(false)
-const idToDelete = ref(0);
-
+const idToDelete = ref(0)
+const selectedStatus = ref()
+const searchQuery = ref('')
 
 const headers = [
   {
@@ -41,8 +43,16 @@ const headers = [
     sortable: false,
   },
 ]
-const selectedStatus = ref()
-const searchQuery = ref('')
+
+const loadings = ref([])
+
+const load = i => {
+  loadings.value[i] = true
+  setTimeout(() => {
+    loadings.value[i] = false
+  }, 1000)
+}
+
 const status = ref([
   {
     title: 'Scheduled',
@@ -57,6 +67,7 @@ const status = ref([
     value: 'Inactive',
   },
 ])
+
 const itemsPerPage = ref(8)
 const page = ref(1)
 
@@ -86,6 +97,7 @@ const apiDelete = async id => {
 const pvList = computed(() => pvData.value.data)
 const totalPv = computed(() => pvData.value.total)
 const lastPage = computed(() => pvData.value.last_page)
+
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
 </script>
 
@@ -105,13 +117,24 @@ const lastPage = computed(() => pvData.value.last_page)
     </VCard>
 
     <!-- 👉 pvs -->
-    <VCard title="Filtres" class="mb-6">
+    <VCard
+      title="Filtres"
+      class="mb-6"
+    >
       <VCardText>
         <VRow>
           <!-- 👉 Select Status -->
-          <VCol cols="12" sm="4">
-            <AppSelect v-model="selectedStatus" placeholder="Type de crédit" :items="status" clearable
-              clear-icon="tabler-x" />
+          <VCol
+            cols="12"
+            sm="4"
+          >
+            <AppSelect
+              v-model="selectedStatus"
+              placeholder="Type de crédit"
+              :items="status"
+              clearable
+              clear-icon="tabler-x"
+            />
           </VCol>
         </VRow>
       </VCardText>
@@ -121,22 +144,45 @@ const lastPage = computed(() => pvData.value.last_page)
       <div class="d-flex flex-wrap gap-4 mx-5">
         <div class="d-flex align-center">
           <!-- 👉 Search  -->
-          <AppTextField v-model="searchQuery" placeholder="Rechercher un pv" density="compact" style="inline-size: 200px;"
-            class="me-3" />
+          <AppTextField
+            v-model="searchQuery"
+            placeholder="Rechercher un pv"
+            density="compact"
+            style="inline-size: 200px;"
+            class="me-3"
+          />
         </div>
 
         <VSpacer />
         <div class="d-flex gap-4 flex-wrap align-center">
           <!-- 👉 Export button -->
-          <VBtn variant="tonal" color="secondary" prepend-icon="tabler-upload">
+          <VBtn
+            variant="tonal"
+            color="secondary"
+            prepend-icon="tabler-upload"
+          >
             Export
           </VBtn>
 
-          <VBtn color="primary" prepend-icon="tabler-plus" @click="$router.push('/pv/add')">
+          <VBtn
+            color="primary"
+            prepend-icon="tabler-plus"
+            :to="{ name: 'pv-add'}"
+          >
             Ajouter un PV
           </VBtn>
-          <VBtn color="primary" prepend-icon="tabler-refresh" @click="fetchPv()">
+          <VBtn
+            :loading="loadings[3]"
+            :disabled="loadings[3]"
+            prepend-icon="tabler-refresh"
+            @click="fetchPv();load(3)"
+          >
             Recharger
+            <template #loader>
+              <span class="custom-loader">
+                <VIcon icon="tabler-refresh" />
+              </span>
+            </template>
           </VBtn>
         </div>
       </div>
@@ -145,14 +191,21 @@ const lastPage = computed(() => pvData.value.last_page)
 
 
       <!-- 👉 Datatable  -->
-      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers" :items="pvList"
-        :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
+      <VDataTableServer
+        v-model:items-per-page="itemsPerPage"
+        v-model:page="page"
+        :headers="headers"
+        :items="pvList"
+        :items-length="totalPv"
+        class="text-no-wrap"
+        @update:options="updateOptions"
+      >
         <!-- Actions -->
         <template #item.actions="{ item }">
-          <IconBtn @click="$router.push('/pv/' + item.id)">
+          <IconBtn :to="{ name: 'pv-id', params: { id: item.id } }">
             <VIcon icon=" tabler-eye" />
           </IconBtn>
-          <IconBtn @click="$router.push('/pv/edit/' + item.id)">
+          <IconBtn :to="{ name: 'pv-edit-id', params: { id: item.id } }">
             <VIcon icon="tabler-edit" />
           </IconBtn>
           <IconBtn @click="$router.push('/pv/download/' + item.id)">
@@ -161,7 +214,6 @@ const lastPage = computed(() => pvData.value.last_page)
           <IconBtn @click="idToDelete = item.id; isDialogVisible = true">
             <VIcon icon="tabler-trash" />
           </IconBtn>
-
         </template>
 
         <template #bottom>
@@ -172,16 +224,29 @@ const lastPage = computed(() => pvData.value.last_page)
               {{ paginationMeta({ page, itemsPerPage }, totalPv) }}
             </p>
 
-            <VPagination v-model="page" :length="lastPage"
-              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)">
+            <VPagination
+              v-model="page"
+              :length="lastPage"
+              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
+            >
               <template #prev="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
                   Précedent
                 </VBtn>
               </template>
 
               <template #next="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
                   Suivant
                 </VBtn>
               </template>
@@ -190,8 +255,11 @@ const lastPage = computed(() => pvData.value.last_page)
         </template>
       </VDataTableServer>
     </VCard>
-    <VDialog v-model="isDialogVisible" persistent class="v-dialog-sm">
-
+    <VDialog
+      v-model="isDialogVisible"
+      persistent
+      class="v-dialog-sm"
+    >
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 
@@ -202,7 +270,11 @@ const lastPage = computed(() => pvData.value.last_page)
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isDialogVisible = false"
+          >
             Annuler
           </VBtn>
           <VBtn @click="apiDelete(idToDelete); isDialogVisible = false">
@@ -213,3 +285,20 @@ const lastPage = computed(() => pvData.value.last_page)
     </VDialog>
   </div>
 </template>
+
+<style lang="scss" scoped>
+  .custom-loader {
+    display: flex;
+    animation: loader 1s infinite;
+  }
+
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  </style>

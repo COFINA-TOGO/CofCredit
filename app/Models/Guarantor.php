@@ -29,6 +29,7 @@ class Guarantor extends Model
         "phone_number",
     ];
 
+    protected $appends = ["full_name"];
 
     public function toArray()
     {
@@ -43,5 +44,10 @@ class Guarantor extends Model
     public function contract(): BelongsTo
     {
         return $this->belongsTo(Contract::class, "contract_id", "id");
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . " " . $this->last_name;
     }
 }

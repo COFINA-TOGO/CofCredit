@@ -99,7 +99,7 @@ return [
     'min' => [
         'numeric' => 'La valeur de :attribute ne peut être inférieure à :min.',
         'file' => 'La taille du fichier :attribute ne peut être inférieure à :min kilo-octets.',
-        'string' => 'Le texte ce champ doit contenir au moins :min caractères.',
+        'string' => 'Le texte de ce champ doit contenir au moins :min caractères.',
     ],
     'min_digits' => 'Le champ :attribute doit avoir au moins :min chiffres.',
     'missing' => 'Le champ :attribute doit être manquant.',

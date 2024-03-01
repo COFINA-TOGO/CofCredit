@@ -243,7 +243,6 @@ class ContractController extends Controller
             $outputFilePath = public_path("Contrat-" . $contract->verbal_trial->committee_id . ".docx");
             $templateProcessor->saveAs($outputFilePath);
 
-            // return response()->file($outputFilePath);
             return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]);
         } else {
             return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
@@ -321,11 +320,8 @@ class ContractController extends Controller
             $outputFilePath = public_path("Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx");
             $templateProcessor->saveAs($outputFilePath);
 
-            return response()->download($outputFilePath)->deleteFileAfterSend(true);
-            // return $this->responseOk(["contract" => $contract]);
-            // } else {
-            //     return $this->responseError(["auth" => [$authorisation->message()]], 403);
-            // }
+            // return response()->download($outputFilePath)->deleteFileAfterSend(true);
+            return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]);
         } else {
             return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
         }

@@ -53,8 +53,10 @@ watch([
       />
 
       <NavbarThemeSwitcher />
-      <NavbarShortcuts />
-      <NavBarNotifications class="me-2" />
+      <!--
+        <NavbarShortcuts />
+        <NavBarNotifications class="me-2" /> 
+      -->
       <UserProfile />
     </template>
 
@@ -77,6 +79,6 @@ watch([
     </template>
 
     <!-- 👉 Customizer -->
-    <TheCustomizer />
+    <!-- <TheCustomizer /> -->
   </HorizontalNavLayout>
 </template>

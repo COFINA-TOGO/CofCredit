@@ -4,39 +4,33 @@ import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 import JsFileDownloader from 'js-file-downloader'
 
+
+const router = useRouter()
+const route = useRoute("contract-contract_id-guarantor")
 const isDialogVisible = ref(false)
-const pvIdToDelete = ref(0)
-const selectedType = ref()
+const guarantorIdToDelete = ref(0)
 const searchQuery = ref('')
 
 const headers = [
   {
-    title: 'Numéro comitée',
-    key: 'verbal_trial.committee_id',
+    title: 'Nom',
+    key: 'full_name',
   },
   {
-    title: 'Admin Crédit',
-    key: 'creator.full_name',
+    title: 'Fonction',
+    key: 'function',
   },
   {
-    title: 'Nom client',
-    key: 'verbal_trial.applicant_full_name',
+    title: 'Pièce d\identité',
+    key: 'number_of_identity_document',
   },
   {
-    title: 'Type de contrat',
-    key: 'type',
+    title: 'Addresse',
+    key: 'home_address',
   },
   {
-    title: 'Type Credit',
-    key: 'verbal_trial.type_of_credit.name',
-  },
-  {
-    title: 'Montant',
-    key: 'verbal_trial.amount',
-  },
-  {
-    title: 'Durée',
-    key: 'verbal_trial.duration',
+    title: 'Numéro de téléphone',
+    key: 'phone_number',
   },
   {
     title: 'Actions',
@@ -54,22 +48,6 @@ const load = i => {
   }, 1000)
 }
 
-
-const status = ref([
-  {
-    title: 'Scheduled',
-    value: 'Scheduled',
-  },
-  {
-    title: 'Publish',
-    value: 'Published',
-  },
-  {
-    title: 'Inactive',
-    value: 'Inactive',
-  },
-])
-
 const itemsPerPage = ref(8)
 const page = ref(1)
 
@@ -78,29 +56,21 @@ const updateOptions = options => {
 }
 
 const {
-  data: pvData,
-  execute: fetchContracts,
-} = await useApi(createUrl('/contract', {
+  data: guarantorData,
+  execute: fetchGuarantors,
+} = await useApi(createUrl('/guarantor', {
   query: {
     search: searchQuery,
-    type: selectedType,
+    with_verbal_trial: 1,
+    contract_id: route.params.contract_id,
     page: page,
-    with_type_of_credit: 1,
-    with_company: 1,
-    with_individual_business: 1,
-    with_creator: 1,
   },
 }))
 
-const pvList = computed(() => pvData.value.data)
-const totalPv = computed(() => pvData.value.total)
-const lastPage = computed(() => pvData.value.last_page)
+const guarantorList = computed(() => guarantorData.value.data)
+const totalGuarantor = computed(() => guarantorData.value.total)
+const lastPage = computed(() => guarantorData.value.last_page)
 
-const typeList = {
-  "company": 'Société',
-  "individual_business": 'Entreprise Individuel',
-  "particular": 'Particulier',
-}
 
 const downloadFile = async (url, fileName) => {
   const userToken = useCookie('userToken').value
@@ -122,46 +92,27 @@ const downloadFile = async (url, fileName) => {
 }
 
 const apiDelete = async id => {
-  await $api(`contract/${id}`, { method: 'DELETE' })
-  fetchContracts()
+  await $api(`guarantor/${id}`, { method: 'DELETE' })
+  fetchGuarantors()
 }
 </script>
 
 <template>
   <div>
-    <!-- 👉 widgets -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>
-              Liste des contrats
-            </h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
-
-    <!-- 👉 pvs -->
-    <VCard title="Filtres" class="mb-6">
-      <VCardText>
-        <VRow>
-          <!-- 👉 Select Status -->
-          <VCol cols="12" sm="4">
-            <AppSelect v-model="selectedType" placeholder="Type de contrat"
-              :items="[{ value: 'company', title: 'Société' }, { value: 'particular', title: 'Particulier' }, { value: 'individual_business', title: 'Entreprise Individuel' }]"
-              clearable clear-icon="tabler-x" />
-          </VCol>
-        </VRow>
-      </VCardText>
-
-      <VDivider class="my-4" />
-
+    <VCard title="Liste des garants" class="mb-6">
       <div class="d-flex flex-wrap gap-4 mx-5">
         <div class="d-flex align-center">
-          <!-- 👉 Search  -->
-          <AppTextField v-model="searchQuery" placeholder="Rechercher un pv" density="compact" style="inline-size: 200px;"
-            class="me-3" />
+          <VRow>
+            <VCol>
+              <VBtn prepend-icon="tabler-arrow-left" :to="{ name: 'contract' }">
+                Contrats
+              </VBtn>
+            </VCol>
+            <VCol>
+              <AppTextField v-model="searchQuery" placeholder="Rechercher" density="compact" style="inline-size: 200px;"
+                class="me-3" />
+            </VCol>
+          </VRow>
         </div>
 
         <VSpacer />
@@ -171,11 +122,12 @@ const apiDelete = async id => {
             Export
           </VBtn>
 
-          <VBtn color="primary" prepend-icon="tabler-plus" :to="{ name: 'contract-add' }">
-            Ajouter un contrat
+          <VBtn color="primary" prepend-icon="tabler-plus"
+            :to="{ name: 'contract-contract_id-guarantor-add', params: { contract_id: route.params.contract_id } }">
+            Ajouter
           </VBtn>
           <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
-            @click="fetchContracts(); load(3)">
+            @click="fetchGuarantors(); load(3)">
             Recharger
             <template #loader>
               <span class="custom-loader">
@@ -190,46 +142,26 @@ const apiDelete = async id => {
 
 
       <!-- 👉 Datatable  -->
-      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers" :items="pvList"
-        :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
-        <template #item.type="{ item }">
-          {{ typeList[item.type] }}
-        </template>
-
-        <template #item.verbal_trial.amount="{ item }">
-          {{ String(item.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
-        </template>
-
+      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
+        :items="guarantorList" :items-length="totalGuarantor" class="text-no-wrap" @update:options="updateOptions">
         <template #item.actions="{ item }">
-          <IconBtn :to="{ name: 'contract-id', params: { id: item.id } }">
+          <IconBtn
+            :to="{ name: 'contract-contract_id-guarantor-id', params: { contract_id: route.params.contract_id, id: item.id } }">
             <VIcon icon="tabler-eye" />
           </IconBtn>
-          <IconBtn :to="{ name: 'contract-edit-id', params: { id: item.id } }">
+          <IconBtn
+            :to="{ name: 'contract-contract_id-guarantor-edit-id', params: { contract_id: route.params.contract_id, id: item.id } }">
             <VIcon icon="tabler-edit" />
           </IconBtn>
-          <IconBtn @click="pvIdToDelete = item.id; isDialogVisible = true">
+          <IconBtn @click="guarantorIdToDelete = item.id; isDialogVisible = true">
             <VIcon icon="tabler-trash" />
           </IconBtn>
           <VBtn icon variant="text" size="small" color="medium-emphasis">
             <VIcon size="24" icon="tabler-dots-vertical" />
             <VMenu activator="parent">
               <VList>
-                <VListItem :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: item.id } }">
-                  <template #prepend>
-                    <VIcon icon="tabler-users" />
-                  </template>
-
-                  <VListItemTitle>Garants</VListItemTitle>
-                </VListItem>
-                <VListItem :to="{ name: 'pv-id', params: { id: item.verbal_trial.id } }">
-                  <template #prepend>
-                    <VIcon icon="tabler-eye" />
-                  </template>
-
-                  <VListItemTitle>Pv</VListItemTitle>
-                </VListItem>
                 <VListItem
-                  @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
+                  @click="downloadFile(`/api/guarantor/download/${item.id}`, `Contrat-caution-${item.id}-credit-${item.contract.verbal_trial.committee_id}.docx`)">
                   <template #prepend>
                     <VIcon icon="tabler-download" />
                   </template>
@@ -237,7 +169,7 @@ const apiDelete = async id => {
                 </VListItem>
 
                 <VListItem
-                  @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
+                  @click="downloadFile(`/api/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-caution-${item.id}-${item.contract.verbal_trial.committee_id}.docx`);">
                   <template #prepend>
                     <VIcon icon="tabler-download" />
                   </template>
@@ -253,7 +185,7 @@ const apiDelete = async id => {
 
           <div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
             <p class="text-sm text-medium-emphasis mb-0">
-              {{ paginationMeta({ page, itemsPerPage }, totalPv) }}
+              {{ paginationMeta({ page, itemsPerPage }, totalGuarantor) }}
             </p>
 
             <VPagination v-model="page" :length="lastPage"
@@ -282,14 +214,14 @@ const apiDelete = async id => {
       <!-- Dialog Content -->
       <VCard title="Suppression">
         <VCardText>
-          Etes vous sûr de vouloir supprimer ce contrat?
+          Etes vous sûr de vouloir supprimer ce garant?
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
           <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
             Annuler
           </VBtn>
-          <VBtn @click="apiDelete(pvIdToDelete); isDialogVisible = false">
+          <VBtn @click="apiDelete(guarantorIdToDelete); isDialogVisible = false">
             Supprimer
           </VBtn>
         </VCardText>

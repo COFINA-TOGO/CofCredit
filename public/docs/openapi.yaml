@@ -729,6 +729,16 @@ paths:
             example: null
         -
           in: query
+          name: creator_id
+          description: 'Filtrer par ID du créateur'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par ID du créateur'
+            example: null
+        -
+          in: query
           name: with_verbal_trial
           description: 'Afficher le PV.'
           example: 0
@@ -1345,6 +1355,16 @@ paths:
           schema:
             type: integer
             description: 'Filtrer par ID du CAF'
+            example: null
+        -
+          in: query
+          name: creator_id
+          description: 'Filtrer par ID du créateur'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par ID du créateur'
             example: null
         -
           in: query

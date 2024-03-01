@@ -187,6 +187,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: false
         custom: []
+      creator_id:
+        name: creator_id
+        description: 'Filtrer par ID du créateur'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
       with_type_of_credit:
         name: with_type_of_credit
         description: 'Afficher le type de crédit.'

@@ -1,6 +1,6 @@
 export default [
   {
-    title: 'VP COMMITTEE',
+    title: 'Pv Comité',
     icon: { icon: 'tabler-align-box-left-top' },
     children: [
       {
@@ -34,11 +34,9 @@ export default [
       },
       {
         title: 'En attente de CAT',
-        to: 'contract',
       },
       {
         title: 'Historique',
-        to: 'contract',
       },
     ],
   },

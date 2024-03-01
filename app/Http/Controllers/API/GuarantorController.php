@@ -8,6 +8,7 @@ use App\Models\Guarantor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Rmunate\Utilities\SpellNumber;
@@ -141,7 +142,7 @@ class GuarantorController extends Controller
         if ($guarantor) {
             // if (($authorisation = Gate::inspect('view', $guarantor))->allowed()) {
             // $guarantor->load(["verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"]);
-            $templateProcessor = new TemplateProcessor('../storage/app/public/templates/particular/contract_caution_particular.docx');
+            $templateProcessor = new TemplateProcessor('../storage/app/public/templates/contracts/particular/contract_caution_particular.docx');
 
             $data = $guarantor->toArray();
             $data = array_merge($data, collect($guarantor->contract)->mapWithKeys(function ($value, $key) {
@@ -192,10 +193,7 @@ class GuarantorController extends Controller
             $outputFilePath = public_path("Contrat-caution-" . $guarantor->contract->verbal_trial->committee_id . ".docx");
             $templateProcessor->saveAs($outputFilePath);
 
-            return response()->download($outputFilePath)->deleteFileAfterSend(true);
-            // } else {
-            //     return $this->responseError(["auth" => [$authorisation->message()]], 403);
-            // }
+            return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]);
         } else {
             return $this->responseError(["id" => "La caution n'existe pas"], 404);
         }
@@ -212,7 +210,7 @@ class GuarantorController extends Controller
         $guarantor = Guarantor::find($id);
         if ($guarantor) {
             // if (($authorisation = Gate::inspect('view', $guarantor))->allowed()) {
-            $templateProcessor = new TemplateProcessor('../storage/app/public/templates/particular/billet_a_ordre_caution_particular.docx');
+            $templateProcessor = new TemplateProcessor('../storage/app/public/templates/contracts/particular/billet_a_ordre_caution_particular.docx');
 
             $data = $guarantor->toArray();
             $data = array_merge($data, collect($guarantor->contract)->mapWithKeys(function ($value, $key) {
@@ -255,10 +253,7 @@ class GuarantorController extends Controller
             $outputFilePath = public_path("Billet-a-ordre-caution-" . $guarantor->contract->verbal_trial->committee_id . ".docx");
             $templateProcessor->saveAs($outputFilePath);
 
-            return response()->download($outputFilePath)->deleteFileAfterSend(true);
-            // } else {
-            //     return $this->responseError(["auth" => [$authorisation->message()]], 403);
-            // }
+            return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]);
         } else {
             return $this->responseError(["id" => ["La caution n'existe pas"]], 404);
         }

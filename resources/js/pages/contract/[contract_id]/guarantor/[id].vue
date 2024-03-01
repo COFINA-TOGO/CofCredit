@@ -1,7 +1,7 @@
 <!-- eslint-disable camelcase -->
 <script setup>
 const router = useRouter()
-const route = useRoute("contract-id")
+const route = useRoute("contract-contract_id")
 
 const frenchMensuality = {
   "mensual": "Mensuelle",
@@ -39,7 +39,7 @@ const tableData = [
   { "title": "Durée", "value": contract.value.verbal_trial.duration + " mois" },
   { "title": "Périodicité", "value": frenchMensuality[contract.value.verbal_trial.periodicity] },
   { "title": "Taux d'intérêt HT", "value": contract.value.verbal_trial.tax_fee_interest_rate + "%" },
-  { "title": "TAF", "value": contract.value.verbal_trial.taf + "%" },
+  { "title": "TAF", "value": contract.value.verbal_trial.taf +"%" },
   { "title": "Echéance TTC", "value": String(contract.value.verbal_trial.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Frais de dossier", "value": String((contract.value.verbal_trial.amount * contract.value.verbal_trial.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Prime d'assurance", "value": String(contract.value.verbal_trial.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
@@ -63,7 +63,7 @@ if (contract.value.verbal_trial.duration > 13) {
               </VBtn>
             </VCol>
             <VCol cols="1">
-              <VBtn :to="{ name: 'contract-edit-id', params: { id: route.params.id } }">
+              <VBtn :to="{ name: 'contract-edit-id', params: { id: contract.id } }">
                 Modifier
               </VBtn>
             </VCol>
@@ -127,7 +127,10 @@ if (contract.value.verbal_trial.duration > 13) {
             <VCol cols="12">
               <VTable class="text-no-wrap">
                 <tbody>
-                  <tr v-for="item in tableData" :key="item.key">
+                  <tr
+                    v-for="item in tableData"
+                    :key="item.key"
+                  >
                     <td colspan="5">
                       {{ item.title }}
                     </td>
@@ -146,12 +149,16 @@ if (contract.value.verbal_trial.duration > 13) {
             </VCol>
             <VCol cols="12">
               <p>
-              <ul>
-                <li v-for="(item, index) in contract.verbal_trial.guarantees" :key="index" style="font-size: 20px">
-                  {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
-                  CFA : {{ item.comment }}
-                </li>
-              </ul>
+                <ul>
+                  <li
+                    v-for="(item, index) in contract.verbal_trial.guarantees"
+                    :key="index"
+                    style="font-size: 20px"
+                  >
+                    {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
+                    CFA : {{ item.comment }}
+                  </li>
+                </ul>
               </p>
             </VCol>
           </VCardText>

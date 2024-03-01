@@ -43,7 +43,8 @@ if (vertalTrial.duration > 13) {
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="11">
               <VBtn to="/pv">
-                Retour
+                <VIcon icon="tabler-arrow-left" />
+                Pvs
               </VBtn>
             </VCol>
             <VCol cols="1">

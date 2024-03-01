@@ -14,102 +14,32 @@ const isAppSearchBarVisible = ref(false)
 // 👉 Default suggestions
 const suggestionGroups = [
   {
-    title: 'Popular Searches',
+    title: 'Courants',
     content: [
       {
-        icon: 'tabler-chart-donut',
-        title: 'Analytics',
-        url: { name: 'dashboards-analytics' },
+        icon: 'tabler-align-box-left-top',
+        title: 'PV',
+        url: { name: 'pv' },
       },
       {
-        icon: 'tabler-chart-bubble',
-        title: 'CRM',
-        url: { name: 'dashboards-crm' },
-      },
-      {
-        icon: 'tabler-file',
-        title: 'Landing Page',
-        url: { name: 'front-pages-landing-page' },
-      },
-      {
-        icon: 'tabler-users',
-        title: 'User List',
-        url: { name: 'apps-user-list' },
+        icon: 'tabler-align-box-left-top',
+        title: 'Contract',
+        url: { name: 'contract' },
       },
     ],
   },
   {
-    title: 'Apps & Pages',
+    title: 'Menu',
     content: [
       {
-        icon: 'tabler-calendar',
-        title: 'Calendar',
-        url: { name: 'apps-calendar' },
+        icon: 'tabler-align-box-left-top',
+        title: 'PV',
+        url: { name: 'pv' },
       },
       {
-        icon: 'tabler-shopping-cart',
-        title: 'ECommerce Product',
-        url: { name: 'apps-ecommerce-product-list' },
-      },
-      {
-        icon: 'tabler-school',
-        title: 'Academy',
-        url: { name: 'apps-academy-dashboard' },
-      },
-      {
-        icon: 'tabler-truck',
-        title: 'Logistic Fleet',
-        url: { name: 'apps-logistics-fleet' },
-      },
-    ],
-  },
-  {
-    title: 'User Interface',
-    content: [
-      {
-        icon: 'tabler-letter-a',
-        title: 'Typography',
-        url: { name: 'pages-typography' },
-      },
-      {
-        icon: 'tabler-square',
-        title: 'Tabs',
-        url: { name: 'components-tabs' },
-      },
-      {
-        icon: 'tabler-map',
-        title: 'Tour',
-        url: { name: 'extensions-tour' },
-      },
-      {
-        icon: 'tabler-keyboard',
-        title: 'Statistics',
-        url: { name: 'pages-cards-card-statistics' },
-      },
-    ],
-  },
-  {
-    title: 'Popular Searches',
-    content: [
-      {
-        icon: 'tabler-list',
-        title: 'Select',
-        url: { name: 'forms-select' },
-      },
-      {
-        icon: 'tabler-currency-dollar',
-        title: 'Payment',
-        url: { name: 'front-pages-payment' },
-      },
-      {
-        icon: 'tabler-calendar',
-        title: 'Date & Time Picker',
-        url: { name: 'forms-date-time-picker' },
-      },
-      {
-        icon: 'tabler-home',
-        title: 'Property Listing Wizard',
-        url: { name: 'wizard-examples-property-listing' },
+        icon: 'tabler-align-box-left-top',
+        title: 'Contract',
+        url: { name: 'contract' },
       },
     ],
   },
@@ -118,22 +48,14 @@ const suggestionGroups = [
 // 👉 No Data suggestion
 const noDataSuggestions = [
   {
-    title: 'Analytics Dashboard',
-    icon: 'tabler-shopping-cart',
-    url: { name: 'dashboards-analytics' },
+    icon: 'tabler-align-box-left-top',
+    title: 'PV',
+    url: { name: 'pv' },
   },
   {
-    title: 'Account Settings',
-    icon: 'tabler-user',
-    url: {
-      name: 'pages-account-settings-tab',
-      params: { tab: 'account' },
-    },
-  },
-  {
-    title: 'Pricing Page',
-    icon: 'tabler-cash',
-    url: { name: 'pages-pricing' },
+    icon: 'tabler-align-box-left-top',
+    title: 'Contract',
+    url: { name: 'contract' },
   },
 ]
 

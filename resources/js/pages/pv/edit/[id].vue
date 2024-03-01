@@ -106,7 +106,7 @@ const onSubmit = () => {
 
       verbalTrialError.value = getEmptyError()
       if (res.status == 200) {
-        router.push(`/verbalTrial/${route.params.id}`)
+        router.push(`/pv/${route.params.id}`)
       } else {
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
@@ -125,22 +125,17 @@ const onSubmit = () => {
 
 <template>
   <VRow>
-    <VCol
-      cols="12"
-      md="12"
-    >
-      <VForm
-        ref="refForm"
-        @submit.prevent="onSubmit"
-      >
+    <VCol cols="12" md="12">
+      <VForm ref="refForm" @submit.prevent="onSubmit">
         <VRow>
           <VCol cols="11">
-            <VBtn to="/verbalTrial">
-              Retour
+            <VBtn :to="{ name: 'pv' }">
+              <VIcon icon="tabler-arrow-left" />
+              Pvs
             </VBtn>
           </VCol>
           <VCol cols="1">
-            <VBtn :to="{ name: 'pv-id', params: { id: verbalTrial.id } }">
+            <VBtn :to="{ name: 'pv-id', params: { id: route.params.id } }">
               Voir
             </VBtn>
           </VCol>
@@ -148,289 +143,109 @@ const onSubmit = () => {
         <VRow>
           <VCol md="12">
             <!-- 👉 verbalTrial Information -->
-            <VCard
-              class="mb-6"
-              title="Modification du verbalTrial de comité"
-            >
+            <VCard class="mb-6" title="Modification du pv de comité">
               <VCardText>
                 <VRow>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppTextField
-                      v-model="verbalTrial.committee_id"
-                      :error-messages="verbalTrialError.committee_id"
-                      label="Numéro du comitée"
-                      placeholder="Ex: CFNTG-044-13-12-23-01212"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppTextField v-model="verbalTrial.committee_id" :error-messages="verbalTrialError.committee_id"
+                      label="Numéro du comitée" placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppDateTimePicker
-                      v-model="verbalTrial.committee_date"
-                      :error-messages="verbalTrialError.committee_date"
-                      label="Date du comitée"
-                      placeholder="Ex: 2024-12-12"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppDateTimePicker v-model="verbalTrial.committee_date"
+                      :error-messages="verbalTrialError.committee_date" label="Date du comitée"
+                      placeholder="Ex: 2024-12-12" :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppAutocomplete
-                      v-model="verbalTrial.caf_id"
-                      :items="cafList"
-                      :error-messages="verbalTrialError.caf_id"
-                      label="Chargé d'affaire"
-                      placeholder="Ex: DJANTE Komla"
-                      item-title="full_name"
-                      item-value="id"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppAutocomplete v-model="verbalTrial.caf_id" :items="cafList"
+                      :error-messages="verbalTrialError.caf_id" label="Chargé d'affaire" placeholder="Ex: DJANTE Komla"
+                      item-title="full_name" item-value="id" :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppSelect
-                      v-model="verbalTrial.civility"
-                      :items="civilityItemList"
-                      :error-messages="verbalTrialError.civility"
-                      label="Civilité"
-                      placeholder="Ex: Mr"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppSelect v-model="verbalTrial.civility" :items="civilityItemList"
+                      :error-messages="verbalTrialError.civility" label="Civilité" placeholder="Ex: Mr"
+                      :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppTextField
-                      v-model="verbalTrial.applicant_first_name"
-                      :error-messages="verbalTrialError.applicant_first_name"
-                      label="Prénom du demandeur"
-                      placeholder="Ex: Cesar"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppTextField v-model="verbalTrial.applicant_first_name"
+                      :error-messages="verbalTrialError.applicant_first_name" label="Prénom du demandeur"
+                      placeholder="Ex: Cesar" :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppTextField
-                      v-model="verbalTrial.applicant_last_name"
-                      :error-messages="verbalTrialError.applicant_last_name"
-                      label="Nom du demandeur"
-                      placeholder="Ex: Endure"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppTextField v-model="verbalTrial.applicant_last_name"
+                      :error-messages="verbalTrialError.applicant_last_name" label="Nom du demandeur"
+                      placeholder="Ex: Endure" :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppTextField
-                      v-model="verbalTrial.account_number"
-                      :error-messages="verbalTrialError.account_number"
-                      label="Numéro de compte"
-                      placeholder="Ex: 251012345678"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppTextField v-model="verbalTrial.account_number" :error-messages="verbalTrialError.account_number"
+                      label="Numéro de compte" placeholder="Ex: 251012345678" :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppTextField
-                      v-model="verbalTrial.activity"
-                      :error-messages="verbalTrialError.activity"
-                      label="Activé"
-                      placeholder="Ex: Homme d'affaire"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppTextField v-model="verbalTrial.activity" :error-messages="verbalTrialError.activity"
+                      label="Activé" placeholder="Ex: Homme d'affaire" :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppTextField
-                      v-model="verbalTrial.purpose_of_financing"
-                      :error-messages="verbalTrialError.purpose_of_financing"
-                      label="Objet du financement"
-                      placeholder="Ex: Achat nouveau locaux"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppTextField v-model="verbalTrial.purpose_of_financing"
+                      :error-messages="verbalTrialError.purpose_of_financing" label="Objet du financement"
+                      placeholder="Ex: Achat nouveau locaux" :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppAutocomplete
-                      v-model="verbalTrial.type_of_credit_id"
-                      :items="typeOfCreditList"
-                      :error-messages="verbalTrialError.type_of_credit_id"
-                      label="Type de credit"
-                      placeholder="Ex: Avance sur salaire"
-                      item-title="name"
-                      item-value="id"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppAutocomplete v-model="verbalTrial.type_of_credit_id" :items="typeOfCreditList"
+                      :error-messages="verbalTrialError.type_of_credit_id" label="Type de credit"
+                      placeholder="Ex: Avance sur salaire" item-title="name" item-value="id"
+                      :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppTextField
-                      v-model="verbalTrial.amount"
-                      type="number"
-                      :error-messages="verbalTrialError.amount"
-                      label="Montant"
-                      placeholder="Ex: 15 000 000"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppTextField v-model="verbalTrial.amount" type="number" :error-messages="verbalTrialError.amount"
+                      label="Montant" placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppTextField
-                      v-model="verbalTrial.duration"
-                      type="number"
-                      :error-messages="verbalTrialError.duration"
-                      label="Durée du crédit en mois"
-                      placeholder="Ex: 18"
-                      append-inner-icon="tabler-calendar"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppTextField v-model="verbalTrial.duration" type="number" :error-messages="verbalTrialError.duration"
+                      label="Durée du crédit en mois" placeholder="Ex: 18" append-inner-icon="tabler-calendar"
+                      :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppSelect
-                      v-model="verbalTrial.periodicity"
-                      :items="periodicityItemList"
-                      :error-messages="verbalTrialError.periodicity"
-                      label="Periodicité"
-                      placeholder="Ex: Mensuelle"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppSelect v-model="verbalTrial.periodicity" :items="periodicityItemList"
+                      :error-messages="verbalTrialError.periodicity" label="Periodicité" placeholder="Ex: Mensuelle"
+                      :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                    lg="4"
-                  >
-                    <AppTextField
-                      v-model="verbalTrial.due_amount"
-                      type="number"
-                      :error-messages="verbalTrialError.due_amount"
-                      label="Montant d'une échéance"
-                      placeholder="Ex: 150 000"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="6" lg="4">
+                    <AppTextField v-model="verbalTrial.due_amount" type="number"
+                      :error-messages="verbalTrialError.due_amount" label="Montant d'une échéance"
+                      placeholder="Ex: 150 000" :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol
-                    cols="12"
-                    md="12"
-                    lg="4"
-                  >
-                    <AppTextField
-                      v-model="verbalTrial.insurance_premium"
-                      type="number"
-                      :error-messages="verbalTrialError.insurance_premium"
-                      label="Prime d'assurance"
-                      placeholder="Ex: 25000"
-                      :rules="[requiredValidator]"
-                    />
+                  <VCol cols="12" md="12" lg="4">
+                    <AppTextField v-model="verbalTrial.insurance_premium" type="number"
+                      :error-messages="verbalTrialError.insurance_premium" label="Prime d'assurance"
+                      placeholder="Ex: 25000" :rules="[requiredValidator]" />
                   </VCol>
                   <VCol cols="12">
-                    <VSlider
-                      v-model="verbalTrial.taf"
-                      label="TAF(%)"
-                      :error-messages="verbalTrialError.taf"
-                      :thumb-size="15"
-                      thumb-label="always"
-                      :rules="[requiredValidator]"
-                      step="0.1"
-                    >
+                    <VSlider v-model="verbalTrial.taf" label="TAF(%)" :error-messages="verbalTrialError.taf"
+                      :thumb-size="15" thumb-label="always" :rules="[requiredValidator]" step="0.1">
                       <template #append>
-                        <VTextField
-                          v-model="verbalTrial.taf"
-                          :error-messages="verbalTrialError.taf"
-                          type="number"
-                          style="width:80px"
-                          density="compact"
-                          hide-details
-                          variant="outlined"
-                          suffix="%"
-                        />
+                        <VTextField v-model="verbalTrial.taf" :error-messages="verbalTrialError.taf" type="number"
+                          style="width:80px" density="compact" hide-details variant="outlined" suffix="%" />
                       </template>
                     </VSlider>
                   </VCol>
                   <VCol cols="12">
-                    <VSlider
-                      v-model="verbalTrial.administrative_fees_percentage"
-                      label="Frais de dossier(%)"
-                      :error-messages="verbalTrialError.administrative_fees_percentage"
-                      :thumb-size="15"
-                      thumb-label="always"
-                      :rules="[requiredValidator]"
-                      step="0.1"
-                    >
+                    <VSlider v-model="verbalTrial.administrative_fees_percentage" label="Frais de dossier(%)"
+                      :error-messages="verbalTrialError.administrative_fees_percentage" :thumb-size="15"
+                      thumb-label="always" :rules="[requiredValidator]" step="0.1">
                       <template #append>
-                        <VTextField
-                          v-model="verbalTrial.administrative_fees_percentage"
-                          :error-messages="verbalTrialError.administrative_fees_percentage"
-                          type="number"
-                          style="width:80px"
-                          density="compact"
-                          hide-details
-                          variant="outlined"
-                          suffix="%"
-                        />
+                        <VTextField v-model="verbalTrial.administrative_fees_percentage"
+                          :error-messages="verbalTrialError.administrative_fees_percentage" type="number"
+                          style="width:80px" density="compact" hide-details variant="outlined" suffix="%" />
                       </template>
                     </VSlider>
                   </VCol>
                   <VCol cols="12">
-                    <VSlider
-                      v-model="verbalTrial.tax_fee_interest_rate"
-                      label="Taux d'intérêt HT(%)"
-                      :error-messages="verbalTrialError.tax_fee_interest_rate"
-                      :thumb-size="15"
-                      thumb-label="always"
-                      :rules="[requiredValidator]"
-                      step="0.1"
-                    >
+                    <VSlider v-model="verbalTrial.tax_fee_interest_rate" label="Taux d'intérêt HT(%)"
+                      :error-messages="verbalTrialError.tax_fee_interest_rate" :thumb-size="15" thumb-label="always"
+                      :rules="[requiredValidator]" step="0.1">
                       <template #append>
-                        <VTextField
-                          v-model="verbalTrial.tax_fee_interest_rate"
-                          :error-messages="verbalTrialError.tax_fee_interest_rate"
-                          type="number"
-                          style="width:80px"
-                          density="compact"
-                          hide-details
-                          variant="outlined"
-                          suffix="%"
-                        />
+                        <VTextField v-model="verbalTrial.tax_fee_interest_rate"
+                          :error-messages="verbalTrialError.tax_fee_interest_rate" type="number" style="width:80px"
+                          density="compact" hide-details variant="outlined" suffix="%" />
                       </template>
                     </VSlider>
                   </VCol>
@@ -442,17 +257,10 @@ const onSubmit = () => {
             <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
               <div class="d-flex flex-column justify-center" />
               <div class="d-flex gap-4 align-center flex-wrap">
-                <VBtn
-                  type="reset"
-                  variant="tonal"
-                  color="primary"
-                >
+                <VBtn type="reset" variant="tonal" color="primary">
                   Effacer
                 </VBtn>
-                <VBtn
-                  type="submit"
-                  class="me-3"
-                >
+                <VBtn type="submit" class="me-3">
                   Enregistrer
                 </VBtn>
               </div>

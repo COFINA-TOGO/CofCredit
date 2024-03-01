@@ -55,8 +55,10 @@ watch([
           :languages="themeConfig.app.i18n.langConfig"
         />
         <NavbarThemeSwitcher />
-        <NavbarShortcuts />
-        <NavBarNotifications class="me-2" />
+        <!--
+          <NavbarShortcuts />
+          <NavBarNotifications class="me-2" /> 
+        -->
         <UserProfile />
       </div>
     </template>
@@ -80,6 +82,6 @@ watch([
     </template>
 
     <!-- 👉 Customizer -->
-    <TheCustomizer />
+    <!-- <TheCustomizer /> -->
   </VerticalNavLayout>
 </template>

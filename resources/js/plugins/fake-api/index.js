@@ -27,5 +27,6 @@ export default function () {
       url: workerUrl,
     },
     onUnhandledRequest: 'bypass',
+    quiet: true,
   })
 }
