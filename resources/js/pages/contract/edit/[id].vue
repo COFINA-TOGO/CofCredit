@@ -123,6 +123,7 @@ const onSubmit = () => {
         $data.company_rccm_number = contract.value.company.rccm_number
         $data.company_phone_number = contract.value.company.phone_number
       } else if (contract.value.type == "individual_business") {
+        console.log(contract.value)
         $data.individual_business_denomination = contract.value.individual_business.denomination
         $data.individual_business_corporate_purpose = contract.value.individual_business.corporate_purpose
         $data.individual_business_head_office_address = contract.value.individual_business.head_office_address
@@ -303,27 +304,27 @@ const onSubmit = () => {
             <VCardText>
               <VRow cols="12">
                 <VCol cols="12" md="6" lg="6">
-                  <AppTextField v-model="contract.individual_business_denomination"
+                  <AppTextField v-model="contract.individual_business.denomination"
                     :error-messages="errorData.individual_business_denomination" label="Dénomination"
                     placeholder="Ex: Agban" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
-                  <AppTextField v-model="contract.individual_business_head_office_address"
+                  <AppTextField v-model="contract.individual_business.head_office_address"
                     :error-messages="errorData.individual_business_head_office_address" label="Addresse du siège social"
                     placeholder="Ex: Lomé, Adewi" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
-                  <AppTextField v-model="contract.individual_business_rccm_number"
+                  <AppTextField v-model="contract.individual_business.rccm_number"
                     :error-messages="errorData.individual_business_rccm_number" label="Numero RCCM"
                     placeholder="Ex: RC-44E18" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
-                  <AppTextField v-model="contract.individual_business_phone_number"
+                  <AppTextField v-model="contract.individual_business.phone_number"
                     :error-messages="errorData.individual_business_phone_number" label="Telephone de la société"
                     placeholder="Ex: +228 96 96 96 96" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12">
-                  <AppTextField v-model="contract.individual_business_corporate_purpose"
+                  <AppTextField v-model="contract.individual_business.corporate_purpose"
                     :error-messages="errorData.individual_business_corporate_purpose" label="Objet social"
                     placeholder="Ex: " :rules="[requiredValidator]" />
                 </VCol>

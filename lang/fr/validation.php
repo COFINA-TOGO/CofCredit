@@ -52,7 +52,7 @@ return [
     'enum' => 'Le champ :attribute sélectionné est invalide.',
     'exists' => 'Le champ :attribute sélectionné est invalide.',
     'file' => 'Le champ :attribute doit être un fichier.',
-    'filled' => "Le champ :attribute est obligatoire.",
+    'filled' => "Ce champ est obligatoire.",
     'gt' => [
         'array' => 'Le champ :attribute doit avoir plus de :value éléments.',
         'file' => 'Le champ :attribute doit être supérieur à :value kilobytes.',
@@ -124,7 +124,7 @@ return [
     'prohibited_unless' => 'Le champ :attribute est interdit sauf si :other est dans :values.',
     'prohibits' => 'Le champ :attribute interdit la présence de :other.',
     'regex' => 'Le format du champ :attribute est invalide.',
-    'required' => 'Le champ :attribute est obligatoire.',
+    'required' => 'Ce champ est obligatoire.',
     'required_array_keys' => 'Le champ :attribute doit contenir des entrées pour : :values.',
     'required_if' => 'Le champ :attribute est obligatoire quand la valeur de :other est :value.',
     'required_if_accepted' => 'Le champ :attribute est obligatoire lorsque :other est accepté.',

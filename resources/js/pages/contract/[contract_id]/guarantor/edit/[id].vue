@@ -161,13 +161,17 @@ const onSubmit = () => {
                     :error-messages="guarantorError.number_of_identity_document" label="Numéro de la pièce d'identité"
                     placeholder="Ex: 251012345678" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol cols="12" md="6" lg="6">
+                <VCol cols="12" md="6" lg="4">
                   <AppDateTimePicker v-model="guarantorItem.date_of_issue_of_identity_document"
                     :error-messages="guarantorError.date_of_issue_of_identity_document"
                     label="Date de délivrance de la pièce d'identité" placeholder="Ex: 2022-01-01"
                     :rules="[requiredValidator]" />
                 </VCol>
-                <VCol cols="12" md="6" lg="6">
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField v-model="guarantorItem.function" :error-messages="guarantorError.function"
+                    label="Fonction" placeholder="Ex: Agent de change" :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="guarantorItem.phone_number" :error-messages="guarantorError.phone_number"
                     label="Numéro de téléphone" placeholder="Ex: +228 96 96 96 96" :rules="[requiredValidator]" />
                 </VCol>

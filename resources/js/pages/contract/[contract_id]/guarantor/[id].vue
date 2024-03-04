@@ -1,7 +1,7 @@
 <!-- eslint-disable camelcase -->
 <script setup>
 const router = useRouter()
-const route = useRoute("contract-contract_id")
+const route = useRoute('contract-contract_id-guarantor-id')
 
 const frenchMensuality = {
   "mensual": "Mensuelle",
@@ -19,118 +19,64 @@ const documentTypeList = {
 }
 
 const {
-  data: contract,
-} = await useApi(createUrl(`/contract/${route.params.id}`, {
+  data: guarantor,
+} = await useApi(createUrl(`/guarantor/${route.params.id}`, {
   query: {
-    with_type_of_credit: 1,
-    with_caf: 1,
-    with_type_of_guarantees: 1,
   },
 }))
 
-if (contract.value.status == 200) {
-  contract.value = contract.value.data.contract
+
+if (guarantor.value.status == 200) {
+  guarantor.value = guarantor.value.data.guarantor
 } else {
-  router.push("/contract")
+  router.push("/guarantor")
 }
+console.log(guarantor.value)
 
 const tableData = [
-  { "title": "Montant", "value": String(contract.value.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Durée", "value": contract.value.verbal_trial.duration + " mois" },
-  { "title": "Périodicité", "value": frenchMensuality[contract.value.verbal_trial.periodicity] },
-  { "title": "Taux d'intérêt HT", "value": contract.value.verbal_trial.tax_fee_interest_rate + "%" },
-  { "title": "TAF", "value": contract.value.verbal_trial.taf +"%" },
-  { "title": "Echéance TTC", "value": String(contract.value.verbal_trial.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Frais de dossier", "value": String((contract.value.verbal_trial.amount * contract.value.verbal_trial.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Prime d'assurance", "value": String(contract.value.verbal_trial.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Nom", "value": guarantor.value.last_name },
+  { "title": "Date de naissance", "value": guarantor.value.birth_date },
+  { "title": "Lieu de naissance", "value": guarantor.value.birth_place },
+  { "title": "Nationalité", "value": guarantor.value.nationality },
+  { "title": "Addresse du domicile", "value": guarantor.value.home_address },
+  { "title": "Type de la pièce d'identité", "value": documentTypeList[guarantor.value.type_of_identity_document] },
+  { "title": "Numéro de la pièce d'identité", "value": guarantor.value.number_of_identity_document },
+  { "title": "Date de délivrance de la pièce d'identité", "value": guarantor.value.date_of_issue_of_identity_document },
+  { "title": "Fonction", "value": guarantor.value.function },
+  { "title": "Numéro de téléphone", "value": guarantor.value.phone_number },
 ]
-
-if (contract.value.verbal_trial.duration > 13) {
-  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
-}
 </script>
 
 <template>
-  <section v-if="contract">
+  <section v-if="guarantor">
     <VRow>
       <VCol cols="12">
         <VCard>
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="11">
-              <VBtn to="/contract">
+              <VBtn :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: route.params.contract_id } }">
                 <VIcon icon="tabler-arrow-left" />
-                Contrats
+                Garants
               </VBtn>
             </VCol>
             <VCol cols="1">
-              <VBtn :to="{ name: 'contract-edit-id', params: { id: contract.id } }">
+              <VBtn
+                :to="{ name: 'contract-contract_id-guarantor-edit-id', params: { contract_id: route.params.contract_id, id: guarantor.id } }">
                 Modifier
               </VBtn>
             </VCol>
             <VCol cols="12">
               <h2 class="text-center">
-                Contrat N°{{ contract.verbal_trial.committee_id }}
+                Garant N°{{ guarantor.id }}
               </h2>
             </VCol>
-            <VCol cols="6">
-              <p style="font-size: 20px">
-                CAF
-              </p>
-              <p style="font-size: 20px">
-                Emprunteur
-              </p>
-              <p style="font-size: 20px">
-                N° de compte
-              </p>
-              <p style="font-size: 20px">
-                Activité
-              </p>
-              <p style="font-size: 20px">
-                Objet du financement
-              </p>
-              <p style="font-size: 20px">
-                Type de concours solicité
-              </p>
-              <br>
-              <p style="font-size: 20px">
-                Date de validation: {{ contract.verbal_trial.created_at }}
-              </p>
-            </VCol>
-            <VCol cols="6">
-              <p style="font-size: 20px">
-                : {{ contract.verbal_trial.caf.full_name }}
-              </p>
-              <p style="font-size: 20px">
-                : <strong> {{ contract.verbal_trial.applicant_last_name + " " +
-                  contract.verbal_trial.applicant_first_name
-                }}</strong>
-              </p>
-              <p style="font-size: 20px">
-                : {{ contract.verbal_trial.account_number }}
-              </p>
-              <p style="font-size: 20px">
-                : {{ contract.verbal_trial.activity }}
-              </p>
-              <p style="font-size: 20px">
-                : {{ contract.verbal_trial.purpose_of_financing }}
-              </p>
-              <p style="font-size: 20px">
-                : {{ contract.verbal_trial.type_of_credit.name }}
-              </p>
-            </VCol>
-          </VCardText>
-
-          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="12">
-              <h2>CARACTERISTIQUES</h2>
+              <h2>Informations:</h2>
             </VCol>
             <VCol cols="12">
               <VTable class="text-no-wrap">
                 <tbody>
-                  <tr
-                    v-for="item in tableData"
-                    :key="item.key"
-                  >
+                  <tr v-for="item in tableData" :key="item.key">
                     <td colspan="5">
                       {{ item.title }}
                     </td>
@@ -140,84 +86,6 @@ if (contract.value.verbal_trial.duration > 13) {
                   </tr>
                 </tbody>
               </VTable>
-            </VCol>
-          </VCardText>
-
-          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
-            <VCol cols="12">
-              <h2>GARANTIES A RECUEILLIR</h2>
-            </VCol>
-            <VCol cols="12">
-              <p>
-                <ul>
-                  <li
-                    v-for="(item, index) in contract.verbal_trial.guarantees"
-                    :key="index"
-                    style="font-size: 20px"
-                  >
-                    {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
-                    CFA : {{ item.comment }}
-                  </li>
-                </ul>
-              </p>
-            </VCol>
-          </VCardText>
-
-          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
-            <VCol cols="12">
-              <h2>Informations suplémentaires du client</h2>
-            </VCol>
-            <VCol cols="6">
-              <p style="font-size: 20px">
-                Date de naissance
-              </p>
-              <p style="font-size: 20px">
-                Lieu de naissance
-              </p>
-              <p style="font-size: 20px">
-                Nationnalité
-              </p>
-              <p style="font-size: 20px">
-                Addresse du domicile
-              </p>
-              <p style="font-size: 20px">
-                Type de la pièce d'identité
-              </p>
-              <p style="font-size: 20px">
-                Numéro de la pièce d'identité
-              </p>
-              <p style="font-size: 20px">
-                Date de délivrance de la pièce d'identité
-              </p>
-              <p style="font-size: 20px">
-                Numéro de téléphone
-              </p>
-            </VCol>
-            <VCol cols="6">
-              <p style="font-size: 20px">
-                : {{ contract.representative_birth_date }}
-              </p>
-              <p style="font-size: 20px">
-                : {{ contract.representative_birth_place }}
-              </p>
-              <p style="font-size: 20px">
-                : {{ contract.representative_nationality }}
-              </p>
-              <p style="font-size: 20px">
-                : {{ contract.representative_home_address }}
-              </p>
-              <p style="font-size: 20px">
-                : {{ documentTypeList[contract.representative_type_of_identity_document] }}
-              </p>
-              <p style="font-size: 20px">
-                : {{ contract.representative_number_of_identity_document }}
-              </p>
-              <p style="font-size: 20px">
-                : {{ contract.representative_date_of_issue_of_identity_document }}
-              </p>
-              <p style="font-size: 20px">
-                : {{ contract.representative_phone_number }}
-              </p>
             </VCol>
           </VCardText>
         </VCard>
