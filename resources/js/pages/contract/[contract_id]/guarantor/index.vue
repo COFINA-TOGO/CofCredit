@@ -58,7 +58,7 @@ const updateOptions = options => {
 const {
   data: guarantorData,
   execute: fetchGuarantors,
-} = await useApi(createUrl('/guarantor', {
+} = await useApi(createUrl('/contract/guarantor', {
   query: {
     search: searchQuery,
     with_verbal_trial: 1,
@@ -70,7 +70,6 @@ const {
 const guarantorList = computed(() => guarantorData.value.data)
 const totalGuarantor = computed(() => guarantorData.value.total)
 const lastPage = computed(() => guarantorData.value.last_page)
-
 
 const downloadFile = async (url, fileName) => {
   const userToken = useCookie('userToken').value
@@ -92,7 +91,7 @@ const downloadFile = async (url, fileName) => {
 }
 
 const apiDelete = async id => {
-  await $api(`guarantor/${id}`, { method: 'DELETE' })
+  await $api(`contract/guarantor/${id}`, { method: 'DELETE' })
   fetchGuarantors()
 }
 </script>
@@ -192,6 +191,7 @@ const apiDelete = async id => {
               :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)">
               <template #prev="slotProps">
                 <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                  <VIcon start icon="tabler-arrow-left" />
                   Précedent
                 </VBtn>
               </template>
@@ -199,6 +199,7 @@ const apiDelete = async id => {
               <template #next="slotProps">
                 <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
                   Suivant
+                  <VIcon end icon="tabler-arrow-right" />
                 </VBtn>
               </template>
             </VPagination>
@@ -207,7 +208,7 @@ const apiDelete = async id => {
       </VDataTableServer>
     </VCard>
 
-    <VDialog v-model="isDialogVisible" persistent class="v-dialog-sm">
+    <VDialog v-model="isDialogVisible" class="v-dialog-sm">
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 

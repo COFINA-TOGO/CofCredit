@@ -54,22 +54,6 @@ const load = i => {
   }, 1000)
 }
 
-
-const status = ref([
-  {
-    title: 'Scheduled',
-    value: 'Scheduled',
-  },
-  {
-    title: 'Publish',
-    value: 'Published',
-  },
-  {
-    title: 'Inactive',
-    value: 'Inactive',
-  },
-])
-
 const itemsPerPage = ref(8)
 const page = ref(1)
 
@@ -228,6 +212,14 @@ const apiDelete = async id => {
 
                   <VListItemTitle>Pv</VListItemTitle>
                 </VListItem>
+                <VDivider />
+                <VListItem
+                  @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
+                  <template #prepend>
+                    <VIcon icon="tabler-upload" />
+                  </template>
+                  <VListItemTitle>Contrat</VListItemTitle>
+                </VListItem>
                 <VListItem
                   @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
                   <template #prepend>
@@ -235,7 +227,14 @@ const apiDelete = async id => {
                   </template>
                   <VListItemTitle>Contrat</VListItemTitle>
                 </VListItem>
-
+                <VDivider />
+                <VListItem
+                  @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
+                  <template #prepend>
+                    <VIcon icon="tabler-upload" />
+                  </template>
+                  <VListItemTitle>Billet à ordre</VListItemTitle>
+                </VListItem>
                 <VListItem
                   @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
                   <template #prepend>
@@ -260,6 +259,7 @@ const apiDelete = async id => {
               :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)">
               <template #prev="slotProps">
                 <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                  <VIcon start icon="tabler-arrow-left" />
                   Précedent
                 </VBtn>
               </template>
@@ -267,6 +267,7 @@ const apiDelete = async id => {
               <template #next="slotProps">
                 <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
                   Suivant
+                  <VIcon end icon="tabler-arrow-right" />
                 </VBtn>
               </template>
             </VPagination>
@@ -275,7 +276,7 @@ const apiDelete = async id => {
       </VDataTableServer>
     </VCard>
 
-    <VDialog v-model="isDialogVisible" persistent class="v-dialog-sm">
+    <VDialog v-model="isDialogVisible" class="v-dialog-sm">
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 

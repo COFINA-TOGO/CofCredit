@@ -18,7 +18,7 @@ const contractData = ref({
   "total_amount_of_interest": 152369,
   "number_of_due_dates": 3,
   "type": "company",
-  "has_pledges": false,
+  "has_pledges": "0",
   "company_denomination": "agban",
   "company_legal_status": "dd",
   "company_head_office_address": "dd",
@@ -65,7 +65,6 @@ const pvError = ref(getResetPvError())
 
 const {
   data: verbalTrialListData,
-  execute: fetchTypeOfCreditList,
 } = await useApi(createUrl('/verbal-trial?has_contract=0', {
   query: {
     "paginate": 0,
@@ -81,8 +80,8 @@ const typeList = [
 ]
 
 const hasPledgesLabel = {
-  true: 'Avec gage',
-  false: 'Sans gage',
+  '1': 'Avec gage',
+  '0': 'Sans gage',
 }
 
 const documentTypeList = [
@@ -162,366 +161,155 @@ const onSubmit = () => {
         <span>Contrat pour un Procès verbal</span>
       </div>
     </div>
-    <VForm
-      ref="refForm"
-      @submit.prevent="onSubmit"
-    >
+    <VForm ref="refForm" @submit.prevent="onSubmit">
       <VRow>
         <VCol md="12">
           <!-- 👉 Contract Information -->
-          <VCard
-            class="mb-6"
-            title="Information sur le client"
-          >
+          <VCard class="mb-6" title="Information sur le client">
             <VCardText>
               <VRow>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="4"
-                >
-                  <AppDateTimePicker
-                    v-model="contractData.representative_birth_date"
-                    :error-messages="pvError.representative_birth_date"
-                    label="Date de naissance"
-                    placeholder="Ex: 2000-12-12"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="4">
+                  <AppDateTimePicker v-model="contractData.representative_birth_date"
+                    :error-messages="pvError.representative_birth_date" label="Date de naissance"
+                    placeholder="Ex: 2000-12-12" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="4"
-                >
-                  <AppTextField
-                    v-model="contractData.representative_birth_place"
-                    :error-messages="pvError.representative_birth_place"
-                    label="Lieu de naissance"
-                    placeholder="Ex: Lomé"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField v-model="contractData.representative_birth_place"
+                    :error-messages="pvError.representative_birth_place" label="Lieu de naissance" placeholder="Ex: Lomé"
+                    :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="4"
-                >
-                  <AppTextField
-                    v-model="contractData.representative_nationality"
-                    :error-messages="pvError.representative_nationality"
-                    label="Nationalité"
-                    placeholder="Ex: Togolaise"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField v-model="contractData.representative_nationality"
+                    :error-messages="pvError.representative_nationality" label="Nationalité" placeholder="Ex: Togolaise"
+                    :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="4"
-                >
-                  <AppTextField
-                    v-model="contractData.representative_home_address"
-                    :error-messages="pvError.representative_home_address"
-                    label="Addresse du domicile"
-                    placeholder="Ex: Adewi, Lomé"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField v-model="contractData.representative_home_address"
+                    :error-messages="pvError.representative_home_address" label="Addresse du domicile"
+                    placeholder="Ex: Adewi, Lomé" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="4"
-                >
-                  <AppSelect
-                    v-model="contractData.representative_type_of_identity_document"
-                    :items="documentTypeList"
-                    :error-messages="pvError.representative_type_of_identity_document"
-                    label="Type de la pièce d'identité"
-                    placeholder="Ex: Passeport"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="4">
+                  <AppSelect v-model="contractData.representative_type_of_identity_document" :items="documentTypeList"
+                    :error-messages="pvError.representative_type_of_identity_document" label="Type de la pièce d'identité"
+                    placeholder="Ex: Passeport" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="4"
-                >
-                  <AppTextField
-                    v-model="contractData.representative_number_of_identity_document"
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField v-model="contractData.representative_number_of_identity_document"
                     :error-messages="pvError.representative_number_of_identity_document"
-                    label="Numéro de la pièce d'identité"
-                    placeholder="Ex: 251012345678"
-                    :rules="[requiredValidator]"
-                  />
+                    label="Numéro de la pièce d'identité" placeholder="Ex: 251012345678" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppDateTimePicker
-                    v-model="contractData.representative_date_of_issue_of_identity_document"
+                <VCol cols="12" md="6" lg="6">
+                  <AppDateTimePicker v-model="contractData.representative_date_of_issue_of_identity_document"
                     :error-messages="pvError.representative_date_of_issue_of_identity_document"
-                    label="Date de délivrance de la pièce d'identité"
-                    placeholder="Ex: 2022-01-01"
-                    :rules="[requiredValidator]"
-                  />
+                    label="Date de délivrance de la pièce d'identité" placeholder="Ex: 2022-01-01"
+                    :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppTextField
-                    v-model="contractData.representative_phone_number"
-                    :error-messages="pvError.representative_phone_number"
-                    label="Numéro de téléphone"
-                    placeholder="Ex: +228 96 96 96 96"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contractData.representative_phone_number"
+                    :error-messages="pvError.representative_phone_number" label="Numéro de téléphone"
+                    placeholder="Ex: +228 96 96 96 96" :rules="[requiredValidator]" />
                 </VCol>
               </VRow>
             </VCardText>
           </VCard>
-          <VCard
-            class="mb-6"
-            title="Information sur contrat"
-          >
+          <VCard class="mb-6" title="Information sur contrat">
             <VCardText>
               <VRow>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppAutocomplete
-                    v-model="contractData.verbal_trial_id"
-                    :items="verbalTrialList"
-                    :error-messages="pvError.verbal_trial_id"
-                    label="Procès verbal"
-                    placeholder="Ex: CFNTG-044-13-12-23-01212"
-                    :rules="[requiredValidator]"
-                    item-title="committee_id"
-                    item-value="id"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppAutocomplete v-model="contractData.verbal_trial_id" :items="verbalTrialList"
+                    :error-messages="pvError.verbal_trial_id" label="Procès verbal"
+                    placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" item-title="committee_id"
+                    item-value="id" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppTextField
-                    v-model="contractData.total_amount_of_interest"
-                    type="number"
-                    :error-messages="pvError.total_amount_of_interest"
-                    label="Montant d'une échéance"
-                    placeholder="Ex: 15 000 000"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contractData.total_amount_of_interest" type="number"
+                    :error-messages="pvError.total_amount_of_interest" label="Montant d'une échéance"
+                    placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppTextField
-                    v-model="contractData.number_of_due_dates"
-                    type="number"
-                    :error-messages="pvError.number_of_due_dates"
-                    label="Nombre d'échéance"
-                    placeholder="Ex: 18"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contractData.number_of_due_dates" type="number"
+                    :error-messages="pvError.number_of_due_dates" label="Nombre d'échéance" placeholder="Ex: 18"
+                    :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppSelect
-                    v-model="contractData.type"
-                    :items="typeList"
-                    :error-messages="pvError.type"
-                    label="Type"
-                    placeholder="Ex: Particulier"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppSelect v-model="contractData.type" :items="typeList" :error-messages="pvError.type" label="Type"
+                    placeholder="Ex: Particulier" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="10">
-                  <VSlider
-                    v-model="contractData.risk_premium_percentage"
+                  <VSlider v-model="contractData.risk_premium_percentage"
                     label="Prime de risque (en pourcentage) du demandeur"
-                    :error-messages="pvError.risk_premium_percentage"
-                    :thumb-size="15"
-                    thumb-label="always"
-                    :rules="[requiredValidator]"
-                    step="0.1"
-                  >
+                    :error-messages="pvError.risk_premium_percentage" :thumb-size="15" thumb-label="always"
+                    :rules="[requiredValidator]" step="0.1">
                     <template #append>
-                      <VTextField
-                        v-model="contractData.risk_premium_percentage"
-                        :error-messages="pvError.risk_premium_percentage"
-                        type="number"
-                        style="width:80px"
-                        density="compact"
-                        hide-details
-                        variant="outlined"
-                        suffix="%"
-                      />
+                      <VTextField v-model="contractData.risk_premium_percentage"
+                        :error-messages="pvError.risk_premium_percentage" type="number" style="width:80px"
+                        density="compact" hide-details variant="outlined" suffix="%" />
                     </template>
                   </VSlider>
                 </VCol>
                 <VCol cols="2">
-                  <VCheckbox
-                    v-model="contractData.has_pledges"
-                    :label="hasPledgesLabel[contractData.has_pledges]"
-                    :error-messages="pvError.has_pledges"
-                    true-icon="tabler-check"
-                    false-icon="tabler-circle-x"
-                    color="success"
-                  />
+                  <VCheckbox v-model="contractData.has_pledges" :true-value="'1'" :false-value="'0'"
+                    :label="hasPledgesLabel[contractData.has_pledges]" :error-messages="pvError.has_pledges"
+                    true-icon="tabler-check" false-icon="tabler-circle-x" color="success" />
                 </VCol>
               </VRow>
             </VCardText>
           </VCard>
-          <VCard
-            v-if="contractData.type == 'company'"
-            class="mb-6"
-            title="Information sur la société"
-          >
+          <VCard v-if="contractData.type == 'company'" class="mb-6" title="Information sur la société">
             <VCardText>
               <VRow cols="12">
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppTextField
-                    v-model="contractData.company_denomination"
-                    :error-messages="pvError.company_denomination"
-                    label="Dénomination"
-                    placeholder="Ex: Adjovidjo"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contractData.company_denomination" :error-messages="pvError.company_denomination"
+                    label="Dénomination" placeholder="Ex: Adjovidjo" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppTextField
-                    v-model="contractData.company_legal_status"
-                    :error-messages="pvError.company_legal_status"
-                    label="Forme juridique"
-                    placeholder="Ex: "
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contractData.company_legal_status" :error-messages="pvError.company_legal_status"
+                    label="Forme juridique" placeholder="Ex: " :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppTextField
-                    v-model="contractData.company_rccm_number"
-                    :error-messages="pvError.company_rccm_number"
-                    label="Numero RCCM"
-                    placeholder="Ex: RC-44E18"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contractData.company_rccm_number" :error-messages="pvError.company_rccm_number"
+                    label="Numero RCCM" placeholder="Ex: RC-44E18" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppTextField
-                    v-model="contractData.company_phone_number"
-                    :error-messages="pvError.company_phone_number"
-                    label="Telephone de la société"
-                    placeholder="Ex: +228 96 96 96 96"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contractData.company_phone_number" :error-messages="pvError.company_phone_number"
+                    label="Telephone de la société" placeholder="Ex: +228 96 96 96 96" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12">
-                  <AppTextField
-                    v-model="contractData.company_head_office_address"
-                    :error-messages="pvError.company_head_office_address"
-                    label="Addresse du siège social"
-                    placeholder="Ex: Lomé, Adewi"
-                    :rules="[requiredValidator]"
-                  />
+                  <AppTextField v-model="contractData.company_head_office_address"
+                    :error-messages="pvError.company_head_office_address" label="Addresse du siège social"
+                    placeholder="Ex: Lomé, Adewi" :rules="[requiredValidator]" />
                 </VCol>
               </VRow>
             </VCardText>
           </VCard>
-          <VCard
-            v-if="contractData.type == 'individual_business'"
-            class="mb-6"
-            title="Information sur l'entreprise individuele"
-          >
+          <VCard v-if="contractData.type == 'individual_business'" class="mb-6"
+            title="Information sur l'entreprise individuele">
             <VCardText>
               <VRow cols="12">
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppTextField
-                    v-model="contractData.individual_business_denomination"
-                    :error-messages="pvError.individual_business_denomination"
-                    label="Dénomination"
-                    placeholder="Ex: Agban"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contractData.individual_business_denomination"
+                    :error-messages="pvError.individual_business_denomination" label="Dénomination"
+                    placeholder="Ex: Agban" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppTextField
-                    v-model="contractData.individual_business_head_office_address"
-                    :error-messages="pvError.individual_business_head_office_address"
-                    label="Addresse du siège social"
-                    placeholder="Ex: Lomé, Adewi"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contractData.individual_business_head_office_address"
+                    :error-messages="pvError.individual_business_head_office_address" label="Addresse du siège social"
+                    placeholder="Ex: Lomé, Adewi" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppTextField
-                    v-model="contractData.individual_business_rccm_number"
-                    :error-messages="pvError.individual_business_rccm_number"
-                    label="Numero RCCM"
-                    placeholder="Ex: RC-44E18"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contractData.individual_business_rccm_number"
+                    :error-messages="pvError.individual_business_rccm_number" label="Numero RCCM"
+                    placeholder="Ex: RC-44E18" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                  lg="6"
-                >
-                  <AppTextField
-                    v-model="contractData.individual_business_phone_number"
-                    :error-messages="pvError.individual_business_phone_number"
-                    label="Telephone de la société"
-                    placeholder="Ex: +228 96 96 96 96"
-                    :rules="[requiredValidator]"
-                  />
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contractData.individual_business_phone_number"
+                    :error-messages="pvError.individual_business_phone_number" label="Telephone de la société"
+                    placeholder="Ex: +228 96 96 96 96" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12">
-                  <AppTextField
-                    v-model="contractData.individual_business_corporate_purpose"
-                    :error-messages="pvError.individual_business_corporate_purpose"
-                    label="Objet social"
-                    placeholder="Ex: "
-                    :rules="[requiredValidator]"
-                  />
+                  <AppTextField v-model="contractData.individual_business_corporate_purpose"
+                    :error-messages="pvError.individual_business_corporate_purpose" label="Objet social"
+                    placeholder="Ex: " :rules="[requiredValidator]" />
                 </VCol>
               </VRow>
             </VCardText>
@@ -532,17 +320,10 @@ const onSubmit = () => {
           <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
             <div class="d-flex flex-column justify-center" />
             <div class="d-flex gap-4 align-center flex-wrap">
-              <VBtn
-                type="reset"
-                variant="tonal"
-                color="primary"
-              >
+              <VBtn type="reset" variant="tonal" color="primary">
                 Effacer
               </VBtn>
-              <VBtn
-                type="submit"
-                class="me-3"
-              >
+              <VBtn type="submit" class="me-3">
                 Enregistrer
               </VBtn>
             </div>

@@ -23,7 +23,7 @@ const tableData = [
   { "title": "Durée", "value": vertalTrial.value.duration + " mois" },
   { "title": "Périodicité", "value": frenchMensuality[vertalTrial.value.periodicity] },
   { "title": "Taux d'intérêt HT", "value": vertalTrial.value.tax_fee_interest_rate + "%" },
-  { "title": "TAF", "value": vertalTrial.value.taf +"%" },
+  { "title": "TAF", "value": vertalTrial.value.taf + "%" },
   { "title": "Echéance TTC", "value": String(vertalTrial.value.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Frais de dossier", "value": String((vertalTrial.value.amount * vertalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Prime d'assurance", "value": String(vertalTrial.value.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
@@ -54,7 +54,7 @@ if (vertalTrial.duration > 13) {
             </VCol>
             <VCol cols="12">
               <h2 class="text-center">
-                vertalTrial N°{{ vertalTrial.committee_id }}
+                Procès Verbal N°{{ vertalTrial.committee_id }}
               </h2>
             </VCol>
             <VCol cols="6">
@@ -111,10 +111,7 @@ if (vertalTrial.duration > 13) {
             <VCol cols="12">
               <VTable class="text-no-wrap">
                 <tbody>
-                  <tr
-                    v-for="item in tableData"
-                    :key="item.key"
-                  >
+                  <tr v-for="item in tableData" :key="item.key">
                     <td colspan="5">
                       {{ item.title }}
                     </td>
@@ -133,16 +130,12 @@ if (vertalTrial.duration > 13) {
             </VCol>
             <VCol cols="12">
               <p>
-                <ul>
-                  <li
-                    v-for="(item, index) in vertalTrial.guarantees"
-                    :key="index"
-                    style="font-size: 20px"
-                  >
-                    {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
-                    CFA : {{ item.comment }}
-                  </li>
-                </ul>
+              <ul>
+                <li v-for="(item, index) in vertalTrial.guarantees" :key="index" style="font-size: 20px">
+                  {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
+                  CFA : {{ item.comment }}
+                </li>
+              </ul>
               </p>
             </VCol>
           </VCardText>

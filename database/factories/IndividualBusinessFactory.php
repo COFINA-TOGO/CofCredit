@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Contract;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,12 @@ class IndividualBusinessFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            "contract_id" => Contract::inRandomOrder()->first()->id ?? Contract::factory(),
+            "denomination" => $this->faker->company(),
+            "corporate_purpose" => "pme",
+            "head_office_address" => "Lomé",
+            "rccm_number" => $this->faker->unique()->numerify("####"),
+            "phone_number" => $this->faker->phoneNumber()
         ];
     }
 }

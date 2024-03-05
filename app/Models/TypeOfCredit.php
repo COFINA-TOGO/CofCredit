@@ -22,6 +22,7 @@ class TypeOfCredit extends Model
         "max_month",
     ];
 
+    protected $appends = ["full_name"];
     public function toArray()
     {
         $data = parent::toArray();
@@ -38,5 +39,10 @@ class TypeOfCredit extends Model
     public function verbals_trials(): HasMany
     {
         return $this->hasMany(VerbalTrial::class, 'type_of_credit_id', 'id');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->name . " " . $this->min_month . " à " . $this->max_month . " mois";
     }
 }

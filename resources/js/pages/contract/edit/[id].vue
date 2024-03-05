@@ -36,7 +36,6 @@ const getEmptyError = () => {
 
 const errorData = ref(getEmptyError())
 
-
 const {
   data: contractData,
 } = await useApi(createUrl(`/contract/${route.params.id}`, {
@@ -83,8 +82,8 @@ const typeList = [
 ]
 
 const hasPledgesLabel = {
-  true: 'Avec gage',
-  false: 'Sans gage',
+  '1': 'Avec gage',
+  '0': 'Sans gage',
 }
 
 const documentTypeList = [
@@ -265,9 +264,9 @@ const onSubmit = () => {
                   </VSlider>
                 </VCol>
                 <VCol cols="2">
-                  <VCheckbox v-model="contract.has_pledges" :label="hasPledgesLabel[contract.has_pledges]"
-                    :error-messages="errorData.has_pledges" true-icon="tabler-check" false-icon="tabler-circle-x"
-                    color="success" />
+                  <VCheckbox v-model="contract.has_pledges" :true-value="'1'" :false-value="'0'"
+                    :label="hasPledgesLabel[contract.has_pledges]" :error-messages="errorData.has_pledges"
+                    true-icon="tabler-check" false-icon="tabler-circle-x" color="success" />
                 </VCol>
               </VRow>
             </VCardText>

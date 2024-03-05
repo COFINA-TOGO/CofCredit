@@ -173,7 +173,7 @@ endpoints:
         custom: []
       tax_fee_interest_rate:
         name: tax_fee_interest_rate
-        description: "Fiilter par taux d'intérêt hors taxe(%)"
+        description: "Filter par taux d'intérêt hors taxe(%)"
         required: false
         example: null
         type: number
@@ -898,13 +898,13 @@ endpoints:
         name: id
         description: "L'ID du procès verbal"
         required: true
-        example: 17
+        example: 19
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 17
+      id: 19
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

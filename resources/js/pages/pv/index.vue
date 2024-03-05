@@ -24,7 +24,7 @@ const headers = [
   },
   {
     title: 'Type Credit',
-    key: 'type_of_credit.name',
+    key: 'type_of_credit.full_name',
   },
   {
     title: 'Montant',
@@ -118,8 +118,8 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
         <VRow>
           <!-- 👉 Select Status -->
           <VCol cols="12" sm="4">
-            <AppAutocomplete v-model="type_of_credit_id" placeholder="Type de crédit" item-title="name" item-value="id"
-              :items="type_of_credit_list" clearable clear-icon="tabler-x" />
+            <AppAutocomplete v-model="type_of_credit_id" placeholder="Type de crédit" item-title="full_name"
+              item-value="id" :items="type_of_credit_list" clearable clear-icon="tabler-x" />
           </VCol>
         </VRow>
       </VCardText>
@@ -188,6 +188,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
               :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)">
               <template #prev="slotProps">
                 <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                  <VIcon start icon="tabler-arrow-left" />
                   Précedent
                 </VBtn>
               </template>
@@ -195,6 +196,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
               <template #next="slotProps">
                 <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
                   Suivant
+                  <VIcon end icon="tabler-arrow-right" />
                 </VBtn>
               </template>
             </VPagination>
@@ -202,7 +204,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
         </template>
       </VDataTableServer>
     </VCard>
-    <VDialog v-model="isDialogVisible" persistent class="v-dialog-sm">
+    <VDialog v-model="isDialogVisible" class="v-dialog-sm">
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 

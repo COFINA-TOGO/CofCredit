@@ -12,14 +12,16 @@ return new class extends Migration {
     {
         Schema::create('c_a_t_s', function (Blueprint $table) {
             $table->id();
-            $table->string("credit_number");            //Le numéro du prêt
-            $table->string("sector_code");              //Le code secteur
-            $table->string("case_manager_code");        //Le code Chargé d'affaire
-            $table->date("first_deadline");             //La date de première échéance
-            $table->date("last_deadline");              //La date de dernière échéance
-            $table->string("credit_risk_rating");       //La note du risque Crédit ??
-            $table->string("source_of_reimbursement");  //La source du remboursement
-            $table->string("past_repayments");          //Les payements passé
+            $table->foreignId("contract_id")->constrained()->cascadeOnDelete();                                                     //Le contrat du
+            $table->string("credit_number");                                                                                        //Le numéro du prêt
+            $table->string("sector");                                                                                               //Le secteur
+            $table->date("first_deadline");                                                                                         //La date de première échéance
+            $table->date("last_deadline");                                                                                          //La date de dernière échéance
+            $table->enum("source_of_reimbursement", ["revenue_from_the_activity", "final_payer_settlement", "resale_of_goods"]);    //La source du remboursement
+            $table->string("instructions_from_the_risk_and_credit_department");                                                     //Les instructions du département risque et crédit
+            $table->string("outstanding_number_ready_to_settle");                                                                   //Le numéro encours prêt à solder
+            $table->decimal("other_expenses", 30, 3);                                                                               //Les autres frais
+            $table->decimal("teg", 30, 3);                                                                                          //Le TEG
             $table->timestamps();
         });
     }
@@ -32,11 +34,3 @@ return new class extends Migration {
         Schema::dropIfExists('c_a_t_s');
     }
 };
-
-"
-
-pour des questions de sécurité, les retraits E-coficash sont limité au total de 500 000 par opération avec un minimum de 5000
-
-Prière de nous apporter le support nécessaire pour apporter les dites modifications.
-
-";

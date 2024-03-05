@@ -1,10 +1,13 @@
+<!-- eslint-disable camelcase -->
 <script setup>
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
+import AppAutocomplete from '@/@core/components/app-form-elements/AppAutocomplete.vue';
 
 const isDialogVisible = ref(false)
-const idToDelete = ref(0);
-
+const idToDelete = ref(0)
+const type_of_credit_id = ref()
+const searchQuery = ref('')
 
 const headers = [
   {
@@ -21,7 +24,7 @@ const headers = [
   },
   {
     title: 'Type Credit',
-    key: 'type_of_credit.name',
+    key: 'type_of_credit.full_name',
   },
   {
     title: 'Montant',
@@ -41,22 +44,16 @@ const headers = [
     sortable: false,
   },
 ]
-const selectedStatus = ref()
-const searchQuery = ref('')
-const status = ref([
-  {
-    title: 'Scheduled',
-    value: 'Scheduled',
-  },
-  {
-    title: 'Publish',
-    value: 'Published',
-  },
-  {
-    title: 'Inactive',
-    value: 'Inactive',
-  },
-])
+
+const loadings = ref([])
+
+const load = i => {
+  loadings.value[i] = true
+  setTimeout(() => {
+    loadings.value[i] = false
+  }, 1000)
+}
+
 const itemsPerPage = ref(8)
 const page = ref(1)
 
@@ -70,10 +67,19 @@ const {
 } = await useApi(createUrl('/verbal-trial', {
   query: {
     search: searchQuery,
+    type_of_credit_id: type_of_credit_id,
     page: page,
     has_contract: 1,
     with_caf: 1,
     with_type_of_credit: 1,
+  },
+}))
+
+const {
+  data: type_of_credit_list_data,
+} = await useApi(createUrl('/type-of-credit', {
+  query: {
+    paginate: 0,
   },
 }))
 
@@ -86,6 +92,8 @@ const apiDelete = async id => {
 const pvList = computed(() => pvData.value.data)
 const totalPv = computed(() => pvData.value.total)
 const lastPage = computed(() => pvData.value.last_page)
+const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
+
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
 </script>
 
@@ -97,7 +105,7 @@ const lastPage = computed(() => pvData.value.last_page)
         <VRow>
           <VCardText>
             <h2>
-              Liste des Procès verbaux avec contrat
+              Liste des Procès verbaux en attente de contrat
             </h2>
           </VCardText>
         </VRow>
@@ -110,8 +118,8 @@ const lastPage = computed(() => pvData.value.last_page)
         <VRow>
           <!-- 👉 Select Status -->
           <VCol cols="12" sm="4">
-            <AppSelect v-model="selectedStatus" placeholder="Type de crédit" :items="status" clearable
-              clear-icon="tabler-x" />
+            <AppAutocomplete v-model="type_of_credit_id" placeholder="Type de crédit" item-title="full_name"
+              item-value="id" :items="type_of_credit_list" clearable clear-icon="tabler-x" />
           </VCol>
         </VRow>
       </VCardText>
@@ -132,11 +140,16 @@ const lastPage = computed(() => pvData.value.last_page)
             Export
           </VBtn>
 
-          <VBtn color="primary" prepend-icon="tabler-plus" @click="$router.push('/pv/add')">
+          <VBtn color="primary" prepend-icon="tabler-plus" :to="{ name: 'pv-add' }">
             Ajouter un PV
           </VBtn>
-          <VBtn color="primary" prepend-icon="tabler-refresh" @click="fetchPv()">
+          <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh" @click="fetchPv(); load(3)">
             Recharger
+            <template #loader>
+              <span class="custom-loader">
+                <VIcon icon="tabler-refresh" />
+              </span>
+            </template>
           </VBtn>
         </div>
       </div>
@@ -149,10 +162,10 @@ const lastPage = computed(() => pvData.value.last_page)
         :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
         <!-- Actions -->
         <template #item.actions="{ item }">
-          <IconBtn @click="$router.push('/pv/' + item.id)">
+          <IconBtn :to="{ name: 'pv-id', params: { id: item.id } }">
             <VIcon icon=" tabler-eye" />
           </IconBtn>
-          <IconBtn @click="$router.push('/pv/edit/' + item.id)">
+          <IconBtn :to="{ name: 'pv-edit-id', params: { id: item.id } }">
             <VIcon icon="tabler-edit" />
           </IconBtn>
           <IconBtn @click="$router.push('/pv/download/' + item.id)">
@@ -161,7 +174,6 @@ const lastPage = computed(() => pvData.value.last_page)
           <IconBtn @click="idToDelete = item.id; isDialogVisible = true">
             <VIcon icon="tabler-trash" />
           </IconBtn>
-
         </template>
 
         <template #bottom>
@@ -176,6 +188,7 @@ const lastPage = computed(() => pvData.value.last_page)
               :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)">
               <template #prev="slotProps">
                 <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                  <VIcon start icon="tabler-arrow-left" />
                   Précedent
                 </VBtn>
               </template>
@@ -183,6 +196,7 @@ const lastPage = computed(() => pvData.value.last_page)
               <template #next="slotProps">
                 <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
                   Suivant
+                  <VIcon end icon="tabler-arrow-right" />
                 </VBtn>
               </template>
             </VPagination>
@@ -190,8 +204,7 @@ const lastPage = computed(() => pvData.value.last_page)
         </template>
       </VDataTableServer>
     </VCard>
-    <VDialog v-model="isDialogVisible" persistent class="v-dialog-sm">
-
+    <VDialog v-model="isDialogVisible" class="v-dialog-sm">
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 
@@ -213,3 +226,20 @@ const lastPage = computed(() => pvData.value.last_page)
     </VDialog>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.custom-loader {
+  display: flex;
+  animation: loader 1s infinite;
+}
+
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

@@ -42,9 +42,10 @@ class VerbalTrialController extends Controller
      * @queryParam  due_amount                                              float               Filtrer par montant d'une échéance                                      No-example
      * @queryParam  administrative_fees_percentage                          float               Filtrer par frais de dossier(pourcentage)                               No-example
      * @queryParam  insurance_premium                                       float               Filtrer par prime d'assurance                                           No-example
-     * @queryParam  tax_fee_interest_rate                                   float               Fiilter par taux d'intérêt hors taxe(%)                                 No-example
+     * @queryParam  tax_fee_interest_rate                                   float               Filter par taux d'intérêt hors taxe(%)                                  No-example
      * @queryParam  caf_id                                                  int                 Filtrer par ID du CAF                                                   No-example
      * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
+     * @queryParam  has_contract                                            int                 Filtrer par présence de contrat                                         Example: 0
      *
      * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
      * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur du type de crédit.                        Example: 1
@@ -53,7 +54,6 @@ class VerbalTrialController extends Controller
      * @queryParam  with_contract                                           int                 Afficher le contrat.                                                    Example: 1
      * @queryParam  with_caf                                                int                 Afficher le CAF.                                                        Example: 1
      * @queryParam  with_creator                                            int                 Afficher le créateur du pv.                                             Example: 0
-     * @queryParam  has_contract                                            int                 Filtrer par présence de contrat                                         Example: 0
      * @queryParam  paginate                                                int                 Utiliser la pagination.                                 Example: 0
      *
      * @response 200

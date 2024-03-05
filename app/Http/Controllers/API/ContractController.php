@@ -46,6 +46,7 @@ class ContractController extends Controller
      * @queryParam  type                                                    string              Filtrer par type de contract.                                           No-example
      * @queryParam  has_pledges                                             int                 Filtrer par présence de gage                                            No-example
      * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
+     * @queryParam  has_cat                                                 int                 Filtrer par présence de cat.                                            Example: 0
      *
      * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
      * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
@@ -81,6 +82,15 @@ class ContractController extends Controller
                     ->orWhere('type', 'LIKE', "%$search%")
                     ->orWhere('has_pledges', 'LIKE', "%$search%")
                 ;
+            }
+
+            if (isset($request["has_cat"])) {
+                $has_cat = (int) $request["has_cat"];
+                if ($has_cat == 1) {
+                    $contractList->whereHas('c_a_t');
+                } else if ($has_cat == 0) {
+                    $contractList->whereDoesntHave('c_a_t');
+                }
             }
 
             foreach (["verbal_trial_id", "representative_birth_date", "representative_birth_place", "representative_nationality", "representative_home_address", "representative_type_of_identity_document", "representative_number_of_identity_document", "representative_date_of_issue_of_identity_document", "representative_phone_number", "risk_premium_percentage", "total_amount_of_interest", "number_of_due_dates", "type", "has_pledges", "creator_id"] as $filter) {

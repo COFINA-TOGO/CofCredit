@@ -1,73 +1,64 @@
 <!-- eslint-disable camelcase -->
 <script setup>
 const router = useRouter()
-const route = useRoute('contract-contract_id-guarantor-id')
+const route = useRoute('cat-id')
 
-const frenchMensuality = {
-  "mensual": "Mensuelle",
-  "quarterly": "Trimestrielle",
-  "semi-annual": "Semestrielle",
-  "annual": "Annuel",
-  "in-fine": "À la fin",
+const sourceOfReimbursement = {
+  "revenue_from_the_activity": "Recettes de l’activité",
+  "final_payer_settlement": "Règlement du payeur final",
+  "resale_of_goods": "Reventes des marchandise",
 }
 
-const documentTypeList = {
-  "cni": 'Carte d\'identité nationale',
-  "passport": 'Passeport',
-  "residence_certificate": 'Certificat de résidence',
-  "driving_licence": 'Permise de conduire',
-}
 
 const {
-  data: guarantor,
-} = await useApi(createUrl(`/contract/guarantor/${route.params.id}`, {
+  data: cat,
+} = await useApi(createUrl(`/cat/${route.params.id}`, {
   query: {
+    with_verbal_trial: 1
   },
 }))
 
 
-if (guarantor.value.status == 200) {
-  guarantor.value = guarantor.value.data.guarantor
+if (cat.value.status == 200) {
+  cat.value = cat.value.data.c_a_t
 } else {
-  router.push("/guarantor")
+  router.push("/cat")
 }
-console.log(guarantor.value)
 
 const tableData = [
-  { "title": "Nom", "value": guarantor.value.last_name },
-  { "title": "Date de naissance", "value": guarantor.value.birth_date },
-  { "title": "Lieu de naissance", "value": guarantor.value.birth_place },
-  { "title": "Nationalité", "value": guarantor.value.nationality },
-  { "title": "Addresse du domicile", "value": guarantor.value.home_address },
-  { "title": "Type de la pièce d'identité", "value": documentTypeList[guarantor.value.type_of_identity_document] },
-  { "title": "Numéro de la pièce d'identité", "value": guarantor.value.number_of_identity_document },
-  { "title": "Date de délivrance de la pièce d'identité", "value": guarantor.value.date_of_issue_of_identity_document },
-  { "title": "Fonction", "value": guarantor.value.function },
-  { "title": "Numéro de téléphone", "value": guarantor.value.phone_number },
+  { "title": "N° Comité", "value": cat.value.contract.verbal_trial.committee_id },
+  { "title": "Numéro de prêt", "value": cat.value.credit_number },
+  { "title": "Secteur", "value": cat.value.sector },
+  { "title": "Prière échéance", "value": cat.value.first_deadline },
+  { "title": "Dernière échéance", "value": cat.value.last_deadline },
+  { "title": "Source du remboursement", "value": sourceOfReimbursement[cat.value.source_of_reimbursement] },
+  { "title": "Instructions du département risque et crédit", "value": cat.value.instructions_from_the_risk_and_credit_department },
+  { "title": "Encours à solder", "value": cat.value.outstanding_number_ready_to_settle },
+  { "title": "Autres frais", "value": String(cat.value.other_expenses).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "TEG", "value": String(cat.value.teg).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
 ]
 </script>
 
 <template>
-  <section v-if="guarantor">
+  <section v-if="cat">
     <VRow>
       <VCol cols="12">
         <VCard>
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="11">
-              <VBtn :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: route.params.contract_id } }">
+              <VBtn :to="{ name: 'cat' }">
                 <VIcon icon="tabler-arrow-left" />
-                Garants
+                CATs
               </VBtn>
             </VCol>
             <VCol cols="1">
-              <VBtn
-                :to="{ name: 'contract-contract_id-guarantor-edit-id', params: { contract_id: route.params.contract_id, id: guarantor.id } }">
+              <VBtn :to="{ name: 'cat-edit-id', params: { id: cat.id } }">
                 Modifier
               </VBtn>
             </VCol>
             <VCol cols="12">
               <h2 class="text-center">
-                Garant N°{{ guarantor.id }}
+                CAT N°{{ cat.contract.verbal_trial.committee_id }}
               </h2>
             </VCol>
             <VCol cols="12">

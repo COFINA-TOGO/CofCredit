@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "bbd7df57-8d02-43b6-8db4-3d47bfe7213d",
+        "_postman_id": "86c690a1-22bb-464d-8218-826debae41a7",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -121,6 +121,388 @@
             ]
         },
         {
+            "name": "CAT",
+            "description": "\nEndPoints pour g\u00e9rer les CAT",
+            "item": [
+                {
+                    "name": "Affiche les CAT",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/cat",
+                            "query": [
+                                {
+                                    "key": "contract_id",
+                                    "value": "",
+                                    "description": "Filtrer par ID du contrat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "credit_number",
+                                    "value": "",
+                                    "description": "Filtrer par num\u00e9ro du cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "sector",
+                                    "value": "",
+                                    "description": "Filtrer par secteur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "first_deadline",
+                                    "value": "",
+                                    "description": "Filtrer par date de premi\u00e8re \u00e9ch\u00e9ance.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "last_deadline",
+                                    "value": "",
+                                    "description": "Filtrer par date de derni\u00e8re \u00e9ch\u00e9ance.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "source_of_reimbursement",
+                                    "value": "",
+                                    "description": "Filtrer par source du remboursement.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "instructions_from_the_risk_and_credit_department",
+                                    "value": "",
+                                    "description": "Filtrer par instructions du d\u00e9partement risque et cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "outstanding_number_ready_to_settle",
+                                    "value": "",
+                                    "description": "Filtrer par num\u00e9ro encours pr\u00eat \u00e0 solder.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "other_expenses",
+                                    "value": "",
+                                    "description": "Filtrer par autres frais.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "teg",
+                                    "value": "",
+                                    "description": "Filtrer par TEG.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_contract",
+                                    "value": "",
+                                    "description": "Afficher le contrat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_verbal_trial",
+                                    "value": "",
+                                    "description": "Afficher le PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_credit",
+                                    "value": "",
+                                    "description": "Afficher le type de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "",
+                                    "description": "Afficher le type de demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les garanties.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_creator",
+                                    "value": "",
+                                    "description": "Afficher le cr\u00e9ateur du contrat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "paginate",
+                                    "value": "",
+                                    "description": "Utiliser la pagination.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/cat?contract_id=&credit_number=&sector=&first_deadline=&last_deadline=&source_of_reimbursement=&instructions_from_the_risk_and_credit_department=&outstanding_number_ready_to_settle=&other_expenses=&teg=&with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&with_creator=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge la version word d'un CAT",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/cat\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/cat\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du CAT."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche un CAT",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/cat\/:id",
+                            "query": [
+                                {
+                                    "key": "with_contract",
+                                    "value": "",
+                                    "description": "Afficher le contrat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_verbal_trial",
+                                    "value": "",
+                                    "description": "Afficher le PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_credit",
+                                    "value": "",
+                                    "description": "Afficher le type de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "",
+                                    "description": "Afficher le type de demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les garanties.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_creator",
+                                    "value": "",
+                                    "description": "Afficher le cr\u00e9ateur du contrat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "paginate",
+                                    "value": "",
+                                    "description": "Utiliser la pagination.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/cat\/:id?with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&with_creator=&paginate=",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du CAT."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er un nouveau CAT",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/cat",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/cat"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"contract_id\":1,\"credit_number\":\"1534820\",\"sector\":\"Transport\",\"first_deadline\":\"2025-01-01\",\"last_deadline\":\"2025-12-31\",\"source_of_reimbursement\":\"revenue_from_the_activity\",\"instructions_from_the_risk_and_credit_department\":\"Restriction sur le compte sous reserve du retrait du tableau d\u2019amortissement et du contrat\",\"outstanding_number_ready_to_settle\":\"1534820\",\"other_expenses\":\"25000\",\"teg\":58563242}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour un CAT",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/cat\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/cat\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du CAT."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"contract_id\":1,\"credit_number\":\"1534820\",\"sector\":\"Transport\",\"first_deadline\":\"2025-01-01\",\"last_deadline\":\"2025-12-31\",\"source_of_reimbursement\":\"revenue_from_the_activity\",\"instructions_from_the_risk_and_credit_department\":\"Restriction sur le compte sous reserve du retrait du tableau d\u2019amortissement et du contrat\",\"outstanding_number_ready_to_settle\":\"1534820\",\"other_expenses\":\"25000\",\"teg\":58563242}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Supprime un CAT",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/cat\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/cat\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du CAT."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "Caution",
             "description": "\nEndPoints pour g\u00e9rer les cautions",
             "item": [
@@ -129,7 +511,7 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/guarantor",
+                            "path": "api\/contract\/guarantor",
                             "query": [
                                 {
                                     "key": "contract_id",
@@ -240,7 +622,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/guarantor?contract_id=&first_name=&last_name=&birth_date=&birth_place=&nationality=&home_address=&type_of_identity_document=&number_of_identity_document=&date_of_issue_of_identity_document=&function=&phone_number=&with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&paginate="
+                            "raw": "{{baseUrl}}\/api\/contract\/guarantor?contract_id=&first_name=&last_name=&birth_date=&birth_place=&nationality=&home_address=&type_of_identity_document=&number_of_identity_document=&date_of_issue_of_identity_document=&function=&phone_number=&with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -270,9 +652,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/guarantor\/download\/:id",
+                            "path": "api\/contract\/guarantor\/download\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/guarantor\/download\/:id",
+                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/download\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -310,9 +692,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/guarantor\/promissory-note\/download\/:id",
+                            "path": "api\/contract\/guarantor\/promissory-note\/download\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/guarantor\/promissory-note\/download\/:id",
+                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/promissory-note\/download\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -350,7 +732,7 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/guarantor\/:id",
+                            "path": "api\/contract\/guarantor\/:id",
                             "query": [
                                 {
                                     "key": "with_contract",
@@ -383,7 +765,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/guarantor\/:id?with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=",
+                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/:id?with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=",
                             "variable": [
                                 {
                                     "id": "id",
@@ -421,9 +803,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/guarantor",
+                            "path": "api\/contract\/guarantor",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/guarantor"
+                            "raw": "{{baseUrl}}\/api\/contract\/guarantor"
                         },
                         "method": "POST",
                         "header": [
@@ -456,9 +838,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/guarantor\/:id",
+                            "path": "api\/contract\/guarantor\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/guarantor\/:id",
+                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -499,9 +881,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/guarantor\/:id",
+                            "path": "api\/contract\/guarantor\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/guarantor\/:id",
+                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -1162,7 +1544,7 @@
                                 {
                                     "key": "tax_fee_interest_rate",
                                     "value": "",
-                                    "description": "Fiilter par taux d'int\u00e9r\u00eat hors taxe(%)",
+                                    "description": "Filter par taux d'int\u00e9r\u00eat hors taxe(%)",
                                     "disabled": true
                                 },
                                 {
@@ -1424,7 +1806,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "17",
+                                    "value": "19",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -1633,7 +2015,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "19",
+                                    "value": "9",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -1873,7 +2255,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "17",
+                                    "value": "12",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -2107,7 +2489,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "16",
+                                    "value": "18",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -2381,7 +2763,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "11",
+                                    "value": "1",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

@@ -70,7 +70,452 @@ paths:
           description: ''
       tags:
         - Authentification
-  /api/guarantor:
+  /api/cat:
+    get:
+      summary: 'Affiche les CAT'
+      operationId: afficheLesCAT
+      description: ''
+      parameters:
+        -
+          in: query
+          name: contract_id
+          description: 'Filtrer par ID du contrat.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par ID du contrat.'
+            example: null
+        -
+          in: query
+          name: credit_number
+          description: 'Filtrer par numéro du crédit.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par numéro du crédit.'
+            example: null
+        -
+          in: query
+          name: sector
+          description: 'Filtrer par secteur.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par secteur.'
+            example: null
+        -
+          in: query
+          name: first_deadline
+          description: 'Filtrer par date de première échéance.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par date de première échéance.'
+            example: null
+        -
+          in: query
+          name: last_deadline
+          description: 'Filtrer par date de dernière échéance.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par date de dernière échéance.'
+            example: null
+        -
+          in: query
+          name: source_of_reimbursement
+          description: 'Filtrer par source du remboursement.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par source du remboursement.'
+            example: null
+        -
+          in: query
+          name: instructions_from_the_risk_and_credit_department
+          description: 'Filtrer par instructions du département risque et crédit.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par instructions du département risque et crédit.'
+            example: null
+        -
+          in: query
+          name: outstanding_number_ready_to_settle
+          description: 'Filtrer par numéro encours prêt à solder.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par numéro encours prêt à solder.'
+            example: null
+        -
+          in: query
+          name: other_expenses
+          description: 'Filtrer par autres frais.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par autres frais.'
+            example: null
+        -
+          in: query
+          name: teg
+          description: 'Filtrer par TEG.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par TEG.'
+            example: null
+        -
+          in: query
+          name: with_contract
+          description: 'Afficher le contrat.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le contrat.'
+            example: 0
+        -
+          in: query
+          name: with_verbal_trial
+          description: 'Afficher le PV.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le PV.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_credit
+          description: 'Afficher le type de crédit.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de crédit.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_applicant
+          description: 'Afficher le type de demandeur.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de demandeur.'
+            example: 0
+        -
+          in: query
+          name: with_guarantees
+          description: 'Afficher les garanties.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les garanties.'
+            example: 0
+        -
+          in: query
+          name: with_creator
+          description: 'Afficher le créateur du contrat.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le créateur du contrat.'
+            example: 0
+        -
+          in: query
+          name: paginate
+          description: 'Utiliser la pagination.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Utiliser la pagination.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - CAT
+    post:
+      summary: 'Créer un nouveau CAT'
+      operationId: crerUnNouveauCAT
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - CAT
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contract_id:
+                  type: integer
+                  description: 'ID du contrat.'
+                  example: 1
+                credit_number:
+                  type: string
+                  description: 'Numéro du crédit.'
+                  example: '1534820'
+                sector:
+                  type: string
+                  description: Secteur.
+                  example: Transport
+                first_deadline:
+                  type: string
+                  description: 'Date de première échéance.'
+                  example: '2025-01-01'
+                last_deadline:
+                  type: string
+                  description: 'Date de dernière échéance.'
+                  example: '2025-12-31'
+                source_of_reimbursement:
+                  type: string
+                  description: 'Source du remboursement.'
+                  example: revenue_from_the_activity
+                instructions_from_the_risk_and_credit_department:
+                  type: string
+                  description: 'Instructions du département risque et crédit.'
+                  example: 'Restriction sur le compte sous reserve du retrait du tableau d’amortissement et du contrat'
+                outstanding_number_ready_to_settle:
+                  type: string
+                  description: 'Numéro encours prêt à solder.'
+                  example: '1534820'
+                other_expenses:
+                  type: string
+                  description: 'Autres frais.'
+                  example: '25000'
+                teg:
+                  type: integer
+                  description: TEG.
+                  example: 58563242
+  '/api/cat/download/{id}':
+    get:
+      summary: "Télécharge la version word d'un CAT"
+      operationId: tlchargeLaVersionWordDunCAT
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - CAT
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du CAT."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/cat/{id}':
+    get:
+      summary: 'Affiche un CAT'
+      operationId: afficheUnCAT
+      description: ''
+      parameters:
+        -
+          in: query
+          name: with_contract
+          description: 'Afficher le contrat.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le contrat.'
+            example: 0
+        -
+          in: query
+          name: with_verbal_trial
+          description: 'Afficher le PV.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le PV.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_credit
+          description: 'Afficher le type de crédit.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de crédit.'
+            example: 0
+        -
+          in: query
+          name: with_type_of_applicant
+          description: 'Afficher le type de demandeur.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le type de demandeur.'
+            example: 0
+        -
+          in: query
+          name: with_guarantees
+          description: 'Afficher les garanties.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les garanties.'
+            example: 0
+        -
+          in: query
+          name: with_creator
+          description: 'Afficher le créateur du contrat.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le créateur du contrat.'
+            example: 0
+        -
+          in: query
+          name: paginate
+          description: 'Utiliser la pagination.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Utiliser la pagination.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - CAT
+    put:
+      summary: 'Mettre à jour un CAT'
+      operationId: mettreJourUnCAT
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - CAT
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contract_id:
+                  type: integer
+                  description: 'ID du contrat.'
+                  example: 1
+                credit_number:
+                  type: string
+                  description: 'Numéro du crédit.'
+                  example: '1534820'
+                sector:
+                  type: string
+                  description: Secteur.
+                  example: Transport
+                first_deadline:
+                  type: string
+                  description: 'Date de première échéance.'
+                  example: '2025-01-01'
+                last_deadline:
+                  type: string
+                  description: 'Date de dernière échéance.'
+                  example: '2025-12-31'
+                source_of_reimbursement:
+                  type: string
+                  description: 'Source du remboursement.'
+                  example: revenue_from_the_activity
+                instructions_from_the_risk_and_credit_department:
+                  type: string
+                  description: 'Instructions du département risque et crédit.'
+                  example: 'Restriction sur le compte sous reserve du retrait du tableau d’amortissement et du contrat'
+                outstanding_number_ready_to_settle:
+                  type: string
+                  description: 'Numéro encours prêt à solder.'
+                  example: '1534820'
+                other_expenses:
+                  type: string
+                  description: 'Autres frais.'
+                  example: '25000'
+                teg:
+                  type: integer
+                  description: TEG.
+                  example: 58563242
+    delete:
+      summary: 'Supprime un CAT'
+      operationId: supprimeUnCAT
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - CAT
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du CAT."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/contract/guarantor:
     get:
       summary: 'Affiche les cautions'
       operationId: afficheLesCautions
@@ -342,7 +787,7 @@ paths:
                   type: string
                   description: 'Numéro de téléphone de la caution'
                   example: '+01 587-45-632-15'
-  '/api/guarantor/download/{id}':
+  '/api/contract/guarantor/download/{id}':
     get:
       summary: "Télécharge la version word d'une caution"
       operationId: tlchargeLaVersionWordDuneCaution
@@ -368,7 +813,7 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/guarantor/promissory-note/download/{id}':
+  '/api/contract/guarantor/promissory-note/download/{id}':
     get:
       summary: "Télécharge le billet à ordre d'une caution"
       operationId: tlchargeLeBilletOrdreDuneCaution
@@ -394,7 +839,7 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/guarantor/{id}':
+  '/api/contract/guarantor/{id}':
     get:
       summary: 'Affiche une caution'
       operationId: afficheUneCaution
@@ -1339,12 +1784,12 @@ paths:
         -
           in: query
           name: tax_fee_interest_rate
-          description: "Fiilter par taux d'intérêt hors taxe(%)"
+          description: "Filter par taux d'intérêt hors taxe(%)"
           example: null
           required: false
           schema:
             type: number
-            description: "Fiilter par taux d'intérêt hors taxe(%)"
+            description: "Filter par taux d'intérêt hors taxe(%)"
             example: null
         -
           in: query
@@ -2545,6 +2990,9 @@ tags:
   -
     name: Authentification
     description: "\nEndpoints pour gérer l_authentification"
+  -
+    name: CAT
+    description: "\nEndPoints pour gérer les CAT"
   -
     name: Caution
     description: "\nEndPoints pour gérer les cautions"

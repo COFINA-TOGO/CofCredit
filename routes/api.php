@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CATController;
 use App\Http\Controllers\API\GuarantorController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ContractController;
@@ -69,6 +70,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete("/{id}", [VerbalTrialController::class, "destroy"])->name("destroy");
     });
     Route::prefix("contract")->name("contract.")->group(function () {
+        Route::prefix("guarantor")->name("guarantor.")->group(function () {
+            Route::get("/", [GuarantorController::class, "index"])->name("index");
+            Route::get("/download/{id}", [GuarantorController::class, "download"])->name("download");
+            Route::get("/promissory-note/download/{id}", [GuarantorController::class, "promissory_note"])->name("promissory-note.download");
+            Route::get("/{id}", [GuarantorController::class, "show"])->name("show");
+            Route::post("/", [GuarantorController::class, "store"])->name("store");
+            Route::put("/{id}", [GuarantorController::class, "update"])->name("update");
+            Route::delete("/{id}", [GuarantorController::class, "destroy"])->name("destroy");
+        });
         Route::get("/", [ContractController::class, "index"])->name("index");
         Route::get("/download/{id}", [ContractController::class, "download"])->name("download");
         Route::get("/promissory-note/download/{id}", [ContractController::class, "promissory_note"])->name("promissory-note.download");
@@ -77,14 +87,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put("/{id}", [ContractController::class, "update"])->name("update");
         Route::delete("/{id}", [ContractController::class, "destroy"])->name("destroy");
     });
-    Route::prefix("guarantor")->name("guarantor.")->group(function () {
-        Route::get("/", [GuarantorController::class, "index"])->name("index");
-        Route::get("/download/{id}", [GuarantorController::class, "download"])->name("download");
-        Route::get("/promissory-note/download/{id}", [GuarantorController::class, "promissory_note"])->name("promissory-note.download");
-        Route::get("/{id}", [GuarantorController::class, "show"])->name("show");
-        Route::post("/", [GuarantorController::class, "store"])->name("store");
-        Route::put("/{id}", [GuarantorController::class, "update"])->name("update");
-        Route::delete("/{id}", [GuarantorController::class, "destroy"])->name("destroy");
+    Route::prefix("cat")->name("cat.")->group(function () {
+        Route::get("/", [CATController::class, "index"])->name("index");
+        Route::get("/download/{id}", [CATController::class, "download"])->name("download");
+        Route::get("/{id}", [CATController::class, "show"])->name("show");
+        Route::post("/", [CATController::class, "store"])->name("store");
+        Route::put("/{id}", [CATController::class, "update"])->name("update");
+        Route::delete("/{id}", [CATController::class, "destroy"])->name("destroy");
     });
 });
 

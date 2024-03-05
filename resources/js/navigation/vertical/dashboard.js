@@ -40,4 +40,18 @@ export default [
       },
     ],
   },
+  {
+    title: 'CAT',
+    icon: { icon: 'tabler-align-box-left-top' },
+    children: [
+      {
+        title: 'Ajouter',
+        to: 'cat-add',
+      },
+      {
+        title: 'Historique',
+        to: 'cat',
+      },
+    ],
+  },
 ]

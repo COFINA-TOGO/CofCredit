@@ -74,4 +74,8 @@ class Contract extends Model
     {
         return $this->belongsTo(User::class, "creator_id", "id");
     }
+
+    public function c_a_t(): HasOne{
+        return $this->hasOne(CAT::class, "contract_id", "id");
+    }
 }

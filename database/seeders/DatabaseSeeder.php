@@ -70,29 +70,15 @@ class DatabaseSeeder extends Seeder
         TypeOfCredit::factory(1)->create(["name" => "CREDIT  BFR", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
         TypeOfCredit::factory(1)->create(["name" => "CREDIT  BFR", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
 
-        TypeOfGuarantee::factory(1)->create(["name" => "Dépôt de garantie"]);
-        TypeOfGuarantee::factory(1)->create(["name" => "Caution personnelle et solidaire"]);
-        TypeOfGuarantee::factory(1)->create(["name" => "Gage de véhicule"]);
-        TypeOfGuarantee::factory(1)->create(["name" => "Gage d'équipement"]);
-        TypeOfGuarantee::factory(1)->create(["name" => "Billet à ordre"]);
-        TypeOfGuarantee::factory(1)->create(["name" => "Engagement de domiciliation de paiement"]);
-        TypeOfGuarantee::factory(1)->create(["name" => "Constitution de PEP"]);
-        TypeOfGuarantee::factory(1)->create(["name" => "Constitution de dépôt hebdomadaire"]);
-        TypeOfGuarantee::factory(1)->create(["name" => "Hypothèque"]);
-        TypeOfGuarantee::factory(1)->create(["name" => "Nantissement de Dépôt à terme (DAT)"]);
+        foreach (["Dépôt de garantie", "Caution personnelle et solidaire", "Gage de véhicule", "Gage d'équipement", "Billet à ordre", "Engagement de domiciliation de paiement", "Constitution de PEP", "Constitution de dépôt hebdomadaire", "Hypothèque", "Nantissement de Dépôt à terme (DAT)"] as $typeOfGuaranteeName) {
+            TypeOfGuarantee::factory(1)->create(["name" => $typeOfGuaranteeName]);
+        }
 
         VerbalTrial::factory(2)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) use ($credit_admin) {
             Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
             Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "individual_business", "creator_id" => $credit_admin->id])->each(function ($contract) {
                 Guarantor::factory(10)->create(["contract_id" => $contract->id]);
-                IndividualBusiness::factory(1)->create([
-                    "contract_id" => $contract->id,
-                    "denomination" => "ganam style",
-                    "corporate_purpose" => "pme",
-                    "head_office_address" => "Lomé",
-                    "rccm_number" => "R2D2",
-                    "phone_number" => "+228 90 90 90 90"
-                ]);
+                IndividualBusiness::factory(1)->create(["contract_id" => $contract->id]);
             });
         });
 
@@ -100,14 +86,7 @@ class DatabaseSeeder extends Seeder
             Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
             Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "company", "creator_id" => $credit_admin->id])->each(function ($contract) {
                 Guarantor::factory(10)->create(["contract_id" => $contract->id]);
-                Company::factory(1)->create([
-                    "contract_id" => $contract->id,
-                    "denomination" => "ganam style",
-                    "legal_status" => "pme",
-                    "head_office_address" => "Lomé",
-                    "rccm_number" => "R2D2",
-                    "phone_number" => "+228 90 90 90 90"
-                ]);
+                Company::factory(1)->create(["contract_id" => $contract->id]);
             });
         });
 
@@ -120,7 +99,7 @@ class DatabaseSeeder extends Seeder
 
 
         VerbalTrial::factory(15)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) {
-            Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+            Guarantee::factory(15)->create(["verbal_trial_id" => $verbalTrial->id]);
             // Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
             //     Guarantor::factory(1)->create(["contract_id" => $contract->id]);
             // });
@@ -129,7 +108,7 @@ class DatabaseSeeder extends Seeder
         $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
         $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
         DB::update("update personal_access_tokens set TOKEN = '8fb55a1d50842403ddc4ea7dc0c80a5d2e44eeb029f1077341babd46b68fe0ba' where ID = 1");
-        DB::update("update personal_access_tokens set TOKEN = '33fe21b6d2c9a877bdcb43e4e69fa85e0f084d3fe0e55af3a6750ce3bec66ae6' where ID = 2");
+        DB::update("update personal_access_tokens set TOKEN = 'fcccfeab1f00ed12473ff22080769ac16dea3274894f42ed68684679f97c7fda' where ID = 2");
         $plainTextToken = "1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644";
         $file = public_path('../.env');
         $lines = file($file);

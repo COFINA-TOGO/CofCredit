@@ -6,7 +6,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/guarantor
+    uri: api/contract/guarantor
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -216,7 +216,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/guarantor/download/{id}'
+    uri: 'api/contract/guarantor/download/{id}'
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -268,7 +268,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/guarantor/promissory-note/download/{id}'
+    uri: 'api/contract/guarantor/promissory-note/download/{id}'
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -320,7 +320,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/guarantor/{id}'
+    uri: 'api/contract/guarantor/{id}'
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -422,7 +422,7 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/guarantor
+    uri: api/contract/guarantor
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -594,7 +594,7 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/guarantor/{id}'
+    uri: 'api/contract/guarantor/{id}'
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -776,7 +776,7 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/guarantor/{id}'
+    uri: 'api/contract/guarantor/{id}'
     metadata:
       groupName: Caution
       groupDescription: |-
