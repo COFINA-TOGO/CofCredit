@@ -1,13 +1,17 @@
 <!-- eslint-disable camelcase -->
+
 <script setup>
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 import JsFileDownloader from 'js-file-downloader'
+import { $api } from '@/utils/api';
 
 const isDialogVisible = ref(false)
-const pvIdToDelete = ref(0)
+const contractIdToDelete = ref(0)
 const selectedType = ref()
 const searchQuery = ref('')
+const refInputEl = ref()
+const uploadState = ref('signed_contract')
 
 const headers = [
   {
@@ -27,16 +31,12 @@ const headers = [
     key: 'type',
   },
   {
-    title: 'Type Credit',
-    key: 'verbal_trial.type_of_credit.name',
-  },
-  {
     title: 'Montant',
     key: 'verbal_trial.amount',
   },
   {
-    title: 'Durée',
-    key: 'verbal_trial.duration',
+    title: 'Observations',
+    key: 'observations',
   },
   {
     title: 'Actions',
@@ -62,7 +62,7 @@ const updateOptions = options => {
 }
 
 const {
-  data: pvData,
+  data: contractData,
   execute: fetchContracts,
 } = await useApi(createUrl('/contract', {
   query: {
@@ -73,12 +73,14 @@ const {
     with_company: 1,
     with_individual_business: 1,
     with_creator: 1,
+    has_upload_completed: 0,
+    has_cat: 0,
   },
 }))
 
-const pvList = computed(() => pvData.value.data)
-const totalPv = computed(() => pvData.value.total)
-const lastPage = computed(() => pvData.value.last_page)
+const contractList = computed(() => contractData.value.data)
+const totalPv = computed(() => contractData.value.total)
+const lastPage = computed(() => contractData.value.last_page)
 
 const typeList = {
   "company": 'Société',
@@ -87,19 +89,18 @@ const typeList = {
 }
 
 const downloadFile = async (url, fileName) => {
-  const userToken = useCookie('userToken').value
-
   try {
     new JsFileDownloader({
       url: url,
       headers: [
-        { name: 'Authorization', value: `Bearer ${userToken}` },
+        { name: 'Authorization', value: `Bearer ${useCookie('userToken').value}` },
       ],
       nameCallback: function (name) {
         return fileName
       },
     })
     console.log('Téléchargement réussi')
+    fetchContracts()
   } catch (error) {
     console.error('Erreur lors du téléchargement:', error)
   }
@@ -109,11 +110,44 @@ const apiDelete = async id => {
   await $api(`contract/${id}`, { method: 'DELETE' })
   fetchContracts()
 }
+
+const uploadFile = async (id, event) => {
+  const { files } = event.target;
+  if (files && files.length === 1) {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64Image = reader.result;
+      try {
+        const response = await fetch(`/api/contract/upload/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${useCookie('userToken').value}`,
+          },
+          body: JSON.stringify({
+            [uploadState.value]: base64Image,
+          }),
+        });
+
+        if (response.ok) {
+          console.log('Document envoyé avec succès.');
+          fetchContracts();
+        } else {
+          console.error('Échec de l\'envoi du document.');
+        }
+      } catch (error) {
+        console.error('Erreur lors de l\'envoi du document:', error);
+      }
+    };
+    reader.readAsDataURL(files[0]);
+  } else {
+    console.error('Veuillez sélectionner un seul fichier.');
+  }
+}
 </script>
 
 <template>
   <div>
-    <!-- 👉 widgets -->
     <VCard class="mb-6">
       <VCardText>
         <VRow>
@@ -126,11 +160,9 @@ const apiDelete = async id => {
       </VCardText>
     </VCard>
 
-    <!-- 👉 pvs -->
     <VCard title="Filtres" class="mb-6">
       <VCardText>
         <VRow>
-          <!-- 👉 Select Status -->
           <VCol cols="12" sm="4">
             <AppSelect v-model="selectedType" placeholder="Type de contrat"
               :items="[{ value: 'company', title: 'Société' }, { value: 'particular', title: 'Particulier' }, { value: 'individual_business', title: 'Entreprise Individuel' }]"
@@ -143,15 +175,13 @@ const apiDelete = async id => {
 
       <div class="d-flex flex-wrap gap-4 mx-5">
         <div class="d-flex align-center">
-          <!-- 👉 Search  -->
-          <AppTextField v-model="searchQuery" placeholder="Rechercher un pv" density="compact" style="inline-size: 200px;"
-            class="me-3" />
+          <AppTextField v-model="searchQuery" placeholder="Rechercher un contrat" density="compact"
+            style="inline-size: 200px;" class="me-3" />
         </div>
 
         <VSpacer />
         <div class="d-flex gap-4 flex-wrap align-center">
-          <!-- 👉 Export button -->
-          <VBtn variant="tonal" color="secondary" prepend-icon="tabler-upload">
+          <VBtn variant="tonal" color="secondary" prepend-icon="tabler-download">
             Export
           </VBtn>
 
@@ -173,15 +203,27 @@ const apiDelete = async id => {
       <VDivider class="mt-4" />
 
 
-      <!-- 👉 Datatable  -->
-      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers" :items="pvList"
-        :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
+      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
+        :items="contractList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
+
         <template #item.type="{ item }">
           {{ typeList[item.type] }}
         </template>
 
         <template #item.verbal_trial.amount="{ item }">
           {{ String(item.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
+        </template>
+
+        <template #item.observations="{ item }">
+          <VList density="compact">
+            <VListItem v-for="observation in item.observations">
+              <VListItemTitle>
+                <VChip label>
+                  {{ observation }}
+                </VChip>
+              </VListItemTitle>
+            </VListItem>
+          </VList>
         </template>
 
         <template #item.actions="{ item }">
@@ -191,57 +233,95 @@ const apiDelete = async id => {
           <IconBtn :to="{ name: 'contract-edit-id', params: { id: item.id } }">
             <VIcon icon="tabler-edit" />
           </IconBtn>
-          <IconBtn @click="pvIdToDelete = item.id; isDialogVisible = true">
+          <IconBtn @click="contractIdToDelete = item.id; isDialogVisible = true">
             <VIcon icon="tabler-trash" />
           </IconBtn>
           <VBtn icon variant="text" size="small" color="medium-emphasis">
             <VIcon size="24" icon="tabler-dots-vertical" />
             <VMenu activator="parent">
               <VList>
-                <VListItem :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: item.id } }">
-                  <template #prepend>
-                    <VIcon icon="tabler-users" />
-                  </template>
+                <input ref="refInputEl" type="file" name="signed_contract" accept=".pdf,.png,.jpg" hidden
+                  @input="uploadFile(item.id, $event)" />
 
-                  <VListItemTitle>Garants</VListItemTitle>
-                </VListItem>
+                <VBadge inline :content="item.guarantors_count">
+                  <VListItem :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: item.id } }">
+                    <template #prepend>
+                      <VIcon icon="tabler-users" />
+                    </template>
+
+                    <VListItemTitle>
+                      Voir les Garants
+                    </VListItemTitle>
+                  </VListItem>
+                </VBadge>
                 <VListItem :to="{ name: 'pv-id', params: { id: item.verbal_trial.id } }">
+
                   <template #prepend>
                     <VIcon icon="tabler-eye" />
                   </template>
 
-                  <VListItemTitle>Pv</VListItemTitle>
+                  <VListItemTitle>Voir le Pv</VListItemTitle>
                 </VListItem>
+
                 <VDivider />
+                <!-- Télécharger contrat non-signé -->
                 <VListItem
                   @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
-                  <template #prepend>
-                    <VIcon icon="tabler-upload" />
-                  </template>
-                  <VListItemTitle>Contrat</VListItemTitle>
-                </VListItem>
-                <VListItem
-                  @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
+
                   <template #prepend>
                     <VIcon icon="tabler-download" />
                   </template>
-                  <VListItemTitle>Contrat</VListItemTitle>
+                  <VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
                 </VListItem>
-                <VDivider />
-                <VListItem
-                  @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
-                  <template #prepend>
-                    <VIcon icon="tabler-upload" />
-                  </template>
-                  <VListItemTitle>Billet à ordre</VListItemTitle>
-                </VListItem>
-                <VListItem
-                  @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
+                <!-- Télécharger contrat signé -->
+                <VListItem v-if="item.signed_contract_path"
+                  @click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
+
                   <template #prepend>
                     <VIcon icon="tabler-download" />
                   </template>
-                  <VListItemTitle>Billet à ordre</VListItemTitle>
+                  <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
                 </VListItem>
+                <!-- Télécharger billet à ordre non-signé -->
+                <VListItem
+                  @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-download" />
+                  </template>
+                  <VListItemTitle>Télécharger Billet à ordre non signé</VListItemTitle>
+                </VListItem>
+                <!-- Télécharger billet à ordre signé -->
+                <VListItem v-if="item.signed_promissory_note_path"
+                  @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-download" />
+                  </template>
+                  <VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
+                </VListItem>
+
+                <VDivider />
+                <!-- Ajouter Contrat signé -->
+                <VListItem v-if="item.signed_contract_path == null"
+                  @click="uploadState = 'signed_contract'; refInputEl?.click()">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-cloud-upload" />
+                  </template>
+                  <VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
+                </VListItem>
+
+                <!-- Ajouter Billet à ordre -->
+                <VListItem v-if="item.signed_promissory_note_path == null"
+                  @click="uploadState = 'signed_promissory_note'; refInputEl?.click()">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-cloud-upload" />
+                  </template>
+                  <VListItemTitle>Ajouter billet à ordre signé</VListItemTitle>
+                </VListItem>
+
               </VList>
             </VMenu>
           </VBtn>
@@ -290,7 +370,7 @@ const apiDelete = async id => {
           <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
             Annuler
           </VBtn>
-          <VBtn @click="apiDelete(pvIdToDelete); isDialogVisible = false">
+          <VBtn @click="apiDelete(contractIdToDelete); isDialogVisible = false">
             Supprimer
           </VBtn>
         </VCardText>

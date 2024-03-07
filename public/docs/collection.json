@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "86c690a1-22bb-464d-8218-826debae41a7",
+        "_postman_id": "13b08e3e-d1ed-481b-bbc6-b2df4a7d62e4",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -688,6 +688,46 @@
                     ]
                 },
                 {
+                    "name": "Sauvegarde le contrat ou proc\u00e8s verbal sign\u00e9",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract\/guarantor\/upload\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/upload\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du contrat."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
                     "name": "T\u00e9l\u00e9charge le billet \u00e0 ordre d'une caution",
                     "request": {
                         "url": {
@@ -1060,6 +1100,18 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "completed",
+                                    "value": "",
+                                    "description": "Filtrer par finalisation du dossier du contrat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "has_cat",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "with_verbal_trial",
                                     "value": "",
                                     "description": "Afficher le PV.",
@@ -1120,7 +1172,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&creator_id=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_company=&with_individual_business=&with_creator=&paginate="
+                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&creator_id=&completed=&has_cat=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_company=&with_individual_business=&with_creator=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -1180,6 +1232,46 @@
                         {
                             "header": [],
                             "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Sauvegarde le contrat ou proc\u00e8s verbal sign\u00e9",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract\/upload\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/contract\/upload\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du contrat."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
                             "body": "{}",
                             "name": ""
                         }
@@ -1560,6 +1652,12 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "has_contract",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de contrat",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "with_type_of_credit",
                                     "value": "",
                                     "description": "Afficher le type de cr\u00e9dit.",
@@ -1602,19 +1700,53 @@
                                     "disabled": true
                                 },
                                 {
-                                    "key": "has_contract",
-                                    "value": "",
-                                    "description": "Filtrer par pr\u00e9sence de contrat",
-                                    "disabled": true
-                                },
-                                {
                                     "key": "paginate",
                                     "value": "",
                                     "description": "Utiliser la pagination.",
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&creator_id=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1&with_creator=&has_contract=&paginate="
+                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&creator_id=&has_contract=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1&with_creator=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge la version word d'un PV",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/verbal-trial\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/verbal-trial\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du PV."
+                                }
+                            ]
                         },
                         "method": "GET",
                         "header": [
@@ -1806,7 +1938,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "19",
+                                    "value": "2",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -1829,6 +1961,46 @@
                         {
                             "header": [],
                             "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge la version word d'un PV",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du PV."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
                             "body": "{}",
                             "name": ""
                         }
@@ -2015,7 +2187,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "9",
+                                    "value": "3",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -2255,7 +2427,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "12",
+                                    "value": "16",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -2489,7 +2661,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "18",
+                                    "value": "20",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -2763,7 +2935,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "1",
+                                    "value": "9",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

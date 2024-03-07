@@ -10,6 +10,8 @@ const route = useRoute("contract-contract_id-guarantor")
 const isDialogVisible = ref(false)
 const guarantorIdToDelete = ref(0)
 const searchQuery = ref('')
+const refInputEl = ref()
+const uploadState = ref('signed_contract')
 
 const headers = [
   {
@@ -25,12 +27,12 @@ const headers = [
     key: 'number_of_identity_document',
   },
   {
-    title: 'Addresse',
-    key: 'home_address',
-  },
-  {
     title: 'Numéro de téléphone',
     key: 'phone_number',
+  },
+  {
+    title: 'Observations',
+    key: 'observations',
   },
   {
     title: 'Actions',
@@ -90,6 +92,40 @@ const downloadFile = async (url, fileName) => {
   }
 }
 
+const uploadFile = async (id, event) => {
+  const { files } = event.target;
+  if (files && files.length === 1) {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64Image = reader.result;
+      try {
+        const response = await fetch(`/api/contract/guarantor/upload/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${useCookie('userToken').value}`,
+          },
+          body: JSON.stringify({
+            [uploadState.value]: base64Image,
+          }),
+        });
+
+        if (response.ok) {
+          console.log('Document envoyé avec succès.');
+          fetchGuarantors();
+        } else {
+          console.error('Échec de l\'envoi du document.');
+        }
+      } catch (error) {
+        console.error('Erreur lors de l\'envoi du document:', error);
+      }
+    };
+    reader.readAsDataURL(files[0]);
+  } else {
+    console.error('Veuillez sélectionner un seul fichier.');
+  }
+}
+
 const apiDelete = async id => {
   await $api(`contract/guarantor/${id}`, { method: 'DELETE' })
   fetchGuarantors()
@@ -143,6 +179,27 @@ const apiDelete = async id => {
       <!-- 👉 Datatable  -->
       <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
         :items="guarantorList" :items-length="totalGuarantor" class="text-no-wrap" @update:options="updateOptions">
+
+
+        <template #item.observations="{ item }">
+          <VList density="compact">
+            <VListItem v-for="observation in item.observations">
+              <VListItemTitle>
+                <VChip label>
+                  {{ observation }}
+                </VChip>
+              </VListItemTitle>
+            </VListItem>
+            <VListItem v-if="item.observations.length == 0" v-for="observation in ['Dossier complet']">
+              <VListItemTitle>
+                <VChip color="success" label>
+                  {{ observation }}
+                </VChip>
+              </VListItemTitle>
+            </VListItem>
+          </VList>
+        </template>
+
         <template #item.actions="{ item }">
           <IconBtn
             :to="{ name: 'contract-contract_id-guarantor-id', params: { contract_id: route.params.contract_id, id: item.id } }">
@@ -159,20 +216,65 @@ const apiDelete = async id => {
             <VIcon size="24" icon="tabler-dots-vertical" />
             <VMenu activator="parent">
               <VList>
+                <input ref="refInputEl" type="file" name="signed_contract" accept=".pdf,.png,.jpg" hidden
+                  @input="uploadFile(item.id, $event)" />
+
+                <!-- Télécharger contrat non-signé -->
                 <VListItem
-                  @click="downloadFile(`/api/guarantor/download/${item.id}`, `Contrat-caution-${item.id}-credit-${item.contract.verbal_trial.committee_id}.docx`)">
+                  @click="downloadFile(`/api/contract/guarantor/download/${item.id}`, `Contrat-Caution-${item.contract.verbal_trial.committee_id}.docx`)">
+
                   <template #prepend>
                     <VIcon icon="tabler-download" />
                   </template>
-                  <VListItemTitle>Contrat</VListItemTitle>
+                  <VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
+                </VListItem>
+                <!-- Télécharger contrat signé -->
+                <VListItem v-if="item.signed_contract_path"
+                  @click="downloadFile(item.signed_contract_path, `Contrat-Caution-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-download" />
+                  </template>
+                  <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
+                </VListItem>
+                <!-- Télécharger billet à ordre non-signé -->
+                <VListItem
+                  @click="downloadFile(`/api/contract/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.contract.verbal_trial.committee_id}.docx`);">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-download" />
+                  </template>
+                  <VListItemTitle>Télécharger Billet à ordre non signé</VListItemTitle>
+                </VListItem>
+                <!-- Télécharger billet à ordre signé -->
+                <VListItem v-if="item.signed_promissory_note_path"
+                  @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-Caution-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-download" />
+                  </template>
+                  <VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
                 </VListItem>
 
-                <VListItem
-                  @click="downloadFile(`/api/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-caution-${item.id}-${item.contract.verbal_trial.committee_id}.docx`);">
+                <VDivider />
+                <!-- Ajouter Contrat signé -->
+                <VListItem v-if="item.signed_contract_path == null"
+                  @click="uploadState = 'signed_contract'; refInputEl?.click()">
+
                   <template #prepend>
-                    <VIcon icon="tabler-download" />
+                    <VIcon icon="tabler-cloud-upload" />
                   </template>
-                  <VListItemTitle>Billet à ordre</VListItemTitle>
+                  <VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
+                </VListItem>
+
+                <!-- Ajouter Billet à ordre -->
+                <VListItem v-if="item.signed_promissory_note_path == null"
+                  @click="uploadState = 'signed_promissory_note'; refInputEl?.click()">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-cloud-upload" />
+                  </template>
+                  <VListItemTitle>Ajouter billet à ordre signé</VListItemTitle>
                 </VListItem>
               </VList>
             </VMenu>

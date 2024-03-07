@@ -63,10 +63,10 @@ class UserController extends Controller
 
 
             if (isset($request["paginate"]) && ($request->paginate == false)) {
-                $userList = $userList->orderByDesc('updated_at')->get();
+                $userList = $userList->orderByDesc('created_at')->get();
                 $data = ["data" => $userList, "total" => count($userList)];
             } else {
-                $data = $userList->orderByDesc('updated_at')->paginate(8)->toArray();
+                $data = $userList->orderByDesc('created_at')->paginate(8)->toArray();
             }
 
             return $this->responseOkPaginate($data);

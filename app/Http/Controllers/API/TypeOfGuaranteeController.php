@@ -52,10 +52,10 @@ class TypeOfGuaranteeController extends Controller
             // }
 
             if (isset($request["paginate"]) && ($request->paginate == false)) {
-                $typeOfGuaranteeList = $typeOfGuaranteeList->orderByDesc('updated_at')->get();
+                $typeOfGuaranteeList = $typeOfGuaranteeList->orderByDesc('created_at')->get();
                 $data = ["data" => $typeOfGuaranteeList, "total" => count($typeOfGuaranteeList)];
             } else {
-                $data = $typeOfGuaranteeList->orderByDesc('updated_at')->paginate(8)->toArray();
+                $data = $typeOfGuaranteeList->orderByDesc('created_at')->paginate(8)->toArray();
             }
 
             return $this->responseOkPaginate($data);

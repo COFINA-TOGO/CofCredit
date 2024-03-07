@@ -25,6 +25,8 @@ return new class extends Migration {
             $table->string("nationality");
             $table->string("function");
             $table->string("phone_number");
+            $table->string("signed_contract_path")->nullable();
+            $table->string("signed_promissory_note_path")->nullable();
             $table->timestamps();
         });
     }

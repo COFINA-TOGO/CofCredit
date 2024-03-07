@@ -196,6 +196,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: false
         custom: []
+      has_contract:
+        name: has_contract
+        description: 'Filtrer par présence de contrat'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       with_type_of_credit:
         name: with_type_of_credit
         description: 'Afficher le type de crédit.'
@@ -259,15 +268,6 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      has_contract:
-        name: has_contract
-        description: 'Filtrer par présence de contrat'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
       paginate:
         name: paginate
         description: 'Utiliser la pagination.'
@@ -278,6 +278,7 @@ endpoints:
         exampleWasSpecified: true
         custom: []
     cleanQueryParameters:
+      has_contract: 0
       with_type_of_credit: 0
       with_type_of_applicant: 1
       with_guarantees: 1
@@ -285,8 +286,59 @@ endpoints:
       with_contract: 1
       with_caf: 1
       with_creator: 0
-      has_contract: 0
       paginate: 0
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/verbal-trial/download/{id}'
+    metadata:
+      groupName: 'Procès Verbal'
+      groupDescription: |-
+
+        EndPoints pour gérer les Procès verbaux
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Télécharge la version word d'un PV"
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du PV."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -896,13 +948,13 @@ endpoints:
         name: id
         description: "L'ID du procès verbal"
         required: true
-        example: 19
+        example: 2
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 19
+      id: 2
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -911,6 +963,58 @@ endpoints:
     responses:
       -
         status: 204
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/download/{id}'
+    metadata:
+      groupName: 'Procès Verbal'
+      groupDescription: |-
+
+        EndPoints pour gérer les Procès verbaux
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Télécharge la version word d'un PV"
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du PV."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
         content: '{}'
         headers: []
         description: ''

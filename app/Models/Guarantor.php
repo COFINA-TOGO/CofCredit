@@ -27,9 +27,11 @@ class Guarantor extends Model
         "date_of_issue_of_identity_document",
         "function",
         "phone_number",
+        'signed_contract_path',
+        'signed_promissory_note_path',
     ];
 
-    protected $appends = ["full_name"];
+    protected $appends = ["full_name", "observations"];
 
     public function toArray()
     {
@@ -49,5 +51,16 @@ class Guarantor extends Model
     public function getFullNameAttribute()
     {
         return $this->first_name . " " . $this->last_name;
+    }
+
+    public function getObservationsAttribute()
+    {
+        $observations = [];
+        if (!$this->signed_contract_path)
+            $observations[] = "Contrat signé manquant";
+        if (!$this->signed_promissory_note_path)
+            $observations[] = "Billet à ordre signé manquant";
+
+        return $observations;
     }
 }

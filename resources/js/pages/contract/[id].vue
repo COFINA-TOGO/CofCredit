@@ -1,4 +1,5 @@
 <!-- eslint-disable camelcase -->
+
 <script setup>
 const router = useRouter()
 const route = useRoute("contract-id")
@@ -92,9 +93,9 @@ if (contract.value.verbal_trial.duration > 13) {
                 Type de concours solicité
               </p>
               <br>
-              <p style="font-size: 20px">
+              <!-- <p style="font-size: 20px">
                 Date de validation: {{ contract.verbal_trial.created_at }}
-              </p>
+              </p> -->
             </VCol>
             <VCol cols="6">
               <p style="font-size: 20px">
@@ -102,8 +103,8 @@ if (contract.value.verbal_trial.duration > 13) {
               </p>
               <p style="font-size: 20px">
                 : <strong> {{ contract.verbal_trial.applicant_last_name + " " +
-                  contract.verbal_trial.applicant_first_name
-                }}</strong>
+    contract.verbal_trial.applicant_first_name
+                  }}</strong>
               </p>
               <p style="font-size: 20px">
                 : {{ contract.verbal_trial.account_number }}

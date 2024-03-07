@@ -53,10 +53,10 @@ class TypeOfApplicantController extends Controller
             }
 
             if (isset($request["paginate"]) && ($request->paginate == false)) {
-                $typeOfApplicantList = $typeOfApplicantList->orderByDesc('updated_at')->get();
+                $typeOfApplicantList = $typeOfApplicantList->orderByDesc('created_at')->get();
                 $data = ["data" => $typeOfApplicantList, "total" => count($typeOfApplicantList)];
             } else {
-                $data = $typeOfApplicantList->orderByDesc('updated_at')->paginate(8)->toArray();
+                $data = $typeOfApplicantList->orderByDesc('created_at')->paginate(8)->toArray();
             }
 
             return $this->responseOkPaginate($data);

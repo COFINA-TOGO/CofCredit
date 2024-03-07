@@ -1,4 +1,5 @@
 <!-- eslint-disable camelcase -->
+
 <script setup>
 import { ref } from 'vue'
 
@@ -37,15 +38,28 @@ const getEmptyError = () => {
 const errorData = ref(getEmptyError())
 
 const {
+  data: verbalTrialListData,
+} = await useApi(createUrl('/verbal-trial', {
+  query: {
+    has_contract: 0,
+    paginate: 0,
+  },
+}))
+const verbalTrialList = computed(() => verbalTrialListData.value.data)
+
+
+const {
   data: contractData,
 } = await useApi(createUrl(`/contract/${route.params.id}`, {
   query: {
+    with_verbal_trial: 1,
     with_company: 1,
     with_individual_business: 1,
   },
 }))
 
 var contract = ref(contractData.value.data.contract)
+verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(contract.value.verbal_trial)))
 if (contract.value.company == null) {
   contract.value.company = {
     "denomination": "",
@@ -65,15 +79,6 @@ if (contract.value.individual_business == null) {
   }
 }
 
-const {
-  data: verbalTrialListData,
-} = await useApi(createUrl('/verbal-trial?has_contract=0', {
-  query: {
-    "paginate": 0,
-  },
-}))
-
-const verbalTrialList = computed(() => verbalTrialListData.value.data)
 
 const typeList = [
   { value: "company", title: 'Société' },
@@ -122,7 +127,6 @@ const onSubmit = () => {
         $data.company_rccm_number = contract.value.company.rccm_number
         $data.company_phone_number = contract.value.company.phone_number
       } else if (contract.value.type == "individual_business") {
-        console.log(contract.value)
         $data.individual_business_denomination = contract.value.individual_business.denomination
         $data.individual_business_corporate_purpose = contract.value.individual_business.corporate_purpose
         $data.individual_business_head_office_address = contract.value.individual_business.head_office_address
@@ -196,8 +200,8 @@ const onSubmit = () => {
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="contract.representative_nationality"
-                    :error-messages="errorData.representative_nationality" label="Nationalité" placeholder="Ex: Togolaise"
-                    :rules="[requiredValidator]" />
+                    :error-messages="errorData.representative_nationality" label="Nationalité"
+                    placeholder="Ex: Togolaise" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="contract.representative_home_address"

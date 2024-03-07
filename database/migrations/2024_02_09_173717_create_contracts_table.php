@@ -27,6 +27,8 @@ return new class extends Migration {
             $table->enum('type', ['particular', 'company', 'individual_business']);
             $table->boolean("has_pledges")->default(0);
             $table->foreignId("creator_id")->constrained(table: "users", column: "id")->cascadeOnDelete();
+            $table->string("signed_contract_path")->nullable();
+            $table->string("signed_promissory_note_path")->nullable();
             $table->timestamps();
         });
     }

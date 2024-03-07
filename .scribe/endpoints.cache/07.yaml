@@ -269,6 +269,58 @@ endpoints:
     custom: []
   -
     httpMethods:
+      - POST
+    uri: 'api/contract/guarantor/upload/{id}'
+    metadata:
+      groupName: Caution
+      groupDescription: |-
+
+        EndPoints pour gérer les cautions
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Sauvegarde le contrat ou procès verbal signé'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du contrat."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 204
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
       - GET
     uri: 'api/contract/guarantor/promissory-note/download/{id}'
     metadata:

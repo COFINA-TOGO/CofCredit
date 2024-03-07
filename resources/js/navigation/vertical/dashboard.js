@@ -34,9 +34,11 @@ export default [
       },
       {
         title: 'En attente de CAT',
+        to: 'contract-waiting-cat',
       },
       {
         title: 'Historique',
+        to: 'contract-historical',
       },
     ],
   },

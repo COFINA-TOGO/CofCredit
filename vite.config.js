@@ -120,4 +120,11 @@ export default defineConfig({
       './resources/js/**/*.vue',
     ],
   },
+  server: {
+    // Configurations du serveur...
+    watch: {
+      // Ignorer les changements dans les dossiers storage et public
+      ignored: ['storage/**', 'public/**']
+    }
+  }
 })

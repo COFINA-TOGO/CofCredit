@@ -7,10 +7,13 @@ use App\Http\Traits\CustomResponseTrait;
 use App\Models\Guarantee;
 use App\Models\User;
 use App\Models\VerbalTrial;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 
 /**
@@ -106,10 +109,10 @@ class VerbalTrialController extends Controller
             }
 
             if (isset($request["paginate"]) && ($request->paginate == false)) {
-                $verbalTrialList = $verbalTrialList->orderByDesc('updated_at')->get();
+                $verbalTrialList = $verbalTrialList->orderByDesc('created_at')->get();
                 $data = ["data" => $verbalTrialList, "total" => count($verbalTrialList)];
             } else {
-                $data = $verbalTrialList->orderByDesc('updated_at')->paginate(8)->toArray();
+                $data = $verbalTrialList->orderByDesc('created_at')->paginate(8)->toArray();
             }
 
             return $this->responseOkPaginate($data);
@@ -121,14 +124,14 @@ class VerbalTrialController extends Controller
     /**
      * Affiche un procès verbal
      *
-     * @urlParam    id                                  int required    L'ID du procès verbal.                                          Example: 1
+     * @urlParam    id                                                      int required    L'ID du procès verbal.                                          Example: 1
      *
-     * @queryParam  with_type_of_credit                 int             Afficher le type de crédit.                                     Example: 0
-     * @queryParam  with_type_of_applicant              int             Afficher le type de demandeur du type de crédit.                Example: 1
-     * @queryParam  with_guarantees                     int             Afficher les garanties.                                         Example: 1
-     * @queryParam  with_type_of_guarantees             int             Afficher les types des garanties.                               Example: 1
-     * @queryParam  with_contract                       int             Afficher le contrat.                                            Example: 1
-     * @queryParam  with_caf                            int             Afficher le CAF.                                                Example: 1
+     * @queryParam  with_type_of_credit                                     int             Afficher le type de crédit.                                     Example: 0
+     * @queryParam  with_type_of_applicant                                  int             Afficher le type de demandeur du type de crédit.                Example: 1
+     * @queryParam  with_guarantees                                         int             Afficher les garanties.                                         Example: 1
+     * @queryParam  with_type_of_guarantees                                 int             Afficher les types des garanties.                               Example: 1
+     * @queryParam  with_contract                                           int             Afficher le contrat.                                            Example: 1
+     * @queryParam  with_caf                                                int             Afficher le CAF.                                                Example: 1
      *
      * @response 200
      */
@@ -150,6 +153,55 @@ class VerbalTrialController extends Controller
             }
         } else {
             return $this->responseError(["id" => "Le procès verbal n'existe pas"], 404);
+        }
+    }
+
+    /**
+     * Télécharge la version word d'un PV
+     *
+     * @urlParam    id                                                      int     required    L'ID du PV.                                                         Example: 1
+     *
+     * @response 200
+     */
+    public function download(Request $request, int $id)
+    {
+        $verbalTrial = VerbalTrial::find($id);
+        if ($verbalTrial) {
+            // if (($authorisation = Gate::inspect('view', $verbalTrial))->allowed()) {
+            $templateProcessor = new TemplateProcessor("../document_templates/PVs/PV.docx");
+            $data = $verbalTrial->toArray();
+            $data = array_merge($data, collect($verbalTrial->caf)->mapWithKeys(function ($value, $key) {
+                return ['caf.' . $key => $value];
+            })->all());
+            $data = array_merge($data, collect($verbalTrial->type_of_credit)->mapWithKeys(function ($value, $key) {
+                return ['type_of_credit.' . $key => $value];
+            })->all());
+
+            $data["administrative_fees_percentage.value"] = number_format((float) $data["administrative_fees_percentage"] * $data["amount"] / 100, 0, ',', ' ');
+            $data["created_at"] = Carbon::parse($verbalTrial->created_at)->format("d/m/Y");
+            $data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
+            $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
+
+            $guaranteeList = [];
+            foreach ($verbalTrial->guarantees as $guarantee) {
+                $tmp = $guarantee->toArray();
+                $tmp["value"] = number_format((float) $tmp["value"], 0, ',', ' ');
+                $guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
+                    return ['type_of_guarantee.' . $key => $value];
+                })->all());
+            }
+            $templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+
+            $templateProcessor->setValues($data);
+            // return $data;
+
+            // Enregistrez les modifications dans un nouveau fichier
+            $outputFilePath = public_path("PV-" . $verbalTrial->committee_id . ".docx");
+            $templateProcessor->saveAs($outputFilePath);
+
+            return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
+        } else {
+            return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
         }
     }
 

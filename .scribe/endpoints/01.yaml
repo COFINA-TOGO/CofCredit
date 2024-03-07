@@ -212,6 +212,24 @@ endpoints:
         enumValues: []
         exampleWasSpecified: false
         custom: []
+      completed:
+        name: completed
+        description: 'Filtrer par finalisation du dossier du contrat.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      has_cat:
+        name: has_cat
+        description: 'Filtrer par présence de cat.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       with_verbal_trial:
         name: with_verbal_trial
         description: 'Afficher le PV.'
@@ -303,6 +321,8 @@ endpoints:
         exampleWasSpecified: true
         custom: []
     cleanQueryParameters:
+      completed: 0
+      has_cat: 0
       with_verbal_trial: 0
       with_type_of_credit: 0
       with_type_of_applicant: 0
@@ -371,6 +391,58 @@ endpoints:
     responses:
       -
         status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/contract/upload/{id}'
+    metadata:
+      groupName: Contrat
+      groupDescription: |-
+
+        EndPoints pour gérer les contrats
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Sauvegarde le contrat ou procès verbal signé'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "L'ID du contrat."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 204
         content: '{}'
         headers: []
         description: ''

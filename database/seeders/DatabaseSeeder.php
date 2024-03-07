@@ -77,7 +77,7 @@ class DatabaseSeeder extends Seeder
         VerbalTrial::factory(2)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) use ($credit_admin) {
             Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
             Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "individual_business", "creator_id" => $credit_admin->id])->each(function ($contract) {
-                Guarantor::factory(10)->create(["contract_id" => $contract->id]);
+                Guarantor::factory(3)->create(["contract_id" => $contract->id]);
                 IndividualBusiness::factory(1)->create(["contract_id" => $contract->id]);
             });
         });
@@ -85,7 +85,7 @@ class DatabaseSeeder extends Seeder
         VerbalTrial::factory(2)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) use ($credit_admin) {
             Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
             Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "company", "creator_id" => $credit_admin->id])->each(function ($contract) {
-                Guarantor::factory(10)->create(["contract_id" => $contract->id]);
+                Guarantor::factory(3)->create(["contract_id" => $contract->id]);
                 Company::factory(1)->create(["contract_id" => $contract->id]);
             });
         });
@@ -93,7 +93,7 @@ class DatabaseSeeder extends Seeder
         VerbalTrial::factory(2)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) use ($credit_admin) {
             Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
             Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
-                Guarantor::factory(10)->create(["contract_id" => $contract->id]);
+                Guarantor::factory(3)->create(["contract_id" => $contract->id]);
             });
         });
 
@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
         $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
         $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
         DB::update("update personal_access_tokens set TOKEN = '8fb55a1d50842403ddc4ea7dc0c80a5d2e44eeb029f1077341babd46b68fe0ba' where ID = 1");
-        DB::update("update personal_access_tokens set TOKEN = 'fcccfeab1f00ed12473ff22080769ac16dea3274894f42ed68684679f97c7fda' where ID = 2");
+        DB::update("update personal_access_tokens set TOKEN = '52042f3785b8c80e8737f149211459ea2802d89a7c875b95ce51e15bd5c7d8ec' where ID = 2");
         $plainTextToken = "1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644";
         $file = public_path('../.env');
         $lines = file($file);

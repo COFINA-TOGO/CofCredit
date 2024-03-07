@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
 use App\Models\CAT;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -79,10 +80,10 @@ class CATController extends Controller
             }
 
             if (isset($request["paginate"]) && ($request->paginate == false)) {
-                $c_a_tList = $c_a_tList->orderByDesc('updated_at')->get();
+                $c_a_tList = $c_a_tList->orderByDesc('created_at')->get();
                 $data = ["data" => $c_a_tList, "total" => count($c_a_tList)];
             } else {
-                $data = $c_a_tList->orderByDesc('updated_at')->paginate(8)->toArray();
+                $data = $c_a_tList->orderByDesc('created_at')->paginate(8)->toArray();
             }
 
             return $this->responseOkPaginate($data);
@@ -139,7 +140,7 @@ class CATController extends Controller
         $c_a_t = CAT::find($id);
         if ($c_a_t) {
             // if (($authorisation = Gate::inspect('view', $c_a_t))->allowed()) {
-            $templateProcessor = new TemplateProcessor("../storage/app/public/templates/CATs/CAT.DOC");
+            $templateProcessor = new TemplateProcessor("../document_templates/CATs/CAT.docx");
             $data = $c_a_t->toArray();
             $data = array_merge($data, collect($c_a_t->contract)->mapWithKeys(function ($value, $key) {
                 return ['contract.' . $key => $value];
@@ -150,34 +151,39 @@ class CATController extends Controller
             $data = array_merge($data, collect($c_a_t->contract->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
                 return ['contract.verbal_trial.type_of_credit.' . $key => $value];
             })->all());
+            $data = array_merge($data, collect($c_a_t->contract->verbal_trial->caf)->mapWithKeys(function ($value, $key) {
+                return ['contract.verbal_trial.caf.' . $key => $value];
+            })->all());
             $data = array_merge($data, collect($c_a_t->contract->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
                 return ['contract.verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
             })->all());
+            $source_of_reimbursementTranslate = [
+                "revenue_from_the_activity" => "Recettes de l’activité",
+                "final_payer_settlement" => "Règlement du payeur final",
+                "resale_of_goods" => "Reventes des marchandise",
+            ];
 
             $data["ht_rate"] = "17";
-            $data["verbal_trial.day_due_amount"] = ((float) $data["verbal_trial.due_amount"]) / 20;
-            $data["verbal_trial.day_due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.day_due_amount"])->locale('fr')->toLetters();
-            $data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
-            $data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
-            $data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-            $data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
-            $data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
-            $data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
-            $data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-            $data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
-            $data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
-            $data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
-            $data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
-            $data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      : « 1% du capital restant dû après 12 mois »";
+            $data["source_of_reimbursement.fr"] = $source_of_reimbursementTranslate[$data["source_of_reimbursement"]];
+            $data["date_of_approval"] = Carbon::parse($c_a_t->contract->verbal_trial->created_at)->format("d/m/Y");
+            $data["first_deadline"] = Carbon::parse($c_a_t->first_deadline)->format("d/m/Y");
+            $data["last_deadline"] = Carbon::parse($c_a_t->last_deadline)->format("d/m/Y");
+            $data["current_date"] = Carbon::now()->format('d/m/Y');
 
-            $data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
-            $data["verbal_trial.day_due_amount"] = number_format(((float) $data["verbal_trial.day_due_amount"]), 0, ',', ' ');
-            $data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
-            $data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
-            $data["verbal_trial.administrative_fees_percentage"] = number_format(((float) $data["verbal_trial.administrative_fees_percentage"]), 0, ',', ' ');
-            $data["verbal_trial.insurance_premium"] = number_format(((float) $data["verbal_trial.insurance_premium"]), 0, ',', ' ');
-            $data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
-
+            $data["contract.verbal_trial.tax_fee_interest_rate.value"] = number_format((float) ($data["contract.verbal_trial.tax_fee_interest_rate"] * $data["contract.verbal_trial.amount"] / 100), 0, ',', ' ');
+            $data["contract.verbal_trial.administrative_fees_percentage.value"] = number_format((float) ($data["contract.verbal_trial.administrative_fees_percentage"] * $data["contract.verbal_trial.amount"] / 100), 0, ',', ' ');
+            $data["contract.risk_premium_percentage.value"] = number_format((float) ($data["contract.risk_premium_percentage"] * $data["contract.verbal_trial.amount"] / 100), 0, ',', ' ');
+            $data["guarantee_amount_total"] = number_format($c_a_t->contract->verbal_trial->guarantees->sum("value"), 0, ',', ' ');
+            $data["security_deposit"] = number_format($data["contract.verbal_trial.amount"] * 0.2, 0, ',', ' ');
+            $data["teg"] = number_format($data["teg"], 0, ',', ' ');
+            $data["contract.verbal_trial.amount"] = number_format($data["contract.verbal_trial.amount"], 0, ',', ' ');
+            if ($data["contract.verbal_trial.duration"] < 6) {
+                $data["credit_type"] = "COURT TERME";
+            } elseif ($data["contract.verbal_trial.duration"] < 12) {
+                $data["credit_type"] = "MOYEN TERME";
+            } else {
+                $data["credit_type"] = "LONG TERME";
+            }
             $guaranteeList = [];
             foreach ($c_a_t->contract->verbal_trial->guarantees as $guarantee) {
                 $tmp = $guarantee->toArray();
@@ -187,12 +193,13 @@ class CATController extends Controller
                 })->all());
             }
             $templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
-
+            unset($data["contract.observations"]);
+            unset($data["contract.guarantors"]);
             $templateProcessor->setValues($data);
             // return $data;
 
             // Enregistrez les modifications dans un nouveau fichier
-            $outputFilePath = public_path("CAT-" . $c_a_t->verbal_trial->committee_id . ".docx");
+            $outputFilePath = public_path("CAT-" . $c_a_t->contract->verbal_trial->committee_id . ".docx");
             $templateProcessor->saveAs($outputFilePath);
 
             return response()->download($outputFilePath)->deleteFileAfterSend(true);

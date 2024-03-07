@@ -40,6 +40,7 @@ const {
   query: {
     paginate: 0,
     with_verbal_trial: 1,
+    has_upload_completed: 1,
     has_cat: 0,
   },
 }))
@@ -104,9 +105,9 @@ const onSubmit = () => {
             <VCardText>
               <VRow>
                 <VCol cols="12" md="12" lg="12">
-                  <AppAutocomplete v-model="cat.contract_id" :items="contractList" :error-messages="catError.contract_id"
-                    label="Contrat" placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]"
-                    item-title="verbal_trial.committee_id" item-value="id" />
+                  <AppAutocomplete v-model="cat.contract_id" :items="contractList"
+                    :error-messages="catError.contract_id" label="Contrat" placeholder="Ex: CFNTG-044-13-12-23-01212"
+                    :rules="[requiredValidator]" item-title="verbal_trial.committee_id" item-value="id" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
                   <AppTextField v-model="cat.credit_number" :error-messages="catError.credit_number"
@@ -126,10 +127,10 @@ const onSubmit = () => {
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
                   <AppSelect v-model="cat.source_of_reimbursement" :items="[
-                    { value: 'revenue_from_the_activity', title: 'Recettes de l’activité' },
-                    { value: 'final_payer_settlement', title: 'Règlement du payeur final' },
-                    { value: 'resale_of_goods', title: 'Reventes des marchandises' }
-                  ]" :error-messages="catError.source_of_reimbursement" label="Source du remboursement"
+      { value: 'revenue_from_the_activity', title: 'Recettes de l’activité' },
+      { value: 'final_payer_settlement', title: 'Règlement du payeur final' },
+      { value: 'resale_of_goods', title: 'Reventes des marchandises' }
+    ]" :error-messages="catError.source_of_reimbursement" label="Source du remboursement"
                     placeholder="Ex: Recettes de l’activité" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">

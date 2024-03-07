@@ -1,0 +1,381 @@
+<!-- eslint-disable camelcase -->
+
+<script setup>
+import { VDataTableServer } from 'vuetify/labs/VDataTable'
+import { paginationMeta } from '@api-utils/paginationMeta'
+import JsFileDownloader from 'js-file-downloader'
+import { $api } from '@/utils/api';
+
+const isDialogVisible = ref(false)
+const contractIdToDelete = ref(0)
+const selectedType = ref()
+const searchQuery = ref('')
+const refInputEl = ref()
+const uploadState = ref('signed_contract')
+
+const headers = [
+  {
+    title: 'Numéro comitée',
+    key: 'verbal_trial.committee_id',
+  },
+  {
+    title: 'Admin Crédit',
+    key: 'creator.full_name',
+  },
+  {
+    title: 'Nom client',
+    key: 'verbal_trial.applicant_full_name',
+  },
+  {
+    title: 'Type de contrat',
+    key: 'type',
+  },
+  {
+    title: 'Montant',
+    key: 'verbal_trial.amount',
+  },
+  {
+    title: 'Actions',
+    key: 'actions',
+    sortable: false,
+  },
+]
+
+const loadings = ref([])
+
+const load = i => {
+  loadings.value[i] = true
+  setTimeout(() => {
+    loadings.value[i] = false
+  }, 1000)
+}
+
+const itemsPerPage = ref(8)
+const page = ref(1)
+
+const updateOptions = options => {
+  page.value = options.page
+}
+
+const {
+  data: contractData,
+  execute: fetchContracts,
+} = await useApi(createUrl('/contract', {
+  query: {
+    search: searchQuery,
+    type: selectedType,
+    page: page,
+    with_type_of_credit: 1,
+    with_company: 1,
+    with_individual_business: 1,
+    with_creator: 1,
+    has_upload_completed: 1,
+    has_cat: 1,
+  },
+}))
+
+const contractList = computed(() => contractData.value.data)
+const totalPv = computed(() => contractData.value.total)
+const lastPage = computed(() => contractData.value.last_page)
+
+const typeList = {
+  "company": 'Société',
+  "individual_business": 'Entreprise Individuel',
+  "particular": 'Particulier',
+}
+
+const downloadFile = async (url, fileName) => {
+  try {
+    new JsFileDownloader({
+      url: url,
+      headers: [
+        { name: 'Authorization', value: `Bearer ${useCookie('userToken').value}` },
+      ],
+      nameCallback: function (name) {
+        return fileName
+      },
+    })
+    console.log('Téléchargement réussi')
+    fetchContracts()
+  } catch (error) {
+    console.error('Erreur lors du téléchargement:', error)
+  }
+}
+
+const apiDelete = async id => {
+  await $api(`contract/${id}`, { method: 'DELETE' })
+  fetchContracts()
+}
+
+const uploadFile = async (id, event) => {
+  const { files } = event.target;
+  if (files && files.length === 1) {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64Image = reader.result;
+      try {
+        const response = await fetch(`/api/contract/upload/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${useCookie('userToken').value}`,
+          },
+          body: JSON.stringify({
+            [uploadState.value]: base64Image,
+          }),
+        });
+
+        if (response.ok) {
+          console.log('Document envoyé avec succès.');
+          fetchContracts();
+        } else {
+          console.error('Échec de l\'envoi du document.');
+        }
+      } catch (error) {
+        console.error('Erreur lors de l\'envoi du document:', error);
+      }
+    };
+    reader.readAsDataURL(files[0]);
+  } else {
+    console.error('Veuillez sélectionner un seul fichier.');
+  }
+}
+</script>
+
+<template>
+  <div>
+    <VCard class="mb-6">
+      <VCardText>
+        <VRow>
+          <VCardText>
+            <h2>
+              Liste des contrats
+            </h2>
+          </VCardText>
+        </VRow>
+      </VCardText>
+    </VCard>
+
+    <VCard title="Filtres" class="mb-6">
+      <VCardText>
+        <VRow>
+          <VCol cols="12" sm="4">
+            <AppSelect v-model="selectedType" placeholder="Type de contrat"
+              :items="[{ value: 'company', title: 'Société' }, { value: 'particular', title: 'Particulier' }, { value: 'individual_business', title: 'Entreprise Individuel' }]"
+              clearable clear-icon="tabler-x" />
+          </VCol>
+        </VRow>
+      </VCardText>
+
+      <VDivider class="my-4" />
+
+      <div class="d-flex flex-wrap gap-4 mx-5">
+        <div class="d-flex align-center">
+          <AppTextField v-model="searchQuery" placeholder="Rechercher un contrat" density="compact"
+            style="inline-size: 200px;" class="me-3" />
+        </div>
+
+        <VSpacer />
+        <div class="d-flex gap-4 flex-wrap align-center">
+          <VBtn variant="tonal" color="secondary" prepend-icon="tabler-download">
+            Export
+          </VBtn>
+
+          <VBtn color="primary" prepend-icon="tabler-plus" :to="{ name: 'contract-add' }">
+            Ajouter un contrat
+          </VBtn>
+          <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
+            @click="fetchContracts(); load(3)">
+            Recharger
+            <template #loader>
+              <span class="custom-loader">
+                <VIcon icon="tabler-refresh" />
+              </span>
+            </template>
+          </VBtn>
+        </div>
+      </div>
+
+      <VDivider class="mt-4" />
+
+
+      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
+        :items="contractList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
+
+        <template #item.type="{ item }">
+          {{ typeList[item.type] }}
+        </template>
+
+        <template #item.verbal_trial.amount="{ item }">
+          {{ String(item.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
+        </template>
+
+        <template #item.actions="{ item }">
+          <IconBtn :to="{ name: 'contract-id', params: { id: item.id } }">
+            <VIcon icon="tabler-eye" />
+          </IconBtn>
+          <IconBtn :to="{ name: 'contract-edit-id', params: { id: item.id } }">
+            <VIcon icon="tabler-edit" />
+          </IconBtn>
+          <IconBtn @click="contractIdToDelete = item.id; isDialogVisible = true">
+            <VIcon icon="tabler-trash" />
+          </IconBtn>
+          <VBtn icon variant="text" size="small" color="medium-emphasis">
+            <VIcon size="24" icon="tabler-dots-vertical" />
+            <VMenu activator="parent">
+              <VList>
+                <input ref="refInputEl" type="file" name="signed_contract" accept=".pdf,.png,.jpg" hidden
+                  @input="uploadFile(item.id, $event)" />
+
+                <VBadge inline :content="item.guarantors_count">
+                  <VListItem :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: item.id } }">
+                    <template #prepend>
+                      <VIcon icon="tabler-users" />
+                    </template>
+
+                    <VListItemTitle>
+                      Voir les Garants
+                    </VListItemTitle>
+                  </VListItem>
+                </VBadge>
+                <VListItem :to="{ name: 'pv-id', params: { id: item.verbal_trial.id } }">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-eye" />
+                  </template>
+
+                  <VListItemTitle>Voir le Pv</VListItemTitle>
+                </VListItem>
+
+                <VDivider />
+                <!-- Télécharger contrat non-signé -->
+                <VListItem
+                  @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-download" />
+                  </template>
+                  <VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
+                </VListItem>
+                <!-- Télécharger contrat signé -->
+                <VListItem v-if="item.signed_contract_path"
+                  @click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-download" />
+                  </template>
+                  <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
+                </VListItem>
+                <!-- Télécharger billet à ordre non-signé -->
+                <VListItem
+                  @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-download" />
+                  </template>
+                  <VListItemTitle>Télécharger Billet à ordre non signé</VListItemTitle>
+                </VListItem>
+                <!-- Télécharger billet à ordre signé -->
+                <VListItem v-if="item.signed_promissory_note_path"
+                  @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-download" />
+                  </template>
+                  <VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
+                </VListItem>
+
+                <VDivider />
+                <!-- Ajouter Contrat signé -->
+                <VListItem v-if="item.signed_contract_path == null"
+                  @click="uploadState = 'signed_contract'; refInputEl?.click()">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-cloud-upload" />
+                  </template>
+                  <VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
+                </VListItem>
+
+                <!-- Ajouter Billet à ordre -->
+                <VListItem v-if="item.signed_promissory_note_path == null"
+                  @click="uploadState = 'signed_promissory_note'; refInputEl?.click()">
+
+                  <template #prepend>
+                    <VIcon icon="tabler-cloud-upload" />
+                  </template>
+                  <VListItemTitle>Ajouter billet à ordre signé</VListItemTitle>
+                </VListItem>
+
+              </VList>
+            </VMenu>
+          </VBtn>
+        </template>
+
+        <template #bottom>
+          <VDivider />
+
+          <div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
+            <p class="text-sm text-medium-emphasis mb-0">
+              {{ paginationMeta({ page, itemsPerPage }, totalPv) }}
+            </p>
+
+            <VPagination v-model="page" :length="lastPage"
+              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)">
+              <template #prev="slotProps">
+                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                  <VIcon start icon="tabler-arrow-left" />
+                  Précedent
+                </VBtn>
+              </template>
+
+              <template #next="slotProps">
+                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                  Suivant
+                  <VIcon end icon="tabler-arrow-right" />
+                </VBtn>
+              </template>
+            </VPagination>
+          </div>
+        </template>
+      </VDataTableServer>
+    </VCard>
+
+    <VDialog v-model="isDialogVisible" class="v-dialog-sm">
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
+
+      <!-- Dialog Content -->
+      <VCard title="Suppression">
+        <VCardText>
+          Etes vous sûr de vouloir supprimer ce contrat?
+        </VCardText>
+
+        <VCardText class="d-flex justify-end gap-3 flex-wrap">
+          <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
+            Annuler
+          </VBtn>
+          <VBtn @click="apiDelete(contractIdToDelete); isDialogVisible = false">
+            Supprimer
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.custom-loader {
+  display: flex;
+  animation: loader 1s infinite;
+}
+
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

@@ -119,6 +119,9 @@
                                                                                 <li class="tocify-item level-2" data-unique="caution-GETapi-contract-guarantor-download--id-">
                                 <a href="#caution-GETapi-contract-guarantor-download--id-">Télécharge la version word d'une caution</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="caution-POSTapi-contract-guarantor-upload--id-">
+                                <a href="#caution-POSTapi-contract-guarantor-upload--id-">Sauvegarde le contrat ou procès verbal signé</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="caution-GETapi-contract-guarantor-promissory-note-download--id-">
                                 <a href="#caution-GETapi-contract-guarantor-promissory-note-download--id-">Télécharge le billet à ordre d'une caution</a>
                             </li>
@@ -150,6 +153,9 @@
                                                                                 <li class="tocify-item level-2" data-unique="contrat-GETapi-contract-download--id-">
                                 <a href="#contrat-GETapi-contract-download--id-">Télécharge la version word d'un contrat</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="contrat-POSTapi-contract-upload--id-">
+                                <a href="#contrat-POSTapi-contract-upload--id-">Sauvegarde le contrat ou procès verbal signé</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="contrat-GETapi-contract-promissory-note-download--id-">
                                 <a href="#contrat-GETapi-contract-promissory-note-download--id-">Télécharge le billet à ordre d'un contrat</a>
                             </li>
@@ -175,6 +181,9 @@
                                                     <li class="tocify-item level-2" data-unique="proces-verbal-GETapi-verbal-trial">
                                 <a href="#proces-verbal-GETapi-verbal-trial">Affiche les Procès verbaux</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="proces-verbal-GETapi-verbal-trial-download--id-">
+                                <a href="#proces-verbal-GETapi-verbal-trial-download--id-">Télécharge la version word d'un PV</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="proces-verbal-GETapi-verbal-trial--id-">
                                 <a href="#proces-verbal-GETapi-verbal-trial--id-">Affiche un procès verbal</a>
                             </li>
@@ -186,6 +195,9 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="proces-verbal-DELETEapi-verbal-trial--id-">
                                 <a href="#proces-verbal-DELETEapi-verbal-trial--id-">Supprime un procès verbal</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="proces-verbal-GETapi-download--id-">
+                                <a href="#proces-verbal-GETapi-download--id-">Télécharge la version word d'un PV</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -289,7 +301,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: March 5, 2024</li>
+        <li>Last updated: March 8, 2024</li>
     </ul>
 </div>
 
@@ -2609,6 +2621,146 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                    <h2 id="caution-POSTapi-contract-guarantor-upload--id-">Sauvegarde le contrat ou procès verbal signé</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-contract-guarantor-upload--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://cofcredit.cofina.localhost/api/contract/guarantor/upload/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/contract/guarantor/upload/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-contract-guarantor-upload--id-">
+            <blockquote>
+            <p>Example response (204):</p>
+        </blockquote>
+                <pre>
+<code>Empty response</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-contract-guarantor-upload--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-contract-guarantor-upload--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-contract-guarantor-upload--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-contract-guarantor-upload--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-contract-guarantor-upload--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-contract-guarantor-upload--id-" data-method="POST"
+      data-path="api/contract/guarantor/upload/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-contract-guarantor-upload--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-contract-guarantor-upload--id-"
+                    onclick="tryItOut('POSTapi-contract-guarantor-upload--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-contract-guarantor-upload--id-"
+                    onclick="cancelTryOut('POSTapi-contract-guarantor-upload--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-contract-guarantor-upload--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/contract/guarantor/upload/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-contract-guarantor-upload--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-contract-guarantor-upload--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-contract-guarantor-upload--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="POSTapi-contract-guarantor-upload--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>L'ID du contrat. Example: <code>1</code></p>
+            </div>
+                    </form>
+
                     <h2 id="caution-GETapi-contract-guarantor-promissory-note-download--id-">Télécharge le billet à ordre d&#039;une caution</h2>
 
 <p>
@@ -3880,7 +4032,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_type_of_guarantees=0&amp;with_company=0&amp;with_individual_business=0&amp;with_creator=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/contract?completed=0&amp;has_cat=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_type_of_guarantees=0&amp;with_company=0&amp;with_individual_business=0&amp;with_creator=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3892,6 +4044,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
 );
 
 const params = {
+    "completed": "0",
+    "has_cat": "0",
     "with_verbal_trial": "0",
     "with_type_of_credit": "0",
     "with_type_of_applicant": "0",
@@ -4175,6 +4329,28 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Filtrer par ID du créateur</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>completed</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="completed"                data-endpoint="GETapi-contract"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par finalisation du dossier du contrat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>has_cat</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="has_cat"                data-endpoint="GETapi-contract"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_verbal_trial</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -4420,6 +4596,146 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="GETapi-contract-download--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>L'ID du contrat. Example: <code>1</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="contrat-POSTapi-contract-upload--id-">Sauvegarde le contrat ou procès verbal signé</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-contract-upload--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://cofcredit.cofina.localhost/api/contract/upload/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/contract/upload/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-contract-upload--id-">
+            <blockquote>
+            <p>Example response (204):</p>
+        </blockquote>
+                <pre>
+<code>Empty response</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-contract-upload--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-contract-upload--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-contract-upload--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-contract-upload--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-contract-upload--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-contract-upload--id-" data-method="POST"
+      data-path="api/contract/upload/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-contract-upload--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-contract-upload--id-"
+                    onclick="tryItOut('POSTapi-contract-upload--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-contract-upload--id-"
+                    onclick="cancelTryOut('POSTapi-contract-upload--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-contract-upload--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/contract/upload/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-contract-upload--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-contract-upload--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-contract-upload--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="POSTapi-contract-upload--id-"
                value="1"
                data-component="url">
     <br>
@@ -5606,7 +5922,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/verbal-trial?with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_type_of_guarantees=1&amp;with_contract=1&amp;with_caf=1&amp;with_creator=0&amp;has_contract=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/verbal-trial?has_contract=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_type_of_guarantees=1&amp;with_contract=1&amp;with_caf=1&amp;with_creator=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5618,6 +5934,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 );
 
 const params = {
+    "has_contract": "0",
     "with_type_of_credit": "0",
     "with_type_of_applicant": "1",
     "with_guarantees": "1",
@@ -5625,7 +5942,6 @@ const params = {
     "with_contract": "1",
     "with_caf": "1",
     "with_creator": "0",
-    "has_contract": "0",
     "paginate": "0",
 };
 Object.keys(params)
@@ -5944,6 +6260,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Filtrer par ID du créateur</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>has_contract</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="has_contract"                data-endpoint="GETapi-verbal-trial"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de contrat Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_type_of_credit</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -6021,17 +6348,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Afficher le créateur du pv. Example: <code>0</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>has_contract</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="has_contract"                data-endpoint="GETapi-verbal-trial"
-               value="0"
-               data-component="query">
-    <br>
-<p>Filtrer par présence de contrat Example: <code>0</code></p>
-            </div>
-                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>paginate</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -6043,6 +6359,147 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Utiliser la pagination. Example: <code>0</code></p>
             </div>
                 </form>
+
+                    <h2 id="proces-verbal-GETapi-verbal-trial-download--id-">Télécharge la version word d&#039;un PV</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-verbal-trial-download--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://cofcredit.cofina.localhost/api/verbal-trial/download/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/verbal-trial/download/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-verbal-trial-download--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-verbal-trial-download--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-verbal-trial-download--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-verbal-trial-download--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-verbal-trial-download--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-verbal-trial-download--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-verbal-trial-download--id-" data-method="GET"
+      data-path="api/verbal-trial/download/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-verbal-trial-download--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-verbal-trial-download--id-"
+                    onclick="tryItOut('GETapi-verbal-trial-download--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-verbal-trial-download--id-"
+                    onclick="cancelTryOut('GETapi-verbal-trial-download--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-verbal-trial-download--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/verbal-trial/download/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-verbal-trial-download--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-verbal-trial-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-verbal-trial-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-verbal-trial-download--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>L'ID du PV. Example: <code>1</code></p>
+            </div>
+                    </form>
 
                     <h2 id="proces-verbal-GETapi-verbal-trial--id-">Affiche un procès verbal</h2>
 
@@ -7031,7 +7488,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/verbal-trial/19" \
+    "http://cofcredit.cofina.localhost/api/verbal-trial/2" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -7039,7 +7496,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/verbal-trial/19"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/2"
 );
 
 const headers = {
@@ -7150,10 +7607,151 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-verbal-trial--id-"
-               value="19"
+               value="2"
                data-component="url">
     <br>
-<p>L'ID du procès verbal Example: <code>19</code></p>
+<p>L'ID du procès verbal Example: <code>2</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="proces-verbal-GETapi-download--id-">Télécharge la version word d&#039;un PV</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-download--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://cofcredit.cofina.localhost/api/download/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/download/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-download--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-download--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-download--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-download--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-download--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-download--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-download--id-" data-method="GET"
+      data-path="api/download/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-download--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-download--id-"
+                    onclick="tryItOut('GETapi-download--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-download--id-"
+                    onclick="cancelTryOut('GETapi-download--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-download--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/download/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-download--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-download--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>L'ID du PV. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -7786,7 +8384,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/9" \
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/3" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -7794,7 +8392,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/9"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/3"
 );
 
 const headers = {
@@ -7905,10 +8503,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-guarantee--id-"
-               value="9"
+               value="3"
                data-component="url">
     <br>
-<p>L'ID du type de garantie Example: <code>9</code></p>
+<p>L'ID du type de garantie Example: <code>3</code></p>
             </div>
                     </form>
 
@@ -8684,7 +9282,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-credit/12" \
+    "http://cofcredit.cofina.localhost/api/type-of-credit/16" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -8692,7 +9290,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-credit/12"
+    "http://cofcredit.cofina.localhost/api/type-of-credit/16"
 );
 
 const headers = {
@@ -8803,10 +9401,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-credit--id-"
-               value="12"
+               value="16"
                data-component="url">
     <br>
-<p>L'ID du type de crédit Example: <code>12</code></p>
+<p>L'ID du type de crédit Example: <code>16</code></p>
             </div>
                     </form>
 
@@ -9493,7 +10091,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/18" \
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/20" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -9501,7 +10099,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/18"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/20"
 );
 
 const headers = {
@@ -9612,10 +10210,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-applicant--id-"
-               value="18"
+               value="20"
                data-component="url">
     <br>
-<p>L'ID du type de demandeur de crédit Example: <code>18</code></p>
+<p>L'ID du type de demandeur de crédit Example: <code>20</code></p>
             </div>
                     </form>
 
@@ -10620,7 +11218,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/user/1" \
+    "http://cofcredit.cofina.localhost/api/user/9" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10628,7 +11226,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/user/1"
+    "http://cofcredit.cofina.localhost/api/user/9"
 );
 
 const headers = {
@@ -10739,10 +11337,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-user--id-"
-               value="1"
+               value="9"
                data-component="url">
     <br>
-<p>L'ID de l'utilisateur Example: <code>1</code></p>
+<p>L'ID de l'utilisateur Example: <code>9</code></p>
             </div>
                     </form>
 

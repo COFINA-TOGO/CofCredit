@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
 use App\Models\Guarantor;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Rmunate\Utilities\SpellNumber;
@@ -83,10 +85,10 @@ class GuarantorController extends Controller
             }
 
             if (isset($request["paginate"]) && ($request->paginate == false)) {
-                $guarantorList = $guarantorList->orderByDesc('updated_at')->get();
+                $guarantorList = $guarantorList->orderByDesc('created_at')->get();
                 $data = ["data" => $guarantorList, "total" => count($guarantorList)];
             } else {
-                $data = $guarantorList->orderByDesc('updated_at')->paginate(8)->toArray();
+                $data = $guarantorList->orderByDesc('created_at')->paginate(8)->toArray();
             }
 
             return $this->responseOkPaginate($data);
@@ -142,7 +144,7 @@ class GuarantorController extends Controller
         if ($guarantor) {
             // if (($authorisation = Gate::inspect('view', $guarantor))->allowed()) {
             // $guarantor->load(["verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"]);
-            $templateProcessor = new TemplateProcessor('../storage/app/public/templates/contracts/particular/contract_caution_particular.docx');
+            $templateProcessor = new TemplateProcessor('../document_templates/contracts/particular/contract_caution_particular.docx');
 
             $data = $guarantor->toArray();
             $data = array_merge($data, collect($guarantor->contract)->mapWithKeys(function ($value, $key) {
@@ -186,6 +188,9 @@ class GuarantorController extends Controller
                     return ['type_of_guarantee.' . $key => $value];
                 })->all());
             }
+            unset($data["observations"]);
+            unset($data["contract.observations"]);
+            unset($data["contract.guarantors"]);
             $templateProcessor->setValues($data);
             $templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 
@@ -210,7 +215,7 @@ class GuarantorController extends Controller
         $guarantor = Guarantor::find($id);
         if ($guarantor) {
             // if (($authorisation = Gate::inspect('view', $guarantor))->allowed()) {
-            $templateProcessor = new TemplateProcessor('../storage/app/public/templates/contracts/particular/billet_a_ordre_caution_particular.docx');
+            $templateProcessor = new TemplateProcessor('../document_templates/contracts/particular/billet_a_ordre_caution_particular.docx');
 
             $data = $guarantor->toArray();
             $data = array_merge($data, collect($guarantor->contract)->mapWithKeys(function ($value, $key) {
@@ -247,6 +252,9 @@ class GuarantorController extends Controller
             $data["contract.verbal_trial.due_amount"] = number_format(((float) $data["contract.verbal_trial.due_amount"]), 0, ',', ' ');
             $data["contract.total_to_pay"] = number_format(((float) $data["contract.total_to_pay"]), 0, ',', ' ');
 
+            unset($data["observations"]);
+            unset($data["contract.observations"]);
+            unset($data["contract.guarantors"]);
             $templateProcessor->setValues($data);
 
             // Enregistrez les modifications dans un nouveau fichier
@@ -368,6 +376,62 @@ class GuarantorController extends Controller
             }
         } else {
             return $this->responseError(["id" => ["La caution n'existe pas"]], 404);
+        }
+    }
+
+
+    /**
+     * Sauvegarde le contrat ou procès verbal signé
+     *
+     * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+     *
+     * @response 204
+     */
+
+    public function upload(Request $request, int $id)
+    {
+        $guarantor = Guarantor::find($id);
+        if ($guarantor) {
+            if (($authorisation = Gate::inspect('update', Guarantor::class))->allowed()) {
+                DB::beginTransaction();
+                if ($request->has('signed_contract')) {
+                    $document_category = "contract";
+                    $base64Document = $request->input('signed_contract');
+                } else if ($request->has('signed_promissory_note')) {
+                    $document_category = "promissory_note";
+                    $base64Document = $request->input('signed_promissory_note');
+                } else {
+                    DB::rollBack();
+                    return $this->responseError(["error" => "Vous devez uploader un contrat signé ou un billet à ordre signé"], 400);
+                }
+
+                // Vérifier si le document est un PDF
+                if (strpos($base64Document, 'data:application/pdf;base64,') === 0) {
+                    // Le document est un PDF
+                    $extension = 'pdf';
+                } elseif (strpos($base64Document, 'data:image/') === 0) {
+                    // Le document est une image
+                    // Extraire l'extension de l'image
+                    $start = strpos($base64Document, '/') + 1;
+                    $end = strpos($base64Document, ';');
+                    $extension = substr($base64Document, $start, $end - $start);
+                } else {
+                    // Type de document non pris en charge
+                    DB::rollBack();
+                    return $this->responseError(["error" => "Le document doit être un pdf ou une image"], 400);
+                }
+                $documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $base64Document));
+                $path = 'upload/guarantors/signed_' . $document_category . 's/' . $guarantor->id . '-signed.' . $extension;
+                Storage::disk("public")->put($path, $documentData);
+                $guarantor->update(["signed_{$document_category}_path" => "/storage/" . $path]);
+
+                DB::commit();
+                return $this->responseOk(["guarantor" => $guarantor]);
+            } else {
+                return $this->responseError(["auth" => [$authorisation->message()]], 403);
+            }
+        } else {
+            return $this->responseError(["id" => "La garantie n'existe pas"], 404);
         }
     }
 

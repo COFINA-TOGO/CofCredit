@@ -1,8 +1,10 @@
 <!-- eslint-disable camelcase -->
+
 <script setup>
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 import AppAutocomplete from '@/@core/components/app-form-elements/AppAutocomplete.vue';
+import JsFileDownloader from 'js-file-downloader'
 
 const isDialogVisible = ref(false)
 const idToDelete = ref(0)
@@ -83,6 +85,24 @@ const {
   },
 }))
 
+const downloadFile = async (url, fileName) => {
+  const userToken = useCookie('userToken').value
+
+  try {
+    new JsFileDownloader({
+      url: url,
+      headers: [
+        { name: 'Authorization', value: `Bearer ${userToken}` },
+      ],
+      nameCallback: function (name) {
+        return fileName
+      },
+    })
+    console.log('Téléchargement réussi')
+  } catch (error) {
+    console.error('Erreur lors du téléchargement:', error)
+  }
+}
 
 const apiDelete = async id => {
   await $api(`verbal-trial/${id}`, { method: 'DELETE' })
@@ -129,8 +149,8 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
       <div class="d-flex flex-wrap gap-4 mx-5">
         <div class="d-flex align-center">
           <!-- 👉 Search  -->
-          <AppTextField v-model="searchQuery" placeholder="Rechercher un pv" density="compact" style="inline-size: 200px;"
-            class="me-3" />
+          <AppTextField v-model="searchQuery" placeholder="Rechercher un pv" density="compact"
+            style="inline-size: 200px;" class="me-3" />
         </div>
 
         <VSpacer />
@@ -143,7 +163,8 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
           <VBtn color="primary" prepend-icon="tabler-plus" :to="{ name: 'pv-add' }">
             Ajouter un PV
           </VBtn>
-          <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh" @click="fetchPv(); load(3)">
+          <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
+            @click="fetchPv(); load(3)">
             Recharger
             <template #loader>
               <span class="custom-loader">
@@ -161,6 +182,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
       <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers" :items="pvList"
         :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
         <!-- Actions -->
+
         <template #item.actions="{ item }">
           <IconBtn :to="{ name: 'pv-id', params: { id: item.id } }">
             <VIcon icon=" tabler-eye" />
@@ -168,7 +190,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
           <IconBtn :to="{ name: 'pv-edit-id', params: { id: item.id } }">
             <VIcon icon="tabler-edit" />
           </IconBtn>
-          <IconBtn @click="$router.push('/pv/download/' + item.id)">
+          <IconBtn @click="downloadFile(`/api/verbal-trial/download/${item.id}`, `PV-${item.committee_id}.docx`)">
             <VIcon icon="tabler-download" />
           </IconBtn>
           <IconBtn @click="idToDelete = item.id; isDialogVisible = true">
