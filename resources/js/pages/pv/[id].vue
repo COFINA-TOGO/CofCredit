@@ -1,4 +1,10 @@
 <script setup>
+definePage({
+  meta: {
+    action: 'read',
+    subject: 'pv',
+  },
+})
 const router = useRouter()
 const route = useRoute("vertalTrial-id")
 

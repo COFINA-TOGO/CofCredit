@@ -15,7 +15,6 @@ export const can = (action, subject) => {
   if (!vm)
     return false
   const localCan = vm.proxy && '$can' in vm.proxy
-  
   return localCan ? vm.proxy?.$can(action, subject) : true
 }
 
@@ -31,11 +30,11 @@ export const canViewNavMenuGroup = item => {
   // Else check for ability using provided subject and action along with checking if has any visible child
   if (!(item.action && item.subject))
     return hasAnyVisibleChild
-  
+
   return can(item.action, item.subject) && hasAnyVisibleChild
 }
 export const canNavigate = to => {
   const ability = useAbility()
-  
+
   return to.matched.some(route => ability.can(route.meta.action, route.meta.subject))
 }

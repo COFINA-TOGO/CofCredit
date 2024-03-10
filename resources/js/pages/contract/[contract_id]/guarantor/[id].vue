@@ -1,5 +1,11 @@
 <!-- eslint-disable camelcase -->
 <script setup>
+definePage({
+  meta: {
+    action: 'read',
+    subject: 'guarantor',
+  },
+})
 const router = useRouter()
 const route = useRoute('contract-contract_id-guarantor-id')
 

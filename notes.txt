@@ -8,3 +8,6 @@ pour les pv dans l'historique il faut afficher le temps entre le commité et la 
 le head crédit aura un dashboard lui resençant les informations suivantes:
     -la durée entre le commitée et la mise en place du pv
     -la durée de mise en place d'un contrat
+
+
+venir mettre les dates formaté en français avec l'ajout .fr pour éviter les soucis lors de l'édition !!!!!!!!!!!!!!!!!!!!!!!!

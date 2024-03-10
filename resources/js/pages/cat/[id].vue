@@ -1,5 +1,11 @@
 <!-- eslint-disable camelcase -->
 <script setup>
+definePage({
+  meta: {
+    action: 'read',
+    subject: 'cat',
+  },
+})
 const router = useRouter()
 const route = useRoute('cat-id')
 

@@ -10,11 +10,25 @@ export const redirects = [
     redirect: to => {
       // TODO: Get type from backend
       const userData = useCookie('userData')
+      console.log(userData.value)
       const userRole = userData.value?.role
       if (userRole === 'admin')
         return { name: 'pv' }
-      if (userRole === 'client')
-        return { name: 'access-control' }
+
+      if (userRole === 'credit_analyst')
+        return { name: 'pv' }
+
+      if (userRole === 'credit_admin')
+        return { name: 'contract' }
+
+      if (userRole === 'head_credit' || userRole === 'operation')
+        return { name: 'cat' }
+
+      if (userRole === 'caf')
+        return { name: 'contract' }
+
+      if (userRole === 'dex')
+        return { name: 'pv' }
 
       return { name: 'login', query: to.query }
     },

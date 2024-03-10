@@ -1,5 +1,11 @@
 <!-- eslint-disable camelcase -->
 <script setup>
+definePage({
+  meta: {
+    action: 'update',
+    subject: 'guarantor',
+  },
+})
 import { createUrl } from '@/@core/composable/createUrl'
 import { useApi } from '@/composables/useApi'
 import { ref } from 'vue'
@@ -73,7 +79,7 @@ const onSubmit = () => {
       })
 
       guarantorError.value = getResetGuarantorError()
-      if (res.status == 201) {
+      if (res.status == 200) {
         router.push({ name: "contract-contract_id-guarantor", params: { contract_id: route.params.contract_id } })
       } else {
         console.log(guarantorError.value)

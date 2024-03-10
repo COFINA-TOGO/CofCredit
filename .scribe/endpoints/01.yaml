@@ -212,8 +212,8 @@ endpoints:
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      completed:
-        name: completed
+      has_upload_completed:
+        name: has_upload_completed
         description: 'Filtrer par finalisation du dossier du contrat.'
         required: false
         example: 0
@@ -321,7 +321,7 @@ endpoints:
         exampleWasSpecified: true
         custom: []
     cleanQueryParameters:
-      completed: 0
+      has_upload_completed: 0
       has_cat: 0
       with_verbal_trial: 0
       with_type_of_credit: 0

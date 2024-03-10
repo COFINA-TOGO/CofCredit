@@ -1,5 +1,11 @@
 <!-- eslint-disable camelcase -->
 <script setup>
+definePage({
+  meta: {
+    action: 'create',
+    subject: 'guarantor',
+  },
+})
 import { ref } from 'vue'
 
 const router = useRouter()
@@ -58,7 +64,7 @@ const refForm = ref()
 const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
     if (valid) {
-      const res = await $api('/guarantor', {
+      const res = await $api('/contract/guarantor', {
         method: 'POST',
         body: {
           contract_id: route.params.contract_id,

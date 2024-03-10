@@ -31,6 +31,8 @@ class User extends Authenticatable
         "password_change_required",
     ];
 
+    protected $appends = ['ability_rules'];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -72,5 +74,124 @@ class User extends Authenticatable
     public function contracts(): HasMany
     {
         return $this->hasMany(Contract::class, "creator_id", "id");
+    }
+
+    public function getAbilityRulesAttribute()
+    {
+        switch ($this->profile) {
+            case('admin'):
+                return [
+                    [
+                        'action' => ['manage'],
+                        'subject' => ['all'],
+                    ]
+                ];
+            case('credit_analyst'):
+                return [
+                    [
+                        "action" => ["manage"],
+                        "subject" => ["pv"],
+                    ],
+                    [
+                        "action" => ["read"],
+                        "subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+                    ]
+                ];
+            case('credit_admin'):
+                return [
+                    [
+                        "action" => ["historical", "download"],
+                        "subject" => ["pv"],
+                    ],
+                    [
+                        "action" => ["create", "read", "historical", "waiting_cat", "update", "delete", "download"],
+                        "subject" => ["contract"],
+                    ],
+                    [
+                        "action" => ["create", "read", "update", "delete", "download"],
+                        "subject" => ["guarantor"],
+                    ],
+                    [
+                        "action" => ["manage"],
+                        "subject" => ["cat"],
+                    ],
+                    [
+                        "action" => ["read"],
+                        "subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+                    ]
+                ];
+            case('head_credit'):
+                return [
+                    [
+                        "action" => ["read", "historical", "download"],
+                        "subject" => ["pv"],
+                    ],
+                    [
+                        "action" => ["read", "historical", "waiting_cat", "download"],
+                        "subject" => ["contract"],
+                    ],
+                    [
+                        "action" => ["read", "download"],
+                        "subject" => ["guarantor"],
+                    ],
+                    [
+                        "action" => ["read", "download", "validate"],
+                        "subject" => ["cat"],
+                    ],
+                    [
+                        "action" => ["read"],
+                        "subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+                    ]
+                ];
+            case('operation'):
+                return [
+                    [
+                        "action" => ["read", "download", "unblock"],
+                        "subject" => ["cat"],
+                    ],
+                    [
+                        "action" => ["read"],
+                        "subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+                    ]
+                ];
+            case('legal'):
+                return [
+
+                ];
+            case('dex'):
+                return [
+                    [
+                        "action" => ["read", "historical", "download"],
+                        "subject" => ["pv"]
+                    ],
+                    [
+                        "action" => ["read", "historical", "waiting_cat", "download"],
+                        "subject" => ["contract"]
+                    ],
+                    [
+                        "action" => ["read", "download"],
+                        "subject" => ["cat"]
+                    ],
+                    [
+                        "action" => ["read", "download"],
+                        "subject" => ["guarantor"],
+                    ],
+                    [
+                        "action" => ["read"],
+                        "subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+                    ]
+                ];
+            case('caf'):
+                return [
+                    [
+                        "action" => ["read", "upload", "download"],
+                        "subject" => ["contract", "guarantor"],
+                    ],
+                    [
+                        "action" => ["read"],
+                        "subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+                    ]
+                ];
+        }
     }
 }

@@ -1,5 +1,11 @@
 <!-- eslint-disable camelcase -->
 <script setup>
+definePage({
+  meta: {
+    action: 'read',
+    subject: 'cat',
+  },
+})
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 import JsFileDownloader from 'js-file-downloader'
@@ -137,8 +143,8 @@ const apiDelete = async id => {
               Exporter
             </VBtn>
 
-            <VBtn color="primary" prepend-icon="tabler-plus" :to="{ name: 'cat-add' }">
-              Ajouter un CAT
+            <VBtn v-if="$can('create', 'cat')" color="primary" prepend-icon="tabler-plus" :to="{ name: 'cat-add' }">
+              Ajouter
             </VBtn>
             <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
               @click="fetchCAT(); load(3)">
@@ -178,21 +184,21 @@ const apiDelete = async id => {
             <VIcon size="24" icon="tabler-dots-vertical" />
             <VMenu activator="parent">
               <VList>
-                <VListItem :to="{ name: 'contract-id', params: { id: item.contract.id } }">
+                <VListItem v-if="$can(['read', 'waiting_cat', 'historical'], 'contract')" :to="{ name: 'contract-id', params: { id: item.contract.id } }">
                   <template #prepend>
                     <VIcon icon="tabler-eye" />
                   </template>
 
                   <VListItemTitle>Contrat</VListItemTitle>
                 </VListItem>
-                <VListItem :to="{ name: 'pv-id', params: { id: item.contract.verbal_trial.id } }">
+                <VListItem v-if="$can(['read', 'historical'], 'pv')" :to="{ name: 'pv-id', params: { id: item.contract.verbal_trial.id } }">
                   <template #prepend>
                     <VIcon icon="tabler-eye" />
                   </template>
 
                   <VListItemTitle>Pv</VListItemTitle>
                 </VListItem>
-                <VListItem
+                <VListItem v-if="$can('download', 'cat')"
                   @click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.contract.verbal_trial.committee_id}.docx`)">
                   <template #prepend>
                     <VIcon icon="tabler-download" />

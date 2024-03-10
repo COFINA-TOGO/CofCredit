@@ -1,5 +1,11 @@
 <!-- eslint-disable camelcase -->
 <script setup>
+definePage({
+  meta: {
+    action: 'create',
+    subject: 'pv',
+  },
+})
 import { ref } from 'vue'
 
 const router = useRouter()

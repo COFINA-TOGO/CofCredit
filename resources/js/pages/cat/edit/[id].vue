@@ -1,5 +1,11 @@
 <!-- eslint-disable camelcase -->
 <script setup>
+definePage({
+  meta: {
+    action: 'update',
+    subject: 'cat',
+  },
+})
 import { ref } from 'vue'
 
 const router = useRouter()

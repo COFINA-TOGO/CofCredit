@@ -2,41 +2,48 @@
 
 namespace App\Policies;
 
+use App\Http\Traits\PermissionCheckerTrait;
 use App\Models\CAT;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
 class CATPolicy
 {
+    use PermissionCheckerTrait;
     public function before(User $connectedUser, string $ability)
     {
-        if ($connectedUser->profile == "admin") {
+        if ($connectedUser->profile == "admin" || ($connectedUser->ability_rules[0]["subject"] == "all" && $connectedUser->ability_rules[0]["action"] == "manage")) {
             return Response::allow();
         }
         return null;
     }
+
     public function viewAny(User $connectedUser)
     {
-        return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return $this->check(["read"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
-    public function view(User $connectedUser, CAT $cat)
+    public function view(User $connectedUser, Cat $cat)
     {
-        return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return $this->check(["read"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
     public function create(User $connectedUser)
     {
-        return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return $this->check(["create"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
-    public function update(User $connectedUser, CAT $cat)
+    public function update(User $connectedUser, Cat $cat)
     {
-        return $this->create($connectedUser);
+        return $this->check(["update"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+    }
+    public function download(User $connectedUser, Cat $cat)
+    {
+        return $this->check(["download"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
-    public function delete(User $connectedUser, CAT $cat)
+    public function delete(User $connectedUser, Cat $cat)
     {
-        return $this->create($connectedUser);
+        return $this->check(["delete"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 }

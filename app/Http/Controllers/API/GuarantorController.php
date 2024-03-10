@@ -278,8 +278,8 @@ class GuarantorController extends Controller
      * @bodyParam  birth_place                              string              Lieu de naissance de la caution.                                        Example: Los Afagnan
      * @bodyParam  nationality                              string              Nationalité de la caution                                               Example: Togolaise
      * @bodyParam  home_address                             string              Addresse de domicile de la caution                                      Example: Adewi
-     * @bodyParam  type_of_identity_document                string              Type de la pièce d'identité de la caution.                             Example: cni
-     * @bodyParam  number_of_identity_document              string              Numéro de la pièce d'identité de la caution.                           Example: BP785632
+     * @bodyParam  type_of_identity_document                string              Type de la pièce d'identité de la caution.                              Example: cni
+     * @bodyParam  number_of_identity_document              string              Numéro de la pièce d'identité de la caution.                            Example: BP785632
      * @bodyParam  date_of_issue_of_identity_document       string              Date de délivrance de la pièce d'identité de la caution.                Example: 2022-03-03
      * @bodyParam  function                                 string              Fonction de la caution                                                  Example: Agent CIA
      * @bodyParam  phone_number                             string              Numéro de téléphone de la caution                                       Example: +01 587-45-632-15
@@ -332,8 +332,8 @@ class GuarantorController extends Controller
      * @bodyParam  birth_place                              string              Lieu de naissance de la caution.                                        Example: Los Afagnan
      * @bodyParam  nationality                              string              Nationalité de la caution                                               Example: Togolaise
      * @bodyParam  home_address                             string              Addresse de domicile de la caution                                      Example: Adewi
-     * @bodyParam  type_of_identity_document                string              Type de la pièce d'identité de la caution.                             Example: cni
-     * @bodyParam  number_of_identity_document              string              Numéro de la pièce d'identité de la caution.                           Example: BP785632
+     * @bodyParam  type_of_identity_document                string              Type de la pièce d'identité de la caution.                              Example: cni
+     * @bodyParam  number_of_identity_document              string              Numéro de la pièce d'identité de la caution.                            Example: BP785632
      * @bodyParam  date_of_issue_of_identity_document       string              Date de délivrance de la pièce d'identité de la caution.                Example: 2022-03-03
      * @bodyParam  function                                 string              Fonction de la caution                                                  Example: Agent CIA
      * @bodyParam  phone_number                             string              Numéro de téléphone de la caution                                       Example: +01 587-45-632-15
@@ -366,7 +366,7 @@ class GuarantorController extends Controller
                     return $this->responseError($validator->errors(), 400);
                 } else {
                     $guarantor->update($requestData);
-                    $guarantor->load(["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"]);
+                    $guarantor->load(["contract.verbal_trial", "contract.verbal_trial.type_of_credit.type_of_applicant", "contract.verbal_trial.guarantees"]);
                     return $this->responseOk([
                         "guarantor" => $guarantor
                     ]);
@@ -392,7 +392,7 @@ class GuarantorController extends Controller
     {
         $guarantor = Guarantor::find($id);
         if ($guarantor) {
-            if (($authorisation = Gate::inspect('update', Guarantor::class))->allowed()) {
+            if (($authorisation = Gate::inspect('upload', $guarantor))->allowed()) {
                 DB::beginTransaction();
                 if ($request->has('signed_contract')) {
                     $document_category = "contract";

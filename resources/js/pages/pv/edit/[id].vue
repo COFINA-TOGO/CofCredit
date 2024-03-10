@@ -1,5 +1,11 @@
 <!-- eslint-disable camelcase -->
 <script setup>
+definePage({
+  meta: {
+    action: 'update',
+    subject: 'pv',
+  },
+})
 const router = useRouter()
 const route = useRoute("verbalTrial-edit-id")
 

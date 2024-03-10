@@ -1,6 +1,12 @@
 <!-- eslint-disable camelcase -->
 
 <script setup>
+definePage({
+  meta: {
+    action: 'historical',
+    subject: 'pv',
+  },
+})
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 import AppAutocomplete from '@/@core/components/app-form-elements/AppAutocomplete.vue';
@@ -160,8 +166,8 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
             Export
           </VBtn>
 
-          <VBtn color="primary" prepend-icon="tabler-plus" :to="{ name: 'pv-add' }">
-            Ajouter un PV
+          <VBtn v-if="$can('create', 'pv')" color="primary" prepend-icon="tabler-plus" :to="{ name: 'pv-add' }">
+            Ajouter
           </VBtn>
           <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
             @click="fetchPv(); load(3)">

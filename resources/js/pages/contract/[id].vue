@@ -1,6 +1,12 @@
 <!-- eslint-disable camelcase -->
 
 <script setup>
+definePage({
+  meta: {
+    action: 'read',
+    subject: 'contract',
+  },
+})
 const router = useRouter()
 const route = useRoute("contract-id")
 

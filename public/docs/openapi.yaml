@@ -1020,6 +1020,32 @@ paths:
         required: true
         schema:
           type: integer
+  '/api/download/{id}':
+    get:
+      summary: "Télécharge la version word d'une caution"
+      operationId: tlchargeLaVersionWordDuneCaution
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Caution
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du caution."
+        example: 1
+        required: true
+        schema:
+          type: integer
   '/api/test/contract/download/{id}':
     get:
       summary: "Télécharge la version word d'un contrat"
@@ -1204,7 +1230,7 @@ paths:
             example: null
         -
           in: query
-          name: completed
+          name: has_upload_completed
           description: 'Filtrer par finalisation du dossier du contrat.'
           example: 0
           required: false
@@ -2280,32 +2306,6 @@ paths:
         in: path
         name: id
         description: "L'ID du procès verbal."
-        example: 1
-        required: true
-        schema:
-          type: integer
-  '/api/download/{id}':
-    get:
-      summary: "Télécharge la version word d'un PV"
-      operationId: tlchargeLaVersionWordDunPV
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example: {  }
-                properties: {  }
-      tags:
-        - 'Procès Verbal'
-    parameters:
-      -
-        in: path
-        name: id
-        description: "L'ID du PV."
         example: 1
         required: true
         schema:

@@ -2,55 +2,45 @@
 
 namespace App\Policies;
 
+use App\Http\Traits\PermissionCheckerTrait;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
-    public function before(User $user, string $ability)
+    use PermissionCheckerTrait;
+    public function before(User $connectedUser, string $ability)
     {
-        if ($user->profile == "admin") {
+        if ($connectedUser->profile == "admin" || ($connectedUser->ability_rules[0]["subject"] == "all" && $connectedUser->ability_rules[0]["action"] == "manage")) {
             return Response::allow();
         }
         return null;
     }
-    public function viewAny(User $user)
+
+    public function viewAny(User $connectedUser)
     {
-        return Response::allow();
+        return $this->check(["read", "historical"], "guarantor", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
     public function view(User $connectedUser, User $user)
     {
-        return Response::allow();
-        // if (in_array($connectedUser->profile, ["operation", "control"])) {
-        // } else if ($connectedUser->profile == "cash_register" && $connectedUser->id == $user->id) {
-        //     return Response::allow();
-        // } else if ($connectedUser->profile == "agency_head" && $user->agency->head->id == $connectedUser->id) {
-        //     return Response::allow();
-        // }
-
-        // return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        if ($connectedUser->id == $user->id)
+            return Response::allow();
+        return $this->check(["read"], "guarantor", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
-    public function create(User $user)
+    public function create(User $connectedUser)
     {
-        return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return $this->check(["create"], "guarantor", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
     public function update(User $connectedUser, User $user)
     {
-        return $this->create($connectedUser);
+        return $this->check(["update"], "guarantor", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
-    public function updatePassword(User $connectedUser, User $user)
-    {
-        if ($connectedUser->id == $user->id) {
-            return Response::allow();
-        }
-        return $this->create($connectedUser);
-    }
     public function delete(User $connectedUser, User $user)
     {
-        return $this->create($connectedUser);
+        return $this->check(["delete"], "guarantor", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 }
