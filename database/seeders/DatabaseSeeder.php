@@ -25,14 +25,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $admin = User::factory(1)->create(["full_name" => "Charles GAMLIGO DD", "name" => "charles.gamligo", "email" => "charles.gamligo@cofinacorp.com", "profile" => "admin", "activated" => true, "password_change_required" => false, "password" => "Coftg2021"])->first();
-        $credit_analyst = User::factory(1)->create(["full_name" => "admin", "profile" => "admin", "password" =>"Coftg2021", "password_change_required" => false, "activated" => true, "email" => "admin@cofinacorp.com"])->first();
-        $credit_analyst = User::factory(1)->create(["full_name" => "credit_analyst", "profile" => "credit_analyst", "password" =>"Coftg2021", "password_change_required" => false, "activated" => true, "email" => "credit_analyst@cofinacorp.com"])->first();
-        $credit_admin = User::factory(1)->create(["full_name" => "credit_admin", "profile" => "credit_admin", "password" =>"Coftg2021", "password_change_required" => false, "activated" => true, "email" => "credit_admin@cofinacorp.com"])->first();
-        $head_credit = User::factory(1)->create(["full_name" => "head_credit", "profile" => "head_credit", "password" =>"Coftg2021", "password_change_required" => false, "activated" => true, "email" => "head_credit@cofinacorp.com"])->first();
-        $operation = User::factory(1)->create(["full_name" => "operation", "profile" => "operation", "password" =>"Coftg2021", "password_change_required" => false, "activated" => true, "email" => "operation@cofinacorp.com"])->first();
-        $legal = User::factory(1)->create(["full_name" => "legal", "profile" => "legal", "password" =>"Coftg2021", "password_change_required" => false, "activated" => true, "email" => "legal@cofinacorp.com"])->first();
-        $dex = User::factory(1)->create(["full_name" => "dex", "profile" => "dex", "password" =>"Coftg2021", "password_change_required" => false, "activated" => true, "email" => "dex@cofinacorp.com"])->first();
-        $caf = User::factory(1)->create(["full_name" => "caf", "profile" => "caf", "password" =>"Coftg2021", "password_change_required" => false, "activated" => true, "email" => "caf@cofinacorp.com"])->first();
+        $credit_analyst = User::factory(1)->create(["full_name" => "admin", "profile" => "admin", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "admin@cofinacorp.com"])->first();
+        $credit_analyst = User::factory(1)->create(["full_name" => "credit_analyst", "profile" => "credit_analyst", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "credit_analyst@cofinacorp.com"])->first();
+        $credit_admin = User::factory(1)->create(["full_name" => "credit_admin", "profile" => "credit_admin", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "credit_admin@cofinacorp.com"])->first();
+        $head_credit = User::factory(1)->create(["full_name" => "head_credit", "profile" => "head_credit", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "head_credit@cofinacorp.com"])->first();
+        $operation = User::factory(1)->create(["full_name" => "operation", "profile" => "operation", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "operation@cofinacorp.com"])->first();
+        $legal = User::factory(1)->create(["full_name" => "legal", "profile" => "legal", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "legal@cofinacorp.com"])->first();
+        $dex = User::factory(1)->create(["full_name" => "dex", "profile" => "dex", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "dex@cofinacorp.com"])->first();
+        $caf = User::factory(1)->create(["full_name" => "caf", "profile" => "caf", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "caf@cofinacorp.com"])->first();
 
         $physical_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Physique"])->first();
         $moral_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Morale"])->first();
@@ -107,9 +107,9 @@ class DatabaseSeeder extends Seeder
         });
 
         $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
-        $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
         DB::update("update personal_access_tokens set TOKEN = '8fb55a1d50842403ddc4ea7dc0c80a5d2e44eeb029f1077341babd46b68fe0ba' where ID = 1");
-        DB::update("update personal_access_tokens set TOKEN = 'c43f445b01d662ccfb74dfdc7cb13250097716213c40324b819064c5191cb401' where ID = 2");
+        $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
+        DB::update("update personal_access_tokens set TOKEN = '96b91ec21dfc7acd2bb8489528e67dbabaf8d6da488267f72069ebb0f09658d6' where ID = 2");
         $plainTextToken = "1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644";
         $file = public_path('../.env');
         $lines = file($file);

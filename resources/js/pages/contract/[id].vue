@@ -25,6 +25,11 @@ const documentTypeList = {
   "driving_licence": 'Permise de conduire',
 }
 
+const garanteeTypeList = {
+  "vehicle": "Véhicule",
+  "stock": "Stock"
+}
+
 const {
   data: contract,
 } = await useApi(createUrl(`/contract/${route.params.id}`, {
@@ -32,6 +37,7 @@ const {
     with_type_of_credit: 1,
     with_caf: 1,
     with_type_of_guarantees: 1,
+    with_pledges: 1,
   },
 }))
 
@@ -129,42 +135,6 @@ if (contract.value.verbal_trial.duration > 13) {
 
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="12">
-              <h2>CARACTERISTIQUES</h2>
-            </VCol>
-            <VCol cols="12">
-              <VTable class="text-no-wrap">
-                <tbody>
-                  <tr v-for="item in tableData" :key="item.key">
-                    <td colspan="5">
-                      {{ item.title }}
-                    </td>
-                    <td colspan="1">
-                      {{ item.value }}
-                    </td>
-                  </tr>
-                </tbody>
-              </VTable>
-            </VCol>
-          </VCardText>
-
-          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
-            <VCol cols="12">
-              <h2>GARANTIES A RECUEILLIR</h2>
-            </VCol>
-            <VCol cols="12">
-              <p>
-              <ul>
-                <li v-for="(item, index) in contract.verbal_trial.guarantees" :key="index" style="font-size: 20px">
-                  {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
-                  CFA : {{ item.comment }}
-                </li>
-              </ul>
-              </p>
-            </VCol>
-          </VCardText>
-
-          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
-            <VCol cols="12">
               <h2>Informations suplémentaires du client</h2>
             </VCol>
             <VCol cols="6">
@@ -195,7 +165,7 @@ if (contract.value.verbal_trial.duration > 13) {
             </VCol>
             <VCol cols="6">
               <p style="font-size: 20px">
-                : {{ contract.representative_birth_date }}
+                : {{ contract.representative_birth_date_fr }}
               </p>
               <p style="font-size: 20px">
                 : {{ contract.representative_birth_place }}
@@ -213,10 +183,74 @@ if (contract.value.verbal_trial.duration > 13) {
                 : {{ contract.representative_number_of_identity_document }}
               </p>
               <p style="font-size: 20px">
-                : {{ contract.representative_date_of_issue_of_identity_document }}
+                : {{ contract.representative_date_of_issue_of_identity_document_fr }}
               </p>
               <p style="font-size: 20px">
                 : {{ contract.representative_phone_number }}
+              </p>
+            </VCol>
+          </VCardText>
+
+          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
+            <VCol cols="12">
+              <h2>CARACTERISTIQUES</h2>
+            </VCol>
+            <VCol cols="12">
+              <VTable class="text-no-wrap">
+                <tbody>
+                  <tr v-for="item in tableData" :key="item.key">
+                    <td colspan="5">
+                      {{ item.title }}
+                    </td>
+                    <td colspan="1">
+                      {{ item.value }}
+                    </td>
+                  </tr>
+                </tbody>
+              </VTable>
+            </VCol>
+          </VCardText>
+
+          <VCardText v-if="contract.has_pledges == '1'"
+            class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
+            <VCol cols="12">
+              <h2>Gages</h2>
+            </VCol>
+            <VCol cols="12">
+              <VTable class="text-no-wrap">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Commentaire</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr v-for="item in contract.pledges" :key="item.key">
+                    <td>
+                      {{ garanteeTypeList[item.type] }}
+                    </td>
+                    <td>
+                      {{ item.comment }}
+                    </td>
+                  </tr>
+                </tbody>
+              </VTable>
+            </VCol>
+          </VCardText>
+
+          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
+            <VCol cols="12">
+              <h2>GARANTIES A RECUEILLIR</h2>
+            </VCol>
+            <VCol cols="12">
+              <p>
+              <ul>
+                <li v-for="(item, index) in contract.verbal_trial.guarantees" :key="index" style="font-size: 20px">
+                  {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
+                  CFA : {{ item.comment }}
+                </li>
+              </ul>
               </p>
             </VCol>
           </VCardText>

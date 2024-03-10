@@ -195,6 +195,7 @@ class CATController extends Controller
             $templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
             unset($data["contract.observations"]);
             unset($data["contract.guarantors"]);
+            unset($data["contract.verbal_trial.caf.ability_rules"]);
             $templateProcessor->setValues($data);
             // return $data;
 

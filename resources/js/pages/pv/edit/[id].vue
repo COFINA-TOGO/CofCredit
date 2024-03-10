@@ -1,5 +1,6 @@
 <!-- eslint-disable camelcase -->
 <script setup>
+import GuaranteeEdit from '@/views/pv/GuaranteeEdit.vue'
 definePage({
   meta: {
     action: 'update',
@@ -35,7 +36,6 @@ const typeOfCreditList = computed(() => typeOfCreditListData.value.data)
 
 const {
   data: cafListData,
-  execute: fetchCafList,
 } = await useApi(createUrl('/user', {
   query: {
     "paginate": 0,
@@ -76,6 +76,7 @@ const {
   query: {
     with_caf: 1,
     with_type_of_credit: 1,
+    with_guarantees: 1,
   },
 }))
 
@@ -107,6 +108,7 @@ const onSubmit = () => {
           administrative_fees_percentage: verbalTrial.value.administrative_fees_percentage,
           taf: verbalTrial.value.taf,
           tax_fee_interest_rate: verbalTrial.value.tax_fee_interest_rate,
+          guarantees: verbalTrial.value.guarantees,
         },
       })
 
@@ -125,6 +127,20 @@ const onSubmit = () => {
         // refForm.value?.resetValidation()
       })
     }
+  })
+}
+
+const removeGuaranteeItem = id => {
+  verbalTrial.value.guarantees.splice(id, 1)
+}
+
+const addGuaranteeItem = () => {
+  console.log(verbalTrial.value)
+  verbalTrial.value.guarantees.push({
+    type_of_guarantee_id: 1,
+    expiration_date: "",
+    value: "",
+    comment: "",
   })
 }
 </script>
@@ -154,7 +170,8 @@ const onSubmit = () => {
                 <VRow>
                   <VCol cols="12" md="6" lg="4">
                     <AppTextField v-model="verbalTrial.committee_id" :error-messages="verbalTrialError.committee_id"
-                      label="Numéro du comitée" placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" />
+                      label="Numéro du comitée" placeholder="Ex: CFNTG-044-13-12-23-01212"
+                      :rules="[requiredValidator]" />
                   </VCol>
                   <VCol cols="12" md="6" lg="4">
                     <AppDateTimePicker v-model="verbalTrial.committee_date"
@@ -205,9 +222,9 @@ const onSubmit = () => {
                       label="Montant" placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
                   </VCol>
                   <VCol cols="12" md="6" lg="4">
-                    <AppTextField v-model="verbalTrial.duration" type="number" :error-messages="verbalTrialError.duration"
-                      label="Durée du crédit en mois" placeholder="Ex: 18" append-inner-icon="tabler-calendar"
-                      :rules="[requiredValidator]" />
+                    <AppTextField v-model="verbalTrial.duration" type="number"
+                      :error-messages="verbalTrialError.duration" label="Durée du crédit en mois" placeholder="Ex: 18"
+                      append-inner-icon="tabler-calendar" :rules="[requiredValidator]" />
                   </VCol>
                   <VCol cols="12" md="6" lg="4">
                     <AppSelect v-model="verbalTrial.periodicity" :items="periodicityItemList"
@@ -256,6 +273,19 @@ const onSubmit = () => {
                     </VSlider>
                   </VCol>
                 </VRow>
+              </VCardText>
+            </VCard>
+            <VCard class="mb-6" title="Information des garanties">
+              <VCardText class="add-products-form">
+                <div v-for="(guarantee, index) in verbalTrial.guarantees" class="my-4 ma-sm-4">
+                  <GuaranteeEdit :id="index" :data="guarantee" @remove-guarantee="removeGuaranteeItem" />
+                </div>
+
+                <div class="mt-4 ma-sm-4">
+                  <VBtn prepend-icon="tabler-plus" @click="addGuaranteeItem">
+                    Ajouter
+                  </VBtn>
+                </div>
               </VCardText>
             </VCard>
           </VCol>

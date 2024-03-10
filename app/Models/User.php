@@ -56,9 +56,9 @@ class User extends Authenticatable
     public function toArray()
     {
         $data = parent::toArray();
-        $data["created_at"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
-        $data["updated_at"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
-        $data["email_verified_at"] = Carbon::parse($data["email_verified_at"])->format("d/m/Y H:i:s");
+        $data["created_at_fr"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
+        $data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
+        $data["email_verified_at_fr"] = Carbon::parse($data["email_verified_at"])->format("d/m/Y H:i:s");
         return $data;
     }
 

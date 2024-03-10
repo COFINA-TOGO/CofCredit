@@ -1,5 +1,7 @@
 <!-- eslint-disable camelcase -->
 <script setup>
+import GuaranteeEdit from '@/views/pv/GuaranteeEdit.vue'
+
 definePage({
   meta: {
     action: 'create',
@@ -11,46 +13,52 @@ import { ref } from 'vue'
 const router = useRouter()
 
 const pvData = ref({
-  "committee_id": "CFNTG-044-13-12-23-01212",
-  "committee_date": "2024-02-02",
-  "caf_id": "7",
-  "civility": "Mr",
-  "applicant_first_name": "Cesar",
-  "applicant_last_name": "Endure",
-  "account_number": "251012345678",
-  "activity": "Homme d'affaire",
-  "purpose_of_financing": "Achat de nouveau locaux",
-  "type_of_credit_id": "1",
-  "amount": "15000000",
-  "duration": "18",
-  "periodicity": "mensual",
-  "due_amount": "150000",
-  "insurance_premium": "15000",
-  "administrative_fees_percentage": 2.5,
-  "taf": 10,
-  "tax_fee_interest_rate": 17,
+  committee_id: "CFNTG-044-13-12-23-01212",
+  committee_date: "2024-02-02",
+  caf_id: "7",
+  civility: "Mr",
+  applicant_first_name: "Cesar",
+  applicant_last_name: "Endure",
+  account_number: "251012345678",
+  activity: "Homme d'affaire",
+  purpose_of_financing: "Achat de nouveau locaux",
+  type_of_credit_id: "1",
+  amount: "15000000",
+  duration: "18",
+  periodicity: "mensual",
+  due_amount: "150000",
+  insurance_premium: "15000",
+  administrative_fees_percentage: 2.5,
+  taf: 10,
+  tax_fee_interest_rate: 17,
+  guarantees: [{
+    type_of_guarantee_id: 1,
+    expiration_date: "",
+    value: "",
+    comment: "",
+  }]
 })
 
 const getResetPvError = () => {
   return {
-    "committee_id": "",
-    "committee_date": "",
-    "caf_id": "",
-    "civility": "",
-    "applicant_first_name": "",
-    "applicant_last_name": "",
-    "account_number": "",
-    "activity": "",
-    "purpose_of_financing": "",
-    "type_of_credit_id": "",
-    "amount": "",
-    "duration": "",
-    "periodicity": "",
-    "due_amount": "",
-    "insurance_premium": "",
-    "administrative_fees_percentage": "",
-    "taf": "",
-    "tax_fee_interest_rate": "",
+    committee_id: "",
+    committee_date: "",
+    caf_id: "",
+    civility: "",
+    applicant_first_name: "",
+    applicant_last_name: "",
+    account_number: "",
+    activity: "",
+    purpose_of_financing: "",
+    type_of_credit_id: "",
+    amount: "",
+    duration: "",
+    periodicity: "",
+    due_amount: "",
+    insurance_premium: "",
+    administrative_fees_percentage: "",
+    taf: "",
+    tax_fee_interest_rate: "",
   }
 }
 
@@ -73,7 +81,6 @@ const periodicityItemList = [
 
 const {
   data: typeOfCreditListData,
-  execute: fetchTypeOfCreditList,
 } = await useApi(createUrl('/type-of-credit', {
   query: {
     "paginate": 0,
@@ -84,7 +91,6 @@ const typeOfCreditList = computed(() => typeOfCreditListData.value.data)
 
 const {
   data: cafListData,
-  execute: fetchCafList,
 } = await useApi(createUrl('/user', {
   query: {
     "paginate": 0,
@@ -120,6 +126,7 @@ const onSubmit = () => {
           administrative_fees_percentage: pvData.value.administrative_fees_percentage,
           taf: pvData.value.taf,
           tax_fee_interest_rate: pvData.value.tax_fee_interest_rate,
+          guarantees: pvData.value.guarantees,
         },
       })
 
@@ -140,6 +147,20 @@ const onSubmit = () => {
     }
   })
 }
+
+const removeGuaranteeItem = id => {
+  pvData.value.guarantees.splice(id, 1)
+}
+
+const addGuaranteeItem = () => {
+  pvData.value.guarantees.push({
+    type_of_guarantee_id: 1,
+    expiration_date: "",
+    value: "",
+    comment: "",
+  })
+}
+
 </script>
 
 <template>
@@ -199,7 +220,8 @@ const onSubmit = () => {
                 <VCol cols="12" md="6" lg="4">
                   <AppAutocomplete v-model="pvData.type_of_credit_id" :items="typeOfCreditList"
                     :error-messages="pvError.type_of_credit_id" label="Type de credit"
-                    placeholder="Ex: Avance sur salaire" item-title="name" item-value="id" :rules="[requiredValidator]" />
+                    placeholder="Ex: Avance sur salaire" item-title="name" item-value="id"
+                    :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="pvData.amount" type="number" :error-messages="pvError.amount" label="Montant"
@@ -255,6 +277,19 @@ const onSubmit = () => {
                   </VSlider>
                 </VCol>
               </VRow>
+            </VCardText>
+          </VCard>
+          <VCard class="mb-6" title="Information des garanties">
+            <VCardText class="add-products-form">
+              <div v-for="(guarantee, index) in pvData.guarantees" class="my-4 ma-sm-4">
+                <GuaranteeEdit :id="index" :data="guarantee" @remove-guarantee="removeGuaranteeItem" />
+              </div>
+
+              <div class="mt-4 ma-sm-4">
+                <VBtn prepend-icon="tabler-plus" @click="addGuaranteeItem">
+                  Ajouter
+                </VBtn>
+              </div>
             </VCardText>
           </VCard>
         </VCol>

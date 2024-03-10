@@ -1020,32 +1020,6 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/download/{id}':
-    get:
-      summary: "Télécharge la version word d'une caution"
-      operationId: tlchargeLaVersionWordDuneCaution
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example: {  }
-                properties: {  }
-      tags:
-        - Caution
-    parameters:
-      -
-        in: path
-        name: id
-        description: "L'ID du caution."
-        example: 1
-        required: true
-        schema:
-          type: integer
   '/api/test/contract/download/{id}':
     get:
       summary: "Télécharge la version word d'un contrat"
@@ -1340,6 +1314,16 @@ paths:
             example: 0
         -
           in: query
+          name: with_pledges
+          description: 'Afficher les gages.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les gages.'
+            example: 0
+        -
+          in: query
           name: paginate
           description: 'Utiliser la pagination.'
           example: 0
@@ -1595,6 +1579,16 @@ paths:
           schema:
             type: integer
             description: 'Afficher les types des garanties.'
+            example: 0
+        -
+          in: query
+          name: with_pledges
+          description: 'Afficher les gages.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher les gages.'
             example: 0
       responses:
         200:
@@ -2306,6 +2300,32 @@ paths:
         in: path
         name: id
         description: "L'ID du procès verbal."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/download/{id}':
+    get:
+      summary: "Télécharge la version word d'un PV"
+      operationId: tlchargeLaVersionWordDunPV
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Procès Verbal'
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du PV."
         example: 1
         required: true
         schema:

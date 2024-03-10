@@ -21,9 +21,9 @@ class Guarantee extends Model
     public function toArray()
     {
         $data = parent::toArray();
-        $data["created_at"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
-        $data["updated_at"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
-        $data["expiration_date"] = Carbon::parse($data["expiration_date"])->format("d/m/Y");
+        $data["created_at_fr"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
+        $data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
+        $data["expiration_date_fr"] = Carbon::parse($data["expiration_date"])->format("d/m/Y");
         return $data;
     }
 

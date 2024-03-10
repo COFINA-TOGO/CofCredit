@@ -42,6 +42,7 @@ const addItem = () => {
     qty: 1,
     description: 'Designed UI kit & app pages.',
   })
+  console.log(props.data.purchasedProducts)
 }
 
 const removeProduct = id => {

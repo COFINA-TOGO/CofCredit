@@ -61,6 +61,7 @@ class ContractController extends Controller
    * @queryParam  with_individual_business                                int                 Afficher les informations de l'entreprise individuelle                  Example: 0
    * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
    * @queryParam  with_creator                                            int                 Afficher le créateur du contrat.                                        Example: 0
+   * @queryParam  with_pledges                                            int                 Afficher les gages.                                                     Example: 0
    * @queryParam  paginate                                                int                 Utiliser la pagination.                                                 Example: 0
    *
    * @response 200
@@ -103,7 +104,7 @@ class ContractController extends Controller
       }
 
 
-      foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_creator" => "creator"] as $key => $value) {
+      foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_creator" => "creator", "with_pledges" => "pledges"] as $key => $value) {
         if (isset($request[$key]) && $request[$key]) {
           $contractList->with($value);
         }
@@ -159,6 +160,7 @@ class ContractController extends Controller
    * @queryParam  with_company                                            int                 Afficher les informations de la société                                 Example: 0
    * @queryParam  with_individual_business                                int                 Afficher les informations de l'entreprise individuelle                  Example: 0
    * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
+   * @queryParam  with_pledges                                            int                 Afficher les gages.                                                     Example: 0
    *
    * @response 200
    */
@@ -168,7 +170,7 @@ class ContractController extends Controller
     if ($contract) {
       if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
         $suplementList = [];
-        foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business"] as $key => $value) {
+        foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_pledges" => "pledges"] as $key => $value) {
           if (isset($request[$key]) && $request[$key]) {
             $suplementList[] = $value;
           }
@@ -195,7 +197,7 @@ class ContractController extends Controller
     $contract = Contract::find($id);
     if ($contract) {
       if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
-        $templatePath = ($contract->has_pledges == "false") ? "../document_templates/Contracts/$contract->type/contract_$contract->type.docx" : "../document_templates/Contracts/$contract->type/with_pledge/contract_$contract->type" . "_with_pledge.docx";
+        $templatePath = ($contract->has_pledges == "0") ? "../document_templates/Contracts/$contract->type/contract_$contract->type.docx" : "../document_templates/Contracts/$contract->type/with_pledge/contract_$contract->type" . "_with_pledge.docx";
         $templateProcessor = new TemplateProcessor($templatePath);
 
         $data = $contract->toArray();
@@ -301,7 +303,6 @@ class ContractController extends Controller
     $contract = Contract::find($id);
     if ($contract) {
       if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
-        // $contract->load(["verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"]);
         $templateProcessor = new TemplateProcessor("../document_templates/Contracts/$contract->type/billet_a_ordre_$contract->type.docx");
 
         $data = $contract->toArray();

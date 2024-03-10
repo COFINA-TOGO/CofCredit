@@ -42,8 +42,8 @@ class VerbalTrial extends Model
     public function toArray()
     {
         $data = parent::toArray();
-        $data["created_at"] = Carbon::parse($data["created_at"])->format('d/m/Y H:i:s');
-        $data["updated_at"] = Carbon::parse($data["updated_at"])->format('d/m/Y H:i:s');
+        $data["created_at_fr"] = Carbon::parse($data["created_at"])->format('d/m/Y H:i:s');
+        $data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format('d/m/Y H:i:s');
         $data["type_of_credit_id"] = (int) $data["type_of_credit_id"];
         $data["amount"] = (float) $data["amount"];
         $data["taf"] = (float) $data["taf"];

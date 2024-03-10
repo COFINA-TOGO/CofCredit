@@ -99,5 +99,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete("/{id}", [CATController::class, "destroy"])->name("destroy");
   });
 });
-Route::get("/download/{id}", [GuarantorController::class, "download"])->name("download");
+Route::get("/download/{id}", [CATController::class, "download"])->name("download");
 

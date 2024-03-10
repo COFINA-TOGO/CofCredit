@@ -67,64 +67,34 @@ const removeProduct = id => {
 <template>
   <VRow>
     <!-- 👉 InvoiceEditable -->
-    <VCol
-      cols="12"
-      md="9"
-    >
-      <InvoiceEditable
-        :data="invoiceData"
-        @push="addProduct"
-        @remove="removeProduct"
-      />
+    <VCol cols="12" md="9">
+      <InvoiceEditable :data="invoiceData" @push="addProduct" @remove="removeProduct" />
     </VCol>
 
     <!-- 👉 Right Column: Invoice Action -->
-    <VCol
-      cols="12"
-      md="3"
-    >
+    <VCol cols="12" md="3">
       <VCard class="mb-8">
         <VCardText>
           <!-- 👉 Send Invoice -->
-          <VBtn
-            block
-            prepend-icon="tabler-send"
-            class="mb-2"
-            @click="isSendSidebarActive = true"
-          >
+          <VBtn block prepend-icon="tabler-send" class="mb-2" @click="isSendSidebarActive = true">
             Send Invoice
           </VBtn>
 
           <!-- 👉 Preview -->
-          <VBtn
-            block
-            color="default"
-            variant="tonal"
-            class="mb-2"
-            :to="{ name: 'apps-invoice-preview-id', params: { id: '5036' } }"
-          >
+          <VBtn block color="default" variant="tonal" class="mb-2"
+            :to="{ name: 'apps-invoice-preview-id', params: { id: '5036' } }">
             Preview
           </VBtn>
 
           <!-- 👉 Save -->
-          <VBtn
-            block
-            color="default"
-            variant="tonal"
-            @click="isAddPaymentSidebarActive = true"
-          >
+          <VBtn block color="default" variant="tonal" @click="isAddPaymentSidebarActive = true">
             Save
           </VBtn>
         </VCardText>
       </VCard>
 
       <!-- 👉 Select payment method -->
-      <AppSelect
-        v-model="selectedPaymentMethod"
-        :items="paymentMethods"
-        label="Accept Payment Via"
-        class="mb-6"
-      />
+      <AppSelect v-model="selectedPaymentMethod" :items="paymentMethods" label="Accept Payment Via" class="mb-6" />
 
       <!-- 👉 Payment Terms -->
       <div class="d-flex align-center justify-space-between mb-2">
@@ -132,10 +102,7 @@ const removeProduct = id => {
           Payment Terms
         </VLabel>
         <div>
-          <VSwitch
-            id="payment-terms"
-            v-model="paymentTerms"
-          />
+          <VSwitch id="payment-terms" v-model="paymentTerms" />
         </div>
       </div>
 
@@ -145,10 +112,7 @@ const removeProduct = id => {
           Client Notes
         </VLabel>
         <div>
-          <VSwitch
-            id="client-notes"
-            v-model="clientNotes"
-          />
+          <VSwitch id="client-notes" v-model="clientNotes" />
         </div>
       </div>
 
@@ -158,10 +122,7 @@ const removeProduct = id => {
           Payment Stub
         </VLabel>
         <div>
-          <VSwitch
-            id="payment-stub"
-            v-model="paymentStub"
-          />
+          <VSwitch id="payment-stub" v-model="paymentStub" />
         </div>
       </div>
     </VCol>

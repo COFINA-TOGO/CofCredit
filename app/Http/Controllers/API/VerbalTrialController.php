@@ -181,6 +181,8 @@ class VerbalTrialController extends Controller
             $data["created_at"] = Carbon::parse($verbalTrial->created_at)->format("d/m/Y");
             $data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
             $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
+            $data["line_review_bonus"] = (((float) $data["duration"]) < 18) ? "" : "Prime de révision de ligne                                          : « 1% du capital restant dû après 12 mois »";
+
 
             $guaranteeList = [];
             foreach ($verbalTrial->guarantees as $guarantee) {
@@ -191,7 +193,7 @@ class VerbalTrialController extends Controller
                 })->all());
             }
             $templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
-
+            unset($data["caf.ability_rules"]);
             $templateProcessor->setValues($data);
             // return $data;
 

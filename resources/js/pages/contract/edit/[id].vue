@@ -1,6 +1,7 @@
 <!-- eslint-disable camelcase -->
 
 <script setup>
+import PledgeEdit from '@/views/contract/PledgeEdit.vue'
 definePage({
   meta: {
     action: 'update',
@@ -61,6 +62,7 @@ const {
     with_verbal_trial: 1,
     with_company: 1,
     with_individual_business: 1,
+    with_pledges: 1,
   },
 }))
 
@@ -140,6 +142,10 @@ const onSubmit = () => {
         $data.individual_business_phone_number = contract.value.individual_business.phone_number
       }
 
+      if (contract.value.has_pledges == '1') {
+        $data.pledges = contract.value.pledges
+      }
+
       const res = await $api(`/contract/${route.params.id}`, {
         method: 'PUT',
         body: $data,
@@ -160,6 +166,20 @@ const onSubmit = () => {
         refForm.value?.resetValidation()
       })
     }
+  })
+}
+
+const removePledgeItem = id => {
+  contract.value.pledges.splice(id, 1)
+}
+
+const addPledgeItem = () => {
+  // if (!contract.value.pledges) {
+  //   contract.value.pledges = []
+  // }
+  contract.value.pledges.push({
+    type: "vehicle",
+    comment: "",
   })
 }
 </script>
@@ -190,7 +210,66 @@ const onSubmit = () => {
       </VRow>
       <VRow>
         <VCol md="12">
-          <!-- 👉 Contract Information -->
+
+          <!-- 👉 Informations sur le contrat -->
+          <VCard class="mb-6" title="Information sur contrat">
+            <VCardText>
+              <VRow>
+                <VCol cols="12" md="6" lg="6">
+                  <AppAutocomplete v-model="contract.verbal_trial_id" :items="verbalTrialList"
+                    :error-messages="errorData.verbal_trial_id" label="Procès verbal"
+                    placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" item-title="committee_id"
+                    item-value="id" />
+                </VCol>
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contract.total_amount_of_interest" type="number"
+                    :error-messages="errorData.total_amount_of_interest" label="Montant d'une échéance"
+                    placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="contract.number_of_due_dates" type="number"
+                    :error-messages="errorData.number_of_due_dates" label="Nombre d'échéance" placeholder="Ex: 18"
+                    :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="6">
+                  <AppSelect v-model="contract.type" :items="typeList" :error-messages="errorData.type" label="Type"
+                    placeholder="Ex: Particulier" :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="10">
+                  <VSlider v-model="contract.risk_premium_percentage"
+                    label="Prime de risque (en pourcentage) du demandeur"
+                    :error-messages="errorData.risk_premium_percentage" :thumb-size="15" thumb-label="always"
+                    :rules="[requiredValidator]" step="0.1">
+                    <template #append>
+                      <VTextField v-model="contract.risk_premium_percentage"
+                        :error-messages="errorData.risk_premium_percentage" type="number" style="width:80px"
+                        density="compact" hide-details variant="outlined" suffix="%" />
+                    </template>
+                  </VSlider>
+                </VCol>
+                <VCol cols="2">
+                  <VCheckbox v-model="contract.has_pledges" :true-value="'1'" :false-value="'0'"
+                    :label="hasPledgesLabel[contract.has_pledges]" :error-messages="errorData.has_pledges"
+                    true-icon="tabler-check" false-icon="tabler-circle-x" color="success" />
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
+          <!-- 👉 Information sur les gages -->
+          <VCard v-if="contract.has_pledges == '1'" class=" mb-6" title="Informations sur les gages">
+            <VCardText class="add-products-form">
+              <div v-for="(pledge, index) in contract.pledges" class="my-4 ma-sm-4">
+                <PledgeEdit :id="index" :data="pledge" @remove-pledge="removePledgeItem" />
+              </div>
+
+              <div class="mt-4 ma-sm-4">
+                <VBtn prepend-icon="tabler-plus" @click="addPledgeItem">
+                  Ajouter
+                </VBtn>
+              </div>
+            </VCardText>
+          </VCard>
+          <!-- 👉 Informations sur le client -->
           <VCard class="mb-6" title="Information sur le client">
             <VCardText>
               <VRow>
@@ -238,49 +317,7 @@ const onSubmit = () => {
               </VRow>
             </VCardText>
           </VCard>
-          <VCard class="mb-6" title="Information sur contrat">
-            <VCardText>
-              <VRow>
-                <VCol cols="12" md="6" lg="6">
-                  <AppAutocomplete v-model="contract.verbal_trial_id" :items="verbalTrialList"
-                    :error-messages="errorData.verbal_trial_id" label="Procès verbal"
-                    placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" item-title="committee_id"
-                    item-value="id" />
-                </VCol>
-                <VCol cols="12" md="6" lg="6">
-                  <AppTextField v-model="contract.total_amount_of_interest" type="number"
-                    :error-messages="errorData.total_amount_of_interest" label="Montant d'une échéance"
-                    placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
-                </VCol>
-                <VCol cols="12" md="6" lg="6">
-                  <AppTextField v-model="contract.number_of_due_dates" type="number"
-                    :error-messages="errorData.number_of_due_dates" label="Nombre d'échéance" placeholder="Ex: 18"
-                    :rules="[requiredValidator]" />
-                </VCol>
-                <VCol cols="12" md="6" lg="6">
-                  <AppSelect v-model="contract.type" :items="typeList" :error-messages="errorData.type" label="Type"
-                    placeholder="Ex: Particulier" :rules="[requiredValidator]" />
-                </VCol>
-                <VCol cols="10">
-                  <VSlider v-model="contract.risk_premium_percentage"
-                    label="Prime de risque (en pourcentage) du demandeur"
-                    :error-messages="errorData.risk_premium_percentage" :thumb-size="15" thumb-label="always"
-                    :rules="[requiredValidator]" step="0.1">
-                    <template #append>
-                      <VTextField v-model="contract.risk_premium_percentage"
-                        :error-messages="errorData.risk_premium_percentage" type="number" style="width:80px"
-                        density="compact" hide-details variant="outlined" suffix="%" />
-                    </template>
-                  </VSlider>
-                </VCol>
-                <VCol cols="2">
-                  <VCheckbox v-model="contract.has_pledges" :true-value="'1'" :false-value="'0'"
-                    :label="hasPledgesLabel[contract.has_pledges]" :error-messages="errorData.has_pledges"
-                    true-icon="tabler-check" false-icon="tabler-circle-x" color="success" />
-                </VCol>
-              </VRow>
-            </VCardText>
-          </VCard>
+          <!-- 👉 Information sur la société -->
           <VCard v-if="contract.type == 'company'" class="mb-6" title="Information sur la société">
             <VCardText>
               <VRow cols="12">
@@ -308,6 +345,7 @@ const onSubmit = () => {
               </VRow>
             </VCardText>
           </VCard>
+          <!-- 👉 Information sur l'entreprise individuelle -->
           <VCard v-if="contract.type == 'individual_business'" class="mb-6"
             title="Information sur l'entreprise individuele">
             <VCardText>

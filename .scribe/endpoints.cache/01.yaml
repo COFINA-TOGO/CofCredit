@@ -313,6 +313,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_pledges:
+        name: with_pledges
+        description: 'Afficher les gages.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       paginate:
         name: paginate
         description: 'Utiliser la pagination.'
@@ -334,6 +343,7 @@ endpoints:
       with_company: 0
       with_individual_business: 0
       with_creator: 0
+      with_pledges: 0
       paginate: 0
     bodyParameters: []
     cleanBodyParameters: []
@@ -614,6 +624,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_pledges:
+        name: with_pledges
+        description: 'Afficher les gages.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
     cleanQueryParameters:
       with_verbal_trial: 0
       with_type_of_credit: 0
@@ -623,6 +642,7 @@ endpoints:
       with_company: 0
       with_individual_business: 0
       with_type_of_guarantees: 0
+      with_pledges: 0
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []

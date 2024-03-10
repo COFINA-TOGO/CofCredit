@@ -41,9 +41,10 @@ class Contract extends Model
     public function toArray()
     {
         $data = parent::toArray();
-        $data["created_at"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
-        $data["updated_at"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
+        $data["created_at_fr"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
+        $data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
         $data["verbal_trial_id"] = (int) $data["verbal_trial_id"];
+        $data["has_pledges"] = (string) $data["has_pledges"];
         $data["representative_birth_date_fr"] = Carbon::parse($data["representative_birth_date"])->format("d/m/Y");
         $data["representative_birth_date_fr"] = Carbon::parse($data["representative_birth_date"])->format("d/m/Y");
         $data["representative_date_of_issue_of_identity_document_fr"] = Carbon::parse($data["representative_date_of_issue_of_identity_document"])->format("d/m/Y");

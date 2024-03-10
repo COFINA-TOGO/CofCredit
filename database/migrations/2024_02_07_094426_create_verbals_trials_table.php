@@ -21,13 +21,13 @@ return new class extends Migration {
             $table->string("activity");
             $table->string("purpose_of_financing");
             $table->foreignId('type_of_credit_id')->constrained(table: 'types_of_credit', column: 'id')->cascadeOnDelete();
-            $table->decimal('amount', 30, 10);
+            $table->decimal('amount', 30, 2);
             $table->integer('duration');
             $table->enum('periodicity', ['mensual', 'quarterly', "semi-annual", "annual", 'in-fine']);
             $table->float('taf');
-            $table->decimal('due_amount', 30, 10);
-            $table->decimal('administrative_fees_percentage', 30, 10);
-            $table->decimal('insurance_premium', 30, 10);
+            $table->decimal('due_amount', 30, 2);
+            $table->decimal('administrative_fees_percentage', 30, 2);
+            $table->decimal('insurance_premium', 30, 2);
             $table->float('tax_fee_interest_rate');
             $table->foreignId('caf_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
             $table->foreignId("creator_id")->constrained(table: "users", column: "id")->cascadeOnDelete();

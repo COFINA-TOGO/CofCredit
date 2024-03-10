@@ -193,7 +193,7 @@ const uploadFile = async (id, event) => {
 
           <VBtn v-if="$can('create', 'contract')" color="primary" prepend-icon="tabler-plus"
             :to="{ name: 'contract-add' }">
-            Ajouter un contrat
+            Ajouter
           </VBtn>
           <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
             @click="fetchContracts(); load(3)">

@@ -84,7 +84,7 @@ if (vertalTrial.duration > 13) {
               </p>
               <br>
               <p style="font-size: 20px">
-                Date de validation: {{ vertalTrial.created_at }}
+                Date de validation: {{ vertalTrial.created_at_fr }}
               </p>
             </VCol>
             <VCol cols="6">
@@ -93,7 +93,7 @@ if (vertalTrial.duration > 13) {
               </p>
               <p style="font-size: 20px">
                 : <strong> {{ vertalTrial.applicant_last_name + " " + vertalTrial.applicant_first_name
-                }}</strong>
+                  }}</strong>
               </p>
               <p style="font-size: 20px">
                 : {{ vertalTrial.account_number }}
