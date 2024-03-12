@@ -3,7 +3,7 @@
 Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supléments
 
 <aside>
-    <strong>Base URL</strong>: <code>http://cofcredit.cofina.localhost</code>
+    <strong>Base URL</strong>: <code>https://credit.catcof.site</code>
 </aside>
 
 This documentation aims to provide all the information you need to work with our API.

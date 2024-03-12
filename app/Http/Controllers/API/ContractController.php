@@ -110,6 +110,12 @@ class ContractController extends Controller
         }
       }
 
+      if (($currentUser = $request->user())->profile == "caf") {
+        $contractList->whereHas('verbal_trial', function ($query) use ($currentUser) {
+          $query->where('caf_id', $currentUser->id);
+        });
+      }
+
       if (isset($request["has_upload_completed"])) {
         if ($request["has_upload_completed"]) {
           $contractList->whereNotNull('signed_contract_path')->whereNotNull('signed_promissory_note_path')->where(function ($query) {

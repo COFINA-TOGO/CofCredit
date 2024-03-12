@@ -112,7 +112,7 @@ class User extends Authenticatable
                         "subject" => ["guarantor"],
                     ],
                     [
-                        "action" => ["manage"],
+                        "action" => ["read", "create", "update", "delete", "download"],
                         "subject" => ["cat"],
                     ],
                     [
@@ -135,7 +135,7 @@ class User extends Authenticatable
                         "subject" => ["guarantor"],
                     ],
                     [
-                        "action" => ["read", "download", "validate"],
+                        "action" => ["read", "download", "validate", "reject_validation", "download"],
                         "subject" => ["cat"],
                     ],
                     [
@@ -146,7 +146,7 @@ class User extends Authenticatable
             case('operation'):
                 return [
                     [
-                        "action" => ["read", "download", "unblock"],
+                        "action" => ["read", "download", "unblock", "reject_unblock"],
                         "subject" => ["cat"],
                     ],
                     [

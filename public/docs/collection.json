@@ -5,12 +5,12 @@
             "key": "baseUrl",
             "type": "string",
             "name": "string",
-            "value": "http:\/\/cofcredit.cofina.localhost"
+            "value": "https:\/\/credit.catcof.site"
         }
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "903909b0-2dad-4a3d-8b6e-630eaa5a2f18",
+        "_postman_id": "b52e8f37-11fc-4fcc-a2eb-ab88a85f7dad",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -461,6 +461,178 @@
                     ]
                 },
                 {
+                    "name": "Valider un CAT",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/cat\/validate\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/cat\/validate\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du CAT."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"comment\":\"Bon\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "D\u00e9bloquer un CAT",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/cat\/unblock\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/cat\/unblock\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du CAT."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"comment\":\"Bon\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Rejeter un CAT",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/cat\/reject-validation\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/cat\/reject-validation\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du CAT."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"comment\":\"Manque ...\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Rejeter le d\u00e9blocage d'un CAT",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/cat\/reject-unblock\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/cat\/reject-unblock\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du CAT."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"comment\":\"Manque ...\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
                     "name": "Supprime un CAT",
                     "request": {
                         "url": {
@@ -495,6 +667,46 @@
                         {
                             "header": [],
                             "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge la version word d'un CAT",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du CAT."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
                             "body": "{}",
                             "name": ""
                         }
@@ -1950,7 +2162,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "12",
+                                    "value": "10",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -1973,46 +2185,6 @@
                         {
                             "header": [],
                             "code": 204,
-                            "body": "{}",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "T\u00e9l\u00e9charge la version word d'un PV",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/download\/:id",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/download\/:id",
-                            "variable": [
-                                {
-                                    "id": "id",
-                                    "key": "id",
-                                    "value": "1",
-                                    "description": "L'ID du PV."
-                                }
-                            ]
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [],
-                            "code": 200,
                             "body": "{}",
                             "name": ""
                         }
@@ -2199,7 +2371,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "3",
+                                    "value": "4",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -2439,7 +2611,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "6",
+                                    "value": "10",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -2673,7 +2845,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "16",
+                                    "value": "11",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -2947,7 +3119,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "10",
+                                    "value": "6",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

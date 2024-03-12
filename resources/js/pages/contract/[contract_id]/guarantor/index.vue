@@ -11,7 +11,6 @@ import { paginationMeta } from '@api-utils/paginationMeta'
 import JsFileDownloader from 'js-file-downloader'
 
 
-const router = useRouter()
 const route = useRoute("contract-contract_id-guarantor")
 const isDialogVisible = ref(false)
 const guarantorIdToDelete = ref(0)
@@ -229,7 +228,7 @@ const apiDelete = async id => {
                   <!-- Télécharger contrat non-signé -->
                   <VListItem
                     @click="downloadFile(`/api/contract/guarantor/download/${item.id}`, `Contrat-Caution-${item.contract.verbal_trial.committee_id}.docx`)">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
@@ -239,27 +238,27 @@ const apiDelete = async id => {
                   <!-- Télécharger contrat signé -->
                   <VListItem v-if="item.signed_contract_path"
                     @click="downloadFile(item.signed_contract_path, `Contrat-Caution-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
                     <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
                   </VListItem>
-                  
+
                   <!-- Télécharger billet à ordre non-signé -->
                   <VListItem
                     @click="downloadFile(`/api/contract/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.contract.verbal_trial.committee_id}.docx`);">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
                     <VListItemTitle>Télécharger Billet à ordre non signé</VListItemTitle>
                   </VListItem>
-                  
+
                   <!-- Télécharger billet à ordre signé -->
                   <VListItem v-if="item.signed_promissory_note_path"
                     @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-Caution-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
@@ -268,21 +267,21 @@ const apiDelete = async id => {
                 </div>
 
                 <div v-if="$can('upload', 'guarantor')">
-                  <VDivider/>
+                  <VDivider />
                   <!-- Ajouter Contrat signé -->
                   <VListItem v-if="item.signed_contract_path == null"
                     @click="uploadState = 'signed_contract'; refInputEl?.click()">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-cloud-upload" />
                     </template>
                     <VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
                   </VListItem>
-  
+
                   <!-- Ajouter Billet à ordre -->
                   <VListItem v-if="item.signed_promissory_note_path == null"
                     @click="uploadState = 'signed_promissory_note'; refInputEl?.click()">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-cloud-upload" />
                     </template>

@@ -20,7 +20,7 @@ class ContractPolicy
 
     public function viewAny(User $connectedUser)
     {
-        return $this->check(["read"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return $this->check(["read", "historical", "waiting_cat"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
     public function view(User $connectedUser, Contract $contract)

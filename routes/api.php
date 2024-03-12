@@ -96,6 +96,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get("/{id}", [CATController::class, "show"])->name("show");
     Route::post("/", [CATController::class, "store"])->name("store");
     Route::put("/{id}", [CATController::class, "update"])->name("update");
+    Route::put("validate/{id}", [CATController::class, "validate_cat"])->name("validate");
+    Route::put("unblock/{id}", [CATController::class, "unblock"])->name("unblock");
+    Route::put("reject-validation/{id}", [CATController::class, "reject_validation"])->name("reject_validation");
+    Route::put("reject-unblock/{id}", [CATController::class, "reject_unblock"])->name("reject_unblock");
     Route::delete("/{id}", [CATController::class, "destroy"])->name("destroy");
   });
 });

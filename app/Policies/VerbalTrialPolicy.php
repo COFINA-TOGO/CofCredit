@@ -25,7 +25,7 @@ class VerbalTrialPolicy
 
     public function view(User $connectedUser, VerbalTrial $verbalTrial)
     {
-        return $this->check(["read"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return $this->check(["read", "historical"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
     public function create(User $connectedUser)

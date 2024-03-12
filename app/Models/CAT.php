@@ -23,7 +23,15 @@ class CAT extends Model
         "outstanding_number_ready_to_settle",
         "other_expenses",
         "teg",
+        "validator_user_id",
+        "validation_status",
+        "validation_comment",
+        "unblocker_user_id",
+        "unblock_status",
+        "unblock_comment",
     ];
+
+    protected $appends = ["status", "comment"];
 
     public function toArray()
     {
@@ -39,5 +47,61 @@ class CAT extends Model
     public function contract(): BelongsTo
     {
         return $this->belongsTo(Contract::class, "contract_id", "id");
+    }
+
+    public function validator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'validator_user_id', 'id');
+    }
+    public function unblocker(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'unblocker_user_id', 'id');
+    }
+
+    public function getStatusAttribute()
+    {
+        if ($this->validation_status == "waiting") {
+            return [
+                "level" => 1,
+                "color" => "warning",
+                "message" => "En attende de validation"
+            ];
+        } elseif ($this->validation_status == "rejected") {
+            return [
+                "level" => -1,
+                "color" => "error",
+                "message" => "Rejeté par le head crédit"
+            ];
+        } else {
+            if ($this->unblock_status == "waiting") {
+                return [
+                    "level" => 2,
+                    "color" => "warning",
+                    "message" => "En attente de déblocage"
+                ];
+            } elseif ($this->unblock_status == "rejected") {
+                return [
+                    "level" => -2,
+                    "color" => "error",
+                    "message" => "Rejeté par les opérations"
+                ];
+            } else {
+                return [
+                    "level" => 3,
+                    "color" => "success",
+                    "message" => "Débloqué"
+                ];
+            }
+        }
+    }
+
+    public function getCommentAttribute()
+    {
+        if ($this->unblock_comment && in_array($this->unblock_status, ["rejected", "validated"])) {
+            return $this->unblock_comment;
+        } elseif ($this->validation_comment && in_array($this->validation_status, ["rejected", "validated"])) {
+            return $this->validation_comment;
+        }
+        return $this->validation_comment;
     }
 }

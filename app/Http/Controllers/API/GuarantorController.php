@@ -144,7 +144,7 @@ class GuarantorController extends Controller
         if ($guarantor) {
             // if (($authorisation = Gate::inspect('view', $guarantor))->allowed()) {
             // $guarantor->load(["verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"]);
-            $templateProcessor = new TemplateProcessor('../document_templates/contracts/particular/contract_caution_particular.docx');
+            $templateProcessor = new TemplateProcessor('../document_templates/Contracts/particular/contract_caution_particular.docx');
 
             $data = $guarantor->toArray();
             $data = array_merge($data, collect($guarantor->contract)->mapWithKeys(function ($value, $key) {
@@ -215,7 +215,7 @@ class GuarantorController extends Controller
         $guarantor = Guarantor::find($id);
         if ($guarantor) {
             // if (($authorisation = Gate::inspect('view', $guarantor))->allowed()) {
-            $templateProcessor = new TemplateProcessor('../document_templates/contracts/particular/billet_a_ordre_caution_particular.docx');
+            $templateProcessor = new TemplateProcessor('../document_templates/Contracts/particular/billet_a_ordre_caution_particular.docx');
 
             $data = $guarantor->toArray();
             $data = array_merge($data, collect($guarantor->contract)->mapWithKeys(function ($value, $key) {

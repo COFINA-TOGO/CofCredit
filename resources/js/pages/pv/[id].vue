@@ -1,12 +1,12 @@
 <script setup>
 definePage({
   meta: {
-    action: 'read',
+    action: ['historical', 'read'],
     subject: 'pv',
   },
 })
 const router = useRouter()
-const route = useRoute("vertalTrial-id")
+const route = useRoute("pv-id")
 
 const frenchMensuality = {
   "mensual": "Mensuelle",
@@ -16,32 +16,34 @@ const frenchMensuality = {
   "in-fine": "À la fin",
 }
 
-const { data: vertalTrial } = await useApi(`/verbal-trial/${Number(route.params.id)}?with_caf=1&with_type_of_credit=1&with_type_of_guarantees=1`)
+const { data: verbalTrial } = await useApi(`/verbal-trial/${Number(route.params.id)}?with_caf=1&with_type_of_credit=1&with_type_of_guarantees=1`)
 
-if (vertalTrial.value.status == 200) {
-  vertalTrial.value = vertalTrial.value.data.verbalTrial
+if (verbalTrial.value.status == 200) {
+  verbalTrial.value = verbalTrial.value.data.verbalTrial
 } else {
-  router.push("/vertalTrial")
+  router.push("/pv")
 }
 
+console.log(verbalTrial.value)
+
 const tableData = [
-  { "title": "Montant", "value": String(vertalTrial.value.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Durée", "value": vertalTrial.value.duration + " mois" },
-  { "title": "Périodicité", "value": frenchMensuality[vertalTrial.value.periodicity] },
-  { "title": "Taux d'intérêt HT", "value": vertalTrial.value.tax_fee_interest_rate + "%" },
-  { "title": "TAF", "value": vertalTrial.value.taf + "%" },
-  { "title": "Echéance TTC", "value": String(vertalTrial.value.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Frais de dossier", "value": String((vertalTrial.value.amount * vertalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Prime d'assurance", "value": String(vertalTrial.value.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Montant", "value": String(verbalTrial.value.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Durée", "value": verbalTrial.value.duration + " mois" },
+  { "title": "Périodicité", "value": frenchMensuality[verbalTrial.value.periodicity] },
+  { "title": "Taux d'intérêt HT", "value": verbalTrial.value.tax_fee_interest_rate + "%" },
+  { "title": "TAF", "value": verbalTrial.value.taf + "%" },
+  { "title": "Echéance TTC", "value": String(verbalTrial.value.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Frais de dossier", "value": String((verbalTrial.value.amount * verbalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Prime d'assurance", "value": String(verbalTrial.value.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
 ]
 
-if (vertalTrial.duration > 13) {
+if (verbalTrial.duration > 13) {
   tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
 }
 </script>
 
 <template>
-  <section v-if="vertalTrial">
+  <section v-if="verbalTrial">
     <VRow>
       <VCol cols="12">
         <VCard>
@@ -54,13 +56,13 @@ if (vertalTrial.duration > 13) {
               </VBtn>
             </VCol>
             <VCol cols="1">
-              <VBtn :to="{ name: 'pv-edit-id', params: { id: vertalTrial.id } }">
+              <VBtn :to="{ name: 'pv-edit-id', params: { id: verbalTrial.id } }">
                 Modifier
               </VBtn>
             </VCol>
             <VCol cols="12">
               <h2 class="text-center">
-                Procès Verbal N°{{ vertalTrial.committee_id }}
+                Procès Verbal N°{{ verbalTrial.committee_id }}
               </h2>
             </VCol>
             <VCol cols="6">
@@ -84,28 +86,28 @@ if (vertalTrial.duration > 13) {
               </p>
               <br>
               <p style="font-size: 20px">
-                Date de validation: {{ vertalTrial.created_at_fr }}
+                Date de validation: {{ verbalTrial.created_at_fr }}
               </p>
             </VCol>
             <VCol cols="6">
               <p style="font-size: 20px">
-                : {{ vertalTrial.caf.full_name }}
+                : {{ verbalTrial.caf.full_name }}
               </p>
               <p style="font-size: 20px">
-                : <strong> {{ vertalTrial.applicant_last_name + " " + vertalTrial.applicant_first_name
+                : <strong> {{ verbalTrial.applicant_last_name + " " + verbalTrial.applicant_first_name
                   }}</strong>
               </p>
               <p style="font-size: 20px">
-                : {{ vertalTrial.account_number }}
+                : {{ verbalTrial.account_number }}
               </p>
               <p style="font-size: 20px">
-                : {{ vertalTrial.activity }}
+                : {{ verbalTrial.activity }}
               </p>
               <p style="font-size: 20px">
-                : {{ vertalTrial.purpose_of_financing }}
+                : {{ verbalTrial.purpose_of_financing }}
               </p>
               <p style="font-size: 20px">
-                : {{ vertalTrial.type_of_credit.name }}
+                : {{ verbalTrial.type_of_credit.name }}
               </p>
             </VCol>
           </VCardText>
@@ -137,7 +139,7 @@ if (vertalTrial.duration > 13) {
             <VCol cols="12">
               <p>
               <ul>
-                <li v-for="(item, index) in vertalTrial.guarantees" :key="index" style="font-size: 20px">
+                <li v-for="(item, index) in verbalTrial.guarantees" :key="index" style="font-size: 20px">
                   {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
                   CFA : {{ item.comment }}
                 </li>

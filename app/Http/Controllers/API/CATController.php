@@ -196,6 +196,7 @@ class CATController extends Controller
             unset($data["contract.observations"]);
             unset($data["contract.guarantors"]);
             unset($data["contract.verbal_trial.caf.ability_rules"]);
+            unset($data["status"]);
             $templateProcessor->setValues($data);
             // return $data;
 
@@ -251,6 +252,8 @@ class CATController extends Controller
 
             DB::beginTransaction();
             try {
+                $requestData["validation_status"] = "waiting";
+                $requestData["unblock_status"] = "waiting";
                 $c_a_t = CAT::create($requestData);
                 $c_a_t->load(["contract.verbal_trial.type_of_credit.type_of_applicant", "contract.verbal_trial.guarantees"]);
             } catch (\Exception $e) {
@@ -317,6 +320,154 @@ class CATController extends Controller
     }
 
     /**
+     * Valider un CAT
+     *
+     * @urlParam    id                                                      int     required    L'ID du CAT.                                                Example: 1
+     *
+     * @bodyParam   comment                                                 string              Le commentaire de la validation.                            Example: Bon
+     *
+     * @response 200
+     *
+     */
+    public function validate_cat(Request $request, int $id)
+    {
+        $c_a_t = CAT::find($id);
+        if ($c_a_t) {
+            if (($authorisation = Gate::inspect('validate', $c_a_t))->allowed()) {
+                $requestData = $request->all();
+                $validator = Validator::make($requestData, [
+                    'comment' => "min:1",
+                ]);
+                if ($validator->fails()) {
+                    return $this->responseError($validator->errors(), 400);
+                } else {
+                    $c_a_t->update([
+                        "validation_status" => "validated",
+                        "validation_comment" => $requestData["comment"],
+                        "validation_user_id" => $request->user()->id,
+                    ]);
+                    return $c_a_t;
+                }
+            } else {
+                return $this->responseError(["auth" => [$authorisation->message()]], 403);
+            }
+        } else {
+            return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
+        }
+    }
+
+    /**
+     * Débloquer un CAT
+     *
+     * @urlParam    id                                                      int     required    L'ID du CAT.                                                Example: 1
+     *
+     * @bodyParam   comment                                                 string              Le commentaire de la déblocage.                             Example: Bon
+     *
+     * @response 200
+     *
+     */
+    public function unblock(Request $request, int $id)
+    {
+        $c_a_t = CAT::find($id);
+        if ($c_a_t) {
+            if (($authorisation = Gate::inspect('unblock', $c_a_t))->allowed()) {
+                $requestData = $request->all();
+                $validator = Validator::make($requestData, [
+                    'comment' => "min:1",
+                ]);
+                if ($validator->fails()) {
+                    return $this->responseError($validator->errors(), 400);
+                } else {
+                    $c_a_t->update([
+                        "unblock_status" => "validated",
+                        "unblock_comment" => $requestData["comment"],
+                        "unblock_user_id" => $request->user()->id,
+                    ]);
+                    return $c_a_t;
+                }
+            } else {
+                return $this->responseError(["auth" => [$authorisation->message()]], 403);
+            }
+        } else {
+            return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
+        }
+    }
+
+    /**
+     * Rejeter un CAT
+     *
+     * @urlParam    id                                                      int     required    L'ID du CAT.                                                Example: 1
+     *
+     * @bodyParam   comment                                                 string              Le commentaire de refus de validation.                      Example: Manque ...
+     *
+     * @response 200
+     *
+     */
+    public function reject_validation(Request $request, int $id)
+    {
+        $c_a_t = CAT::find($id);
+        if ($c_a_t) {
+            if (($authorisation = Gate::inspect('reject_validation', $c_a_t))->allowed()) {
+                $requestData = $request->all();
+                $validator = Validator::make($requestData, [
+                    'comment' => "min:1",
+                ]);
+                if ($validator->fails()) {
+                    return $this->responseError($validator->errors(), 400);
+                } else {
+                    $c_a_t->update([
+                        "validation_status" => "rejected",
+                        "validation_comment" => $requestData["comment"],
+                        "validation_user_id" => $request->user()->id,
+                    ]);
+                    return $c_a_t;
+                }
+            } else {
+                return $this->responseError(["auth" => [$authorisation->message()]], 403);
+            }
+        } else {
+            return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
+        }
+    }
+
+    /**
+     * Rejeter le déblocage d'un CAT
+     *
+     * @urlParam    id                                                      int     required    L'ID du CAT.                                                Example: 1
+     *
+     * @bodyParam   comment                                                 string              Le commentaire de refus de déblocage.                       Example: Manque ...
+     *
+     * @response 200
+     *
+     */
+    public function reject_unblock(Request $request, int $id)
+    {
+        $c_a_t = CAT::find($id);
+        if ($c_a_t) {
+            if (($authorisation = Gate::inspect('reject_unblock', $c_a_t))->allowed()) {
+                $requestData = $request->all();
+                $validator = Validator::make($requestData, [
+                    'comment' => "min:1",
+                ]);
+                if ($validator->fails()) {
+                    return $this->responseError($validator->errors(), 400);
+                } else {
+                    $c_a_t->update([
+                        "unblock_status" => "rejected",
+                        "unblock_comment" => $requestData["comment"],
+                        "unblock_user_id" => $request->user()->id,
+                    ]);
+                    return $c_a_t;
+                }
+            } else {
+                return $this->responseError(["auth" => [$authorisation->message()]], 403);
+            }
+        } else {
+            return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
+        }
+    }
+
+    /**
      * Supprime un CAT
      *
      * @urlParam    id                                                      int     required    L'ID du CAT.                                                        Example: 1
@@ -339,6 +490,5 @@ class CATController extends Controller
         } else {
             return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
         }
-
     }
 }

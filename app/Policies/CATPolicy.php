@@ -41,7 +41,22 @@ class CATPolicy
     {
         return $this->check(["download"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
-
+    public function validate(User $connectedUser, Cat $cat)
+    {
+        return $this->check(["validate"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+    }
+    public function unblock(User $connectedUser, Cat $cat)
+    {
+        return $this->check(["unblock"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+    }
+    public function reject_validation(User $connectedUser, Cat $cat)
+    {
+        return $this->check(["reject_validation"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+    }
+    public function reject_unblock(User $connectedUser, Cat $cat)
+    {
+        return $this->check(["reject_unblock"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+    }
     public function delete(User $connectedUser, Cat $cat)
     {
         return $this->check(["delete"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");

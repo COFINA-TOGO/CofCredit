@@ -9,9 +9,10 @@ definePage({
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 import JsFileDownloader from 'js-file-downloader'
+import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue';
 
 const isDialogVisible = ref(false)
-const catIdToDelete = ref(0)
+const catSelectedId = ref(0)
 const selectedType = ref()
 const searchQuery = ref('')
 
@@ -39,6 +40,14 @@ const headers = [
   {
     title: 'Montant',
     key: 'contract.verbal_trial.amount',
+  },
+  {
+    title: 'Status',
+    key: 'status',
+  },
+  {
+    title: 'Commentaire',
+    key: 'comment',
   },
   {
     title: 'Actions',
@@ -109,6 +118,36 @@ const apiDelete = async id => {
   await $api(`cat/${id}`, { method: 'DELETE' })
   fetchCAT()
 }
+
+
+
+const isActionDialogVisible = ref(false)
+const actionTitle = ref("")
+const actionText = ref("")
+const actionButtonText = ref("")
+const actionFunction = ref()
+const actionComment = ref("")
+
+
+const validateCAT = async id => {
+  await $api(`cat/validate/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+  fetchCAT()
+}
+
+const unblockCAT = async id => {
+  await $api(`cat/unblock/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+  fetchCAT()
+}
+
+const rejectValidationCAT = async id => {
+  await $api(`cat/reject-validation/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+  fetchCAT()
+}
+
+const rejectUnblockCAT = async id => {
+  await $api(`cat/reject-unblock/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+  fetchCAT()
+}
 </script>
 
 <template>
@@ -166,44 +205,90 @@ const apiDelete = async id => {
           {{ typeList[item.type] }}
         </template>
 
+        <template #item.status="{ item }">
+          <VChip label :color="item.status.color">
+            {{ item.status.message }}
+          </VChip>
+        </template>
+
+        <template #item.comment="{ item }">
+          {{ item.comment }}
+        </template>
+
         <template #item.contract.verbal_trial.amount="{ item }">
           {{ String(item.contract.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
         </template>
 
         <template #item.actions="{ item }">
-          <IconBtn :to="{ name: 'cat-id', params: { id: item.id } }">
+          <IconBtn v-if="$can('read', 'cat')" :to="{ name: 'cat-id', params: { id: item.id } }">
             <VIcon icon="tabler-eye" />
           </IconBtn>
-          <IconBtn :to="{ name: 'cat-edit-id', params: { id: item.id } }">
+          <IconBtn v-if="$can('update', 'cat')" :to="{ name: 'cat-edit-id', params: { id: item.id } }">
             <VIcon icon="tabler-edit" />
           </IconBtn>
-          <IconBtn @click="catIdToDelete = item.id; isDialogVisible = true">
+          <IconBtn v-if="$can('delete', 'cat')" @click="catSelectedId = item.id; isDialogVisible = true">
             <VIcon icon="tabler-trash" />
           </IconBtn>
           <VBtn icon variant="text" size="small" color="medium-emphasis">
             <VIcon size="24" icon="tabler-dots-vertical" />
             <VMenu activator="parent">
               <VList>
-                <VListItem v-if="$can(['read', 'waiting_cat', 'historical'], 'contract')" :to="{ name: 'contract-id', params: { id: item.contract.id } }">
+                <VListItem v-if="$can('historical', 'pv') || $can('read', 'pv')"
+                  :to="{ name: 'pv-id', params: { id: item.contract.verbal_trial.id } }">
                   <template #prepend>
                     <VIcon icon="tabler-eye" />
                   </template>
 
-                  <VListItemTitle>Contrat</VListItemTitle>
+                  <VListItemTitle>Voir Pv</VListItemTitle>
                 </VListItem>
-                <VListItem v-if="$can(['read', 'historical'], 'pv')" :to="{ name: 'pv-id', params: { id: item.contract.verbal_trial.id } }">
+                <VListItem
+                  v-if="$can('read', 'contract') || $can('historical', 'contract') || $can('waiting_cat', 'contract')"
+                  :to="{ name: 'contract-id', params: { id: item.contract.id } }">
                   <template #prepend>
                     <VIcon icon="tabler-eye" />
                   </template>
 
-                  <VListItemTitle>Pv</VListItemTitle>
+                  <VListItemTitle>Voir Contrat</VListItemTitle>
                 </VListItem>
                 <VListItem v-if="$can('download', 'cat')"
                   @click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.contract.verbal_trial.committee_id}.docx`)">
                   <template #prepend>
                     <VIcon icon="tabler-download" />
                   </template>
-                  <VListItemTitle>CAT</VListItemTitle>
+                  <VListItemTitle>Télécharger CAT</VListItemTitle>
+                </VListItem>
+                <VDivider v-if="$can('validate', 'cat') && item.validation_status == 'waiting'" />
+                <VListItem v-if="$can('validate', 'cat') && item.validation_status == 'waiting'"
+                  @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Valider CAT', actionText = 'Voulez vous vraiment valider ce CAT?', actionFunction = validateCAT; actionButtonText = 'Valider';">
+                  <template #prepend>
+                    <VIcon icon="tabler-check" />
+                  </template>
+                  <VListItemTitle>Valider CAT</VListItemTitle>
+                </VListItem>
+                <VListItem v-if="$can('reject_validation', 'cat') && item.validation_status == 'waiting'"
+                  @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Rejeter CAT', actionText = 'Voulez vous vraiment rejeter ce CAT?', actionFunction = rejectValidationCAT; actionButtonText = 'Rejeter';">
+                  <template #prepend>
+                    <VIcon icon="tabler-x" />
+                  </template>
+                  <VListItemTitle>Rejeter CAT</VListItemTitle>
+                </VListItem>
+                <VDivider
+                  v-if="$can('unblock', 'cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'" />
+                <VListItem
+                  v-if="$can('unblock', 'cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'"
+                  @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Débloquer CAT', actionText = 'Voulez vous vraiment débloquer ce CAT?', actionFunction = unblockCAT; actionButtonText = 'Débloquer';">
+                  <template #prepend>
+                    <VIcon icon="tabler-lock-open" />
+                  </template>
+                  <VListItemTitle>Débloquer CAT</VListItemTitle>
+                </VListItem>
+                <VListItem
+                  v-if="$can('reject_unblock', 'cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'"
+                  @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Rejeter deblocage CAT', actionText = 'Voulez vous vraiment rejeter le déblocage de ce CAT?', actionFunction = rejectUnblockCAT; actionButtonText = 'Rejeter';">
+                  <template #prepend>
+                    <VIcon icon="tabler-x" />
+                  </template>
+                  <VListItemTitle>Refuser déblocage CAT</VListItemTitle>
                 </VListItem>
               </VList>
             </VMenu>
@@ -239,11 +324,34 @@ const apiDelete = async id => {
       </VDataTableServer>
     </VCard>
 
+    <VDialog v-model="isActionDialogVisible" class="v-dialog-sm">
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isActionDialogVisible = !isActionDialogVisible" />
+
+      <!-- Dialog De suppression -->
+      <VCard :title="actionTitle">
+        <VCardText>
+          {{ actionText }}
+          <AppTextarea class="mt-3" v-model="actionComment" label="Commentaire" placeholder="Ex: RAS" />
+        </VCardText>
+
+        <VCardText class="d-flex justify-end gap-3 flex-wrap">
+          <VBtn color="secondary" variant="tonal" @click="isActionDialogVisible = false">
+            Annuler
+          </VBtn>
+          <VBtn @click="actionFunction(catSelectedId); isActionDialogVisible = false">
+            {{ actionButtonText }}
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
+
+
     <VDialog v-model="isDialogVisible" class="v-dialog-sm">
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 
-      <!-- Dialog Content -->
+      <!-- Dialog De suppression -->
       <VCard title="Suppression">
         <VCardText>
           Etes vous sûr de vouloir supprimer ce CAT?
@@ -253,7 +361,7 @@ const apiDelete = async id => {
           <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
             Annuler
           </VBtn>
-          <VBtn @click="apiDelete(catIdToDelete); isDialogVisible = false">
+          <VBtn @click="apiDelete(catSelectedId); isDialogVisible = false">
             Supprimer
           </VBtn>
         </VCardText>

@@ -17,34 +17,19 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
 
 <template>
   <div class="misc-wrapper">
-    <ErrorHeader
-      status-code="401"
-      title="You are not authorized! 🔐"
-      description="You do not have permission to view this page using the credentials that you have provided while login.
-       Please contact your site administrator."
-    />
+    <ErrorHeader status-code="401" title="Vous n'etes pas autorisé 🔐" description="Vous n'êtes pas autorisé à afficher cette page en utilisant les informations d'identification que vous avez fournies lors de la connexion.
+        Merci de contacter l'administrateur de votre site." />
 
-    <VBtn
-      class="mt-2 mb-10"
-      to="/"
-    >
-      Back Home
+    <VBtn class="mt-2 mb-10" to="/">
+      Retour à l'entrée
     </VBtn>
 
     <!-- 👉 Image -->
     <div class="misc-avatar w-100 text-center">
-      <VImg
-        :src="pages401"
-        alt="Coming Soon"
-        :max-width="170"
-        class="mx-auto"
-      />
+      <VImg :src="pages401" alt="Coming Soon" :max-width="170" class="mx-auto" />
     </div>
 
-    <VImg
-      :src="authThemeMask"
-      class="misc-footer-img d-none d-md-block"
-    />
+    <VImg :src="authThemeMask" class="misc-footer-img d-none d-md-block" />
   </div>
 </template>
 

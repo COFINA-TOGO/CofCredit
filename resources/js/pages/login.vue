@@ -1,7 +1,6 @@
 <!-- ❗Errors in the form are set on line 60 -->
 <script setup>
 import { VForm } from 'vuetify/components/VForm'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png'
 import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png'
@@ -35,11 +34,9 @@ const errors = ref({
 const refVForm = ref()
 
 const credentials = ref({
-  email: 'caf@cofinacorp.com',
-  password: 'Coftg2021',
+  email: '',
+  password: '',
 })
-
-const rememberMe = ref(false)
 
 const login = async () => {
   try {
@@ -54,22 +51,38 @@ const login = async () => {
       },
     })
 
-    const { userToken, user } = res.data
+    errors.value.email = undefined;
+    errors.value.password = undefined;
 
-    useCookie('userAbilityRules').value = user.ability_rules
-    ability.update(user.ability_rules)
-    useCookie('userData').value = {
-      "id": user.id,
-      "fullName": user.full_name,
-      "username": user.name,
-      "avatar": "/images/avatars/avatar-1.png",
-      "email": user.email,
-      "role": user.profile,
+    if (res.status == 200) {
+      const { userToken, user } = res.data
+
+      useCookie('userAbilityRules').value = user.ability_rules
+      ability.update(user.ability_rules)
+      useCookie('userData').value = {
+        "id": user.id,
+        "fullName": user.full_name,
+        "username": user.name,
+        "avatar": "/images/avatars/avatar-1.png",
+        "email": user.email,
+        "role": user.profile,
+      }
+      useCookie('userToken').value = userToken
+      await nextTick(() => {
+        router.replace(route.query.to ? String(route.query.to) : '/')
+      })
+    } else {
+      if (res.status == 400) {
+        if (res.errors.email) {
+          errors.value.email = res.errors.email[0]
+        }
+        if (res.errors.password) {
+          errors.value.password = res.errors.password[0]
+        }
+      }
     }
-    useCookie('userToken').value = userToken
-    await nextTick(() => {
-      router.replace(route.query.to ? String(route.query.to) : '/')
-    })
+
+
   } catch (err) {
     console.error(err)
   }
@@ -101,21 +114,11 @@ const onSubmit = () => {
           <VNodeRenderer :nodes="themeConfig.app.logo" class="mb-6" />
 
           <h4 class="text-h4 mb-1">
-            Welcome to <span class="text-capitalize"> {{ themeConfig.app.title }} </span>! 👋🏻
+            Bienvenue sur <span class="text-capitalize"> {{ themeConfig.app.title }} </span>! 👋🏻
           </h4>
           <p class="mb-0">
-            Please sign-in to your account and start the adventure
+            Veuillez vous connecter
           </p>
-        </VCardText>
-        <VCardText>
-          <VAlert color="primary" variant="tonal">
-            <p class="text-sm mb-2">
-              Admin Email: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
-            </p>
-            <p class="text-sm mb-0">
-              Client Email: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
-            </p>
-          </VAlert>
         </VCardText>
         <VCardText>
           <VForm ref="refVForm" @submit.prevent="onSubmit">
@@ -132,36 +135,11 @@ const onSubmit = () => {
                   :rules="[requiredValidator]" :type="isPasswordVisible ? 'text' : 'password'"
                   :error-messages="errors.password"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                  @click:append-inner="isPasswordVisible = !isPasswordVisible" />
-
-                <div class="d-flex align-center flex-wrap justify-space-between mt-1 mb-4">
-                  <VCheckbox v-model="rememberMe" label="Remember me" />
-                  <RouterLink class="text-primary ms-2 mb-1" :to="{ name: 'forgot-password' }">
-                    Forgot Password?
-                  </RouterLink>
-                </div>
+                  @click:append-inner="isPasswordVisible = !isPasswordVisible" class="mb-8" />
 
                 <VBtn block type="submit">
-                  Login
+                  Connexion
                 </VBtn>
-              </VCol>
-
-              <!-- create account -->
-              <VCol cols="12" class="text-center">
-                <span>New on our platform?</span>
-                <RouterLink class="text-primary ms-2" :to="{ name: 'register' }">
-                  Create an account
-                </RouterLink>
-              </VCol>
-              <VCol cols="12" class="d-flex align-center">
-                <VDivider />
-                <span class="mx-4">or</span>
-                <VDivider />
-              </VCol>
-
-              <!-- auth providers -->
-              <VCol cols="12" class="text-center">
-                <AuthProvider />
               </VCol>
             </VRow>
           </VForm>

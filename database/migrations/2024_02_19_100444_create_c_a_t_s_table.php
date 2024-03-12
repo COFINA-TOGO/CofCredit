@@ -22,6 +22,12 @@ return new class extends Migration {
             $table->string("outstanding_number_ready_to_settle");                                                                   //Le numéro encours prêt à solder
             $table->decimal("other_expenses", 30, 3);                                                                               //Les autres frais
             $table->decimal("teg", 30, 3);                                                                                          //Le TEG
+            $table->foreignId("validator_user_id")->nullable()->constrained(table: 'users', column: 'id')->cascadeOnDelete();       //Le validateur du CAT
+            $table->enum("validation_status", ["waiting", "rejected", "validated"]);                                                //Le statut de validation du CAT
+            $table->string("validation_comment")->nullable();                                                                       //Le commentaire de changement de status du CAT
+            $table->foreignId("unblocker_user_id")->nullable()->constrained(table: 'users', column: 'id')->cascadeOnDelete();       //Le débloqueur du CAT
+            $table->enum("unblock_status", ["waiting", "rejected", "validated"]);                                                   //Le statut de déblocage du CAT
+            $table->string("unblock_comment")->nullable();                                                                          //Le commentaire de changement de status de déblocage du CAT
             $table->timestamps();
         });
     }
