@@ -270,13 +270,13 @@ const uploadFile = async (id, event) => {
                   <VListItemTitle>Voir le Pv</VListItemTitle>
                 </VListItem>
 
-                
+
                 <div v-if="$can('download', 'contract')">
                   <VDivider />
                   <!-- Télécharger contrat non-signé -->
                   <VListItem
                     @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
@@ -285,7 +285,7 @@ const uploadFile = async (id, event) => {
                   <!-- Télécharger contrat signé -->
                   <VListItem v-if="item.signed_contract_path"
                     @click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
@@ -294,7 +294,7 @@ const uploadFile = async (id, event) => {
                   <!-- Télécharger billet à ordre non-signé -->
                   <VListItem
                     @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
@@ -303,7 +303,7 @@ const uploadFile = async (id, event) => {
                   <!-- Télécharger billet à ordre signé -->
                   <VListItem v-if="item.signed_promissory_note_path"
                     @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
@@ -316,7 +316,7 @@ const uploadFile = async (id, event) => {
                   <!-- Ajouter Contrat signé -->
                   <VListItem v-if="item.signed_contract_path == null"
                     @click="uploadState = 'signed_contract'; refInputEl?.click()">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-cloud-upload" />
                     </template>
@@ -325,7 +325,7 @@ const uploadFile = async (id, event) => {
                   <!-- Ajouter Billet à ordre -->
                   <VListItem v-if="item.signed_promissory_note_path == null"
                     @click="uploadState = 'signed_promissory_note'; refInputEl?.click()">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-cloud-upload" />
                     </template>

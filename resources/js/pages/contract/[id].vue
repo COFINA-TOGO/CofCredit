@@ -22,7 +22,7 @@ const documentTypeList = {
   "cni": 'Carte d\'identité nationale',
   "passport": 'Passeport',
   "residence_certificate": 'Certificat de résidence',
-  "driving_licence": 'Permise de conduire',
+  "driving_licence": 'Permis de conduire',
 }
 
 const garanteeTypeList = {

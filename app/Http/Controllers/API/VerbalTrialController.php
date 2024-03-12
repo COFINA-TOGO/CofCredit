@@ -181,6 +181,7 @@ class VerbalTrialController extends Controller
             $data["created_at"] = Carbon::parse($verbalTrial->created_at)->format("d/m/Y");
             $data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
             $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
+            $data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
             $data["line_review_bonus"] = (((float) $data["duration"]) < 18) ? "" : "Prime de révision de ligne                                          : « 1% du capital restant dû après 12 mois »";
 
 

@@ -480,13 +480,13 @@ endpoints:
         name: id
         description: "L'ID de l'utilisateur"
         required: true
-        example: 6
+        example: 2
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 6
+      id: 2
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

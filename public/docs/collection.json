@@ -5,12 +5,12 @@
             "key": "baseUrl",
             "type": "string",
             "name": "string",
-            "value": "https:\/\/credit.catcof.site"
+            "value": "http:\/\/cofcredit.cofina.localhost"
         }
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "b52e8f37-11fc-4fcc-a2eb-ab88a85f7dad",
+        "_postman_id": "da5f6771-a893-4839-8d83-953b82653024",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -667,46 +667,6 @@
                         {
                             "header": [],
                             "code": 204,
-                            "body": "{}",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "T\u00e9l\u00e9charge la version word d'un CAT",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/download\/:id",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/download\/:id",
-                            "variable": [
-                                {
-                                    "id": "id",
-                                    "key": "id",
-                                    "value": "1",
-                                    "description": "L'ID du CAT."
-                                }
-                            ]
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [],
-                            "code": 200,
                             "body": "{}",
                             "name": ""
                         }
@@ -1747,6 +1707,46 @@
                             "name": ""
                         }
                     ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge le billet \u00e0 ordre d'un contrat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du contrat."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
                 }
             ]
         },
@@ -2162,7 +2162,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "10",
+                                    "value": "12",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -2371,7 +2371,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "4",
+                                    "value": "20",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -2611,7 +2611,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "10",
+                                    "value": "20",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -2845,7 +2845,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "11",
+                                    "value": "12",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -3119,7 +3119,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "6",
+                                    "value": "2",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

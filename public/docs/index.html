@@ -26,13 +26,13 @@
             </style>
 
     <script>
-        var tryItOutBaseUrl = "https://credit.catcof.site";
+        var tryItOutBaseUrl = "http://cofcredit.cofina.localhost";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-4.32.0.js"></script>
+    <script src="../docs/js/tryitout-4.33.0.js"></script>
 
-    <script src="../docs/js/theme-default-4.32.0.js"></script>
+    <script src="../docs/js/theme-default-4.33.0.js"></script>
 
 </head>
 
@@ -118,9 +118,6 @@
                                                                                 <li class="tocify-item level-2" data-unique="cat-DELETEapi-cat--id-">
                                 <a href="#cat-DELETEapi-cat--id-">Supprime un CAT</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="cat-GETapi-download--id-">
-                                <a href="#cat-GETapi-download--id-">Télécharge la version word d'un CAT</a>
-                            </li>
                                                                         </ul>
                             </ul>
                     <ul id="tocify-header-caution" class="tocify-header">
@@ -185,6 +182,9 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="contrat-DELETEapi-contract--id-">
                                 <a href="#contrat-DELETEapi-contract--id-">Supprime un contrat</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="contrat-GETapi-download--id-">
+                                <a href="#contrat-GETapi-download--id-">Télécharge le billet à ordre d'un contrat</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -323,7 +323,7 @@
         <h1 id="introduction">Introduction</h1>
 <p>Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supléments</p>
 <aside>
-    <strong>Base URL</strong>: <code>https://credit.catcof.site</code>
+    <strong>Base URL</strong>: <code>http://cofcredit.cofina.localhost</code>
 </aside>
 <p>This documentation aims to provide all the information you need to work with our API.</p>
 <aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
@@ -352,7 +352,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://credit.catcof.site/api/auth/login" \
+    "http://cofcredit.cofina.localhost/api/auth/login" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -365,7 +365,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/auth/login"
+    "http://cofcredit.cofina.localhost/api/auth/login"
 );
 
 const headers = {
@@ -515,7 +515,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/auth/show" \
+    --get "http://cofcredit.cofina.localhost/api/auth/show" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -523,7 +523,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/auth/show"
+    "http://cofcredit.cofina.localhost/api/auth/show"
 );
 
 const headers = {
@@ -644,7 +644,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://credit.catcof.site/api/auth/logout" \
+    "http://cofcredit.cofina.localhost/api/auth/logout" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -652,7 +652,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/auth/logout"
+    "http://cofcredit.cofina.localhost/api/auth/logout"
 );
 
 const headers = {
@@ -776,7 +776,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/cat?with_contract=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0&amp;with_creator=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/cat?with_contract=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0&amp;with_creator=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -784,7 +784,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/cat"
+    "http://cofcredit.cofina.localhost/api/cat"
 );
 
 const params = {
@@ -1105,7 +1105,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/cat/download/1" \
+    --get "http://cofcredit.cofina.localhost/api/cat/download/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1113,7 +1113,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/cat/download/1"
+    "http://cofcredit.cofina.localhost/api/cat/download/1"
 );
 
 const headers = {
@@ -1246,7 +1246,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/cat/1?with_contract=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0&amp;with_creator=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/cat/1?with_contract=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0&amp;with_creator=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1254,7 +1254,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/cat/1"
+    "http://cofcredit.cofina.localhost/api/cat/1"
 );
 
 const params = {
@@ -1477,7 +1477,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://credit.catcof.site/api/cat" \
+    "http://cofcredit.cofina.localhost/api/cat" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -1498,7 +1498,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/cat"
+    "http://cofcredit.cofina.localhost/api/cat"
 );
 
 const headers = {
@@ -1744,7 +1744,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/cat/1" \
+    "http://cofcredit.cofina.localhost/api/cat/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -1765,7 +1765,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/cat/1"
+    "http://cofcredit.cofina.localhost/api/cat/1"
 );
 
 const headers = {
@@ -2023,7 +2023,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/cat/validate/1" \
+    "http://cofcredit.cofina.localhost/api/cat/validate/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2035,7 +2035,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/cat/validate/1"
+    "http://cofcredit.cofina.localhost/api/cat/validate/1"
 );
 
 const headers = {
@@ -2185,7 +2185,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/cat/unblock/1" \
+    "http://cofcredit.cofina.localhost/api/cat/unblock/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2197,7 +2197,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/cat/unblock/1"
+    "http://cofcredit.cofina.localhost/api/cat/unblock/1"
 );
 
 const headers = {
@@ -2347,7 +2347,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/cat/reject-validation/1" \
+    "http://cofcredit.cofina.localhost/api/cat/reject-validation/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2359,7 +2359,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/cat/reject-validation/1"
+    "http://cofcredit.cofina.localhost/api/cat/reject-validation/1"
 );
 
 const headers = {
@@ -2509,7 +2509,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/cat/reject-unblock/1" \
+    "http://cofcredit.cofina.localhost/api/cat/reject-unblock/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2521,7 +2521,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/cat/reject-unblock/1"
+    "http://cofcredit.cofina.localhost/api/cat/reject-unblock/1"
 );
 
 const headers = {
@@ -2671,7 +2671,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://credit.catcof.site/api/cat/1" \
+    "http://cofcredit.cofina.localhost/api/cat/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2679,7 +2679,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/cat/1"
+    "http://cofcredit.cofina.localhost/api/cat/1"
 );
 
 const headers = {
@@ -2797,147 +2797,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="cat-GETapi-download--id-">Télécharge la version word d&#039;un CAT</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-GETapi-download--id-">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/download/1" \
-    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/download/1"
-);
-
-const headers = {
-    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-download--id-">
-            <blockquote>
-            <p>Example response (200):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json" style="max-height: 300px;">{}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-download--id-" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-download--id-"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-download--id-"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-download--id-" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-download--id-">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-download--id-" data-method="GET"
-      data-path="api/download/{id}"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-download--id-', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-download--id-"
-                    onclick="tryItOut('GETapi-download--id-');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-download--id-"
-                    onclick="cancelTryOut('GETapi-download--id-');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-download--id-"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/download/{id}</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-download--id-"
-               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
-               data-component="header">
-    <br>
-<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-download--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-download--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-download--id-"
-               value="1"
-               data-component="url">
-    <br>
-<p>L'ID du CAT. Example: <code>1</code></p>
-            </div>
-                    </form>
-
                 <h1 id="caution">Caution</h1>
 
     <p>EndPoints pour gérer les cautions</p>
@@ -2956,7 +2815,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/contract/guarantor?with_contract=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/contract/guarantor?with_contract=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2964,7 +2823,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/guarantor"
+    "http://cofcredit.cofina.localhost/api/contract/guarantor"
 );
 
 const params = {
@@ -3295,7 +3154,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/contract/guarantor/download/1" \
+    --get "http://cofcredit.cofina.localhost/api/contract/guarantor/download/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3303,7 +3162,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/guarantor/download/1"
+    "http://cofcredit.cofina.localhost/api/contract/guarantor/download/1"
 );
 
 const headers = {
@@ -3436,7 +3295,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://credit.catcof.site/api/contract/guarantor/upload/1" \
+    "http://cofcredit.cofina.localhost/api/contract/guarantor/upload/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3444,7 +3303,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/guarantor/upload/1"
+    "http://cofcredit.cofina.localhost/api/contract/guarantor/upload/1"
 );
 
 const headers = {
@@ -3576,7 +3435,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/contract/guarantor/promissory-note/download/1" \
+    --get "http://cofcredit.cofina.localhost/api/contract/guarantor/promissory-note/download/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3584,7 +3443,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/guarantor/promissory-note/download/1"
+    "http://cofcredit.cofina.localhost/api/contract/guarantor/promissory-note/download/1"
 );
 
 const headers = {
@@ -3717,7 +3576,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/contract/guarantor/1?with_contract=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0" \
+    --get "http://cofcredit.cofina.localhost/api/contract/guarantor/1?with_contract=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3725,7 +3584,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/guarantor/1"
+    "http://cofcredit.cofina.localhost/api/contract/guarantor/1"
 );
 
 const params = {
@@ -3924,7 +3783,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://credit.catcof.site/api/contract/guarantor" \
+    "http://cofcredit.cofina.localhost/api/contract/guarantor" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -3948,7 +3807,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/guarantor"
+    "http://cofcredit.cofina.localhost/api/contract/guarantor"
 );
 
 const headers = {
@@ -4230,7 +4089,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/contract/guarantor/1" \
+    "http://cofcredit.cofina.localhost/api/contract/guarantor/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -4254,7 +4113,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/guarantor/1"
+    "http://cofcredit.cofina.localhost/api/contract/guarantor/1"
 );
 
 const headers = {
@@ -4548,7 +4407,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://credit.catcof.site/api/contract/guarantor/1" \
+    "http://cofcredit.cofina.localhost/api/contract/guarantor/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4556,7 +4415,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/guarantor/1"
+    "http://cofcredit.cofina.localhost/api/contract/guarantor/1"
 );
 
 const headers = {
@@ -4692,7 +4551,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/test/contract/download/1" \
+    --get "http://cofcredit.cofina.localhost/api/test/contract/download/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4700,7 +4559,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/test/contract/download/1"
+    "http://cofcredit.cofina.localhost/api/test/contract/download/1"
 );
 
 const headers = {
@@ -4833,7 +4692,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/contract?has_upload_completed=0&amp;has_cat=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_type_of_guarantees=0&amp;with_company=0&amp;with_individual_business=0&amp;with_creator=0&amp;with_pledges=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/contract?has_upload_completed=0&amp;has_cat=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_type_of_guarantees=0&amp;with_company=0&amp;with_individual_business=0&amp;with_creator=0&amp;with_pledges=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4841,7 +4700,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract"
+    "http://cofcredit.cofina.localhost/api/contract"
 );
 
 const params = {
@@ -5289,7 +5148,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/contract/download/1" \
+    --get "http://cofcredit.cofina.localhost/api/contract/download/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5297,7 +5156,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/download/1"
+    "http://cofcredit.cofina.localhost/api/contract/download/1"
 );
 
 const headers = {
@@ -5430,7 +5289,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://credit.catcof.site/api/contract/upload/1" \
+    "http://cofcredit.cofina.localhost/api/contract/upload/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5438,7 +5297,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/upload/1"
+    "http://cofcredit.cofina.localhost/api/contract/upload/1"
 );
 
 const headers = {
@@ -5570,7 +5429,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/contract/promissory-note/download/1" \
+    --get "http://cofcredit.cofina.localhost/api/contract/promissory-note/download/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5578,7 +5437,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/promissory-note/download/1"
+    "http://cofcredit.cofina.localhost/api/contract/promissory-note/download/1"
 );
 
 const headers = {
@@ -5711,7 +5570,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/contract/1?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_company=0&amp;with_individual_business=0&amp;with_type_of_guarantees=0&amp;with_pledges=0" \
+    --get "http://cofcredit.cofina.localhost/api/contract/1?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_company=0&amp;with_individual_business=0&amp;with_type_of_guarantees=0&amp;with_pledges=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5719,7 +5578,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/1"
+    "http://cofcredit.cofina.localhost/api/contract/1"
 );
 
 const params = {
@@ -5966,7 +5825,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://credit.catcof.site/api/contract" \
+    "http://cofcredit.cofina.localhost/api/contract" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -5991,7 +5850,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract"
+    "http://cofcredit.cofina.localhost/api/contract"
 );
 
 const headers = {
@@ -6285,7 +6144,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/contract/1" \
+    "http://cofcredit.cofina.localhost/api/contract/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -6309,7 +6168,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/1"
+    "http://cofcredit.cofina.localhost/api/contract/1"
 );
 
 const headers = {
@@ -6603,7 +6462,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://credit.catcof.site/api/contract/1" \
+    "http://cofcredit.cofina.localhost/api/contract/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6611,7 +6470,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/contract/1"
+    "http://cofcredit.cofina.localhost/api/contract/1"
 );
 
 const headers = {
@@ -6729,6 +6588,147 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                    <h2 id="contrat-GETapi-download--id-">Télécharge le billet à ordre d&#039;un contrat</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-download--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://cofcredit.cofina.localhost/api/download/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/download/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-download--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-download--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-download--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-download--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-download--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-download--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-download--id-" data-method="GET"
+      data-path="api/download/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-download--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-download--id-"
+                    onclick="tryItOut('GETapi-download--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-download--id-"
+                    onclick="cancelTryOut('GETapi-download--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-download--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/download/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-download--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-download--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>L'ID du contrat. Example: <code>1</code></p>
+            </div>
+                    </form>
+
                 <h1 id="proces-verbal">Procès Verbal</h1>
 
     <p>EndPoints pour gérer les Procès verbaux</p>
@@ -6747,7 +6747,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/verbal-trial?has_contract=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_type_of_guarantees=1&amp;with_contract=1&amp;with_caf=1&amp;with_creator=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/verbal-trial?has_contract=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_type_of_guarantees=1&amp;with_contract=1&amp;with_caf=1&amp;with_creator=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6755,7 +6755,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/verbal-trial"
+    "http://cofcredit.cofina.localhost/api/verbal-trial"
 );
 
 const params = {
@@ -7199,7 +7199,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/verbal-trial/download/1" \
+    --get "http://cofcredit.cofina.localhost/api/verbal-trial/download/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -7207,7 +7207,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/verbal-trial/download/1"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/download/1"
 );
 
 const headers = {
@@ -7340,7 +7340,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/verbal-trial/1?with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_type_of_guarantees=1&amp;with_contract=1&amp;with_caf=1" \
+    --get "http://cofcredit.cofina.localhost/api/verbal-trial/1?with_type_of_credit=0&amp;with_type_of_applicant=1&amp;with_guarantees=1&amp;with_type_of_guarantees=1&amp;with_contract=1&amp;with_caf=1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -7348,7 +7348,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/verbal-trial/1"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/1"
 );
 
 const params = {
@@ -7559,7 +7559,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://credit.catcof.site/api/verbal-trial" \
+    "http://cofcredit.cofina.localhost/api/verbal-trial" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -7588,7 +7588,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/verbal-trial"
+    "http://cofcredit.cofina.localhost/api/verbal-trial"
 );
 
 const headers = {
@@ -7930,7 +7930,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/verbal-trial/1" \
+    "http://cofcredit.cofina.localhost/api/verbal-trial/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -7959,7 +7959,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/verbal-trial/1"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/1"
 );
 
 const headers = {
@@ -8313,7 +8313,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://credit.catcof.site/api/verbal-trial/10" \
+    "http://cofcredit.cofina.localhost/api/verbal-trial/12" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -8321,7 +8321,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/verbal-trial/10"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/12"
 );
 
 const headers = {
@@ -8432,10 +8432,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-verbal-trial--id-"
-               value="10"
+               value="12"
                data-component="url">
     <br>
-<p>L'ID du procès verbal Example: <code>10</code></p>
+<p>L'ID du procès verbal Example: <code>12</code></p>
             </div>
                     </form>
 
@@ -8457,7 +8457,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/type-of-guarantee?paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/type-of-guarantee?paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -8465,7 +8465,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-guarantee"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee"
 );
 
 const params = {
@@ -8615,7 +8615,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/type-of-guarantee/1" \
+    --get "http://cofcredit.cofina.localhost/api/type-of-guarantee/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -8623,7 +8623,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-guarantee/1"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/1"
 );
 
 const headers = {
@@ -8756,7 +8756,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://credit.catcof.site/api/type-of-guarantee" \
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -8768,7 +8768,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-guarantee"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee"
 );
 
 const headers = {
@@ -8906,7 +8906,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/type-of-guarantee/1" \
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -8918,7 +8918,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-guarantee/1"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/1"
 );
 
 const headers = {
@@ -9068,7 +9068,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://credit.catcof.site/api/type-of-guarantee/4" \
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/20" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -9076,7 +9076,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-guarantee/4"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/20"
 );
 
 const headers = {
@@ -9187,10 +9187,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-guarantee--id-"
-               value="4"
+               value="20"
                data-component="url">
     <br>
-<p>L'ID du type de garantie Example: <code>4</code></p>
+<p>L'ID du type de garantie Example: <code>20</code></p>
             </div>
                     </form>
 
@@ -9212,7 +9212,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/type-of-credit?with_type_of_applicant=0&amp;with_verbals_trials=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/type-of-credit?with_type_of_applicant=0&amp;with_verbals_trials=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -9220,7 +9220,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-credit"
+    "http://cofcredit.cofina.localhost/api/type-of-credit"
 );
 
 const params = {
@@ -9405,7 +9405,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/type-of-credit/1?with_type_of_applicant=0&amp;with_verbals_trials=0" \
+    --get "http://cofcredit.cofina.localhost/api/type-of-credit/1?with_type_of_applicant=0&amp;with_verbals_trials=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -9413,7 +9413,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-credit/1"
+    "http://cofcredit.cofina.localhost/api/type-of-credit/1"
 );
 
 const params = {
@@ -9576,7 +9576,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://credit.catcof.site/api/type-of-credit" \
+    "http://cofcredit.cofina.localhost/api/type-of-credit" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -9591,7 +9591,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-credit"
+    "http://cofcredit.cofina.localhost/api/type-of-credit"
 );
 
 const headers = {
@@ -9765,7 +9765,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/type-of-credit/1" \
+    "http://cofcredit.cofina.localhost/api/type-of-credit/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -9780,7 +9780,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-credit/1"
+    "http://cofcredit.cofina.localhost/api/type-of-credit/1"
 );
 
 const headers = {
@@ -9966,7 +9966,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://credit.catcof.site/api/type-of-credit/10" \
+    "http://cofcredit.cofina.localhost/api/type-of-credit/20" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -9974,7 +9974,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-credit/10"
+    "http://cofcredit.cofina.localhost/api/type-of-credit/20"
 );
 
 const headers = {
@@ -10085,10 +10085,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-credit--id-"
-               value="10"
+               value="20"
                data-component="url">
     <br>
-<p>L'ID du type de crédit Example: <code>10</code></p>
+<p>L'ID du type de crédit Example: <code>20</code></p>
             </div>
                     </form>
 
@@ -10110,7 +10110,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/type-of-applicant?with_types_of_credit=0&amp;with_verbals_trials=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/type-of-applicant?with_types_of_credit=0&amp;with_verbals_trials=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10118,7 +10118,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-applicant"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant"
 );
 
 const params = {
@@ -10292,7 +10292,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/type-of-applicant/1?with_types_of_credit=0&amp;with_verbals_trials=0" \
+    --get "http://cofcredit.cofina.localhost/api/type-of-applicant/1?with_types_of_credit=0&amp;with_verbals_trials=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10300,7 +10300,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-applicant/1"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/1"
 );
 
 const params = {
@@ -10463,7 +10463,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://credit.catcof.site/api/type-of-applicant" \
+    "http://cofcredit.cofina.localhost/api/type-of-applicant" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -10475,7 +10475,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-applicant"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant"
 );
 
 const headers = {
@@ -10613,7 +10613,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/type-of-applicant/1" \
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -10625,7 +10625,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-applicant/1"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/1"
 );
 
 const headers = {
@@ -10775,7 +10775,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://credit.catcof.site/api/type-of-applicant/11" \
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/12" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10783,7 +10783,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/type-of-applicant/11"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/12"
 );
 
 const headers = {
@@ -10894,10 +10894,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-applicant--id-"
-               value="11"
+               value="12"
                data-component="url">
     <br>
-<p>L'ID du type de demandeur de crédit Example: <code>11</code></p>
+<p>L'ID du type de demandeur de crédit Example: <code>12</code></p>
             </div>
                     </form>
 
@@ -10919,7 +10919,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/user?paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/user?paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10927,7 +10927,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/user"
+    "http://cofcredit.cofina.localhost/api/user"
 );
 
 const params = {
@@ -11132,7 +11132,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://credit.catcof.site/api/user/1" \
+    --get "http://cofcredit.cofina.localhost/api/user/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -11140,7 +11140,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/user/1"
+    "http://cofcredit.cofina.localhost/api/user/1"
 );
 
 const headers = {
@@ -11273,7 +11273,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://credit.catcof.site/api/user" \
+    "http://cofcredit.cofina.localhost/api/user" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -11290,7 +11290,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/user"
+    "http://cofcredit.cofina.localhost/api/user"
 );
 
 const headers = {
@@ -11488,7 +11488,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/user/update-password" \
+    "http://cofcredit.cofina.localhost/api/user/update-password" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -11502,7 +11502,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/user/update-password"
+    "http://cofcredit.cofina.localhost/api/user/update-password"
 );
 
 const headers = {
@@ -11664,7 +11664,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://credit.catcof.site/api/user/1" \
+    "http://cofcredit.cofina.localhost/api/user/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -11681,7 +11681,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/user/1"
+    "http://cofcredit.cofina.localhost/api/user/1"
 );
 
 const headers = {
@@ -11902,7 +11902,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://credit.catcof.site/api/user/6" \
+    "http://cofcredit.cofina.localhost/api/user/2" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -11910,7 +11910,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://credit.catcof.site/api/user/6"
+    "http://cofcredit.cofina.localhost/api/user/2"
 );
 
 const headers = {
@@ -12021,10 +12021,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-user--id-"
-               value="6"
+               value="2"
                data-component="url">
     <br>
-<p>L'ID de l'utilisateur Example: <code>6</code></p>
+<p>L'ID de l'utilisateur Example: <code>2</code></p>
             </div>
                     </form>
 

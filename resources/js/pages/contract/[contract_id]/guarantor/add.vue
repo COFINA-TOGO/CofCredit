@@ -56,7 +56,7 @@ const documentTypeList = [
   { value: "cni", title: 'Carte d\'identité nationale' },
   { value: "passport", title: 'Passeport' },
   { value: "residence_certificate", title: 'Certificat de résidence' },
-  { value: "driving_licence", title: 'Permise de conduire' },
+  { value: "driving_licence", title: 'Permis de conduire' },
 ]
 
 const refForm = ref()
