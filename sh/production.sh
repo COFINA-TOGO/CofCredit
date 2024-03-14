@@ -1,6 +1,7 @@
 rm credit.zip;
-wget https://49c5-156-38-73-89.ngrok-free.app/credit.zip;
+wget https://8fd7-156-38-73-89.ngrok-free.app/credit.zip;
 unzip -o credit.zip;
+wget https://8fd7-156-38-73-89.ngrok-free.app/composer.json;
 # cp -r ../tmp/vendor;
 cp ../tmp/.env .;
 rm public/storage;

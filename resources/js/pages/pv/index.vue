@@ -99,6 +99,7 @@ const downloadFile = async (url, fileName) => {
       url: url,
       headers: [
         { name: 'Authorization', value: `Bearer ${userToken}` },
+        { name: 'Accept', value: `application/json` },
       ],
       nameCallback: function (name) {
         return fileName
@@ -188,6 +189,10 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
       <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers" :items="pvList"
         :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
         <!-- Actions -->
+
+        <template #item.duration="{ item }">
+          {{ item.duration }} mois
+        </template>
 
         <template #item.actions="{ item }">
           <IconBtn v-if="$can('read', 'pv') || $can('historical', 'pv')"

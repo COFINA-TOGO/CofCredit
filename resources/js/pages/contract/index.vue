@@ -100,6 +100,7 @@ const downloadFile = async (url, fileName) => {
       url: url,
       headers: [
         { name: 'Authorization', value: `Bearer ${useCookie('userToken').value}` },
+        { name: 'Accept', value: `application/json` },
       ],
       nameCallback: function (name) {
         return fileName

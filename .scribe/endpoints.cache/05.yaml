@@ -256,13 +256,13 @@ endpoints:
         name: id
         description: "L'ID du type de garantie"
         required: true
-        example: 20
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 20
+      id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

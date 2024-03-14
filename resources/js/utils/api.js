@@ -2,7 +2,7 @@ import { ofetch } from 'ofetch'
 
 const $api = ofetch.create({
 
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: '/api',
   async onRequest({ options }) {
     options.headers = {
       ...options.headers,

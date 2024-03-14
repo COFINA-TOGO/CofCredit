@@ -1843,32 +1843,6 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/download/{id}':
-    get:
-      summary: "Télécharge le billet à ordre d'un contrat"
-      operationId: tlchargeLeBilletOrdreDunContrat
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example: {  }
-                properties: {  }
-      tags:
-        - Contrat
-    parameters:
-      -
-        in: path
-        name: id
-        description: "L'ID du contrat."
-        example: 1
-        required: true
-        schema:
-          type: integer
   /api/verbal-trial:
     get:
       summary: 'Affiche les Procès verbaux'

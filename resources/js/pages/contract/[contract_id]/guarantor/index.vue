@@ -86,6 +86,7 @@ const downloadFile = async (url, fileName) => {
       url: url,
       headers: [
         { name: 'Authorization', value: `Bearer ${userToken}` },
+        { name: 'Accept', value: `application/json` },
       ],
       nameCallback: function (name) {
         return fileName

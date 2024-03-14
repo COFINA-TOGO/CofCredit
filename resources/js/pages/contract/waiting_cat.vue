@@ -94,6 +94,7 @@ const downloadFile = async (url, fileName) => {
       url: url,
       headers: [
         { name: 'Authorization', value: `Bearer ${useCookie('userToken').value}` },
+        { name: 'Accept', value: `application/json` },
       ],
       nameCallback: function (name) {
         return fileName
@@ -217,13 +218,13 @@ const apiDelete = async id => {
                   <VListItemTitle>Voir le Pv</VListItemTitle>
                 </VListItem>
 
-                
+
                 <div v-if="$can('download', 'contract')">
                   <VDivider />
                   <!-- Télécharger contrat non-signé -->
                   <VListItem
                     @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
@@ -232,7 +233,7 @@ const apiDelete = async id => {
                   <!-- Télécharger contrat signé -->
                   <VListItem v-if="item.signed_contract_path"
                     @click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
@@ -241,7 +242,7 @@ const apiDelete = async id => {
                   <!-- Télécharger billet à ordre non-signé -->
                   <VListItem
                     @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
@@ -250,7 +251,7 @@ const apiDelete = async id => {
                   <!-- Télécharger billet à ordre signé -->
                   <VListItem v-if="item.signed_promissory_note_path"
                     @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
-  
+
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
