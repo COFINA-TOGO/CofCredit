@@ -79,25 +79,29 @@ class User extends Authenticatable
     public function getAbilityRulesAttribute()
     {
         switch ($this->profile) {
-            case('admin'):
+            case ('admin'):
                 return [
                     [
                         'action' => ['manage'],
                         'subject' => ['all'],
                     ]
                 ];
-            case('credit_analyst'):
+            case ('credit_analyst'):
                 return [
                     [
                         "action" => ["manage"],
                         "subject" => ["pv"],
                     ],
                     [
+                        "action" => ["read_caf"],
+                        "subject" => ["user"]
+                    ],
+                    [
                         "action" => ["read"],
                         "subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
                     ]
                 ];
-            case('credit_admin'):
+            case ('credit_admin'):
                 return [
                     [
                         "action" => ["historical", "download"],
@@ -120,7 +124,7 @@ class User extends Authenticatable
                         "subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
                     ]
                 ];
-            case('head_credit'):
+            case ('head_credit'):
                 return [
                     [
                         "action" => ["read", "historical", "download"],
@@ -143,7 +147,7 @@ class User extends Authenticatable
                         "subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
                     ]
                 ];
-            case('operation'):
+            case ('operation'):
                 return [
                     [
                         "action" => ["read", "download", "unblock", "reject_unblock"],
@@ -154,11 +158,11 @@ class User extends Authenticatable
                         "subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
                     ]
                 ];
-            case('legal'):
+            case ('legal'):
                 return [
 
                 ];
-            case('dex'):
+            case ('dex'):
                 return [
                     [
                         "action" => ["read", "historical", "download"],
@@ -181,7 +185,7 @@ class User extends Authenticatable
                         "subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
                     ]
                 ];
-            case('caf'):
+            case ('caf'):
                 return [
                     [
                         "action" => ["read", "upload", "download"],

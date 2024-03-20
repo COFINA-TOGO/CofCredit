@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         $legal = User::factory(1)->create(["full_name" => "legal", "profile" => "legal", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "legal@cofinacorp.com"])->first();
         $dex = User::factory(1)->create(["full_name" => "dex", "profile" => "dex", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "dex@cofinacorp.com"])->first();
         $caf = User::factory(1)->create(["full_name" => "caf", "profile" => "caf", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "caf@cofinacorp.com"])->first();
+        $caf2 = User::factory(1)->create(["full_name" => "caf2", "profile" => "caf", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "caf2@cofinacorp.com"])->first();
 
         $physical_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Physique"])->first();
         $moral_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Morale"])->first();

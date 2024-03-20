@@ -50,7 +50,7 @@ class UserController extends Controller
             }
 
             foreach (["name", "full_name", "email", "profile"] as $filter) {
-                if (isset($request[$filter]) && $request[$filter]) {
+                if (isset ($request[$filter]) && $request[$filter]) {
                     $userList->where($filter, $request[$filter]);
                 }
             }
@@ -61,8 +61,13 @@ class UserController extends Controller
             //     }
             // }
 
+            $connectedUser = $request->user();
 
-            if (isset($request["paginate"]) && ($request->paginate == false)) {
+            if ($connectedUser->profile == "credit_analyst") {
+                $userList->where('profile', 'caf');
+            }
+
+            if (isset ($request["paginate"]) && ($request->paginate == false)) {
                 $userList = $userList->orderByDesc('created_at')->get();
                 $data = ["data" => $userList, "total" => count($userList)];
             } else {
@@ -129,7 +134,7 @@ class UserController extends Controller
             $validator = Validator::make($requestData, [
                 'name' => 'required|unique:users',
                 'full_name' => 'required|unique:users',
-                "profile" => 'required|in:admin,credit_analyst,credit_admin,head_credit,operation,legal,dex,daf',
+                "profile" => 'required|in:admin,credit_analyst,credit_admin,head_credit,operation,legal,dex,caf',
                 'email' => 'required|unique:users',
                 "activated" => 'required|boolean',
                 "password" => 'required|min:8',
@@ -185,7 +190,7 @@ class UserController extends Controller
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
                 } else {
-                    if (isset($requestData["password"])) {
+                    if (isset ($requestData["password"])) {
                         $requestData["password"] = Hash::make($request->password);
                         $requestData["password_change_required"] = true;
                     }
