@@ -1,4 +1,3 @@
-#!/usr/bin/bash
 mv .env .env-tmp;
 mv .env-production .env;
 pnpm build;

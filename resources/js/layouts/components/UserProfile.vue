@@ -39,60 +39,23 @@ const userProfileList = [
 </script>
 
 <template>
-  <VBadge
-    v-if="userData"
-    dot
-    bordered
-    location="bottom right"
-    offset-x="3"
-    offset-y="3"
-    color="success"
-  >
-    <VAvatar
-      class="cursor-pointer"
-      :color="!(userData && userData.avatar) ? 'primary' : undefined"
-      :variant="!(userData && userData.avatar) ? 'tonal' : undefined"
-    >
-      <VImg
-        v-if="userData && userData.avatar"
-        :src="userData.avatar"
-      />
-      <VIcon
-        v-else
-        icon="tabler-user"
-      />
+  <VBadge v-if="userData" dot bordered location="bottom right" offset-x="3" offset-y="3" color="success">
+    <VAvatar class="cursor-pointer" :color="!(userData && userData.avatar) ? 'primary' : undefined"
+      :variant="!(userData && userData.avatar) ? 'tonal' : undefined">
+      <VImg v-if="userData && userData.avatar" :src="userData.avatar" />
+      <VIcon v-else icon="tabler-user" />
 
       <!-- SECTION Menu -->
-      <VMenu
-        activator="parent"
-        width="230"
-        location="bottom end"
-        offset="14px"
-      >
+      <VMenu activator="parent" width="230" location="bottom end" offset="14px">
         <VList>
           <VListItem>
             <template #prepend>
               <VListItemAction start>
-                <VBadge
-                  dot
-                  location="bottom right"
-                  offset-x="3"
-                  offset-y="3"
-                  color="success"
-                  bordered
-                >
-                  <VAvatar
-                    :color="!(userData && userData.avatar) ? 'primary' : undefined"
-                    :variant="!(userData && userData.avatar) ? 'tonal' : undefined"
-                  >
-                    <VImg
-                      v-if="userData && userData.avatar"
-                      :src="userData.avatar"
-                    />
-                    <VIcon
-                      v-else
-                      icon="tabler-user"
-                    />
+                <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success" bordered>
+                  <VAvatar :color="!(userData && userData.avatar) ? 'primary' : undefined"
+                    :variant="!(userData && userData.avatar) ? 'tonal' : undefined">
+                    <VImg v-if="userData && userData.avatar" :src="userData.avatar" />
+                    <VIcon v-else icon="tabler-user" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
@@ -105,37 +68,20 @@ const userProfileList = [
           </VListItem>
 
           <PerfectScrollbar :options="{ wheelPropagation: false }">
-            <template
-              v-for="item in userProfileList"
-              :key="item.title"
-            >
-              <VListItem
-                v-if="item.type === 'navItem'"
-                :to="item.to"
-                @click="item.onClick && item.onClick()"
-              >
+            <template v-for="item in userProfileList" :key="item.title">
+              <VListItem v-if="item.type === 'navItem'" :to="item.to" @click="item.onClick && item.onClick()">
                 <template #prepend>
-                  <VIcon
-                    class="me-2"
-                    :icon="item.icon"
-                    size="22"
-                  />
+                  <VIcon class="me-2" :icon="item.icon" size="22" />
                 </template>
 
                 <VListItemTitle>{{ item.title }}</VListItemTitle>
 
-                <template
-                  v-if="item.badgeProps"
-                  #append
-                >
+                <template v-if="item.badgeProps" #append>
                   <VBadge v-bind="item.badgeProps" />
                 </template>
               </VListItem>
 
-              <VDivider
-                v-else
-                class="my-2"
-              />
+              <VDivider v-else class="my-2" />
             </template>
           </PerfectScrollbar>
         </VList>
