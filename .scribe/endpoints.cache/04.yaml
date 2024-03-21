@@ -365,13 +365,13 @@ endpoints:
         name: id
         description: "L'ID du type de crédit"
         required: true
-        example: 13
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 13
+      id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

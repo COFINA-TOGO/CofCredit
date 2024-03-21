@@ -540,7 +540,7 @@ class ContractController extends Controller
   {
     $contract = Contract::find($id);
     if ($contract) {
-      if (($authorisation = Gate::inspect('update', Contract::class))->allowed()) {
+      if (($authorisation = Gate::inspect('update', $contract))->allowed()) {
         $requestData = $request->all();
         $validator = Validator::make($requestData, [
           'verbal_trial_id' => "required|exists:verbals_trials,id|unique:contracts,verbal_trial_id," . $id,

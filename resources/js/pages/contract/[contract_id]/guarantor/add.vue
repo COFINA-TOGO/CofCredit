@@ -12,18 +12,18 @@ const router = useRouter()
 const route = useRoute('contract-contract_id-guarantor-add')
 
 const guarantorItem = ref({
-  "civility": "Mr",
-  "first_name": "Kong",
-  "last_name": "King",
-  "birth_date": "1988-05-28",
-  "birth_place": "Chine",
-  "nationality": "Chinoise",
-  "home_address": "Zanguera",
-  "type_of_identity_document": "cni",
-  "number_of_identity_document": "DD13-12-23-01212",
-  "date_of_issue_of_identity_document": "2026-02-02",
-  "function": "Chef d'agence",
-  "phone_number": "+228 91 91 91 91",
+  "civility":null,
+  "first_name":null,
+  "last_name":null,
+  "birth_date":null,
+  "birth_place":null,
+  "nationality":null,
+  "home_address":null,
+  "type_of_identity_document":null,
+  "number_of_identity_document":null,
+  "date_of_issue_of_identity_document":null,
+  "function":null,
+  "phone_number":null,
 })
 
 const getResetGuarantorError = () => {

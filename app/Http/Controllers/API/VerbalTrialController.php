@@ -87,13 +87,13 @@ class VerbalTrialController extends Controller
             }
 
             foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "insurance_premium", "caf_id", "creator_id"] as $filter) {
-                if (isset($request[$filter]) && $request[$filter]) {
+                if (isset ($request[$filter]) && $request[$filter]) {
                     $verbalTrialList->where($filter, $request[$filter]);
                 }
             }
 
 
-            if (isset($request["has_contract"])) {
+            if (isset ($request["has_contract"])) {
                 $has_contract = (int) $request["has_contract"];
                 if ($has_contract == 1) {
                     $verbalTrialList->whereHas('contract');
@@ -103,12 +103,12 @@ class VerbalTrialController extends Controller
             }
 
             foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf", "with_creator" => "creator"] as $key => $value) {
-                if (isset($request[$key]) && $request[$key]) {
+                if (isset ($request[$key]) && $request[$key]) {
                     $verbalTrialList->with($value);
                 }
             }
 
-            if (isset($request["paginate"]) && ($request->paginate == false)) {
+            if (isset ($request["paginate"]) && ($request->paginate == false)) {
                 $verbalTrialList = $verbalTrialList->orderByDesc('created_at')->get();
                 $data = ["data" => $verbalTrialList, "total" => count($verbalTrialList)];
             } else {
@@ -142,7 +142,7 @@ class VerbalTrialController extends Controller
             if (($authorisation = Gate::inspect('view', $verbalTrial))->allowed()) {
                 $suplementList = [];
                 foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf", "with_creator" => "creator"] as $key => $value) {
-                    if (isset($request[$key]) && $request[$key]) {
+                    if (isset ($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }
                 }
@@ -181,6 +181,7 @@ class VerbalTrialController extends Controller
             $data["created_at"] = Carbon::parse($verbalTrial->created_at)->format("d/m/Y");
             $data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
             $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
+            $data["insurance_premium"] = number_format(((float) $data["insurance_premium"]), 0, ',', ' ');
             $data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
             $data["line_review_bonus"] = (((float) $data["duration"]) < 18) ? "" : "Prime de révision de ligne                                          : « 1% du capital restant dû après 12 mois »";
 
@@ -269,7 +270,7 @@ class VerbalTrialController extends Controller
                     try {
                         $requestData["creator_id"] = $request->user()->id;
                         $verbalTrial = VerbalTrial::create($requestData);
-                        if (isset($requestData["guarantees"])) {
+                        if (isset ($requestData["guarantees"])) {
                             foreach ($requestData["guarantees"] as $guarantee) {
                                 Guarantee::create([
                                     "verbal_trial_id" => $verbalTrial->id,
@@ -364,7 +365,7 @@ class VerbalTrialController extends Controller
                             $requestData["creator_id"] = $request->user()->id;
                             $verbalTrial->update($requestData);
                             $verbalTrial->guarantees()->delete();
-                            if (isset($requestData["guarantees"])) {
+                            if (isset ($requestData["guarantees"])) {
                                 foreach ($requestData["guarantees"] as $guarantee) {
                                     Guarantee::create([
                                         "verbal_trial_id" => $verbalTrial->id,

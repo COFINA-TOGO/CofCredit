@@ -13,21 +13,21 @@ import { ref } from 'vue'
 const router = useRouter()
 
 const pvData = ref({
-  committee_id: "CFNTG-044-13-12-23-01212",
-  committee_date: "2024-02-02",
-  caf_id: 9,
-  civility: "Mr",
-  applicant_first_name: "Cesar",
-  applicant_last_name: "Endure",
-  account_number: "251012345678",
-  activity: "Homme d'affaire",
-  purpose_of_financing: "Achat de nouveau locaux",
-  type_of_credit_id: "1",
-  amount: "15000000",
-  duration: "18",
-  periodicity: "mensual",
-  due_amount: "150000",
-  insurance_premium: "15000",
+  committee_id: null,
+  committee_date: null,
+  caf_id: null,
+  civility: null,
+  applicant_first_name: null,
+  applicant_last_name: null,
+  account_number: null,
+  activity: null,
+  purpose_of_financing: null,
+  type_of_credit_id: null,
+  amount: null,
+  duration: null,
+  periodicity: null,
+  due_amount: null,
+  insurance_premium: null,
   administrative_fees_percentage: 2.5,
   taf: 10,
   tax_fee_interest_rate: 17,
@@ -220,7 +220,7 @@ const addGuaranteeItem = () => {
                 <VCol cols="12" md="6" lg="4">
                   <AppAutocomplete v-model="pvData.type_of_credit_id" :items="typeOfCreditList"
                     :error-messages="pvError.type_of_credit_id" label="Type de credit"
-                    placeholder="Ex: Avance sur salaire" item-title="name" item-value="id"
+                    placeholder="Ex: Avance sur salaire" item-title="full_name" item-value="id"
                     :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">

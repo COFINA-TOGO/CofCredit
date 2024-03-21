@@ -22,6 +22,7 @@ class TypeOfGuarantee extends Model
         $data = parent::toArray();
         $data["created_at_fr"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
         $data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
+        $data["id"] = (int) ($data["id"]);
         return $data;
     }
 
