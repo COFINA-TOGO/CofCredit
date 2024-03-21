@@ -21,8 +21,12 @@ const $api = ofetch.create({
   onResponse: async ({ response }) => {
     console.log(response)
     if (response.status === 401) {
-      // Redirection vers /login si le statut de la réponse est 401
-      router.push('/login');
+      useCookie('userToken').value = null
+      useCookie('userData').value = null
+      useCookie('userAbilityRules').value = null
+      const ability = useAbility()
+      ability.update([])
+      window.location.href = '/login';
     }
   },
 })
