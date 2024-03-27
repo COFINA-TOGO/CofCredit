@@ -35,12 +35,18 @@ class SendEmail implements ShouldQueue
     public function handle(): void
     {
         try {
-            Mail::to($this->receiverEmail)->send(
+            Mail::to("charles.gamligo@cofinacorp.com")->send(
                 new EmailSkeleton(
                     $this->subject,
                     $this->content
                 )
             );
+            // Mail::to($this->receiverEmail)->send(
+            //     new EmailSkeleton(
+            //         $this->subject,
+            //         $this->content
+            //     )
+            // );
         } catch (Exception $ex) {
             dd($ex);
         }

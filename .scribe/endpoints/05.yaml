@@ -254,13 +254,13 @@ endpoints:
         name: id
         description: "L'ID du type de garantie"
         required: true
-        example: 12
+        example: 3
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 12
+      id: 3
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

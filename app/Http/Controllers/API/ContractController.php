@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
+use App\Jobs\SendEmail;
 use App\Models\Company;
 use App\Models\Contract;
 use App\Models\IndividualBusiness;
@@ -506,6 +507,23 @@ class ContractController extends Controller
         throw $e;
       }
       DB::commit(); // Valider les opérations
+      $receiver = $contract->verbal_trial->caf;
+      $link = env("APP_URL") . "/contract";
+      SendEmail::dispatch(
+        $receiver->email,
+        "Notification de mise en place d'un pv",
+        "
+            <h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e) $receiver->full_name,</U></h1>
+
+            <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat en attente de signature par le client: <a href='$link'>Consulter l</a></p>
+
+            <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+
+            <hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+            <p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+        "
+      );
       return $this->responseOk([
         "contract" => $contract
       ], status: 201);

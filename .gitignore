@@ -60,3 +60,4 @@ dist-ssr
 !.env.example
 credit.zip
 notes.txt
+ssl

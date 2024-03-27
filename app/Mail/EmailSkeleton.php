@@ -14,15 +14,15 @@ class EmailSkeleton extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected string $subject;
-    protected string $content;
+    public string $emailSubject;
+    public string $content;
 
     /**
      * Create a new message instance.
      */
     public function __construct(string $subject, string $content)
     {
-        $this->subject = $subject;
+        $this->emailSubject = $subject;
         $this->content = $content;
     }
 
@@ -32,9 +32,9 @@ class EmailSkeleton extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('gamligocharles2@gmail.com', 'COFINA-TOGO-CREDIT'),
+            from: new Address('gamligocharles2@gmail.com', 'COFINA-TOGO-CREDIT-DIGITAL'),
             cc: ['charles.gamligo@cofinacorp.com'],
-            subject: "COFINA CREDIT TOGO - $this->subject",
+            subject: "COFINA TOGO CREDIT DIGITAL - $this->emailSubject",
         );
     }
 
@@ -45,7 +45,7 @@ class EmailSkeleton extends Mailable
     {
         return new Content(
             view: 'EmailSkeleton',
-            with: ['content', $this->content]
+            with: ['content' => $this->content, 'subject' => $this->emailSubject]
         );
     }
 

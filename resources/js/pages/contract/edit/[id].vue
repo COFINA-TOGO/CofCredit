@@ -223,7 +223,7 @@ const addPledgeItem = () => {
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
                   <AppTextField v-model="contract.total_amount_of_interest" type="number"
-                    :error-messages="errorData.total_amount_of_interest" label="Montant d'une échéance"
+                    :error-messages="errorData.total_amount_of_interest" label="Montant total des intérêts"
                     placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
+use App\Jobs\SendEmail;
 use App\Models\Guarantee;
 use App\Models\User;
 use App\Models\VerbalTrial;
@@ -281,11 +282,31 @@ class VerbalTrialController extends Controller
                                 ]);
                             }
                         }
+                        $receiver = User::find($requestData["caf_id"]);
+                        $link = env("APP_URL") . "/contract/add";
+                        foreach (User::where('profile', 'credit_admin')->get() as $receiver) {
+                            SendEmail::dispatch(
+                                $receiver->email,
+                                "Notification de mise en place d'un contrat",
+                                "
+                                <h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
+        
+                                <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de contrat: <a href='$link'>Créer le contrat</a></p>
+        
+                                <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+        
+                                <hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+        
+                                <p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+                            "
+                            );
+                        }
                     } catch (\Exception $e) {
                         DB::rollback();
                         throw $e;
                     }
                     DB::commit(); // Valider les opérations
+
                     $verbalTrial->load(["type_of_credit.type_of_applicant", "guarantees", "caf"]);
                     return $this->responseOk([
                         "verbalTrial" => $verbalTrial
