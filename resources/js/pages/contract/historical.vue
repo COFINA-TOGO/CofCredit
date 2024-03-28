@@ -100,7 +100,6 @@ const downloadFile = async (url, fileName) => {
         return fileName
       },
     })
-    console.log('Téléchargement réussi')
     fetchContracts()
   } catch (error) {
     console.error('Erreur lors du téléchargement:', error)

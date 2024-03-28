@@ -19,7 +19,6 @@ const $api = ofetch.create({
       }
     },
   onResponse: async ({ response }) => {
-    console.log(response)
     if (response.status === 401) {
       useCookie('userToken').value = null
       useCookie('userData').value = null

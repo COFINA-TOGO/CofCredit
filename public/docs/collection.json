@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "5886c669-ab3c-4fb3-9166-9268814a0e74",
+        "_postman_id": "6c8dc6d2-2351-4e64-a442-347d7448c90e",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1842,6 +1842,12 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "has_mortgage",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence d'hypoth\u00e8que",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "with_type_of_credit",
                                     "value": "",
                                     "description": "Afficher le type de cr\u00e9dit.",
@@ -1890,7 +1896,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&creator_id=&has_contract=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1&with_creator=&paginate="
+                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&creator_id=&has_contract=&has_mortgage=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1&with_creator=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -2122,7 +2128,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "8",
+                                    "value": "12",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -2331,7 +2337,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "3",
+                                    "value": "5",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -2805,7 +2811,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "8",
+                                    "value": "10",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -3079,7 +3085,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "7",
+                                    "value": "18",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

@@ -28,7 +28,7 @@ Contrat:
     Nombre d'échéance:                                  18
     Type:                                               Société
     Gages:
-        1:
+        1:CFNTG-044-13-12-23-01212
             Type de Gage:                                       Véhicule
             Commentaire:                                        RAS
     Date de naissance:                                  1998-03-03

@@ -205,6 +205,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      has_mortgage:
+        name: has_mortgage
+        description: "Filtrer par présence d'hypothèque"
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       with_type_of_credit:
         name: with_type_of_credit
         description: 'Afficher le type de crédit.'
@@ -279,6 +288,7 @@ endpoints:
         custom: []
     cleanQueryParameters:
       has_contract: 0
+      has_mortgage: 0
       with_type_of_credit: 0
       with_type_of_applicant: 1
       with_guarantees: 1
@@ -948,13 +958,13 @@ endpoints:
         name: id
         description: "L'ID du procès verbal"
         required: true
-        example: 8
+        example: 12
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 8
+      id: 12
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

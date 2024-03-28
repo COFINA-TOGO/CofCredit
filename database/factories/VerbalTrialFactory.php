@@ -24,7 +24,7 @@ class VerbalTrialFactory extends Factory
             "civility" => $this->faker->randomElement(["Mr", "Mme", "Mlle"]),
             "applicant_first_name" => $this->faker->firstName(),
             "applicant_last_name" => $this->faker->lastName(),
-            "account_number" => $this->faker->unique()->numerify('##########'),
+            "account_number" => $this->faker->unique()->numerify('############'),
             "activity" => $this->faker->company(),
             "purpose_of_financing" => $this->faker->company(),
             "type_of_credit_id" => TypeOfCredit::inRandomOrder()->first()->id,

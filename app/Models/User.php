@@ -112,6 +112,10 @@ class User extends Authenticatable
                         "subject" => ["contract"],
                     ],
                     [
+                        "action" => ["create", "read", "historical", "without-signed-contract", "update", "delete", "download"],
+                        "subject" => ["notification"],
+                    ],
+                    [
                         "action" => ["create", "read", "update", "delete", "download"],
                         "subject" => ["guarantor"],
                     ],
@@ -133,6 +137,10 @@ class User extends Authenticatable
                     [
                         "action" => ["read", "historical", "waiting_cat", "download"],
                         "subject" => ["contract"],
+                    ],
+                    [
+                        "action" => ["read", "historical", "without-head-validation", "download"],
+                        "subject" => ["notification"],
                     ],
                     [
                         "action" => ["read", "download"],

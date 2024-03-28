@@ -1,5 +1,3 @@
-const emailRouteComponent = () => import('@/pages/apps/email/index.vue')
-
 // 👉 Redirects
 export const redirects = [
   // ℹ️ We are redirecting to different pages based on role.

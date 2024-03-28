@@ -37,7 +37,6 @@ if (guarantor.value.status == 200) {
 } else {
   router.push("/guarantor")
 }
-console.log(guarantor.value)
 
 const tableData = [
   { "title": "Nom", "value": guarantor.value.last_name },

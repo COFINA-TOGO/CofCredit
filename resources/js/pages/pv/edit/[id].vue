@@ -135,7 +135,6 @@ const removeGuaranteeItem = id => {
 }
 
 const addGuaranteeItem = () => {
-  console.log(verbalTrial.value)
   verbalTrial.value.guarantees.push({
     type_of_guarantee_id: 1,
     expiration_date: "",

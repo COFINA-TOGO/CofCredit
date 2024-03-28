@@ -25,10 +25,10 @@ export default defineConfig({
       },
 
 
-      beforeWriteFiles: root => {
-        root.insert('/apps/email/:filter', '/resources/js/pages/apps/email/index.vue')
-        root.insert('/apps/email/:label', '/resources/js/pages/apps/email/index.vue')
-      },
+      // beforeWriteFiles: root => {
+      //   root.insert('/apps/email/:filter', '/resources/js/pages/apps/email/index.vue')
+      //   root.insert('/apps/email/:label', '/resources/js/pages/apps/email/index.vue')
+      // },
 
       routesFolder: 'resources/js/pages',
     }),

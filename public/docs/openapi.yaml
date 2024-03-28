@@ -2051,6 +2051,16 @@ paths:
             example: 0
         -
           in: query
+          name: has_mortgage
+          description: "Filtrer par présence d'hypothèque"
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: "Filtrer par présence d'hypothèque"
+            example: 0
+        -
+          in: query
           name: with_type_of_credit
           description: 'Afficher le type de crédit.'
           example: 0

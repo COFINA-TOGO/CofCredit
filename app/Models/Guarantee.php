@@ -24,6 +24,7 @@ class Guarantee extends Model
         $data["created_at_fr"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
         $data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
         $data["expiration_date_fr"] = Carbon::parse($data["expiration_date"])->format("d/m/Y");
+        $data["type_of_guarantee_id"] = (int) $data["type_of_guarantee_id"];
         $data["id"] = (int) ($data["id"]);
         return $data;
     }

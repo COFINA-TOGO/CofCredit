@@ -92,7 +92,6 @@ const downloadFile = async (url, fileName) => {
         return fileName
       },
     })
-    console.log('Téléchargement réussi')
   } catch (error) {
     console.error('Erreur lors du téléchargement:', error)
   }
@@ -117,7 +116,6 @@ const uploadFile = async (id, event) => {
         });
 
         if (response.ok) {
-          console.log('Document envoyé avec succès.');
           fetchGuarantors();
         } else {
           console.error('Échec de l\'envoi du document.');

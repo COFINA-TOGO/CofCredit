@@ -3,7 +3,7 @@
 <script setup>
 definePage({
   meta: {
-    action: 'read',
+    action: 'without-notification',
     subject: 'pv',
   },
 })
@@ -78,7 +78,7 @@ const {
     type_of_credit_id: type_of_credit_id,
     page: page,
     has_contract: 0,
-    has_mortgage: 0,
+    has_mortgage: 1,
     with_caf: 1,
     with_type_of_credit: 1,
   },
@@ -132,7 +132,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
         <VRow>
           <VCardText>
             <h2>
-              Liste des Procès verbaux en attente de contrat
+              Liste des Procès verbaux en attente de contrat hypothécaire
             </h2>
           </VCardText>
         </VRow>

@@ -3,14 +3,16 @@
 <script setup>
 definePage({
   meta: {
-    action: 'read',
+    action: 'historical-mortgage',
     subject: 'pv',
   },
 })
+
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 import AppAutocomplete from '@/@core/components/app-form-elements/AppAutocomplete.vue';
 import JsFileDownloader from 'js-file-downloader'
+
 
 const isDialogVisible = ref(false)
 const idToDelete = ref(0)
@@ -77,8 +79,8 @@ const {
     search: searchQuery,
     type_of_credit_id: type_of_credit_id,
     page: page,
-    has_contract: 0,
-    has_mortgage: 0,
+    has_contract: 1,
+    has_mortgage : 1, 
     with_caf: 1,
     with_type_of_credit: 1,
   },
@@ -189,10 +191,6 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
       <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers" :items="pvList"
         :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
         <!-- Actions -->
-
-        <template #item.duration="{ item }">
-          {{ item.duration }} mois
-        </template>
 
         <template #item.actions="{ item }">
           <IconBtn v-if="$can('read', 'pv') || $can('historical', 'pv')"

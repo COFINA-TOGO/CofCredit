@@ -14,6 +14,7 @@ class CAT extends Model
     protected $table = "c_a_t_s";
     protected $fillable = [
         "contract_id",
+        "notification_id",
         "credit_number",
         "sector",
         "first_deadline",
@@ -39,6 +40,7 @@ class CAT extends Model
         $data["created_at_fr"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
         $data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
         $data["contract_id"] = (int) $data["contract_id"];
+        $data["notification_id"] = (int) $data["notification_id"];
         $data["other_expenses"] = (int) $data["other_expenses"];
         $data["teg"] = (int) $data["teg"];
         return $data;
@@ -56,6 +58,11 @@ class CAT extends Model
     public function unblocker(): BelongsTo
     {
         return $this->belongsTo(User::class, 'unblocker_user_id', 'id');
+    }
+
+    public function notification(): BelongsTo
+    {
+        return $this->belongsTo(Notification::class, 'notification_id', 'id');
     }
 
     public function getStatusAttribute()
@@ -94,7 +101,6 @@ class CAT extends Model
             }
         }
     }
-
     public function getCommentAttribute()
     {
         if ($this->unblock_comment && in_array($this->unblock_status, ["rejected", "validated"])) {

@@ -87,13 +87,11 @@ const onSubmit = () => {
       if (res.status == 201) {
         router.push({ name: "contract-contract_id-guarantor", params: { contract_id: route.params.contract_id } })
       } else {
-        console.log(guarantorError.value)
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
             guarantorError.value[key] += message + "\n"
           })
         }
-        console.log(guarantorError.value)
       }
       nextTick(() => {
         // refForm.value?.reset()

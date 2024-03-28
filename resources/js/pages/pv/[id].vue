@@ -24,8 +24,6 @@ if (verbalTrial.value.status == 200) {
   router.push("/pv")
 }
 
-console.log(verbalTrial.value)
-
 const tableData = [
   { "title": "Montant", "value": String(verbalTrial.value.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Durée", "value": verbalTrial.value.duration + " mois" },

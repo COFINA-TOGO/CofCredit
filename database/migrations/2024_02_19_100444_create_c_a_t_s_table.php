@@ -12,7 +12,8 @@ return new class extends Migration {
     {
         Schema::create('c_a_t_s', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("contract_id")->constrained()->cascadeOnDelete();                                                     //Le contrat du
+            $table->foreignId("contract_id")->nullable()->constrained()->cascadeOnDelete();                                         //Le contrat du
+            $table->foreignId("notification_id")->nullable()->constrained()->cascadeOnDelete();                                     //Le contrat du
             $table->string("credit_number");                                                                                        //Le numéro du prêt
             $table->string("sector");                                                                                               //Le secteur
             $table->date("first_deadline");                                                                                         //La date de première échéance

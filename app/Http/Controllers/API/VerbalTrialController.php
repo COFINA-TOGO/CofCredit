@@ -11,6 +11,7 @@ use App\Models\VerbalTrial;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -50,6 +51,7 @@ class VerbalTrialController extends Controller
      * @queryParam  caf_id                                                  int                 Filtrer par ID du CAF                                                   No-example
      * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
      * @queryParam  has_contract                                            int                 Filtrer par présence de contrat                                         Example: 0
+     * @queryParam  has_mortgage                                            int                 Filtrer par présence d'hypothèque                                       Example: 0
      *
      * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
      * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur du type de crédit.                        Example: 1
@@ -88,13 +90,13 @@ class VerbalTrialController extends Controller
             }
 
             foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "insurance_premium", "caf_id", "creator_id"] as $filter) {
-                if (isset ($request[$filter]) && $request[$filter]) {
+                if (isset($request[$filter]) && $request[$filter] != "") {
                     $verbalTrialList->where($filter, $request[$filter]);
                 }
             }
 
 
-            if (isset ($request["has_contract"])) {
+            if (isset($request["has_contract"])) {
                 $has_contract = (int) $request["has_contract"];
                 if ($has_contract == 1) {
                     $verbalTrialList->whereHas('contract');
@@ -103,13 +105,26 @@ class VerbalTrialController extends Controller
                 }
             }
 
+            if (isset($request["has_mortgage"])) {
+                $has_mortgage = (int) $request["has_mortgage"];
+                if ($has_mortgage == 1) {
+                    $verbalTrialList->whereHas('guarantees', function ($query) {
+                        $query->where('type_of_guarantee_id', 9);
+                    });
+                } else if ($has_mortgage == 0) {
+                    $verbalTrialList->whereDoesntHave('guarantees', function ($query) {
+                        $query->where('type_of_guarantee_id', 9);
+                    });
+                }
+            }
+
             foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf", "with_creator" => "creator"] as $key => $value) {
-                if (isset ($request[$key]) && $request[$key]) {
+                if (isset($request[$key]) && $request[$key]) {
                     $verbalTrialList->with($value);
                 }
             }
 
-            if (isset ($request["paginate"]) && ($request->paginate == false)) {
+            if (isset($request["paginate"]) && ($request->paginate == false)) {
                 $verbalTrialList = $verbalTrialList->orderByDesc('created_at')->get();
                 $data = ["data" => $verbalTrialList, "total" => count($verbalTrialList)];
             } else {
@@ -143,7 +158,7 @@ class VerbalTrialController extends Controller
             if (($authorisation = Gate::inspect('view', $verbalTrial))->allowed()) {
                 $suplementList = [];
                 foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf", "with_creator" => "creator"] as $key => $value) {
-                    if (isset ($request[$key]) && $request[$key]) {
+                    if (isset($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }
                 }
@@ -271,7 +286,15 @@ class VerbalTrialController extends Controller
                     try {
                         $requestData["creator_id"] = $request->user()->id;
                         $verbalTrial = VerbalTrial::create($requestData);
-                        if (isset ($requestData["guarantees"])) {
+                        if (isset($requestData["guarantees"])) {
+                            $guaranteesCollection = new Collection($requestData["guarantees"]);
+                            if (
+                                $guaranteesCollection->contains(function ($objet) {
+                                    return $objet["type_of_guarantee_id"] === 9;
+                                })
+                            ) {
+                                $verbalTrial->update(["has_mortgage" => true]);
+                            }
                             foreach ($requestData["guarantees"] as $guarantee) {
                                 Guarantee::create([
                                     "verbal_trial_id" => $verbalTrial->id,
@@ -384,9 +407,12 @@ class VerbalTrialController extends Controller
                         DB::beginTransaction();
                         try {
                             $requestData["creator_id"] = $request->user()->id;
-                            $verbalTrial->update($requestData);
                             $verbalTrial->guarantees()->delete();
-                            if (isset ($requestData["guarantees"])) {
+                            if (isset($requestData["guarantees"])) {
+                                $guaranteesCollection = new Collection($requestData["guarantees"]);
+                                $requestData["has_mortgage"] = $guaranteesCollection->contains(function ($objet) {
+                                    return $objet["type_of_guarantee_id"] === 9;
+                                });
                                 foreach ($requestData["guarantees"] as $guarantee) {
                                     Guarantee::create([
                                         "verbal_trial_id" => $verbalTrial->id,
@@ -397,6 +423,7 @@ class VerbalTrialController extends Controller
                                     ]);
                                 }
                             }
+                            $verbalTrial->update($requestData);
                         } catch (\Exception $e) {
                             DB::rollback();
                             throw $e;

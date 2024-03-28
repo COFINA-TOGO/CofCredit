@@ -89,7 +89,7 @@ class ContractController extends Controller
         ;
       }
 
-      if (isset ($request["has_cat"])) {
+      if (isset($request["has_cat"])) {
         $has_cat = (int) $request["has_cat"];
         if ($has_cat == 1) {
           $contractList->whereHas('c_a_t');
@@ -99,14 +99,14 @@ class ContractController extends Controller
       }
 
       foreach (["verbal_trial_id", "representative_birth_date", "representative_birth_place", "representative_nationality", "representative_home_address", "representative_type_of_identity_document", "representative_number_of_identity_document", "representative_date_of_issue_of_identity_document", "representative_phone_number", "risk_premium_percentage", "total_amount_of_interest", "number_of_due_dates", "type", "has_pledges", "creator_id"] as $filter) {
-        if (isset ($request[$filter]) && $request[$filter]) {
+        if (isset($request[$filter]) && $request[$filter]) {
           $contractList->where($filter, $request[$filter]);
         }
       }
 
 
       foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_creator" => "creator", "with_pledges" => "pledges"] as $key => $value) {
-        if (isset ($request[$key]) && $request[$key]) {
+        if (isset($request[$key]) && $request[$key]) {
           $contractList->with($value);
         }
       }
@@ -116,7 +116,7 @@ class ContractController extends Controller
         });
       }
 
-      if (isset ($request["has_upload_completed"])) {
+      if (isset($request["has_upload_completed"])) {
         if ($request["has_upload_completed"]) {
           $contractList->whereNotNull('signed_contract_path')->whereNotNull('signed_promissory_note_path')->where(function ($query) {
             $query->whereDoesntHave('guarantors', function ($query) {
@@ -142,7 +142,7 @@ class ContractController extends Controller
       // return $contractList->toSql();
 
 
-      if (isset ($request["paginate"]) && ($request->paginate == false)) {
+      if (isset($request["paginate"]) && ($request->paginate == false)) {
         $contractList = $contractList->orderByDesc('created_at')->get();
         $data = ["data" => $contractList, "total" => count($contractList)];
       } else {
@@ -180,7 +180,7 @@ class ContractController extends Controller
       if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
         $suplementList = [];
         foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_pledges" => "pledges"] as $key => $value) {
-          if (isset ($request[$key]) && $request[$key]) {
+          if (isset($request[$key]) && $request[$key]) {
             $suplementList[] = $value;
           }
         }
@@ -481,7 +481,7 @@ class ContractController extends Controller
           $relationList[] = "individual_business";
         }
 
-        if (isset ($requestData["has_pledges"])) {
+        if (isset($requestData["has_pledges"])) {
           if ($requestData["has_pledges"]) {
             $validator = Validator::make($requestData, [
               "pledges" => "required|array|min:1",
@@ -635,7 +635,7 @@ class ContractController extends Controller
             $relationList[] = "individual_business";
           }
 
-          if (isset ($requestData["has_pledges"])) {
+          if (isset($requestData["has_pledges"])) {
             if ($requestData["has_pledges"]) {
               $validator = Validator::make($requestData, [
                 "pledges" => "required|array|min:1",
