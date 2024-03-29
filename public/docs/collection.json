@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "6c8dc6d2-2351-4e64-a442-347d7448c90e",
+        "_postman_id": "5ad717c3-2225-44a4-8f70-b52811638d79",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1848,6 +1848,12 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "status",
+                                    "value": "waiting",
+                                    "description": "Filtrer par statut du pv",
+                                    "disabled": false
+                                },
+                                {
                                     "key": "with_type_of_credit",
                                     "value": "",
                                     "description": "Afficher le type de cr\u00e9dit.",
@@ -1896,7 +1902,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&creator_id=&has_contract=&has_mortgage=&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1&with_creator=&paginate="
+                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&creator_id=&has_contract=&has_mortgage=&status=waiting&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1&with_creator=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -2117,6 +2123,39 @@
                     ]
                 },
                 {
+                    "name": "PUT api\/verbal-trial\/change-status\/{id}",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/verbal-trial\/change-status\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/verbal-trial\/change-status\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consectetur",
+                                    "description": "The ID of the change status."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
                     "name": "Supprime un proc\u00e8s verbal",
                     "request": {
                         "url": {
@@ -2128,7 +2167,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "12",
+                                    "value": "18",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -2337,7 +2376,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "5",
+                                    "value": "11",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -2577,7 +2616,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "16",
+                                    "value": "19",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -2811,7 +2850,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "10",
+                                    "value": "14",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -3085,7 +3124,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "18",
+                                    "value": "1",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

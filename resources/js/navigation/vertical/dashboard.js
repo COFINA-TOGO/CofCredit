@@ -108,13 +108,13 @@ export default [
     children: [
       {
         title: 'Ajouter',
-        // to: 'cat-add',
+        to: 'cat-add',
         action: 'create',
         subject: 'cat',
       },
       {
         title: 'Historique',
-        // to: 'cat',
+        to: 'cat',
         action: 'read',
         subject: 'cat',
       },

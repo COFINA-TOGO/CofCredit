@@ -241,7 +241,7 @@ const uploadFile = async (id, event) => {
             <VIcon icon="tabler-edit" />
           </IconBtn>
           <IconBtn v-if="$can('delete', 'contract')" @click="contractIdToDelete = item.id; isDialogVisible = true">
-            <VIcon icon="tabler-trash" />
+            <VIcon icon="tabler-trash" color='error' />
           </IconBtn>
           <VBtn icon variant="text" size="small" color="medium-emphasis">
             <VIcon size="24" icon="tabler-dots-vertical" />

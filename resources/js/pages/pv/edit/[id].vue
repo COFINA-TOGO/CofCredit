@@ -150,10 +150,7 @@ const addGuaranteeItem = () => {
       <VForm ref="refForm" @submit.prevent="onSubmit">
         <VRow>
           <VCol cols="11">
-            <VBtn :to="{ name: 'pv' }">
-              <VIcon icon="tabler-arrow-left" />
-              Pvs
-            </VBtn>
+
           </VCol>
           <VCol cols="1">
             <VBtn :to="{ name: 'pv-id', params: { id: route.params.id } }">

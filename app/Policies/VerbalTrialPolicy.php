@@ -37,6 +37,10 @@ class VerbalTrialPolicy
     {
         return $this->check(["update"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
+    public function change_status(User $connectedUser, VerbalTrial $verbalTrial)
+    {
+        return $this->check(["change_status"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+    }
     public function download(User $connectedUser, VerbalTrial $verbalTrial)
     {
         return $this->check(["download"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");

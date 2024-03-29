@@ -48,10 +48,7 @@ if (verbalTrial.duration > 13) {
           <!-- SECTION Header -->
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="11">
-              <VBtn to="/pv">
-                <VIcon icon="tabler-arrow-left" />
-                Pvs
-              </VBtn>
+
             </VCol>
             <VCol cols="1">
               <VBtn :to="{ name: 'pv-edit-id', params: { id: verbalTrial.id } }">

@@ -131,21 +131,25 @@ const actionComment = ref("")
 
 const validateCAT = async id => {
   await $api(`cat/validate/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+  actionComment.value = ""
   fetchCAT()
 }
 
 const unblockCAT = async id => {
   await $api(`cat/unblock/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+  actionComment.value = ""
   fetchCAT()
 }
 
 const rejectValidationCAT = async id => {
   await $api(`cat/reject-validation/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+  actionComment.value = ""
   fetchCAT()
 }
 
 const rejectUnblockCAT = async id => {
   await $api(`cat/reject-unblock/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+  actionComment.value = ""
   fetchCAT()
 }
 </script>
@@ -227,7 +231,7 @@ const rejectUnblockCAT = async id => {
             <VIcon icon="tabler-edit" />
           </IconBtn>
           <IconBtn v-if="$can('delete', 'cat')" @click="catSelectedId = item.id; isDialogVisible = true">
-            <VIcon icon="tabler-trash" />
+            <VIcon icon="tabler-trash" color='error' />
           </IconBtn>
           <VBtn icon variant="text" size="small" color="medium-emphasis">
             <VIcon size="24" icon="tabler-dots-vertical" />

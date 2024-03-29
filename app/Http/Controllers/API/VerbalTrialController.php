@@ -52,6 +52,7 @@ class VerbalTrialController extends Controller
      * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
      * @queryParam  has_contract                                            int                 Filtrer par présence de contrat                                         Example: 0
      * @queryParam  has_mortgage                                            int                 Filtrer par présence d'hypothèque                                       Example: 0
+     * @queryParam  status                                                  string              Filtrer par statut du pv                                                Example: waiting
      *
      * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
      * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur du type de crédit.                        Example: 1
@@ -93,6 +94,16 @@ class VerbalTrialController extends Controller
                 if (isset($request[$filter]) && $request[$filter] != "") {
                     $verbalTrialList->where($filter, $request[$filter]);
                 }
+            }
+
+            if (isset($request["status"])) {
+                $verbalTrialList->where(function ($query) use ($request) {
+                    foreach (str_split($request["status"]) as $char) {
+                        if (in_array($char, ['w', 'v', 'r', 'c'])) {
+                            $query->orWhere("status", ["w" => "waiting", "v" => "validated", "r" => "rejected"][$char]);
+                        }
+                    }
+                });
             }
 
 
@@ -423,6 +434,7 @@ class VerbalTrialController extends Controller
                                     ]);
                                 }
                             }
+                            $requestData["status"] = "waiting";
                             $verbalTrial->update($requestData);
                         } catch (\Exception $e) {
                             DB::rollback();
@@ -442,6 +454,33 @@ class VerbalTrialController extends Controller
             }
         } else {
             return $this->responseError(["id" => "Le procès verbal n'existe pas"], 404);
+        }
+    }
+
+    public function change_status(Request $request, $id)
+    {
+        $verbalTrial = VerbalTrial::find($id);
+        if ($verbalTrial) {
+            if (($authorisation = Gate::inspect("change_status", $verbalTrial))->allowed()) {
+                $requestData = $request->all();
+                $validator = Validator::make($requestData, [
+                    'status' => 'required|in:waiting,rejected,validated',
+                    'comment' => "min:0",
+                ]);
+                if ($validator->fails()) {
+                    return $this->responseError($validator->errors(), 400);
+                } else {
+                    $verbalTrial->update([
+                        "status" => $requestData["status"],
+                        "status_observation" => $requestData["comment"],
+                    ]);
+                    return $verbalTrial;
+                }
+            } else {
+                return $this->responseError(["auth" => [$authorisation->message()]], 403);
+            }
+        } else {
+            return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
         }
     }
 

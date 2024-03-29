@@ -80,7 +80,8 @@ const {
     type_of_credit_id: type_of_credit_id,
     page: page,
     has_contract: 1,
-    has_mortgage : 0, 
+    has_mortgage: 0,
+    status: 'v',
     with_caf: 1,
     with_type_of_credit: 1,
   },
@@ -134,7 +135,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
         <VRow>
           <VCardText>
             <h2>
-              Liste des Procès verbaux en attente de contrat
+              Historique des procès verbaux
             </h2>
           </VCardText>
         </VRow>
@@ -205,7 +206,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
             <VIcon icon="tabler-download" />
           </IconBtn>
           <IconBtn v-if="$can('delete', 'pv')" @click="idToDelete = item.id; isDialogVisible = true">
-            <VIcon icon="tabler-trash" />
+            <VIcon icon="tabler-trash" color='error' />
           </IconBtn>
         </template>
 

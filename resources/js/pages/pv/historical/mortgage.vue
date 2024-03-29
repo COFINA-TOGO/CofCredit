@@ -80,7 +80,7 @@ const {
     type_of_credit_id: type_of_credit_id,
     page: page,
     has_contract: 1,
-    has_mortgage : 1, 
+    has_mortgage: 1,
     with_caf: 1,
     with_type_of_credit: 1,
   },
@@ -205,7 +205,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
             <VIcon icon="tabler-download" />
           </IconBtn>
           <IconBtn v-if="$can('delete', 'pv')" @click="idToDelete = item.id; isDialogVisible = true">
-            <VIcon icon="tabler-trash" />
+            <VIcon icon="tabler-trash" color='error' />
           </IconBtn>
         </template>
 

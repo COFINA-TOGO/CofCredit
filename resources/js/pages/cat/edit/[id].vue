@@ -123,7 +123,7 @@ const onSubmit = () => {
                 <VCol cols="12" md="12" lg="12">
                   <AppAutocomplete v-model="cat.contract_id" :items="contractList"
                     :error-messages="catError.contract_id" label="Contrat" placeholder="Ex: CFNTG-044-13-12-23-01212"
-                    :rules="[requiredValidator]" item-title="verbal_trial.committee_id" item-value="id" />
+                    :rules="[requiredValidator]" item-title="verbal_trial.label" item-value="id" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
                   <AppTextField v-model="cat.credit_number" :error-messages="catError.credit_number"

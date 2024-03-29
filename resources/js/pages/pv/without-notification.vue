@@ -207,7 +207,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
             <VIcon icon="tabler-download" />
           </IconBtn>
           <IconBtn v-if="$can('delete', 'pv')" @click="idToDelete = item.id; isDialogVisible = true">
-            <VIcon icon="tabler-trash" />
+            <VIcon icon="tabler-trash" color='error' />
           </IconBtn>
         </template>
 

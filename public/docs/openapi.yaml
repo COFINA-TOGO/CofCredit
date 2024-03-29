@@ -2061,6 +2061,16 @@ paths:
             example: 0
         -
           in: query
+          name: status
+          description: 'Filtrer par statut du pv'
+          example: waiting
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par statut du pv'
+            example: waiting
+        -
+          in: query
           name: with_type_of_credit
           description: 'Afficher le type de crédit.'
           example: 0
@@ -2462,6 +2472,24 @@ paths:
         required: true
         schema:
           type: integer
+  '/api/verbal-trial/change-status/{id}':
+    put:
+      summary: ''
+      operationId: putApiVerbalTrialChangeStatusId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Procès Verbal'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the change status.'
+        example: consectetur
+        required: true
+        schema:
+          type: string
   /api/type-of-guarantee:
     get:
       summary: 'Affiche les types de garantie'

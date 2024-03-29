@@ -35,9 +35,11 @@ class VerbalTrial extends Model
         'tax_fee_interest_rate',
         'caf_id',
         'creator_id',
+        'status',
+        'status_observation',
     ];
 
-    protected $appends = ["applicant_full_name"];
+    protected $appends = ["applicant_full_name", "label", "amount_fr"];
 
     public function toArray()
     {
@@ -83,5 +85,15 @@ class VerbalTrial extends Model
     public function getApplicantFullNameAttribute()
     {
         return $this->applicant_first_name . " " . $this->applicant_last_name;
+    }
+
+    public function getLabelAttribute()
+    {
+        return "$this->applicant_full_name($this->committee_id)";
+    }
+
+    public function getAmountFrAttribute()
+    {
+        return number_format(((float) $this["amount"]), 0, ',', ' ') . " FCFA";
     }
 }

@@ -31,6 +31,8 @@ return new class extends Migration {
             $table->float('tax_fee_interest_rate');
             $table->foreignId('caf_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
             $table->foreignId("creator_id")->constrained(table: "users", column: "id")->cascadeOnDelete();
+            $table->enum('status', ["waiting", 'rejected', "validated"])->default('waiting');
+            $table->string("status_observation")->nullable();
             $table->timestamps();
         });
     }

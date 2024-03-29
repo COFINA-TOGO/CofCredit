@@ -218,7 +218,7 @@ const addPledgeItem = () => {
                 <VCol cols="12" md="6" lg="6">
                   <AppAutocomplete v-model="contract.verbal_trial_id" :items="verbalTrialList"
                     :error-messages="errorData.verbal_trial_id" label="Procès verbal"
-                    placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" item-title="committee_id"
+                    placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" item-title="label"
                     item-value="id" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">

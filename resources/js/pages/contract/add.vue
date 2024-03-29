@@ -78,9 +78,12 @@ const pvError = ref(getResetPvError())
 
 const {
   data: verbalTrialListData,
-} = await useApi(createUrl('/verbal-trial?has_contract=0', {
+} = await useApi(createUrl('/verbal-trial', {
   query: {
-    "paginate": 0,
+    has_contract: 0,
+    paginate: 0,
+    has_mortgage: 0,
+    status: 'v'
   },
 }))
 
@@ -199,7 +202,7 @@ const addPledgeItem = () => {
                 <VCol cols="12" md="6" lg="6">
                   <AppAutocomplete v-model="contractData.verbal_trial_id" :items="verbalTrialList"
                     :error-messages="pvError.verbal_trial_id" label="Procès verbal"
-                    placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" item-title="committee_id"
+                    placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" item-title="label"
                     item-value="id" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
