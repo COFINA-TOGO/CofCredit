@@ -188,10 +188,12 @@ const onSubmit = () => {
             <div class="d-flex flex-column justify-center" />
             <div class="d-flex gap-4 align-center flex-wrap">
               <VBtn type="reset" variant="tonal" color="primary">
+                <VIcon start icon="tabler-circle-minus" />
                 Effacer
               </VBtn>
               <VBtn type="submit" class="me-3">
                 Enregistrer
+                <VIcon end icon="tabler-checkbox" />
               </VBtn>
             </div>
           </div>

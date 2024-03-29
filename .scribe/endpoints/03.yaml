@@ -294,13 +294,13 @@ endpoints:
         name: id
         description: "L'ID du type de demandeur de crédit"
         required: true
-        example: 14
+        example: 15
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 14
+      id: 15
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

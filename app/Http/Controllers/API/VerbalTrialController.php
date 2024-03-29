@@ -136,10 +136,10 @@ class VerbalTrialController extends Controller
             }
 
             if (isset($request["paginate"]) && ($request->paginate == false)) {
-                $verbalTrialList = $verbalTrialList->orderByDesc('created_at')->get();
+                $verbalTrialList = $verbalTrialList->orderByDesc('updated_at')->get();
                 $data = ["data" => $verbalTrialList, "total" => count($verbalTrialList)];
             } else {
-                $data = $verbalTrialList->orderByDesc('created_at')->paginate(8)->toArray();
+                $data = $verbalTrialList->orderByDesc('updated_at')->paginate(8)->toArray();
             }
 
             return $this->responseOkPaginate($data);

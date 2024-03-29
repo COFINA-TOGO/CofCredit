@@ -143,7 +143,7 @@ const apiDelete = async id => {
         <div class="d-flex align-center">
           <VRow>
             <VCol>
-              <VBtn prepend-icon="tabler-arrow-left" :to="{ name: 'contract' }">
+              <VBtn prepend-icon="tabler-arrow-left" :to="'../'">
                 Contrats
               </VBtn>
             </VCol>

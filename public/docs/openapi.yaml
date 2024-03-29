@@ -2486,7 +2486,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the change status.'
-        example: consectetur
+        example: et
         required: true
         schema:
           type: string

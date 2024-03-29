@@ -79,7 +79,7 @@ const {
     with_company: 1,
     with_individual_business: 1,
     with_creator: 1,
-    has_upload_completed: 0,
+    // has_upload_completed: 1,
     has_cat: 0,
   },
 }))
@@ -222,7 +222,7 @@ const uploadFile = async (id, event) => {
         </template>
 
         <template #item.observations="{ item }">
-          <VList density="compact">
+          <VList v-if="item.observations.length > 0" density=" compact">
             <VListItem v-for="observation in item.observations">
               <VListItemTitle>
                 <VChip label>
@@ -231,110 +231,143 @@ const uploadFile = async (id, event) => {
               </VListItemTitle>
             </VListItem>
           </VList>
+
+          <VList density="compact" v-if="item.observations.length == 0">
+            <VListItem>
+              <VChip color="success" label>
+                Dossier ccomplêt
+              </VChip>
+            </VListItem>
+          </VList>
         </template>
 
         <template #item.actions="{ item }">
-          <IconBtn :to="{ name: 'contract-id', params: { id: item.id } }">
-            <VIcon icon="tabler-eye" />
+          <span>
+            <IconBtn :to="{ name: 'contract-id', params: { id: item.id } }">
+              <VIcon icon="tabler-eye" />
+            </IconBtn>
+            <VBtn icon variant="text" size="small" color="medium-emphasis">
+              <VIcon size="24" icon="tabler-dots-vertical" />
+              <VMenu activator="parent">
+                <VList>
+                  <input ref="refInputEl" type="file" name="signed_contract" accept=".pdf,.png,.jpg" hidden
+                    @input="uploadFile(item.id, $event)" />
+
+                  <VBadge v-if="$can('read', 'guarantor')" inline :content="item.guarantors_count">
+                    <VListItem :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: item.id } }">
+                      <template #prepend>
+                        <VIcon icon="tabler-users" />
+                      </template>
+
+                      <VListItemTitle>
+                        Voir les Garants
+                      </VListItemTitle>
+                    </VListItem>
+                  </VBadge>
+                  <VListItem v-if="$can('read', 'pv')" :to="{ name: 'pv-id', params: { id: item.verbal_trial.id } }">
+
+                    <template #prepend>
+                      <VIcon icon="tabler-eye" />
+                    </template>
+
+                    <VListItemTitle>Voir le Pv</VListItemTitle>
+                  </VListItem>
+
+
+                  <div v-if="$can('download', 'contract')">
+                    <VDivider />
+                    <!-- Télécharger contrat non-signé -->
+                    <VListItem
+                      @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
+
+                      <template #prepend>
+                        <VIcon icon="tabler-download" />
+                      </template>
+                      <VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
+                    </VListItem>
+                    <!-- Télécharger contrat signé -->
+                    <VListItem v-if="item.signed_contract_path"
+                      @click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
+
+                      <template #prepend>
+                        <VIcon icon="tabler-download" />
+                      </template>
+                      <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
+                    </VListItem>
+                    <!-- Télécharger billet à ordre non-signé -->
+                    <VListItem
+                      @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
+
+                      <template #prepend>
+                        <VIcon icon="tabler-download" />
+                      </template>
+                      <VListItemTitle>Télécharger Billet à ordre non signé</VListItemTitle>
+                    </VListItem>
+                    <!-- Télécharger billet à ordre signé -->
+                    <VListItem v-if="item.signed_promissory_note_path"
+                      @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
+
+                      <template #prepend>
+                        <VIcon icon="tabler-download" />
+                      </template>
+                      <VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
+                    </VListItem>
+                  </div>
+
+                  <div v-if="$can('upload', 'contract')">
+                    <VDivider />
+                    <!-- Ajouter Contrat signé -->
+                    <VListItem v-if="item.signed_contract_path == null"
+                      @click="uploadState = 'signed_contract'; refInputEl?.click()">
+
+                      <template #prepend>
+                        <VIcon icon="tabler-cloud-upload" />
+                      </template>
+                      <VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
+                    </VListItem>
+                    <!-- Ajouter Billet à ordre -->
+                    <VListItem v-if="item.signed_promissory_note_path == null"
+                      @click="uploadState = 'signed_promissory_note'; refInputEl?.click()">
+
+                      <template #prepend>
+                        <VIcon icon="tabler-cloud-upload" />
+                      </template>
+                      <VListItemTitle>Ajouter billet à ordre signé</VListItemTitle>
+                    </VListItem>
+                  </div>
+                </VList>
+              </VMenu>
+            </VBtn>
+          </span>
+          <span>
+            <VDivider />
+            <IconBtn v-if="$can('update', 'contract')" :to="{ name: 'contract-edit-id', params: { id: item.id } }">
+              <VIcon icon="tabler-edit" />
+            </IconBtn>
+            <IconBtn v-if="$can('delete', 'contract')" @click="contractIdToDelete = item.id; isDialogVisible = true">
+              <VIcon icon="tabler-trash" color='error' />
+            </IconBtn>
+          </span>
+
+          <VDivider />
+          <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected'"
+            @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
+            <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
+            <VIcon icon="tabler-x" color="error" />
           </IconBtn>
-          <IconBtn v-if="$can('update', 'contract')" :to="{ name: 'contract-edit-id', params: { id: item.id } }">
-            <VIcon icon="tabler-edit" />
-          </IconBtn>
-          <IconBtn v-if="$can('delete', 'contract')" @click="contractIdToDelete = item.id; isDialogVisible = true">
-            <VIcon icon="tabler-trash" color='error' />
-          </IconBtn>
-          <VBtn icon variant="text" size="small" color="medium-emphasis">
-            <VIcon size="24" icon="tabler-dots-vertical" />
-            <VMenu activator="parent">
-              <VList>
-                <input ref="refInputEl" type="file" name="signed_contract" accept=".pdf,.png,.jpg" hidden
-                  @input="uploadFile(item.id, $event)" />
-
-                <VBadge v-if="$can('read', 'guarantor')" inline :content="item.guarantors_count">
-                  <VListItem :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: item.id } }">
-                    <template #prepend>
-                      <VIcon icon="tabler-users" />
-                    </template>
-
-                    <VListItemTitle>
-                      Voir les Garants
-                    </VListItemTitle>
-                  </VListItem>
-                </VBadge>
-                <VListItem v-if="$can('read', 'pv')" :to="{ name: 'pv-id', params: { id: item.verbal_trial.id } }">
-
-                  <template #prepend>
-                    <VIcon icon="tabler-eye" />
-                  </template>
-
-                  <VListItemTitle>Voir le Pv</VListItemTitle>
-                </VListItem>
-
-
-                <div v-if="$can('download', 'contract')">
-                  <VDivider />
-                  <!-- Télécharger contrat non-signé -->
-                  <VListItem
-                    @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
-
-                    <template #prepend>
-                      <VIcon icon="tabler-download" />
-                    </template>
-                    <VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
-                  </VListItem>
-                  <!-- Télécharger contrat signé -->
-                  <VListItem v-if="item.signed_contract_path"
-                    @click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
-
-                    <template #prepend>
-                      <VIcon icon="tabler-download" />
-                    </template>
-                    <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
-                  </VListItem>
-                  <!-- Télécharger billet à ordre non-signé -->
-                  <VListItem
-                    @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
-
-                    <template #prepend>
-                      <VIcon icon="tabler-download" />
-                    </template>
-                    <VListItemTitle>Télécharger Billet à ordre non signé</VListItemTitle>
-                  </VListItem>
-                  <!-- Télécharger billet à ordre signé -->
-                  <VListItem v-if="item.signed_promissory_note_path"
-                    @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
-
-                    <template #prepend>
-                      <VIcon icon="tabler-download" />
-                    </template>
-                    <VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
-                  </VListItem>
-                </div>
-
-                <div v-if="$can('upload', 'contract')">
-                  <VDivider />
-                  <!-- Ajouter Contrat signé -->
-                  <VListItem v-if="item.signed_contract_path == null"
-                    @click="uploadState = 'signed_contract'; refInputEl?.click()">
-
-                    <template #prepend>
-                      <VIcon icon="tabler-cloud-upload" />
-                    </template>
-                    <VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
-                  </VListItem>
-                  <!-- Ajouter Billet à ordre -->
-                  <VListItem v-if="item.signed_promissory_note_path == null"
-                    @click="uploadState = 'signed_promissory_note'; refInputEl?.click()">
-
-                    <template #prepend>
-                      <VIcon icon="tabler-cloud-upload" />
-                    </template>
-                    <VListItemTitle>Ajouter billet à ordre signé</VListItemTitle>
-                  </VListItem>
-                </div>
-              </VList>
-            </VMenu>
-          </VBtn>
+          <span v-if="item.status == 'waiting'">
+            <IconBtn v-if="$can('validate', 'pv')"
+              @click="selectedItemId = item.id; actionTitle = 'Valider le PV', actionText = 'Voulez vous vraiment valider ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = true; actionStatus = 'validated'; isActionDialogVisible = true;">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider</VTooltip>
+              <VIcon icon="tabler-check" color="success" />
+            </IconBtn>
+          </span>
+          <span v-if="item.status == 'validated'">
+            <IconBtn v-if="$can('create', 'contract')" :to="{ name: 'contract-add', query: { id: item.id } }">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le contrat</VTooltip>
+              <VIcon icon="tabler-plus" color="success" />
+            </IconBtn>
+          </span>
         </template>
 
         <template #bottom>

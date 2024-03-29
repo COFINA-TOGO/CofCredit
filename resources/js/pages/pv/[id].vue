@@ -55,6 +55,11 @@ if (verbalTrial.duration > 13) {
                 Modifier
               </VBtn>
             </VCol>
+            <VCol>
+              <VAlert v-if="verbalTrial.status == 'rejected' && verbalTrial.status_observation" color="error">
+                {{ verbalTrial.status_observation }}
+              </VAlert>
+            </VCol>
             <VCol cols="12">
               <h2 class="text-center">
                 Procès Verbal N°{{ verbalTrial.committee_id }}

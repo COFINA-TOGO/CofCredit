@@ -1,9 +1,11 @@
 export default [
   {
     title: 'Contrat',
+    subject: ['pv', 'contract'],
     children: [
       {
         title: 'Pv Comité',
+        subject: 'pv',
         children: [
           {
             title: 'Ajouter',
@@ -29,6 +31,7 @@ export default [
       },
       {
         title: 'Contract',
+        subject: 'contract',
         children: [
           {
             title: 'Ajouter',

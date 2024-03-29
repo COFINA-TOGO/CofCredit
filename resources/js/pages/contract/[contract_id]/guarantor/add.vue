@@ -12,18 +12,18 @@ const router = useRouter()
 const route = useRoute('contract-contract_id-guarantor-add')
 
 const guarantorItem = ref({
-  "civility":null,
-  "first_name":null,
-  "last_name":null,
-  "birth_date":null,
-  "birth_place":null,
-  "nationality":null,
-  "home_address":null,
-  "type_of_identity_document":null,
-  "number_of_identity_document":null,
-  "date_of_issue_of_identity_document":null,
-  "function":null,
-  "phone_number":null,
+  "civility": null,
+  "first_name": null,
+  "last_name": null,
+  "birth_date": null,
+  "birth_place": null,
+  "nationality": null,
+  "home_address": null,
+  "type_of_identity_document": null,
+  "number_of_identity_document": null,
+  "date_of_issue_of_identity_document": null,
+  "function": null,
+  "phone_number": null,
 })
 
 const getResetGuarantorError = () => {
@@ -184,7 +184,8 @@ const onSubmit = () => {
             </div>
             <div class="d-flex gap-4 align-center flex-wrap">
               <VBtn type="reset" variant="tonal" color="primary">
-                <VIcon start icon="tabler-circle-minus" />Effacer
+                <VIcon start icon="tabler-circle-minus" />
+                Effacer
               </VBtn>
               <VBtn type="submit" class="me-3">
                 Enregistrer

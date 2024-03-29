@@ -13,8 +13,10 @@ import AppAutocomplete from '@/@core/components/app-form-elements/AppAutocomplet
 import JsFileDownloader from 'js-file-downloader'
 import { $api } from '@/utils/api';
 
+const router = useRouter()
+
 const type_of_credit_id = ref()
-const status = ref('wr')
+const status = ref()
 const searchQuery = ref('')
 
 const headers = [
@@ -41,10 +43,6 @@ const headers = [
   {
     title: 'Statut',
     key: 'status',
-  },
-  {
-    title: 'Observation',
-    key: 'status_observation',
   },
   {
     title: 'Actions',
@@ -121,6 +119,9 @@ const apiDelete = async id => {
 const apiChangeStatus = async id => {
   await $api(`verbal-trial/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
   actionComment.value = ""
+  if (actionStatus.value == "validated") {
+    router.push(`/contract/add?id=${id}`)
+  }
   fetchPv()
 }
 
@@ -165,9 +166,9 @@ const actionStatus = ref("waiting")
               item-value="id" :items="type_of_credit_list" clearable clear-icon="tabler-x" />
           </VCol>
           <VCol cols="12" sm="4">
-            <AppAutocomplete v-model="status" placeholder="Statut"
-              :items="[{ value: 'wr', title: 'Tout' }, { value: 'w', title: 'En attente' }, { value: 'r', title: 'Rejeté' }]"
-              clear-icon="tabler-x" />
+            <VSelect v-model="status" placeholder="Statut"
+              :items="[{ value: 'v', title: 'Validé' }, { value: 'w', title: 'En attente' }, { value: 'r', title: 'Rejeté' }]"
+              clear-icon="tabler-x" clearable="" />
           </VCol>
         </VRow>
       </VCardText>
@@ -216,45 +217,60 @@ const actionStatus = ref("waiting")
         </template>
 
         <template #item.status="{ item }">
-          <VChip label :color="item.status == 'waiting' ? 'warning' : 'error'">
-            {{ item.status }}
+          <VChip label :color="{ 'validated': 'success', 'rejected': 'error', 'waiting': 'warning' }[item.status]">
+            <VTooltip v-if="item.status_observation" activator="parent" transition="scroll-x-transition"
+              location="start">Raison: {{ item.status_observation }}</VTooltip>
+            {{ item.status == 'validated' ? 'Validé' : null }}
+            {{ item.status == 'waiting' ? 'En attente' : null }}
+            {{ item.status == 'rejected' ? 'Rejeté' : null }}
           </VChip>
         </template>
 
         <template #item.actions="{ item }">
-          <IconBtn v-if="$can('read', 'pv') || $can('historical', 'pv')"
-            :to="{ name: 'pv-id', params: { id: item.id } }">
-            <VTooltip activator="parent" location="start">Details</VTooltip>
-            <VIcon icon=" tabler-eye" />
-          </IconBtn>
-          <IconBtn v-if="$can('update', 'pv')" :to="{ name: 'pv-edit-id', params: { id: item.id } }">
-            <VTooltip activator="parent" location="top">Modifier</VTooltip>
-            <VIcon icon="tabler-edit" />
-          </IconBtn>
-          <VDivider />
-          <IconBtn v-if="$can('download', 'pv')"
-            @click="downloadFile(`/api/verbal-trial/download/${item.id}`, `PV-${item.committee_id}.docx`)">
-            <VTooltip activator="parent" location="start">Télécharger</VTooltip>
-            <VIcon icon="tabler-download" v-tooltip="'Ceci est une icône'" />
-          </IconBtn>
-
-          <IconBtn v-if="$can('delete', 'pv')"
-            @click="selectedItemId = item.id; actionTitle = 'Supprimer le PV', actionText = 'Voulez vous vraiment supprimer ce pv?', actionFunction = apiDelete; actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;">
-            <VTooltip activator="parent" location="end">Supprimer</VTooltip>
-            <VIcon icon="tabler-trash" color='error' />
-          </IconBtn>
-
-          <span v-if="item.status == 'waiting'">
-            <VDivider />
-            <IconBtn v-if="$can('reject', 'pv')"
-              @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
-              <VTooltip activator="parent" location="bottom">Rejeter</VTooltip>
-              <VIcon icon="tabler-x" color="error" />
+          <div>
+            <IconBtn v-if="$can('read', 'pv') || $can('historical', 'pv')"
+              :to="{ name: 'pv-id', params: { id: item.id } }">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="start">Details</VTooltip>
+              <VIcon icon=" tabler-eye" />
             </IconBtn>
+            <IconBtn v-if="$can('download', 'pv')"
+              @click="downloadFile(`/api/verbal-trial/download/${item.id}`, `PV-${item.committee_id}.docx`)">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Télécharger</VTooltip>
+              <VIcon icon="tabler-download" v-tooltip="'Ceci est une icône'" />
+            </IconBtn>
+          </div>
+
+          <div>
+            <VDivider />
+            <IconBtn v-if="$can('update', 'pv')" :to="{ name: 'pv-edit-id', params: { id: item.id } }">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="start">Modifier</VTooltip>
+              <VIcon icon="tabler-edit" />
+            </IconBtn>
+
+            <IconBtn v-if="$can('delete', 'pv')"
+              @click="selectedItemId = item.id; actionTitle = 'Supprimer le PV', actionText = 'Voulez vous vraiment supprimer ce pv?', actionFunction = apiDelete; actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Supprimer</VTooltip>
+              <VIcon icon="tabler-trash" color='error' />
+            </IconBtn>
+          </div>
+
+          <VDivider />
+          <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected'"
+            @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
+            <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
+            <VIcon icon="tabler-x" color="error" />
+          </IconBtn>
+          <span v-if="item.status == 'waiting'">
             <IconBtn v-if="$can('validate', 'pv')"
               @click="selectedItemId = item.id; actionTitle = 'Valider le PV', actionText = 'Voulez vous vraiment valider ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = true; actionStatus = 'validated'; isActionDialogVisible = true;">
-              <VTooltip activator="parent" location="end">Valider</VTooltip>
+              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider</VTooltip>
               <VIcon icon="tabler-check" color="success" />
+            </IconBtn>
+          </span>
+          <span v-if="item.status == 'validated'">
+            <IconBtn v-if="$can('create', 'contract')" :to="{ name: 'contract-add', query: { id: item.id } }">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le contrat</VTooltip>
+              <VIcon icon="tabler-plus" color="success" />
             </IconBtn>
           </span>
         </template>

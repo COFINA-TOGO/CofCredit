@@ -970,13 +970,13 @@ endpoints:
         name: id
         description: 'The ID of the change status.'
         required: true
-        example: consectetur
+        example: et
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: consectetur
+      id: et
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1016,13 +1016,13 @@ endpoints:
         name: id
         description: "L'ID du procès verbal"
         required: true
-        example: 18
+        example: 19
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 18
+      id: 19
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

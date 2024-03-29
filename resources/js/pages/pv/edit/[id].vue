@@ -164,6 +164,13 @@ const addGuaranteeItem = () => {
             <VCard class="mb-6" title="Modification du pv de comité">
               <VCardText>
                 <VRow>
+                  <VCol>
+                    <VAlert v-if="verbalTrial.status == 'rejected' && verbalTrial.status_observation" color="warning">
+                      Motif du refus : {{ verbalTrial.status_observation }}
+                    </VAlert>
+                  </VCol>
+                </VRow>
+                <VRow>
                   <VCol cols="12" md="6" lg="4">
                     <AppTextField v-model="verbalTrial.committee_id" :error-messages="verbalTrialError.committee_id"
                       label="Numéro du comitée" placeholder="Ex: CFNTG-044-13-12-23-01212"
@@ -290,10 +297,12 @@ const addGuaranteeItem = () => {
               <div class="d-flex flex-column justify-center" />
               <div class="d-flex gap-4 align-center flex-wrap">
                 <VBtn type="reset" variant="tonal" color="primary">
+                  <VIcon start icon="tabler-circle-minus" />
                   Effacer
                 </VBtn>
                 <VBtn type="submit" class="me-3">
                   Enregistrer
+                  <VIcon end icon="tabler-checkbox" />
                 </VBtn>
               </div>
             </div>
