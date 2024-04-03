@@ -51,14 +51,14 @@ const tableData = [
       <VCol cols="12">
         <VCard>
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
-            <VCol cols="11">
+            <VCol cols="10">
               <VBtn :to="{ name: 'cat' }">
                 <VIcon icon="tabler-arrow-left" />
                 CATs
               </VBtn>
             </VCol>
-            <VCol cols="1">
-              <VBtn :to="{ name: 'cat-edit-id', params: { id: cat.id } }">
+            <VCol cols="2" class="text-right">
+              <VBtn append-icon="tabler-edit" :to="{ name: 'cat-edit-id', params: { id: cat.id } }">
                 Modifier
               </VBtn>
             </VCol>
