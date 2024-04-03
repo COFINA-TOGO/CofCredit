@@ -130,9 +130,15 @@ const onSubmit = () => {
         },
       })
 
+      let nextRoute = "/pv";
       pvError.value = getResetPvError()
       if (res.status == 201) {
-        router.push("/pv")
+        pvData.value.guarantees.forEach(guarantee => {
+          if (guarantee.type_of_guarantee_id == 9) {
+            nextRoute = '/pv/without-notification'
+          }
+        })
+        router.push(nextRoute)
       } else {
         for (const key in res.errors) {
           res.errors[key].forEach(message => {

@@ -10,6 +10,8 @@ definePage({
 const router = useRouter()
 const route = useRoute("contract-id")
 
+let backRoute = "/contract"
+
 const frenchMensuality = {
   "mensual": "Mensuelle",
   "quarterly": "Trimestrielle",
@@ -61,6 +63,9 @@ const tableData = [
 if (contract.value.verbal_trial.duration > 13) {
   tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
 }
+if (contract.value.observations.length == 0) {
+  backRoute = "/contract/historical"
+}
 </script>
 
 <template>
@@ -69,16 +74,22 @@ if (contract.value.verbal_trial.duration > 13) {
       <VCol cols="12">
         <VCard>
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
-            <VCol cols="11">
-              <VBtn to="/contract">
+            <VCol cols="10">
+              <VBtn :to="backRoute">
                 <VIcon icon="tabler-arrow-left" />
                 Contrats
               </VBtn>
             </VCol>
-            <VCol cols="1">
-              <VBtn :to="{ name: 'contract-edit-id', params: { id: route.params.id } }">
+            <VCol cols="2" class="text-right">
+              <VBtn append-icon="tabler-edit" :to="{ name: 'contract-edit-id', params: { id: route.params.id } }"
+                :disabled="contract.status == 'validated'">
                 Modifier
               </VBtn>
+            </VCol>
+            <VCol>
+              <VAlert v-if="contract.status == 'rejected' && contract.status_observation" color="warning">
+                Motif du refus: {{ contract.status_observation }}
+              </VAlert>
             </VCol>
             <VCol cols="12">
               <h2 class="text-center">

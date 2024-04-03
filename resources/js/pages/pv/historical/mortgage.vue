@@ -79,7 +79,7 @@ const {
     search: searchQuery,
     type_of_credit_id: type_of_credit_id,
     page: page,
-    has_contract: 1,
+    has_notification: 1,
     has_mortgage: 1,
     status: 'v',
     with_caf: 1,

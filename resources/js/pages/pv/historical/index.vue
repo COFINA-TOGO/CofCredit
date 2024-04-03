@@ -81,7 +81,7 @@ const {
     page: page,
     has_contract: 1,
     has_mortgage: 0,
-    status: 'wr',
+    status: 'v',
     with_caf: 1,
     with_type_of_credit: 1,
   },
@@ -196,17 +196,13 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
         <template #item.actions="{ item }">
           <IconBtn v-if="$can('read', 'pv') || $can('historical', 'pv')"
             :to="{ name: 'pv-id', params: { id: item.id } }">
+            <VTooltip activator="parent" transition="scroll-x-transition" location="top">Details</VTooltip>
             <VIcon icon=" tabler-eye" />
-          </IconBtn>
-          <IconBtn v-if="$can('update', 'pv')" :to="{ name: 'pv-edit-id', params: { id: item.id } }">
-            <VIcon icon="tabler-edit" />
           </IconBtn>
           <IconBtn v-if="$can('download', 'pv')"
             @click="downloadFile(`/api/verbal-trial/download/${item.id}`, `PV-${item.committee_id}.docx`)">
+            <VTooltip activator="parent" transition="scroll-x-transition" location="top">Télécharger</VTooltip>
             <VIcon icon="tabler-download" />
-          </IconBtn>
-          <IconBtn v-if="$can('delete', 'pv')" @click="idToDelete = item.id; isDialogVisible = true">
-            <VIcon icon="tabler-trash" color='error' />
           </IconBtn>
         </template>
 

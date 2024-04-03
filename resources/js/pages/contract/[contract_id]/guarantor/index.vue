@@ -17,6 +17,7 @@ const guarantorIdToDelete = ref(0)
 const searchQuery = ref('')
 const refInputEl = ref()
 const uploadState = ref('signed_contract')
+let backRoute = "/contract"
 
 const headers = [
   {
@@ -73,6 +74,11 @@ const {
     page: page,
   },
 }))
+
+const {
+  data: contractData,
+} = await useApi(createUrl(`/contract/${route.params.contract_id}`))
+
 
 const guarantorList = computed(() => guarantorData.value.data)
 const totalGuarantor = computed(() => guarantorData.value.total)
@@ -134,6 +140,10 @@ const apiDelete = async id => {
   await $api(`guarantor/${id}`, { method: 'DELETE' })
   fetchGuarantors()
 }
+console.log(contractData.value)
+if (contractData.value.data.contract.observations.length == 0) {
+  backRoute = "/contract/historical"
+}
 </script>
 
 <template>
@@ -143,7 +153,7 @@ const apiDelete = async id => {
         <div class="d-flex align-center">
           <VRow>
             <VCol>
-              <VBtn prepend-icon="tabler-arrow-left" :to="'../'">
+              <VBtn prepend-icon="tabler-arrow-left" :to="backRoute">
                 Contrats
               </VBtn>
             </VCol>

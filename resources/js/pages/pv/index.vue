@@ -3,7 +3,7 @@
 <script setup>
 definePage({
   meta: {
-    action: 'read',
+    action: 'read' || 'historical',
     subject: 'pv',
   },
 })
@@ -240,7 +240,7 @@ const actionStatus = ref("waiting")
             </IconBtn>
           </div>
 
-          <div>
+          <div v-if="$can('update', 'pv') || $can('delete', 'pv')">
             <VDivider />
             <IconBtn v-if="$can('update', 'pv')" :to="{ name: 'pv-edit-id', params: { id: item.id } }"
               :disabled="item.status == 'validated'">
@@ -248,32 +248,35 @@ const actionStatus = ref("waiting")
               <VIcon icon="tabler-edit" />
             </IconBtn>
 
-            <IconBtn v-if="$can('delete', 'pv')"
-              @click="selectedItemId = item.id; actionTitle = 'Supprimer le PV', actionText = 'Voulez vous vraiment supprimer ce pv?', actionFunction = apiDelete; actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;">
+            <IconBtn v-if="$can('delete', 'pv')" :disabled="item.status == 'validated'" @click=" selectedItemId = item.id; actionTitle = 'Supprimer le PV',
+              actionText = 'Voulez vous vraiment supprimer ce pv?', actionFunction = apiDelete;
+            actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;">
               <VTooltip activator="parent" transition="scroll-x-transition" location="end">Supprimer</VTooltip>
               <VIcon icon="tabler-trash" color='error' />
             </IconBtn>
           </div>
 
-          <VDivider />
-          <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected'"
-            @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
-            <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
-            <VIcon icon="tabler-x" color="error" />
-          </IconBtn>
-          <span v-if="item.status == 'waiting'">
-            <IconBtn v-if="$can('validate', 'pv')"
-              @click="selectedItemId = item.id; actionTitle = 'Valider le PV', actionText = 'Voulez vous vraiment valider ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = false; actionStatus = 'validated'; isActionDialogVisible = true;">
-              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider</VTooltip>
-              <VIcon icon="tabler-check" color="success" />
+          <div v-if="$can('reject', 'pv') || $can('validate', 'pv') || $can('create', 'contract')">
+            <VDivider />
+            <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected'"
+              @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
+              <VIcon icon="tabler-x" color="error" />
             </IconBtn>
-          </span>
-          <span v-if="item.status == 'validated'">
-            <IconBtn v-if="$can('create', 'contract')" :to="{ name: 'contract-add', query: { id: item.id } }">
-              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le contrat</VTooltip>
-              <VIcon icon="tabler-file-plus" color="success" />
-            </IconBtn>
-          </span>
+            <span v-if="item.status == 'waiting'">
+              <IconBtn v-if="$can('validate', 'pv')"
+                @click="selectedItemId = item.id; actionTitle = 'Valider le PV', actionText = 'Voulez vous vraiment valider ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = false; actionStatus = 'validated'; isActionDialogVisible = true;">
+                <VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider</VTooltip>
+                <VIcon icon="tabler-check" color="success" />
+              </IconBtn>
+            </span>
+            <span v-if="item.status == 'validated'">
+              <IconBtn v-if="$can('create', 'contract')" :to="{ name: 'contract-add', query: { id: item.id } }">
+                <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le contrat</VTooltip>
+                <VIcon icon="tabler-file-plus" color="success" />
+              </IconBtn>
+            </span>
+          </div>
         </template>
 
         <template #bottom>

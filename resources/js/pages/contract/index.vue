@@ -342,7 +342,7 @@ const uploadFile = async (id, event) => {
                   <div v-if="$can('upload', 'contract')">
                     <VDivider />
                     <!-- Ajouter Contrat signé -->
-                    <VListItem v-if="item.signed_contract_path == null"
+                    <VListItem v-if="item.signed_contract_path == null || item.status == 'rejected'"
                       @click="uploadState = 'signed_contract'; refInputEl?.click()">
 
                       <template #prepend>
@@ -351,7 +351,7 @@ const uploadFile = async (id, event) => {
                       <VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
                     </VListItem>
                     <!-- Ajouter Billet à ordre -->
-                    <VListItem v-if="item.signed_promissory_note_path == null"
+                    <VListItem v-if="item.signed_promissory_note_path == null || item.status == 'rejected'"
                       @click="uploadState = 'signed_promissory_note'; refInputEl?.click()">
 
                       <template #prepend>
@@ -364,7 +364,8 @@ const uploadFile = async (id, event) => {
               </VMenu>
             </VBtn>
           </span>
-          <span>
+
+          <span v-if="$can('update', 'contract') || $can('delete', 'contract')">
             <VDivider />
             <IconBtn v-if="$can('update', 'contract')" :to="{ name: 'contract-edit-id', params: { id: item.id } }"
               :disabled="item.status == 'validated'">
@@ -378,21 +379,20 @@ const uploadFile = async (id, event) => {
             </IconBtn>
           </span>
 
-          <VDivider />
-          <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected' && item.observations.length == 0"
-            @click="selectedItemId = item.id; actionTitle = 'Rejeter le contrat', actionText = 'Voulez vous vraiment rejeter ce contrat?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
-            <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
-            <VIcon icon="tabler-x" color="error" />
-          </IconBtn>
-          <span v-if="item.status == 'waiting' && item.observations.length == 0">
-            <IconBtn v-if="$can('validate', 'pv')"
+          <span v-if="$can('reject', 'contract') || $can('validate', 'contract') || $can('create', 'cat')">
+            <VDivider />
+            <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected' && item.observations.length == 0"
+              @click="selectedItemId = item.id; actionTitle = 'Rejeter le contrat', actionText = 'Voulez vous vraiment rejeter ce contrat?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
+              <VIcon icon="tabler-x" color="error" />
+            </IconBtn>
+            <IconBtn v-if="$can('validate', 'pv') && item.status == 'waiting' && item.observations.length == 0"
               @click="selectedItemId = item.id; actionTitle = 'Valider le contrat', actionText = 'Voulez vous vraiment valider ce contrat?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = false; actionStatus = 'validated'; isActionDialogVisible = true;">
               <VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider</VTooltip>
               <VIcon icon="tabler-check" color="success" />
             </IconBtn>
-          </span>
-          <span v-if="item.status == 'validated'">
-            <IconBtn v-if="$can('create', 'cat')" :to="{ name: 'cat-add', query: { id: item.id } }">
+            <IconBtn v-if="$can('create', 'cat') && item.status == 'validated'"
+              :to="{ name: 'cat-add', query: { id: item.id } }">
               <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le CAT</VTooltip>
               <VIcon icon="tabler-file-plus" color="success" />
             </IconBtn>

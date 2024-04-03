@@ -203,7 +203,7 @@ const addPledgeItem = () => {
           </VBtn>
         </VCol>
         <VCol cols="1">
-          <VBtn :to="{ name: 'contract-id', params: { id: route.params.id } }">
+          <VBtn append-icon="tabler-eye" :to="{ name: 'contract-id', params: { id: route.params.id } }">
             Voir
           </VBtn>
         </VCol>
@@ -214,6 +214,13 @@ const addPledgeItem = () => {
           <!-- 👉 Informations sur le contrat -->
           <VCard class="mb-6" title="Information sur contrat">
             <VCardText>
+              <VRow>
+                <VCol>
+                  <VAlert v-if="contract.status == 'rejected' && contract.status_observation" color="warning">
+                    Motif du refus : {{ contract.status_observation }}
+                  </VAlert>
+                </VCol>
+              </VRow>
               <VRow>
                 <VCol cols="12" md="6" lg="6">
                   <AppAutocomplete v-model="contract.verbal_trial_id" :items="verbalTrialList"

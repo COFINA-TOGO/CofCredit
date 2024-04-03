@@ -93,7 +93,11 @@ class User extends Authenticatable
             case ('credit_analyst'):
                 return [
                     [
-                        "action" => ["manage"],
+                        "action" => "read",
+                        "subject" => ["non-mortgage-contract", "mortgame-contract"]
+                    ],
+                    [
+                        "action" => ["read", "historical", "create", "update", "delete", "download"],
                         "subject" => ["pv"],
                     ],
                     [
@@ -108,7 +112,11 @@ class User extends Authenticatable
             case ('credit_admin'):
                 return [
                     [
-                        "action" => ["historical", "download"],
+                        "action" => "read",
+                        "subject" => ["non-mortgage-contract", "mortgame-contract"]
+                    ],
+                    [
+                        "action" => ["read", "historical", "download", "reject", "validate", "change_status"],
                         "subject" => ["pv"],
                     ],
                     [
@@ -134,6 +142,10 @@ class User extends Authenticatable
                 ];
             case ('head_credit'):
                 return [
+                    [
+                        "action" => "read",
+                        "subject" => ["non-mortgage-contract", "mortgame-contract"]
+                    ],
                     [
                         "action" => ["read", "historical", "download"],
                         "subject" => ["pv"],
@@ -162,6 +174,10 @@ class User extends Authenticatable
             case ('operation'):
                 return [
                     [
+                        "action" => "read",
+                        "subject" => ["non-mortgage-contract", "mortgame-contract"]
+                    ],
+                    [
                         "action" => ["read", "download", "unblock", "reject_unblock"],
                         "subject" => ["cat"],
                     ],
@@ -172,16 +188,27 @@ class User extends Authenticatable
                 ];
             case ('legal'):
                 return [
-
+                    [
+                        "action" => "read",
+                        "subject" => ["non-mortgage-contract", "mortgame-contract"]
+                    ],
                 ];
             case ('dex'):
                 return [
+                    [
+                        "action" => "read",
+                        "subject" => ["non-mortgage-contract", "mortgame-contract"]
+                    ],
+                    [
+                        "action" => "read",
+                        "subject" => ["non-mortgage-contract", "mortgame-contract"]
+                    ],
                     [
                         "action" => ["read", "historical", "download"],
                         "subject" => ["pv"]
                     ],
                     [
-                        "action" => ["read", "historical", "waiting_cat", "download"],
+                        "action" => ["read", "historical", "download"],
                         "subject" => ["contract"]
                     ],
                     [
@@ -199,6 +226,10 @@ class User extends Authenticatable
                 ];
             case ('caf'):
                 return [
+                    [
+                        "action" => "read",
+                        "subject" => ["non-mortgage-contract", "mortgame-contract"]
+                    ],
                     [
                         "action" => ["read", "upload", "download"],
                         "subject" => ["contract", "guarantor"],

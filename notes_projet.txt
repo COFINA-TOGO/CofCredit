@@ -14,4 +14,3 @@ Presentation de l'application de gestion de credit
 
 Modules à présenter:
     Elaboration du contrat(Dossier de crédit) & Edition du CAT
-    -Contrats de crédit avec garantie hypothécaire

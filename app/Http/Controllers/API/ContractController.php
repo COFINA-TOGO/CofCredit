@@ -727,7 +727,7 @@ class ContractController extends Controller
         $documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $base64Document));
         $path = 'upload/Contracts/signed_' . $document_category . 's/' . $contract->verbal_trial->committee_id . '-signed.' . $extension;
         Storage::disk("public")->put($path, $documentData);
-        $contract->update(["signed_{$document_category}_path" => "/storage/" . $path]);
+        $contract->update(["signed_{$document_category}_path" => "/storage/" . $path, "status" => "waiting"]);
 
         DB::commit();
         return $this->responseOk(["contract" => $contract]);

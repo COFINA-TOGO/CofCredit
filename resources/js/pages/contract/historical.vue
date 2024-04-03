@@ -185,19 +185,13 @@ const apiDelete = async id => {
 
         <template #item.actions="{ item }">
           <IconBtn :to="{ name: 'contract-id', params: { id: item.id } }">
+            <VTooltip activator="parent" transition="scroll-x-transition" location="top">Details</VTooltip>
             <VIcon icon="tabler-eye" />
-          </IconBtn>
-          <IconBtn v-if="$can('update', 'contract')" :to="{ name: 'contract-edit-id', params: { id: item.id } }">
-            <VIcon icon="tabler-edit" />
-          </IconBtn>
-          <IconBtn v-if="$can('delete', 'contract')" @click="contractIdToDelete = item.id; isDialogVisible = true">
-            <VIcon icon="tabler-trash" color='error' />
           </IconBtn>
           <VBtn icon variant="text" size="small" color="medium-emphasis">
             <VIcon size="24" icon="tabler-dots-vertical" />
             <VMenu activator="parent">
               <VList>
-
                 <VBadge v-if="$can('read', 'guarantor')" inline :content="item.guarantors_count">
                   <VListItem :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: item.id } }">
                     <template #prepend>

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "c95e6dea-db7f-4d3d-a509-d919ddb4299c",
+        "_postman_id": "3303622b-712b-465c-aa38-f4b5ab5bd7de",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -2750,7 +2750,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "13",
+                                    "value": "16",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -2959,7 +2959,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "15",
+                                    "value": "10",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -3199,7 +3199,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "19",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -3433,7 +3433,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "17",
+                                    "value": "16",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -3707,7 +3707,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "13",
+                                    "value": "5",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

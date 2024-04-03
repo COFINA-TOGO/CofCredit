@@ -9,6 +9,7 @@ definePage({
 })
 const router = useRouter()
 const route = useRoute("verbalTrial-edit-id")
+let nextRoute = "/pv";
 
 const civilityItemList = [
   { value: "Mr", title: 'Mr' },
@@ -114,7 +115,12 @@ const onSubmit = () => {
 
       verbalTrialError.value = getEmptyError()
       if (res.status == 200) {
-        router.push(`/pv/${route.params.id}`)
+        verbalTrial.value.guarantees.forEach(guarantee => {
+          if (guarantee.type_of_guarantee_id == 9) {
+            nextRoute = '/pv/without-notification'
+          }
+        })
+        router.push(nextRoute)
       } else {
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
@@ -142,6 +148,13 @@ const addGuaranteeItem = () => {
     comment: "",
   })
 }
+
+
+verbalTrial.value.guarantees.forEach(guarantee => {
+  if (guarantee.type_of_guarantee_id == 9) {
+    nextRoute = '/pv/without-notification'
+  }
+})
 </script>
 
 <template>
@@ -150,10 +163,12 @@ const addGuaranteeItem = () => {
       <VForm ref="refForm" @submit.prevent="onSubmit">
         <VRow>
           <VCol cols="11">
-
+            <VBtn prepend-icon="tabler-arrow-narrow-left" :to="nextRoute">
+              Procès verbaux
+            </VBtn>
           </VCol>
-          <VCol cols="1">
-            <VBtn :to="{ name: 'pv-id', params: { id: route.params.id } }">
+          <VCol cols="1" class="text-right">
+            <VBtn append-icon="tabler-eye" :to="{ name: 'pv-id', params: { id: route.params.id } }">
               Voir
             </VBtn>
           </VCol>

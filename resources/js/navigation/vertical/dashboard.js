@@ -1,19 +1,22 @@
 export default [
   {
+    title: 'Ajouter PV',
+    to: 'pv-add',
+    icon: { icon: 'tabler-file-plus' },
+    action: 'create',
+    subject: 'pv',
+  },
+  {
     title: 'Contrat',
     icon: { icon: 'tabler-writing-sign' },
-    subject: ['pv', 'contract'],
+    action: 'read',
+    subject: 'non-mortgage-contract',
     children: [
       {
         title: 'Pv Comité',
         subject: 'pv',
+        action: 'historical',
         children: [
-          {
-            title: 'Ajouter',
-            to: 'pv-add',
-            action: 'create',
-            subject: 'pv',
-          },
           {
             title: 'Sans contrat',
             to: 'pv',
@@ -32,6 +35,7 @@ export default [
       },
       {
         title: 'Contract',
+        action: 'read',
         subject: 'contract',
         children: [
           {
@@ -56,6 +60,8 @@ export default [
       },
       {
         title: 'CAT',
+        subject: 'cat',
+        action: 'read',
         children: [
           {
             title: 'Ajouter',
@@ -76,6 +82,8 @@ export default [
   {
     title: 'Contrat Hypothécaire',
     icon: { icon: 'tabler-home-ribbon' },
+    action: 'read',
+    subject: 'mortgage-contract',
     children: [
       {
         title: 'Pv Comité',

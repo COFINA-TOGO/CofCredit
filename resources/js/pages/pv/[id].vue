@@ -1,12 +1,13 @@
 <script setup>
 definePage({
   meta: {
-    action: ['historical', 'read'],
+    action: 'read',
     subject: 'pv',
   },
 })
 const router = useRouter()
 const route = useRoute("pv-id")
+let nextRoute = "/pv";
 
 const frenchMensuality = {
   "mensual": "Mensuelle",
@@ -35,9 +36,15 @@ const tableData = [
   { "title": "Prime d'assurance", "value": String(verbalTrial.value.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
 ]
 
-if (verbalTrial.duration > 13) {
+if (verbalTrial.value.duration > 13) {
   tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
 }
+
+verbalTrial.value.guarantees.forEach(guarantee => {
+  if (guarantee.type_of_guarantee_id == 9) {
+    nextRoute = '/pv/without-notification'
+  }
+})
 </script>
 
 <template>
@@ -47,17 +54,21 @@ if (verbalTrial.duration > 13) {
         <VCard>
           <!-- SECTION Header -->
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
-            <VCol cols="11">
-
+            <VCol cols="10">
+              <VBtn prepend-icon="tabler-arrow-narrow-left" :to="nextRoute"
+                :disabled="verbalTrial.status == 'vaidated'">
+                Procès verbaux
+              </VBtn>
             </VCol>
-            <VCol cols="1">
-              <VBtn :to="{ name: 'pv-edit-id', params: { id: verbalTrial.id } }">
+            <VCol cols="2" class="text-right">
+              <VBtn append-icon="tabler-edit" :to="{ name: 'pv-edit-id', params: { id: verbalTrial.id } }"
+                :disabled="verbalTrial.status == 'vaidated'">
                 Modifier
               </VBtn>
             </VCol>
             <VCol>
-              <VAlert v-if="verbalTrial.status == 'rejected' && verbalTrial.status_observation" color="error">
-                {{ verbalTrial.status_observation }}
+              <VAlert v-if="verbalTrial.status == 'rejected' && verbalTrial.status_observation" color="warning">
+                Motif du refus: {{ verbalTrial.status_observation }}
               </VAlert>
             </VCol>
             <VCol cols="12">

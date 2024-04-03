@@ -334,20 +334,11 @@ class CATController extends Controller
         $c_a_t = CAT::find($id);
         if ($c_a_t) {
             if (($authorisation = Gate::inspect('validate', $c_a_t))->allowed()) {
-                $requestData = $request->all();
-                $validator = Validator::make($requestData, [
-                    'comment' => "min:1",
+                $c_a_t->update([
+                    "validation_status" => "validated",
+                    "validation_user_id" => $request->user()->id,
                 ]);
-                if ($validator->fails()) {
-                    return $this->responseError($validator->errors(), 400);
-                } else {
-                    $c_a_t->update([
-                        "validation_status" => "validated",
-                        "validation_comment" => $requestData["comment"],
-                        "validation_user_id" => $request->user()->id,
-                    ]);
-                    return $c_a_t;
-                }
+                return $c_a_t;
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
@@ -371,20 +362,11 @@ class CATController extends Controller
         $c_a_t = CAT::find($id);
         if ($c_a_t) {
             if (($authorisation = Gate::inspect('unblock', $c_a_t))->allowed()) {
-                $requestData = $request->all();
-                $validator = Validator::make($requestData, [
-                    'comment' => "min:1",
+                $c_a_t->update([
+                    "unblock_status" => "validated",
+                    "unblock_user_id" => $request->user()->id,
                 ]);
-                if ($validator->fails()) {
-                    return $this->responseError($validator->errors(), 400);
-                } else {
-                    $c_a_t->update([
-                        "unblock_status" => "validated",
-                        "unblock_comment" => $requestData["comment"],
-                        "unblock_user_id" => $request->user()->id,
-                    ]);
-                    return $c_a_t;
-                }
+                return $c_a_t;
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
