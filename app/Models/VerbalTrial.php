@@ -96,4 +96,9 @@ class VerbalTrial extends Model
     {
         return number_format(((float) $this["amount"]), 0, ',', ' ') . " FCFA";
     }
+
+    public function notification(): HasOne
+    {
+        return $this->hasOne(Notification::class, 'verbal_trial_id', 'id');
+    }
 }

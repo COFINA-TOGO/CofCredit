@@ -232,6 +232,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      status:
+        name: status
+        description: 'Filtrer par statut du contrat'
+        required: false
+        example: waiting
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       with_verbal_trial:
         name: with_verbal_trial
         description: 'Afficher le PV.'
@@ -334,6 +343,7 @@ endpoints:
     cleanQueryParameters:
       has_upload_completed: 0
       has_cat: 0
+      status: waiting
       with_verbal_trial: 0
       with_type_of_credit: 0
       with_type_of_applicant: 0
@@ -1009,6 +1019,78 @@ endpoints:
       total_amount_of_interest: 152369
       number_of_due_dates: 3
       type: company
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/contract/change-status/{id}'
+    metadata:
+      groupName: Contrat
+      groupDescription: |-
+
+        EndPoints pour gérer les contrats
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Mettre à jour le statut d'un contrat"
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "int             L'ID du contrat."
+        required: true
+        example: '1'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanUrlParameters:
+      id: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      status:
+        name: status
+        description: 'Le nouveau statut'
+        required: false
+        example: rejected
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      comment:
+        name: comment
+        description: 'Commentaire du changement'
+        required: false
+        example: 'Trop bas'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanBodyParameters:
+      status: rejected
+      comment: 'Trop bas'
     fileParameters: []
     responses:
       -

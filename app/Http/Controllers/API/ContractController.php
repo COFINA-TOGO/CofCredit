@@ -51,6 +51,7 @@ class ContractController extends Controller
    * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
    * @queryParam  has_upload_completed                                    int                 Filtrer par finalisation du dossier du contrat.                         Example: 0
    * @queryParam  has_cat                                                 int                 Filtrer par présence de cat.                                            Example: 0
+   * @queryParam  status                                                  string              Filtrer par statut du contrat                                           Example: waiting
    *
    * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
    * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
@@ -104,6 +105,15 @@ class ContractController extends Controller
         }
       }
 
+      if (isset($request["status"])) {
+        $contractList->where(function ($query) use ($request) {
+          foreach (str_split($request["status"]) as $char) {
+            if (in_array($char, ['w', 'v', 'r', 'c'])) {
+              $query->orWhere("status", ["w" => "waiting", "v" => "validated", "r" => "rejected"][$char]);
+            }
+          }
+        });
+      }
 
       foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_creator" => "creator", "with_pledges" => "pledges"] as $key => $value) {
         if (isset($request[$key]) && $request[$key]) {
@@ -143,10 +153,10 @@ class ContractController extends Controller
 
 
       if (isset($request["paginate"]) && ($request->paginate == false)) {
-        $contractList = $contractList->orderByDesc('created_at')->get();
+        $contractList = $contractList->orderByDesc('updated_at')->get();
         $data = ["data" => $contractList, "total" => count($contractList)];
       } else {
-        $data = $contractList->orderByDesc('created_at')->paginate(8)->toArray();
+        $data = $contractList->orderByDesc('updated_at')->paginate(8)->toArray();
       }
 
 
@@ -584,6 +594,7 @@ class ContractController extends Controller
         try {
           $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
           $requestData["creator_id"] = $request->user()->id;
+          $requestData["status"] = "waiting";
           $contract->update($requestData);
           $contract->company?->delete();
           $contract->individual_business?->delete();
@@ -725,6 +736,43 @@ class ContractController extends Controller
       }
     } else {
       return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
+    }
+  }
+
+  /**
+   * Mettre à jour le statut d'un contrat
+   *
+   * @urlParam    id      required                    int             L'ID du contrat.                                        Example: 1
+   *
+   * @bodyParam   status                              string          Le nouveau statut                                       Example: rejected
+   * @bodyParam   comment                             string          Commentaire du changement                               Example: Trop bas
+   *
+   * @response 200
+   *
+   */
+  public function change_status(Request $request, $id)
+  {
+    $contract = Contract::find($id);
+    if ($contract) {
+      if (($authorisation = Gate::inspect("change_status", $contract))->allowed()) {
+        $requestData = $request->all();
+        $validator = Validator::make($requestData, [
+          'status' => 'required|in:rejected,validated',
+          'comment' => "min:0",
+        ]);
+        if ($validator->fails()) {
+          return $this->responseError($validator->errors(), 400);
+        } else {
+          $contract->update([
+            "status" => $requestData["status"],
+            "status_observation" => $requestData["comment"],
+          ]);
+        }
+      } else {
+        return $this->responseError(["auth" => [$authorisation->message()]], 403);
+      }
+    } else {
+      return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
     }
   }
 

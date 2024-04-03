@@ -8,6 +8,7 @@ definePage({
 })
 import { ref } from 'vue'
 
+const route = useRoute('cat-add')
 const router = useRouter()
 
 const cat = ref({
@@ -48,6 +49,7 @@ const {
     with_verbal_trial: 1,
     has_upload_completed: 1,
     has_cat: 0,
+    status: 'v',
   },
 }))
 
@@ -92,6 +94,12 @@ const onSubmit = () => {
       })
     }
   })
+}
+if (route.query.id) {
+  const id = parseInt(route.query.id);
+  if (contractList.value.find(object => object.id == id)) {
+    cat.value.contract_id = id;
+  }
 }
 </script>
 
@@ -145,12 +153,12 @@ const onSubmit = () => {
                     placeholder="Ex: " :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
-                  <AppTextField v-model="cat.other_expenses" :error-messages="catError.other_expenses"
+                  <AppTextField type="number" v-model="cat.other_expenses" :error-messages="catError.other_expenses"
                     label="Autres frais" placeholder="Ex: " :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
-                  <AppTextField v-model="cat.teg" :error-messages="catError.teg" label="TEG" placeholder="Ex: 15000600"
-                    :rules="[requiredValidator]" />
+                  <AppTextField type="number" v-model="cat.teg" :error-messages="catError.teg" label="TEG"
+                    placeholder="Ex: 15000600" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="12" lg="12">
                   <AppTextarea v-model="cat.instructions_from_the_risk_and_credit_department"

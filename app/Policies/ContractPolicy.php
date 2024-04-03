@@ -46,6 +46,11 @@ class ContractPolicy
         return $this->check(["upload"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 
+    public function change_status(User $connectedUser, Contract $contract)
+    {
+        return $this->check(["change_status"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+    }
+
     public function delete(User $connectedUser, Contract $contract)
     {
         return $this->check(["delete"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");

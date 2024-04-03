@@ -29,6 +29,8 @@ return new class extends Migration {
             $table->foreignId("creator_id")->constrained(table: "users", column: "id")->cascadeOnDelete();
             $table->string("signed_contract_path")->nullable();
             $table->string("signed_promissory_note_path")->nullable();
+            $table->enum('status', ["waiting", 'rejected', "validated"])->default('waiting');
+            $table->string("status_observation")->nullable();
             $table->timestamps();
         });
     }

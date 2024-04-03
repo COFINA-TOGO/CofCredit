@@ -32,6 +32,8 @@ class Contract extends Model
         'creator_id',
         'signed_contract_path',
         'signed_promissory_note_path',
+        'status',
+        'status_observation',
     ];
 
     // protected $with = ['company', 'individual_business'];

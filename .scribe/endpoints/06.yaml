@@ -205,6 +205,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      has_notification:
+        name: has_notification
+        description: 'Filtrer par présence de notification'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       has_mortgage:
         name: has_mortgage
         description: "Filtrer par présence d'hypothèque"
@@ -297,6 +306,7 @@ endpoints:
         custom: []
     cleanQueryParameters:
       has_contract: 0
+      has_notification: 0
       has_mortgage: 0
       status: waiting
       with_type_of_credit: 0
@@ -955,7 +965,7 @@ endpoints:
         EndPoints pour gérer les Procès verbaux
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: "Mettre à jour le statut d'un procès verbal"
       description: ''
       authenticated: true
       custom: []
@@ -966,21 +976,47 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the change status.'
+        description: "int             L'ID du procès verbal."
         required: true
-        example: et
+        example: '1'
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         custom: []
     cleanUrlParameters:
-      id: et
+      id: '1'
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      status:
+        name: status
+        description: 'Le nouveau statut'
+        required: false
+        example: rejected
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      comment:
+        name: comment
+        description: 'Commentaire du changement'
+        required: false
+        example: 'Trop bas'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+    cleanBodyParameters:
+      status: rejected
+      comment: 'Trop bas'
     fileParameters: []
-    responses: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
     responseFields: []
     auth:
       - headers
@@ -1014,13 +1050,13 @@ endpoints:
         name: id
         description: "L'ID du procès verbal"
         required: true
-        example: 19
+        example: 14
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 19
+      id: 14
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

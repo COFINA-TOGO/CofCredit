@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "e5d4e26a-73b2-4450-80ce-318e7a48590d",
+        "_postman_id": "ad90c2c9-5cff-46bc-841d-5302aa732a13",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1284,6 +1284,12 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "status",
+                                    "value": "waiting",
+                                    "description": "Filtrer par statut du contrat",
+                                    "disabled": false
+                                },
+                                {
                                     "key": "with_verbal_trial",
                                     "value": "",
                                     "description": "Afficher le PV.",
@@ -1350,7 +1356,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&creator_id=&has_upload_completed=&has_cat=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_company=&with_individual_business=&with_creator=&with_pledges=&paginate="
+                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&creator_id=&has_upload_completed=&has_cat=&status=waiting&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_company=&with_individual_business=&with_creator=&with_pledges=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -1669,6 +1675,49 @@
                     ]
                 },
                 {
+                    "name": "Mettre \u00e0 jour le statut d'un contrat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/contract\/change-status\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/contract\/change-status\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "int             L'ID du contrat."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"status\":\"rejected\",\"comment\":\"Trop bas\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
                     "name": "Supprime un contrat",
                     "request": {
                         "url": {
@@ -1682,6 +1731,453 @@
                                     "key": "id",
                                     "value": "1",
                                     "description": "L'ID du contrat."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Endpoints",
+            "description": "",
+            "item": [
+                {
+                    "name": "Affiche les notification",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/notification",
+                            "query": [
+                                {
+                                    "key": "verbal_trial_id",
+                                    "value": "",
+                                    "description": "Filtrer par ID du PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "phone_number",
+                                    "value": "",
+                                    "description": "Filtrer par Num\u00e9ro de t\u00e9l\u00e9phone du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "head_credit_validation",
+                                    "value": "",
+                                    "description": "Filtrer par statut de validation du head credit",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "signed_notification",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de notficaiton sign\u00e9.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "has_signed_contract",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de contrat sign\u00e9.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "has_upload_completed",
+                                    "value": "",
+                                    "description": "Filtrer par billet \u00e0 ordre.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "has_cat",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_verbal_trial",
+                                    "value": "",
+                                    "description": "Afficher le PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_credit",
+                                    "value": "",
+                                    "description": "Afficher le type de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "",
+                                    "description": "Afficher le type de demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_caf",
+                                    "value": "",
+                                    "description": "Afficher le caf en charge du dossier.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les garanties.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les types des garanties.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_creator",
+                                    "value": "",
+                                    "description": "Afficher le cr\u00e9ateur de la notification.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "paginate",
+                                    "value": "",
+                                    "description": "Utiliser la pagination.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/notification?verbal_trial_id=&phone_number=&head_credit_validation=&signed_notification=&has_signed_contract=&has_upload_completed=&has_cat=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_creator=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge la version word d'un notification",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/notification\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/notification\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID de la notification."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge le billet \u00e0 ordre d'un notification",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/notification\/promissory-note\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/notification\/promissory-note\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID de la notification."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche un notification",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/notification\/:id",
+                            "query": [
+                                {
+                                    "key": "with_verbal_trial",
+                                    "value": "",
+                                    "description": "Afficher le PV.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_credit",
+                                    "value": "",
+                                    "description": "Afficher le type de cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_applicant",
+                                    "value": "",
+                                    "description": "Afficher le type de demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_caf",
+                                    "value": "",
+                                    "description": "Afficher le CAF en charge du dossier.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les garanties.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_type_of_guarantees",
+                                    "value": "",
+                                    "description": "Afficher les types des garanties.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/notification\/:id?with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID de la notification."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er un nouveau notification",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/notification",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/notification"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"verbal_trial_id\":1,\"representative_phone_number\":\"+228 90 90 90 90\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour un notification",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/notification\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/notification\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID de la notification."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"verbal_trial_id\":1,\"representative_phone_number\":\"+228 90 90 90 90\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour le statut d'une notification",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/notification\/change-status\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/notification\/change-status\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "int             L'ID d'une notification."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"head_credit_validation\":\"rejected\",\"head_credit_observation\":\"Trop bas\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Supprime un notification",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/notification\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/notification\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID de la notification."
                                 }
                             ]
                         },
@@ -1842,6 +2338,12 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "has_notification",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de notification",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "has_mortgage",
                                     "value": "",
                                     "description": "Filtrer par pr\u00e9sence d'hypoth\u00e8que",
@@ -1902,7 +2404,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&creator_id=&has_contract=&has_mortgage=&status=waiting&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1&with_creator=&paginate="
+                            "raw": "{{baseUrl}}\/api\/verbal-trial?committee_id=&committee_date=&civility=&applicant_first_name=&applicant_last_name=&account_number=&activity=&purpose_of_financing=&type_of_credit_id=&amount=&duration=&periodicity=&taf=&due_amount=&administrative_fees_percentage=&insurance_premium=&tax_fee_interest_rate=&caf_id=&creator_id=&has_contract=&has_notification=&has_mortgage=&status=waiting&with_type_of_credit=&with_type_of_applicant=1&with_guarantees=1&with_type_of_guarantees=1&with_contract=1&with_caf=1&with_creator=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -2123,7 +2625,7 @@
                     ]
                 },
                 {
-                    "name": "PUT api\/verbal-trial\/change-status\/{id}",
+                    "name": "Mettre \u00e0 jour le statut d'un proc\u00e8s verbal",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -2134,8 +2636,8 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "et",
-                                    "description": "The ID of the change status."
+                                    "value": "1",
+                                    "description": "int             L'ID du proc\u00e8s verbal."
                                 }
                             ]
                         },
@@ -2150,10 +2652,20 @@
                                 "value": "application\/json"
                             }
                         ],
-                        "body": null,
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"status\":\"rejected\",\"comment\":\"Trop bas\"}"
+                        },
                         "description": ""
                     },
-                    "response": []
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
                 },
                 {
                     "name": "Supprime un proc\u00e8s verbal",
@@ -2167,7 +2679,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "19",
+                                    "value": "14",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -2376,7 +2888,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "20",
+                                    "value": "12",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -2616,7 +3128,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "14",
+                                    "value": "10",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -2850,7 +3362,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "15",
+                                    "value": "17",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -3124,7 +3636,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "18",
+                                    "value": "12",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

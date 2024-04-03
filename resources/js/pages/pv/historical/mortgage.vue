@@ -72,7 +72,7 @@ const updateOptions = options => {
 }
 
 const {
-  data: pvData,
+  data: pvListData,
   execute: fetchPv,
 } = await useApi(createUrl('/verbal-trial', {
   query: {
@@ -81,6 +81,7 @@ const {
     page: page,
     has_contract: 1,
     has_mortgage: 1,
+    status: 'v',
     with_caf: 1,
     with_type_of_credit: 1,
   },
@@ -118,9 +119,9 @@ const apiDelete = async id => {
   fetchPv()
 }
 
-const pvList = computed(() => pvData.value.data)
-const totalPv = computed(() => pvData.value.total)
-const lastPage = computed(() => pvData.value.last_page)
+const pvList = computed(() => pvListData.value.data)
+const totalPv = computed(() => pvListData.value.total)
+const lastPage = computed(() => pvListData.value.last_page)
 const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)

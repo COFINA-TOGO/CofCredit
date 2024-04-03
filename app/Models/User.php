@@ -75,6 +75,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Contract::class, "creator_id", "id");
     }
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, "creator_id", "id");
+    }
 
     public function getAbilityRulesAttribute()
     {
@@ -108,7 +112,7 @@ class User extends Authenticatable
                         "subject" => ["pv"],
                     ],
                     [
-                        "action" => ["create", "read", "historical", "waiting_cat", "update", "delete", "download"],
+                        "action" => ["create", "read", "historical", "waiting_cat", "update", "change_status", "delete", "download"],
                         "subject" => ["contract"],
                     ],
                     [

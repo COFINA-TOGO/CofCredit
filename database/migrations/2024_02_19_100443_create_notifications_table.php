@@ -13,12 +13,13 @@ return new class extends Migration {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId("verbal_trial_id")->constrained(table: 'verbals_trials', column: 'id')->cascadeOnDelete();
-            $table->string("phone_number");
+            $table->string("representative_phone_number");
             $table->string("head_credit_observation")->nullable();
             $table->enum("head_credit_validation", ["waiting", "rejected", "validated"])->default(("waiting"));
-            $table->string("signed_version_path")->nullable();
+            $table->string("signed_notification_path")->nullable();
             $table->string("signed_contract_path")->nullable();
             $table->string("signed_promissory_note_path")->nullable();
+            $table->foreignId("creator_id")->constrained(table: "users", column: "id")->cascadeOnDelete();
             $table->timestamps();
         });
     }

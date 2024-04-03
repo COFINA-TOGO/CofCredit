@@ -39,8 +39,8 @@ class CAT extends Model
         $data = parent::toArray();
         $data["created_at_fr"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
         $data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
-        $data["contract_id"] = (int) $data["contract_id"];
-        $data["notification_id"] = (int) $data["notification_id"];
+        $data["contract_id"] = isset($data["contract_id"]) ? (int) $data["contract_id"] : null;
+        $data["notification_id"] = isset($data["notification_id"]) ? (int) $data["notification_id"] : null;
         $data["other_expenses"] = (int) $data["other_expenses"];
         $data["teg"] = (int) $data["teg"];
         return $data;

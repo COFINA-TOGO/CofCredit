@@ -74,8 +74,7 @@ const {
     with_individual_business: 1,
     with_creator: 1,
     has_upload_completed: 1,
-    has_cat: 1,
-    status: 'v',
+    has_cat: 0,
   },
 }))
 

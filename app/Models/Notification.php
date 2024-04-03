@@ -14,11 +14,12 @@ class Notification extends Model
 
     protected $fillable = [
         'verbal_trial_id',
-        'phone_number',
+        'representative_phone_number',
         'head_credit_observation',
         'head_credit_validation',
         'signed_contract_path',
         'signed_promissory_note_path',
+        'creator_id',
     ];
 
     protected $appends = ['observations', 'upload_completed'];
@@ -49,14 +50,14 @@ class Notification extends Model
         if ($this->head_credit_validation == "rejected")
             return ["Notification rejetée"];
         if ($this->head_credit_validation == "waiting")
-            $observations[] = "validation head credit manquante";
-        if (!$this->signed_version_path)
+            $observations[] = "Validation head credit manquante";
+        if (!$this->signed_notification_path)
             $observations[] = "Notification signé manquante";
         if (!$this->signed_contract_path)
             $observations[] = "Contrat notarié signé manquant";
         if (!$this->signed_promissory_note_path)
             $observations[] = "Billet à ordre signé manquant";
-        $incompleteGuarantor = $this->verbal_trial->guarantors->filter(function ($item) {
+        $incompleteGuarantor = $this->verbal_trial->guarantors?->filter(function ($item) {
             return $item['signed_contract_path'] == null || $item['signed_promissory_note_path'] == null;
         })->toArray();
         if ($incompleteGuarantor)
@@ -67,5 +68,10 @@ class Notification extends Model
     public function getUploadCompletedAttribute()
     {
         return empty($this->observations);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, "creator_id", "id");
     }
 }

@@ -81,7 +81,7 @@ const {
     page: page,
     has_contract: 1,
     has_mortgage: 0,
-    status: 'v',
+    status: 'wr',
     with_caf: 1,
     with_type_of_credit: 1,
   },

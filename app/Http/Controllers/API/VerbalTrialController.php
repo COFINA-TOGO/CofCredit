@@ -51,6 +51,7 @@ class VerbalTrialController extends Controller
      * @queryParam  caf_id                                                  int                 Filtrer par ID du CAF                                                   No-example
      * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
      * @queryParam  has_contract                                            int                 Filtrer par présence de contrat                                         Example: 0
+     * @queryParam  has_notification                                        int                 Filtrer par présence de notification                                    Example: 0
      * @queryParam  has_mortgage                                            int                 Filtrer par présence d'hypothèque                                       Example: 0
      * @queryParam  status                                                  string              Filtrer par statut du pv                                                Example: waiting
      *
@@ -113,6 +114,15 @@ class VerbalTrialController extends Controller
                     $verbalTrialList->whereHas('contract');
                 } else if ($has_contract == 0) {
                     $verbalTrialList->whereDoesntHave('contract');
+                }
+            }
+
+            if (isset($request["has_notification"])) {
+                $has_notification = (int) $request["has_notification"];
+                if ($has_notification == 1) {
+                    $verbalTrialList->whereHas('notification');
+                } else if ($has_notification == 0) {
+                    $verbalTrialList->whereDoesntHave('notification');
                 }
             }
 
@@ -457,6 +467,17 @@ class VerbalTrialController extends Controller
         }
     }
 
+    /**
+     * Mettre à jour le statut d'un procès verbal
+     *
+     * @urlParam    id      required                    int             L'ID du procès verbal.                                  Example: 1
+     *
+     * @bodyParam   status                              string          Le nouveau statut                                       Example: rejected
+     * @bodyParam   comment                             string          Commentaire du changement                               Example: Trop bas
+     *
+     * @response 200
+     *
+     */
     public function change_status(Request $request, $id)
     {
         $verbalTrial = VerbalTrial::find($id);
@@ -464,7 +485,7 @@ class VerbalTrialController extends Controller
             if (($authorisation = Gate::inspect("change_status", $verbalTrial))->allowed()) {
                 $requestData = $request->all();
                 $validator = Validator::make($requestData, [
-                    'status' => 'required|in:waiting,rejected,validated',
+                    'status' => 'required|in:rejected,validated',
                     'comment' => "min:0",
                 ]);
                 if ($validator->fails()) {

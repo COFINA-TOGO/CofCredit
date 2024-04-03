@@ -242,7 +242,8 @@ const actionStatus = ref("waiting")
 
           <div>
             <VDivider />
-            <IconBtn v-if="$can('update', 'pv')" :to="{ name: 'pv-edit-id', params: { id: item.id } }">
+            <IconBtn v-if="$can('update', 'pv')" :to="{ name: 'pv-edit-id', params: { id: item.id } }"
+              :disabled="item.status == 'validated'">
               <VTooltip activator="parent" transition="scroll-x-transition" location="start">Modifier</VTooltip>
               <VIcon icon="tabler-edit" />
             </IconBtn>
@@ -262,7 +263,7 @@ const actionStatus = ref("waiting")
           </IconBtn>
           <span v-if="item.status == 'waiting'">
             <IconBtn v-if="$can('validate', 'pv')"
-              @click="selectedItemId = item.id; actionTitle = 'Valider le PV', actionText = 'Voulez vous vraiment valider ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = true; actionStatus = 'validated'; isActionDialogVisible = true;">
+              @click="selectedItemId = item.id; actionTitle = 'Valider le PV', actionText = 'Voulez vous vraiment valider ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = false; actionStatus = 'validated'; isActionDialogVisible = true;">
               <VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider</VTooltip>
               <VIcon icon="tabler-check" color="success" />
             </IconBtn>
@@ -270,7 +271,7 @@ const actionStatus = ref("waiting")
           <span v-if="item.status == 'validated'">
             <IconBtn v-if="$can('create', 'contract')" :to="{ name: 'contract-add', query: { id: item.id } }">
               <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le contrat</VTooltip>
-              <VIcon icon="tabler-plus" color="success" />
+              <VIcon icon="tabler-file-plus" color="success" />
             </IconBtn>
           </span>
         </template>

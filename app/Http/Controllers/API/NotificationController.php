@@ -30,9 +30,10 @@ class NotificationController extends Controller
      *
      * @queryParam  verbal_trial_id                                         int                 Filtrer par ID du PV.                                                   No-example
      * @queryParam  phone_number                                            string              Filtrer par Numéro de téléphone du demandeur.                           No-example
-     * @queryParam  has_signed_version                                      int                 Filtrer par présence de version signé de la notification.               Example: 0
-     * @queryParam  has_signed_contract                                 int                 Filtrer par présence de version signé du contrat.                       Example: 0
-     * @queryParam  has_upload_completed                                    int                 Filtrer par finalisation du dossier du contrat.                         Example: 0
+     * @queryParam  head_credit_validation                                  string              Filtrer par statut de validation du head credit                         No-example
+     * @queryParam  signed_notification                                     int                 Filtrer par présence de notficaiton signé.                              Example: 0
+     * @queryParam  has_signed_contract                                     int                 Filtrer par présence de contrat signé.                                  Example: 0
+     * @queryParam  has_upload_completed                                    int                 Filtrer par billet à ordre.                                             Example: 0
      * @queryParam  has_cat                                                 int                 Filtrer par présence de cat.                                            Example: 0
      *
      * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
@@ -41,7 +42,7 @@ class NotificationController extends Controller
      * @queryParam  with_caf                                                int                 Afficher le caf en charge du dossier.                                   Example: 0
      * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                 Example: 0
      * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
-     * @queryParam  with_creator                                            int                 Afficher le créateur du contrat.                                        Example: 0
+     * @queryParam  with_creator                                            int                 Afficher le créateur de la notification.                                Example: 0
      * @queryParam  paginate                                                int                 Utiliser la pagination.                                                 Example: 0
      *
      * @response 200
@@ -71,6 +72,15 @@ class NotificationController extends Controller
                 }
             }
 
+            if (isset($request["head_credit_validation"])) {
+                $notificationList->where(function ($query) use ($request) {
+                    foreach (str_split($request["head_credit_validation"]) as $char) {
+                        if (in_array($char, ['w', 'v', 'r', 'c'])) {
+                            $query->orWhere("head_credit_validation", ["w" => "waiting", "v" => "validated", "r" => "rejected"][$char]);
+                        }
+                    }
+                });
+            }
 
             foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_creator" => "creator", "with_pledges" => "pledges"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
@@ -84,11 +94,11 @@ class NotificationController extends Controller
                 });
             }
 
-            if (isset($request["has_signed_version"])) {
-                if ($request["has_signed_version"]) {
-                    $notificationList->whereNotNull('signed_version_path');
+            if (isset($request["signed_notification"])) {
+                if ($request["signed_notification"]) {
+                    $notificationList->whereNotNull('signed_notification_path');
                 } else {
-                    $notificationList->whereNull('signed_version_path');
+                    $notificationList->whereNull('signed_notification_path');
                 }
             }
 
@@ -102,21 +112,15 @@ class NotificationController extends Controller
 
             if (isset($request["has_upload_completed"])) {
                 if ($request["has_upload_completed"]) {
-                    $notificationList->whereNotNull('signed_version_path')->whereNotNull('signed_contract_path')->whereNotNull('signed_promissory_note_path')->where(function ($query) {
+                    $notificationList->whereNotNull('signed_notification_path')->whereNotNull('signed_contract_path')->whereNotNull('signed_promissory_note_path')->where(function ($query) {
                         $query->whereDoesntHave('guarantors', function ($query) {
                             $query->whereNull('signed_promissory_note_path');
                         });
                     });
                 } else {
                     $notificationList->where(function ($query) {
-                        $query->whereNull('signed_version_path')->orWhere(function ($query) {
-                            $query->whereNull('signed_contract_path');
-                        })->orWhere(function ($query) {
+                        $query->whereNull('signed_notification_path')->orWhereNull('signed_contract_path')->orWhereNull('signed_promissory_note_path')->orWhereHas('guarantors', function ($query) {
                             $query->whereNull('signed_promissory_note_path');
-                        })->orWhere(function ($query) {
-                            $query->whereHas('guarantors', function ($query) {
-                                $query->whereNull('signed_promissory_note_path');
-                            });
                         });
                     });
                 }
@@ -139,19 +143,16 @@ class NotificationController extends Controller
     }
 
     /**
-     * Affiche un contrat
+     * Affiche un notification
      *
-     * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+     * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
      *
-     * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
-     * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
-     * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                          Example: 0
-     * @queryParam  with_caf                                                int                 Afficher le CAF en charge du dossier.                                   Example: 0
-     * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                 Example: 0
-     * @queryParam  with_company                                            int                 Afficher les informations de la société                                 Example: 0
-     * @queryParam  with_individual_business                                int                 Afficher les informations de l'entreprise individuelle                  Example: 0
-     * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
-     * @queryParam  with_pledges                                            int                 Afficher les gages.                                                     Example: 0
+     * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                                 Example: 0
+     * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                                     Example: 0
+     * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                                  Example: 0
+     * @queryParam  with_caf                                                int                 Afficher le CAF en charge du dossier.                                           Example: 0
+     * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                         Example: 0
+     * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                               Example: 0
      *
      * @response 200
      */
@@ -161,7 +162,7 @@ class NotificationController extends Controller
         if ($notification) {
             if (($authorisation = Gate::inspect('view', $notification))->allowed()) {
                 $suplementList = [];
-                foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_pledges" => "pledges"] as $key => $value) {
+                foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee"] as $key => $value) {
                     if (isset($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }
@@ -172,14 +173,14 @@ class NotificationController extends Controller
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
         } else {
-            return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
+            return $this->responseError(["id" => "La notification n'existe pas"], 404);
         }
     }
 
     /**
-     * Télécharge la version word d'un contrat
+     * Télécharge la version word d'un notification
      *
-     * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+     * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
      *
      * @response 200
      */
@@ -285,13 +286,13 @@ class NotificationController extends Controller
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
         } else {
-            return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
+            return $this->responseError(["id" => "La notification n'existe pas"], 404);
         }
     }
     /**
-     * Télécharge le billet à ordre d'un contrat
+     * Télécharge le billet à ordre d'un notification
      *
-     * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+     * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
      *
      * @response 200
      */
@@ -362,27 +363,15 @@ class NotificationController extends Controller
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
         } else {
-            return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
+            return $this->responseError(["id" => "La notification n'existe pas"], 404);
         }
     }
 
     /**
-     * Créer un nouveau contrat
+     * Créer un nouveau notification
      *
      * @bodyParam   verbal_trial_id                                         int                 L'ID du PV.                                                             Example: 1
-     * @bodyParam   representative_birth_date                               string              La date de naissance du demandeur.                                      Example: 1988-05-01
-     * @bodyParam   representative_birth_place                              string              Le lieu de naissance du demandeur.                                      Example: Lomé
-     * @bodyParam   representative_nationality                              string              La nationalité du demandeur.                                            Example: Togolaise
-     * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
-     * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'identité du demandeur.                           Example: cni
-     * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'identité du demandeur.                         Example: CND-4D8-84S-52S
-     * @bodyParam   representative_date_of_issue_of_identity_document       string              La date de délivrance de la pièce d'identité du demandeur.              Example: 2020-01-01
      * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
-     * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
-     * @bodyParam   total_amount_of_interest                                int                 Le montant total des intérêts du crédit du demandeur.                   Example: 152369
-     * @bodyParam   number_of_due_dates                                     int                 Le nombre d'échéance du crédit.                                         Example: 3
-     * @bodyParam   type                                                    string              Le type du contrat.                                                     Example: company
-     * @bodyParam   has_pledges                                             string              La présence de gage.                                                    Example: 0
      *
      * @response 200
      */
@@ -392,119 +381,35 @@ class NotificationController extends Controller
             $requestData = $request->all();
             $validator = Validator::make($requestData, [
                 'verbal_trial_id' => "required|exists:verbals_trials,id|unique:notifications",
-                'representative_birth_date' => 'required|date',
-                'representative_birth_place' => 'required|min:2',
-                'representative_nationality' => 'required|min:2',
-                'representative_home_address' => 'required|min:2',
-                'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence',
-                'representative_number_of_identity_document' => 'required|min:2',
-                'representative_date_of_issue_of_identity_document' => 'required|date',
                 'representative_phone_number' => 'required|min:2',
-                'risk_premium_percentage' => 'required|numeric',
-                'total_amount_of_interest' => 'required|numeric',
-                'number_of_due_dates' => 'required|numeric',
-                'type' => 'required|in:particular,company,individual_business',
-                'has_pledges' => 'required|boolean',
             ]);
             if ($validator->fails()) {
                 return $this->responseError($validator->errors(), 400);
             }
 
-            DB::beginTransaction();
-            try {
-                $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
-                $requestData["creator_id"] = $request->user()->id;
-                $notification = Notification::create($requestData);
-                if ($requestData["type"] == "company") {
-                    $validator = Validator::make($requestData, [
-                        'company_denomination' => "required|min:2",
-                        'company_legal_status' => "required|min:2",
-                        'company_head_office_address' => "required|min:2",
-                        'company_rccm_number' => "required|min:2",
-                        'company_phone_number' => "required|min:2",
-                    ]);
+            $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
+            $requestData["creator_id"] = $request->user()->id;
+            $notification = Notification::create($requestData);
+            $notification->load($relationList);
 
-                    if ($validator->fails()) {
-                        return $this->responseError($validator->errors(), 400);
-                    } else {
-                        Company::create([
-                            "notification_id" => $notification->id,
-                            "denomination" => $requestData["company_denomination"],
-                            "legal_status" => $requestData["company_legal_status"],
-                            "head_office_address" => $requestData["company_head_office_address"],
-                            "rccm_number" => $requestData["company_rccm_number"],
-                            "phone_number" => $requestData["company_phone_number"],
-                        ]);
-                    }
-
-                    $relationList[] = "company";
-                } elseif ($requestData["type"] == "individual_business") {
-                    $validator = Validator::make($requestData, [
-                        'individual_business_denomination' => "required|min:2",
-                        'individual_business_corporate_purpose' => "required|min:2",
-                        'individual_business_head_office_address' => "required|min:2",
-                        'individual_business_rccm_number' => "required|min:2",
-                        'individual_business_phone_number' => "required|min:2",
-                    ]);
-
-                    if ($validator->fails()) {
-                        return $this->responseError($validator->errors(), 400);
-                    } else {
-                        IndividualBusiness::create([
-                            "notification_id" => $notification->id,
-                            "denomination" => $requestData["individual_business_denomination"],
-                            "corporate_purpose" => $requestData["individual_business_corporate_purpose"],
-                            "head_office_address" => $requestData["individual_business_head_office_address"],
-                            "rccm_number" => $requestData["individual_business_rccm_number"],
-                            "phone_number" => $requestData["individual_business_phone_number"],
-                        ]);
-                    }
-
-                    $relationList[] = "individual_business";
-                }
-
-                if (isset($requestData["has_pledges"])) {
-                    if ($requestData["has_pledges"]) {
-                        $validator = Validator::make($requestData, [
-                            "pledges" => "required|array|min:1",
-                            "pledges.*.type" => "required|in:vehicle,stock",
-                            "pledges.*.comment" => "required|min:2"
-                        ]);
-                        if ($validator->fails()) {
-                            return $this->responseError($validator->errors(), 400);
-                        }
-                        foreach ($requestData["pledges"] as $pledge) {
-                            Pledge::create([
-                                "notification_id" => $notification->id,
-                                "type" => $pledge["type"],
-                                "comment" => $pledge["comment"],
-                            ]);
-                        }
-                        $relationList[] = "pledges";
-                    }
-                }
-                $notification->load($relationList);
-            } catch (Exception $e) {
-                DB::rollback();
-                throw $e;
-            }
-            DB::commit(); // Valider les opérations
             $receiver = $notification->verbal_trial->caf;
+            $receiver->email = "charles.gamligo@cofinacorp.com";
+            $receiver->full_name = "Head Crédit";
             $link = env("APP_URL") . "/notification";
             SendEmail::dispatch(
                 $receiver->email,
                 "Notification de mise en place d'un pv",
                 "
-              <h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e) $receiver->full_name,</U></h1>
-  
-              <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat en attente de signature par le client: <a href='$link'>Consulter l</a></p>
-  
-              <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-  
-              <hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-  
-              <p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-          "
+            <h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e) $receiver->full_name,</U></h1>
+
+            <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement la notification de validation: <a href='$link'>Consulter l</a></p>
+
+            <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+
+            <hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+            <p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+"
             );
             return $this->responseOk([
                 "notification" => $notification
@@ -515,23 +420,12 @@ class NotificationController extends Controller
     }
 
     /**
-     * Mettre à jour un contrat
+     * Mettre à jour un notification
      *
-     * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+     * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
      *
      * @bodyParam   verbal_trial_id                                         int                 L'ID du PV.                                                             Example: 1
-     * @bodyParam   representative_birth_date                               string              La date de naissance du demandeur.                                      Example: 1988-05-01
-     * @bodyParam   representative_birth_place                              string              Le lieu de naissance du demandeur.                                      Example: Lomé
-     * @bodyParam   representative_nationality                              string              La nationalité du demandeur.                                            Example: Togolaise
-     * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
-     * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'identité du demandeur.                           Example: cni
-     * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'identité du demandeur.                         Example: CND-4D8-84S-52S
-     * @bodyParam   representative_date_of_issue_of_identity_document       string              La date de délivrance de la pièce d'identité du demandeur.              Example: 2020-01-01
      * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
-     * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
-     * @bodyParam   total_amount_of_interest                                int                 Le montant total des intérêts du crédit du demandeur.                   Example: 152369
-     * @bodyParam   number_of_due_dates                                     int                 Le nombre d'échéance du crédit.                                         Example: 3
-     * @bodyParam   type                                                    string              Le type du contrat.                                                     Example: company
      *
      * @response 200
      *
@@ -544,120 +438,69 @@ class NotificationController extends Controller
                 $requestData = $request->all();
                 $validator = Validator::make($requestData, [
                     'verbal_trial_id' => "required|exists:verbals_trials,id|unique:notifications,verbal_trial_id," . $id,
-                    'representative_birth_date' => 'required|date',
-                    'representative_birth_place' => 'required|min:2',
-                    'representative_nationality' => 'required|min:2',
-                    'representative_home_address' => 'required|min:2',
-                    'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence',
-                    'representative_number_of_identity_document' => 'required|min:2',
-                    'representative_date_of_issue_of_identity_document' => 'required|date',
                     'representative_phone_number' => 'required|min:2',
-                    'risk_premium_percentage' => 'required|numeric',
-                    'total_amount_of_interest' => 'required|numeric',
-                    'number_of_due_dates' => 'required|numeric',
-                    'type' => 'required|in:particular,company,individual_business',
-                    'has_pledges' => 'required|boolean',
                 ]);
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
                 }
 
-                DB::beginTransaction();
-                try {
-                    $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
-                    $requestData["creator_id"] = $request->user()->id;
-                    $notification->update($requestData);
-                    $notification->company?->delete();
-                    $notification->individual_business?->delete();
-                    if ($requestData["type"] == "company") {
-                        $validator = Validator::make($requestData, [
-                            'company_denomination' => "required|min:2",
-                            'company_legal_status' => "required|min:2",
-                            'company_head_office_address' => "required|min:2",
-                            'company_rccm_number' => "required|min:2",
-                            'company_phone_number' => "required|min:2",
-                        ]);
-
-                        if ($validator->fails()) {
-                            return $this->responseError($validator->errors(), 400);
-                        } else {
-                            Company::create([
-                                "notification_id" => $notification->id,
-                                "denomination" => $requestData["company_denomination"],
-                                "legal_status" => $requestData["company_legal_status"],
-                                "head_office_address" => $requestData["company_head_office_address"],
-                                "rccm_number" => $requestData["company_rccm_number"],
-                                "phone_number" => $requestData["company_phone_number"],
-                            ]);
-                        }
-
-                        $relationList[] = "company";
-                    } elseif ($requestData["type"] == "individual_business") {
-                        $validator = Validator::make($requestData, [
-                            'individual_business_denomination' => "required|min:2",
-                            'individual_business_corporate_purpose' => "required|min:2",
-                            'individual_business_head_office_address' => "required|min:2",
-                            'individual_business_rccm_number' => "required|min:2",
-                            'individual_business_phone_number' => "required|min:2",
-                        ]);
-
-                        if ($validator->fails()) {
-                            return $this->responseError($validator->errors(), 400);
-                        } else {
-                            IndividualBusiness::create([
-                                "notification_id" => $notification->id,
-                                "denomination" => $requestData["individual_business_denomination"],
-                                "corporate_purpose" => $requestData["individual_business_corporate_purpose"],
-                                "head_office_address" => $requestData["individual_business_head_office_address"],
-                                "rccm_number" => $requestData["individual_business_rccm_number"],
-                                "phone_number" => $requestData["individual_business_phone_number"],
-                            ]);
-                        }
-
-                        $relationList[] = "individual_business";
-                    }
-
-                    if (isset($requestData["has_pledges"])) {
-                        if ($requestData["has_pledges"]) {
-                            $validator = Validator::make($requestData, [
-                                "pledges" => "required|array|min:1",
-                                "pledges.*.type" => "required|in:vehicle,stock",
-                                "pledges.*.comment" => "required|min:2"
-                            ]);
-                            if ($validator->fails()) {
-                                return $this->responseError($validator->errors(), 400);
-                            }
-                            foreach ($requestData["pledges"] as $pledge) {
-                                Pledge::create([
-                                    "notification_id" => $notification->id,
-                                    "type" => $pledge["type"],
-                                    "comment" => $pledge["comment"],
-                                ]);
-                            }
-                            $relationList[] = "pledges";
-                        }
-                    }
-                    $notification->load($relationList);
-                } catch (Exception $e) {
-                    DB::rollback();
-                    throw $e;
-                }
-                DB::commit(); // Valider les opérations
+                $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
+                $requestData["head_credit_validation"] = "waiting";
+                $notification->update($requestData);
+                $notification->load($relationList);
                 return $this->responseOk([
                     "notification" => $notification
-                ], status: 201);
+                ], status: 200);
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
         } else {
-            return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
+            return $this->responseError(["id" => "La notification n'existe pas"], 404);
+        }
+    }
+
+
+    /**
+     * Mettre à jour le statut d'une notification
+     *
+     * @urlParam    id      required                    int             L'ID d'une notification.                                Example: 1
+     *
+     * @bodyParam   head_credit_validation              string          Le nouveau statut                                       Example: rejected
+     * @bodyParam   head_credit_observation             string          Commentaire du changement                               Example: Trop bas
+     *
+     * @response 200
+     *
+     */
+    public function change_status(Request $request, $id)
+    {
+        $notification = Notification::find($id);
+        if ($notification) {
+            if (($authorisation = Gate::inspect("change_status", $notification))->allowed()) {
+                $requestData = $request->all();
+                $validator = Validator::make($requestData, [
+                    'head_credit_validation' => 'required|in:rejected,validated',
+                    'head_credit_observation' => "min:0",
+                ]);
+                if ($validator->fails()) {
+                    return $this->responseError($validator->errors(), 400);
+                } else {
+                    $notification->update([
+                        "head_credit_validation" => $requestData["head_credit_validation"],
+                        "head_credit_observation" => $requestData["head_credit_observation"],
+                    ]);
+                }
+            } else {
+                return $this->responseError(["auth" => [$authorisation->message()]], 403);
+            }
+        } else {
+            return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
         }
     }
 
     /**
-     * Sauvegarde le contrat ou procès verbal signé
+     * Sauvegarde la notification ou procès verbal signé
      *
-     * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+     * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
      *
      * @response 204
      */
@@ -668,15 +511,18 @@ class NotificationController extends Controller
         if ($notification) {
             if (($authorisation = Gate::inspect('upload', $notification))->allowed()) {
                 DB::beginTransaction();
-                if ($request->has('signed_notification')) {
+                if ($request->has('signed_version')) {
                     $document_category = "notification";
-                    $base64Document = $request->input('signed_notification');
+                    $base64Document = $request->input('signed_version');
+                } else if ($request->has('signed_contract')) {
+                    $document_category = "contract";
+                    $base64Document = $request->input('signed_contract');
                 } else if ($request->has('signed_promissory_note')) {
                     $document_category = "promissory_note";
                     $base64Document = $request->input('signed_promissory_note');
                 } else {
                     DB::rollBack();
-                    return $this->responseError(["error" => "Vous devez uploader un contrat signé ou un billet à ordre signé"], 400);
+                    return $this->responseError(["error" => "Vous devez uploader une notification signé, notification signé ou un billet à ordre signé"], 400);
                 }
 
                 // Vérifier si le document est un PDF
@@ -706,14 +552,14 @@ class NotificationController extends Controller
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
         } else {
-            return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
+            return $this->responseError(["id" => "La notification n'existe pas"], 404);
         }
     }
 
     /**
-     * Supprime un contrat
+     * Supprime un notification
      *
-     * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+     * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
      *
      * @response 204
      */
@@ -723,7 +569,7 @@ class NotificationController extends Controller
         if ($notification) {
             if (($authorisation = Gate::inspect('delete', $notification))->allowed()) {
                 if ($notification->delete()) {
-                    return $this->responseOk(messages: ["notification" => "Le contrat a été supprimé"], status: 204);
+                    return $this->responseOk(messages: ["notification" => "La notification a été supprimé"], status: 204);
                 } else {
                     return $this->responseError(["server" => "Erreur du serveur"], 500);
                 }
@@ -731,7 +577,7 @@ class NotificationController extends Controller
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
         } else {
-            return $this->responseError(["id" => ["Le contrat n'existe pas"]], 404);
+            return $this->responseError(["id" => ["La notification n'existe pas"]], 404);
         }
 
     }
