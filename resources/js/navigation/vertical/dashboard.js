@@ -92,7 +92,7 @@ export default [
           },
           {
             title: 'Sans contrat notarié',
-            // to: 'notification-without-signed-contract',
+            to: 'notification-without-signed-contract',
             action: 'read',
             subject: 'notification',
           },

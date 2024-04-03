@@ -26,7 +26,7 @@ const documentTypeList = {
 
 const {
   data: guarantor,
-} = await useApi(createUrl(`/contract/guarantor/${route.params.id}`, {
+} = await useApi(createUrl(`/guarantor/${route.params.id}`, {
   query: {
   },
 }))

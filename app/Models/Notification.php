@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Notification extends Model
@@ -17,12 +18,15 @@ class Notification extends Model
         'representative_phone_number',
         'head_credit_observation',
         'head_credit_validation',
+        'status',
+        'status_observation',
+        'signed_notification_path',
         'signed_contract_path',
         'signed_promissory_note_path',
         'creator_id',
     ];
 
-    protected $appends = ['observations', 'upload_completed'];
+    protected $appends = ['observations', 'upload_completed', 'guarantors_count'];
 
     public function toArray()
     {
@@ -33,10 +37,14 @@ class Notification extends Model
         return $data;
     }
 
-
     public function verbal_trial(): BelongsTo
     {
         return $this->belongsTo(VerbalTrial::class, 'verbal_trial_id', 'id');
+    }
+
+    public function guarantors(): HasMany
+    {
+        return $this->hasMany(Guarantor::class, "notification_id", "id");
     }
 
     public function c_a_t(): HasOne
@@ -57,8 +65,8 @@ class Notification extends Model
             $observations[] = "Contrat notarié signé manquant";
         if (!$this->signed_promissory_note_path)
             $observations[] = "Billet à ordre signé manquant";
-        $incompleteGuarantor = $this->verbal_trial->guarantors?->filter(function ($item) {
-            return $item['signed_contract_path'] == null || $item['signed_promissory_note_path'] == null;
+        $incompleteGuarantor = $this->guarantors->filter(function ($item) {
+            return $item['signed_promissory_note_path'] == null;
         })->toArray();
         if ($incompleteGuarantor)
             $observations[] = "Billet à ordre manquantes des cautions";
@@ -73,5 +81,10 @@ class Notification extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, "creator_id", "id");
+    }
+
+    public function getGuarantorsCountAttribute()
+    {
+        return count($this->guarantors);
     }
 }

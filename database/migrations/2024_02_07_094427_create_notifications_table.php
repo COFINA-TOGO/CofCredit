@@ -14,8 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->foreignId("verbal_trial_id")->constrained(table: 'verbals_trials', column: 'id')->cascadeOnDelete();
             $table->string("representative_phone_number");
-            $table->string("head_credit_observation")->nullable();
             $table->enum("head_credit_validation", ["waiting", "rejected", "validated"])->default(("waiting"));
+            $table->string("head_credit_observation")->nullable();
+            $table->enum("status", ["waiting", "rejected", "validated"])->default(("waiting"));
+            $table->string("status_observation")->nullable();
             $table->string("signed_notification_path")->nullable();
             $table->string("signed_contract_path")->nullable();
             $table->string("signed_promissory_note_path")->nullable();

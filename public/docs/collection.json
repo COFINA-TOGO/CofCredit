@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "ad90c2c9-5cff-46bc-841d-5302aa732a13",
+        "_postman_id": "c95e6dea-db7f-4d3d-a509-d919ddb4299c",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -683,12 +683,18 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/contract\/guarantor",
+                            "path": "api\/guarantor",
                             "query": [
                                 {
                                     "key": "contract_id",
                                     "value": "",
                                     "description": "Filtrer par ID du contract.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "notification_id",
+                                    "value": "",
+                                    "description": "Filtrer par ID de la notification.",
                                     "disabled": true
                                 },
                                 {
@@ -764,27 +770,9 @@
                                     "disabled": true
                                 },
                                 {
-                                    "key": "with_verbal_trial",
+                                    "key": "with_notification",
                                     "value": "",
-                                    "description": "Afficher le PV.",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "with_type_of_credit",
-                                    "value": "",
-                                    "description": "Afficher le type de cr\u00e9dit.",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "with_type_of_applicant",
-                                    "value": "",
-                                    "description": "Afficher le type de demandeur.",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "with_guarantees",
-                                    "value": "",
-                                    "description": "Afficher les garanties.",
+                                    "description": "Afficher la notification.",
                                     "disabled": true
                                 },
                                 {
@@ -794,7 +782,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/contract\/guarantor?contract_id=&first_name=&last_name=&birth_date=&birth_place=&nationality=&home_address=&type_of_identity_document=&number_of_identity_document=&date_of_issue_of_identity_document=&function=&phone_number=&with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&paginate="
+                            "raw": "{{baseUrl}}\/api\/guarantor?contract_id=&notification_id=&first_name=&last_name=&birth_date=&birth_place=&nationality=&home_address=&type_of_identity_document=&number_of_identity_document=&date_of_issue_of_identity_document=&function=&phone_number=&with_contract=&with_notification=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -824,9 +812,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/contract\/guarantor\/download\/:id",
+                            "path": "api\/guarantor\/download\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/download\/:id",
+                            "raw": "{{baseUrl}}\/api\/guarantor\/download\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -864,9 +852,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/contract\/guarantor\/upload\/:id",
+                            "path": "api\/guarantor\/upload\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/upload\/:id",
+                            "raw": "{{baseUrl}}\/api\/guarantor\/upload\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -904,9 +892,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/contract\/guarantor\/promissory-note\/download\/:id",
+                            "path": "api\/guarantor\/promissory-note\/download\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/promissory-note\/download\/:id",
+                            "raw": "{{baseUrl}}\/api\/guarantor\/promissory-note\/download\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -944,7 +932,7 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/contract\/guarantor\/:id",
+                            "path": "api\/guarantor\/:id",
                             "query": [
                                 {
                                     "key": "with_contract",
@@ -977,7 +965,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/:id?with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=",
+                            "raw": "{{baseUrl}}\/api\/guarantor\/:id?with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=",
                             "variable": [
                                 {
                                     "id": "id",
@@ -1015,9 +1003,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/contract\/guarantor",
+                            "path": "api\/guarantor",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/contract\/guarantor"
+                            "raw": "{{baseUrl}}\/api\/guarantor"
                         },
                         "method": "POST",
                         "header": [
@@ -1032,7 +1020,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"contract_id\":1,\"civility\":\"Mr\",\"first_name\":\"Charles\",\"last_name\":\"Xavier\",\"birth_date\":\"2000-03-03\",\"birth_place\":\"Los Afagnan\",\"nationality\":\"Togolaise\",\"home_address\":\"Adewi\",\"type_of_identity_document\":\"cni\",\"number_of_identity_document\":\"BP785632\",\"date_of_issue_of_identity_document\":\"2022-03-03\",\"function\":\"Agent CIA\",\"phone_number\":\"+01 587-45-632-15\"}"
+                            "raw": "{\"contract_id\":1,\"notification_id\":1,\"civility\":\"Mr\",\"first_name\":\"Charles\",\"last_name\":\"Xavier\",\"birth_date\":\"2000-03-03\",\"birth_place\":\"Los Afagnan\",\"nationality\":\"Togolaise\",\"home_address\":\"Adewi\",\"type_of_identity_document\":\"cni\",\"number_of_identity_document\":\"BP785632\",\"date_of_issue_of_identity_document\":\"2022-03-03\",\"function\":\"Agent CIA\",\"phone_number\":\"+01 587-45-632-15\"}"
                         },
                         "description": ""
                     },
@@ -1050,9 +1038,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/contract\/guarantor\/:id",
+                            "path": "api\/guarantor\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/:id",
+                            "raw": "{{baseUrl}}\/api\/guarantor\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -1075,7 +1063,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"contract_id\":1,\"civility\":\"Mr\",\"first_name\":\"Charles\",\"last_name\":\"Xavier\",\"birth_date\":\"2000-03-03\",\"birth_place\":\"Los Afagnan\",\"nationality\":\"Togolaise\",\"home_address\":\"Adewi\",\"type_of_identity_document\":\"cni\",\"number_of_identity_document\":\"BP785632\",\"date_of_issue_of_identity_document\":\"2022-03-03\",\"function\":\"Agent CIA\",\"phone_number\":\"+01 587-45-632-15\"}"
+                            "raw": "{\"contract_id\":1,\"notification_id\":1,\"civility\":\"Mr\",\"first_name\":\"Charles\",\"last_name\":\"Xavier\",\"birth_date\":\"2000-03-03\",\"birth_place\":\"Los Afagnan\",\"nationality\":\"Togolaise\",\"home_address\":\"Adewi\",\"type_of_identity_document\":\"cni\",\"number_of_identity_document\":\"BP785632\",\"date_of_issue_of_identity_document\":\"2022-03-03\",\"function\":\"Agent CIA\",\"phone_number\":\"+01 587-45-632-15\"}"
                         },
                         "description": ""
                     },
@@ -1093,9 +1081,9 @@
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/contract\/guarantor\/:id",
+                            "path": "api\/guarantor\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/contract\/guarantor\/:id",
+                            "raw": "{{baseUrl}}\/api\/guarantor\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -2079,6 +2067,46 @@
                     ]
                 },
                 {
+                    "name": "Sauvegarde la notification ou proc\u00e8s verbal sign\u00e9",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/notification\/upload\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/notification\/upload\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID de la notification."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
                     "name": "Mettre \u00e0 jour un notification",
                     "request": {
                         "url": {
@@ -2122,13 +2150,13 @@
                     ]
                 },
                 {
-                    "name": "Mettre \u00e0 jour le statut d'une notification",
+                    "name": "Mettre \u00e0 jour le statut de validation head_credit d'une notification",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/notification\/change-status\/:id",
+                            "path": "api\/notification\/change-head-credit-status\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/notification\/change-status\/:id",
+                            "raw": "{{baseUrl}}\/api\/notification\/change-head-credit-status\/:id",
                             "variable": [
                                 {
                                     "id": "id",
@@ -2152,6 +2180,49 @@
                         "body": {
                             "mode": "raw",
                             "raw": "{\"head_credit_validation\":\"rejected\",\"head_credit_observation\":\"Trop bas\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Mettre \u00e0 jour le statut d'un proc\u00e8s verbal",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/notification\/change-status\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/notification\/change-status\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "int             L'ID du proc\u00e8s verbal."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"status\":\"rejected\",\"comment\":\"Trop bas\"}"
                         },
                         "description": ""
                     },
@@ -2679,7 +2750,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "14",
+                                    "value": "13",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -2888,7 +2959,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "12",
+                                    "value": "15",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -3128,7 +3199,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "10",
+                                    "value": "2",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -3636,7 +3707,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "12",
+                                    "value": "13",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

@@ -18,7 +18,7 @@ const contractData = ref({
   representative_birth_place: "Lomé",
   representative_nationality: "Togolaise",
   representative_home_address: "Zip 85",
-  representative_phone_number: "cni",
+  representative_phone_number: "+228 91 91 91 91",
   representative_type_of_identity_document: "passport",
   representative_number_of_identity_document: "2020-01-01",
   representative_date_of_issue_of_identity_document: "2025-01-01",

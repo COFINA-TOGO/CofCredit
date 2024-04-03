@@ -7,7 +7,7 @@ definePage({
   },
 })
 const router = useRouter()
-const route = useRoute('contract-contract_id-guarantor-id')
+const route = useRoute('notification-notification_id-guarantor-id')
 
 const frenchMensuality = {
   "mensual": "Mensuelle",
@@ -26,7 +26,7 @@ const documentTypeList = {
 
 const {
   data: guarantor,
-} = await useApi(createUrl(`/contract/guarantor/${route.params.id}`, {
+} = await useApi(createUrl(`/guarantor/${route.params.id}`, {
   query: {
   },
 }))
@@ -59,14 +59,15 @@ const tableData = [
         <VCard>
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="11">
-              <VBtn :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: route.params.contract_id } }">
+              <VBtn
+                :to="{ name: 'notification-notification_id-guarantor', params: { notification_id: route.params.notification_id } }">
                 <VIcon icon="tabler-arrow-left" />
                 Garants
               </VBtn>
             </VCol>
             <VCol cols="1">
               <VBtn
-                :to="{ name: 'contract-contract_id-guarantor-edit-id', params: { contract_id: route.params.contract_id, id: guarantor.id } }">
+                :to="{ name: 'notification-notification_id-guarantor-edit-id', params: { notification_id: route.params.notification_id, id: guarantor.id } }">
                 Modifier
               </VBtn>
             </VCol>

@@ -13,7 +13,7 @@ import { ref } from 'vue'
 const router = useRouter()
 const route = useRoute('contract-contract_id-guarantor-edit-id')
 
-const { data: guarantorAPI } = await useApi(createUrl(`/contract/guarantor/${route.params.id}`, {
+const { data: guarantorAPI } = await useApi(createUrl(`/guarantor/${route.params.id}`, {
   query: {
     with_contract: 1,
   },
@@ -59,7 +59,7 @@ const refForm = ref()
 const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
     if (valid) {
-      const res = await $api(`/contract/guarantor/${route.params.id}`, {
+      const res = await $api(`/guarantor/${route.params.id}`, {
         method: 'PUT',
         body: {
           contract_id: route.params.contract_id,

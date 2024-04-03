@@ -1,0 +1,17 @@
+avis au niveau de l'upload du contrat au niveau du juridique
+pour tout ce qui est validation il faut mettre un avis
+
+ajouter une option observation au niveau head credit et de l'opération pour permettre un call back en cas de soucis avec le dossier, mais le dossier reste en attente
+
+au niveau du checking post deblocage 
+
+en attente x
+
+
+
+
+Presentation de l'application de gestion de credit
+
+Modules à présenter:
+    Elaboration du contrat(Dossier de crédit) & Edition du CAT
+    -Contrats de crédit avec garantie hypothécaire

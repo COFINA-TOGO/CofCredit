@@ -6,7 +6,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/contract/guarantor
+    uri: api/guarantor
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -28,6 +28,15 @@ endpoints:
       contract_id:
         name: contract_id
         description: 'Filtrer par ID du contract.'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        custom: []
+      notification_id:
+        name: notification_id
+        description: 'Filtrer par ID de la notification.'
         required: false
         example: null
         type: integer
@@ -142,36 +151,9 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
-      with_verbal_trial:
-        name: with_verbal_trial
-        description: 'Afficher le PV.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_type_of_credit:
-        name: with_type_of_credit
-        description: 'Afficher le type de crédit.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_type_of_applicant:
-        name: with_type_of_applicant
-        description: 'Afficher le type de demandeur.'
-        required: false
-        example: 0
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        custom: []
-      with_guarantees:
-        name: with_guarantees
-        description: 'Afficher les garanties.'
+      with_notification:
+        name: with_notification
+        description: 'Afficher la notification.'
         required: false
         example: 0
         type: integer
@@ -189,10 +171,7 @@ endpoints:
         custom: []
     cleanQueryParameters:
       with_contract: 0
-      with_verbal_trial: 0
-      with_type_of_credit: 0
-      with_type_of_applicant: 0
-      with_guarantees: 0
+      with_notification: 0
       paginate: 0
     bodyParameters: []
     cleanBodyParameters: []
@@ -216,7 +195,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/contract/guarantor/download/{id}'
+    uri: 'api/guarantor/download/{id}'
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -268,7 +247,7 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: 'api/contract/guarantor/upload/{id}'
+    uri: 'api/guarantor/upload/{id}'
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -320,7 +299,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/contract/guarantor/promissory-note/download/{id}'
+    uri: 'api/guarantor/promissory-note/download/{id}'
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -372,7 +351,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/contract/guarantor/{id}'
+    uri: 'api/guarantor/{id}'
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -474,7 +453,7 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/contract/guarantor
+    uri: api/guarantor
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -497,7 +476,16 @@ endpoints:
     bodyParameters:
       contract_id:
         name: contract_id
-        description: 'ID du contract.'
+        description: 'ID du contract en cas de contrat normal.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      notification_id:
+        name: notification_id
+        description: 'ID de la notification en cas contrat hypothécaire.'
         required: false
         example: 1
         type: integer
@@ -614,6 +602,7 @@ endpoints:
         custom: []
     cleanBodyParameters:
       contract_id: 1
+      notification_id: 1
       civility: Mr
       first_name: Charles
       last_name: Xavier
@@ -646,7 +635,7 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/contract/guarantor/{id}'
+    uri: 'api/guarantor/{id}'
     metadata:
       groupName: Caution
       groupDescription: |-
@@ -679,7 +668,16 @@ endpoints:
     bodyParameters:
       contract_id:
         name: contract_id
-        description: 'ID du contract.'
+        description: 'ID du contract en cas de contrat normal.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
+      notification_id:
+        name: notification_id
+        description: 'ID de la notification en cas contrat hypothécaire.'
         required: false
         example: 1
         type: integer
@@ -796,6 +794,7 @@ endpoints:
         custom: []
     cleanBodyParameters:
       contract_id: 1
+      notification_id: 1
       civility: Mr
       first_name: Charles
       last_name: Xavier
@@ -828,7 +827,7 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/contract/guarantor/{id}'
+    uri: 'api/guarantor/{id}'
     metadata:
       groupName: Caution
       groupDescription: |-

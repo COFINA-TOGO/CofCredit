@@ -30,23 +30,21 @@ class GuarantorController extends Controller
      * Affiche les cautions
      *
      * @queryParam  contract_id                             int                 Filtrer par ID du contract.                                             No-example
+     * @queryParam  notification_id                         int                 Filtrer par ID de la notification.                                      No-example
      * @queryParam  first_name                              string              Filtrer par prénom de la caution.                                       No-example
      * @queryParam  last_name                               string              Filtrer par nom de la caution.                                          No-example
      * @queryParam  birth_date                              string              Filtrer par date de naissance de la caution.                            No-example
      * @queryParam  birth_place                             string              Filtrer par lieu de naissance de la caution.                            No-example
      * @queryParam  nationality                             string              Filtrer par nationalité de la caution                                   No-example
      * @queryParam  home_address                            string              Filtrer par addresse de domicile de la caution                          No-example
-     * @queryParam  type_of_identity_document               string              Filtrer par type de la pièce d'identité de la caution.                 No-example
-     * @queryParam  number_of_identity_document             string              Filtrer par numéro de la pièce d'identité de la caution.               No-example
+     * @queryParam  type_of_identity_document               string              Filtrer par type de la pièce d'identité de la caution.                  No-example
+     * @queryParam  number_of_identity_document             string              Filtrer par numéro de la pièce d'identité de la caution.                No-example
      * @queryParam  date_of_issue_of_identity_document      int                 Filtrer par date de délivrance de la pièce d'identité de la caution.    No-example
      * @queryParam  function                                int                 Filtrer par fonction de la caution                                      No-example
      * @queryParam  phone_number                            int                 Filtrer par numéro de téléphone de la caution                           No-example
      *
      * @queryParam  with_contract                           int                 Afficher le contrat.                                                    Example: 0
-     * @queryParam  with_verbal_trial                       int                 Afficher le PV.                                                         Example: 0
-     * @queryParam  with_type_of_credit                     int                 Afficher le type de crédit.                                             Example: 0
-     * @queryParam  with_type_of_applicant                  int                 Afficher le type de demandeur.                                          Example: 0
-     * @queryParam  with_guarantees                         int                 Afficher les garanties.                                                 Example: 0
+     * @queryParam  with_notification                       int                 Afficher la notification.                                               Example: 0
      * @queryParam  paginate                                int                 Utiliser la pagination.                                                 Example: 0
      *
      * @response 200
@@ -58,6 +56,7 @@ class GuarantorController extends Controller
             if ($search = $request->search) {
                 $guarantorList
                     ->where('contract_id', 'LIKE', "%$search%")
+                    ->where('notification_id', 'LIKE', "%$search%")
                     ->orWhere('first_name', 'LIKE', "%$search%")
                     ->orWhere('last_name', 'LIKE', "%$search%")
                     ->orWhere('birth_date', 'LIKE', "%$search%")
@@ -72,13 +71,13 @@ class GuarantorController extends Controller
                 ;
             }
 
-            foreach (["contract_id", "first_name", "last_name", "birth_date", "birth_place", "nationality", "home_address", "type_of_identity_document", "number_of_identity_document", "date_of_issue_of_identity_document", "function", "phone_number"] as $filter) {
+            foreach (["contract_id", "notification_id", "first_name", "last_name", "birth_date", "birth_place", "nationality", "home_address", "type_of_identity_document", "number_of_identity_document", "date_of_issue_of_identity_document", "function", "phone_number"] as $filter) {
                 if (isset($request[$filter]) && $request[$filter]) {
                     $guarantorList->where($filter, $request[$filter]);
                 }
             }
 
-            foreach (["with_contract" => "contract", "with_verbal_trial" => "contract.verbal_trial", "with_type_of_credit" => "contract.verbal_trial.type_of_credit", "with_type_of_applicant" => "contract.verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "contract.verbal_trial.guarantees"] as $key => $value) {
+            foreach (["with_contract" => "contract", "with_notification" => "notification"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
                     $guarantorList->with($value);
                 }
@@ -270,7 +269,8 @@ class GuarantorController extends Controller
     /**
      * Créer une nouvelLa caution
      *
-     * @bodyParam  contract_id                              int                 ID du contract.                                                         Example: 1
+     * @bodyParam  contract_id                              int                 ID du contract en cas de contrat normal.                                Example: 1
+     * @bodyParam  notification_id                          int                 ID de la notification en cas contrat hypothécaire.                      Example: 1
      * @bodyParam  civility                                 string              Civilité de la caution.                                                 Example: Mr
      * @bodyParam  first_name                               string              Prénom de la caution.                                                   Example: Charles
      * @bodyParam  last_name                                string              Nom de la caution.                                                      Example: Xavier
@@ -290,8 +290,15 @@ class GuarantorController extends Controller
     {
         if (($authorisation = Gate::inspect('create', Guarantor::class))->allowed()) {
             $requestData = $request->all();
+            $validator = Validator::make($requestData, ["contract_id" => "required|exists:contracts,id"]);
+            if ($validator->fails()) {
+                $validator = Validator::make($requestData, ["notification_id" => "required|exists:notifications,id"]);
+                if ($validator->fails()) {
+                    return $this->responseError(["error" => ["Le contrat ou la notification est manquante"]], 400);
+                }
+            }
+
             $validator = Validator::make($requestData, [
-                'contract_id' => "required|exists:contracts,id",
                 'civility' => 'required|in:Mr,Mme,Mlle',
                 'first_name' => 'required|min:2',
                 'last_name' => 'required|min:2',
@@ -324,7 +331,8 @@ class GuarantorController extends Controller
      *
      * @urlParam    id                                      int     required    L'ID du caution.                                                        Example: 1
      *
-     * @bodyParam  contract_id                              int                 ID du contract.                                                         Example: 1
+     * @bodyParam  contract_id                              int                 ID du contract en cas de contrat normal.                                Example: 1
+     * @bodyParam  notification_id                          int                 ID de la notification en cas contrat hypothécaire.                      Example: 1
      * @bodyParam  civility                                 string              Civilité de la caution.                                                 Example: Mr
      * @bodyParam  first_name                               string              Prénom de la caution.                                                   Example: Charles
      * @bodyParam  last_name                                string              Nom de la caution.                                                      Example: Xavier
@@ -347,8 +355,14 @@ class GuarantorController extends Controller
         if ($guarantor) {
             if (($authorisation = Gate::inspect('update', $guarantor))->allowed()) {
                 $requestData = $request->all();
+                $validator = Validator::make($requestData, ["contract_id" => "required|exists:contracts,id"]);
+                if ($validator->fails()) {
+                    $validator = Validator::make($requestData, ["notification_id" => "required|exists:notifications,id"]);
+                    if ($validator->fails()) {
+                        return $this->responseError(["error" => ["Le contrat ou la notification est manquante"]], 400);
+                    }
+                }
                 $validator = Validator::make($requestData, [
-                    'contract_id' => "required|exists:contracts,id",
                     'civility' => 'required|in:Mr,Mme,Mlle',
                     'first_name' => 'required|min:2',
                     'last_name' => 'required|min:2',

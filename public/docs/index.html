@@ -125,29 +125,29 @@
                     <a href="#caution">Caution</a>
                 </li>
                                     <ul id="tocify-subheader-caution" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="caution-GETapi-contract-guarantor">
-                                <a href="#caution-GETapi-contract-guarantor">Affiche les cautions</a>
+                                                    <li class="tocify-item level-2" data-unique="caution-GETapi-guarantor">
+                                <a href="#caution-GETapi-guarantor">Affiche les cautions</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="caution-GETapi-contract-guarantor-download--id-">
-                                <a href="#caution-GETapi-contract-guarantor-download--id-">Télécharge la version word d'une caution</a>
+                                                                                <li class="tocify-item level-2" data-unique="caution-GETapi-guarantor-download--id-">
+                                <a href="#caution-GETapi-guarantor-download--id-">Télécharge la version word d'une caution</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="caution-POSTapi-contract-guarantor-upload--id-">
-                                <a href="#caution-POSTapi-contract-guarantor-upload--id-">Sauvegarde le contrat ou procès verbal signé</a>
+                                                                                <li class="tocify-item level-2" data-unique="caution-POSTapi-guarantor-upload--id-">
+                                <a href="#caution-POSTapi-guarantor-upload--id-">Sauvegarde le contrat ou procès verbal signé</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="caution-GETapi-contract-guarantor-promissory-note-download--id-">
-                                <a href="#caution-GETapi-contract-guarantor-promissory-note-download--id-">Télécharge le billet à ordre d'une caution</a>
+                                                                                <li class="tocify-item level-2" data-unique="caution-GETapi-guarantor-promissory-note-download--id-">
+                                <a href="#caution-GETapi-guarantor-promissory-note-download--id-">Télécharge le billet à ordre d'une caution</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="caution-GETapi-contract-guarantor--id-">
-                                <a href="#caution-GETapi-contract-guarantor--id-">Affiche une caution</a>
+                                                                                <li class="tocify-item level-2" data-unique="caution-GETapi-guarantor--id-">
+                                <a href="#caution-GETapi-guarantor--id-">Affiche une caution</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="caution-POSTapi-contract-guarantor">
-                                <a href="#caution-POSTapi-contract-guarantor">Créer une nouvelLa caution</a>
+                                                                                <li class="tocify-item level-2" data-unique="caution-POSTapi-guarantor">
+                                <a href="#caution-POSTapi-guarantor">Créer une nouvelLa caution</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="caution-PUTapi-contract-guarantor--id-">
-                                <a href="#caution-PUTapi-contract-guarantor--id-">Mettre à jour une caution</a>
+                                                                                <li class="tocify-item level-2" data-unique="caution-PUTapi-guarantor--id-">
+                                <a href="#caution-PUTapi-guarantor--id-">Mettre à jour une caution</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="caution-DELETEapi-contract-guarantor--id-">
-                                <a href="#caution-DELETEapi-contract-guarantor--id-">Supprime une caution</a>
+                                                                                <li class="tocify-item level-2" data-unique="caution-DELETEapi-guarantor--id-">
+                                <a href="#caution-DELETEapi-guarantor--id-">Supprime une caution</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -208,11 +208,17 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-notification">
                                 <a href="#endpoints-POSTapi-notification">Créer un nouveau notification</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-notification-upload--id-">
+                                <a href="#endpoints-POSTapi-notification-upload--id-">Sauvegarde la notification ou procès verbal signé</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-PUTapi-notification--id-">
                                 <a href="#endpoints-PUTapi-notification--id-">Mettre à jour un notification</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-notification-change-head-credit-status--id-">
+                                <a href="#endpoints-PUTapi-notification-change-head-credit-status--id-">Mettre à jour le statut de validation head_credit d'une notification</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-PUTapi-notification-change-status--id-">
-                                <a href="#endpoints-PUTapi-notification-change-status--id-">Mettre à jour le statut d'une notification</a>
+                                <a href="#endpoints-PUTapi-notification-change-status--id-">Mettre à jour le statut d'un procès verbal</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-notification--id-">
                                 <a href="#endpoints-DELETEapi-notification--id-">Supprime un notification</a>
@@ -2835,7 +2841,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
     <p>EndPoints pour gérer les cautions</p>
 
-                                <h2 id="caution-GETapi-contract-guarantor">Affiche les cautions</h2>
+                                <h2 id="caution-GETapi-guarantor">Affiche les cautions</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -2843,13 +2849,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-GETapi-contract-guarantor">
+<span id="example-requests-GETapi-guarantor">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract/guarantor?with_contract=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/guarantor?with_contract=0&amp;with_notification=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -2857,15 +2863,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/contract/guarantor"
+    "http://cofcredit.cofina.localhost/api/guarantor"
 );
 
 const params = {
     "with_contract": "0",
-    "with_verbal_trial": "0",
-    "with_type_of_credit": "0",
-    "with_type_of_applicant": "0",
-    "with_guarantees": "0",
+    "with_notification": "0",
     "paginate": "0",
 };
 Object.keys(params)
@@ -2884,7 +2887,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-GETapi-contract-guarantor">
+<span id="example-responses-GETapi-guarantor">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
@@ -2893,43 +2896,43 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{}</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-contract-guarantor" hidden>
+<span id="execution-results-GETapi-guarantor" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-contract-guarantor"></span>:
+                id="execution-response-status-GETapi-guarantor"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-contract-guarantor"
+    <pre class="json"><code id="execution-response-content-GETapi-guarantor"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-contract-guarantor" hidden>
+<span id="execution-error-GETapi-guarantor" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-contract-guarantor">
+    <pre><code id="execution-error-message-GETapi-guarantor">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-contract-guarantor" data-method="GET"
-      data-path="api/contract/guarantor"
+<form id="form-GETapi-guarantor" data-method="GET"
+      data-path="api/guarantor"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-contract-guarantor', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-guarantor', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-contract-guarantor"
-                    onclick="tryItOut('GETapi-contract-guarantor');">Try it out ⚡
+                    id="btn-tryout-GETapi-guarantor"
+                    onclick="tryItOut('GETapi-guarantor');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-contract-guarantor"
-                    onclick="cancelTryOut('GETapi-contract-guarantor');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-guarantor"
+                    onclick="cancelTryOut('GETapi-guarantor');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-contract-guarantor"
+                    id="btn-executetryout-GETapi-guarantor"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -2937,7 +2940,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/contract/guarantor</code></b>
+            <b><code>api/guarantor</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -2945,7 +2948,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-contract-guarantor"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-guarantor"
                value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
                data-component="header">
     <br>
@@ -2956,7 +2959,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-contract-guarantor"
+                              name="Content-Type"                data-endpoint="GETapi-guarantor"
                value="application/json"
                data-component="header">
     <br>
@@ -2967,7 +2970,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-contract-guarantor"
+                              name="Accept"                data-endpoint="GETapi-guarantor"
                value="application/json"
                data-component="header">
     <br>
@@ -2979,18 +2982,29 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="contract_id"                data-endpoint="GETapi-contract-guarantor"
+               step="any"               name="contract_id"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
 <p>Filtrer par ID du contract.</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>notification_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="notification_id"                data-endpoint="GETapi-guarantor"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par ID de la notification.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>first_name</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="first_name"                data-endpoint="GETapi-contract-guarantor"
+                              name="first_name"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
@@ -3001,7 +3015,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="last_name"                data-endpoint="GETapi-contract-guarantor"
+                              name="last_name"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
@@ -3012,7 +3026,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="birth_date"                data-endpoint="GETapi-contract-guarantor"
+                              name="birth_date"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
@@ -3023,7 +3037,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="birth_place"                data-endpoint="GETapi-contract-guarantor"
+                              name="birth_place"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
@@ -3034,7 +3048,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="nationality"                data-endpoint="GETapi-contract-guarantor"
+                              name="nationality"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
@@ -3045,7 +3059,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="home_address"                data-endpoint="GETapi-contract-guarantor"
+                              name="home_address"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
@@ -3056,7 +3070,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="type_of_identity_document"                data-endpoint="GETapi-contract-guarantor"
+                              name="type_of_identity_document"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
@@ -3067,7 +3081,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="number_of_identity_document"                data-endpoint="GETapi-contract-guarantor"
+                              name="number_of_identity_document"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
@@ -3078,7 +3092,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="date_of_issue_of_identity_document"                data-endpoint="GETapi-contract-guarantor"
+               step="any"               name="date_of_issue_of_identity_document"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
@@ -3089,7 +3103,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="function"                data-endpoint="GETapi-contract-guarantor"
+               step="any"               name="function"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
@@ -3100,7 +3114,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="phone_number"                data-endpoint="GETapi-contract-guarantor"
+               step="any"               name="phone_number"                data-endpoint="GETapi-guarantor"
                value=""
                data-component="query">
     <br>
@@ -3111,62 +3125,29 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="with_contract"                data-endpoint="GETapi-contract-guarantor"
+               step="any"               name="with_contract"                data-endpoint="GETapi-guarantor"
                value="0"
                data-component="query">
     <br>
 <p>Afficher le contrat. Example: <code>0</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>with_verbal_trial</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>with_notification</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="with_verbal_trial"                data-endpoint="GETapi-contract-guarantor"
+               step="any"               name="with_notification"                data-endpoint="GETapi-guarantor"
                value="0"
                data-component="query">
     <br>
-<p>Afficher le PV. Example: <code>0</code></p>
-            </div>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>with_type_of_credit</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="with_type_of_credit"                data-endpoint="GETapi-contract-guarantor"
-               value="0"
-               data-component="query">
-    <br>
-<p>Afficher le type de crédit. Example: <code>0</code></p>
-            </div>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>with_type_of_applicant</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="with_type_of_applicant"                data-endpoint="GETapi-contract-guarantor"
-               value="0"
-               data-component="query">
-    <br>
-<p>Afficher le type de demandeur. Example: <code>0</code></p>
-            </div>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>with_guarantees</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="with_guarantees"                data-endpoint="GETapi-contract-guarantor"
-               value="0"
-               data-component="query">
-    <br>
-<p>Afficher les garanties. Example: <code>0</code></p>
+<p>Afficher la notification. Example: <code>0</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>paginate</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="paginate"                data-endpoint="GETapi-contract-guarantor"
+               step="any"               name="paginate"                data-endpoint="GETapi-guarantor"
                value="0"
                data-component="query">
     <br>
@@ -3174,7 +3155,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                 </form>
 
-                    <h2 id="caution-GETapi-contract-guarantor-download--id-">Télécharge la version word d&#039;une caution</h2>
+                    <h2 id="caution-GETapi-guarantor-download--id-">Télécharge la version word d&#039;une caution</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -3182,13 +3163,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-GETapi-contract-guarantor-download--id-">
+<span id="example-requests-GETapi-guarantor-download--id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract/guarantor/download/1" \
+    --get "http://cofcredit.cofina.localhost/api/guarantor/download/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3196,7 +3177,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/contract/guarantor/download/1"
+    "http://cofcredit.cofina.localhost/api/guarantor/download/1"
 );
 
 const headers = {
@@ -3212,7 +3193,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-GETapi-contract-guarantor-download--id-">
+<span id="example-responses-GETapi-guarantor-download--id-">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
@@ -3221,43 +3202,43 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{}</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-contract-guarantor-download--id-" hidden>
+<span id="execution-results-GETapi-guarantor-download--id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-contract-guarantor-download--id-"></span>:
+                id="execution-response-status-GETapi-guarantor-download--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-contract-guarantor-download--id-"
+    <pre class="json"><code id="execution-response-content-GETapi-guarantor-download--id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-contract-guarantor-download--id-" hidden>
+<span id="execution-error-GETapi-guarantor-download--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-contract-guarantor-download--id-">
+    <pre><code id="execution-error-message-GETapi-guarantor-download--id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-contract-guarantor-download--id-" data-method="GET"
-      data-path="api/contract/guarantor/download/{id}"
+<form id="form-GETapi-guarantor-download--id-" data-method="GET"
+      data-path="api/guarantor/download/{id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-contract-guarantor-download--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-guarantor-download--id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-contract-guarantor-download--id-"
-                    onclick="tryItOut('GETapi-contract-guarantor-download--id-');">Try it out ⚡
+                    id="btn-tryout-GETapi-guarantor-download--id-"
+                    onclick="tryItOut('GETapi-guarantor-download--id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-contract-guarantor-download--id-"
-                    onclick="cancelTryOut('GETapi-contract-guarantor-download--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-guarantor-download--id-"
+                    onclick="cancelTryOut('GETapi-guarantor-download--id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-contract-guarantor-download--id-"
+                    id="btn-executetryout-GETapi-guarantor-download--id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -3265,7 +3246,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/contract/guarantor/download/{id}</code></b>
+            <b><code>api/guarantor/download/{id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -3273,7 +3254,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-contract-guarantor-download--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-guarantor-download--id-"
                value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
                data-component="header">
     <br>
@@ -3284,7 +3265,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-contract-guarantor-download--id-"
+                              name="Content-Type"                data-endpoint="GETapi-guarantor-download--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -3295,7 +3276,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-contract-guarantor-download--id-"
+                              name="Accept"                data-endpoint="GETapi-guarantor-download--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -3307,7 +3288,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-contract-guarantor-download--id-"
+               step="any"               name="id"                data-endpoint="GETapi-guarantor-download--id-"
                value="1"
                data-component="url">
     <br>
@@ -3315,7 +3296,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="caution-POSTapi-contract-guarantor-upload--id-">Sauvegarde le contrat ou procès verbal signé</h2>
+                    <h2 id="caution-POSTapi-guarantor-upload--id-">Sauvegarde le contrat ou procès verbal signé</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -3323,13 +3304,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-POSTapi-contract-guarantor-upload--id-">
+<span id="example-requests-POSTapi-guarantor-upload--id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://cofcredit.cofina.localhost/api/contract/guarantor/upload/1" \
+    "http://cofcredit.cofina.localhost/api/guarantor/upload/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3337,7 +3318,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/contract/guarantor/upload/1"
+    "http://cofcredit.cofina.localhost/api/guarantor/upload/1"
 );
 
 const headers = {
@@ -3353,7 +3334,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-POSTapi-contract-guarantor-upload--id-">
+<span id="example-responses-POSTapi-guarantor-upload--id-">
             <blockquote>
             <p>Example response (204):</p>
         </blockquote>
@@ -3361,43 +3342,43 @@ fetch(url, {
 <code>Empty response</code>
  </pre>
     </span>
-<span id="execution-results-POSTapi-contract-guarantor-upload--id-" hidden>
+<span id="execution-results-POSTapi-guarantor-upload--id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-POSTapi-contract-guarantor-upload--id-"></span>:
+                id="execution-response-status-POSTapi-guarantor-upload--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-contract-guarantor-upload--id-"
+    <pre class="json"><code id="execution-response-content-POSTapi-guarantor-upload--id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-POSTapi-contract-guarantor-upload--id-" hidden>
+<span id="execution-error-POSTapi-guarantor-upload--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-contract-guarantor-upload--id-">
+    <pre><code id="execution-error-message-POSTapi-guarantor-upload--id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-POSTapi-contract-guarantor-upload--id-" data-method="POST"
-      data-path="api/contract/guarantor/upload/{id}"
+<form id="form-POSTapi-guarantor-upload--id-" data-method="POST"
+      data-path="api/guarantor/upload/{id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-contract-guarantor-upload--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-guarantor-upload--id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-contract-guarantor-upload--id-"
-                    onclick="tryItOut('POSTapi-contract-guarantor-upload--id-');">Try it out ⚡
+                    id="btn-tryout-POSTapi-guarantor-upload--id-"
+                    onclick="tryItOut('POSTapi-guarantor-upload--id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-contract-guarantor-upload--id-"
-                    onclick="cancelTryOut('POSTapi-contract-guarantor-upload--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-POSTapi-guarantor-upload--id-"
+                    onclick="cancelTryOut('POSTapi-guarantor-upload--id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-contract-guarantor-upload--id-"
+                    id="btn-executetryout-POSTapi-guarantor-upload--id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -3405,7 +3386,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-black">POST</small>
-            <b><code>api/contract/guarantor/upload/{id}</code></b>
+            <b><code>api/guarantor/upload/{id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -3413,7 +3394,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-contract-guarantor-upload--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-guarantor-upload--id-"
                value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
                data-component="header">
     <br>
@@ -3424,7 +3405,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-contract-guarantor-upload--id-"
+                              name="Content-Type"                data-endpoint="POSTapi-guarantor-upload--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -3435,7 +3416,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-contract-guarantor-upload--id-"
+                              name="Accept"                data-endpoint="POSTapi-guarantor-upload--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -3447,7 +3428,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="POSTapi-contract-guarantor-upload--id-"
+               step="any"               name="id"                data-endpoint="POSTapi-guarantor-upload--id-"
                value="1"
                data-component="url">
     <br>
@@ -3455,7 +3436,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="caution-GETapi-contract-guarantor-promissory-note-download--id-">Télécharge le billet à ordre d&#039;une caution</h2>
+                    <h2 id="caution-GETapi-guarantor-promissory-note-download--id-">Télécharge le billet à ordre d&#039;une caution</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -3463,13 +3444,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-GETapi-contract-guarantor-promissory-note-download--id-">
+<span id="example-requests-GETapi-guarantor-promissory-note-download--id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract/guarantor/promissory-note/download/1" \
+    --get "http://cofcredit.cofina.localhost/api/guarantor/promissory-note/download/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3477,7 +3458,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/contract/guarantor/promissory-note/download/1"
+    "http://cofcredit.cofina.localhost/api/guarantor/promissory-note/download/1"
 );
 
 const headers = {
@@ -3493,7 +3474,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-GETapi-contract-guarantor-promissory-note-download--id-">
+<span id="example-responses-GETapi-guarantor-promissory-note-download--id-">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
@@ -3502,43 +3483,43 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{}</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-contract-guarantor-promissory-note-download--id-" hidden>
+<span id="execution-results-GETapi-guarantor-promissory-note-download--id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-contract-guarantor-promissory-note-download--id-"></span>:
+                id="execution-response-status-GETapi-guarantor-promissory-note-download--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-contract-guarantor-promissory-note-download--id-"
+    <pre class="json"><code id="execution-response-content-GETapi-guarantor-promissory-note-download--id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-contract-guarantor-promissory-note-download--id-" hidden>
+<span id="execution-error-GETapi-guarantor-promissory-note-download--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-contract-guarantor-promissory-note-download--id-">
+    <pre><code id="execution-error-message-GETapi-guarantor-promissory-note-download--id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-contract-guarantor-promissory-note-download--id-" data-method="GET"
-      data-path="api/contract/guarantor/promissory-note/download/{id}"
+<form id="form-GETapi-guarantor-promissory-note-download--id-" data-method="GET"
+      data-path="api/guarantor/promissory-note/download/{id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-contract-guarantor-promissory-note-download--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-guarantor-promissory-note-download--id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-contract-guarantor-promissory-note-download--id-"
-                    onclick="tryItOut('GETapi-contract-guarantor-promissory-note-download--id-');">Try it out ⚡
+                    id="btn-tryout-GETapi-guarantor-promissory-note-download--id-"
+                    onclick="tryItOut('GETapi-guarantor-promissory-note-download--id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-contract-guarantor-promissory-note-download--id-"
-                    onclick="cancelTryOut('GETapi-contract-guarantor-promissory-note-download--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-guarantor-promissory-note-download--id-"
+                    onclick="cancelTryOut('GETapi-guarantor-promissory-note-download--id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-contract-guarantor-promissory-note-download--id-"
+                    id="btn-executetryout-GETapi-guarantor-promissory-note-download--id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -3546,7 +3527,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/contract/guarantor/promissory-note/download/{id}</code></b>
+            <b><code>api/guarantor/promissory-note/download/{id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -3554,7 +3535,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-contract-guarantor-promissory-note-download--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-guarantor-promissory-note-download--id-"
                value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
                data-component="header">
     <br>
@@ -3565,7 +3546,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-contract-guarantor-promissory-note-download--id-"
+                              name="Content-Type"                data-endpoint="GETapi-guarantor-promissory-note-download--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -3576,7 +3557,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-contract-guarantor-promissory-note-download--id-"
+                              name="Accept"                data-endpoint="GETapi-guarantor-promissory-note-download--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -3588,7 +3569,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-contract-guarantor-promissory-note-download--id-"
+               step="any"               name="id"                data-endpoint="GETapi-guarantor-promissory-note-download--id-"
                value="1"
                data-component="url">
     <br>
@@ -3596,7 +3577,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="caution-GETapi-contract-guarantor--id-">Affiche une caution</h2>
+                    <h2 id="caution-GETapi-guarantor--id-">Affiche une caution</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -3604,13 +3585,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-GETapi-contract-guarantor--id-">
+<span id="example-requests-GETapi-guarantor--id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract/guarantor/1?with_contract=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0" \
+    --get "http://cofcredit.cofina.localhost/api/guarantor/1?with_contract=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_guarantees=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3618,7 +3599,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/contract/guarantor/1"
+    "http://cofcredit.cofina.localhost/api/guarantor/1"
 );
 
 const params = {
@@ -3644,7 +3625,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-GETapi-contract-guarantor--id-">
+<span id="example-responses-GETapi-guarantor--id-">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
@@ -3653,43 +3634,43 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{}</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-contract-guarantor--id-" hidden>
+<span id="execution-results-GETapi-guarantor--id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-contract-guarantor--id-"></span>:
+                id="execution-response-status-GETapi-guarantor--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-contract-guarantor--id-"
+    <pre class="json"><code id="execution-response-content-GETapi-guarantor--id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-contract-guarantor--id-" hidden>
+<span id="execution-error-GETapi-guarantor--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-contract-guarantor--id-">
+    <pre><code id="execution-error-message-GETapi-guarantor--id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-contract-guarantor--id-" data-method="GET"
-      data-path="api/contract/guarantor/{id}"
+<form id="form-GETapi-guarantor--id-" data-method="GET"
+      data-path="api/guarantor/{id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-contract-guarantor--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-guarantor--id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-contract-guarantor--id-"
-                    onclick="tryItOut('GETapi-contract-guarantor--id-');">Try it out ⚡
+                    id="btn-tryout-GETapi-guarantor--id-"
+                    onclick="tryItOut('GETapi-guarantor--id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-contract-guarantor--id-"
-                    onclick="cancelTryOut('GETapi-contract-guarantor--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-guarantor--id-"
+                    onclick="cancelTryOut('GETapi-guarantor--id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-contract-guarantor--id-"
+                    id="btn-executetryout-GETapi-guarantor--id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -3697,7 +3678,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/contract/guarantor/{id}</code></b>
+            <b><code>api/guarantor/{id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -3705,7 +3686,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-contract-guarantor--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-guarantor--id-"
                value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
                data-component="header">
     <br>
@@ -3716,7 +3697,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-contract-guarantor--id-"
+                              name="Content-Type"                data-endpoint="GETapi-guarantor--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -3727,7 +3708,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-contract-guarantor--id-"
+                              name="Accept"                data-endpoint="GETapi-guarantor--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -3739,7 +3720,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-contract-guarantor--id-"
+               step="any"               name="id"                data-endpoint="GETapi-guarantor--id-"
                value="1"
                data-component="url">
     <br>
@@ -3751,7 +3732,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="with_contract"                data-endpoint="GETapi-contract-guarantor--id-"
+               step="any"               name="with_contract"                data-endpoint="GETapi-guarantor--id-"
                value="0"
                data-component="query">
     <br>
@@ -3762,7 +3743,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="with_verbal_trial"                data-endpoint="GETapi-contract-guarantor--id-"
+               step="any"               name="with_verbal_trial"                data-endpoint="GETapi-guarantor--id-"
                value="0"
                data-component="query">
     <br>
@@ -3773,7 +3754,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="with_type_of_credit"                data-endpoint="GETapi-contract-guarantor--id-"
+               step="any"               name="with_type_of_credit"                data-endpoint="GETapi-guarantor--id-"
                value="0"
                data-component="query">
     <br>
@@ -3784,7 +3765,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="with_type_of_applicant"                data-endpoint="GETapi-contract-guarantor--id-"
+               step="any"               name="with_type_of_applicant"                data-endpoint="GETapi-guarantor--id-"
                value="0"
                data-component="query">
     <br>
@@ -3795,7 +3776,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="with_guarantees"                data-endpoint="GETapi-contract-guarantor--id-"
+               step="any"               name="with_guarantees"                data-endpoint="GETapi-guarantor--id-"
                value="0"
                data-component="query">
     <br>
@@ -3803,7 +3784,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                 </form>
 
-                    <h2 id="caution-POSTapi-contract-guarantor">Créer une nouvelLa caution</h2>
+                    <h2 id="caution-POSTapi-guarantor">Créer une nouvelLa caution</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -3811,18 +3792,19 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-POSTapi-contract-guarantor">
+<span id="example-requests-POSTapi-guarantor">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://cofcredit.cofina.localhost/api/contract/guarantor" \
+    "http://cofcredit.cofina.localhost/api/guarantor" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
     \"contract_id\": 1,
+    \"notification_id\": 1,
     \"civility\": \"Mr\",
     \"first_name\": \"Charles\",
     \"last_name\": \"Xavier\",
@@ -3841,7 +3823,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/contract/guarantor"
+    "http://cofcredit.cofina.localhost/api/guarantor"
 );
 
 const headers = {
@@ -3852,6 +3834,7 @@ const headers = {
 
 let body = {
     "contract_id": 1,
+    "notification_id": 1,
     "civility": "Mr",
     "first_name": "Charles",
     "last_name": "Xavier",
@@ -3874,7 +3857,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-POSTapi-contract-guarantor">
+<span id="example-responses-POSTapi-guarantor">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
@@ -3883,43 +3866,43 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{}</code>
  </pre>
     </span>
-<span id="execution-results-POSTapi-contract-guarantor" hidden>
+<span id="execution-results-POSTapi-guarantor" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-POSTapi-contract-guarantor"></span>:
+                id="execution-response-status-POSTapi-guarantor"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-contract-guarantor"
+    <pre class="json"><code id="execution-response-content-POSTapi-guarantor"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-POSTapi-contract-guarantor" hidden>
+<span id="execution-error-POSTapi-guarantor" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-contract-guarantor">
+    <pre><code id="execution-error-message-POSTapi-guarantor">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-POSTapi-contract-guarantor" data-method="POST"
-      data-path="api/contract/guarantor"
+<form id="form-POSTapi-guarantor" data-method="POST"
+      data-path="api/guarantor"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-contract-guarantor', this);">
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-guarantor', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-contract-guarantor"
-                    onclick="tryItOut('POSTapi-contract-guarantor');">Try it out ⚡
+                    id="btn-tryout-POSTapi-guarantor"
+                    onclick="tryItOut('POSTapi-guarantor');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-contract-guarantor"
-                    onclick="cancelTryOut('POSTapi-contract-guarantor');" hidden>Cancel 🛑
+                    id="btn-canceltryout-POSTapi-guarantor"
+                    onclick="cancelTryOut('POSTapi-guarantor');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-contract-guarantor"
+                    id="btn-executetryout-POSTapi-guarantor"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -3927,7 +3910,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-black">POST</small>
-            <b><code>api/contract/guarantor</code></b>
+            <b><code>api/guarantor</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -3935,7 +3918,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-contract-guarantor"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-guarantor"
                value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
                data-component="header">
     <br>
@@ -3946,7 +3929,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-contract-guarantor"
+                              name="Content-Type"                data-endpoint="POSTapi-guarantor"
                value="application/json"
                data-component="header">
     <br>
@@ -3957,7 +3940,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-contract-guarantor"
+                              name="Accept"                data-endpoint="POSTapi-guarantor"
                value="application/json"
                data-component="header">
     <br>
@@ -3969,18 +3952,29 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="contract_id"                data-endpoint="POSTapi-contract-guarantor"
+               step="any"               name="contract_id"                data-endpoint="POSTapi-guarantor"
                value="1"
                data-component="body">
     <br>
-<p>ID du contract. Example: <code>1</code></p>
+<p>ID du contract en cas de contrat normal. Example: <code>1</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>notification_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="notification_id"                data-endpoint="POSTapi-guarantor"
+               value="1"
+               data-component="body">
+    <br>
+<p>ID de la notification en cas contrat hypothécaire. Example: <code>1</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>civility</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="civility"                data-endpoint="POSTapi-contract-guarantor"
+                              name="civility"                data-endpoint="POSTapi-guarantor"
                value="Mr"
                data-component="body">
     <br>
@@ -3991,7 +3985,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="first_name"                data-endpoint="POSTapi-contract-guarantor"
+                              name="first_name"                data-endpoint="POSTapi-guarantor"
                value="Charles"
                data-component="body">
     <br>
@@ -4002,7 +3996,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="last_name"                data-endpoint="POSTapi-contract-guarantor"
+                              name="last_name"                data-endpoint="POSTapi-guarantor"
                value="Xavier"
                data-component="body">
     <br>
@@ -4013,7 +4007,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="birth_date"                data-endpoint="POSTapi-contract-guarantor"
+                              name="birth_date"                data-endpoint="POSTapi-guarantor"
                value="2000-03-03"
                data-component="body">
     <br>
@@ -4024,7 +4018,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="birth_place"                data-endpoint="POSTapi-contract-guarantor"
+                              name="birth_place"                data-endpoint="POSTapi-guarantor"
                value="Los Afagnan"
                data-component="body">
     <br>
@@ -4035,7 +4029,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="nationality"                data-endpoint="POSTapi-contract-guarantor"
+                              name="nationality"                data-endpoint="POSTapi-guarantor"
                value="Togolaise"
                data-component="body">
     <br>
@@ -4046,7 +4040,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="home_address"                data-endpoint="POSTapi-contract-guarantor"
+                              name="home_address"                data-endpoint="POSTapi-guarantor"
                value="Adewi"
                data-component="body">
     <br>
@@ -4057,7 +4051,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="type_of_identity_document"                data-endpoint="POSTapi-contract-guarantor"
+                              name="type_of_identity_document"                data-endpoint="POSTapi-guarantor"
                value="cni"
                data-component="body">
     <br>
@@ -4068,7 +4062,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="number_of_identity_document"                data-endpoint="POSTapi-contract-guarantor"
+                              name="number_of_identity_document"                data-endpoint="POSTapi-guarantor"
                value="BP785632"
                data-component="body">
     <br>
@@ -4079,7 +4073,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="date_of_issue_of_identity_document"                data-endpoint="POSTapi-contract-guarantor"
+                              name="date_of_issue_of_identity_document"                data-endpoint="POSTapi-guarantor"
                value="2022-03-03"
                data-component="body">
     <br>
@@ -4090,7 +4084,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="function"                data-endpoint="POSTapi-contract-guarantor"
+                              name="function"                data-endpoint="POSTapi-guarantor"
                value="Agent CIA"
                data-component="body">
     <br>
@@ -4101,7 +4095,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="phone_number"                data-endpoint="POSTapi-contract-guarantor"
+                              name="phone_number"                data-endpoint="POSTapi-guarantor"
                value="+01 587-45-632-15"
                data-component="body">
     <br>
@@ -4109,7 +4103,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="caution-PUTapi-contract-guarantor--id-">Mettre à jour une caution</h2>
+                    <h2 id="caution-PUTapi-guarantor--id-">Mettre à jour une caution</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -4117,18 +4111,19 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-PUTapi-contract-guarantor--id-">
+<span id="example-requests-PUTapi-guarantor--id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://cofcredit.cofina.localhost/api/contract/guarantor/1" \
+    "http://cofcredit.cofina.localhost/api/guarantor/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
     \"contract_id\": 1,
+    \"notification_id\": 1,
     \"civility\": \"Mr\",
     \"first_name\": \"Charles\",
     \"last_name\": \"Xavier\",
@@ -4147,7 +4142,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/contract/guarantor/1"
+    "http://cofcredit.cofina.localhost/api/guarantor/1"
 );
 
 const headers = {
@@ -4158,6 +4153,7 @@ const headers = {
 
 let body = {
     "contract_id": 1,
+    "notification_id": 1,
     "civility": "Mr",
     "first_name": "Charles",
     "last_name": "Xavier",
@@ -4180,7 +4176,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-PUTapi-contract-guarantor--id-">
+<span id="example-responses-PUTapi-guarantor--id-">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
@@ -4189,43 +4185,43 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{}</code>
  </pre>
     </span>
-<span id="execution-results-PUTapi-contract-guarantor--id-" hidden>
+<span id="execution-results-PUTapi-guarantor--id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-PUTapi-contract-guarantor--id-"></span>:
+                id="execution-response-status-PUTapi-guarantor--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-PUTapi-contract-guarantor--id-"
+    <pre class="json"><code id="execution-response-content-PUTapi-guarantor--id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-PUTapi-contract-guarantor--id-" hidden>
+<span id="execution-error-PUTapi-guarantor--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-PUTapi-contract-guarantor--id-">
+    <pre><code id="execution-error-message-PUTapi-guarantor--id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-PUTapi-contract-guarantor--id-" data-method="PUT"
-      data-path="api/contract/guarantor/{id}"
+<form id="form-PUTapi-guarantor--id-" data-method="PUT"
+      data-path="api/guarantor/{id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('PUTapi-contract-guarantor--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-guarantor--id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-PUTapi-contract-guarantor--id-"
-                    onclick="tryItOut('PUTapi-contract-guarantor--id-');">Try it out ⚡
+                    id="btn-tryout-PUTapi-guarantor--id-"
+                    onclick="tryItOut('PUTapi-guarantor--id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-PUTapi-contract-guarantor--id-"
-                    onclick="cancelTryOut('PUTapi-contract-guarantor--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-PUTapi-guarantor--id-"
+                    onclick="cancelTryOut('PUTapi-guarantor--id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-PUTapi-contract-guarantor--id-"
+                    id="btn-executetryout-PUTapi-guarantor--id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -4233,7 +4229,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-darkblue">PUT</small>
-            <b><code>api/contract/guarantor/{id}</code></b>
+            <b><code>api/guarantor/{id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -4241,7 +4237,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-guarantor--id-"
                value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
                data-component="header">
     <br>
@@ -4252,7 +4248,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="Content-Type"                data-endpoint="PUTapi-guarantor--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -4263,7 +4259,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="Accept"                data-endpoint="PUTapi-guarantor--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -4275,7 +4271,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="PUTapi-contract-guarantor--id-"
+               step="any"               name="id"                data-endpoint="PUTapi-guarantor--id-"
                value="1"
                data-component="url">
     <br>
@@ -4287,18 +4283,29 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="contract_id"                data-endpoint="PUTapi-contract-guarantor--id-"
+               step="any"               name="contract_id"                data-endpoint="PUTapi-guarantor--id-"
                value="1"
                data-component="body">
     <br>
-<p>ID du contract. Example: <code>1</code></p>
+<p>ID du contract en cas de contrat normal. Example: <code>1</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>notification_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="notification_id"                data-endpoint="PUTapi-guarantor--id-"
+               value="1"
+               data-component="body">
+    <br>
+<p>ID de la notification en cas contrat hypothécaire. Example: <code>1</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>civility</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="civility"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="civility"                data-endpoint="PUTapi-guarantor--id-"
                value="Mr"
                data-component="body">
     <br>
@@ -4309,7 +4316,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="first_name"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="first_name"                data-endpoint="PUTapi-guarantor--id-"
                value="Charles"
                data-component="body">
     <br>
@@ -4320,7 +4327,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="last_name"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="last_name"                data-endpoint="PUTapi-guarantor--id-"
                value="Xavier"
                data-component="body">
     <br>
@@ -4331,7 +4338,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="birth_date"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="birth_date"                data-endpoint="PUTapi-guarantor--id-"
                value="2000-03-03"
                data-component="body">
     <br>
@@ -4342,7 +4349,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="birth_place"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="birth_place"                data-endpoint="PUTapi-guarantor--id-"
                value="Los Afagnan"
                data-component="body">
     <br>
@@ -4353,7 +4360,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="nationality"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="nationality"                data-endpoint="PUTapi-guarantor--id-"
                value="Togolaise"
                data-component="body">
     <br>
@@ -4364,7 +4371,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="home_address"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="home_address"                data-endpoint="PUTapi-guarantor--id-"
                value="Adewi"
                data-component="body">
     <br>
@@ -4375,7 +4382,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="type_of_identity_document"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="type_of_identity_document"                data-endpoint="PUTapi-guarantor--id-"
                value="cni"
                data-component="body">
     <br>
@@ -4386,7 +4393,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="number_of_identity_document"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="number_of_identity_document"                data-endpoint="PUTapi-guarantor--id-"
                value="BP785632"
                data-component="body">
     <br>
@@ -4397,7 +4404,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="date_of_issue_of_identity_document"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="date_of_issue_of_identity_document"                data-endpoint="PUTapi-guarantor--id-"
                value="2022-03-03"
                data-component="body">
     <br>
@@ -4408,7 +4415,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="function"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="function"                data-endpoint="PUTapi-guarantor--id-"
                value="Agent CIA"
                data-component="body">
     <br>
@@ -4419,7 +4426,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="phone_number"                data-endpoint="PUTapi-contract-guarantor--id-"
+                              name="phone_number"                data-endpoint="PUTapi-guarantor--id-"
                value="+01 587-45-632-15"
                data-component="body">
     <br>
@@ -4427,7 +4434,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="caution-DELETEapi-contract-guarantor--id-">Supprime une caution</h2>
+                    <h2 id="caution-DELETEapi-guarantor--id-">Supprime une caution</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -4435,13 +4442,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-DELETEapi-contract-guarantor--id-">
+<span id="example-requests-DELETEapi-guarantor--id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/contract/guarantor/1" \
+    "http://cofcredit.cofina.localhost/api/guarantor/1" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -4449,7 +4456,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/contract/guarantor/1"
+    "http://cofcredit.cofina.localhost/api/guarantor/1"
 );
 
 const headers = {
@@ -4465,7 +4472,7 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-DELETEapi-contract-guarantor--id-">
+<span id="example-responses-DELETEapi-guarantor--id-">
             <blockquote>
             <p>Example response (204):</p>
         </blockquote>
@@ -4473,43 +4480,43 @@ fetch(url, {
 <code>Empty response</code>
  </pre>
     </span>
-<span id="execution-results-DELETEapi-contract-guarantor--id-" hidden>
+<span id="execution-results-DELETEapi-guarantor--id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-contract-guarantor--id-"></span>:
+                id="execution-response-status-DELETEapi-guarantor--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-contract-guarantor--id-"
+    <pre class="json"><code id="execution-response-content-DELETEapi-guarantor--id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-DELETEapi-contract-guarantor--id-" hidden>
+<span id="execution-error-DELETEapi-guarantor--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-contract-guarantor--id-">
+    <pre><code id="execution-error-message-DELETEapi-guarantor--id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-DELETEapi-contract-guarantor--id-" data-method="DELETE"
-      data-path="api/contract/guarantor/{id}"
+<form id="form-DELETEapi-guarantor--id-" data-method="DELETE"
+      data-path="api/guarantor/{id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-contract-guarantor--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-guarantor--id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-contract-guarantor--id-"
-                    onclick="tryItOut('DELETEapi-contract-guarantor--id-');">Try it out ⚡
+                    id="btn-tryout-DELETEapi-guarantor--id-"
+                    onclick="tryItOut('DELETEapi-guarantor--id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-contract-guarantor--id-"
-                    onclick="cancelTryOut('DELETEapi-contract-guarantor--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-DELETEapi-guarantor--id-"
+                    onclick="cancelTryOut('DELETEapi-guarantor--id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-contract-guarantor--id-"
+                    id="btn-executetryout-DELETEapi-guarantor--id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -4517,7 +4524,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-red">DELETE</small>
-            <b><code>api/contract/guarantor/{id}</code></b>
+            <b><code>api/guarantor/{id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -4525,7 +4532,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-contract-guarantor--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-guarantor--id-"
                value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
                data-component="header">
     <br>
@@ -4536,7 +4543,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="DELETEapi-contract-guarantor--id-"
+                              name="Content-Type"                data-endpoint="DELETEapi-guarantor--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -4547,7 +4554,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="DELETEapi-contract-guarantor--id-"
+                              name="Accept"                data-endpoint="DELETEapi-guarantor--id-"
                value="application/json"
                data-component="header">
     <br>
@@ -4559,7 +4566,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="DELETEapi-contract-guarantor--id-"
+               step="any"               name="id"                data-endpoint="DELETEapi-guarantor--id-"
                value="1"
                data-component="url">
     <br>
@@ -7789,6 +7796,146 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
+                    <h2 id="endpoints-POSTapi-notification-upload--id-">Sauvegarde la notification ou procès verbal signé</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-notification-upload--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://cofcredit.cofina.localhost/api/notification/upload/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/notification/upload/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-notification-upload--id-">
+            <blockquote>
+            <p>Example response (204):</p>
+        </blockquote>
+                <pre>
+<code>Empty response</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-notification-upload--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-notification-upload--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-notification-upload--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-notification-upload--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-notification-upload--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-notification-upload--id-" data-method="POST"
+      data-path="api/notification/upload/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-notification-upload--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-notification-upload--id-"
+                    onclick="tryItOut('POSTapi-notification-upload--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-notification-upload--id-"
+                    onclick="cancelTryOut('POSTapi-notification-upload--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-notification-upload--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/notification/upload/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-notification-upload--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-notification-upload--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-notification-upload--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="POSTapi-notification-upload--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>L'ID de la notification. Example: <code>1</code></p>
+            </div>
+                    </form>
+
                     <h2 id="endpoints-PUTapi-notification--id-">Mettre à jour un notification</h2>
 
 <p>
@@ -7964,7 +8111,182 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-PUTapi-notification-change-status--id-">Mettre à jour le statut d&#039;une notification</h2>
+                    <h2 id="endpoints-PUTapi-notification-change-head-credit-status--id-">Mettre à jour le statut de validation head_credit d&#039;une notification</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-PUTapi-notification-change-head-credit-status--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://cofcredit.cofina.localhost/api/notification/change-head-credit-status/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"head_credit_validation\": \"rejected\",
+    \"head_credit_observation\": \"Trop bas\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/notification/change-head-credit-status/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "head_credit_validation": "rejected",
+    "head_credit_observation": "Trop bas"
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-notification-change-head-credit-status--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{}</code>
+ </pre>
+    </span>
+<span id="execution-results-PUTapi-notification-change-head-credit-status--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-notification-change-head-credit-status--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-notification-change-head-credit-status--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-notification-change-head-credit-status--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-notification-change-head-credit-status--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-notification-change-head-credit-status--id-" data-method="PUT"
+      data-path="api/notification/change-head-credit-status/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-notification-change-head-credit-status--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-notification-change-head-credit-status--id-"
+                    onclick="tryItOut('PUTapi-notification-change-head-credit-status--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-notification-change-head-credit-status--id-"
+                    onclick="cancelTryOut('PUTapi-notification-change-head-credit-status--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-notification-change-head-credit-status--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/notification/change-head-credit-status/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-notification-change-head-credit-status--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PUTapi-notification-change-head-credit-status--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PUTapi-notification-change-head-credit-status--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="id"                data-endpoint="PUTapi-notification-change-head-credit-status--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>int             L'ID d'une notification. Example: <code>1</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>head_credit_validation</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="head_credit_validation"                data-endpoint="PUTapi-notification-change-head-credit-status--id-"
+               value="rejected"
+               data-component="body">
+    <br>
+<p>Le nouveau statut Example: <code>rejected</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>head_credit_observation</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="head_credit_observation"                data-endpoint="PUTapi-notification-change-head-credit-status--id-"
+               value="Trop bas"
+               data-component="body">
+    <br>
+<p>Commentaire du changement Example: <code>Trop bas</code></p>
+        </div>
+        </form>
+
+                    <h2 id="endpoints-PUTapi-notification-change-status--id-">Mettre à jour le statut d&#039;un procès verbal</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -7983,8 +8305,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"head_credit_validation\": \"rejected\",
-    \"head_credit_observation\": \"Trop bas\"
+    \"status\": \"rejected\",
+    \"comment\": \"Trop bas\"
 }"
 </code></pre></div>
 
@@ -8001,8 +8323,8 @@ const headers = {
 };
 
 let body = {
-    "head_credit_validation": "rejected",
-    "head_credit_observation": "Trop bas"
+    "status": "rejected",
+    "comment": "Trop bas"
 };
 
 fetch(url, {
@@ -8112,26 +8434,26 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="1"
                data-component="url">
     <br>
-<p>int             L'ID d'une notification. Example: <code>1</code></p>
+<p>int             L'ID du procès verbal. Example: <code>1</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>head_credit_validation</code></b>&nbsp;&nbsp;
+            <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="head_credit_validation"                data-endpoint="PUTapi-notification-change-status--id-"
+                              name="status"                data-endpoint="PUTapi-notification-change-status--id-"
                value="rejected"
                data-component="body">
     <br>
 <p>Le nouveau statut Example: <code>rejected</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>head_credit_observation</code></b>&nbsp;&nbsp;
+            <b style="line-height: 2;"><code>comment</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="head_credit_observation"                data-endpoint="PUTapi-notification-change-status--id-"
+                              name="comment"                data-endpoint="PUTapi-notification-change-status--id-"
                value="Trop bas"
                data-component="body">
     <br>
@@ -10074,7 +10396,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/verbal-trial/14" \
+    "http://cofcredit.cofina.localhost/api/verbal-trial/13" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10082,7 +10404,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/verbal-trial/14"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/13"
 );
 
 const headers = {
@@ -10193,10 +10515,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-verbal-trial--id-"
-               value="14"
+               value="13"
                data-component="url">
     <br>
-<p>L'ID du procès verbal Example: <code>14</code></p>
+<p>L'ID du procès verbal Example: <code>13</code></p>
             </div>
                     </form>
 
@@ -10829,7 +11151,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/12" \
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/15" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10837,7 +11159,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/12"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/15"
 );
 
 const headers = {
@@ -10948,10 +11270,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-guarantee--id-"
-               value="12"
+               value="15"
                data-component="url">
     <br>
-<p>L'ID du type de garantie Example: <code>12</code></p>
+<p>L'ID du type de garantie Example: <code>15</code></p>
             </div>
                     </form>
 
@@ -11727,7 +12049,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-credit/10" \
+    "http://cofcredit.cofina.localhost/api/type-of-credit/2" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -11735,7 +12057,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-credit/10"
+    "http://cofcredit.cofina.localhost/api/type-of-credit/2"
 );
 
 const headers = {
@@ -11846,10 +12168,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-credit--id-"
-               value="10"
+               value="2"
                data-component="url">
     <br>
-<p>L'ID du type de crédit Example: <code>10</code></p>
+<p>L'ID du type de crédit Example: <code>2</code></p>
             </div>
                     </form>
 
@@ -13663,7 +13985,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/user/12" \
+    "http://cofcredit.cofina.localhost/api/user/13" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -13671,7 +13993,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/user/12"
+    "http://cofcredit.cofina.localhost/api/user/13"
 );
 
 const headers = {
@@ -13782,10 +14104,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-user--id-"
-               value="12"
+               value="13"
                data-component="url">
     <br>
-<p>L'ID de l'utilisateur Example: <code>12</code></p>
+<p>L'ID de l'utilisateur Example: <code>13</code></p>
             </div>
                     </form>
 

@@ -12,7 +12,8 @@ return new class extends Migration {
     {
         Schema::create('guarantors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('contract_id')->constrained(table: 'contracts', column: "id")->cascadeOnDelete();
+            $table->foreignId('contract_id')->nullable()->constrained(table: 'contracts', column: "id")->cascadeOnDelete();
+            $table->foreignId('notification_id')->nullable()->constrained(table: 'notifications', column: "id")->cascadeOnDelete();
             $table->enum("civility", ["Mr", "Mme", "Mlle"]);
             $table->string("first_name");
             $table->string("last_name");

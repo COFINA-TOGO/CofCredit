@@ -26,8 +26,8 @@ const {
 } = await useApi(createUrl('/verbal-trial', {
   query: {
     has_notification: 0,
-    has_mortage: 1,
     paginate: 0,
+    has_mortgage: 1,
     status: 'v',
   },
 }))

@@ -73,16 +73,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete("/{id}", [VerbalTrialController::class, "destroy"])->name("destroy");
   });
   Route::prefix("contract")->name("contract.")->group(function () {
-    Route::prefix("guarantor")->name("guarantor.")->group(function () {
-      Route::get("/", [GuarantorController::class, "index"])->name("index");
-      Route::get("/download/{id}", [GuarantorController::class, "download"])->name("download");
-      Route::post("/upload/{id}", [GuarantorController::class, "upload"])->name("upload");
-      Route::get("/promissory-note/download/{id}", [GuarantorController::class, "promissory_note"])->name("promissory-note.download");
-      Route::get("/{id}", [GuarantorController::class, "show"])->name("show");
-      Route::post("/", [GuarantorController::class, "store"])->name("store");
-      Route::put("/{id}", [GuarantorController::class, "update"])->name("update");
-      Route::delete("/{id}", [GuarantorController::class, "destroy"])->name("destroy");
-    });
     Route::get("/", [ContractController::class, "index"])->name("index");
     Route::get("/download/{id}", [ContractController::class, "download"])->name("download");
     Route::post("/upload/{id}", [ContractController::class, "upload"])->name("upload");
@@ -93,13 +83,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put("/change-status/{id}", [ContractController::class, "change_status"])->name("change_status");
     Route::delete("/{id}", [ContractController::class, "destroy"])->name("destroy");
   });
+  Route::prefix("guarantor")->name("guarantor.")->group(function () {
+    Route::get("/", [GuarantorController::class, "index"])->name("index");
+    Route::get("/download/{id}", [GuarantorController::class, "download"])->name("download");
+    Route::post("/upload/{id}", [GuarantorController::class, "upload"])->name("upload");
+    Route::get("/promissory-note/download/{id}", [GuarantorController::class, "promissory_note"])->name("promissory-note.download");
+    Route::get("/{id}", [GuarantorController::class, "show"])->name("show");
+    Route::post("/", [GuarantorController::class, "store"])->name("store");
+    Route::put("/{id}", [GuarantorController::class, "update"])->name("update");
+    Route::delete("/{id}", [GuarantorController::class, "destroy"])->name("destroy");
+  });
   Route::prefix("notification")->name("notification.")->group(function () {
     Route::get("/", [NotificationController::class, "index"])->name("index");
     Route::get("/download/{id}", [NotificationController::class, "download"])->name("download");
     Route::get("/promissory-note/download/{id}", [NotificationController::class, "promissory_note"])->name("promissory-note.download");
     Route::get("/{id}", [NotificationController::class, "show"])->name("show");
     Route::post("/", [NotificationController::class, "store"])->name("store");
+    Route::post("/upload/{id}", [NotificationController::class, "upload"])->name("upload");
     Route::put("/{id}", [NotificationController::class, "update"])->name("update");
+    Route::put("/change-head-credit-status/{id}", [NotificationController::class, "change_head_credit_status"])->name("change_head_credit_status");
     Route::put("/change-status/{id}", [NotificationController::class, "change_status"])->name("change_status");
     Route::delete("/{id}", [NotificationController::class, "destroy"])->name("destroy");
   });

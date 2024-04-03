@@ -663,7 +663,7 @@ paths:
         required: true
         schema:
           type: integer
-  /api/contract/guarantor:
+  /api/guarantor:
     get:
       summary: 'Affiche les cautions'
       operationId: afficheLesCautions
@@ -678,6 +678,16 @@ paths:
           schema:
             type: integer
             description: 'Filtrer par ID du contract.'
+            example: null
+        -
+          in: query
+          name: notification_id
+          description: 'Filtrer par ID de la notification.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par ID de la notification.'
             example: null
         -
           in: query
@@ -801,43 +811,13 @@ paths:
             example: 0
         -
           in: query
-          name: with_verbal_trial
-          description: 'Afficher le PV.'
+          name: with_notification
+          description: 'Afficher la notification.'
           example: 0
           required: false
           schema:
             type: integer
-            description: 'Afficher le PV.'
-            example: 0
-        -
-          in: query
-          name: with_type_of_credit
-          description: 'Afficher le type de crédit.'
-          example: 0
-          required: false
-          schema:
-            type: integer
-            description: 'Afficher le type de crédit.'
-            example: 0
-        -
-          in: query
-          name: with_type_of_applicant
-          description: 'Afficher le type de demandeur.'
-          example: 0
-          required: false
-          schema:
-            type: integer
-            description: 'Afficher le type de demandeur.'
-            example: 0
-        -
-          in: query
-          name: with_guarantees
-          description: 'Afficher les garanties.'
-          example: 0
-          required: false
-          schema:
-            type: integer
-            description: 'Afficher les garanties.'
+            description: 'Afficher la notification.'
             example: 0
         -
           in: query
@@ -885,7 +865,11 @@ paths:
               properties:
                 contract_id:
                   type: integer
-                  description: 'ID du contract.'
+                  description: 'ID du contract en cas de contrat normal.'
+                  example: 1
+                notification_id:
+                  type: integer
+                  description: 'ID de la notification en cas contrat hypothécaire.'
                   example: 1
                 civility:
                   type: string
@@ -935,7 +919,7 @@ paths:
                   type: string
                   description: 'Numéro de téléphone de la caution'
                   example: '+01 587-45-632-15'
-  '/api/contract/guarantor/download/{id}':
+  '/api/guarantor/download/{id}':
     get:
       summary: "Télécharge la version word d'une caution"
       operationId: tlchargeLaVersionWordDuneCaution
@@ -961,7 +945,7 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/contract/guarantor/upload/{id}':
+  '/api/guarantor/upload/{id}':
     post:
       summary: 'Sauvegarde le contrat ou procès verbal signé'
       operationId: sauvegardeLeContratOuProcsVerbalSign
@@ -981,7 +965,7 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/contract/guarantor/promissory-note/download/{id}':
+  '/api/guarantor/promissory-note/download/{id}':
     get:
       summary: "Télécharge le billet à ordre d'une caution"
       operationId: tlchargeLeBilletOrdreDuneCaution
@@ -1007,7 +991,7 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/contract/guarantor/{id}':
+  '/api/guarantor/{id}':
     get:
       summary: 'Affiche une caution'
       operationId: afficheUneCaution
@@ -1099,7 +1083,11 @@ paths:
               properties:
                 contract_id:
                   type: integer
-                  description: 'ID du contract.'
+                  description: 'ID du contract en cas de contrat normal.'
+                  example: 1
+                notification_id:
+                  type: integer
+                  description: 'ID de la notification en cas contrat hypothécaire.'
                   example: 1
                 civility:
                   type: string
@@ -2271,10 +2259,30 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/notification/change-status/{id}':
+  '/api/notification/upload/{id}':
+    post:
+      summary: 'Sauvegarde la notification ou procès verbal signé'
+      operationId: sauvegardeLaNotificationOuProcsVerbalSign
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - Endpoints
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID de la notification."
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/notification/change-head-credit-status/{id}':
     put:
-      summary: "Mettre à jour le statut d'une notification"
-      operationId: mettreJourLeStatutDuneNotification
+      summary: "Mettre à jour le statut de validation head_credit d'une notification"
+      operationId: mettreJourLeStatutDeValidationHeadCreditDuneNotification
       description: ''
       parameters: []
       responses:
@@ -2308,6 +2316,47 @@ paths:
         in: path
         name: id
         description: "int             L'ID d'une notification."
+        example: '1'
+        required: true
+        schema:
+          type: string
+  '/api/notification/change-status/{id}':
+    put:
+      summary: "Mettre à jour le statut d'un procès verbal"
+      operationId: mettreJourLeStatutDunProcsVerbal
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: 'Le nouveau statut'
+                  example: rejected
+                comment:
+                  type: string
+                  description: 'Commentaire du changement'
+                  example: 'Trop bas'
+    parameters:
+      -
+        in: path
+        name: id
+        description: "int             L'ID du procès verbal."
         example: '1'
         required: true
         schema:

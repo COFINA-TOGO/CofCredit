@@ -64,7 +64,7 @@ const refForm = ref()
 const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
     if (valid) {
-      const res = await $api('/contract/guarantor', {
+      const res = await $api('/guarantor', {
         method: 'POST',
         body: {
           contract_id: route.params.contract_id,

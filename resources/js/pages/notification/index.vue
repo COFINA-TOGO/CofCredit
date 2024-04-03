@@ -42,6 +42,10 @@ const headers = [
     key: 'verbal_trial.amount',
   },
   {
+    title: 'Statut',
+    key: 'head_credit_validation',
+  },
+  {
     title: 'Actions',
     key: 'actions',
     sortable: false,
@@ -74,7 +78,7 @@ const {
     page: page,
     with_type_of_credit: 1,
     with_creator: 1,
-    // has_upload_completed: 1,
+    head_credit_validation: 'wr',
     has_cat: 0,
   },
 }))
@@ -83,11 +87,6 @@ const notificationList = computed(() => notificationData.value.data)
 const totalPv = computed(() => notificationData.value.total)
 const lastPage = computed(() => notificationData.value.last_page)
 
-const typeList = {
-  "company": 'Société',
-  "individual_business": 'Entreprise Individuel',
-  "particular": 'Particulier',
-}
 
 const downloadFile = async (url, fileName) => {
   try {
@@ -113,10 +112,10 @@ const apiDelete = async id => {
 }
 
 const apiChangeStatus = async id => {
-  await $api(`notification/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
+  await $api(`notification/change-head-credit-status/${id}`, { method: 'PUT', body: { head_credit_validation: actionStatus.value, head_credit_observation: actionComment.value } })
   actionComment.value = ""
   if (actionStatus.value == "validated") {
-    router.push(`/cat/add?id=${id}`)
+    router.push(`/notification/without-signed-contract`)
   }
   fetchContracts()
 }
@@ -180,23 +179,13 @@ const uploadFile = async (id, event) => {
       </VCardText>
     </VCard>
 
-    <VCard title="Filtres" class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCol cols="12" sm="4">
-            <AppSelect v-model="selectedType" placeholder="Type de contrat"
-              :items="[{ value: 'company', title: 'Société' }, { value: 'particular', title: 'Particulier' }, { value: 'individual_business', title: 'Entreprise Individuel' }]"
-              clearable clear-icon="tabler-x" />
-          </VCol>
-        </VRow>
-      </VCardText>
+    <VCard class="mb-6">
 
-      <VDivider class="my-4" />
 
-      <div class="d-flex flex-wrap gap-4 mx-5">
+      <div class="d-flex flex-wrap gap-4 mt-5 mx-5">
         <div class="d-flex align-center">
-          <AppTextField v-model="searchQuery" placeholder="Rechercher un contrat" density="compact"
-            style="inline-size: 200px;" class="me-3" />
+          <!-- <AppTextField v-model="searchQuery" placeholder="Rechercher un contrat" density="compact"
+            style="inline-size: 200px;" class="me-3" /> -->
         </div>
 
         <VSpacer />
@@ -227,12 +216,19 @@ const uploadFile = async (id, event) => {
       <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
         :items="notificationList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
 
-        <template #item.type="{ item }">
-          {{ typeList[item.type] }}
-        </template>
-
         <template #item.verbal_trial.amount="{ item }">
           {{ String(item.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
+        </template>
+
+        <template #item.head_credit_validation="{ item }">
+          <VChip label
+            :color="{ 'validated': 'success', 'rejected': 'error', 'waiting': 'warning' }[item.head_credit_validation]">
+            <VTooltip v-if="item.head_credit_observation" activator="parent" transition="scroll-x-transition"
+              location="start">Raison: {{ item.head_credit_observation }}</VTooltip>
+            {{ item.head_credit_validation == 'validated' ? 'Validé' : null }}
+            {{ item.head_credit_validation == 'waiting' ? 'En attente' : null }}
+            {{ item.head_credit_validation == 'rejected' ? 'Rejeté' : null }}
+          </VChip>
         </template>
 
 
@@ -273,24 +269,6 @@ const uploadFile = async (id, event) => {
 
                   <div v-if="$can('download', 'notification')">
                     <VDivider />
-                    <!-- Télécharger contrat non-signé -->
-                    <VListItem
-                      @click="downloadFile(`/api/notification/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
-
-                      <template #prepend>
-                        <VIcon icon="tabler-download" />
-                      </template>
-                      <VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
-                    </VListItem>
-                    <!-- Télécharger contrat signé -->
-                    <VListItem v-if="item.signed_notification_path"
-                      @click="downloadFile(item.signed_notification_path, `Contrat-${item.signed_notification_path.split('/').slice(-1)[0]}`)">
-
-                      <template #prepend>
-                        <VIcon icon="tabler-download" />
-                      </template>
-                      <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
-                    </VListItem>
                     <!-- Télécharger billet à ordre non-signé -->
                     <VListItem
                       @click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
@@ -313,15 +291,6 @@ const uploadFile = async (id, event) => {
 
                   <div v-if="$can('upload', 'notification')">
                     <VDivider />
-                    <!-- Ajouter Contrat signé -->
-                    <VListItem v-if="item.signed_notification_path == null"
-                      @click="uploadState = 'signed_notification'; refInputEl?.click()">
-
-                      <template #prepend>
-                        <VIcon icon="tabler-cloud-upload" />
-                      </template>
-                      <VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
-                    </VListItem>
                     <!-- Ajouter Billet à ordre -->
                     <VListItem v-if="item.signed_promissory_note_path == null"
                       @click="uploadState = 'signed_promissory_note'; refInputEl?.click()">
@@ -363,12 +332,6 @@ const uploadFile = async (id, event) => {
               <VIcon icon="tabler-check" color="success" />
             </IconBtn>
           </span>
-          <!-- <span v-if="item.status == 'validated'">
-            <IconBtn v-if="$can('create', 'cat')" :to="{ name: 'cat-add', query: { id: item.id } }">
-              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le CAT</VTooltip>
-              <VIcon icon="tabler-file-plus" color="success" />
-            </IconBtn>
-          </span> -->
         </template>
 
         <template #bottom>

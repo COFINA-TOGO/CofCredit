@@ -445,7 +445,10 @@ class NotificationController extends Controller
                 }
 
                 $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
-                $requestData["head_credit_validation"] = "waiting";
+                if ($notification->head_credit_validation == "rejected") {
+                    $requestData["head_credit_validation"] = "waiting";
+                }
+                $requestData["status"] = "waiting";
                 $notification->update($requestData);
                 $notification->load($relationList);
                 return $this->responseOk([
@@ -461,7 +464,7 @@ class NotificationController extends Controller
 
 
     /**
-     * Mettre à jour le statut d'une notification
+     * Mettre à jour le statut de validation head_credit d'une notification
      *
      * @urlParam    id      required                    int             L'ID d'une notification.                                Example: 1
      *
@@ -471,11 +474,11 @@ class NotificationController extends Controller
      * @response 200
      *
      */
-    public function change_status(Request $request, $id)
+    public function change_head_credit_status(Request $request, $id)
     {
         $notification = Notification::find($id);
         if ($notification) {
-            if (($authorisation = Gate::inspect("change_status", $notification))->allowed()) {
+            if (($authorisation = Gate::inspect("change_head_credit_status", $notification))->allowed()) {
                 $requestData = $request->all();
                 $validator = Validator::make($requestData, [
                     'head_credit_validation' => 'required|in:rejected,validated',
@@ -488,6 +491,44 @@ class NotificationController extends Controller
                         "head_credit_validation" => $requestData["head_credit_validation"],
                         "head_credit_observation" => $requestData["head_credit_observation"],
                     ]);
+                }
+            } else {
+                return $this->responseError(["auth" => [$authorisation->message()]], 403);
+            }
+        } else {
+            return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
+        }
+    }
+
+    /**
+     * Mettre à jour le statut d'un procès verbal
+     *
+     * @urlParam    id      required                    int             L'ID du procès verbal.                                  Example: 1
+     *
+     * @bodyParam   status                              string          Le nouveau statut                                       Example: rejected
+     * @bodyParam   comment                             string          Commentaire du changement                               Example: Trop bas
+     *
+     * @response 200
+     *
+     */
+    public function change_status(Request $request, $id)
+    {
+        $notification = Notification::find($id);
+        if ($notification) {
+            if (($authorisation = Gate::inspect("change_status", $notification))->allowed()) {
+                $requestData = $request->all();
+                $validator = Validator::make($requestData, [
+                    'status' => 'required|in:rejected,validated',
+                    'comment' => "min:0",
+                ]);
+                if ($validator->fails()) {
+                    return $this->responseError($validator->errors(), 400);
+                } else {
+                    $notification->update([
+                        "status" => $requestData["status"],
+                        "status_observation" => $requestData["comment"],
+                    ]);
+                    return $notification;
                 }
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
@@ -511,9 +552,9 @@ class NotificationController extends Controller
         if ($notification) {
             if (($authorisation = Gate::inspect('upload', $notification))->allowed()) {
                 DB::beginTransaction();
-                if ($request->has('signed_version')) {
+                if ($request->has('signed_notification')) {
                     $document_category = "notification";
-                    $base64Document = $request->input('signed_version');
+                    $base64Document = $request->input('signed_notification');
                 } else if ($request->has('signed_contract')) {
                     $document_category = "contract";
                     $base64Document = $request->input('signed_contract');
@@ -522,7 +563,7 @@ class NotificationController extends Controller
                     $base64Document = $request->input('signed_promissory_note');
                 } else {
                     DB::rollBack();
-                    return $this->responseError(["error" => "Vous devez uploader une notification signé, notification signé ou un billet à ordre signé"], 400);
+                    return $this->responseError(["error" => "Vous devez uploader une notification signée, un contrat signé ou un billet à ordre signé"], 400);
                 }
 
                 // Vérifier si le document est un PDF

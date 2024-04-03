@@ -65,7 +65,7 @@ const updateOptions = options => {
 const {
   data: guarantorData,
   execute: fetchGuarantors,
-} = await useApi(createUrl('/contract/guarantor', {
+} = await useApi(createUrl('/guarantor', {
   query: {
     search: searchQuery,
     with_verbal_trial: 1,
@@ -104,7 +104,7 @@ const uploadFile = async (id, event) => {
     reader.onload = async () => {
       const base64Image = reader.result;
       try {
-        const response = await fetch(`/api/contract/guarantor/upload/${id}`, {
+        const response = await fetch(`/api/guarantor/upload/${id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ const uploadFile = async (id, event) => {
 }
 
 const apiDelete = async id => {
-  await $api(`contract/guarantor/${id}`, { method: 'DELETE' })
+  await $api(`guarantor/${id}`, { method: 'DELETE' })
   fetchGuarantors()
 }
 </script>
@@ -226,7 +226,7 @@ const apiDelete = async id => {
                 <div v-if="$can('download', 'guarantor')">
                   <!-- Télécharger contrat non-signé -->
                   <VListItem
-                    @click="downloadFile(`/api/contract/guarantor/download/${item.id}`, `Contrat-Caution-${item.contract.verbal_trial.committee_id}.docx`)">
+                    @click="downloadFile(`/api/guarantor/download/${item.id}`, `Contrat-Caution-${item.contract.verbal_trial.committee_id}.docx`)">
 
                     <template #prepend>
                       <VIcon icon="tabler-download" />
@@ -246,7 +246,7 @@ const apiDelete = async id => {
 
                   <!-- Télécharger billet à ordre non-signé -->
                   <VListItem
-                    @click="downloadFile(`/api/contract/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.contract.verbal_trial.committee_id}.docx`);">
+                    @click="downloadFile(`/api/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.contract.verbal_trial.committee_id}.docx`);">
 
                     <template #prepend>
                       <VIcon icon="tabler-download" />

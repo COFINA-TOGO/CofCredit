@@ -11,12 +11,12 @@ import { paginationMeta } from '@api-utils/paginationMeta'
 import JsFileDownloader from 'js-file-downloader'
 
 
-const route = useRoute("contract-contract_id-guarantor")
+const route = useRoute("notification-notification_id-guarantor")
 const isDialogVisible = ref(false)
 const guarantorIdToDelete = ref(0)
 const searchQuery = ref('')
 const refInputEl = ref()
-const uploadState = ref('signed_contract')
+const uploadState = ref('signed_notification')
 
 const headers = [
   {
@@ -65,11 +65,11 @@ const updateOptions = options => {
 const {
   data: guarantorData,
   execute: fetchGuarantors,
-} = await useApi(createUrl('/contract/guarantor', {
+} = await useApi(createUrl('/guarantor', {
   query: {
     search: searchQuery,
     with_verbal_trial: 1,
-    contract_id: route.params.contract_id,
+    notification_id: route.params.notification_id,
     page: page,
   },
 }))
@@ -104,7 +104,7 @@ const uploadFile = async (id, event) => {
     reader.onload = async () => {
       const base64Image = reader.result;
       try {
-        const response = await fetch(`/api/contract/guarantor/upload/${id}`, {
+        const response = await fetch(`/api/guarantor/upload/${id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ const uploadFile = async (id, event) => {
 }
 
 const apiDelete = async id => {
-  await $api(`contract/guarantor/${id}`, { method: 'DELETE' })
+  await $api(`guarantor/${id}`, { method: 'DELETE' })
   fetchGuarantors()
 }
 </script>
@@ -144,7 +144,7 @@ const apiDelete = async id => {
           <VRow>
             <VCol>
               <VBtn prepend-icon="tabler-arrow-left" :to="'../'">
-                Contrats
+                Notifications
               </VBtn>
             </VCol>
             <VCol>
@@ -162,7 +162,7 @@ const apiDelete = async id => {
           </VBtn>
 
           <VBtn v-if="$can('create', 'guarantor')" color="primary" prepend-icon="tabler-plus"
-            :to="{ name: 'contract-contract_id-guarantor-add', params: { contract_id: route.params.contract_id } }">
+            :to="{ name: 'notification-notification_id-guarantor-add', params: { notification_id: route.params.notification_id } }">
             Ajouter
           </VBtn>
           <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
@@ -206,11 +206,11 @@ const apiDelete = async id => {
 
         <template #item.actions="{ item }">
           <IconBtn v-if="$can('read', 'guarantor')"
-            :to="{ name: 'contract-contract_id-guarantor-id', params: { contract_id: route.params.contract_id, id: item.id } }">
+            :to="{ name: 'notification-notification_id-guarantor-id', params: { notification_id: route.params.notification_id, id: item.id } }">
             <VIcon icon="tabler-eye" />
           </IconBtn>
           <IconBtn v-if="$can('update', 'guarantor')"
-            :to="{ name: 'contract-contract_id-guarantor-edit-id', params: { contract_id: route.params.contract_id, id: item.id } }">
+            :to="{ name: 'notification-notification_id-guarantor-edit-id', params: { notification_id: route.params.notification_id, id: item.id } }">
             <VIcon icon="tabler-edit" />
           </IconBtn>
           <IconBtn v-if="$can('delete', 'guarantor')" @click="guarantorIdToDelete = item.id; isDialogVisible = true">
@@ -220,33 +220,13 @@ const apiDelete = async id => {
             <VIcon size="24" icon="tabler-dots-vertical" />
             <VMenu activator="parent">
               <VList>
-                <input ref="refInputEl" type="file" name="signed_contract" accept=".pdf,.png,.jpg" hidden
+                <input ref="refInputEl" type="file" name="signed_notification" accept=".pdf,.png,.jpg" hidden
                   @input="uploadFile(item.id, $event)" />
 
                 <div v-if="$can('download', 'guarantor')">
-                  <!-- Télécharger contrat non-signé -->
-                  <VListItem
-                    @click="downloadFile(`/api/contract/guarantor/download/${item.id}`, `Contrat-Caution-${item.contract.verbal_trial.committee_id}.docx`)">
-
-                    <template #prepend>
-                      <VIcon icon="tabler-download" />
-                    </template>
-                    <VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
-                  </VListItem>
-
-                  <!-- Télécharger contrat signé -->
-                  <VListItem v-if="item.signed_contract_path"
-                    @click="downloadFile(item.signed_contract_path, `Contrat-Caution-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
-
-                    <template #prepend>
-                      <VIcon icon="tabler-download" />
-                    </template>
-                    <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
-                  </VListItem>
-
                   <!-- Télécharger billet à ordre non-signé -->
                   <VListItem
-                    @click="downloadFile(`/api/contract/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.contract.verbal_trial.committee_id}.docx`);">
+                    @click="downloadFile(`/api/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.notification.verbal_trial.committee_id}.docx`);">
 
                     <template #prepend>
                       <VIcon icon="tabler-download" />
@@ -267,16 +247,6 @@ const apiDelete = async id => {
 
                 <div v-if="$can('upload', 'guarantor')">
                   <VDivider />
-                  <!-- Ajouter Contrat signé -->
-                  <VListItem v-if="item.signed_contract_path == null"
-                    @click="uploadState = 'signed_contract'; refInputEl?.click()">
-
-                    <template #prepend>
-                      <VIcon icon="tabler-cloud-upload" />
-                    </template>
-                    <VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
-                  </VListItem>
-
                   <!-- Ajouter Billet à ordre -->
                   <VListItem v-if="item.signed_promissory_note_path == null"
                     @click="uploadState = 'signed_promissory_note'; refInputEl?.click()">

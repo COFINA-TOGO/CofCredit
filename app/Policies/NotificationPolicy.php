@@ -45,6 +45,14 @@ class NotificationPolicy
     {
         return $this->check(["upload"], "notification", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
+    public function change_head_credit_status(User $connectedUser, Notification $notification)
+    {
+        return $this->check(["change_head_credit_status"], "notification", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+    }
+    public function change_status(User $connectedUser, Notification $notification)
+    {
+        return $this->check(["change_status"], "notification", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+    }
     public function delete(User $connectedUser, Notification $notification)
     {
         return $this->check(["delete"], "notification", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");

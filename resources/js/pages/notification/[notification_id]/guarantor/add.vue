@@ -2,24 +2,29 @@
 <script setup>
 definePage({
   meta: {
-    action: 'update',
+    action: 'create',
     subject: 'guarantor',
   },
 })
-import { createUrl } from '@/@core/composable/createUrl'
-import { useApi } from '@/composables/useApi'
 import { ref } from 'vue'
 
 const router = useRouter()
-const route = useRoute('contract-contract_id-guarantor-edit-id')
+const route = useRoute('notification-notification_id-guarantor-add')
 
-const { data: guarantorAPI } = await useApi(createUrl(`/contract/guarantor/${route.params.id}`, {
-  query: {
-    with_contract: 1,
-  },
-}))
-
-const guarantorItem = computed(() => guarantorAPI.value.data.guarantor)
+const guarantorItem = ref({
+  "civility": null,
+  "first_name": null,
+  "last_name": null,
+  "birth_date": null,
+  "birth_place": null,
+  "nationality": null,
+  "home_address": null,
+  "type_of_identity_document": null,
+  "number_of_identity_document": null,
+  "date_of_issue_of_identity_document": null,
+  "function": null,
+  "phone_number": null,
+})
 
 const getResetGuarantorError = () => {
   return {
@@ -59,10 +64,10 @@ const refForm = ref()
 const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
     if (valid) {
-      const res = await $api(`/contract/guarantor/${route.params.id}`, {
-        method: 'PUT',
+      const res = await $api('/guarantor', {
+        method: 'POST',
         body: {
-          contract_id: route.params.contract_id,
+          notification_id: route.params.notification_id,
           civility: guarantorItem.value.civility,
           first_name: guarantorItem.value.first_name,
           last_name: guarantorItem.value.last_name,
@@ -79,8 +84,8 @@ const onSubmit = () => {
       })
 
       guarantorError.value = getResetGuarantorError()
-      if (res.status == 200) {
-        router.push({ name: "contract-contract_id-guarantor", params: { contract_id: route.params.contract_id } })
+      if (res.status == 201) {
+        router.push({ name: "notification-notification_id-guarantor", params: { notification_id: route.params.notification_id } })
       } else {
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
@@ -102,25 +107,11 @@ const onSubmit = () => {
     <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
       <div class="d-flex flex-column justify-center">
         <h4 class="text-h4 font-weight-medium">
-          Modifer un garant
+          Ajouter un garant
         </h4>
       </div>
     </div>
     <VForm ref="refForm" @submit.prevent="onSubmit">
-      <VRow>
-        <VCol cols="11">
-          <VBtn prepend-icon="tabler-arrow-left"
-            :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: route.params.contract_id } }">
-            Garants
-          </VBtn>
-        </VCol>
-        <VCol cols="1">
-          <VBtn prepend-icon='tabler-eye'
-            :to="{ name: 'contract-contract_id-guarantor-id', params: { contract_id: route.params.contract_id, id: route.params.id } }">
-            Voir
-          </VBtn>
-        </VCol>
-      </VRow>
       <VRow>
         <VCol md="12">
           <VCard class="mb-6" title="Information du garant">
@@ -185,7 +176,12 @@ const onSubmit = () => {
         </VCol>
         <VCol cols="12">
           <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
-            <div class="d-flex flex-column justify-center" />
+            <div class="d-flex flex-column justify-center">
+              <VBtn prepend-icon="tabler-arrow-left"
+                :to="{ name: 'notification-notification_id-guarantor', params: { notification_id: route.params.notification_id } }">
+                Garants
+              </VBtn>
+            </div>
             <div class="d-flex gap-4 align-center flex-wrap">
               <VBtn type="reset" variant="tonal" color="primary">
                 <VIcon start icon="tabler-circle-minus" />
