@@ -1,6 +1,7 @@
 export default [
   {
     title: 'Contrat',
+    icon: { icon: 'tabler-writing-sign' },
     subject: ['pv', 'contract'],
     children: [
       {
@@ -53,10 +54,28 @@ export default [
           },
         ],
       },
+      {
+        title: 'CAT',
+        children: [
+          {
+            title: 'Ajouter',
+            to: 'cat-add',
+            action: 'create',
+            subject: 'cat',
+          },
+          {
+            title: 'Historique',
+            to: 'cat',
+            action: 'read',
+            subject: 'cat',
+          },
+        ],
+      },
     ]
   },
   {
     title: 'Contrat Hypothécaire',
+    icon: { icon: 'tabler-home-ribbon' },
     children: [
       {
         title: 'Pv Comité',
@@ -105,23 +124,6 @@ export default [
         ],
       },
     ]
-  },
-  {
-    title: 'CAT',
-    children: [
-      {
-        title: 'Ajouter',
-        to: 'cat-add',
-        action: 'create',
-        subject: 'cat',
-      },
-      {
-        title: 'Historique',
-        to: 'cat',
-        action: 'read',
-        subject: 'cat',
-      },
-    ],
   },
   // {
   //   title: 'Report d\'échéance'
