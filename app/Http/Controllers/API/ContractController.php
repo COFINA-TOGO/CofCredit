@@ -74,20 +74,27 @@ class ContractController extends Controller
       $contractList = Contract::query();
       if ($search = $request->search) {
         $contractList
-          ->where('representative_birth_date', 'LIKE', "%$search%")
-          ->orWhere('representative_birth_place', 'LIKE', "%$search%")
-          ->orWhere('representative_nationality', 'LIKE', "%$search%")
-          ->orWhere('representative_home_address', 'LIKE', "%$search%")
-          ->orWhere('representative_type_of_identity_document', 'LIKE', "%$search%")
-          ->orWhere('representative_number_of_identity_document', 'LIKE', "%$search%")
-          ->orWhere('representative_date_of_issue_of_identity_document', 'LIKE', "%$search%")
-          ->orWhere('representative_phone_number', 'LIKE', "%$search%")
-          ->orWhere('risk_premium_percentage', 'LIKE', "%$search%")
-          ->orWhere('total_amount_of_interest', 'LIKE', "%$search%")
-          ->orWhere('number_of_due_dates', 'LIKE', "%$search%")
-          ->orWhere('type', 'LIKE', "%$search%")
-          ->orWhere('has_pledges', 'LIKE', "%$search%")
-        ;
+          ->where(function ($query) use ($search) {
+            $query
+              ->where('representative_birth_date', 'LIKE', "%$search%")
+              ->orWhere('representative_birth_place', 'LIKE', "%$search%")
+              ->orWhere('representative_nationality', 'LIKE', "%$search%")
+              ->orWhere('representative_home_address', 'LIKE', "%$search%")
+              ->orWhere('representative_type_of_identity_document', 'LIKE', "%$search%")
+              ->orWhere('representative_number_of_identity_document', 'LIKE', "%$search%")
+              ->orWhere('representative_date_of_issue_of_identity_document', 'LIKE', "%$search%")
+              ->orWhere('representative_phone_number', 'LIKE', "%$search%")
+              ->orWhere('risk_premium_percentage', 'LIKE', "%$search%")
+              ->orWhere('total_amount_of_interest', 'LIKE', "%$search%")
+              ->orWhere('number_of_due_dates', 'LIKE', "%$search%")
+              ->orWhere('type', 'LIKE', "%$search%")
+              ->orWhere('has_pledges', 'LIKE', "%$search%")
+              ->orWhereHas('verbal_trial', function ($query) use ($search) {
+                $query->where('committee_id', 'LIKE', "%$search%")
+                  ->orWhere(DB::raw("CONCAT(applicant_first_name, ' ', applicant_last_name)"), 'LIKE', "%$search%");
+              })
+            ;
+          });
       }
 
       if (isset($request["has_cat"])) {

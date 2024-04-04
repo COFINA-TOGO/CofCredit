@@ -54,17 +54,32 @@ class CATController extends Controller
             $c_a_tList = CAT::query();
             if ($search = $request->search) {
                 $c_a_tList
-                    ->where('contract_id', 'LIKE', "%$search%")
-                    ->orWhere('credit_number', 'LIKE', "%$search%")
-                    ->orWhere('sector', 'LIKE', "%$search%")
-                    ->orWhere('first_deadline', 'LIKE', "%$search%")
-                    ->orWhere('last_deadline', 'LIKE', "%$search%")
-                    ->orWhere('source_of_reimbursement', 'LIKE', "%$search%")
-                    ->orWhere('instructions_from_the_risk_and_credit_department', 'LIKE', "%$search%")
-                    ->orWhere('outstanding_number_ready_to_settle', 'LIKE', "%$search%")
-                    ->orWhere('other_expenses', 'LIKE', "%$search%")
-                    ->orWhere('teg', 'LIKE', "%$search%")
-                ;
+                    ->where(function ($query) use ($search) {
+                        $query
+                            ->where('contract_id', 'LIKE', "%$search%")
+                            ->orWhere('credit_number', 'LIKE', "%$search%")
+                            ->orWhere('sector', 'LIKE', "%$search%")
+                            ->orWhere('first_deadline', 'LIKE', "%$search%")
+                            ->orWhere('last_deadline', 'LIKE', "%$search%")
+                            ->orWhere('source_of_reimbursement', 'LIKE', "%$search%")
+                            ->orWhere('instructions_from_the_risk_and_credit_department', 'LIKE', "%$search%")
+                            ->orWhere('outstanding_number_ready_to_settle', 'LIKE', "%$search%")
+                            ->orWhere('other_expenses', 'LIKE', "%$search%")
+                            ->orWhere('teg', 'LIKE', "%$search%")
+                            ->orWhereHas('contract', function ($query) use ($search) {
+                                $query->whereHas('verbal_trial', function ($query) use ($search) {
+                                    $query->where('committee_id', 'LIKE', "%$search%")
+                                        ->orWhere(DB::raw("CONCAT(applicant_first_name, ' ', applicant_last_name)"), 'LIKE', "%$search%");
+                                });
+                            })
+                            ->orWhereHas('notification', function ($query) use ($search) {
+                                $query->whereHas('verbal_trial', function ($query) use ($search) {
+                                    $query->where('committee_id', 'LIKE', "%$search%")
+                                        ->orWhere(DB::raw("CONCAT(applicant_first_name, ' ', applicant_last_name)"), 'LIKE', "%$search%");
+                                });
+                            })
+                        ;
+                    });
             }
 
             foreach (["contract_id", "credit_number", "sector", "first_deadline", "last_deadline", "source_of_reimbursement", "instructions_from_the_risk_and_credit_department", "outstanding_number_ready_to_settle", "other_expenses", "teg"] as $filter) {

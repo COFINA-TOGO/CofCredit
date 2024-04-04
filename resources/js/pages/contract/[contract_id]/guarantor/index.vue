@@ -236,7 +236,7 @@ if (contractData.value.data.contract.observations.length == 0) {
                 <div v-if="$can('download', 'guarantor')">
                   <!-- Télécharger contrat non-signé -->
                   <VListItem
-                    @click="downloadFile(`/api/guarantor/download/${item.id}`, `Contrat-Caution-${item.contract.verbal_trial.committee_id}.docx`)">
+                    @click="console.log(item.contract); downloadFile(`/api/guarantor/download/${item.id}`, `Contrat-Caution-${item.contract.verbal_trial.committee_id}.docx`)">
 
                     <template #prepend>
                       <VIcon icon="tabler-download" />

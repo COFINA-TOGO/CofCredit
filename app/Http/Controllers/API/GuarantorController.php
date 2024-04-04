@@ -44,6 +44,7 @@ class GuarantorController extends Controller
      * @queryParam  phone_number                            int                 Filtrer par numéro de téléphone de la caution                           No-example
      *
      * @queryParam  with_contract                           int                 Afficher le contrat.                                                    Example: 0
+     * @queryParam  with_verbal_trial                       int                 Afficher le procès verbal.                                              Example: 0
      * @queryParam  with_notification                       int                 Afficher la notification.                                               Example: 0
      * @queryParam  paginate                                int                 Utiliser la pagination.                                                 Example: 0
      *
@@ -55,20 +56,24 @@ class GuarantorController extends Controller
             $guarantorList = Guarantor::query();
             if ($search = $request->search) {
                 $guarantorList
-                    ->where('contract_id', 'LIKE', "%$search%")
-                    ->where('notification_id', 'LIKE', "%$search%")
-                    ->orWhere('first_name', 'LIKE', "%$search%")
-                    ->orWhere('last_name', 'LIKE', "%$search%")
-                    ->orWhere('birth_date', 'LIKE', "%$search%")
-                    ->orWhere('birth_place', 'LIKE', "%$search%")
-                    ->orWhere('nationality', 'LIKE', "%$search%")
-                    ->orWhere('home_address', 'LIKE', "%$search%")
-                    ->orWhere('type_of_identity_document', 'LIKE', "%$search%")
-                    ->orWhere('number_of_identity_document', 'LIKE', "%$search%")
-                    ->orWhere('date_of_issue_of_identity_document', 'LIKE', "%$search%")
-                    ->orWhere('function', 'LIKE', "%$search%")
-                    ->orWhere('phone_number', 'LIKE', "%$search%")
-                ;
+                    ->where(function ($query) use ($search) {
+                        $query
+                            ->where('contract_id', 'LIKE', "%$search%")
+                            ->where('notification_id', 'LIKE', "%$search%")
+                            ->orWhere('first_name', 'LIKE', "%$search%")
+                            ->orWhere('last_name', 'LIKE', "%$search%")
+                            ->orWhere('birth_date', 'LIKE', "%$search%")
+                            ->orWhere('birth_place', 'LIKE', "%$search%")
+                            ->orWhere('nationality', 'LIKE', "%$search%")
+                            ->orWhere('home_address', 'LIKE', "%$search%")
+                            ->orWhere('type_of_identity_document', 'LIKE', "%$search%")
+                            ->orWhere('number_of_identity_document', 'LIKE', "%$search%")
+                            ->orWhere('date_of_issue_of_identity_document', 'LIKE', "%$search%")
+                            ->orWhere('function', 'LIKE', "%$search%")
+                            ->orWhere('phone_number', 'LIKE', "%$search%")
+                            ->orWhere(DB::raw("CONCAT(first_name, ' ', last_name)"), 'LIKE', "%$search%")
+                        ;
+                    });
             }
 
             foreach (["contract_id", "notification_id", "first_name", "last_name", "birth_date", "birth_place", "nationality", "home_address", "type_of_identity_document", "number_of_identity_document", "date_of_issue_of_identity_document", "function", "phone_number"] as $filter) {
@@ -77,7 +82,7 @@ class GuarantorController extends Controller
                 }
             }
 
-            foreach (["with_contract" => "contract", "with_notification" => "notification"] as $key => $value) {
+            foreach (["with_contract" => "contract", "with_verbal_trial" => "contract.verbal_trial", "with_notification" => "notification"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
                     $guarantorList->with($value);
                 }

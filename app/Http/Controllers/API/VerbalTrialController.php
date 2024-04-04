@@ -72,22 +72,26 @@ class VerbalTrialController extends Controller
             $verbalTrialList = VerbalTrial::query();
             if ($search = $request->search) {
                 $verbalTrialList
-                    ->orWhere('committee_id', 'LIKE', "%$search%")
-                    ->orWhere('committee_date', 'LIKE', "%$search%")
-                    ->orWhere('civility', 'LIKE', "%$search%")
-                    ->orWhere('applicant_first_name', 'LIKE', "%$search%")
-                    ->orWhere('applicant_last_name', 'LIKE', "%$search%")
-                    ->orWhere('account_number', 'LIKE', "%$search%")
-                    ->orWhere('activity', 'LIKE', "%$search%")
-                    ->orWhere('purpose_of_financing', 'LIKE', "%$search%")
-                    ->orWhere('type_of_credit_id', 'LIKE', "%$search%")
-                    ->orWhere('amount', 'LIKE', "%$search%")
-                    ->orWhere('duration', 'LIKE', "%$search%")
-                    ->orWhere('periodicity', 'LIKE', "%$search%")
-                    ->orWhere('taf', 'LIKE', "%$search%")
-                    ->orWhere('due_amount', 'LIKE', "%$search%")
-                    ->orWhere('administrative_fees_percentage', 'LIKE', "%$search%")
-                    ->orWhere('insurance_premium', 'LIKE', "%$search%")
+                    ->where(function ($query) use ($search) {
+                        $query
+                            ->orWhere('committee_id', 'LIKE', "%$search%")
+                            ->orWhere('committee_date', 'LIKE', "%$search%")
+                            ->orWhere('civility', 'LIKE', "%$search%")
+                            ->orWhere('applicant_first_name', 'LIKE', "%$search%")
+                            ->orWhere('applicant_last_name', 'LIKE', "%$search%")
+                            ->orWhere('account_number', 'LIKE', "%$search%")
+                            ->orWhere('activity', 'LIKE', "%$search%")
+                            ->orWhere('purpose_of_financing', 'LIKE', "%$search%")
+                            ->orWhere('type_of_credit_id', 'LIKE', "%$search%")
+                            ->orWhere('amount', 'LIKE', "%$search%")
+                            ->orWhere('duration', 'LIKE', "%$search%")
+                            ->orWhere('periodicity', 'LIKE', "%$search%")
+                            ->orWhere('taf', 'LIKE', "%$search%")
+                            ->orWhere('due_amount', 'LIKE', "%$search%")
+                            ->orWhere('administrative_fees_percentage', 'LIKE', "%$search%")
+                            ->orWhere('insurance_premium', 'LIKE', "%$search%")
+                            ->orWhere(DB::raw("CONCAT(applicant_first_name, ' ', applicant_last_name)"), 'LIKE', "%$search%");
+                    });
                 ;
             }
 

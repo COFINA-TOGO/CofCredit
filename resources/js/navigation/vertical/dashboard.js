@@ -133,16 +133,16 @@ export default [
       },
     ]
   },
-  // {
-  //   title: 'Report d\'échéance'
-  // },
-  // {
-  //   title: 'Remboursement anticipé'
-  // },
-  // {
-  //   title: 'Lettre de mise en demeure'
-  // },
-  // {
-  //   title: 'Checking post-deblocage'
-  // },
+  {
+    title: 'Report d\'échéance'
+  },
+  {
+    title: 'Remboursement anticipé'
+  },
+  {
+    title: 'Lettre de mise en demeure'
+  },
+  {
+    title: 'Checking post-deblocage'
+  },
 ]

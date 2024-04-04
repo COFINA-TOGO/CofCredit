@@ -43,18 +43,21 @@ class UserController extends Controller
         if (($authorisation = Gate::inspect('viewAny', User::class))->allowed()) {
             $userList = User::query();
             if ($search = $request->search) {
-                $userList->where('name', 'LIKE', "%$search%")
-                    ->orWhere('full_name', 'LIKE', "%$search%")
-                    ->orWhere('email', 'LIKE', "%$search%")
-                    ->orWhere('profile', 'LIKE', "%$search%");
+                $userList->where(function ($query) use ($search) {
+                    $query
+                        ->where('name', 'LIKE', "%$search%")
+                        ->orWhere('full_name', 'LIKE', "%$search%")
+                        ->orWhere('email', 'LIKE', "%$search%")
+                        ->orWhere('profile', 'LIKE', "%$search%");
+                });
             }
 
+
             foreach (["name", "full_name", "email", "profile"] as $filter) {
-                if (isset ($request[$filter]) && $request[$filter]) {
+                if (isset($request[$filter]) && $request[$filter]) {
                     $userList->where($filter, $request[$filter]);
                 }
             }
-
             // foreach (["with_agency" => "agency", "with_head" => "agency.head"] as $key => $value) {
             //     if (isset($request[$key]) && $request[$key]) {
             //         $userList->with($value);
@@ -67,7 +70,7 @@ class UserController extends Controller
                 $userList->where('profile', 'caf');
             }
 
-            if (isset ($request["paginate"]) && ($request->paginate == false)) {
+            if (isset($request["paginate"]) && ($request->paginate == false)) {
                 $userList = $userList->orderByDesc('created_at')->get();
                 $data = ["data" => $userList, "total" => count($userList)];
             } else {
@@ -190,7 +193,7 @@ class UserController extends Controller
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
                 } else {
-                    if (isset ($requestData["password"])) {
+                    if (isset($requestData["password"])) {
                         $requestData["password"] = Hash::make($request->password);
                         $requestData["password_change_required"] = true;
                     }
