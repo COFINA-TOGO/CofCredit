@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
+use App\Http\Traits\WordToolsTrait;
 use App\Jobs\SendEmail;
 use App\Models\Guarantee;
 use App\Models\User;
@@ -15,8 +16,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Pandoc\Pandoc;
 use PhpOffice\PhpWord\TemplateProcessor;
-
+use PhpOffice\PhpWord\PhpWord;
+use Dompdf\Dompdf;
 
 /**
  * @group Procès Verbal
@@ -26,7 +29,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 class VerbalTrialController extends Controller
 {
 
-    use CustomResponseTrait;
+    use CustomResponseTrait, WordToolsTrait;
 
     /**
      * Affiche les Procès verbaux
@@ -110,7 +113,6 @@ class VerbalTrialController extends Controller
                     }
                 });
             }
-
 
             if (isset($request["has_contract"])) {
                 $has_contract = (int) $request["has_contract"];
@@ -241,10 +243,37 @@ class VerbalTrialController extends Controller
             // return $data;
 
             // Enregistrez les modifications dans un nouveau fichier
-            $outputFilePath = public_path("PV-" . $verbalTrial->committee_id . ".docx");
-            $templateProcessor->saveAs($outputFilePath);
+            $wordFilePath = public_path("PV-" . $verbalTrial->committee_id . ".docx");
+            $templateProcessor->saveAs($wordFilePath);
+            $pdfDirectoryPath = public_path("/");
+            $pdfFileName = public_path("PV-" . $verbalTrial->committee_id . ".pdf");
+            $pdfFilePath = public_path("PV-" . $verbalTrial->committee_id . ".pdf");
 
-            return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
+            $command = "soffice --headless --convert-to pdf $wordFilePath";
+
+            exec($command, $output);
+
+            foreach ($output as $line) {
+                echo $line . "<br>";
+            }
+
+            // $this->wordToPdf($wordFilePath, $pdfFilePath);
+            // exec("dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock");
+            // $output = shell_exec('dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock');
+            // exec("soffice --headless --convert-to pdf --outdir $pdfDirectoryPath $wordFilePath");
+
+            \PhpOffice\PhpWord\Settings::setPdfRendererPath(base_path('vendor/dompdf/dompdf'));
+            \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+            $Content = \PhpOffice\PhpWord\IOFactory::load($wordFilePath);
+            $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'PDF');
+            $PDFWriter->save($pdfFilePath);
+
+            if (file_exists($wordFilePath)) {
+                unlink($wordFilePath);
+            }
+
+            return response()->download($pdfFilePath)->deleteFileAfterSend();
+            // return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
         } else {
             return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
         }
@@ -301,7 +330,6 @@ class VerbalTrialController extends Controller
                 "guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id",
                 "guarantees.*.value" => "required|numeric",
                 "guarantees.*.expiration_date" => "required|date",
-                "guarantees.*.comment" => "required|min:2",
             ]);
             if ($validator->fails()) {
                 return $this->responseError($validator->errors(), 400);

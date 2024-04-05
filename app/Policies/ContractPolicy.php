@@ -35,7 +35,7 @@ class ContractPolicy
 
     public function update(User $connectedUser, Contract $contract)
     {
-        return $this->check(["update"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return $this->check(["update"], "contract", $connectedUser) ? ($contract->status == "validated") ? Response::deny("vous n'etes plus autorisé à modifier ce contrat") : Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
     public function download(User $connectedUser, Contract $contract)
     {
@@ -53,6 +53,6 @@ class ContractPolicy
 
     public function delete(User $connectedUser, Contract $contract)
     {
-        return $this->check(["delete"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return $this->check(["delete"], "contract", $connectedUser) ? ($contract->status == "validated") ? Response::deny("vous n'etes plus autorisé à supprimer ce contrat") : Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 }

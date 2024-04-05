@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "161c5223-6820-4b01-86d3-a4cfba4447a0",
+        "_postman_id": "67270ba4-2719-409b-916a-cc0a1afb2e4b",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -770,6 +770,12 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "with_verbal_trial",
+                                    "value": "",
+                                    "description": "Afficher le proc\u00e8s verbal.",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "with_notification",
                                     "value": "",
                                     "description": "Afficher la notification.",
@@ -782,7 +788,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/guarantor?contract_id=&notification_id=&first_name=&last_name=&birth_date=&birth_place=&nationality=&home_address=&type_of_identity_document=&number_of_identity_document=&date_of_issue_of_identity_document=&function=&phone_number=&with_contract=&with_notification=&paginate="
+                            "raw": "{{baseUrl}}\/api\/guarantor?contract_id=&notification_id=&first_name=&last_name=&birth_date=&birth_place=&nationality=&home_address=&type_of_identity_document=&number_of_identity_document=&date_of_issue_of_identity_document=&function=&phone_number=&with_contract=&with_verbal_trial=&with_notification=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -2750,7 +2756,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "15",
+                                    "value": "8",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -2959,7 +2965,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "18",
+                                    "value": "16",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -3433,7 +3439,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "20",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -3707,7 +3713,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "16",
+                                    "value": "19",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

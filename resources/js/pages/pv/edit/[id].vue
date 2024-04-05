@@ -121,6 +121,14 @@ const onSubmit = () => {
           }
         })
         router.push(nextRoute)
+      } else if (res.status == 403) {
+        isSnackbarScrollReverseVisible.value = true
+        snackbarMessage.value = ""
+        for (const key in res.errors) {
+          res.errors[key].forEach(message => {
+            snackbarMessage.value += message + "\n";
+          })
+        }
       } else {
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
@@ -155,6 +163,9 @@ verbalTrial.value.guarantees.forEach(guarantee => {
     nextRoute = '/pv/without-notification'
   }
 })
+
+const isSnackbarScrollReverseVisible = ref(false)
+const snackbarMessage = ref("")
 </script>
 
 <template>
@@ -326,4 +337,9 @@ verbalTrial.value.guarantees.forEach(guarantee => {
       </VForm>
     </VCol>
   </VRow>
+
+  <VSnackbar v-model="isSnackbarScrollReverseVisible" transition="scroll-y-reverse-transition" location="bottom end"
+    color="error">
+    {{ snackbarMessage }}
+  </VSnackbar>
 </template>

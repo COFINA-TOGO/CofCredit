@@ -234,7 +234,7 @@ const actionStatus = ref("waiting")
               <VIcon icon=" tabler-eye" />
             </IconBtn>
             <IconBtn v-if="$can('download', 'pv')"
-              @click="downloadFile(`/api/verbal-trial/download/${item.id}`, `PV-${item.committee_id}.docx`)">
+              @click="downloadFile(`/api/verbal-trial/download/${item.id}`, `PV-${item.committee_id}.pdf`)">
               <VTooltip activator="parent" transition="scroll-x-transition" location="end">Télécharger</VTooltip>
               <VIcon icon="tabler-download" v-tooltip="'Ceci est une icône'" />
             </IconBtn>

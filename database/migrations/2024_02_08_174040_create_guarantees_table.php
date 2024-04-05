@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->decimal('value', 30, 2);
             $table->date('expiration_date');
             $table->foreignId('type_of_guarantee_id')->constrained(table: 'types_of_guarantee', column: 'id')->cascadeOnDelete();
-            $table->text('comment');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

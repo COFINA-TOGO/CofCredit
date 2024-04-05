@@ -153,6 +153,15 @@ endpoints:
         enumValues: []
         exampleWasSpecified: true
         custom: []
+      with_verbal_trial:
+        name: with_verbal_trial
+        description: 'Afficher le procès verbal.'
+        required: false
+        example: 0
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        custom: []
       with_notification:
         name: with_notification
         description: 'Afficher la notification.'
@@ -173,6 +182,7 @@ endpoints:
         custom: []
     cleanQueryParameters:
       with_contract: 0
+      with_verbal_trial: 0
       with_notification: 0
       paginate: 0
     bodyParameters: []

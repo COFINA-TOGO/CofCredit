@@ -118,3 +118,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete("/{id}", [CATController::class, "destroy"])->name("destroy");
   });
 });
+
+Route::get("/download/{id}", [VerbalTrialController::class, "download"])->name("download");

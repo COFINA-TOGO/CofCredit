@@ -811,6 +811,16 @@ paths:
             example: 0
         -
           in: query
+          name: with_verbal_trial
+          description: 'Afficher le procès verbal.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le procès verbal.'
+            example: 0
+        -
+          in: query
           name: with_notification
           description: 'Afficher la notification.'
           example: 0

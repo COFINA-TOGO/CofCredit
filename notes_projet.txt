@@ -1,3 +1,18 @@
+Livrable le 08/04/2024:
+    -Préciser que les frais de dossiers sont hors taxe dans le pv [Done]
+    -Télécharger les pv uniquement en pdf
+    -Rendre les commentaire facultatifs pour les garanties
+    -Remplacer le terme garant par Caution
+    -Télécharger le contrat en pdf pour les caf
+    -Le client doit signer la notification avant que le juridique ne puisse continuer le processus
+Livrable le 12/04/2024:
+    -Gérer les notification facilités
+Autres points:
+    -Gérer les TA dans l'application
+    -Gérer les rapports sur les cautions dans l'application
+    -Gérer les renouvellement de crédit
+
+
 avis au niveau de l'upload du contrat au niveau du juridique
 pour tout ce qui est validation il faut mettre un avis
 

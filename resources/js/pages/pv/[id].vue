@@ -62,7 +62,7 @@ verbalTrial.value.guarantees.forEach(guarantee => {
             </VCol>
             <VCol cols="2" class="text-right">
               <VBtn append-icon="tabler-edit" :to="{ name: 'pv-edit-id', params: { id: verbalTrial.id } }"
-                :disabled="verbalTrial.status == 'vaidated'">
+                :disabled="verbalTrial.status == 'validated'">
                 Modifier
               </VBtn>
             </VCol>

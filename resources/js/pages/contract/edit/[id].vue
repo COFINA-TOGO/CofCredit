@@ -154,6 +154,14 @@ const onSubmit = () => {
       errorData.value = getEmptyError()
       if (res.status == 201) {
         router.push("/contract")
+      } else if (res.status == 403) {
+        isSnackbarScrollReverseVisible.value = true
+        snackbarMessage.value = ""
+        for (const key in res.errors) {
+          res.errors[key].forEach(message => {
+            snackbarMessage.value += message + "\n";
+          })
+        }
       } else {
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
@@ -182,6 +190,9 @@ const addPledgeItem = () => {
     comment: "",
   })
 }
+
+const isSnackbarScrollReverseVisible = ref(false)
+const snackbarMessage = ref("")
 </script>
 
 <template>
@@ -404,6 +415,10 @@ const addPledgeItem = () => {
         </VCol>
       </VRow>
     </VForm>
+    <VSnackbar v-model="isSnackbarScrollReverseVisible" transition="scroll-y-reverse-transition" location="bottom end"
+      color="error">
+      {{ snackbarMessage }}
+    </VSnackbar>
   </div>
 </template>
 

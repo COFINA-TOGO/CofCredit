@@ -35,7 +35,7 @@ class VerbalTrialPolicy
 
     public function update(User $connectedUser, VerbalTrial $verbalTrial)
     {
-        return $this->check(["update"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return $this->check(["update"], "pv", $connectedUser) ? ($verbalTrial->status == "validated") ? Response::deny("vous n'etes plus autorisé à modifier ce pv") : Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
     public function change_status(User $connectedUser, VerbalTrial $verbalTrial)
     {
@@ -48,6 +48,6 @@ class VerbalTrialPolicy
 
     public function delete(User $connectedUser, VerbalTrial $verbalTrial)
     {
-        return $this->check(["delete"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return $this->check(["delete"], "pv", $connectedUser) ? ($verbalTrial->status == "validated") ? Response::deny("vous n'etes plus autorisé à supprimer ce pv") : Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
 }
