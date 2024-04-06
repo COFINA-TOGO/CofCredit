@@ -117,7 +117,7 @@ const apiChangeStatus = async id => {
   await $api(`notification/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
   actionComment.value = ""
   if (actionStatus.value == "validated") {
-    router.push(`/cat/notification-add?id=${id}`)
+    router.push(`/cat/notification/add?id=${id}`)
   }
   fetchNotifications()
 }
@@ -242,7 +242,7 @@ const uploadFile = async (id, event) => {
                 <VTooltip v-if="item.status" activator="parent" transition="scroll-x-transition" location="start">
                   Raison: {{ item.status_observation }}</VTooltip>
                 {{ (item.status == 'validated') ? 'Dossier validé' : null }}
-                {{ (item.status == 'waiting') ? (item.sent) ? 'Dossier en attente de validation' : 'Dossier non envoyé'
+                {{ (item.status == 'waiting') ? (item.sent) ? 'Dossier en attente de validation' : 'Dossier prêt'
             : null }}
                 {{ (item.status == 'rejected') ? 'Dossier rejeté' : null }}
               </VChip>
@@ -363,7 +363,8 @@ const uploadFile = async (id, event) => {
                       <template #prepend>
                         <VIcon icon="tabler-cloud-upload" />
                       </template>
-                      <VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
+                      <VListItemTitle color="error">Ajouter contrat signé
+                      </VListItemTitle>
                     </VListItem>
                     <!-- Ajouter Billet à ordre -->
                     <VListItem

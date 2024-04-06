@@ -132,10 +132,10 @@ class NotificationController extends Controller
 
 
             if (isset($request["paginate"]) && ($request->paginate == false)) {
-                $notificationList = $notificationList->orderByDesc('created_at')->get();
+                $notificationList = $notificationList->orderByDesc('updated_at')->get();
                 $data = ["data" => $notificationList, "total" => count($notificationList)];
             } else {
-                $data = $notificationList->orderByDesc('created_at')->paginate(8)->toArray();
+                $data = $notificationList->orderByDesc('updated_at')->paginate(8)->toArray();
             }
 
 
@@ -399,6 +399,7 @@ class NotificationController extends Controller
 
             $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
             $requestData["creator_id"] = $request->user()->id;
+            $requestData["sent"] = false;
             $notification = Notification::create($requestData);
             $notification->load($relationList);
 

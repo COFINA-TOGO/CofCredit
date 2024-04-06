@@ -47,7 +47,6 @@ const {
   query: {
     paginate: 0,
     with_verbal_trial: 1,
-    has_upload_completed: 1,
     has_cat: 0,
     status: 'v',
   },
@@ -80,7 +79,7 @@ const onSubmit = () => {
 
       catError.value = getResetCATError()
       if (res.status == 201) {
-        router.push("/cat")
+        router.push("/cat/notification")
       } else {
         for (const key in res.errors) {
           res.errors[key].forEach(message => {

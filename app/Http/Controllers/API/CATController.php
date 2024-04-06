@@ -37,8 +37,11 @@ class CATController extends Controller
      * @queryParam  outstanding_number_ready_to_settle                      string              Filtrer par numéro encours prêt à solder.                               No-example
      * @queryParam  other_expenses                                          string              Filtrer par autres frais.                                               No-example
      * @queryParam  teg                                                     int                 Filtrer par TEG.                                                        No-example
+     * @queryParam  has_notification                                        int                 Filtrer par présence de notification.                                   No-example
+     * @queryParam  has_contract                                            int                 Filtrer par présence de contrat.                                        No-example
      *
      * @queryParam  with_contract                                           int                 Afficher le contrat.                                                    Example: 0
+     * @queryParam  with_notification                                       int                 Afficher le notification.                                               Example: 0
      * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
      * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
      * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                          Example: 0
@@ -82,13 +85,35 @@ class CATController extends Controller
                     });
             }
 
+            $parentRelation = "contract";
+
+            if (isset($request["has_notification"])) {
+                $has_notification = (int) $request["has_notification"];
+                if ($has_notification == 1) {
+                    $parentRelation = "notification";
+                    $c_a_tList->whereHas('notification');
+                } else if ($has_notification == 0) {
+                    $c_a_tList->whereDoesntHave('notification');
+                }
+            }
+
+            if (isset($request["has_contract"])) {
+                $has_contract = (int) $request["has_contract"];
+                if ($has_contract == 1) {
+                    $parentRelation = "contract";
+                    $c_a_tList->whereHas('contract');
+                } else if ($has_contract == 0) {
+                    $c_a_tList->whereDoesntHave('contract');
+                }
+            }
+
             foreach (["contract_id", "credit_number", "sector", "first_deadline", "last_deadline", "source_of_reimbursement", "instructions_from_the_risk_and_credit_department", "outstanding_number_ready_to_settle", "other_expenses", "teg"] as $filter) {
                 if (isset($request[$filter]) && $request[$filter]) {
                     $c_a_tList->where($filter, $request[$filter]);
                 }
             }
 
-            foreach (["with_contract" => "contract", "with_verbal_trial" => "contract.verbal_trial", "with_type_of_credit" => "contract.verbal_trial.type_of_credit", "with_type_of_applicant" => "contract.verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "contract.verbal_trial.guarantees", "with_creator" => "contract.creator"] as $key => $value) {
+            foreach (["with_contract" => "contract", "with_notification" => "notification", "with_verbal_trial" => "$parentRelation.verbal_trial", "with_type_of_credit" => "$parentRelation.verbal_trial.type_of_credit", "with_type_of_applicant" => "$parentRelation.verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "$parentRelation.verbal_trial.guarantees", "with_creator" => "$parentRelation.creator"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
                     $c_a_tList->with($value);
                 }
@@ -251,6 +276,17 @@ class CATController extends Controller
             $requestData = $request->all();
             $validator = Validator::make($requestData, [
                 'contract_id' => "required|exists:contracts,id|unique:c_a_t_s",
+            ]);
+            if ($validator->fails()) {
+                $validator = Validator::make($requestData, [
+                    'notification_id' => "required|exists:notifications,id|unique:c_a_t_s",
+                ]);
+                if ($validator->fails()) {
+                    return $this->responseError(["id" => ["Le contrat ou la notification est manquante"]], 403);
+                }
+            }
+
+            $validator = Validator::make($requestData, [
                 'credit_number' => 'required|unique:c_a_t_s',
                 'sector' => 'required|min:2',
                 'first_deadline' => 'required|date',
@@ -261,6 +297,7 @@ class CATController extends Controller
                 'other_expenses' => 'required|numeric',
                 'teg' => 'required|numeric',
             ]);
+
             if ($validator->fails()) {
                 return $this->responseError($validator->errors(), 400);
             }

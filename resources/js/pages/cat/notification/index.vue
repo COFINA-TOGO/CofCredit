@@ -19,15 +19,15 @@ const searchQuery = ref('')
 const headers = [
   {
     title: 'Numéro comitée',
-    key: 'contract.verbal_trial.committee_id',
+    key: 'notification.verbal_trial.committee_id',
   },
   {
     title: 'Admin Crédit',
-    key: 'contract.creator.full_name',
+    key: 'notification.creator.full_name',
   },
   {
     title: 'Nom client',
-    key: 'contract.verbal_trial.applicant_full_name',
+    key: 'notification.verbal_trial.applicant_full_name',
   },
   {
     title: 'Secteur',
@@ -39,7 +39,7 @@ const headers = [
   },
   {
     title: 'Montant',
-    key: 'contract.verbal_trial.amount',
+    key: 'notification.verbal_trial.amount',
   },
   {
     title: 'Status',
@@ -78,8 +78,8 @@ const {
     page: page,
     with_type_of_applicant: 1,
     with_creator: 1,
-    with_contract: 1,
-    has_contract: 1,
+    with_notification: 1,
+    has_notification: 1,
   },
 }))
 
@@ -222,8 +222,8 @@ const rejectUnblockCAT = async id => {
           {{ item.comment }}
         </template>
 
-        <template #item.contract.verbal_trial.amount="{ item }">
-          {{ String(item.contract.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
+        <template #item.notification.verbal_trial.amount="{ item }">
+          {{ String(item.notification.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
         </template>
 
         <template #item.actions="{ item }">
@@ -236,15 +236,15 @@ const rejectUnblockCAT = async id => {
               <VMenu activator="parent">
                 <VList>
                   <VListItem v-if="$can('historical', 'pv') || $can('read', 'pv')"
-                    :to="{ name: 'pv-id', params: { id: item.contract.verbal_trial.id } }">
+                    :to="{ name: 'pv-id', params: { id: item.notification.verbal_trial.id } }">
                     <template #prepend>
                       <VIcon icon="tabler-eye" />
                     </template>
 
                     <VListItemTitle>Voir Pv</VListItemTitle>
                   </VListItem>
-                  <VListItem v-if="$can('read', 'contract') || $can('historical', 'contract')"
-                    :to="{ name: 'contract-id', params: { id: item.contract.id } }">
+                  <VListItem v-if="$can('read', 'notifcation') || $can('historical', 'notifcation')"
+                    :to="{ name: 'notifcation-id', params: { id: item.notifcation.id } }">
                     <template #prepend>
                       <VIcon icon="tabler-eye" />
                     </template>
@@ -252,7 +252,7 @@ const rejectUnblockCAT = async id => {
                     <VListItemTitle>Voir Contrat</VListItemTitle>
                   </VListItem>
                   <VListItem v-if="$can('download', 'cat')"
-                    @click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.contract.verbal_trial.committee_id}.docx`)">
+                    @click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.notification.verbal_trial.committee_id}.docx`)">
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
