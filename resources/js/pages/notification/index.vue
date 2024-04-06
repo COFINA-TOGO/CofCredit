@@ -226,7 +226,7 @@ const uploadFile = async (id, event) => {
             <VTooltip v-if="item.head_credit_observation" activator="parent" transition="scroll-x-transition"
               location="start">Raison: {{ item.head_credit_observation }}</VTooltip>
             {{ item.head_credit_validation == 'validated' ? 'Validé' : null }}
-            {{ item.head_credit_validation == 'waiting' ? 'En attente' : null }}
+            {{ item.head_credit_validation == 'waiting' ? 'En attente de validation' : null }}
             {{ item.head_credit_validation == 'rejected' ? 'Rejeté' : null }}
           </VChip>
         </template>
@@ -253,7 +253,7 @@ const uploadFile = async (id, event) => {
                       </template>
 
                       <VListItemTitle>
-                        Voir les Garants
+                        Voir les Cautions
                       </VListItemTitle>
                     </VListItem>
                   </VBadge>

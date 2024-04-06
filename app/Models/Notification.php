@@ -16,6 +16,9 @@ class Notification extends Model
     protected $fillable = [
         'verbal_trial_id',
         'representative_phone_number',
+        'representative_home_address',
+        'number_of_due_dates',
+        'risk_premium_percentage',
         'head_credit_observation',
         'head_credit_validation',
         'status',
@@ -24,6 +27,7 @@ class Notification extends Model
         'signed_contract_path',
         'signed_promissory_note_path',
         'creator_id',
+        'sent',
     ];
 
     protected $appends = ['observations', 'upload_completed', 'guarantors_count'];
@@ -34,6 +38,7 @@ class Notification extends Model
         $data["created_at_fr"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
         $data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
         $data["verbal_trial_id"] = (int) $data["verbal_trial_id"];
+        $data["sent"] = (int) $data["sent"];
         return $data;
     }
 
@@ -63,8 +68,8 @@ class Notification extends Model
             $observations[] = "Notification signé manquante";
         if (!$this->signed_contract_path)
             $observations[] = "Contrat notarié signé manquant";
-        if (!$this->signed_promissory_note_path)
-            $observations[] = "Billet à ordre signé manquant";
+        // if (!$this->signed_promissory_note_path)
+        //     $observations[] = "Billet à ordre signé manquant";
         $incompleteGuarantor = $this->guarantors->filter(function ($item) {
             return $item['signed_promissory_note_path'] == null;
         })->toArray();

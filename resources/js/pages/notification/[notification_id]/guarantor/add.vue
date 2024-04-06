@@ -107,14 +107,14 @@ const onSubmit = () => {
     <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
       <div class="d-flex flex-column justify-center">
         <h4 class="text-h4 font-weight-medium">
-          Ajouter un garant
+          Ajouter une caution
         </h4>
       </div>
     </div>
     <VForm ref="refForm" @submit.prevent="onSubmit">
       <VRow>
         <VCol md="12">
-          <VCard class="mb-6" title="Information du garant">
+          <VCard class="mb-6" title="Information de la caution">
             <VCardText>
               <VRow>
                 <VCol cols="12" md="6" lg="4">
@@ -179,7 +179,7 @@ const onSubmit = () => {
             <div class="d-flex flex-column justify-center">
               <VBtn prepend-icon="tabler-arrow-left"
                 :to="{ name: 'notification-notification_id-guarantor', params: { notification_id: route.params.notification_id } }">
-                Garants
+                Cautions
               </VBtn>
             </div>
             <div class="d-flex gap-4 align-center flex-wrap">

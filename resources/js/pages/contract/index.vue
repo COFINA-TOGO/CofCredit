@@ -285,7 +285,7 @@ const uploadFile = async (id, event) => {
                       </template>
 
                       <VListItemTitle>
-                        Voir les Garants
+                        Voir les Cautions
                       </VListItemTitle>
                     </VListItem>
                   </VBadge>

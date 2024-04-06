@@ -12,14 +12,17 @@ import { ref } from 'vue'
 const router = useRouter()
 const route = useRoute("notification-edit-id")
 
-const getEmptyError = () => {
+const getResetFormError = () => {
   return {
-    "verbal_trial_id": "",
-    "representative_phone_number": "",
+    verbal_trial_id: "",
+    representative_phone_number: "",
+    representative_home_address: "",
+    number_of_due_dates: "",
+    risk_premium_percentage: "",
   }
 }
 
-const errorData = ref(getEmptyError())
+const formError = ref(getResetFormError())
 
 const {
   data: verbalTrialListData,
@@ -54,6 +57,9 @@ const onSubmit = () => {
       const $data = {
         verbal_trial_id: notification.value.verbal_trial_id,
         representative_phone_number: notification.value.representative_phone_number,
+        representative_home_address: notification.value.representative_home_address,
+        number_of_due_dates: notification.value.number_of_due_dates,
+        risk_premium_percentage: notification.value.risk_premium_percentage,
       }
 
       const res = await $api(`/notification/${route.params.id}`, {
@@ -61,13 +67,21 @@ const onSubmit = () => {
         body: $data,
       })
 
-      errorData.value = getEmptyError()
+      formError.value = getResetFormError()
       if (res.status == 200) {
         router.push("/notification")
+      } else if (res.status == 403) {
+        isSnackbarScrollReverseVisible.value = true
+        snackbarMessage.value = ""
+        for (const key in res.errors) {
+          res.errors[key].forEach(message => {
+            snackbarMessage.value += message + "\n";
+          })
+        }
       } else {
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
-            errorData.value[key] += message + "\n"
+            formError.value[key] += message + "\n"
           })
         }
       }
@@ -79,6 +93,8 @@ const onSubmit = () => {
   })
 }
 
+const isSnackbarScrollReverseVisible = ref(false)
+const snackbarMessage = ref("")
 </script>
 
 <template>
@@ -112,17 +128,51 @@ const onSubmit = () => {
           <VCard class="mb-6" title="Information sur notification">
             <VCardText>
               <VRow>
+                <VCol v-if="notification.status == 'rejected' && notification.status_observation">
+                  <VAlert color="warning">
+                    Motif du refus par {{ notification.creator.full_name }}: {{ notification.status_observation }}
+                  </VAlert>
+                </VCol>
+                <VCol v-if="notification.head_credit_validation == 'rejected' && notification.head_credit_observation">
+                  <VAlert color="warning">
+                    Motif du refus par head crédit: {{ notification.head_credit_observation }}
+                  </VAlert>
+                </VCol>
+              </VRow>
+
+              <VRow>
                 <VCol cols="12" md="6" lg="6">
                   <AppAutocomplete v-model="notification.verbal_trial_id" :items="verbalTrialList"
-                    :error-messages="errorData.verbal_trial_id" label="Procès verbal"
+                    :error-messages="formError.verbal_trial_id" label="Procès verbal"
                     placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" item-title="label"
                     item-value="id" />
                 </VCol>
-
                 <VCol cols="12" md="6" lg="6">
                   <AppTextField v-model="notification.representative_phone_number"
-                    :error-messages="errorData.representative_phone_number" label="Numéro de téléphone"
+                    :error-messages="formError.representative_phone_number" label="Numéro de téléphone"
                     placeholder="Ex: +228 96 96 96 96" :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="notification.representative_home_address"
+                    :error-messages="formError.representative_home_address" label="Addresse" placeholder="Ex: Adewi"
+                    :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField type="number" v-model="notification.number_of_due_dates"
+                    :error-messages="formError.number_of_due_dates" label="Nombre d'échéance" placeholder="Ex: 4"
+                    :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12">
+                  <VSlider v-model="notification.risk_premium_percentage"
+                    label="Prime de risque (en pourcentage) du demandeur"
+                    :error-messages="formError.risk_premium_percentage" :thumb-size="15" thumb-label="always"
+                    :rules="[requiredValidator]" step="0.1">
+                    <template #append>
+                      <VTextField v-model="notification.risk_premium_percentage"
+                        :error-messages="formError.risk_premium_percentage" type="number" style="width:80px"
+                        density="compact" hide-details variant="outlined" suffix="%" />
+                    </template>
+                  </VSlider>
                 </VCol>
               </VRow>
             </VCardText>
@@ -146,6 +196,11 @@ const onSubmit = () => {
         </VCol>
       </VRow>
     </VForm>
+
+    <VSnackbar v-model="isSnackbarScrollReverseVisible" transition="scroll-y-reverse-transition" location="bottom end"
+      color="error">
+      {{ snackbarMessage }}
+    </VSnackbar>
   </div>
 </template>
 

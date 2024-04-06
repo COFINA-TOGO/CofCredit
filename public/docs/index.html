@@ -214,6 +214,9 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-PUTapi-notification--id-">
                                 <a href="#endpoints-PUTapi-notification--id-">Mettre à jour un notification</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-notification-send--id-">
+                                <a href="#endpoints-PUTapi-notification-send--id-">Envoyer les modifications à porter au dossier à validation</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-PUTapi-notification-change-head-credit-status--id-">
                                 <a href="#endpoints-PUTapi-notification-change-head-credit-status--id-">Mettre à jour le statut de validation head_credit d'une notification</a>
                             </li>
@@ -250,6 +253,9 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="proces-verbal-DELETEapi-verbal-trial--id-">
                                 <a href="#proces-verbal-DELETEapi-verbal-trial--id-">Supprime un procès verbal</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="proces-verbal-GETapi-download--id-">
+                                <a href="#proces-verbal-GETapi-download--id-">Télécharge la version word d'un PV</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -353,7 +359,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: April 4, 2024</li>
+        <li>Last updated: April 6, 2024</li>
     </ul>
 </div>
 
@@ -5635,7 +5641,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/contract/1?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_company=0&amp;with_individual_business=0&amp;with_type_of_guarantees=0&amp;with_pledges=0" \
+    --get "http://cofcredit.cofina.localhost/api/contract/1?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_company=0&amp;with_individual_business=0&amp;with_type_of_guarantees=0&amp;with_creator=0&amp;with_pledges=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -5655,6 +5661,7 @@ const params = {
     "with_company": "0",
     "with_individual_business": "0",
     "with_type_of_guarantees": "0",
+    "with_creator": "0",
     "with_pledges": "0",
 };
 Object.keys(params)
@@ -5862,6 +5869,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="query">
     <br>
 <p>Afficher les types des garanties. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_creator</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_creator"                data-endpoint="GETapi-contract--id-"
+               value="0"
+               data-component="query">
+    <br>
+<p>Afficher le créateur du contrat. Example: <code>0</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_pledges</code></b>&nbsp;&nbsp;
@@ -7440,7 +7458,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/notification/1?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_type_of_guarantees=0" \
+    --get "http://cofcredit.cofina.localhost/api/notification/1?with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_creator=0&amp;with_guarantees=0&amp;with_type_of_guarantees=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -7456,6 +7474,7 @@ const params = {
     "with_type_of_credit": "0",
     "with_type_of_applicant": "0",
     "with_caf": "0",
+    "with_creator": "0",
     "with_guarantees": "0",
     "with_type_of_guarantees": "0",
 };
@@ -7622,6 +7641,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Afficher le CAF en charge du dossier. Example: <code>0</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>with_creator</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="with_creator"                data-endpoint="GETapi-notification--id-"
+               value="0"
+               data-component="query">
+    <br>
+<p>Afficher le créateur de la notification. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_guarantees</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -7665,7 +7695,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"verbal_trial_id\": 1,
-    \"representative_phone_number\": \"+228 90 90 90 90\"
+    \"representative_phone_number\": \"+228 90 90 90 90\",
+    \"representative_home_address\": \"Zip 85\",
+    \"number_of_due_dates\": 3,
+    \"risk_premium_percentage\": 2
 }"
 </code></pre></div>
 
@@ -7683,7 +7716,10 @@ const headers = {
 
 let body = {
     "verbal_trial_id": 1,
-    "representative_phone_number": "+228 90 90 90 90"
+    "representative_phone_number": "+228 90 90 90 90",
+    "representative_home_address": "Zip 85",
+    "number_of_due_dates": 3,
+    "risk_premium_percentage": 2
 };
 
 fetch(url, {
@@ -7805,6 +7841,39 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="body">
     <br>
 <p>Le numéro de téléphone du demandeur. Example: <code>+228 90 90 90 90</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>representative_home_address</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_home_address"                data-endpoint="POSTapi-notification"
+               value="Zip 85"
+               data-component="body">
+    <br>
+<p>L'addresse du domicile du demandeur. Example: <code>Zip 85</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>number_of_due_dates</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="number_of_due_dates"                data-endpoint="POSTapi-notification"
+               value="3"
+               data-component="body">
+    <br>
+<p>Le nombre d'échéance du crédit. Example: <code>3</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>risk_premium_percentage</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="risk_premium_percentage"                data-endpoint="POSTapi-notification"
+               value="2"
+               data-component="body">
+    <br>
+<p>La prime de risque (en pourcentage) du crédit du demandeur. Example: <code>2</code></p>
         </div>
         </form>
 
@@ -7968,7 +8037,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"verbal_trial_id\": 1,
-    \"representative_phone_number\": \"+228 90 90 90 90\"
+    \"representative_phone_number\": \"+228 90 90 90 90\",
+    \"representative_home_address\": \"Zip 85\",
+    \"number_of_due_dates\": 3,
+    \"risk_premium_percentage\": 2
 }"
 </code></pre></div>
 
@@ -7986,7 +8058,10 @@ const headers = {
 
 let body = {
     "verbal_trial_id": 1,
-    "representative_phone_number": "+228 90 90 90 90"
+    "representative_phone_number": "+228 90 90 90 90",
+    "representative_home_address": "Zip 85",
+    "number_of_due_dates": 3,
+    "risk_premium_percentage": 2
 };
 
 fetch(url, {
@@ -8121,7 +8196,181 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Le numéro de téléphone du demandeur. Example: <code>+228 90 90 90 90</code></p>
         </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>representative_home_address</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_home_address"                data-endpoint="PUTapi-notification--id-"
+               value="Zip 85"
+               data-component="body">
+    <br>
+<p>L'addresse du domicile du demandeur. Example: <code>Zip 85</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>number_of_due_dates</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="number_of_due_dates"                data-endpoint="PUTapi-notification--id-"
+               value="3"
+               data-component="body">
+    <br>
+<p>Le nombre d'échéance du crédit. Example: <code>3</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>risk_premium_percentage</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="risk_premium_percentage"                data-endpoint="PUTapi-notification--id-"
+               value="2"
+               data-component="body">
+    <br>
+<p>La prime de risque (en pourcentage) du crédit du demandeur. Example: <code>2</code></p>
+        </div>
         </form>
+
+                    <h2 id="endpoints-PUTapi-notification-send--id-">Envoyer les modifications à porter au dossier à validation</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-PUTapi-notification-send--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://cofcredit.cofina.localhost/api/notification/send/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/notification/send/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-notification-send--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{}</code>
+ </pre>
+    </span>
+<span id="execution-results-PUTapi-notification-send--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-notification-send--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-notification-send--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-notification-send--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-notification-send--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-notification-send--id-" data-method="PUT"
+      data-path="api/notification/send/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-notification-send--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-notification-send--id-"
+                    onclick="tryItOut('PUTapi-notification-send--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-notification-send--id-"
+                    onclick="cancelTryOut('PUTapi-notification-send--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-notification-send--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/notification/send/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-notification-send--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PUTapi-notification-send--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PUTapi-notification-send--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="id"                data-endpoint="PUTapi-notification-send--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>int             L'ID d'une notification. Example: <code>1</code></p>
+            </div>
+                    </form>
 
                     <h2 id="endpoints-PUTapi-notification-change-head-credit-status--id-">Mettre à jour le statut de validation head_credit d&#039;une notification</h2>
 
@@ -10408,7 +10657,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/verbal-trial/8" \
+    "http://cofcredit.cofina.localhost/api/verbal-trial/16" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10416,7 +10665,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/verbal-trial/8"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/16"
 );
 
 const headers = {
@@ -10527,10 +10776,151 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-verbal-trial--id-"
-               value="8"
+               value="16"
                data-component="url">
     <br>
-<p>L'ID du procès verbal Example: <code>8</code></p>
+<p>L'ID du procès verbal Example: <code>16</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="proces-verbal-GETapi-download--id-">Télécharge la version word d&#039;un PV</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-download--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://cofcredit.cofina.localhost/api/download/1" \
+    --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://cofcredit.cofina.localhost/api/download/1"
+);
+
+const headers = {
+    "Authorization": "Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-download--id-">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-download--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-download--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-download--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-download--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-download--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-download--id-" data-method="GET"
+      data-path="api/download/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-download--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-download--id-"
+                    onclick="tryItOut('GETapi-download--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-download--id-"
+                    onclick="cancelTryOut('GETapi-download--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-download--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/download/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-download--id-"
+               value="Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-download--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-download--id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>L'ID du PV. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -11163,7 +11553,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/16" \
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/9" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -11171,7 +11561,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/16"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/9"
 );
 
 const headers = {
@@ -11282,10 +11672,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-guarantee--id-"
-               value="16"
+               value="9"
                data-component="url">
     <br>
-<p>L'ID du type de garantie Example: <code>16</code></p>
+<p>L'ID du type de garantie Example: <code>9</code></p>
             </div>
                     </form>
 
@@ -12061,7 +12451,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-credit/3" \
+    "http://cofcredit.cofina.localhost/api/type-of-credit/6" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -12069,7 +12459,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-credit/3"
+    "http://cofcredit.cofina.localhost/api/type-of-credit/6"
 );
 
 const headers = {
@@ -12180,10 +12570,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-credit--id-"
-               value="3"
+               value="6"
                data-component="url">
     <br>
-<p>L'ID du type de crédit Example: <code>3</code></p>
+<p>L'ID du type de crédit Example: <code>6</code></p>
             </div>
                     </form>
 
@@ -12870,7 +13260,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/20" \
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/14" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -12878,7 +13268,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/20"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/14"
 );
 
 const headers = {
@@ -12989,10 +13379,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-applicant--id-"
-               value="20"
+               value="14"
                data-component="url">
     <br>
-<p>L'ID du type de demandeur de crédit Example: <code>20</code></p>
+<p>L'ID du type de demandeur de crédit Example: <code>14</code></p>
             </div>
                     </form>
 
@@ -13997,7 +14387,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/user/19" \
+    "http://cofcredit.cofina.localhost/api/user/10" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -14005,7 +14395,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/user/19"
+    "http://cofcredit.cofina.localhost/api/user/10"
 );
 
 const headers = {
@@ -14116,10 +14506,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-user--id-"
-               value="19"
+               value="10"
                data-component="url">
     <br>
-<p>L'ID de l'utilisateur Example: <code>19</code></p>
+<p>L'ID de l'utilisateur Example: <code>10</code></p>
             </div>
                     </form>
 

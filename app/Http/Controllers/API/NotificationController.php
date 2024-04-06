@@ -5,13 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
 use App\Jobs\SendEmail;
-use App\Models\Company;
 use App\Models\Notification;
-use App\Models\IndividualBusiness;
-use App\Models\Pledge;
 use Carbon\Carbon;
 use DB;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
@@ -52,8 +48,15 @@ class NotificationController extends Controller
         if (($authorisation = Gate::inspect('viewAny', Notification::class))->allowed()) {
             $notificationList = Notification::query();
             if ($search = $request->search) {
-                $notificationList
-                    ->where('phone_number', 'LIKE', "%$search%")
+                $notificationList->where(function ($query) use ($search) {
+                    $query
+                        ->where('phone_number', 'LIKE', "%$search%")
+                        ->where('representative_home_address', 'LIKE', "%$search%")
+                        ->where('number_of_due_dates', 'LIKE', "%$search%")
+                        ->where('risk_premium_percentage', 'LIKE', "%$search%")
+                        ->where('sent', 'LIKE', "%$search%")
+                    ;
+                })
                 ;
             }
 
@@ -66,7 +69,7 @@ class NotificationController extends Controller
                 }
             }
 
-            foreach (["verbal_trial_id", "phone_number"] as $filter) {
+            foreach (["verbal_trial_id", "phone_number", "representative_home_address", "number_of_due_dates", "risk_premium_percentage", "sent"] as $filter) {
                 if (isset($request[$filter]) && $request[$filter]) {
                     $notificationList->where($filter, $request[$filter]);
                 }
@@ -151,6 +154,7 @@ class NotificationController extends Controller
      * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                                     Example: 0
      * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                                  Example: 0
      * @queryParam  with_caf                                                int                 Afficher le CAF en charge du dossier.                                           Example: 0
+     * @queryParam  with_creator                                            int                 Afficher le créateur de la notification.                                        Example: 0
      * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                         Example: 0
      * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                               Example: 0
      *
@@ -162,7 +166,7 @@ class NotificationController extends Controller
         if ($notification) {
             if (($authorisation = Gate::inspect('view', $notification))->allowed()) {
                 $suplementList = [];
-                foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee"] as $key => $value) {
+                foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_creator" => "creator"] as $key => $value) {
                     if (isset($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }
@@ -372,6 +376,9 @@ class NotificationController extends Controller
      *
      * @bodyParam   verbal_trial_id                                         int                 L'ID du PV.                                                             Example: 1
      * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
+     * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
+     * @bodyParam   number_of_due_dates                                     int                 Le nombre d'échéance du crédit.                                         Example: 3
+     * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
      *
      * @response 200
      */
@@ -382,6 +389,9 @@ class NotificationController extends Controller
             $validator = Validator::make($requestData, [
                 'verbal_trial_id' => "required|exists:verbals_trials,id|unique:notifications",
                 'representative_phone_number' => 'required|min:2',
+                'representative_home_address' => 'required|min:2',
+                'number_of_due_dates' => 'required|numeric',
+                'risk_premium_percentage' => 'required|numeric',
             ]);
             if ($validator->fails()) {
                 return $this->responseError($validator->errors(), 400);
@@ -426,7 +436,9 @@ class NotificationController extends Controller
      *
      * @bodyParam   verbal_trial_id                                         int                 L'ID du PV.                                                             Example: 1
      * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
-     *
+     * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
+     * @bodyParam   number_of_due_dates                                     int                 Le nombre d'échéance du crédit.                                         Example: 3
+     * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
      * @response 200
      *
      */
@@ -439,6 +451,9 @@ class NotificationController extends Controller
                 $validator = Validator::make($requestData, [
                     'verbal_trial_id' => "required|exists:verbals_trials,id|unique:notifications,verbal_trial_id," . $id,
                     'representative_phone_number' => 'required|min:2',
+                    'representative_home_address' => 'required|min:2',
+                    'number_of_due_dates' => 'required|numeric',
+                    'risk_premium_percentage' => 'required|numeric',
                 ]);
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
@@ -496,7 +511,33 @@ class NotificationController extends Controller
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
         } else {
-            return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
+            return $this->responseError(["id" => ["La notification n'existe pas"]], 404);
+        }
+    }
+
+    /**
+     * Envoyer les modifications à porter au dossier à validation
+     *
+     * @urlParam    id      required                    int             L'ID d'une notification.                                Example: 1
+     *
+     * @response 200
+     *
+     */
+    public function send(Request $request, $id)
+    {
+        $notification = Notification::find($id);
+        if ($notification) {
+            if (($authorisation = Gate::inspect("send", $notification))->allowed()) {
+                if ($notification->observations == []) {
+                    $notification->update(["sent" => true, "status" => "waiting"]);
+                } else {
+                    return $this->responseError(["observations" => ["Le dossier de la notification est incomplet"]]);
+                }
+            } else {
+                return $this->responseError(["auth" => [$authorisation->message()]], 403);
+            }
+        } else {
+            return $this->responseError(["id" => ["La notification n'existe pas"]], 404);
         }
     }
 
@@ -524,17 +565,21 @@ class NotificationController extends Controller
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
                 } else {
-                    $notification->update([
+                    $data = [
                         "status" => $requestData["status"],
                         "status_observation" => $requestData["comment"],
-                    ]);
+                    ];
+                    if ($requestData["status"] == "rejected") {
+                        $data["sent"] = false;
+                    }
+                    $notification->update($data);
                     return $notification;
                 }
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
         } else {
-            return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
+            return $this->responseError(["id" => ["La notification n'existe pas"]], 404);
         }
     }
 

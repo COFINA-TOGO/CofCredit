@@ -78,47 +78,52 @@ class DatabaseSeeder extends Seeder
             TypeOfGuarantee::factory(1)->create(["name" => $typeOfGuaranteeName]);
         }
 
-        // VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
-        //     Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-        //     Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "individual_business", "creator_id" => $credit_admin->id])->each(function ($contract) {
-        //         Guarantor::factory(3)->create(["contract_id" => $contract->id]);
-        //         IndividualBusiness::factory(1)->create(["contract_id" => $contract->id]);
-        //     });
-        // });
-        // VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
-        //     Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-        //     Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "company", "creator_id" => $credit_admin->id])->each(function ($contract) {
-        //         Guarantor::factory(3)->create(["contract_id" => $contract->id]);
-        //         Company::factory(1)->create(["contract_id" => $contract->id]);
-        //     });
-        // });
-        // VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
-        //     Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-        //     Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
-        //         Guarantor::factory(3)->create(["contract_id" => $contract->id]);
-        //     });
-        // });
-        // VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) use ($credit_admin) {
-        //     Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-        //     Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
-        //         Guarantor::factory(3)->create(["contract_id" => $contract->id]);
-        //         CAT::factory(1)->create(["contract_id" => $contract->id]);
-        //     });
-        // });
-        // VerbalTrial::factory(15)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) {
-        //     Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-        //     // Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
-        //     //     Guarantor::factory(1)->create(["contract_id" => $contract->id]);
-        //     // });
-        // });
+        //Pv avec contrat individuel
+        VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
+            Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+            Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "individual_business", "creator_id" => $credit_admin->id])->each(function ($contract) {
+                Guarantor::factory(3)->create(["contract_id" => $contract->id]);
+                IndividualBusiness::factory(1)->create(["contract_id" => $contract->id]);
+            });
+        });
+        //Pv avec contrat de société
+        VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
+            Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+            Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "company", "creator_id" => $credit_admin->id])->each(function ($contract) {
+                Guarantor::factory(3)->create(["contract_id" => $contract->id]);
+                Company::factory(1)->create(["contract_id" => $contract->id]);
+            });
+        });
+        //Pv avec contrat particulier
+        VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
+            Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+            Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
+                Guarantor::factory(3)->create(["contract_id" => $contract->id]);
+            });
+        });
 
+        //Pv avec contrat et avec CAT
+        VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) use ($credit_admin) {
+            Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+            Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
+                Guarantor::factory(3)->create(["contract_id" => $contract->id]);
+                CAT::factory(1)->create(["contract_id" => $contract->id]);
+            });
+        });
 
-        // VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) {
-        //     Guarantee::factory(2)->create(["verbal_trial_id" => $verbalTrial->id, "type_of_guarantee_id" => 9]);
-        // });
-        // VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) {
-        //     Guarantee::factory(2)->create(["verbal_trial_id" => $verbalTrial->id, "type_of_guarantee_id" => 9]);
-        // });
+        //Pv sans contrat
+        VerbalTrial::factory(15)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) {
+            Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+        });
+
+        //Pv hypothécaire non validé
+        VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) {
+            Guarantee::factory(2)->create(["verbal_trial_id" => $verbalTrial->id, "type_of_guarantee_id" => 9]);
+        });
+        //Pv hypothécaire validés
+        VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) {
+            Guarantee::factory(2)->create(["verbal_trial_id" => $verbalTrial->id, "type_of_guarantee_id" => 9]);
+        });
 
         $plainTextToken = $admin->createToken("auth-token")->plainTextToken;
         DB::update("update personal_access_tokens set TOKEN = '8fb55a1d50842403ddc4ea7dc0c80a5d2e44eeb029f1077341babd46b68fe0ba' where ID = 1");

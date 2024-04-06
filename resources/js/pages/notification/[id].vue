@@ -22,6 +22,7 @@ const {
   query: {
     with_type_of_credit: 1,
     with_caf: 1,
+    with_creator: 1,
     with_verbal_trial: 1,
     with_type_of_guarantees: 1,
   },
@@ -42,11 +43,26 @@ const tableData = [
   { "title": "Echéance TTC", "value": String(notification.value.verbal_trial.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Frais de dossier", "value": String((notification.value.verbal_trial.amount * notification.value.verbal_trial.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Prime d'assurance", "value": String(notification.value.verbal_trial.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Téléphone", "value": notification.value.representative_phone_number },
 ]
 
-if (notification.duration > 13) {
+const notificationData = [
+  { "title": "Téléphone", "value": notification.value.representative_phone_number },
+  { "title": "Adresse", "value": notification.value.representative_home_address },
+  { "title": "Nombre d'écheance", "value": notification.value.number_of_due_dates },
+  { "title": "Prime de risque", "value": notification.value.risk_premium_percentage + "%" },
+]
+
+if (notification.value.verbal_trial.duration > 13) {
   tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
+}
+
+let backRouteName = 'notification'
+if (notification.value.head_credit_validation == 'validated') {
+  if (notification.value.status == 'validated') {
+    backRouteName = 'notification-historical'
+  } else {
+    backRouteName = 'notification-without-signed-contract'
+  }
 }
 </script>
 
@@ -58,18 +74,26 @@ if (notification.duration > 13) {
           <!-- SECTION Header -->
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="11">
-
+              <VBtn prepend-icon="tabler-arrow-narrow-left" :to="{ name: backRouteName }">
+                Notifications
+              </VBtn>
             </VCol>
             <VCol cols="1">
-              <VBtn :to="{ name: 'notification-edit-id', params: { id: notification.id } }">
+              <VBtn :to="{ name: 'notification-edit-id', params: { id: notification.id } }"
+                :disabled="notification.status == 'validated'">
                 Modifier
               </VBtn>
             </VCol>
-            <!-- <VCol>
-              <VAlert v-if="notification.status == 'rejected' && notification.status_observation" color="error">
-                {{ notification.status_observation }}
+            <VCol v-if="notification.status == 'rejected' && notification.status_observation">
+              <VAlert color="warning">
+                Motif du refus par {{ notification.creator.full_name }}: {{ notification.status_observation }}
               </VAlert>
-            </VCol> -->
+            </VCol>
+            <VCol v-if="notification.head_credit_validation == 'rejected' && notification.head_credit_observation">
+              <VAlert color="warning">
+                Motif du refus par head crédit: {{ notification.head_credit_observation }}
+              </VAlert>
+            </VCol>
             <VCol cols="12">
               <h2 class="text-center">
                 Notification N°{{ notification.verbal_trial.committee_id }}
@@ -131,6 +155,26 @@ if (notification.duration > 13) {
               <VTable class="text-no-wrap">
                 <tbody>
                   <tr v-for="item in tableData" :key="item.key">
+                    <td colspan="5">
+                      {{ item.title }}
+                    </td>
+                    <td colspan="1">
+                      {{ item.value }}
+                    </td>
+                  </tr>
+                </tbody>
+              </VTable>
+            </VCol>
+          </VCardText>
+
+          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
+            <VCol cols="12">
+              <h2>Informations de la notification</h2>
+            </VCol>
+            <VCol cols="12">
+              <VTable class="text-no-wrap">
+                <tbody>
+                  <tr v-for="item in notificationData" :key="item.key">
                     <td colspan="5">
                       {{ item.title }}
                     </td>

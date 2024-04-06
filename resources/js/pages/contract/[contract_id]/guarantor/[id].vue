@@ -61,7 +61,7 @@ const tableData = [
             <VCol cols="11">
               <VBtn :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: route.params.contract_id } }">
                 <VIcon icon="tabler-arrow-left" />
-                Garants
+                Cautions
               </VBtn>
             </VCol>
             <VCol cols="1">
@@ -72,7 +72,7 @@ const tableData = [
             </VCol>
             <VCol cols="12">
               <h2 class="text-center">
-                Garant N°{{ guarantor.id }}
+                Caution N°{{ guarantor.id }}
               </h2>
             </VCol>
             <VCol cols="12">

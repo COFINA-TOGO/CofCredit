@@ -62,7 +62,7 @@ const tableData = [
               <VBtn
                 :to="{ name: 'notification-notification_id-guarantor', params: { notification_id: route.params.notification_id } }">
                 <VIcon icon="tabler-arrow-left" />
-                Garants
+                Cautions
               </VBtn>
             </VCol>
             <VCol cols="1">
@@ -73,7 +73,7 @@ const tableData = [
             </VCol>
             <VCol cols="12">
               <h2 class="text-center">
-                Garant N°{{ guarantor.id }}
+                Caution N°{{ guarantor.id }}
               </h2>
             </VCol>
             <VCol cols="12">

@@ -66,8 +66,8 @@ verbalTrial.value.guarantees.forEach(guarantee => {
                 Modifier
               </VBtn>
             </VCol>
-            <VCol>
-              <VAlert v-if="verbalTrial.status == 'rejected' && verbalTrial.status_observation" color="warning">
+            <VCol v-if="verbalTrial.status == 'rejected' && verbalTrial.status_observation">
+              <VAlert color="warning">
                 Motif du refus: {{ verbalTrial.status_observation }}
               </VAlert>
             </VCol>

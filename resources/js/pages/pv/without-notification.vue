@@ -248,7 +248,7 @@ const actionStatus = ref("waiting")
               <VIcon icon="tabler-edit" />
             </IconBtn>
 
-            <IconBtn v-if="$can('delete', 'pv')"
+            <IconBtn v-if="$can('delete', 'pv')" :disabled="item.status == 'validated'"
               @click="selectedItemId = item.id; actionTitle = 'Supprimer le PV', actionText = 'Voulez vous vraiment supprimer ce pv?', actionFunction = apiDelete; actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;">
               <VTooltip activator="parent" transition="scroll-x-transition" location="end">Supprimer</VTooltip>
               <VIcon icon="tabler-trash" color='error' />

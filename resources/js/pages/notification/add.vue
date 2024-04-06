@@ -13,17 +13,23 @@ const router = useRouter()
 
 const notificationData = ref({
   verbal_trial_id: null,
-  representative_phone_number: "+228 91 91 91 91",
+  representative_phone_number: "+228 90 90 90 90",
+  representative_home_address: "Adewi",
+  number_of_due_dates: 15,
+  risk_premium_percentage: 0,
 })
 
-const getResetPvError = () => {
+const getResetFormError = () => {
   return {
     verbal_trial_id: "",
     representative_phone_number: "",
+    representative_home_address: "",
+    number_of_due_dates: "",
+    risk_premium_percentage: "",
   }
 }
 
-const pvError = ref(getResetPvError())
+const formError = ref(getResetFormError())
 
 
 const {
@@ -39,23 +45,6 @@ const {
 
 const verbalTrialList = computed(() => verbalTrialListData.value.data)
 
-const typeList = [
-  { value: "company", title: 'Société' },
-  { value: "individual_business", title: 'Entreprise Individuel' },
-  { value: "particular", title: 'Particulier' },
-]
-
-const hasPledgesLabel = {
-  '1': 'Avec gage',
-  '0': 'Sans gage',
-}
-
-const documentTypeList = [
-  { value: "cni", title: 'Carte d\'identité nationale' },
-  { value: "passport", title: 'Passeport' },
-  { value: "residence_certificate", title: 'Certificat de résidence' },
-  { value: "driving_licence", title: 'Permis de conduire' },
-]
 
 const refForm = ref()
 
@@ -65,6 +54,9 @@ const onSubmit = () => {
       const $data = {
         verbal_trial_id: notificationData.value.verbal_trial_id,
         representative_phone_number: notificationData.value.representative_phone_number,
+        representative_home_address: notificationData.value.representative_home_address,
+        number_of_due_dates: notificationData.value.number_of_due_dates,
+        risk_premium_percentage: notificationData.value.risk_premium_percentage,
       }
 
       const res = await $api('/notification', {
@@ -72,13 +64,13 @@ const onSubmit = () => {
         body: $data,
       })
 
-      pvError.value = getResetPvError()
+      formError.value = getResetFormError()
       if (res.status == 201) {
         router.push("/notification")
       } else {
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
-            pvError.value[key] += message + "\n"
+            formError.value[key] += message + "\n"
           })
         }
       }
@@ -116,14 +108,36 @@ if (route.query.id) {
               <VRow>
                 <VCol cols="12" md="6" lg="6">
                   <AppAutocomplete v-model="notificationData.verbal_trial_id" :items="verbalTrialList"
-                    :error-messages="pvError.verbal_trial_id" label="Procès verbal"
+                    :error-messages="formError.verbal_trial_id" label="Procès verbal"
                     placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" item-title="label"
                     item-value="id" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
                   <AppTextField v-model="notificationData.representative_phone_number"
-                    :error-messages="pvError.representative_phone_number" label="Numéro de téléphone"
+                    :error-messages="formError.representative_phone_number" label="Numéro de téléphone"
                     placeholder="Ex: +228 96 96 96 96" :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField v-model="notificationData.representative_home_address"
+                    :error-messages="formError.representative_home_address" label="Addresse" placeholder="Ex: Adewi"
+                    :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField type="number" v-model="notificationData.number_of_due_dates"
+                    :error-messages="formError.number_of_due_dates" label="Nombre d'échéance" placeholder="Ex: 4"
+                    :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12">
+                  <VSlider v-model="notificationData.risk_premium_percentage"
+                    label="Prime de risque (en pourcentage) du demandeur"
+                    :error-messages="formError.risk_premium_percentage" :thumb-size="15" thumb-label="always"
+                    :rules="[requiredValidator]" step="0.1">
+                    <template #append>
+                      <VTextField v-model="notificationData.risk_premium_percentage"
+                        :error-messages="formError.risk_premium_percentage" type="number" style="width:80px"
+                        density="compact" hide-details variant="outlined" suffix="%" />
+                    </template>
+                  </VSlider>
                 </VCol>
               </VRow>
             </VCardText>

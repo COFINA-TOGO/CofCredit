@@ -148,7 +148,7 @@ if (contractData.value.data.contract.observations.length == 0) {
 
 <template>
   <div>
-    <VCard title="Liste des garants" class="mb-6">
+    <VCard title="Liste des cautions" class="mb-6">
       <div class="d-flex flex-wrap gap-4 mx-5">
         <div class="d-flex align-center">
           <VRow>
@@ -339,7 +339,7 @@ if (contractData.value.data.contract.observations.length == 0) {
       <!-- Dialog Content -->
       <VCard title="Suppression">
         <VCardText>
-          Etes vous sûr de vouloir supprimer ce garant?
+          Etes vous sûr de vouloir supprimer cette caution?
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">

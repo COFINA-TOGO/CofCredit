@@ -48,7 +48,7 @@ const removeGuarantee = () => {
       <VRow>
         <VCol cols="12" md="6" lg="4">
           <AppSelect v-model="localGuaranteeData.type_of_guarantee_id" :items="typeOfGuaranteeList" item-title="name"
-            item-value="id" label="Type de garantie" placeholder="Choisir le type de garantie" class="mb-3"
+            item-value="id" label="Type de cautionie" placeholder="Choisir le type de cautionie" class="mb-3"
             :rules="[requiredValidator]" />
         </VCol>
         <VCol cols="12" md="6" lg="4">

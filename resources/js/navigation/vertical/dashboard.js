@@ -131,18 +131,31 @@ export default [
           },
         ],
       },
+      {
+        title: 'CAT',
+        subject: 'cat',
+        action: 'read',
+        children: [
+          {
+            title: 'Ajouter',
+            to: 'cat-notification-add',
+            action: 'create',
+            subject: 'cat',
+          }
+        ],
+      },
     ]
   },
-  {
-    title: 'Report d\'échéance'
-  },
-  {
-    title: 'Remboursement anticipé'
-  },
-  {
-    title: 'Lettre de mise en demeure'
-  },
-  {
-    title: 'Checking post-deblocage'
-  },
+  // {
+  //   title: 'Report d\'échéance'
+  // },
+  // {
+  //   title: 'Remboursement anticipé'
+  // },
+  // {
+  //   title: 'Lettre de mise en demeure'
+  // },
+  // {
+  //   title: 'Checking post-deblocage'
+  // },
 ]

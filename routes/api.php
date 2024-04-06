@@ -101,6 +101,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post("/", [NotificationController::class, "store"])->name("store");
     Route::post("/upload/{id}", [NotificationController::class, "upload"])->name("upload");
     Route::put("/{id}", [NotificationController::class, "update"])->name("update");
+    Route::put("/send/{id}", [NotificationController::class, "send"])->name("send");
     Route::put("/change-head-credit-status/{id}", [NotificationController::class, "change_head_credit_status"])->name("change_head_credit_status");
     Route::put("/change-status/{id}", [NotificationController::class, "change_status"])->name("change_status");
     Route::delete("/{id}", [NotificationController::class, "destroy"])->name("destroy");

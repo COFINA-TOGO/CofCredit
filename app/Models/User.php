@@ -231,8 +231,8 @@ class User extends Authenticatable
                         "subject" => ["non-mortgage-contract", "mortgame-contract"]
                     ],
                     [
-                        "action" => ["read", "upload", "download"],
-                        "subject" => ["contract", "guarantor"],
+                        "action" => ["read", "upload", "download", "send"],
+                        "subject" => ["contract", "guarantor", "notification"],
                     ],
                     [
                         "action" => ["read"],

@@ -199,7 +199,7 @@ const apiDelete = async id => {
                     </template>
 
                     <VListItemTitle>
-                      Voir les Garants
+                      Voir les Cautions
                     </VListItemTitle>
                   </VListItem>
                 </VBadge>
