@@ -14,12 +14,20 @@ import { $api } from '@/utils/api';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
-
 const selectedType = ref()
 const searchQuery = ref('')
 const refInputEl = ref()
 const uploadState = ref('signed_contract')
-
+const selectedItemId = ref(0)
+const isActionDialogVisible = ref(false)
+const actionTitle = ref("")
+const actionText = ref("")
+const actionButtonText = ref("")
+const actionFunction = ref()
+const actionComment = ref("")
+const commentPresence = ref(false)
+const actionStatus = ref("waiting")
+const loadings = ref([])
 const headers = [
   {
     title: 'Numéro comitée',
@@ -51,8 +59,12 @@ const headers = [
     sortable: false,
   },
 ]
+const typeList = {
+  "company": 'Société',
+  "individual_business": 'Entreprise Individuel',
+  "particular": 'Particulier',
+}
 
-const loadings = ref([])
 
 const load = i => {
   loadings.value[i] = true
@@ -85,15 +97,7 @@ const {
   },
 }))
 
-const contractList = computed(() => contractData.value.data)
-const totalPv = computed(() => contractData.value.total)
-const lastPage = computed(() => contractData.value.last_page)
 
-const typeList = {
-  "company": 'Société',
-  "individual_business": 'Entreprise Individuel',
-  "particular": 'Particulier',
-}
 
 const downloadFile = async (url, fileName) => {
   try {
@@ -112,30 +116,6 @@ const downloadFile = async (url, fileName) => {
     console.error('Erreur lors du téléchargement:', error)
   }
 }
-
-const apiDelete = async id => {
-  await $api(`contract/${id}`, { method: 'DELETE' })
-  fetchContracts()
-}
-
-const apiChangeStatus = async id => {
-  await $api(`contract/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
-  actionComment.value = ""
-  if (actionStatus.value == "validated") {
-    router.push(`/cat/add?id=${id}`)
-  }
-  fetchContracts()
-}
-
-const selectedItemId = ref(0)
-const isActionDialogVisible = ref(false)
-const actionTitle = ref("")
-const actionText = ref("")
-const actionButtonText = ref("")
-const actionFunction = ref()
-const actionComment = ref("")
-const commentPresence = ref(false)
-const actionStatus = ref("waiting")
 
 const uploadFile = async (id, event) => {
   const { files } = event.target;
@@ -170,6 +150,24 @@ const uploadFile = async (id, event) => {
     console.error('Veuillez sélectionner un seul fichier.');
   }
 }
+
+const apiDelete = async id => {
+  await $api(`contract/${id}`, { method: 'DELETE' })
+  fetchContracts()
+}
+
+const apiChangeStatus = async id => {
+  await $api(`contract/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
+  actionComment.value = ""
+  if (actionStatus.value == "validated") {
+    router.push(`/cat/add?id=${id}`)
+  }
+  fetchContracts()
+}
+
+const contractList = computed(() => contractData.value.data)
+const totalPv = computed(() => contractData.value.total)
+const lastPage = computed(() => contractData.value.last_page)
 </script>
 
 <template>

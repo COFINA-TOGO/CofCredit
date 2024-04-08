@@ -14,12 +14,6 @@ import { $api } from '@/utils/api';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
-
-const selectedType = ref()
-const searchQuery = ref('')
-const refInputEl = ref()
-const uploadState = ref('signed_notification')
-
 const headers = [
   {
     title: 'Numéro comitée',
@@ -32,6 +26,10 @@ const headers = [
   {
     title: 'Nom client',
     key: 'verbal_trial.applicant_full_name',
+  },
+  {
+    title: 'Type de notification',
+    key: 'type',
   },
   {
     title: 'Téléphone',
@@ -51,8 +49,27 @@ const headers = [
     sortable: false,
   },
 ]
-
+const typeData = {
+  particular: { icon: "tabler-user", color: 'primary', name: "Particulier" },
+  company: { icon: "tabler-users", color: 'success', name: "Société" },
+  individual_business: { icon: "tabler-box-multiple-1", color: 'info', name: "Entreprise individuelle" },
+}
+const selectedType = ref()
+const searchQuery = ref('')
+const refInputEl = ref()
+const uploadState = ref('signed_notification')
 const loadings = ref([])
+const itemsPerPage = ref(8)
+const page = ref(1)
+const selectedItemId = ref(0)
+const isActionDialogVisible = ref(false)
+const actionTitle = ref("")
+const actionText = ref("")
+const actionButtonText = ref("")
+const actionFunction = ref()
+const actionComment = ref("")
+const commentPresence = ref(false)
+const actionStatus = ref("waiting")
 
 const load = i => {
   loadings.value[i] = true
@@ -60,9 +77,6 @@ const load = i => {
     loadings.value[i] = false
   }, 1000)
 }
-
-const itemsPerPage = ref(8)
-const page = ref(1)
 
 const updateOptions = options => {
   page.value = options.page
@@ -83,11 +97,6 @@ const {
   },
 }))
 
-const notificationList = computed(() => notificationData.value.data)
-const totalPv = computed(() => notificationData.value.total)
-const lastPage = computed(() => notificationData.value.last_page)
-
-
 const downloadFile = async (url, fileName) => {
   try {
     new JsFileDownloader({
@@ -105,30 +114,6 @@ const downloadFile = async (url, fileName) => {
     console.error('Erreur lors du téléchargement:', error)
   }
 }
-
-const apiDelete = async id => {
-  await $api(`notification/${id}`, { method: 'DELETE' })
-  fetchContracts()
-}
-
-const apiChangeStatus = async id => {
-  await $api(`notification/change-head-credit-status/${id}`, { method: 'PUT', body: { head_credit_validation: actionStatus.value, head_credit_observation: actionComment.value } })
-  actionComment.value = ""
-  if (actionStatus.value == "validated") {
-    router.push(`/notification/without-signed-contract`)
-  }
-  fetchContracts()
-}
-
-const selectedItemId = ref(0)
-const isActionDialogVisible = ref(false)
-const actionTitle = ref("")
-const actionText = ref("")
-const actionButtonText = ref("")
-const actionFunction = ref()
-const actionComment = ref("")
-const commentPresence = ref(false)
-const actionStatus = ref("waiting")
 
 const uploadFile = async (id, event) => {
   const { files } = event.target;
@@ -163,6 +148,26 @@ const uploadFile = async (id, event) => {
     console.error('Veuillez sélectionner un seul fichier.');
   }
 }
+
+const apiDelete = async id => {
+  await $api(`notification/${id}`, { method: 'DELETE' })
+  fetchContracts()
+}
+
+const apiChangeStatus = async id => {
+  await $api(`notification/change-head-credit-status/${id}`, { method: 'PUT', body: { head_credit_validation: actionStatus.value, head_credit_observation: actionComment.value } })
+  actionComment.value = ""
+  if (actionStatus.value == "validated") {
+    router.push(`/notification/without-signed-contract`)
+  }
+  fetchContracts()
+}
+
+
+
+const notificationList = computed(() => notificationData.value.data)
+const totalPv = computed(() => notificationData.value.total)
+const lastPage = computed(() => notificationData.value.last_page)
 </script>
 
 <template>
@@ -215,6 +220,17 @@ const uploadFile = async (id, event) => {
 
       <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
         :items="notificationList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
+
+
+        <template #item.type="{ item }">
+          <div class="d-flex align-center">
+            <VAvatar size="26" :color="typeData[item.type].color" variant="tonal">
+              <VIcon :icon="typeData[item.type].icon" size="20" :color="typeData[item.type].color" class="rounded-0" />
+            </VAvatar>
+            <span class="ms-1 text-no-wrap">{{ typeData[item.type].name }}</span>
+          </div>
+          <!-- info, primary, success -->
+        </template>
 
         <template #item.verbal_trial.amount="{ item }">
           {{ String(item.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
@@ -269,6 +285,15 @@ const uploadFile = async (id, event) => {
 
                   <div v-if="$can('download', 'notification')">
                     <VDivider />
+                    <!-- Télécharger notification non-signé -->
+                    <VListItem
+                      @click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.docx`);">
+
+                      <template #prepend>
+                        <VIcon icon="tabler-download" />
+                      </template>
+                      <VListItemTitle>Télécharger Notification non signé</VListItemTitle>
+                    </VListItem>
                     <!-- Télécharger billet à ordre non-signé -->
                     <VListItem
                       @click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
@@ -277,15 +302,6 @@ const uploadFile = async (id, event) => {
                         <VIcon icon="tabler-download" />
                       </template>
                       <VListItemTitle>Télécharger Billet à ordre non signé</VListItemTitle>
-                    </VListItem>
-                    <!-- Télécharger billet à ordre signé -->
-                    <VListItem v-if="item.signed_promissory_note_path"
-                      @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
-
-                      <template #prepend>
-                        <VIcon icon="tabler-download" />
-                      </template>
-                      <VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
                     </VListItem>
                   </div>
 
@@ -299,6 +315,15 @@ const uploadFile = async (id, event) => {
                         <VIcon icon="tabler-cloud-upload" />
                       </template>
                       <VListItemTitle>Ajouter billet à ordre signé</VListItemTitle>
+                    </VListItem>
+                    <!-- Télécharger billet à ordre signé -->
+                    <VListItem v-if="item.signed_promissory_note_path"
+                      @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
+
+                      <template #prepend>
+                        <VIcon icon="tabler-download" />
+                      </template>
+                      <VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
                     </VListItem>
                   </div>
                 </VList>

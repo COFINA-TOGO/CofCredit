@@ -238,7 +238,8 @@ const uploadFile = async (id, event) => {
               </VListItemTitle>
             </VListItem>
             <VListItem v-if="item.observations.length == 0">
-              <VChip label :color="{ 'validated': 'success', 'rejected': 'error', 'waiting': 'warning' }[item.status]">
+              <VChip label
+                :color="{ 'validated': 'success', 'rejected': 'error', 'waiting': (item.sent) ? 'warning' : 'success' }[item.status]">
                 <VTooltip v-if="item.status" activator="parent" transition="scroll-x-transition" location="start">
                   Raison: {{ item.status_observation }}</VTooltip>
                 {{ (item.status == 'validated') ? 'Dossier validé' : null }}

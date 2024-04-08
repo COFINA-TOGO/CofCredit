@@ -178,6 +178,26 @@ paths:
             example: null
         -
           in: query
+          name: has_notification
+          description: 'Filtrer par présence de notification.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par présence de notification.'
+            example: null
+        -
+          in: query
+          name: has_contract
+          description: 'Filtrer par présence de contrat.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par présence de contrat.'
+            example: null
+        -
+          in: query
           name: with_contract
           description: 'Afficher le contrat.'
           example: 0
@@ -185,6 +205,16 @@ paths:
           schema:
             type: integer
             description: 'Afficher le contrat.'
+            example: 0
+        -
+          in: query
+          name: with_notification
+          description: 'Afficher le notification.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le notification.'
             example: 0
         -
           in: query
@@ -2112,6 +2142,26 @@ paths:
                   type: integer
                   description: 'La prime de risque (en pourcentage) du crédit du demandeur.'
                   example: 2
+                total_amount_of_interest:
+                  type: integer
+                  description: 'La prime de risque (en pourcentage) du crédit du demandeur.'
+                  example: 2
+                representative_type_of_identity_document:
+                  type: integer
+                  description: 'La prime de risque (en pourcentage) du crédit du demandeur.'
+                  example: 2
+                representative_number_of_identity_document:
+                  type: integer
+                  description: 'La prime de risque (en pourcentage) du crédit du demandeur.'
+                  example: 2
+                representative_date_of_issue_of_identity_document:
+                  type: integer
+                  description: 'La prime de risque (en pourcentage) du crédit du demandeur.'
+                  example: 2
+                type:
+                  type: integer
+                  description: 'La prime de risque (en pourcentage) du crédit du demandeur.'
+                  example: 2
   '/api/notification/download/{id}':
     get:
       summary: "Télécharge la version word d'un notification"
@@ -2140,8 +2190,8 @@ paths:
           type: integer
   '/api/notification/promissory-note/download/{id}':
     get:
-      summary: "Télécharge le billet à ordre d'un notification"
-      operationId: tlchargeLeBilletOrdreDunNotification
+      summary: "Télécharge le billet à ordre d'une notification"
+      operationId: tlchargeLeBilletOrdreDuneNotification
       description: ''
       parameters: []
       responses:
@@ -2441,6 +2491,32 @@ paths:
         required: true
         schema:
           type: string
+  '/api/download/{id}':
+    get:
+      summary: "Télécharge la version word d'un notification"
+      operationId: tlchargeLaVersionWordDunNotification
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Endpoints
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID de la notification."
+        example: 1
+        required: true
+        schema:
+          type: integer
   /api/verbal-trial:
     get:
       summary: 'Affiche les Procès verbaux'
@@ -3121,32 +3197,6 @@ paths:
         required: true
         schema:
           type: string
-  '/api/download/{id}':
-    get:
-      summary: "Télécharge la version word d'un PV"
-      operationId: tlchargeLaVersionWordDunPV
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example: {  }
-                properties: {  }
-      tags:
-        - 'Procès Verbal'
-    parameters:
-      -
-        in: path
-        name: id
-        description: "L'ID du PV."
-        example: 1
-        required: true
-        schema:
-          type: integer
   /api/type-of-guarantee:
     get:
       summary: 'Affiche les types de garantie'

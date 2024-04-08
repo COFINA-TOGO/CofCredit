@@ -28,6 +28,12 @@ class Notification extends Model
         'signed_promissory_note_path',
         'creator_id',
         'sent',
+        'total_amount_of_interest',
+        'representative_type_of_identity_document',
+        'representative_number_of_identity_document',
+        'representative_date_of_issue_of_identity_document',
+        'type',
+        'business_denomination',
     ];
 
     protected $appends = ['observations', 'upload_completed', 'guarantors_count'];

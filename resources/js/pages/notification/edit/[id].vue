@@ -19,6 +19,12 @@ const getResetFormError = () => {
     representative_home_address: "",
     number_of_due_dates: "",
     risk_premium_percentage: "",
+    total_amount_of_interest: "",
+    representative_type_of_identity_document: "",
+    representative_number_of_identity_document: "",
+    representative_date_of_issue_of_identity_document: "",
+    type: "",
+    business_denomination: "",
   }
 }
 
@@ -60,6 +66,12 @@ const onSubmit = () => {
         representative_home_address: notification.value.representative_home_address,
         number_of_due_dates: notification.value.number_of_due_dates,
         risk_premium_percentage: notification.value.risk_premium_percentage,
+        total_amount_of_interest: notification.value.total_amount_of_interest,
+        representative_type_of_identity_document: notification.value.representative_type_of_identity_document,
+        representative_number_of_identity_document: notification.value.representative_number_of_identity_document,
+        representative_date_of_issue_of_identity_document: notification.value.representative_date_of_issue_of_identity_document,
+        type: notification.value.type,
+        business_denomination: notification.value.business_denomination,
       }
 
       const res = await $api(`/notification/${route.params.id}`, {
@@ -95,6 +107,20 @@ const onSubmit = () => {
 
 const isSnackbarScrollReverseVisible = ref(false)
 const snackbarMessage = ref("")
+
+
+const typeList = [
+  { value: "company", title: 'Société' },
+  { value: "individual_business", title: 'Entreprise Individuel' },
+  { value: "particular", title: 'Particulier' },
+]
+
+const documentTypeList = [
+  { value: "cni", title: 'Carte d\'identité nationale' },
+  { value: "passport", title: 'Passeport' },
+  { value: "residence_certificate", title: 'Certificat de résidence' },
+  { value: "driving_licence", title: 'Permis de conduire' },
+]
 </script>
 
 <template>
@@ -128,40 +154,55 @@ const snackbarMessage = ref("")
           <VCard class="mb-6" title="Information sur notification">
             <VCardText>
               <VRow>
-                <VCol v-if="notification.status == 'rejected' && notification.status_observation">
-                  <VAlert color="warning">
-                    Motif du refus par {{ notification.creator.full_name }}: {{ notification.status_observation }}
-                  </VAlert>
-                </VCol>
-                <VCol v-if="notification.head_credit_validation == 'rejected' && notification.head_credit_observation">
-                  <VAlert color="warning">
-                    Motif du refus par head crédit: {{ notification.head_credit_observation }}
-                  </VAlert>
-                </VCol>
-              </VRow>
-
-              <VRow>
-                <VCol cols="12" md="6" lg="6">
+                <VCol cols="12" md="6" lg="4">
                   <AppAutocomplete v-model="notification.verbal_trial_id" :items="verbalTrialList"
                     :error-messages="formError.verbal_trial_id" label="Procès verbal"
                     placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" item-title="label"
                     item-value="id" />
                 </VCol>
-                <VCol cols="12" md="6" lg="6">
+                <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="notification.representative_phone_number"
                     :error-messages="formError.representative_phone_number" label="Numéro de téléphone"
                     placeholder="Ex: +228 96 96 96 96" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol cols="12" md="6" lg="6">
+                <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="notification.representative_home_address"
                     :error-messages="formError.representative_home_address" label="Addresse" placeholder="Ex: Adewi"
                     :rules="[requiredValidator]" />
                 </VCol>
-                <VCol cols="12" md="6" lg="6">
+                <VCol cols="12" md="6" lg="4">
                   <AppTextField type="number" v-model="notification.number_of_due_dates"
                     :error-messages="formError.number_of_due_dates" label="Nombre d'échéance" placeholder="Ex: 4"
                     :rules="[requiredValidator]" />
                 </VCol>
+
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField v-model="notification.total_amount_of_interest" type="number"
+                    :error-messages="formError.total_amount_of_interest" label="Montant total des intérêts"
+                    placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="4">
+                  <AppSelect v-model="notification.type" :items="typeList" :error-messages="formError.type" label="Type"
+                    placeholder="Ex: Particulier" :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="4">
+                  <AppSelect v-model="notification.representative_type_of_identity_document" :items="documentTypeList"
+                    :error-messages="formError.representative_type_of_identity_document"
+                    label="Type de la pièce d'identité" placeholder="Ex: Passeport" :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="4">
+                  <AppTextField v-model="notification.representative_number_of_identity_document"
+                    :error-messages="formError.representative_number_of_identity_document"
+                    label="Numéro de la pièce d'identité" placeholder="Ex: 251012345678" :rules="[requiredValidator]" />
+                </VCol>
+
+                <VCol cols="12" md="12" lg="4">
+                  <AppDateTimePicker v-model="notification.representative_date_of_issue_of_identity_document"
+                    :error-messages="formError.representative_date_of_issue_of_identity_document"
+                    label="Date de délivrance de la pièce d'identité" placeholder="Ex: 2022-01-01"
+                    :rules="[requiredValidator]" />
+                </VCol>
+
                 <VCol cols="12">
                   <VSlider v-model="notification.risk_premium_percentage"
                     label="Prime de risque (en pourcentage) du demandeur"
@@ -173,6 +214,31 @@ const snackbarMessage = ref("")
                         density="compact" hide-details variant="outlined" suffix="%" />
                     </template>
                   </VSlider>
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
+          <!-- 👉 Information sur la société -->
+          <VCard v-if="notification.type == 'company'" class="mb-6" title="Information sur la société">
+            <VCardText>
+              <VRow cols="12">
+                <VCol cols="12">
+                  <AppTextField v-model="notification.business_denomination"
+                    :error-messages="formError.business_denomination" label="Dénomination" placeholder="Ex: Adjovidjo"
+                    :rules="[requiredValidator]" />
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
+          <!-- 👉 Information sur l'entreprise individuelle -->
+          <VCard v-if="notification.type == 'individual_business'" class="mb-6"
+            title="Information sur l'entreprise individuele">
+            <VCardText>
+              <VRow cols="12">
+                <VCol cols="12">
+                  <AppTextField v-model="notification.business_denomination"
+                    :error-messages="formError.business_denomination" label="Dénomination" placeholder="Ex: Agban"
+                    :rules="[requiredValidator]" />
                 </VCol>
               </VRow>
             </VCardText>

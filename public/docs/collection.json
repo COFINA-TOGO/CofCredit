@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "37f4bb19-9366-487a-a7d1-c8a44d4ef487",
+        "_postman_id": "cda4d516-771f-4f59-88c3-0c36e1bf7c8a",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -192,9 +192,27 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "has_notification",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de notification.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "has_contract",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de contrat.",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "with_contract",
                                     "value": "",
                                     "description": "Afficher le contrat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_notification",
+                                    "value": "",
+                                    "description": "Afficher le notification.",
                                     "disabled": true
                                 },
                                 {
@@ -234,7 +252,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/cat?contract_id=&credit_number=&sector=&first_deadline=&last_deadline=&source_of_reimbursement=&instructions_from_the_risk_and_credit_department=&outstanding_number_ready_to_settle=&other_expenses=&teg=&with_contract=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&with_creator=&paginate="
+                            "raw": "{{baseUrl}}\/api\/cat?contract_id=&credit_number=&sector=&first_deadline=&last_deadline=&source_of_reimbursement=&instructions_from_the_risk_and_credit_department=&outstanding_number_ready_to_settle=&other_expenses=&teg=&has_notification=&has_contract=&with_contract=&with_notification=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&with_creator=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -1927,7 +1945,7 @@
                     ]
                 },
                 {
-                    "name": "T\u00e9l\u00e9charge le billet \u00e0 ordre d'un notification",
+                    "name": "T\u00e9l\u00e9charge le billet \u00e0 ordre d'une notification",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -2071,7 +2089,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"verbal_trial_id\":1,\"representative_phone_number\":\"+228 90 90 90 90\",\"representative_home_address\":\"Zip 85\",\"number_of_due_dates\":3,\"risk_premium_percentage\":2}"
+                            "raw": "{\"verbal_trial_id\":1,\"representative_phone_number\":\"+228 90 90 90 90\",\"representative_home_address\":\"Zip 85\",\"number_of_due_dates\":3,\"risk_premium_percentage\":2,\"total_amount_of_interest\":2,\"representative_type_of_identity_document\":2,\"representative_number_of_identity_document\":2,\"representative_date_of_issue_of_identity_document\":2,\"type\":2}"
                         },
                         "description": ""
                     },
@@ -2328,6 +2346,46 @@
                         {
                             "header": [],
                             "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charge la version word d'un notification",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/download\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/download\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID de la notification."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
                             "body": "{}",
                             "name": ""
                         }
@@ -2808,7 +2866,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "16",
+                                    "value": "20",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -2831,46 +2889,6 @@
                         {
                             "header": [],
                             "code": 204,
-                            "body": "{}",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "T\u00e9l\u00e9charge la version word d'un PV",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/download\/:id",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/download\/:id",
-                            "variable": [
-                                {
-                                    "id": "id",
-                                    "key": "id",
-                                    "value": "1",
-                                    "description": "L'ID du PV."
-                                }
-                            ]
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [],
-                            "code": 200,
                             "body": "{}",
                             "name": ""
                         }
@@ -3057,7 +3075,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "9",
+                                    "value": "1",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -3297,7 +3315,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "6",
+                                    "value": "7",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -3531,7 +3549,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "14",
+                                    "value": "11",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -3805,7 +3823,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "10",
+                                    "value": "4",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

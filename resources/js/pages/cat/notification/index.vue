@@ -243,13 +243,13 @@ const rejectUnblockCAT = async id => {
 
                     <VListItemTitle>Voir Pv</VListItemTitle>
                   </VListItem>
-                  <VListItem v-if="$can('read', 'notifcation') || $can('historical', 'notifcation')"
-                    :to="{ name: 'notifcation-id', params: { id: item.notifcation.id } }">
+                  <VListItem v-if="$can('read', 'notification') || $can('historical', 'notification')"
+                    :to="{ name: 'notification-id', params: { id: item.notification.id } }">
                     <template #prepend>
                       <VIcon icon="tabler-eye" />
                     </template>
 
-                    <VListItemTitle>Voir Contrat</VListItemTitle>
+                    <VListItemTitle>Voir la notification</VListItemTitle>
                   </VListItem>
                   <VListItem v-if="$can('download', 'cat')"
                     @click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.notification.verbal_trial.committee_id}.docx`)">

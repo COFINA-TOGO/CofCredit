@@ -327,6 +327,8 @@ class ContractController extends Controller
       return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
     }
   }
+
+
   /**
    * Télécharge le billet à ordre d'un contrat
    *

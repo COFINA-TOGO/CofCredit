@@ -120,4 +120,4 @@ Route::middleware('auth:sanctum')->group(function () {
   });
 });
 
-Route::get("/download/{id}", [VerbalTrialController::class, "download"])->name("download");
+Route::get("/download/{id}", [NotificationController::class, "download"])->name("download");

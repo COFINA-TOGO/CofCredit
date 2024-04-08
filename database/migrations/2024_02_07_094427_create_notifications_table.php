@@ -23,6 +23,14 @@ return new class extends Migration {
             $table->enum("status", ["waiting", "rejected", "validated"])->default(("waiting"));
             $table->string("status_observation")->nullable();
 
+            $table->decimal('total_amount_of_interest', 30, 10);
+            $table->enum("representative_type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence"])->default('cni');
+            $table->string("representative_number_of_identity_document");
+            $table->date("representative_date_of_issue_of_identity_document");
+            $table->enum('type', ['particular', 'company', 'individual_business']);
+
+            $table->string("business_denomination")->nullable();
+
             $table->string("signed_notification_path")->nullable();
             $table->string("signed_contract_path")->nullable();
             $table->string("signed_promissory_note_path")->nullable();

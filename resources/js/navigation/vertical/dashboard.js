@@ -141,6 +141,11 @@ export default [
             to: 'cat-notification-add',
             action: 'create',
             subject: 'cat',
+          }, {
+            title: 'Historique',
+            to: 'cat-notification',
+            action: 'create',
+            subject: 'cat',
           }
         ],
       },

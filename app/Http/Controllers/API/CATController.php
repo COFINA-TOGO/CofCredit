@@ -54,9 +54,9 @@ class CATController extends Controller
     public function index(Request $request)
     {
         if (($authorisation = Gate::inspect('viewAny', CAT::class))->allowed()) {
-            $c_a_tList = CAT::query();
+            $catList = CAT::query();
             if ($search = $request->search) {
-                $c_a_tList
+                $catList
                     ->where(function ($query) use ($search) {
                         $query
                             ->where('contract_id', 'LIKE', "%$search%")
@@ -91,9 +91,9 @@ class CATController extends Controller
                 $has_notification = (int) $request["has_notification"];
                 if ($has_notification == 1) {
                     $parentRelation = "notification";
-                    $c_a_tList->whereHas('notification');
+                    $catList->whereHas('notification');
                 } else if ($has_notification == 0) {
-                    $c_a_tList->whereDoesntHave('notification');
+                    $catList->whereDoesntHave('notification');
                 }
             }
 
@@ -101,29 +101,29 @@ class CATController extends Controller
                 $has_contract = (int) $request["has_contract"];
                 if ($has_contract == 1) {
                     $parentRelation = "contract";
-                    $c_a_tList->whereHas('contract');
+                    $catList->whereHas('contract');
                 } else if ($has_contract == 0) {
-                    $c_a_tList->whereDoesntHave('contract');
+                    $catList->whereDoesntHave('contract');
                 }
             }
 
             foreach (["contract_id", "credit_number", "sector", "first_deadline", "last_deadline", "source_of_reimbursement", "instructions_from_the_risk_and_credit_department", "outstanding_number_ready_to_settle", "other_expenses", "teg"] as $filter) {
                 if (isset($request[$filter]) && $request[$filter]) {
-                    $c_a_tList->where($filter, $request[$filter]);
+                    $catList->where($filter, $request[$filter]);
                 }
             }
 
             foreach (["with_contract" => "contract", "with_notification" => "notification", "with_verbal_trial" => "$parentRelation.verbal_trial", "with_type_of_credit" => "$parentRelation.verbal_trial.type_of_credit", "with_type_of_applicant" => "$parentRelation.verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "$parentRelation.verbal_trial.guarantees", "with_creator" => "$parentRelation.creator"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
-                    $c_a_tList->with($value);
+                    $catList->with($value);
                 }
             }
 
             if (isset($request["paginate"]) && ($request->paginate == false)) {
-                $c_a_tList = $c_a_tList->orderByDesc('created_at')->get();
-                $data = ["data" => $c_a_tList, "total" => count($c_a_tList)];
+                $catList = $catList->orderByDesc('created_at')->get();
+                $data = ["data" => $catList, "total" => count($catList)];
             } else {
-                $data = $c_a_tList->orderByDesc('created_at')->paginate(8)->toArray();
+                $data = $catList->orderByDesc('created_at')->paginate(8)->toArray();
             }
 
             return $this->responseOkPaginate($data);
@@ -149,17 +149,17 @@ class CATController extends Controller
      */
     public function show(Request $request, int $id)
     {
-        $c_a_t = CAT::find($id);
-        if ($c_a_t) {
-            if (($authorisation = Gate::inspect('view', $c_a_t))->allowed()) {
+        $cat = CAT::find($id);
+        if ($cat) {
+            if (($authorisation = Gate::inspect('view', $cat))->allowed()) {
                 $suplementList = [];
                 foreach (["with_contract" => "contract", "with_verbal_trial" => "contract.verbal_trial", "with_type_of_credit" => "contract.verbal_trial.type_of_credit", "with_type_of_applicant" => "contract.verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "contract.verbal_trial.guarantees", "with_creator" => "contract.creator"] as $key => $value) {
                     if (isset($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }
                 }
-                $c_a_t->load($suplementList);
-                return $this->responseOk(["c_a_t" => $c_a_t]);
+                $cat->load($suplementList);
+                return $this->responseOk(["c_a_t" => $cat]);
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
@@ -177,25 +177,26 @@ class CATController extends Controller
      */
     public function download(Request $request, int $id)
     {
-        $c_a_t = CAT::find($id);
-        if ($c_a_t) {
-            // if (($authorisation = Gate::inspect('view', $c_a_t))->allowed()) {
-            $templateProcessor = new TemplateProcessor("../document_templates/CATs/CAT.docx");
-            $data = $c_a_t->toArray();
-            $data = array_merge($data, collect($c_a_t->contract)->mapWithKeys(function ($value, $key) {
-                return ['contract.' . $key => $value];
+        $cat = CAT::find($id);
+        if ($cat) {
+            // if (($authorisation = Gate::inspect('view', $cat))->allowed()) {
+            $parentRelation = ($cat->notification) ? "notification" : "contract";
+            $templateProcessor = new TemplateProcessor("../document_templates/CATs/CAT-$parentRelation.docx");
+            $data = $cat->toArray();
+            $data = array_merge($data, collect($cat->$parentRelation)->mapWithKeys(function ($value, $key) use ($parentRelation) {
+                return ["$parentRelation." . $key => $value];
             })->all());
-            $data = array_merge($data, collect($c_a_t->contract->verbal_trial)->mapWithKeys(function ($value, $key) {
-                return ['contract.verbal_trial.' . $key => $value];
+            $data = array_merge($data, collect($cat->$parentRelation->verbal_trial)->mapWithKeys(function ($value, $key) use ($parentRelation) {
+                return ["$parentRelation.verbal_trial." . $key => $value];
             })->all());
-            $data = array_merge($data, collect($c_a_t->contract->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
-                return ['contract.verbal_trial.type_of_credit.' . $key => $value];
+            $data = array_merge($data, collect($cat->$parentRelation->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) use ($parentRelation) {
+                return ["$parentRelation.verbal_trial.type_of_credit." . $key => $value];
             })->all());
-            $data = array_merge($data, collect($c_a_t->contract->verbal_trial->caf)->mapWithKeys(function ($value, $key) {
-                return ['contract.verbal_trial.caf.' . $key => $value];
+            $data = array_merge($data, collect($cat->$parentRelation->verbal_trial->caf)->mapWithKeys(function ($value, $key) use ($parentRelation) {
+                return ["$parentRelation.verbal_trial.caf." . $key => $value];
             })->all());
-            $data = array_merge($data, collect($c_a_t->contract->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
-                return ['contract.verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
+            $data = array_merge($data, collect($cat->$parentRelation->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) use ($parentRelation) {
+                return ["$parentRelation.verbal_trial.type_of_credit.type_of_applicant." . $key => $value];
             })->all());
             $source_of_reimbursementTranslate = [
                 "revenue_from_the_activity" => "Recettes de l’activité",
@@ -205,27 +206,27 @@ class CATController extends Controller
 
             $data["ht_rate"] = "17";
             $data["source_of_reimbursement.fr"] = $source_of_reimbursementTranslate[$data["source_of_reimbursement"]];
-            $data["date_of_approval"] = Carbon::parse($c_a_t->contract->verbal_trial->created_at)->format("d/m/Y");
-            $data["first_deadline"] = Carbon::parse($c_a_t->first_deadline)->format("d/m/Y");
-            $data["last_deadline"] = Carbon::parse($c_a_t->last_deadline)->format("d/m/Y");
+            $data["date_of_approval"] = Carbon::parse($cat->$parentRelation->verbal_trial->created_at)->format("d/m/Y");
+            $data["first_deadline"] = Carbon::parse($cat->first_deadline)->format("d/m/Y");
+            $data["last_deadline"] = Carbon::parse($cat->last_deadline)->format("d/m/Y");
             $data["current_date"] = Carbon::now()->format('d/m/Y');
 
-            $data["contract.verbal_trial.tax_fee_interest_rate.value"] = number_format((float) ($data["contract.verbal_trial.tax_fee_interest_rate"] * $data["contract.verbal_trial.amount"] / 100), 0, ',', ' ');
-            $data["contract.verbal_trial.administrative_fees_percentage.value"] = number_format((float) ($data["contract.verbal_trial.administrative_fees_percentage"] * $data["contract.verbal_trial.amount"] / 100), 0, ',', ' ');
-            $data["contract.risk_premium_percentage.value"] = number_format((float) ($data["contract.risk_premium_percentage"] * $data["contract.verbal_trial.amount"] / 100), 0, ',', ' ');
-            $data["guarantee_amount_total"] = number_format($c_a_t->contract->verbal_trial->guarantees->sum("value"), 0, ',', ' ');
-            $data["security_deposit"] = number_format($data["contract.verbal_trial.amount"] * 0.2, 0, ',', ' ');
+            $data["$parentRelation.verbal_trial.tax_fee_interest_rate.value"] = number_format((float) ($data["$parentRelation.verbal_trial.tax_fee_interest_rate"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
+            $data["$parentRelation.verbal_trial.administrative_fees_percentage.value"] = number_format((float) ($data["$parentRelation.verbal_trial.administrative_fees_percentage"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
+            $data["$parentRelation.risk_premium_percentage.value"] = number_format((float) ($data["$parentRelation.risk_premium_percentage"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
+            $data["guarantee_amount_total"] = number_format($cat->$parentRelation->verbal_trial->guarantees->sum("value"), 0, ',', ' ');
+            $data["security_deposit"] = number_format($data["$parentRelation.verbal_trial.amount"] * 0.2, 0, ',', ' ');
             $data["teg"] = number_format($data["teg"], 0, ',', ' ');
-            $data["contract.verbal_trial.amount"] = number_format($data["contract.verbal_trial.amount"], 0, ',', ' ');
-            if ($data["contract.verbal_trial.duration"] < 6) {
+            $data["$parentRelation.verbal_trial.amount"] = number_format($data["$parentRelation.verbal_trial.amount"], 0, ',', ' ');
+            if ($data["$parentRelation.verbal_trial.duration"] < 6) {
                 $data["credit_type"] = "COURT TERME";
-            } elseif ($data["contract.verbal_trial.duration"] < 12) {
+            } elseif ($data["$parentRelation.verbal_trial.duration"] < 12) {
                 $data["credit_type"] = "MOYEN TERME";
             } else {
                 $data["credit_type"] = "LONG TERME";
             }
             $guaranteeList = [];
-            foreach ($c_a_t->contract->verbal_trial->guarantees as $guarantee) {
+            foreach ($cat->$parentRelation->verbal_trial->guarantees as $guarantee) {
                 $tmp = $guarantee->toArray();
                 $tmp["value"] = number_format((float) $tmp["value"], 0, ',', ' ');
                 $guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
@@ -233,19 +234,20 @@ class CATController extends Controller
                 })->all());
             }
             $templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
-            unset($data["contract.observations"]);
-            unset($data["contract.guarantors"]);
-            unset($data["contract.verbal_trial.caf.ability_rules"]);
+            unset($data["$parentRelation.observations"]);
+            unset($data["$parentRelation.guarantors"]);
+            unset($data["$parentRelation.verbal_trial.caf.ability_rules"]);
+            unset($data["$parentRelation"]);
             unset($data["status"]);
             $templateProcessor->setValues($data);
             // return $data;
 
             // Enregistrez les modifications dans un nouveau fichier
-            $outputFilePath = public_path("CAT-" . $c_a_t->contract->verbal_trial->committee_id . ".docx");
+            $outputFilePath = public_path("CAT-" . $cat->$parentRelation->verbal_trial->committee_id . ".docx");
             $templateProcessor->saveAs($outputFilePath);
 
             return response()->download($outputFilePath)->deleteFileAfterSend(true);
-            // return $this->responseOk(["c_a_t" => $c_a_t]);
+            // return $this->responseOk(["c_a_t" => $cat]);
             // } else {
             //     return $this->responseError(["auth" => [$authorisation->message()]], 403);
             // }
@@ -306,14 +308,14 @@ class CATController extends Controller
             try {
                 $requestData["validation_status"] = "waiting";
                 $requestData["unblock_status"] = "waiting";
-                $c_a_t = CAT::create($requestData);
-                $c_a_t->load(["contract.verbal_trial.type_of_credit.type_of_applicant", "contract.verbal_trial.guarantees"]);
+                $cat = CAT::create($requestData);
+                $cat->load(["contract.verbal_trial.type_of_credit.type_of_applicant", "contract.verbal_trial.guarantees"]);
             } catch (\Exception $e) {
                 DB::rollback();
                 throw $e;
             }
             DB::commit(); // Valider les opérations
-            return $this->responseOk(["c_a_t" => $c_a_t], status: 201);
+            return $this->responseOk(["c_a_t" => $cat], status: 201);
         } else {
             return $this->responseError(["auth" => [$authorisation->message()]], 403);
         }
@@ -340,9 +342,9 @@ class CATController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $c_a_t = CAT::find($id);
-        if ($c_a_t) {
-            if (($authorisation = Gate::inspect('update', $c_a_t))->allowed()) {
+        $cat = CAT::find($id);
+        if ($cat) {
+            if (($authorisation = Gate::inspect('update', $cat))->allowed()) {
                 $requestData = $request->all();
                 $validator = Validator::make($requestData, [
                     'contract_id' => "required|exists:contracts,id|unique:c_a_t_s,contract_id," . $id,
@@ -359,9 +361,9 @@ class CATController extends Controller
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
                 } else {
-                    $c_a_t->update($requestData);
-                    $c_a_t->load(["contract.verbal_trial.type_of_credit.type_of_applicant", "contract.verbal_trial.guarantees"]);
-                    return $this->responseOk(["c_a_t" => $c_a_t]);
+                    $cat->update($requestData);
+                    $cat->load(["contract.verbal_trial.type_of_credit.type_of_applicant", "contract.verbal_trial.guarantees"]);
+                    return $this->responseOk(["c_a_t" => $cat]);
                 }
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
@@ -383,14 +385,14 @@ class CATController extends Controller
      */
     public function validate_cat(Request $request, int $id)
     {
-        $c_a_t = CAT::find($id);
-        if ($c_a_t) {
-            if (($authorisation = Gate::inspect('validate', $c_a_t))->allowed()) {
-                $c_a_t->update([
+        $cat = CAT::find($id);
+        if ($cat) {
+            if (($authorisation = Gate::inspect('validate', $cat))->allowed()) {
+                $cat->update([
                     "validation_status" => "validated",
                     "validation_user_id" => $request->user()->id,
                 ]);
-                return $c_a_t;
+                return $cat;
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
@@ -411,14 +413,14 @@ class CATController extends Controller
      */
     public function unblock(Request $request, int $id)
     {
-        $c_a_t = CAT::find($id);
-        if ($c_a_t) {
-            if (($authorisation = Gate::inspect('unblock', $c_a_t))->allowed()) {
-                $c_a_t->update([
+        $cat = CAT::find($id);
+        if ($cat) {
+            if (($authorisation = Gate::inspect('unblock', $cat))->allowed()) {
+                $cat->update([
                     "unblock_status" => "validated",
                     "unblock_user_id" => $request->user()->id,
                 ]);
-                return $c_a_t;
+                return $cat;
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
@@ -439,9 +441,9 @@ class CATController extends Controller
      */
     public function reject_validation(Request $request, int $id)
     {
-        $c_a_t = CAT::find($id);
-        if ($c_a_t) {
-            if (($authorisation = Gate::inspect('reject_validation', $c_a_t))->allowed()) {
+        $cat = CAT::find($id);
+        if ($cat) {
+            if (($authorisation = Gate::inspect('reject_validation', $cat))->allowed()) {
                 $requestData = $request->all();
                 $validator = Validator::make($requestData, [
                     'comment' => "min:1",
@@ -449,12 +451,12 @@ class CATController extends Controller
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
                 } else {
-                    $c_a_t->update([
+                    $cat->update([
                         "validation_status" => "rejected",
                         "validation_comment" => $requestData["comment"],
                         "validation_user_id" => $request->user()->id,
                     ]);
-                    return $c_a_t;
+                    return $cat;
                 }
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
@@ -476,9 +478,9 @@ class CATController extends Controller
      */
     public function reject_unblock(Request $request, int $id)
     {
-        $c_a_t = CAT::find($id);
-        if ($c_a_t) {
-            if (($authorisation = Gate::inspect('reject_unblock', $c_a_t))->allowed()) {
+        $cat = CAT::find($id);
+        if ($cat) {
+            if (($authorisation = Gate::inspect('reject_unblock', $cat))->allowed()) {
                 $requestData = $request->all();
                 $validator = Validator::make($requestData, [
                     'comment' => "min:1",
@@ -486,12 +488,12 @@ class CATController extends Controller
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
                 } else {
-                    $c_a_t->update([
+                    $cat->update([
                         "unblock_status" => "rejected",
                         "unblock_comment" => $requestData["comment"],
                         "unblock_user_id" => $request->user()->id,
                     ]);
-                    return $c_a_t;
+                    return $cat;
                 }
             } else {
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
@@ -510,10 +512,10 @@ class CATController extends Controller
      */
     public function destroy(int $id)
     {
-        $c_a_t = CAT::find($id);
-        if ($c_a_t) {
-            if (($authorisation = Gate::inspect('delete', $c_a_t))->allowed()) {
-                if ($c_a_t->delete()) {
+        $cat = CAT::find($id);
+        if ($cat) {
+            if (($authorisation = Gate::inspect('delete', $cat))->allowed()) {
+                if ($cat->delete()) {
                     return $this->responseOk(messages: ["c_a_t" => "Le CAT a été supprimé"], status: 204);
                 } else {
                     return $this->responseError(["server" => "Erreur du serveur"], 500);

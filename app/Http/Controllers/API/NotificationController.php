@@ -192,111 +192,79 @@ class NotificationController extends Controller
     {
         $notification = Notification::find($id);
         if ($notification) {
-            if (($authorisation = Gate::inspect('view', $notification))->allowed()) {
-                $templatePath = ($notification->has_pledges == "0") ? "../document_templates/Notifications/$notification->type/notification_$notification->type.docx" : "../document_templates/Notifications/$notification->type/with_pledge/notification_$notification->type" . "_with_pledge.docx";
-                $templateProcessor = new TemplateProcessor($templatePath);
+            // if (($authorisation = Gate::inspect('view', $notification))->allowed()) {
+            $templateProcessor = new TemplateProcessor(($notification->head_credit_validation == "validated") ? "../document_templates/Notifications/Notification-validated.docx" : "../document_templates/Notifications/Notification.docx");
 
-                $data = $notification->toArray();
-                $data = array_merge($data, collect($notification->verbal_trial)->mapWithKeys(function ($value, $key) {
-                    return ['verbal_trial.' . $key => $value];
+            $data = $notification->toArray();
+            $data = array_merge($data, collect($notification->verbal_trial)->mapWithKeys(function ($value, $key) {
+                return ['verbal_trial.' . $key => $value];
+            })->all());
+            $data = array_merge($data, collect($notification->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
+                return ['verbal_trial.type_of_credit.' . $key => $value];
+            })->all());
+            $data = array_merge($data, collect($notification->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
+                return ['verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
+            })->all());
+            if ($notification->type == "company") {
+                $data = array_merge($data, collect($notification->company)->mapWithKeys(function ($value, $key) {
+                    return ['company.' . $key => $value];
                 })->all());
-                $data = array_merge($data, collect($notification->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
-                    return ['verbal_trial.type_of_credit.' . $key => $value];
+            } elseif ($notification->type == "individual_business") {
+                $data = array_merge($data, collect($notification->individual_business)->mapWithKeys(function ($value, $key) {
+                    return ['individual_business.' . $key => $value];
                 })->all());
-                $data = array_merge($data, collect($notification->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
-                    return ['verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
-                })->all());
-                if ($notification->type == "company") {
-                    $data = array_merge($data, collect($notification->company)->mapWithKeys(function ($value, $key) {
-                        return ['company.' . $key => $value];
-                    })->all());
-                } elseif ($notification->type == "individual_business") {
-                    $data = array_merge($data, collect($notification->individual_business)->mapWithKeys(function ($value, $key) {
-                        return ['individual_business.' . $key => $value];
-                    })->all());
-                }
-                $data["ht_rate"] = "17";
-                $data["verbal_trial.day_due_amount"] = ((float) $data["verbal_trial.due_amount"]) / 20;
-                $data["verbal_trial.day_due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.day_due_amount"])->locale('fr')->toLetters();
-                $data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
-                $data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
-                $data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-                $data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
-                $data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
-                $data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
-                $data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-                $data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
-                $data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
-                $data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
-                $data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
-                $data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      : « 1% du capital restant dû après 12 mois »";
-                $data["representative_type_of_identity_document"] = [
-                    "cni" => "Carte d'identité nationale",
-                    "passport" => "Passeport",
-                    "residence_certificate" => "Certificat de résidence",
-                    "driving_licence" => "Permis de conduire"
-                ][$data["representative_type_of_identity_document"]];
-
-                $data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
-                $data["verbal_trial.day_due_amount"] = number_format(((float) $data["verbal_trial.day_due_amount"]), 0, ',', ' ');
-                $data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
-                $data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
-                $data["verbal_trial.administrative_fees_percentage"] = number_format(((float) $data["verbal_trial.administrative_fees_percentage"]), 0, ',', ' ');
-                $data["verbal_trial.insurance_premium"] = number_format(((float) $data["verbal_trial.insurance_premium"]), 0, ',', ' ');
-                $data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
-
-                $guaranteeList = [];
-                foreach ($notification->verbal_trial->guarantees as $guarantee) {
-                    $tmp = $guarantee->toArray();
-                    $tmp["value"] = number_format((float) $tmp["value"], 0, ',', ' ');
-                    $guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
-                        return ['type_of_guarantee.' . $key => $value];
-                    })->all());
-                }
-                $templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
-
-                if ($notification->has_pledges == "true") {
-                    $pledgeList = [];
-                    foreach ($notification->pledges as $pledge) {
-                        $tmp = $pledge->toArray();
-                        $tmp["type.fr"] = ["vehicle" => "véhicule", "stock" => "stock"][$tmp["type"]];
-                        $pledgeList[] = array_merge($tmp, collect($pledge->type_of_pledge)->mapWithKeys(function ($value, $key) {
-                            return ['pledge.' . $key => $value];
-                        })->all());
-                    }
-                    $data["vehicleCount"] = $notification->pledges()->where('type', 'vehicle')->count();
-                    $data["stockCount"] = $notification->pledges()->where('type', 'stock')->count();
-                    $data["number_pledge.fr"] = "";
-                    if ($data["vehicleCount"] > 0) {
-                        $data["number_pledge.fr"] .= SpellNumber::value((float) $data["vehicleCount"])->locale('fr')->toLetters() . " véhicule(s)";
-                    }
-
-                    if ($data["stockCount"] > 0) {
-                        $data["number_pledge.fr"] .= ($data["vehicleCount"] > 0) ? " et " : "";
-                        $data["number_pledge.fr"] .= SpellNumber::value((float) $data["stockCount"])->locale('fr')->toLetters() . " Stock(s)";
-                    }
-                    $templateProcessor->cloneBlock('pledgeList', 0, true, false, $pledgeList);
-                }
-                unset($data["observations"]);
-                unset($data["guarantors"]);
-                $templateProcessor->setValues($data);
-
-                // Enregistrez les modifications dans un nouveau fichier
-                $outputFilePath = public_path("Contrat-" . $notification->verbal_trial->committee_id . ".docx");
-                $templateProcessor->saveAs($outputFilePath);
-
-                return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
-            } else {
-                return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
+            $data["ht_rate"] = "17";
+            $data["verbal_trial.civility.2"] = ["Mr" => "Monsieur", "Mme" => "Madame", "Mlle" => "Madame"][$data["verbal_trial.civility"]];
+            $data["current_date"] = Carbon::now()->translatedFormat('d F Y');
+            $data["verbal_trial.day_due_amount"] = ((float) $data["verbal_trial.due_amount"]) / 20;
+            $data["verbal_trial.administrative_fees_percentage.value"] = number_format((float) $data["verbal_trial.administrative_fees_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', ' ');
+            $data["verbal_trial.day_due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.day_due_amount"])->locale('fr')->toLetters();
+            $data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
+            $data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
+            $data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
+            $data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
+            $data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
+            $data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
+            $data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
+            $data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne                               : « 1% du capital restant dû après 12 mois »";
+            $data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
+            $data["verbal_trial.day_due_amount"] = number_format(((float) $data["verbal_trial.day_due_amount"]), 0, ',', ' ');
+            $data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
+            $data["verbal_trial.administrative_fees_percentage"] = number_format(((float) $data["verbal_trial.administrative_fees_percentage"]), 0, ',', ' ');
+            $data["verbal_trial.insurance_premium"] = number_format(((float) $data["verbal_trial.insurance_premium"]), 0, ',', ' ');
+
+            $guaranteeList = [];
+            foreach ($notification->verbal_trial->guarantees as $guarantee) {
+                $tmp = $guarantee->toArray();
+                $tmp["value"] = number_format((float) $tmp["value"], 0, ',', ' ');
+                $guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
+                    return ['type_of_guarantee.' . $key => $value];
+                })->all());
+            }
+            $templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+
+            unset($data["observations"]);
+            unset($data["guarantors"]);
+            $templateProcessor->setValues($data);
+
+            // Enregistrez les modifications dans un nouveau fichier
+            $outputFilePath = public_path("Contrat-" . $notification->verbal_trial->committee_id . ".docx");
+            $templateProcessor->saveAs($outputFilePath);
+
+            return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
+            // } else {
+            //     return $this->responseError(["auth" => [$authorisation->message()]], 403);
+            // }
         } else {
             return $this->responseError(["id" => "La notification n'existe pas"], 404);
         }
     }
+
     /**
-     * Télécharge le billet à ordre d'un notification
+     * Télécharge le billet à ordre d'une notification
      *
-     * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
+     * @urlParam    id                                                      int     required    L'ID de la notification.                                                    Example: 1
      *
      * @response 200
      */
@@ -317,29 +285,13 @@ class NotificationController extends Controller
                 $data = array_merge($data, collect($notification->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
                     return ['verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
                 })->all());
-                if ($notification->type == "company") {
-                    $data = array_merge($data, collect($notification->company)->mapWithKeys(function ($value, $key) {
-                        return ['company.' . $key => $value];
-                    })->all());
-                } elseif ($notification->type == "individual_business") {
-                    $data = array_merge($data, collect($notification->individual_business)->mapWithKeys(function ($value, $key) {
-                        return ['individual_business.' . $key => $value];
-                    })->all());
-                }
 
-                $data["ht_rate"] = "17";
+                // $data["ht_rate"] = "17";
                 $data["current_date"] = Carbon::now()->format("d/m/Y");
-                $data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
                 $data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
-                $data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-                $data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
                 $data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
                 $data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
-                $data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
                 $data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
-                $data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
-                $data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
-                $data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
                 $data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      : « 1% du capital restant dû après 12 mois »";
                 $data["representative_type_of_identity_document"] = [
                     "cni" => "Carte d'identité nationale",
@@ -347,12 +299,18 @@ class NotificationController extends Controller
                     "residence_certificate" => "Certificat de résidence",
                     "driving_licence" => "Permis de conduire"
                 ][$data["representative_type_of_identity_document"]];
-
-                $data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
                 $data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
-                $data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
                 $data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
 
+                $data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
+                $data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
+                $data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
+                $data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
+                $data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
+                $data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
+                $data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
+                $data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
+                $data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
                 unset($data["observations"]);
                 unset($data["guarantors"]);
                 $templateProcessor->setValues($data);
@@ -367,7 +325,7 @@ class NotificationController extends Controller
                 return $this->responseError(["auth" => [$authorisation->message()]], 403);
             }
         } else {
-            return $this->responseError(["id" => "La notification n'existe pas"], 404);
+            return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
         }
     }
 
@@ -379,6 +337,11 @@ class NotificationController extends Controller
      * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
      * @bodyParam   number_of_due_dates                                     int                 Le nombre d'échéance du crédit.                                         Example: 3
      * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
+     * @bodyParam   total_amount_of_interest                                int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
+     * @bodyParam   representative_type_of_identity_document                int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
+     * @bodyParam   representative_number_of_identity_document              int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
+     * @bodyParam   representative_date_of_issue_of_identity_document       int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
+     * @bodyParam   type                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
      *
      * @response 200
      */
@@ -392,14 +355,28 @@ class NotificationController extends Controller
                 'representative_home_address' => 'required|min:2',
                 'number_of_due_dates' => 'required|numeric',
                 'risk_premium_percentage' => 'required|numeric',
+                'total_amount_of_interest' => 'required|numeric',
+                'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence',
+                'representative_number_of_identity_document' => 'required|min:2',
+                'representative_date_of_issue_of_identity_document' => 'required|date',
+                'type' => 'required|in:particular,company,individual_business',
             ]);
             if ($validator->fails()) {
                 return $this->responseError($validator->errors(), 400);
             }
 
-            $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
+            if ($requestData["type"] != "particual") {
+                $validator = Validator::make($requestData, [
+                    'business_denomination' => "required|min:2",
+                ]);
+                if ($validator->fails()) {
+                    return $this->responseError($validator->errors(), 400);
+                }
+            }
             $requestData["creator_id"] = $request->user()->id;
             $requestData["sent"] = false;
+
+            $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
             $notification = Notification::create($requestData);
             $notification->load($relationList);
 
@@ -455,9 +432,23 @@ class NotificationController extends Controller
                     'representative_home_address' => 'required|min:2',
                     'number_of_due_dates' => 'required|numeric',
                     'risk_premium_percentage' => 'required|numeric',
+                    'total_amount_of_interest' => 'required|numeric',
+                    'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence',
+                    'representative_number_of_identity_document' => 'required|min:2',
+                    'representative_date_of_issue_of_identity_document' => 'required|date',
+                    'type' => 'required|in:particular,company,individual_business',
                 ]);
                 if ($validator->fails()) {
                     return $this->responseError($validator->errors(), 400);
+                }
+
+                if ($requestData["type"] != "particual") {
+                    $validator = Validator::make($requestData, [
+                        'business_denomination' => "required|min:2",
+                    ]);
+                    if ($validator->fails()) {
+                        return $this->responseError($validator->errors(), 400);
+                    }
                 }
 
                 $relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
