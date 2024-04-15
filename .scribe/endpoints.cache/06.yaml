@@ -1052,13 +1052,13 @@ endpoints:
         name: id
         description: "L'ID du procès verbal"
         required: true
-        example: 20
+        example: 2
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 20
+      id: 2
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

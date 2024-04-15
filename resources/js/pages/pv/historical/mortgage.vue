@@ -3,7 +3,7 @@
 <script setup>
 definePage({
   meta: {
-    action: 'historical-mortgage',
+    action: 'historical',
     subject: 'pv',
   },
 })
@@ -198,15 +198,9 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
             :to="{ name: 'pv-id', params: { id: item.id } }">
             <VIcon icon=" tabler-eye" />
           </IconBtn>
-          <IconBtn v-if="$can('update', 'pv')" :to="{ name: 'pv-edit-id', params: { id: item.id } }">
-            <VIcon icon="tabler-edit" />
-          </IconBtn>
           <IconBtn v-if="$can('download', 'pv')"
             @click="downloadFile(`/api/verbal-trial/download/${item.id}`, `PV-${item.committee_id}.docx`)">
             <VIcon icon="tabler-download" />
-          </IconBtn>
-          <IconBtn v-if="$can('delete', 'pv')" @click="idToDelete = item.id; isDialogVisible = true">
-            <VIcon icon="tabler-trash" color='error' />
           </IconBtn>
         </template>
 

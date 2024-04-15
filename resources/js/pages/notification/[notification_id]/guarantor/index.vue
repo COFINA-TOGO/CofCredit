@@ -17,7 +17,10 @@ const guarantorIdToDelete = ref(0)
 const searchQuery = ref('')
 const refInputEl = ref()
 const uploadState = ref('signed_notification')
-
+const loadings = ref([])
+const itemsPerPage = ref(8)
+const page = ref(1)
+let backRouteName = 'notification'
 const headers = [
   {
     title: 'Nom',
@@ -46,22 +49,6 @@ const headers = [
   },
 ]
 
-const loadings = ref([])
-
-const load = i => {
-  loadings.value[i] = true
-  setTimeout(() => {
-    loadings.value[i] = false
-  }, 1000)
-}
-
-const itemsPerPage = ref(8)
-const page = ref(1)
-
-const updateOptions = options => {
-  page.value = options.page
-}
-
 const {
   data: guarantorData,
   execute: fetchGuarantors,
@@ -74,9 +61,20 @@ const {
   },
 }))
 
-const guarantorList = computed(() => guarantorData.value.data)
-const totalGuarantor = computed(() => guarantorData.value.total)
-const lastPage = computed(() => guarantorData.value.last_page)
+const {
+  data: verbalTrialData,
+} = await useApi(createUrl(`/verbal-trial/${route.params.notification_id}`))
+
+const load = i => {
+  loadings.value[i] = true
+  setTimeout(() => {
+    loadings.value[i] = false
+  }, 1000)
+}
+
+const updateOptions = options => {
+  page.value = options.page
+}
 
 const downloadFile = async (url, fileName) => {
   const userToken = useCookie('userToken').value
@@ -134,6 +132,18 @@ const apiDelete = async id => {
   await $api(`guarantor/${id}`, { method: 'DELETE' })
   fetchGuarantors()
 }
+
+if (verbalTrialData.value.data.verbalTrial.head_credit_validation == 'validated') {
+  if (verbalTrialData.value.data.verbalTrial.status == 'validated') {
+    backRouteName = 'notification-historical'
+  } else {
+    backRouteName = 'notification-without-signed-contract'
+  }
+}
+
+const guarantorList = computed(() => guarantorData.value.data)
+const totalGuarantor = computed(() => guarantorData.value.total)
+const lastPage = computed(() => guarantorData.value.last_page)
 </script>
 
 <template>

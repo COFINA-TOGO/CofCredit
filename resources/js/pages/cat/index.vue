@@ -229,6 +229,7 @@ const rejectUnblockCAT = async id => {
         <template #item.actions="{ item }">
           <span>
             <IconBtn v-if="$can('read', 'cat')" :to="{ name: 'cat-id', params: { id: item.id } }">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="top">Details</VTooltip>
               <VIcon icon="tabler-eye" />
             </IconBtn>
             <VBtn icon variant="text" size="small" color="medium-emphasis">

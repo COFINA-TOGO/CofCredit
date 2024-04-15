@@ -10,7 +10,7 @@ import { ref } from 'vue'
 
 const route = useRoute('cat-notificat-add')
 const router = useRouter()
-
+const refForm = ref()
 const cat = ref({
   "notification_id": null,
   "credit_number": "978456123",
@@ -39,8 +39,6 @@ const getResetCATError = () => {
   }
 }
 
-const catError = ref(getResetCATError())
-
 const {
   data: noitificationDataList,
 } = await useApi(createUrl('/notification', {
@@ -49,12 +47,9 @@ const {
     with_verbal_trial: 1,
     has_cat: 0,
     status: 'v',
+    is_simple: 0,
   },
 }))
-
-const notificationList = computed(() => noitificationDataList.value.data)
-
-const refForm = ref()
 
 const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
@@ -94,6 +89,8 @@ const onSubmit = () => {
     }
   })
 }
+const notificationList = computed(() => noitificationDataList.value.data)
+const catError = ref(getResetCATError())
 if (route.query.id) {
   const id = parseInt(route.query.id);
   if (notificationList.value.find(object => object.id == id)) {

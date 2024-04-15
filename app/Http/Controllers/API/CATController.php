@@ -39,6 +39,7 @@ class CATController extends Controller
      * @queryParam  teg                                                     int                 Filtrer par TEG.                                                        No-example
      * @queryParam  has_notification                                        int                 Filtrer par présence de notification.                                   No-example
      * @queryParam  has_contract                                            int                 Filtrer par présence de contrat.                                        No-example
+     * @queryParam  is_simple                                               int                 Filtrer par type de notifcation.                                        No-example
      *
      * @queryParam  with_contract                                           int                 Afficher le contrat.                                                    Example: 0
      * @queryParam  with_notification                                       int                 Afficher le notification.                                               Example: 0
@@ -97,6 +98,13 @@ class CATController extends Controller
                 }
             }
 
+            if (isset($request["is_simple"])) {
+                $is_simple = (int) $request["is_simple"];
+                $catList->whereHas('notification', function ($query) use ($is_simple) {
+                    $query->where('is_simple', $is_simple);
+                });
+            }
+
             if (isset($request["has_contract"])) {
                 $has_contract = (int) $request["has_contract"];
                 if ($has_contract == 1) {
@@ -112,7 +120,6 @@ class CATController extends Controller
                     $catList->where($filter, $request[$filter]);
                 }
             }
-
             foreach (["with_contract" => "contract", "with_notification" => "notification", "with_verbal_trial" => "$parentRelation.verbal_trial", "with_type_of_credit" => "$parentRelation.verbal_trial.type_of_credit", "with_type_of_applicant" => "$parentRelation.verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "$parentRelation.verbal_trial.guarantees", "with_creator" => "$parentRelation.creator"] as $key => $value) {
                 if (isset($request[$key]) && $request[$key]) {
                     $catList->with($value);
@@ -153,7 +160,8 @@ class CATController extends Controller
         if ($cat) {
             if (($authorisation = Gate::inspect('view', $cat))->allowed()) {
                 $suplementList = [];
-                foreach (["with_contract" => "contract", "with_verbal_trial" => "contract.verbal_trial", "with_type_of_credit" => "contract.verbal_trial.type_of_credit", "with_type_of_applicant" => "contract.verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "contract.verbal_trial.guarantees", "with_creator" => "contract.creator"] as $key => $value) {
+                $parentRelation = ($cat->contract_id) ? "contract" : "notification";
+                foreach (["with_contract" => "contract", "with_verbal_trial" => "$parentRelation.verbal_trial", "with_type_of_credit" => "$parentRelation.verbal_trial.type_of_credit", "with_type_of_applicant" => "$parentRelation.verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "$parentRelation.verbal_trial.guarantees", "with_creator" => "$parentRelation.creator"] as $key => $value) {
                     if (isset($request[$key]) && $request[$key]) {
                         $suplementList[] = $value;
                     }

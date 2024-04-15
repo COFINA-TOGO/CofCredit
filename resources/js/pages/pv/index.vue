@@ -18,7 +18,18 @@ const router = useRouter()
 const type_of_credit_id = ref()
 const status = ref()
 const searchQuery = ref('')
-
+const loadings = ref([])
+const itemsPerPage = ref(8)
+const page = ref(1)
+const selectedItemId = ref(0)
+const isActionDialogVisible = ref(false)
+const actionTitle = ref("")
+const actionText = ref("")
+const actionButtonText = ref("")
+const actionFunction = ref()
+const actionComment = ref("")
+const commentPresence = ref(false)
+const actionStatus = ref("waiting")
 const headers = [
   {
     title: 'Numéro comitée',
@@ -50,23 +61,6 @@ const headers = [
     sortable: false,
   },
 ]
-
-const loadings = ref([])
-
-const load = i => {
-  loadings.value[i] = true
-  setTimeout(() => {
-    loadings.value[i] = false
-  }, 1000)
-}
-
-const itemsPerPage = ref(8)
-const page = ref(1)
-
-const updateOptions = options => {
-  page.value = options.page
-}
-
 const {
   data: pvData,
   execute: fetchPv,
@@ -77,6 +71,7 @@ const {
     status: status,
     page: page,
     has_contract: 0,
+    has_notification: 0,
     has_mortgage: 0,
     with_caf: 1,
     with_type_of_credit: 1,
@@ -90,6 +85,18 @@ const {
     paginate: 0,
   },
 }))
+
+
+const load = i => {
+  loadings.value[i] = true
+  setTimeout(() => {
+    loadings.value[i] = false
+  }, 1000)
+}
+
+const updateOptions = options => {
+  page.value = options.page
+}
 
 const downloadFile = async (url, fileName) => {
   const userToken = useCookie('userToken').value
@@ -129,17 +136,7 @@ const pvList = computed(() => pvData.value.data)
 const totalPv = computed(() => pvData.value.total)
 const lastPage = computed(() => pvData.value.last_page)
 const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
-
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
-const selectedItemId = ref(0)
-const isActionDialogVisible = ref(false)
-const actionTitle = ref("")
-const actionText = ref("")
-const actionButtonText = ref("")
-const actionFunction = ref()
-const actionComment = ref("")
-const commentPresence = ref(false)
-const actionStatus = ref("waiting")
 </script>
 
 <template>

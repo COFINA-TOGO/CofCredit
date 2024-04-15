@@ -115,8 +115,8 @@ endpoints:
         enumValues: []
         exampleWasSpecified: false
         custom: []
-      representative_home_address:
-        name: representative_home_address
+      represenstative_home_address:
+        name: represenstative_home_address
         description: 'Filtrer par addresse du domicile du demandeur.'
         required: false
         example: null

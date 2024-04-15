@@ -33,7 +33,7 @@ endpoints:
         name: email
         description: "L'email de l'utilsateur."
         required: true
-        example: charles.gamligo@cofinacorp.com
+        example: admin@cofinacorp.com
         type: string
         enumValues: []
         exampleWasSpecified: true
@@ -42,14 +42,14 @@ endpoints:
         name: password
         description: "Le mot de passe complet de l'utilisateur."
         required: true
-        example: password
+        example: Coftg2021
         type: string
         enumValues: []
         exampleWasSpecified: true
         custom: []
     cleanBodyParameters:
-      email: charles.gamligo@cofinacorp.com
-      password: password
+      email: admin@cofinacorp.com
+      password: Coftg2021
     fileParameters: []
     responses:
       -

@@ -217,13 +217,16 @@ if (contractData.value.data.contract.observations.length == 0) {
         <template #item.actions="{ item }">
           <IconBtn v-if="$can('read', 'guarantor')"
             :to="{ name: 'contract-contract_id-guarantor-id', params: { contract_id: route.params.contract_id, id: item.id } }">
+            <VTooltip activator="parent" transition="scroll-x-transition" location="top">Details</VTooltip>
             <VIcon icon="tabler-eye" />
           </IconBtn>
           <IconBtn v-if="$can('update', 'guarantor')"
             :to="{ name: 'contract-contract_id-guarantor-edit-id', params: { contract_id: route.params.contract_id, id: item.id } }">
+            <VTooltip activator="parent" transition="scroll-x-transition" location="top">Modifier</VTooltip>
             <VIcon icon="tabler-edit" />
           </IconBtn>
           <IconBtn v-if="$can('delete', 'guarantor')" @click="guarantorIdToDelete = item.id; isDialogVisible = true">
+            <VTooltip activator="parent" transition="scroll-x-transition" location="top">Supprimer</VTooltip>
             <VIcon icon="tabler-trash" color='error' />
           </IconBtn>
           <VBtn icon variant="text" size="small" color="medium-emphasis">

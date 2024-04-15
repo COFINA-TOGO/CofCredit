@@ -34,6 +34,7 @@ class Notification extends Model
         'representative_date_of_issue_of_identity_document',
         'type',
         'business_denomination',
+        "is_simple",
     ];
 
     protected $appends = ['observations', 'upload_completed', 'guarantors_count'];
@@ -72,15 +73,18 @@ class Notification extends Model
             $observations[] = "Validation head credit manquante";
         if (!$this->signed_notification_path)
             $observations[] = "Notification signé manquante";
-        if (!$this->signed_contract_path)
-            $observations[] = "Contrat notarié signé manquant";
-        // if (!$this->signed_promissory_note_path)
-        //     $observations[] = "Billet à ordre signé manquant";
-        $incompleteGuarantor = $this->guarantors->filter(function ($item) {
-            return $item['signed_promissory_note_path'] == null;
-        })->toArray();
-        if ($incompleteGuarantor)
-            $observations[] = "Billet à ordre manquantes des cautions";
+
+        if (!$this->is_simple) {
+            if (!$this->signed_contract_path)
+                $observations[] = "Contrat notarié signé manquant";
+            // if (!$this->signed_promissory_note_path)
+            //     $observations[] = "Billet à ordre signé manquant";
+            $incompleteGuarantor = $this->guarantors->filter(function ($item) {
+                return $item['signed_promissory_note_path'] == null;
+            })->toArray();
+            if ($incompleteGuarantor)
+                $observations[] = "Billet à ordre manquantes des cautions";
+        }
         return $observations;
     }
 

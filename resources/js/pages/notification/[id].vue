@@ -7,13 +7,24 @@ definePage({
 })
 const router = useRouter()
 const route = useRoute("notification-id")
-
+let backRouteName = 'notification'
 const frenchMensuality = {
   "mensual": "Mensuelle",
   "quarterly": "Trimestrielle",
   "semi-annual": "Semestrielle",
   "annual": "Annuel",
   "in-fine": "À la fin",
+}
+const documentTypeList = {
+  "cni": 'Carte d\'identité nationale',
+  "passport": 'Passeport',
+  "residence_certificate": 'Certificat de résidence',
+  "driving_licence": 'Permis de conduire',
+}
+const notificationTypeList = {
+  "company": "Société",
+  "individual_business": "Entreprise individuelle",
+  "particular": "Particulier"
 }
 
 const {
@@ -28,12 +39,22 @@ const {
   },
 }))
 
+
 if (notification.value.status == 200) {
   notification.value = notification.value.data.notification
 } else {
   router.push("/pv")
 }
-
+if (notification.value.verbal_trial.duration > 13) {
+  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
+}
+if (notification.value.head_credit_validation == 'validated') {
+  if (notification.value.status == 'validated') {
+    backRouteName = 'notification-historical'
+  } else {
+    backRouteName = 'notification-without-signed-contract'
+  }
+}
 const tableData = [
   { "title": "Montant", "value": String(notification.value.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Durée", "value": notification.value.verbal_trial.duration + " mois" },
@@ -44,26 +65,17 @@ const tableData = [
   { "title": "Frais de dossier", "value": String((notification.value.verbal_trial.amount * notification.value.verbal_trial.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Prime d'assurance", "value": String(notification.value.verbal_trial.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
 ]
-
 const notificationData = [
   { "title": "Téléphone", "value": notification.value.representative_phone_number },
   { "title": "Adresse", "value": notification.value.representative_home_address },
   { "title": "Nombre d'écheance", "value": notification.value.number_of_due_dates },
   { "title": "Prime de risque", "value": notification.value.risk_premium_percentage + "%" },
+  { "title": "Montant total des intérêts", "value": notification.value.total_amount_of_interest },
+  { "title": "Type de pièce d'identité", "value": documentTypeList[notification.value.representative_type_of_identity_document] },
+  { "title": "Numéro de la pièce d'identité", "value": notification.value.representative_number_of_identity_document },
+  { "title": "Date d'expiration de la pièce d'identité", "value": notification.value.representative_date_of_issue_of_identity_document },
+  { "title": "Type de notification", "value": notificationTypeList[notification.value.type] },
 ]
-
-if (notification.value.verbal_trial.duration > 13) {
-  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
-}
-
-let backRouteName = 'notification'
-if (notification.value.head_credit_validation == 'validated') {
-  if (notification.value.status == 'validated') {
-    backRouteName = 'notification-historical'
-  } else {
-    backRouteName = 'notification-without-signed-contract'
-  }
-}
 </script>
 
 <template>

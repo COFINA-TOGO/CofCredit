@@ -62,26 +62,26 @@ const updateOptions = options => {
 }
 
 const {
-  data: contractData,
+  data: notificationData,
   execute: fetchContracts,
-} = await useApi(createUrl('/contract', {
+} = await useApi(createUrl('/notification', {
   query: {
     search: searchQuery,
     type: selectedType,
     page: page,
-    with_type_of_credit: 1,
-    with_company: 1,
-    with_individual_business: 1,
-    with_creator: 1,
-    has_upload_completed: 1,
-    has_cat: 1,
-    status: 'v',
+    with_verbal_trial: 1,
+    // with_type_of_credit: 1,
+    // with_creator: 1,
+    // has_upload_completed: 1,
+    // has_cat: 1,
+    // is_simple: 0,
+    // status: 'v',
   },
 }))
 
-const contractList = computed(() => contractData.value.data)
-const totalPv = computed(() => contractData.value.total)
-const lastPage = computed(() => contractData.value.last_page)
+const notificationList = computed(() => notificationData.value.data)
+const totalPv = computed(() => notificationData.value.total)
+const lastPage = computed(() => notificationData.value.last_page)
 
 const typeList = {
   "company": 'Société',
@@ -108,7 +108,7 @@ const downloadFile = async (url, fileName) => {
 }
 
 const apiDelete = async id => {
-  await $api(`contract/${id}`, { method: 'DELETE' })
+  await $api(`notification/${id}`, { method: 'DELETE' })
   fetchContracts()
 }
 
@@ -153,8 +153,8 @@ const apiDelete = async id => {
             Export
           </VBtn>
 
-          <VBtn v-if="$can('create', 'contract')" color="primary" prepend-icon="tabler-plus"
-            :to="{ name: 'contract-add' }">
+          <VBtn v-if="$can('create', 'notification')" color="primary" prepend-icon="tabler-plus"
+            :to="{ name: 'notification-add' }">
             Ajouter
           </VBtn>
           <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
@@ -173,7 +173,7 @@ const apiDelete = async id => {
 
 
       <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
-        :items="contractList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
+        :items="notificationList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
 
         <template #item.type="{ item }">
           {{ typeList[item.type] }}
@@ -184,14 +184,8 @@ const apiDelete = async id => {
         </template>
 
         <template #item.actions="{ item }">
-          <IconBtn :to="{ name: 'contract-id', params: { id: item.id } }">
+          <IconBtn :to="{ name: 'notification-id', params: { id: item.id } }">
             <VIcon icon="tabler-eye" />
-          </IconBtn>
-          <IconBtn v-if="$can('update', 'contract')" :to="{ name: 'contract-edit-id', params: { id: item.id } }">
-            <VIcon icon="tabler-edit" />
-          </IconBtn>
-          <IconBtn v-if="$can('delete', 'contract')" @click="contractIdToDelete = item.id; isDialogVisible = true">
-            <VIcon icon="tabler-trash" color='error' />
           </IconBtn>
           <VBtn icon variant="text" size="small" color="medium-emphasis">
             <VIcon size="24" icon="tabler-dots-vertical" />
@@ -199,7 +193,8 @@ const apiDelete = async id => {
               <VList>
 
                 <VBadge v-if="$can('read', 'guarantor')" inline :content="item.guarantors_count">
-                  <VListItem :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: item.id } }">
+                  <VListItem
+                    :to="{ name: 'notification-notification_id-guarantor', params: { notification_id: item.id } }">
                     <template #prepend>
                       <VIcon icon="tabler-users" />
                     </template>
@@ -219,25 +214,16 @@ const apiDelete = async id => {
                 </VListItem>
 
 
-                <div v-if="$can('download', 'contract')">
+                <div v-if="$can('download', 'notification')">
                   <VDivider />
                   <!-- Télécharger contrat non-signé -->
                   <VListItem
-                    @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
+                    @click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.docx`)">
 
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
                     <VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
-                  </VListItem>
-                  <!-- Télécharger contrat signé -->
-                  <VListItem v-if="item.signed_contract_path"
-                    @click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
-
-                    <template #prepend>
-                      <VIcon icon="tabler-download" />
-                    </template>
-                    <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
                   </VListItem>
                   <!-- Télécharger billet à ordre non-signé -->
                   <VListItem
@@ -247,6 +233,16 @@ const apiDelete = async id => {
                       <VIcon icon="tabler-download" />
                     </template>
                     <VListItemTitle>Télécharger Billet à ordre non signé</VListItemTitle>
+                  </VListItem>
+                  <VDivider />
+                  <!-- Télécharger contrat signé -->
+                  <VListItem v-if="item.signed_contract_path"
+                    @click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
+
+                    <template #prepend>
+                      <VIcon icon="tabler-download" />
+                    </template>
+                    <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
                   </VListItem>
                   <!-- Télécharger billet à ordre signé -->
                   <VListItem v-if="item.signed_promissory_note_path"
@@ -292,27 +288,6 @@ const apiDelete = async id => {
         </template>
       </VDataTableServer>
     </VCard>
-
-    <VDialog v-model="isDialogVisible" class="v-dialog-sm">
-      <!-- Dialog close btn -->
-      <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
-
-      <!-- Dialog Content -->
-      <VCard title="Suppression">
-        <VCardText>
-          Etes vous sûr de vouloir supprimer ce contrat?
-        </VCardText>
-
-        <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
-            Annuler
-          </VBtn>
-          <VBtn @click="apiDelete(contractIdToDelete); isDialogVisible = false">
-            Supprimer
-          </VBtn>
-        </VCardText>
-      </VCard>
-    </VDialog>
   </div>
 </template>
 

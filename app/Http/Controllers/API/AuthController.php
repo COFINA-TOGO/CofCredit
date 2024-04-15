@@ -22,8 +22,8 @@ class AuthController extends Controller
     /**
      * Connecte un utilisateur
      *
-     * @bodyParam email     string  required L'email de l'utilsateur.                   Example: charles.gamligo@cofinacorp.com
-     * @bodyParam password  string  required Le mot de passe complet de l'utilisateur.  Example: password
+     * @bodyParam email     string  required L'email de l'utilsateur.                   Example: admin@cofinacorp.com
+     * @bodyParam password  string  required Le mot de passe complet de l'utilisateur.  Example: Coftg2021
      *
      * @response 200
      */

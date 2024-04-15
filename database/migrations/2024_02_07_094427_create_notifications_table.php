@@ -38,6 +38,7 @@ return new class extends Migration {
             $table->foreignId("creator_id")->constrained(table: "users", column: "id")->cascadeOnDelete();
 
             $table->boolean("sent")->default(false);
+            $table->boolean("is_simple")->default(false);
 
             $table->timestamps();
         });

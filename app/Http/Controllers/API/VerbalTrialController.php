@@ -262,6 +262,7 @@ class VerbalTrialController extends Controller
             // $output = shell_exec('dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock');
             // exec("soffice --headless --convert-to pdf --outdir $pdfDirectoryPath $wordFilePath");
 
+
             \PhpOffice\PhpWord\Settings::setPdfRendererPath(base_path('vendor/dompdf/dompdf'));
             \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
             $Content = \PhpOffice\PhpWord\IOFactory::load($wordFilePath);

@@ -34,11 +34,11 @@ paths:
                 email:
                   type: string
                   description: "L'email de l'utilsateur."
-                  example: charles.gamligo@cofinacorp.com
+                  example: admin@cofinacorp.com
                 password:
                   type: string
                   description: "Le mot de passe complet de l'utilisateur."
-                  example: password
+                  example: Coftg2021
               required:
                 - email
                 - password
@@ -195,6 +195,16 @@ paths:
           schema:
             type: integer
             description: 'Filtrer par présence de contrat.'
+            example: null
+        -
+          in: query
+          name: is_simple
+          description: 'Filtrer par type de notifcation.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par type de notifcation.'
             example: null
         -
           in: query
@@ -1270,7 +1280,7 @@ paths:
             example: null
         -
           in: query
-          name: representative_home_address
+          name: represenstative_home_address
           description: 'Filtrer par addresse du domicile du demandeur.'
           example: null
           required: false
@@ -1950,7 +1960,7 @@ paths:
             example: null
         -
           in: query
-          name: phone_number
+          name: representative_phone_number
           description: 'Filtrer par Numéro de téléphone du demandeur.'
           example: null
           required: false
@@ -1960,7 +1970,7 @@ paths:
             example: null
         -
           in: query
-          name: head_credit_validation
+          name: representative_home_address
           description: 'Filtrer par statut de validation du head credit'
           example: null
           required: false
@@ -1970,13 +1980,183 @@ paths:
             example: null
         -
           in: query
-          name: signed_notification
-          description: 'Filtrer par présence de notficaiton signé.'
+          name: number_of_due_dates
+          description: "Filtrer par nombre d'échéance."
           example: 0
           required: false
           schema:
             type: integer
-            description: 'Filtrer par présence de notficaiton signé.'
+            description: "Filtrer par nombre d'échéance."
+            example: 0
+        -
+          in: query
+          name: risk_premium_percentage
+          description: 'Filtrer par prime de risque (en pourcentage) du crédit du demandeur.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par prime de risque (en pourcentage) du crédit du demandeur.'
+            example: null
+        -
+          in: query
+          name: head_credit_observation
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: head_credit_validation
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: status
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: status_observation
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: signed_notification_path
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: signed_contract_path
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: signed_promissory_note_path
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: creator_id
+          description: 'Filtrer par présence de cat.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par présence de cat.'
+            example: 0
+        -
+          in: query
+          name: sent
+          description: 'Filtrer par présence de cat.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par présence de cat.'
+            example: 0
+        -
+          in: query
+          name: total_amount_of_interest
+          description: 'Filtrer par présence de cat.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par présence de cat.'
+            example: 0
+        -
+          in: query
+          name: representative_type_of_identity_document
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: representative_number_of_identity_document
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: representative_date_of_issue_of_identity_document
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: type
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: business_denomination
+          description: 'Filtrer par présence de cat.'
+          example: '0'
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par présence de cat.'
+            example: '0'
+        -
+          in: query
+          name: is_simple
+          description: 'Filtrer par présence de cat.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par présence de cat.'
             example: 0
         -
           in: query

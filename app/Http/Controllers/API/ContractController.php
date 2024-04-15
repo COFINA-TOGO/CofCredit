@@ -38,7 +38,7 @@ class ContractController extends Controller
    * @queryParam  representative_birth_date                               string              Filtrer par date de naissance du demandeur.                             No-example
    * @queryParam  representative_birth_place                              string              Filtrer par lieu de naissance du demandeur.                             No-example
    * @queryParam  representative_nationality                              string              Filtrer par nationalité du demandeur.                                   No-example
-   * @queryParam  representative_home_address                             string              Filtrer par addresse du domicile du demandeur.                          No-example
+   * @queryParam  represenstative_home_address                            string              Filtrer par addresse du domicile du demandeur.                          No-example
    * @queryParam  representative_type_of_identity_document                string              Filtrer par type de la pièce d'identité du demandeur.                   No-example
    * @queryParam  representative_number_of_identity_document              string              Filtrer par numéro de la pièce d'identité du demandeur.                 No-example
    * @queryParam  representative_date_of_issue_of_identity_document       string              Filtrer par date de délivrance de la pièce d'identité du demandeur.     No-example
@@ -687,7 +687,7 @@ class ContractController extends Controller
         DB::commit(); // Valider les opérations
         return $this->responseOk([
           "contract" => $contract
-        ], status: 201);
+        ]);
       } else {
         return $this->responseError(["auth" => [$authorisation->message()]], 403);
       }

@@ -35,7 +35,7 @@ class CATPolicy
 
     public function update(User $connectedUser, Cat $cat)
     {
-        return $this->check(["update"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return $this->check(["update"], "cat", $connectedUser) ? ($cat->validation_status == "validated") ? Response::deny("vous n'etes plus autorisé à modifier ce cat") : Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
     public function download(User $connectedUser, Cat $cat)
     {

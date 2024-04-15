@@ -58,7 +58,8 @@ const tableData = [
               </VBtn>
             </VCol>
             <VCol cols="2" class="text-right">
-              <VBtn append-icon="tabler-edit" :to="{ name: 'cat-edit-id', params: { id: cat.id } }">
+              <VBtn append-icon="tabler-edit" :to="{ name: 'cat-edit-id', params: { id: cat.id } }"
+                :disabled="cat.validation_status == 'validated'">
                 Modifier
               </VBtn>
             </VCol>

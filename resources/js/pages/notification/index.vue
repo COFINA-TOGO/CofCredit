@@ -71,6 +71,22 @@ const actionComment = ref("")
 const commentPresence = ref(false)
 const actionStatus = ref("waiting")
 
+const {
+  data: notificationData,
+  execute: fetchContracts,
+} = await useApi(createUrl('/notification', {
+  query: {
+    search: searchQuery,
+    type: selectedType,
+    page: page,
+    with_type_of_credit: 1,
+    with_creator: 1,
+    is_simple: 0,
+    head_credit_validation: 'wr',
+    has_cat: 0,
+  },
+}))
+
 const load = i => {
   loadings.value[i] = true
   setTimeout(() => {
@@ -82,20 +98,6 @@ const updateOptions = options => {
   page.value = options.page
 }
 
-const {
-  data: notificationData,
-  execute: fetchContracts,
-} = await useApi(createUrl('/notification', {
-  query: {
-    search: searchQuery,
-    type: selectedType,
-    page: page,
-    with_type_of_credit: 1,
-    with_creator: 1,
-    head_credit_validation: 'wr',
-    has_cat: 0,
-  },
-}))
 
 const downloadFile = async (url, fileName) => {
   try {
@@ -177,7 +179,7 @@ const lastPage = computed(() => notificationData.value.last_page)
         <VRow>
           <VCardText>
             <h2>
-              Liste des contrats
+              Liste des notifications
             </h2>
           </VCardText>
         </VRow>

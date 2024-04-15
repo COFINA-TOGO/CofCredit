@@ -3,7 +3,7 @@
 <script setup>
 definePage({
   meta: {
-    action: 'read',
+    action: 'without-signed-contract',
     subject: 'notification',
   },
 })
@@ -14,12 +14,22 @@ import { $api } from '@/utils/api';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
-
 const selectedType = ref()
 const searchQuery = ref('')
 const refInputEl = ref()
 const uploadState = ref('signed_notification')
-
+const itemsPerPage = ref(8)
+const page = ref(1)
+const loadings = ref([])
+const selectedItemId = ref(0)
+const isActionDialogVisible = ref(false)
+const actionTitle = ref("")
+const actionText = ref("")
+const actionButtonText = ref("")
+const actionFunction = ref()
+const actionComment = ref("")
+const commentPresence = ref(false)
+const actionStatus = ref("waiting")
 const headers = [
   {
     title: 'Numéro comitée',
@@ -52,22 +62,6 @@ const headers = [
   },
 ]
 
-const loadings = ref([])
-
-const load = i => {
-  loadings.value[i] = true
-  setTimeout(() => {
-    loadings.value[i] = false
-  }, 1000)
-}
-
-const itemsPerPage = ref(8)
-const page = ref(1)
-
-const updateOptions = options => {
-  page.value = options.page
-}
-
 const {
   data: notificationData,
   execute: fetchNotifications,
@@ -82,12 +76,20 @@ const {
     with_creator: 1,
     head_credit_validation: 'v',
     has_cat: 0,
+    is_simple: 0,
   },
 }))
 
-const notificationList = computed(() => notificationData.value.data)
-const totalPv = computed(() => notificationData.value.total)
-const lastPage = computed(() => notificationData.value.last_page)
+const load = i => {
+  loadings.value[i] = true
+  setTimeout(() => {
+    loadings.value[i] = false
+  }, 1000)
+}
+
+const updateOptions = options => {
+  page.value = options.page
+}
 
 const typeList = {
   "company": 'Société',
@@ -127,16 +129,6 @@ const apiSendNotification = async id => {
   fetchNotifications()
 }
 
-const selectedItemId = ref(0)
-const isActionDialogVisible = ref(false)
-const actionTitle = ref("")
-const actionText = ref("")
-const actionButtonText = ref("")
-const actionFunction = ref()
-const actionComment = ref("")
-const commentPresence = ref(false)
-const actionStatus = ref("waiting")
-
 const uploadFile = async (id, event) => {
   const { files } = event.target;
   if (files && files.length === 1) {
@@ -169,6 +161,10 @@ const uploadFile = async (id, event) => {
     console.error('Veuillez sélectionner un seul fichier.');
   }
 }
+
+const notificationList = computed(() => notificationData.value.data)
+const totalPv = computed(() => notificationData.value.total)
+const lastPage = computed(() => notificationData.value.last_page)
 </script>
 
 <template>

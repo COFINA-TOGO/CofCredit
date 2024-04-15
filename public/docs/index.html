@@ -359,7 +359,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: April 8, 2024</li>
+        <li>Last updated: April 15, 2024</li>
     </ul>
 </div>
 
@@ -403,8 +403,8 @@ You can switch the language used with the tabs at the top right (or from the nav
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"email\": \"charles.gamligo@cofinacorp.com\",
-    \"password\": \"password\"
+    \"email\": \"admin@cofinacorp.com\",
+    \"password\": \"Coftg2021\"
 }"
 </code></pre></div>
 
@@ -421,8 +421,8 @@ const headers = {
 };
 
 let body = {
-    "email": "charles.gamligo@cofinacorp.com",
-    "password": "password"
+    "email": "admin@cofinacorp.com",
+    "password": "Coftg2021"
 };
 
 fetch(url, {
@@ -529,10 +529,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="email"                data-endpoint="POSTapi-auth-login"
-               value="charles.gamligo@cofinacorp.com"
+               value="admin@cofinacorp.com"
                data-component="body">
     <br>
-<p>L'email de l'utilsateur. Example: <code>charles.gamligo@cofinacorp.com</code></p>
+<p>L'email de l'utilsateur. Example: <code>admin@cofinacorp.com</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -540,10 +540,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="password"                data-endpoint="POSTapi-auth-login"
-               value="password"
+               value="Coftg2021"
                data-component="body">
     <br>
-<p>Le mot de passe complet de l'utilisateur. Example: <code>password</code></p>
+<p>Le mot de passe complet de l'utilisateur. Example: <code>Coftg2021</code></p>
         </div>
         </form>
 
@@ -1080,6 +1080,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="query">
     <br>
 <p>Filtrer par présence de contrat.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>is_simple</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="is_simple"                data-endpoint="GETapi-cat"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par type de notifcation.</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_contract</code></b>&nbsp;&nbsp;
@@ -4963,11 +4974,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Filtrer par nationalité du demandeur.</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>representative_home_address</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>represenstative_home_address</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="representative_home_address"                data-endpoint="GETapi-contract"
+                              name="represenstative_home_address"                data-endpoint="GETapi-contract"
                value=""
                data-component="query">
     <br>
@@ -6898,7 +6909,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://cofcredit.cofina.localhost/api/notification?signed_notification=0&amp;has_signed_contract=0&amp;has_upload_completed=0&amp;has_cat=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_type_of_guarantees=0&amp;with_creator=0&amp;paginate=0" \
+    --get "http://cofcredit.cofina.localhost/api/notification?number_of_due_dates=0&amp;head_credit_observation=0&amp;head_credit_validation=0&amp;status=0&amp;status_observation=0&amp;signed_notification_path=0&amp;signed_contract_path=0&amp;signed_promissory_note_path=0&amp;creator_id=0&amp;sent=0&amp;total_amount_of_interest=0&amp;representative_type_of_identity_document=0&amp;representative_number_of_identity_document=0&amp;representative_date_of_issue_of_identity_document=0&amp;type=0&amp;business_denomination=0&amp;is_simple=0&amp;has_signed_contract=0&amp;has_upload_completed=0&amp;has_cat=0&amp;with_verbal_trial=0&amp;with_type_of_credit=0&amp;with_type_of_applicant=0&amp;with_caf=0&amp;with_guarantees=0&amp;with_type_of_guarantees=0&amp;with_creator=0&amp;paginate=0" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -6910,7 +6921,23 @@ You can check the Dev Tools console for debugging information.</code></pre>
 );
 
 const params = {
-    "signed_notification": "0",
+    "number_of_due_dates": "0",
+    "head_credit_observation": "0",
+    "head_credit_validation": "0",
+    "status": "0",
+    "status_observation": "0",
+    "signed_notification_path": "0",
+    "signed_contract_path": "0",
+    "signed_promissory_note_path": "0",
+    "creator_id": "0",
+    "sent": "0",
+    "total_amount_of_interest": "0",
+    "representative_type_of_identity_document": "0",
+    "representative_number_of_identity_document": "0",
+    "representative_date_of_issue_of_identity_document": "0",
+    "type": "0",
+    "business_denomination": "0",
+    "is_simple": "0",
     "has_signed_contract": "0",
     "has_upload_completed": "0",
     "has_cat": "0",
@@ -7041,15 +7068,59 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Filtrer par ID du PV.</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>phone_number</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>representative_phone_number</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="phone_number"                data-endpoint="GETapi-notification"
+                              name="representative_phone_number"                data-endpoint="GETapi-notification"
                value=""
                data-component="query">
     <br>
 <p>Filtrer par Numéro de téléphone du demandeur.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>representative_home_address</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_home_address"                data-endpoint="GETapi-notification"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par statut de validation du head credit</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>number_of_due_dates</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="number_of_due_dates"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par nombre d'échéance. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>risk_premium_percentage</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="risk_premium_percentage"                data-endpoint="GETapi-notification"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par prime de risque (en pourcentage) du crédit du demandeur.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>head_credit_observation</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="head_credit_observation"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>head_credit_validation</code></b>&nbsp;&nbsp;
@@ -7057,21 +7128,164 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="head_credit_validation"                data-endpoint="GETapi-notification"
-               value=""
-               data-component="query">
-    <br>
-<p>Filtrer par statut de validation du head credit</p>
-            </div>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>signed_notification</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="signed_notification"                data-endpoint="GETapi-notification"
                value="0"
                data-component="query">
     <br>
-<p>Filtrer par présence de notficaiton signé. Example: <code>0</code></p>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="status"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>status_observation</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="status_observation"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>signed_notification_path</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="signed_notification_path"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>signed_contract_path</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="signed_contract_path"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>signed_promissory_note_path</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="signed_promissory_note_path"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>creator_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="creator_id"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>sent</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="sent"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>total_amount_of_interest</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="total_amount_of_interest"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>representative_type_of_identity_document</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_type_of_identity_document"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>representative_number_of_identity_document</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_number_of_identity_document"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>representative_date_of_issue_of_identity_document</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_date_of_issue_of_identity_document"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="type"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>business_denomination</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="business_denomination"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>is_simple</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="is_simple"                data-endpoint="GETapi-notification"
+               value="0"
+               data-component="query">
+    <br>
+<p>Filtrer par présence de cat. Example: <code>0</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>has_signed_contract</code></b>&nbsp;&nbsp;
@@ -10897,7 +11111,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/verbal-trial/20" \
+    "http://cofcredit.cofina.localhost/api/verbal-trial/2" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -10905,7 +11119,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/verbal-trial/20"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/2"
 );
 
 const headers = {
@@ -11016,10 +11230,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-verbal-trial--id-"
-               value="20"
+               value="2"
                data-component="url">
     <br>
-<p>L'ID du procès verbal Example: <code>20</code></p>
+<p>L'ID du procès verbal Example: <code>2</code></p>
             </div>
                     </form>
 
@@ -11652,7 +11866,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/1" \
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/17" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -11660,7 +11874,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-guarantee/1"
+    "http://cofcredit.cofina.localhost/api/type-of-guarantee/17"
 );
 
 const headers = {
@@ -11771,10 +11985,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-guarantee--id-"
-               value="1"
+               value="17"
                data-component="url">
     <br>
-<p>L'ID du type de garantie Example: <code>1</code></p>
+<p>L'ID du type de garantie Example: <code>17</code></p>
             </div>
                     </form>
 
@@ -12550,7 +12764,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-credit/7" \
+    "http://cofcredit.cofina.localhost/api/type-of-credit/8" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -12558,7 +12772,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-credit/7"
+    "http://cofcredit.cofina.localhost/api/type-of-credit/8"
 );
 
 const headers = {
@@ -12669,10 +12883,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-credit--id-"
-               value="7"
+               value="8"
                data-component="url">
     <br>
-<p>L'ID du type de crédit Example: <code>7</code></p>
+<p>L'ID du type de crédit Example: <code>8</code></p>
             </div>
                     </form>
 
@@ -13359,7 +13573,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/11" \
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/9" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -13367,7 +13581,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/11"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/9"
 );
 
 const headers = {
@@ -13478,10 +13692,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-applicant--id-"
-               value="11"
+               value="9"
                data-component="url">
     <br>
-<p>L'ID du type de demandeur de crédit Example: <code>11</code></p>
+<p>L'ID du type de demandeur de crédit Example: <code>9</code></p>
             </div>
                     </form>
 
@@ -14486,7 +14700,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/user/4" \
+    "http://cofcredit.cofina.localhost/api/user/3" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -14494,7 +14708,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/user/4"
+    "http://cofcredit.cofina.localhost/api/user/3"
 );
 
 const headers = {
@@ -14605,10 +14819,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-user--id-"
-               value="4"
+               value="3"
                data-component="url">
     <br>
-<p>L'ID de l'utilisateur Example: <code>4</code></p>
+<p>L'ID de l'utilisateur Example: <code>3</code></p>
             </div>
                     </form>
 

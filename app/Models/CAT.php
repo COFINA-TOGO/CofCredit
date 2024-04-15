@@ -83,7 +83,7 @@ class CAT extends Model
             if ($this->unblock_status == "waiting") {
                 return [
                     "level" => 2,
-                    "color" => "warning",
+                    "color" => "primary",
                     "message" => "En attente de déblocage"
                 ];
             } elseif ($this->unblock_status == "rejected") {

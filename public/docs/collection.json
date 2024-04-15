@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "cda4d516-771f-4f59-88c3-0c36e1bf7c8a",
+        "_postman_id": "31512f4f-9d27-40c0-a795-5d169781bc26",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -41,7 +41,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"email\":\"charles.gamligo@cofinacorp.com\",\"password\":\"password\"}"
+                            "raw": "{\"email\":\"admin@cofinacorp.com\",\"password\":\"Coftg2021\"}"
                         },
                         "description": ""
                     },
@@ -204,6 +204,12 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "is_simple",
+                                    "value": "",
+                                    "description": "Filtrer par type de notifcation.",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "with_contract",
                                     "value": "",
                                     "description": "Afficher le contrat.",
@@ -252,7 +258,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/cat?contract_id=&credit_number=&sector=&first_deadline=&last_deadline=&source_of_reimbursement=&instructions_from_the_risk_and_credit_department=&outstanding_number_ready_to_settle=&other_expenses=&teg=&has_notification=&has_contract=&with_contract=&with_notification=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&with_creator=&paginate="
+                            "raw": "{{baseUrl}}\/api\/cat?contract_id=&credit_number=&sector=&first_deadline=&last_deadline=&source_of_reimbursement=&instructions_from_the_risk_and_credit_department=&outstanding_number_ready_to_settle=&other_expenses=&teg=&has_notification=&has_contract=&is_simple=&with_contract=&with_notification=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_guarantees=&with_creator=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -1218,7 +1224,7 @@
                                     "disabled": true
                                 },
                                 {
-                                    "key": "representative_home_address",
+                                    "key": "represenstative_home_address",
                                     "value": "",
                                     "description": "Filtrer par addresse du domicile du demandeur.",
                                     "disabled": true
@@ -1368,7 +1374,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&representative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&creator_id=&has_upload_completed=&has_cat=&status=waiting&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_company=&with_individual_business=&with_creator=&with_pledges=&paginate="
+                            "raw": "{{baseUrl}}\/api\/contract?verbal_trial_id=&representative_birth_date=&representative_birth_place=&representative_nationality=&represenstative_home_address=&representative_type_of_identity_document=&representative_number_of_identity_document=&representative_date_of_issue_of_identity_document=&representative_phone_number=&risk_premium_percentage=&total_amount_of_interest=&number_of_due_dates=&type=&has_pledges=&creator_id=&has_upload_completed=&has_cat=&status=waiting&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_company=&with_individual_business=&with_creator=&with_pledges=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -1795,21 +1801,123 @@
                                     "disabled": true
                                 },
                                 {
-                                    "key": "phone_number",
+                                    "key": "representative_phone_number",
                                     "value": "",
                                     "description": "Filtrer par Num\u00e9ro de t\u00e9l\u00e9phone du demandeur.",
                                     "disabled": true
                                 },
                                 {
-                                    "key": "head_credit_validation",
+                                    "key": "representative_home_address",
                                     "value": "",
                                     "description": "Filtrer par statut de validation du head credit",
                                     "disabled": true
                                 },
                                 {
-                                    "key": "signed_notification",
+                                    "key": "number_of_due_dates",
                                     "value": "",
-                                    "description": "Filtrer par pr\u00e9sence de notficaiton sign\u00e9.",
+                                    "description": "Filtrer par nombre d'\u00e9ch\u00e9ance.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "risk_premium_percentage",
+                                    "value": "",
+                                    "description": "Filtrer par prime de risque (en pourcentage) du cr\u00e9dit du demandeur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "head_credit_observation",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "head_credit_validation",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "status_observation",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "signed_notification_path",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "signed_contract_path",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "signed_promissory_note_path",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "creator_id",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "sent",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "total_amount_of_interest",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_type_of_identity_document",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_number_of_identity_document",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_date_of_issue_of_identity_document",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "type",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "business_denomination",
+                                    "value": "0",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "is_simple",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9sence de cat.",
                                     "disabled": true
                                 },
                                 {
@@ -1879,7 +1987,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/notification?verbal_trial_id=&phone_number=&head_credit_validation=&signed_notification=&has_signed_contract=&has_upload_completed=&has_cat=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_creator=&paginate="
+                            "raw": "{{baseUrl}}\/api\/notification?verbal_trial_id=&representative_phone_number=&representative_home_address=&number_of_due_dates=&risk_premium_percentage=&head_credit_observation=0&head_credit_validation=0&status=0&status_observation=0&signed_notification_path=0&signed_contract_path=0&signed_promissory_note_path=0&creator_id=&sent=&total_amount_of_interest=&representative_type_of_identity_document=0&representative_number_of_identity_document=0&representative_date_of_issue_of_identity_document=0&type=0&business_denomination=0&is_simple=&has_signed_contract=&has_upload_completed=&has_cat=&with_verbal_trial=&with_type_of_credit=&with_type_of_applicant=&with_caf=&with_guarantees=&with_type_of_guarantees=&with_creator=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -2866,7 +2974,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "20",
+                                    "value": "2",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -3075,7 +3183,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "1",
+                                    "value": "17",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -3315,7 +3423,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "7",
+                                    "value": "8",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -3549,7 +3657,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "11",
+                                    "value": "9",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -3823,7 +3931,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "4",
+                                    "value": "3",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

@@ -11,6 +11,20 @@ import { ref } from 'vue'
 
 const router = useRouter()
 const route = useRoute("notification-edit-id")
+const isSnackbarScrollReverseVisible = ref(false)
+const snackbarMessage = ref("")
+const refForm = ref()
+const typeList = [
+  { value: "company", title: 'Société' },
+  { value: "individual_business", title: 'Entreprise Individuel' },
+  { value: "particular", title: 'Particulier' },
+]
+const documentTypeList = [
+  { value: "cni", title: 'Carte d\'identité nationale' },
+  { value: "passport", title: 'Passeport' },
+  { value: "residence_certificate", title: 'Certificat de résidence' },
+  { value: "driving_licence", title: 'Permis de conduire' },
+]
 
 const getResetFormError = () => {
   return {
@@ -28,8 +42,6 @@ const getResetFormError = () => {
   }
 }
 
-const formError = ref(getResetFormError())
-
 const {
   data: verbalTrialListData,
 } = await useApi(createUrl('/verbal-trial', {
@@ -40,8 +52,6 @@ const {
     status: 'v',
   },
 }))
-const verbalTrialList = computed(() => verbalTrialListData.value.data)
-
 
 const {
   data: notificationData,
@@ -50,12 +60,6 @@ const {
     with_verbal_trial: 1,
   },
 }))
-
-//Ajout du procès verbal courant à la liste des pv
-var notification = ref(notificationData.value.data.notification)
-verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value.verbal_trial)))
-
-const refForm = ref()
 
 const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
@@ -105,22 +109,10 @@ const onSubmit = () => {
   })
 }
 
-const isSnackbarScrollReverseVisible = ref(false)
-const snackbarMessage = ref("")
-
-
-const typeList = [
-  { value: "company", title: 'Société' },
-  { value: "individual_business", title: 'Entreprise Individuel' },
-  { value: "particular", title: 'Particulier' },
-]
-
-const documentTypeList = [
-  { value: "cni", title: 'Carte d\'identité nationale' },
-  { value: "passport", title: 'Passeport' },
-  { value: "residence_certificate", title: 'Certificat de résidence' },
-  { value: "driving_licence", title: 'Permis de conduire' },
-]
+const formError = ref(getResetFormError())
+const verbalTrialList = computed(() => verbalTrialListData.value.data)
+var notification = ref(notificationData.value.data.notification)
+verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value.verbal_trial)))
 </script>
 
 <template>

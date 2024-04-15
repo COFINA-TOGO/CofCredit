@@ -15,7 +15,16 @@ const isDialogVisible = ref(false)
 const catSelectedId = ref(0)
 const selectedType = ref()
 const searchQuery = ref('')
-
+const loadings = ref([])
+const itemsPerPage = ref(8)
+const page = ref(1)
+const isActionDialogVisible = ref(false)
+const needComment = ref(false)
+const actionTitle = ref("")
+const actionText = ref("")
+const actionButtonText = ref("")
+const actionFunction = ref()
+const actionComment = ref(null)
 const headers = [
   {
     title: 'Numéro comitée',
@@ -51,21 +60,10 @@ const headers = [
     sortable: false,
   },
 ]
-
-const loadings = ref([])
-
-const load = i => {
-  loadings.value[i] = true
-  setTimeout(() => {
-    loadings.value[i] = false
-  }, 1000)
-}
-
-const itemsPerPage = ref(8)
-const page = ref(1)
-
-const updateOptions = options => {
-  page.value = options.page
+const typeList = {
+  "company": 'Société',
+  "individual_business": 'Entreprise Individuel',
+  "particular": 'Particulier',
 }
 
 const {
@@ -76,21 +74,24 @@ const {
     search: searchQuery,
     type: selectedType,
     page: page,
-    with_type_of_applicant: 1,
     with_creator: 1,
+    with_verbal_trial: 1,
     with_notification: 1,
     has_notification: 1,
+    is_simple: 0,
   },
 }))
 
-const catList = computed(() => catData.value.data)
-const totalCAT = computed(() => catData.value.total)
-const lastPage = computed(() => catData.value.last_page)
+const load = i => {
+  loadings.value[i] = true
+  setTimeout(() => {
+    loadings.value[i] = false
+  }, 1000)
+}
 
-const typeList = {
-  "company": 'Société',
-  "individual_business": 'Entreprise Individuel',
-  "particular": 'Particulier',
+
+const updateOptions = options => {
+  page.value = options.page
 }
 
 const downloadFile = async (url, fileName) => {
@@ -117,17 +118,6 @@ const apiDelete = async id => {
   fetchCAT()
 }
 
-
-
-const isActionDialogVisible = ref(false)
-const needComment = ref(false)
-const actionTitle = ref("")
-const actionText = ref("")
-const actionButtonText = ref("")
-const actionFunction = ref()
-const actionComment = ref(null)
-
-
 const validateCAT = async id => {
   await $api(`cat/validate/${id}`, { method: 'PUT' })
   actionComment.value = null
@@ -151,6 +141,10 @@ const rejectUnblockCAT = async id => {
   actionComment.value = null
   fetchCAT()
 }
+
+const catList = computed(() => catData.value.data)
+const totalCAT = computed(() => catData.value.total)
+const lastPage = computed(() => catData.value.last_page)
 </script>
 
 <template>
@@ -228,7 +222,8 @@ const rejectUnblockCAT = async id => {
 
         <template #item.actions="{ item }">
           <span>
-            <IconBtn v-if="$can('read', 'cat')" :to="{ name: 'cat-id', params: { id: item.id } }">
+            <IconBtn v-if="$can('read', 'cat')" :to="{ name: 'cat-notification-id', params: { id: item.id } }">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="top">Details</VTooltip>
               <VIcon icon="tabler-eye" />
             </IconBtn>
             <VBtn icon variant="text" size="small" color="medium-emphasis">

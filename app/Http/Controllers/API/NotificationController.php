@@ -25,9 +25,28 @@ class NotificationController extends Controller
      * Affiche les notification
      *
      * @queryParam  verbal_trial_id                                         int                 Filtrer par ID du PV.                                                   No-example
-     * @queryParam  phone_number                                            string              Filtrer par Numéro de téléphone du demandeur.                           No-example
-     * @queryParam  head_credit_validation                                  string              Filtrer par statut de validation du head credit                         No-example
-     * @queryParam  signed_notification                                     int                 Filtrer par présence de notficaiton signé.                              Example: 0
+     * @queryParam  representative_phone_number                             string              Filtrer par Numéro de téléphone du demandeur.                           No-example
+     * @queryParam  representative_home_address                             string              Filtrer par statut de validation du head credit                         No-example
+     * @queryParam  number_of_due_dates                                     int                 Filtrer par nombre d'échéance.                                          Example: 0
+     * @queryParam  risk_premium_percentage                                 int                 Filtrer par prime de risque (en pourcentage) du crédit du demandeur.    No-example
+     * @queryParam  head_credit_observation                                 string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  head_credit_validation                                  string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  status                                                  string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  status_observation                                      string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  signed_notification_path                                string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  signed_contract_path                                    string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  signed_promissory_note_path                             string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  creator_id                                              int                 Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  sent                                                    int                 Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  total_amount_of_interest                                int                 Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  representative_type_of_identity_document                string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  representative_number_of_identity_document              string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  representative_date_of_issue_of_identity_document       string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  type                                                    string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  business_denomination                                   string              Filtrer par présence de cat.                                            Example: 0
+     * @queryParam  is_simple                                               int                 Filtrer par présence de cat.                                            Example: 0
+     * 
+     * 
      * @queryParam  has_signed_contract                                     int                 Filtrer par présence de contrat signé.                                  Example: 0
      * @queryParam  has_upload_completed                                    int                 Filtrer par billet à ordre.                                             Example: 0
      * @queryParam  has_cat                                                 int                 Filtrer par présence de cat.                                            Example: 0
@@ -69,8 +88,8 @@ class NotificationController extends Controller
                 }
             }
 
-            foreach (["verbal_trial_id", "phone_number", "representative_home_address", "number_of_due_dates", "risk_premium_percentage", "sent"] as $filter) {
-                if (isset($request[$filter]) && $request[$filter]) {
+            foreach (["verbal_trial_id", "phone_number", "representative_home_address", "number_of_due_dates", "risk_premium_percentage", "sent", "is_simple"] as $filter) {
+                if (isset($request[$filter]) && $request[$filter] != "") {
                     $notificationList->where($filter, $request[$filter]);
                 }
             }

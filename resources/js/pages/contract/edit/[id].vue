@@ -12,6 +12,24 @@ import { ref } from 'vue'
 
 const router = useRouter()
 const route = useRoute("contract-edit-id")
+const isSnackbarScrollReverseVisible = ref(false)
+const snackbarMessage = ref("")
+const refForm = ref()
+const typeList = [
+  { value: "company", title: 'Société' },
+  { value: "individual_business", title: 'Entreprise Individuel' },
+  { value: "particular", title: 'Particulier' },
+]
+const hasPledgesLabel = {
+  '1': 'Avec gage',
+  '0': 'Sans gage',
+}
+const documentTypeList = [
+  { value: "cni", title: 'Carte d\'identité nationale' },
+  { value: "passport", title: 'Passeport' },
+  { value: "residence_certificate", title: 'Certificat de résidence' },
+  { value: "driving_licence", title: 'Permis de conduire' },
+]
 
 const getEmptyError = () => {
   return {
@@ -42,8 +60,6 @@ const getEmptyError = () => {
   }
 }
 
-const errorData = ref(getEmptyError())
-
 const {
   data: verbalTrialListData,
 } = await useApi(createUrl('/verbal-trial', {
@@ -52,8 +68,6 @@ const {
     paginate: 0,
   },
 }))
-const verbalTrialList = computed(() => verbalTrialListData.value.data)
-
 
 const {
   data: contractData,
@@ -65,48 +79,6 @@ const {
     with_pledges: 1,
   },
 }))
-
-var contract = ref(contractData.value.data.contract)
-verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(contract.value.verbal_trial)))
-if (contract.value.company == null) {
-  contract.value.company = {
-    "denomination": "",
-    "legal_status": "",
-    "head_office_address": "",
-    "rccm_number": "",
-    "phone_number": "",
-  }
-}
-if (contract.value.individual_business == null) {
-  contract.value.individual_business = {
-    "denomination": "",
-    "corporate_purpose": "",
-    "head_office_address": "",
-    "rccm_number": "",
-    "phone_number": "",
-  }
-}
-
-
-const typeList = [
-  { value: "company", title: 'Société' },
-  { value: "individual_business", title: 'Entreprise Individuel' },
-  { value: "particular", title: 'Particulier' },
-]
-
-const hasPledgesLabel = {
-  '1': 'Avec gage',
-  '0': 'Sans gage',
-}
-
-const documentTypeList = [
-  { value: "cni", title: 'Carte d\'identité nationale' },
-  { value: "passport", title: 'Passeport' },
-  { value: "residence_certificate", title: 'Certificat de résidence' },
-  { value: "driving_licence", title: 'Permis de conduire' },
-]
-
-const refForm = ref()
 
 const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
@@ -152,7 +124,7 @@ const onSubmit = () => {
       })
 
       errorData.value = getEmptyError()
-      if (res.status == 201) {
+      if (res.status == 200) {
         router.push("/contract")
       } else if (res.status == 403) {
         isSnackbarScrollReverseVisible.value = true
@@ -191,8 +163,28 @@ const addPledgeItem = () => {
   })
 }
 
-const isSnackbarScrollReverseVisible = ref(false)
-const snackbarMessage = ref("")
+const errorData = ref(getEmptyError())
+const verbalTrialList = computed(() => verbalTrialListData.value.data)
+var contract = ref(contractData.value.data.contract)
+verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(contract.value.verbal_trial)))
+if (contract.value.company == null) {
+  contract.value.company = {
+    "denomination": "",
+    "legal_status": "",
+    "head_office_address": "",
+    "rccm_number": "",
+    "phone_number": "",
+  }
+}
+if (contract.value.individual_business == null) {
+  contract.value.individual_business = {
+    "denomination": "",
+    "corporate_purpose": "",
+    "head_office_address": "",
+    "rccm_number": "",
+    "phone_number": "",
+  }
+}
 </script>
 
 <template>
