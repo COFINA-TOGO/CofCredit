@@ -16,7 +16,7 @@ const refForm = ref()
 
 const getResetCATError = () => {
   return {
-    "contract_id": "",
+    "notification_id": "",
     "credit_number": "",
     "sector": "",
     "first_deadline": "",
@@ -30,8 +30,8 @@ const getResetCATError = () => {
 }
 
 const {
-  data: contractDataList,
-} = await useApi(createUrl('/contract', {
+  data: notificationDataList,
+} = await useApi(createUrl('/notification', {
   query: {
     paginate: 0,
     with_verbal_trial: 1,
@@ -54,7 +54,7 @@ const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
     if (valid) {
       const $data = {
-        contract_id: cat.value.contract_id,
+        notification_id: cat.value.notification_id,
         credit_number: cat.value.credit_number,
         sector: cat.value.sector,
         first_deadline: cat.value.first_deadline,
@@ -73,7 +73,7 @@ const onSubmit = () => {
 
       catError.value = getResetCATError()
       if (res.status == 200) {
-        router.push("/cat")
+        router.push({ name: "cat-notification" })
       } else if (res.status == 403) {
         isSnackbarScrollReverseVisible.value = true
         snackbarMessage.value = ""
@@ -97,9 +97,10 @@ const onSubmit = () => {
   })
 }
 const catError = ref(getResetCATError())
-const contractList = computed(() => contractDataList.value.data)
+const notificationList = computed(() => notificationDataList.value.data)
+console.log(notificationDataList.value)
 var cat = ref(catData.value.data.c_a_t)
-contractDataList.value.data.push(JSON.parse(JSON.stringify(cat.value.contract)))
+notificationDataList.value.data.push(JSON.parse(JSON.stringify(cat.value.notification)))
 </script>
 
 <template>
@@ -114,12 +115,12 @@ contractDataList.value.data.push(JSON.parse(JSON.stringify(cat.value.contract)))
     <VForm ref="refForm" @submit.prevent="onSubmit">
       <VRow>
         <VCol cols="11">
-          <VBtn prepend-icon="tabler-arrow-left" :to="{ name: 'cat' }">
+          <VBtn prepend-icon="tabler-arrow-left" :to="{ name: 'cat-notification' }">
             CATs
           </VBtn>
         </VCol>
         <VCol cols="1">
-          <VBtn prepend-icon='tabler-eye' :to="{ name: 'cat-id', params: { id: route.params.id } }">
+          <VBtn prepend-icon='tabler-eye' :to="{ name: 'cat-notification-id', params: { id: route.params.id } }">
             Voir
           </VBtn>
         </VCol>
@@ -130,9 +131,10 @@ contractDataList.value.data.push(JSON.parse(JSON.stringify(cat.value.contract)))
             <VCardText>
               <VRow>
                 <VCol cols="12" md="12" lg="12">
-                  <AppAutocomplete v-model="cat.contract_id" :items="contractList"
-                    :error-messages="catError.contract_id" label="Contrat" placeholder="Ex: CFNTG-044-13-12-23-01212"
-                    :rules="[requiredValidator]" item-title="verbal_trial.label" item-value="id" />
+                  <AppAutocomplete v-model="cat.notification_id" :items="notificationList"
+                    :error-messages="catError.notification_id" label="Notification"
+                    placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]"
+                    item-title="verbal_trial.label" item-value="id" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
                   <AppTextField v-model="cat.credit_number" :error-messages="catError.credit_number"

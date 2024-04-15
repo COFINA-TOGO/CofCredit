@@ -342,7 +342,7 @@ const lastPage = computed(() => notificationData.value.last_page)
                     </span>
                   </span>
 
-                  <span v-if="$can('upload', 'notification')">
+                  <span v-if="$can('upload_signed_notification', 'notification')">
                     <!-- Ajouter Notification signé -->
                     <VListItem v-if="item.signed_notification_path == null || item.status == 'rejected'"
                       @click="uploadState = 'signed_notification'; refInputEl?.click()">
@@ -352,6 +352,8 @@ const lastPage = computed(() => notificationData.value.last_page)
                       </template>
                       <VListItemTitle color="error">Ajouter notification signé</VListItemTitle>
                     </VListItem>
+                  </span>
+                  <span v-if="$can('upload', 'notification')">
                     <!-- Ajouter Contrat signé -->
                     <VListItem
                       v-if="(item.signed_contract_path == null || item.status == 'rejected') && item.signed_notification_path != null"

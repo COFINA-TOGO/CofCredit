@@ -124,15 +124,15 @@ class User extends Authenticatable
 						"subject" => ["contract"],
 					],
 					[
-						"action" => ["create", "read", "without-signed-contract", "historical", "update", "delete", "download"],
+						"action" => ["create", "read", "without-signed-contract", "historical", "update", "delete", "download", "change_status"],
 						"subject" => ["notification"],
 					],
 					[
-						"action" => ["create", "read", "historical", "without-signed-notification", "update", "delete", "download"],
+						"action" => ["create", "simple-notification", "read", "historical", "without-signed-notification", "update", "delete", "download"],
 						"subject" => ["simple-notification"],
 					],
 					[
-						"action" => ["create", "read", "historical", "delete", "download", "change_status"],
+						"action" => ["create", "read", "historical", "delete", "download", "change_stsatus"],
 						"subject" => ["cat-simple-notification"]
 					],
 					[
@@ -167,7 +167,7 @@ class User extends Authenticatable
 						"subject" => ["notification"],
 					],
 					[
-						"action" => ["read", "without-signed-notification", "historical", "download", "validate", "reject", "change_head_credit_status"],
+						"action" => ["read", "simple-notification", "without-signed-notification", "historical", "download", "validate", "reject", "change_head_credit_status"],
 						"subject" => ["simple-notification"],
 					],
 					[
@@ -186,8 +186,12 @@ class User extends Authenticatable
 			case ('operation'):
 				return [
 					[
-						"action" => "read",
-						"subject" => ["non-mortgage-contract", "mortgage-contract"]
+						"action" => ["read"],
+						"subject" => ["non-mortgage-contract", "mortgage-contract", "simple-notification"]
+					],
+					[
+						"action" => ["simple-notification"],
+						"subject" => ["simple-notification"]
 					],
 					[
 						"action" => ["read", "download", "unblock", "reject_unblock"],
@@ -201,14 +205,18 @@ class User extends Authenticatable
 			case ('legal'):
 				return [
 					[
-						"action" => "read",
-						"subject" => ["non-mortgage-contract", "mortgage-contract"]
+						"action" => ["read"],
+						"subject" => ["mortgage-contract"]
+					],
+					[
+						"action" => ["without-signed-contract", "upload_signed_notification"],
+						"subject" => ["notification"]
 					],
 				];
 			case ('dex'):
 				return [
 					[
-						"action" => ["read", "historical", "download"],
+						"action" => ["simple-notification", "read", "historical", "download"],
 						"subject" => ["pv", "contract", "cat", "guarantor", "non-mortgage-contract", "mortgage-contract", "notification", "simple-notification"]
 					],
 					[
@@ -239,7 +247,7 @@ class User extends Authenticatable
 						"subject" => ["notification"]
 					],
 					[
-						"action" => ["without-signed-notification", "upload", "download", "send"],
+						"action" => ["simple-notification", "without-signed-notification", "upload", "download", "send"],
 						"subject" => ["simple-notification"]
 					],
 					[

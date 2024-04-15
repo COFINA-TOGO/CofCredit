@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "31512f4f-9d27-40c0-a795-5d169781bc26",
+        "_postman_id": "f545bb64-7cdb-4e96-af05-cc914a066605",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -3183,7 +3183,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "17",
+                                    "value": "6",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -3423,7 +3423,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "8",
+                                    "value": "10",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -3657,7 +3657,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "9",
+                                    "value": "5",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -3931,7 +3931,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "3",
+                                    "value": "11",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

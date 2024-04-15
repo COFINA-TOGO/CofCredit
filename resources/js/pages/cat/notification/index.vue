@@ -292,7 +292,7 @@ const lastPage = computed(() => catData.value.last_page)
           </span>
           <span>
             <VDivider />
-            <IconBtn v-if="$can('update', 'cat')" :to="{ name: 'cat-edit-id', params: { id: item.id } }"
+            <IconBtn v-if="$can('update', 'cat')" :to="{ name: 'cat-notification-edit-id', params: { id: item.id } }"
               :disabled="item.validation_status == 'validated'">
               <VIcon icon="tabler-edit" />
             </IconBtn>

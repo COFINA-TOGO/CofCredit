@@ -39,22 +39,12 @@ const {
   },
 }))
 
-
 if (notification.value.status == 200) {
   notification.value = notification.value.data.notification
 } else {
-  router.push("/pv")
+  router.push({ name: "pv-without-notification" })
 }
-if (notification.value.verbal_trial.duration > 13) {
-  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
-}
-if (notification.value.head_credit_validation == 'validated') {
-  if (notification.value.status == 'validated') {
-    backRouteName = 'notification-historical'
-  } else {
-    backRouteName = 'notification-without-signed-contract'
-  }
-}
+
 const tableData = [
   { "title": "Montant", "value": String(notification.value.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Durée", "value": notification.value.verbal_trial.duration + " mois" },
@@ -76,6 +66,16 @@ const notificationData = [
   { "title": "Date d'expiration de la pièce d'identité", "value": notification.value.representative_date_of_issue_of_identity_document },
   { "title": "Type de notification", "value": notificationTypeList[notification.value.type] },
 ]
+if (notification.value.verbal_trial.duration > 13) {
+  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
+}
+if (notification.value.head_credit_validation == 'validated') {
+  if (notification.value.status == 'validated') {
+    backRouteName = 'notification-historical'
+  } else {
+    backRouteName = 'notification-without-signed-contract'
+  }
+}
 </script>
 
 <template>

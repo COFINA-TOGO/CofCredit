@@ -148,7 +148,7 @@ export default [
 					}, {
 						title: 'Historique',
 						to: 'cat-notification',
-						action: 'create',
+						action: 'read',
 						subject: 'cat',
 					}
 				],
@@ -159,7 +159,7 @@ export default [
 	{
 		title: 'Notification Simplifiée',
 		icon: { icon: 'tabler-bell-ringing' },
-		action: 'without-signed-notification',
+		action: 'simple-notification',
 		subject: 'simple-notification',
 		children: [
 			{
