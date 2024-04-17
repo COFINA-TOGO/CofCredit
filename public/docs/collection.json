@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "f545bb64-7cdb-4e96-af05-cc914a066605",
+        "_postman_id": "2cc6ff8c-b598-4bb3-a7b1-babd5acdb8a1",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -2974,8 +2974,272 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "16",
                                     "description": "L'ID du proc\u00e8s verbal"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Report d'\u00e9ch\u00e9ance",
+            "description": "\nEndpoints pour g\u00e9rer les reports d'\u00e9ch\u00e9ances",
+            "item": [
+                {
+                    "name": "Affiche les report d'\u00e9ch\u00e9ance",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/deadline-postponed",
+                            "query": [
+                                {
+                                    "key": "caf_id",
+                                    "value": "",
+                                    "description": "Filtrer par ID du caf initiateur.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "credit_number",
+                                    "value": "",
+                                    "description": "Filtrer par num\u00e9ro du cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "deadline_number",
+                                    "value": "",
+                                    "description": "Filtrer par num\u00e9ro d'\u00e9ch\u00e9ance.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "new_date",
+                                    "value": "",
+                                    "description": "Filtrer par nouvelle date.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "request_path",
+                                    "value": "",
+                                    "description": "Filtrer par lien du document de la demande.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "memo_path",
+                                    "value": "",
+                                    "description": "Filtrer par lien du m\u00e9mo de la demande.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "",
+                                    "description": "Filtrer par status du report.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "comment",
+                                    "value": "",
+                                    "description": "Filtrer par commentaire sur le report.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "with_caf",
+                                    "value": "",
+                                    "description": "Afficher le caf.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "paginate",
+                                    "value": "",
+                                    "description": "Utiliser la pagination.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/deadline-postponed?caf_id=&credit_number=&deadline_number=&new_date=&request_path=&memo_path=&status=&comment=&with_caf=&paginate="
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Affiche un report d'\u00e9ch\u00e9ance",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/deadline-postponed\/:id",
+                            "query": [
+                                {
+                                    "key": "with_caf",
+                                    "value": "",
+                                    "description": "Afficher le caf.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/deadline-postponed\/:id?with_caf=",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du report."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er un nouveau report d'\u00e9ch\u00e9ance",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/deadline-postponed",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/deadline-postponed"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"caf_id\":1,\"credit_number\":\"d4s1d4sds\",\"deadline_number\":1,\"new_date\":\"2024-04-04\",\"request\":\"test\",\"memo\":\"test\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Met \u00e0 jour un report d'\u00e9ch\u00e9ance",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/deadline-postponed\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/deadline-postponed\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du report d'\u00e9ch\u00e9ance."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"caf_id\":1,\"credit_number\":\"d4s1d4sds\",\"deadline_number\":1,\"new_date\":\"2024-04-04\",\"request\":\"test\",\"memo\":\"test\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Supprime un report d'\u00e9ch\u00e9ance",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/deadline-postponed\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/deadline-postponed\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "L'ID du report d'\u00e9ch\u00e9ance."
                                 }
                             ]
                         },
@@ -3183,7 +3447,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "6",
+                                    "value": "17",
                                     "description": "L'ID du type de garantie"
                                 }
                             ]
@@ -3423,7 +3687,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "10",
+                                    "value": "7",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -3657,7 +3921,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "5",
+                                    "value": "9",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -3931,7 +4195,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "11",
+                                    "value": "9",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

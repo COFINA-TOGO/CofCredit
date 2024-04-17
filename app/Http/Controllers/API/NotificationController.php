@@ -19,7 +19,7 @@ use Rmunate\Utilities\SpellNumber;
 class NotificationController extends Controller
 {
 
-    use CustomResponseTrait;
+    
 
     /**
      * Affiche les notification

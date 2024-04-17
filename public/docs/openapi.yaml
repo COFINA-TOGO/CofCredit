@@ -3377,6 +3377,277 @@ paths:
         required: true
         schema:
           type: string
+  /api/deadline-postponed:
+    get:
+      summary: "Affiche les report d'échéance"
+      operationId: afficheLesReportDchance
+      description: ''
+      parameters:
+        -
+          in: query
+          name: caf_id
+          description: 'Filtrer par ID du caf initiateur.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par ID du caf initiateur.'
+            example: null
+        -
+          in: query
+          name: credit_number
+          description: 'Filtrer par numéro du crédit.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par numéro du crédit.'
+            example: null
+        -
+          in: query
+          name: deadline_number
+          description: "Filtrer par numéro d'échéance."
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: "Filtrer par numéro d'échéance."
+            example: null
+        -
+          in: query
+          name: new_date
+          description: 'Filtrer par nouvelle date.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par nouvelle date.'
+            example: null
+        -
+          in: query
+          name: request_path
+          description: 'Filtrer par lien du document de la demande.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par lien du document de la demande.'
+            example: null
+        -
+          in: query
+          name: memo_path
+          description: 'Filtrer par lien du mémo de la demande.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par lien du mémo de la demande.'
+            example: null
+        -
+          in: query
+          name: status
+          description: 'Filtrer par status du report.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par status du report.'
+            example: null
+        -
+          in: query
+          name: comment
+          description: 'Filtrer par commentaire sur le report.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par commentaire sur le report.'
+            example: null
+        -
+          in: query
+          name: with_caf
+          description: 'Afficher le caf.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le caf.'
+            example: 0
+        -
+          in: query
+          name: paginate
+          description: 'Utiliser la pagination.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Utiliser la pagination.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - "Report d'échéance"
+    post:
+      summary: "Créer un nouveau report d'échéance"
+      operationId: crerUnNouveauReportDchance
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - "Report d'échéance"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                caf_id:
+                  type: integer
+                  description: "L'ID du caf initiateur."
+                  example: 1
+                credit_number:
+                  type: string
+                  description: 'Le numéro du crédit.'
+                  example: d4s1d4sds
+                deadline_number:
+                  type: integer
+                  description: "Le numéro d'échéance."
+                  example: 1
+                new_date:
+                  type: string
+                  description: "La nouvelle date d'échéance."
+                  example: '2024-04-04'
+                request:
+                  type: string
+                  description: 'Le document de la demande.'
+                  example: test
+                memo:
+                  type: string
+                  description: 'Le mémo de la demande.'
+                  example: test
+              required:
+                - caf_id
+                - credit_number
+                - deadline_number
+                - new_date
+                - request
+                - memo
+  '/api/deadline-postponed/{id}':
+    get:
+      summary: "Affiche un report d'échéance"
+      operationId: afficheUnReportDchance
+      description: ''
+      parameters:
+        -
+          in: query
+          name: with_caf
+          description: 'Afficher le caf.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'Afficher le caf.'
+            example: 0
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - "Report d'échéance"
+    put:
+      summary: "Met à jour un report d'échéance"
+      operationId: metJourUnReportDchance
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - "Report d'échéance"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                caf_id:
+                  type: integer
+                  description: "L'ID du caf initiateur."
+                  example: 1
+                credit_number:
+                  type: string
+                  description: 'Le numéro du crédit.'
+                  example: d4s1d4sds
+                deadline_number:
+                  type: integer
+                  description: "Le numéro d'échéance."
+                  example: 1
+                new_date:
+                  type: string
+                  description: "La nouvelle date d'échéance."
+                  example: '2024-04-04'
+                request:
+                  type: string
+                  description: 'Le document de la demande.'
+                  example: test
+                memo:
+                  type: string
+                  description: 'Le mémo de la demande.'
+                  example: test
+              required:
+                - caf_id
+                - credit_number
+                - deadline_number
+                - new_date
+                - request
+                - memo
+    delete:
+      summary: "Supprime un report d'échéance"
+      operationId: supprimeUnReportDchance
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - "Report d'échéance"
+    parameters:
+      -
+        in: path
+        name: id
+        description: "L'ID du report."
+        example: 1
+        required: true
+        schema:
+          type: integer
   /api/type-of-guarantee:
     get:
       summary: 'Affiche les types de garantie'
@@ -4184,6 +4455,9 @@ tags:
   -
     name: 'Procès Verbal'
     description: "\nEndPoints pour gérer les Procès verbaux"
+  -
+    name: "Report d'échéance"
+    description: "\nEndpoints pour gérer les reports d'échéances"
   -
     name: 'Type de Garantie'
     description: "\nEndPoints pour gérer les types de garanties"

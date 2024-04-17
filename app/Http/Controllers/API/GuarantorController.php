@@ -24,7 +24,7 @@ use Rmunate\Utilities\SpellNumber;
 class GuarantorController extends Controller
 {
 
-    use CustomResponseTrait;
+    
 
     /**
      * Affiche les cautions

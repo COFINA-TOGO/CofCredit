@@ -14,8 +14,8 @@ use App\Models\TypeOfCredit;
 use App\Models\TypeOfGuarantee;
 use App\Models\User;
 use App\Models\VerbalTrial;
-use DB;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Dotenv;
 
 class DatabaseSeeder extends Seeder
@@ -36,6 +36,8 @@ class DatabaseSeeder extends Seeder
 		$dex = User::factory(1)->create(["full_name" => "dex", "profile" => "dex", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "dex@cofinacorp.com"])->first();
 		$caf = User::factory(1)->create(["full_name" => "caf", "profile" => "caf", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "caf@cofinacorp.com"])->first();
 		$caf2 = User::factory(1)->create(["full_name" => "caf2", "profile" => "caf", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "caf2@cofinacorp.com"])->first();
+		$ca = User::factory(1)->create(["full_name" => "ca", "profile" => "ca", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "ca@cofinacorp.com"])->first();
+		$md = User::factory(1)->create(["full_name" => "md", "profile" => "md", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "md@cofinacorp.com"])->first();
 
 		$physical_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Physique"])->first();
 		$moral_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Morale"])->first();

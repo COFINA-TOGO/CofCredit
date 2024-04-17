@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 class TypeOfCreditController extends Controller
 {
 
-    use CustomResponseTrait;
+    
 
     /**
      * Affiche les types de crédit

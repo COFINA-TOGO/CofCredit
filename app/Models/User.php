@@ -80,6 +80,11 @@ class User extends Authenticatable
 		return $this->hasMany(Notification::class, "creator_id", "id");
 	}
 
+	public function deadline_postponeds(): HasMany
+	{
+		return $this->hasMany(DeadlinePostponed::class, "caf_id", "id");
+	}
+
 	public function getAbilityRulesAttribute()
 	{
 		switch ($this->profile) {
@@ -146,6 +151,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read"],
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+					],
+					[
+						"action" => ["read", "historical", "change_status"],
+						"subject" => ["deadline-postponed"],
 					]
 				];
 			case ('head_credit'):
@@ -181,6 +190,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read"],
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+					],
+					[
+						"action" => ["read", "historical", "change_status"],
+						"subject" => ["deadline-postponed"],
 					]
 				];
 			case ('operation'):
@@ -230,6 +243,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read"],
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+					],
+					[
+						"action" => ["read", "historical", "change_status"],
+						"subject" => ["deadline-postponed"],
 					]
 				];
 			case ('caf'):
@@ -253,6 +270,24 @@ class User extends Authenticatable
 					[
 						"action" => ["read"],
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+					],
+					[
+						"action" => ["read", "historical", "create", "update", "delete"],
+						"subject" => ["deadline-postponed"],
+					]
+				];
+			case ('ca'):
+				return [
+					[
+						"action" => ["read", "historical", "change_status"],
+						"subject" => ["deadline-postponed"],
+					]
+				];
+			case ('md'):
+				return [
+					[
+						"action" => ["read", "historical", "change_status"],
+						"subject" => ["deadline-postponed"],
 					]
 				];
 		}

@@ -30,6 +30,12 @@ export const redirects = [
 			if (userRole === 'legal')
 				return { name: 'notification-without-signed-contract' }
 
+			if (userRole === 'ca')
+				return { name: 'deadline-postponed' }
+
+			if (userRole === 'md')
+				return { name: 'deadline-postponed' }
+
 			return { name: 'login', query: to.query }
 		},
 	},

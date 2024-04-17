@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\TemplateProcessor;
-use Rmunate\Utilities\SpellNumber;
 
 
 /**
@@ -22,7 +21,7 @@ use Rmunate\Utilities\SpellNumber;
 class CATController extends Controller
 {
 
-	use CustomResponseTrait;
+	
 
 	/**
 	 * Affiche les CAT

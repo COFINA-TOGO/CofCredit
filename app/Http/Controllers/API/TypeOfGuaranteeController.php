@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 class TypeOfGuaranteeController extends Controller
 {
 
-    use CustomResponseTrait;
+    
 
     /**
      * Affiche les types de garantie

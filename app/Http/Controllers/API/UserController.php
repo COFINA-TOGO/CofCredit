@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\CustomResponseTrait;
 use App\Models\User;
 use Carbon\Carbon;
-use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -19,261 +18,261 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
 
-    use CustomResponseTrait;
-
-    //  * @apiResourceCollection App\Http\Resources\UserResource
-    //  * @apiResourceModel App\Models\User
-    //  * @apiResourceAdditional status=200 messages="Utilisateurs récupérés avec succès"
-    /**
-     * Affiche les utilisateurs
-     *
-     * @queryParam  name                        string  Filtrer par username.                           No-example
-     * @queryParam  full_name                   string  Filtrer par nom complet.                        No-example
-     * @queryParam  email                       string  Filtrer par email.                              No-example
-     * @queryParam  profile                     string  Filtrer par profil.                             No-example
-     * @queryParam  activated                   int     Filtrer par statut d'activation                 No-example
-     * @queryParam  password_change_required    int     Filtrer par statut de mot de passe à changer    No-example
-     *
-     * @queryParam  paginate                    int     Utiliser la pagination.                         Example: 0
-     *
-     * @response 200
-     */
-    public function index(Request $request)
-    {
-        if (($authorisation = Gate::inspect('viewAny', User::class))->allowed()) {
-            $userList = User::query();
-            if ($search = $request->search) {
-                $userList->where(function ($query) use ($search) {
-                    $query
-                        ->where('name', 'LIKE', "%$search%")
-                        ->orWhere('full_name', 'LIKE', "%$search%")
-                        ->orWhere('email', 'LIKE', "%$search%")
-                        ->orWhere('profile', 'LIKE', "%$search%");
-                });
-            }
 
 
-            foreach (["name", "full_name", "email", "profile"] as $filter) {
-                if (isset($request[$filter]) && $request[$filter]) {
-                    $userList->where($filter, $request[$filter]);
-                }
-            }
-            // foreach (["with_agency" => "agency", "with_head" => "agency.head"] as $key => $value) {
-            //     if (isset($request[$key]) && $request[$key]) {
-            //         $userList->with($value);
-            //     }
-            // }
+	//  * @apiResourceCollection App\Http\Resources\UserResource
+	//  * @apiResourceModel App\Models\User
+	//  * @apiResourceAdditional status=200 messages="Utilisateurs récupérés avec succès"
+	/**
+	 * Affiche les utilisateurs
+	 *
+	 * @queryParam  name                        string  Filtrer par username.                           No-example
+	 * @queryParam  full_name                   string  Filtrer par nom complet.                        No-example
+	 * @queryParam  email                       string  Filtrer par email.                              No-example
+	 * @queryParam  profile                     string  Filtrer par profil.                             No-example
+	 * @queryParam  activated                   int     Filtrer par statut d'activation                 No-example
+	 * @queryParam  password_change_required    int     Filtrer par statut de mot de passe à changer    No-example
+	 *
+	 * @queryParam  paginate                    int     Utiliser la pagination.                         Example: 0
+	 *
+	 * @response 200
+	 */
+	public function index(Request $request)
+	{
+		if (($authorisation = Gate::inspect('viewAny', User::class))->allowed()) {
+			$userList = User::query();
+			if ($search = $request->search) {
+				$userList->where(function ($query) use ($search) {
+					$query
+						->where('name', 'LIKE', "%$search%")
+						->orWhere('full_name', 'LIKE', "%$search%")
+						->orWhere('email', 'LIKE', "%$search%")
+						->orWhere('profile', 'LIKE', "%$search%");
+				});
+			}
 
-            $connectedUser = $request->user();
 
-            if ($connectedUser->profile == "credit_analyst") {
-                $userList->where('profile', 'caf');
-            }
+			foreach (["name", "full_name", "email", "profile"] as $filter) {
+				if (isset($request[$filter]) && $request[$filter]) {
+					$userList->where($filter, $request[$filter]);
+				}
+			}
+			// foreach (["with_agency" => "agency", "with_head" => "agency.head"] as $key => $value) {
+			//     if (isset($request[$key]) && $request[$key]) {
+			//         $userList->with($value);
+			//     }
+			// }
 
-            if (isset($request["paginate"]) && ($request->paginate == false)) {
-                $userList = $userList->orderByDesc('created_at')->get();
-                $data = ["data" => $userList, "total" => count($userList)];
-            } else {
-                $data = $userList->orderByDesc('created_at')->paginate(8)->toArray();
-            }
+			$connectedUser = $request->user();
 
-            return $this->responseOkPaginate($data);
-        } else {
-            return $this->responseError(["auth" => [$authorisation->message()]], 403);
-        }
-    }
+			if ($connectedUser->profile == "credit_analyst") {
+				$userList->where('profile', 'caf');
+			}
 
-    //  * @apiResource App\Http\Resources\UserResource
-    //  * @apiResourceModel App\Models\User
-    //  * @apiResourceAdditional status=200 messages="Utilisateur récupéré avec succès"
-    /**
-     * Affiche un utilisateur
-     *
-     * @urlParam    id              int required    L'ID de l'utilisateur.          Example: 1
-     *
-     * @response 200
-     */
-    public function show(Request $request, int $id)
-    {
-        $user = User::find($id);
-        if ($user) {
-            if (($authorisation = Gate::inspect('view', $user))->allowed()) {
-                // $suplementList = [];
-                // foreach (["with_agency" => "agency", "with_head" => "agency.head"] as $key => $value) {
-                //     if (isset($request[$key]) && $request[$key]) {
-                //         $suplementList[] = $value;
-                //     }
-                // }
-                // $user->load($suplementList);
-                return $this->responseOk(["user" => $user]);
-            } else {
-                return $this->responseError(["auth" => [$authorisation->message()]], 403);
-            }
-        } else {
-            return $this->responseError(["id" => "L'utilisateur n'existe pas"], 404);
-        }
-    }
+			if (isset($request["paginate"]) && ($request->paginate == false)) {
+				$userList = $userList->orderByDesc('created_at')->get();
+				$data = ["data" => $userList, "total" => count($userList)];
+			} else {
+				$data = $userList->orderByDesc('created_at')->paginate(8)->toArray();
+			}
 
-    //  * @apiResource App\Http\Resources\UserResource
-    //  * @apiResourceModel App\Models\User
-    //  * @apiResourceAdditional status=200 messages=[]
-    /**
-     * Créer un nouvel utilisateur
-     *
-     * @bodyParam   name                        string  required    Le username de l'utilsateur.                Example: mawena
-     * @bodyParam   full_name                   string  required    Le nom complet de l'utilisateur.            Example: Charles GAMLIGO
-     * @bodyParam   profile                     string  required    Le profil de l'utilisateur.                 Example: admin
-     * @bodyParam   activated                   int     required    Le statut d'activation de l'utilisateur     Example: 1
-     * @bodyParam   password                    string  required    Le mot de passe de l'utilisateur.           Example: password
-     * @bodyParam   password_change_required    int     required    Le statut d'activation de l'utilisateur     Example: 1
-     *
-     *
-     * @response 200
-     */
-    public function store(Request $request)
-    {
-        if (($authorisation = Gate::inspect('create', User::class))->allowed()) {
-            $requestData = $request->all();
-            $validator = Validator::make($requestData, [
-                'name' => 'required|unique:users',
-                'full_name' => 'required|unique:users',
-                "profile" => 'required|in:admin,credit_analyst,credit_admin,head_credit,operation,legal,dex,caf',
-                'email' => 'required|unique:users',
-                "activated" => 'required|boolean',
-                "password" => 'required|min:8',
-                "password_change_required" => 'required|boolean',
-            ]);
-            if ($validator->fails()) {
-                return $this->responseError($validator->errors(), 400);
-            } else {
-                $requestData["password"] = Hash::make($request->password);
-                $requestData["email_verified_at"] = Carbon::now();
-                $user = User::create($requestData);
-                // $user->load("agency.head");
-                return $this->responseOk([
-                    "user" => $user
-                ], status: 201);
-            }
-        } else {
-            return $this->responseError(["auth" => [$authorisation->message()]], 403);
-        }
-    }
+			return $this->responseOkPaginate($data);
+		} else {
+			return $this->responseError(["auth" => [$authorisation->message()]], 403);
+		}
+	}
 
-    /**
-     * Mettre à jour un utilisateur
-     *
-     * @urlParam id required L'ID de l'utilisateur. Example: 1
-     *
-     * @bodyParam   name                        string  required    Le username de l'utilsateur.                Example: mawena
-     * @bodyParam   full_name                   string  required    Le nom complet de l'utilisateur.            Example: Charles GAMLIGO
-     * @bodyParam   profile                     string  required    Le profil de l'utilisateur.                 Example: admin
-     * @bodyParam   email                       string  required    L'email de l'utilisateur.                   Example: gamligocharles@gmail.com
-     * @bodyParam   activated                   int     required    Le statut d'activation de l'utilisateur     Example: 1
-     * @bodyParam   password                    string              Le mot de passe de l'utilisateur.           No-example
-     * @bodyParam   password_change_required    int     required    Le statut d'activation de l'utilisateur     Example: 1
-     *
-     * @response 200
-     *
-     */
-    public function update(Request $request, int $id)
-    {
-        $user = User::find($id);
-        if ($user) {
-            if (($authorisation = Gate::inspect('update', $user))->allowed()) {
-                $requestData = $request->all();
-                $validator = Validator::make($requestData, [
-                    'name' => 'required',
-                    'full_name' => 'required|unique:users,full_name,' . $id,
-                    'email' => 'required|unique:users,email,' . $id,
-                    "profile" => 'required|in:admin,credit_analyst,credit_admin,head_credit,operation,legal,dex,daf',
-                    "password" => 'min:8',
-                    "activated" => 'required|boolean',
-                    "password_change_required" => 'required|boolean',
-                ]);
-                if ($validator->fails()) {
-                    return $this->responseError($validator->errors(), 400);
-                } else {
-                    if (isset($requestData["password"])) {
-                        $requestData["password"] = Hash::make($request->password);
-                        $requestData["password_change_required"] = true;
-                    }
-                    $user->update($requestData);
-                    // $user->load("agency.head");
-                    return $this->responseOk([
-                        "user" => $user
-                    ]);
-                }
-            } else {
-                return $this->responseError(["auth" => [$authorisation->message()]], 403);
-            }
-        } else {
-            return $this->responseError(["id" => "L'utilisateur n'existe pas"], 404);
-        }
-    }
-    /**
-     * Mettre à jour le mot de passe de l'utilisateur connecté utilisateur
-     *
-     * @bodyParam   old_password                    string  required    L'ancien mot de passe de l'utilisateur.                     No-example
-     * @bodyParam   new_password                    string  required    Le nouveau mot de passe de l'utilisateur.                   No-example
-     * @bodyParam   new_password_confirmation       string  required    La confirmation du nouveau mot de passe de l'utilisateur.   No-example
-     *
-     * @response 200
-     *
-     */
-    public function update_password(Request $request)
-    {
-        $user = $request->user();
-        if ($user) {
-            if (($authorisation = Gate::inspect('updatePassword', $user))->allowed()) {
-                $validator = Validator::make($request->all(), [
-                    "old_password" => 'required|min:8',
-                    "new_password" => 'required|min:8',
-                    "new_password_confirmation" => 'required|min:8|same:new_password',
-                ]);
-                if ($validator->fails()) {
-                    return $this->responseError($validator->errors(), 400);
-                } else {
-                    if (Hash::check($request->old_password, $user->password)) {
-                        $user->update(["password" => $request->new_password]);
-                        // $user->load("agency.head");
-                        return $this->responseOk([
-                            "user" => $user
-                        ]);
-                    } else {
-                        return $this->responseError(["old_password" => ["Ancien mot de passe incorect"]], 403);
-                    }
-                }
-            } else {
-                return $this->responseError(["auth" => [$authorisation->message()]], 403);
-            }
-        } else {
-            return $this->responseError(["id" => "L'utilisateur n'existe pas"], 404);
-        }
-    }
+	//  * @apiResource App\Http\Resources\UserResource
+	//  * @apiResourceModel App\Models\User
+	//  * @apiResourceAdditional status=200 messages="Utilisateur récupéré avec succès"
+	/**
+	 * Affiche un utilisateur
+	 *
+	 * @urlParam    id              int required    L'ID de l'utilisateur.          Example: 1
+	 *
+	 * @response 200
+	 */
+	public function show(Request $request, int $id)
+	{
+		$user = User::find($id);
+		if ($user) {
+			if (($authorisation = Gate::inspect('view', $user))->allowed()) {
+				// $suplementList = [];
+				// foreach (["with_agency" => "agency", "with_head" => "agency.head"] as $key => $value) {
+				//     if (isset($request[$key]) && $request[$key]) {
+				//         $suplementList[] = $value;
+				//     }
+				// }
+				// $user->load($suplementList);
+				return $this->responseOk(["user" => $user]);
+			} else {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
+		} else {
+			return $this->responseError(["id" => "L'utilisateur n'existe pas"], 404);
+		}
+	}
 
-    /**
-     * Supprime un utilisateur
-     *
-     * @urlParam id int required L'ID de l'utilisateur
-     *
-     * @response 204
-     */
-    public function destroy(int $id)
-    {
-        $user = User::find($id);
-        if ($user) {
-            if (($authorisation = Gate::inspect('delete', $user))->allowed()) {
-                if ($user->delete()) {
-                    return $this->responseOk(messages: ["user" => "Utilisateur supprimé"], status: 204);
-                } else {
-                    return $this->responseError(["server" => "Erreur du serveur"], 500);
-                }
-            } else {
-                return $this->responseError(["auth" => [$authorisation->message()]], 403);
-            }
-        } else {
-            return $this->responseError(["id" => ["L'utilisateur n'existe pas"]], 404);
-        }
+	//  * @apiResource App\Http\Resources\UserResource
+	//  * @apiResourceModel App\Models\User
+	//  * @apiResourceAdditional status=200 messages=[]
+	/**
+	 * Créer un nouvel utilisateur
+	 *
+	 * @bodyParam   name                        string  required    Le username de l'utilsateur.                Example: mawena
+	 * @bodyParam   full_name                   string  required    Le nom complet de l'utilisateur.            Example: Charles GAMLIGO
+	 * @bodyParam   profile                     string  required    Le profil de l'utilisateur.                 Example: admin
+	 * @bodyParam   activated                   int     required    Le statut d'activation de l'utilisateur     Example: 1
+	 * @bodyParam   password                    string  required    Le mot de passe de l'utilisateur.           Example: password
+	 * @bodyParam   password_change_required    int     required    Le statut d'activation de l'utilisateur     Example: 1
+	 *
+	 *
+	 * @response 200
+	 */
+	public function store(Request $request)
+	{
+		if (($authorisation = Gate::inspect('create', User::class))->allowed()) {
+			$requestData = $request->all();
+			$validator = Validator::make($requestData, [
+				'name' => 'required|unique:users',
+				'full_name' => 'required|unique:users',
+				"profile" => 'required|in:admin,credit_analyst,credit_admin,head_credit,operation,legal,dex,caf,ca,md',
+				'email' => 'required|unique:users',
+				"activated" => 'required|boolean',
+				"password" => 'required|min:8',
+				"password_change_required" => 'required|boolean',
+			]);
+			if ($validator->fails()) {
+				return $this->responseError($validator->errors(), 400);
+			} else {
+				$requestData["password"] = Hash::make($request->password);
+				$requestData["email_verified_at"] = Carbon::now();
+				$user = User::create($requestData);
+				// $user->load("agency.head");
+				return $this->responseOk([
+					"user" => $user
+				], status: 201);
+			}
+		} else {
+			return $this->responseError(["auth" => [$authorisation->message()]], 403);
+		}
+	}
 
-    }
+	/**
+	 * Mettre à jour un utilisateur
+	 *
+	 * @urlParam id required L'ID de l'utilisateur. Example: 1
+	 *
+	 * @bodyParam   name                        string  required    Le username de l'utilsateur.                Example: mawena
+	 * @bodyParam   full_name                   string  required    Le nom complet de l'utilisateur.            Example: Charles GAMLIGO
+	 * @bodyParam   profile                     string  required    Le profil de l'utilisateur.                 Example: admin
+	 * @bodyParam   email                       string  required    L'email de l'utilisateur.                   Example: gamligocharles@gmail.com
+	 * @bodyParam   activated                   int     required    Le statut d'activation de l'utilisateur     Example: 1
+	 * @bodyParam   password                    string              Le mot de passe de l'utilisateur.           No-example
+	 * @bodyParam   password_change_required    int     required    Le statut d'activation de l'utilisateur     Example: 1
+	 *
+	 * @response 200
+	 *
+	 */
+	public function update(Request $request, int $id)
+	{
+		$user = User::find($id);
+		if ($user) {
+			if (($authorisation = Gate::inspect('update', $user))->allowed()) {
+				$requestData = $request->all();
+				$validator = Validator::make($requestData, [
+					'name' => 'required',
+					'full_name' => 'required|unique:users,full_name,' . $id,
+					'email' => 'required|unique:users,email,' . $id,
+					"profile" => 'required|in:admin,credit_analyst,credit_admin,head_credit,operation,legal,dex,caf,ca,md',
+					"password" => 'min:8',
+					"activated" => 'required|boolean',
+					"password_change_required" => 'required|boolean',
+				]);
+				if ($validator->fails()) {
+					return $this->responseError($validator->errors(), 400);
+				} else {
+					if (isset($requestData["password"])) {
+						$requestData["password"] = Hash::make($request->password);
+						$requestData["password_change_required"] = true;
+					}
+					$user->update($requestData);
+					// $user->load("agency.head");
+					return $this->responseOk([
+						"user" => $user
+					]);
+				}
+			} else {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
+		} else {
+			return $this->responseError(["id" => "L'utilisateur n'existe pas"], 404);
+		}
+	}
+	/**
+	 * Mettre à jour le mot de passe de l'utilisateur connecté utilisateur
+	 *
+	 * @bodyParam   old_password                    string  required    L'ancien mot de passe de l'utilisateur.                     No-example
+	 * @bodyParam   new_password                    string  required    Le nouveau mot de passe de l'utilisateur.                   No-example
+	 * @bodyParam   new_password_confirmation       string  required    La confirmation du nouveau mot de passe de l'utilisateur.   No-example
+	 *
+	 * @response 200
+	 *
+	 */
+	public function update_password(Request $request)
+	{
+		$user = $request->user();
+		if ($user) {
+			if (($authorisation = Gate::inspect('updatePassword', $user))->allowed()) {
+				$validator = Validator::make($request->all(), [
+					"old_password" => 'required|min:8',
+					"new_password" => 'required|min:8',
+					"new_password_confirmation" => 'required|min:8|same:new_password',
+				]);
+				if ($validator->fails()) {
+					return $this->responseError($validator->errors(), 400);
+				} else {
+					if (Hash::check($request->old_password, $user->password)) {
+						$user->update(["password" => $request->new_password]);
+						// $user->load("agency.head");
+						return $this->responseOk([
+							"user" => $user
+						]);
+					} else {
+						return $this->responseError(["old_password" => ["Ancien mot de passe incorect"]], 403);
+					}
+				}
+			} else {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
+		} else {
+			return $this->responseError(["id" => "L'utilisateur n'existe pas"], 404);
+		}
+	}
+
+	/**
+	 * Supprime un utilisateur
+	 *
+	 * @urlParam id int required L'ID de l'utilisateur
+	 *
+	 * @response 204
+	 */
+	public function destroy(int $id)
+	{
+		$user = User::find($id);
+		if ($user) {
+			if (($authorisation = Gate::inspect('delete', $user))->allowed()) {
+				if ($user->delete()) {
+					return $this->responseOk(messages: ["user" => "Utilisateur supprimé"], status: 204);
+				} else {
+					return $this->responseError(["server" => "Erreur du serveur"], 500);
+				}
+			} else {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
+		} else {
+			return $this->responseError(["id" => ["L'utilisateur n'existe pas"]], 404);
+		}
+
+	}
 }
