@@ -381,7 +381,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: April 17, 2024</li>
+        <li>Last updated: April 22, 2024</li>
     </ul>
 </div>
 
@@ -11133,7 +11133,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/verbal-trial/16" \
+    "http://cofcredit.cofina.localhost/api/verbal-trial/18" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -11141,7 +11141,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/verbal-trial/16"
+    "http://cofcredit.cofina.localhost/api/verbal-trial/18"
 );
 
 const headers = {
@@ -11252,10 +11252,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-verbal-trial--id-"
-               value="16"
+               value="18"
                data-component="url">
     <br>
-<p>L'ID du procès verbal Example: <code>16</code></p>
+<p>L'ID du procès verbal Example: <code>18</code></p>
             </div>
                     </form>
 
@@ -11432,6 +11432,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Filtrer par numéro d'échéance.</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>old_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="old_date"                data-endpoint="GETapi-deadline-postponed"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par ancienne date.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>new_date</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -11485,6 +11496,72 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="query">
     <br>
 <p>Filtrer par commentaire sur le report.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>extension</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="extension"                data-endpoint="GETapi-deadline-postponed"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par rallonge.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>beneficiary_label</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="beneficiary_label"                data-endpoint="GETapi-deadline-postponed"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par applelation du bénéficiaire.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>loan_amount</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="loan_amount"                data-endpoint="GETapi-deadline-postponed"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par montant du crédit.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>representative_civility</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_civility"                data-endpoint="GETapi-deadline-postponed"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par civilité du représentant.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>representative_last_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_last_name"                data-endpoint="GETapi-deadline-postponed"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par nom du représentant.</p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>representative_first_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_first_name"                data-endpoint="GETapi-deadline-postponed"
+               value=""
+               data-component="query">
+    <br>
+<p>Filtrer par prénom du représentant.</p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>with_caf</code></b>&nbsp;&nbsp;
@@ -11691,9 +11768,16 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"caf_id\": 1,
     \"credit_number\": \"d4s1d4sds\",
     \"deadline_number\": 1,
+    \"old_date\": \"2024-03-03\",
     \"new_date\": \"2024-04-04\",
     \"request\": \"test\",
-    \"memo\": \"test\"
+    \"memo\": \"test\",
+    \"extension\": 0,
+    \"beneficiary_label\": \"David GUETTA\",
+    \"loan_amount\": 15000000,
+    \"representative_civility\": \"Mr\",
+    \"representative_last_name\": \"GUETTA\",
+    \"representative_first_name\": \"David\"
 }"
 </code></pre></div>
 
@@ -11713,9 +11797,16 @@ let body = {
     "caf_id": 1,
     "credit_number": "d4s1d4sds",
     "deadline_number": 1,
+    "old_date": "2024-03-03",
     "new_date": "2024-04-04",
     "request": "test",
-    "memo": "test"
+    "memo": "test",
+    "extension": 0,
+    "beneficiary_label": "David GUETTA",
+    "loan_amount": 15000000,
+    "representative_civility": "Mr",
+    "representative_last_name": "GUETTA",
+    "representative_first_name": "David"
 };
 
 fetch(url, {
@@ -11850,6 +11941,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Le numéro d'échéance. Example: <code>1</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>old_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="old_date"                data-endpoint="POSTapi-deadline-postponed"
+               value="2024-03-03"
+               data-component="body">
+    <br>
+<p>L'ancienne date. Example: <code>2024-03-03</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>new_date</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
@@ -11882,6 +11984,72 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Le mémo de la demande. Example: <code>test</code></p>
         </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>extension</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="extension"                data-endpoint="POSTapi-deadline-postponed"
+               value="0"
+               data-component="body">
+    <br>
+<p>La rallonge. Example: <code>0</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>beneficiary_label</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="beneficiary_label"                data-endpoint="POSTapi-deadline-postponed"
+               value="David GUETTA"
+               data-component="body">
+    <br>
+<p>L'applelation du bénéficiaire. Example: <code>David GUETTA</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>loan_amount</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="loan_amount"                data-endpoint="POSTapi-deadline-postponed"
+               value="15000000"
+               data-component="body">
+    <br>
+<p>Le montant du crédit. Example: <code>15000000</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>representative_civility</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_civility"                data-endpoint="POSTapi-deadline-postponed"
+               value="Mr"
+               data-component="body">
+    <br>
+<p>La civilité du représentant. Example: <code>Mr</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>representative_last_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_last_name"                data-endpoint="POSTapi-deadline-postponed"
+               value="GUETTA"
+               data-component="body">
+    <br>
+<p>Le nom du représentant. Example: <code>GUETTA</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>representative_first_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_first_name"                data-endpoint="POSTapi-deadline-postponed"
+               value="David"
+               data-component="body">
+    <br>
+<p>Le prénom du représentant. Example: <code>David</code></p>
+        </div>
         </form>
 
                     <h2 id="report-decheance-PUTapi-deadline-postponed--id-">Met à jour un report d&#039;échéance</h2>
@@ -11906,9 +12074,16 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"caf_id\": 1,
     \"credit_number\": \"d4s1d4sds\",
     \"deadline_number\": 1,
+    \"old_date\": \"2024-03-03\",
     \"new_date\": \"2024-04-04\",
     \"request\": \"test\",
-    \"memo\": \"test\"
+    \"memo\": \"test\",
+    \"extension\": 0,
+    \"beneficiary_label\": \"David GUETTA\",
+    \"loan_amount\": 15000000,
+    \"representative_civility\": \"Mr\",
+    \"representative_last_name\": \"GUETTA\",
+    \"representative_first_name\": \"David\"
 }"
 </code></pre></div>
 
@@ -11928,9 +12103,16 @@ let body = {
     "caf_id": 1,
     "credit_number": "d4s1d4sds",
     "deadline_number": 1,
+    "old_date": "2024-03-03",
     "new_date": "2024-04-04",
     "request": "test",
-    "memo": "test"
+    "memo": "test",
+    "extension": 0,
+    "beneficiary_label": "David GUETTA",
+    "loan_amount": 15000000,
+    "representative_civility": "Mr",
+    "representative_last_name": "GUETTA",
+    "representative_first_name": "David"
 };
 
 fetch(url, {
@@ -12077,6 +12259,17 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Le numéro d'échéance. Example: <code>1</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>old_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="old_date"                data-endpoint="PUTapi-deadline-postponed--id-"
+               value="2024-03-03"
+               data-component="body">
+    <br>
+<p>L'ancienne date. Example: <code>2024-03-03</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>new_date</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
@@ -12090,7 +12283,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>request</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
- &nbsp;
+<i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="request"                data-endpoint="PUTapi-deadline-postponed--id-"
                value="test"
@@ -12101,13 +12294,79 @@ You can check the Dev Tools console for debugging information.</code></pre>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>memo</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
- &nbsp;
+<i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="memo"                data-endpoint="PUTapi-deadline-postponed--id-"
                value="test"
                data-component="body">
     <br>
 <p>Le mémo de la demande. Example: <code>test</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>extension</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="extension"                data-endpoint="PUTapi-deadline-postponed--id-"
+               value="0"
+               data-component="body">
+    <br>
+<p>La rallonge. Example: <code>0</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>beneficiary_label</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="beneficiary_label"                data-endpoint="PUTapi-deadline-postponed--id-"
+               value="David GUETTA"
+               data-component="body">
+    <br>
+<p>L'applelation du bénéficiaire. Example: <code>David GUETTA</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>loan_amount</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="loan_amount"                data-endpoint="PUTapi-deadline-postponed--id-"
+               value="15000000"
+               data-component="body">
+    <br>
+<p>Le montant du crédit. Example: <code>15000000</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>representative_civility</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_civility"                data-endpoint="PUTapi-deadline-postponed--id-"
+               value="Mr"
+               data-component="body">
+    <br>
+<p>La civilité du représentant. Example: <code>Mr</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>representative_last_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_last_name"                data-endpoint="PUTapi-deadline-postponed--id-"
+               value="GUETTA"
+               data-component="body">
+    <br>
+<p>Le nom du représentant. Example: <code>GUETTA</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>representative_first_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="representative_first_name"                data-endpoint="PUTapi-deadline-postponed--id-"
+               value="David"
+               data-component="body">
+    <br>
+<p>Le prénom du représentant. Example: <code>David</code></p>
         </div>
         </form>
 
@@ -13778,7 +14037,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-credit/7" \
+    "http://cofcredit.cofina.localhost/api/type-of-credit/17" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -13786,7 +14045,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-credit/7"
+    "http://cofcredit.cofina.localhost/api/type-of-credit/17"
 );
 
 const headers = {
@@ -13897,10 +14156,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-credit--id-"
-               value="7"
+               value="17"
                data-component="url">
     <br>
-<p>L'ID du type de crédit Example: <code>7</code></p>
+<p>L'ID du type de crédit Example: <code>17</code></p>
             </div>
                     </form>
 
@@ -14587,7 +14846,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/9" \
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/6" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -14595,7 +14854,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/type-of-applicant/9"
+    "http://cofcredit.cofina.localhost/api/type-of-applicant/6"
 );
 
 const headers = {
@@ -14706,10 +14965,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-type-of-applicant--id-"
-               value="9"
+               value="6"
                data-component="url">
     <br>
-<p>L'ID du type de demandeur de crédit Example: <code>9</code></p>
+<p>L'ID du type de demandeur de crédit Example: <code>6</code></p>
             </div>
                     </form>
 
@@ -15714,7 +15973,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://cofcredit.cofina.localhost/api/user/9" \
+    "http://cofcredit.cofina.localhost/api/user/20" \
     --header "Authorization: Bearer 1|c96jDUWBogbtZRsU6Oo9ZbzL3ZB5ry2spd3PC5RHd9464644" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -15722,7 +15981,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://cofcredit.cofina.localhost/api/user/9"
+    "http://cofcredit.cofina.localhost/api/user/20"
 );
 
 const headers = {
@@ -15833,10 +16092,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-user--id-"
-               value="9"
+               value="20"
                data-component="url">
     <br>
-<p>L'ID de l'utilisateur Example: <code>9</code></p>
+<p>L'ID de l'utilisateur Example: <code>20</code></p>
             </div>
                     </form>
 

@@ -15,13 +15,13 @@ class Contract extends Model
 
 	protected $fillable = [
 		"verbal_trial_id",
-		"representative_birth_date",
-		"representative_birth_place",
-		"representative_nationality",
+		"representative_birth_date", //
+		"representative_birth_place", //
+		"representative_nationality", //
 		"representative_home_address",
-		"representative_phone_number",
+		"representative_phone_number", //
 		"representative_type_of_identity_document",
-		"representative_number_of_identity_document",
+		"representative_number_of_identity_document", //
 		"representative_date_of_issue_of_identity_document",
 		"risk_premium_percentage",
 		"total_amount_of_interest",

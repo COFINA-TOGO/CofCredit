@@ -213,9 +213,30 @@ export default [
 			},
 		]
 	},
-	// {
-	//   title: 'Report d\'échéance'
-	// },
+	{
+		title: 'Report d\'échéance',
+		icon: { icon: "tabler-calendar-repeat" },
+		subject: 'deadline-postponed',
+		action: 'read',
+		children: [
+			{
+				title: 'Ajouter',
+				// to: 'deadline-postponed',
+				action: 'create',
+				subject: 'deadline-postponed',
+			}, {
+				title: 'En attente',
+				to: 'deadline-postponed',
+				action: 'read',
+				subject: 'deadline-postponed',
+			}, {
+				title: 'Historique',
+				// to: 'deadline-postponed-historical',
+				action: 'historical',
+				subject: 'deadline-postponed',
+			}
+		],
+	},
 	// {
 	//   title: 'Remboursement anticipé'
 	// },

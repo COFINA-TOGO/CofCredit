@@ -223,7 +223,7 @@ class UserController extends Controller
 	{
 		$user = $request->user();
 		if ($user) {
-			if (($authorisation = Gate::inspect('updatePassword', $user))->allowed()) {
+			if (($authorisation = Gate::inspect('update_password', $user))->allowed()) {
 				$validator = Validator::make($request->all(), [
 					"old_password" => 'required|min:8',
 					"new_password" => 'required|min:8',
@@ -233,7 +233,7 @@ class UserController extends Controller
 					return $this->responseError($validator->errors(), 400);
 				} else {
 					if (Hash::check($request->old_password, $user->password)) {
-						$user->update(["password" => $request->new_password]);
+						$user->update(["password" => $request->new_password, "password_change_required" => false]);
 						// $user->load("agency.head");
 						return $this->responseOk([
 							"user" => $user

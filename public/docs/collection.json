@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Document de CofCredit",
-        "_postman_id": "2cc6ff8c-b598-4bb3-a7b1-babd5acdb8a1",
+        "_postman_id": "d56eef8d-45e1-4cae-b5ec-d1ee8d1360f6",
         "description": "Application web de digitalisation du processus de mise en place d'un dossier de credit, de son suivi et supl\u00e9ments",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -2974,7 +2974,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "16",
+                                    "value": "18",
                                     "description": "L'ID du proc\u00e8s verbal"
                                 }
                             ]
@@ -3034,6 +3034,12 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "old_date",
+                                    "value": "",
+                                    "description": "Filtrer par ancienne date.",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "new_date",
                                     "value": "",
                                     "description": "Filtrer par nouvelle date.",
@@ -3064,6 +3070,42 @@
                                     "disabled": true
                                 },
                                 {
+                                    "key": "extension",
+                                    "value": "",
+                                    "description": "Filtrer par rallonge.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "beneficiary_label",
+                                    "value": "",
+                                    "description": "Filtrer par applelation du b\u00e9n\u00e9ficiaire.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "loan_amount",
+                                    "value": "",
+                                    "description": "Filtrer par montant du cr\u00e9dit.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_civility",
+                                    "value": "",
+                                    "description": "Filtrer par civilit\u00e9 du repr\u00e9sentant.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_last_name",
+                                    "value": "",
+                                    "description": "Filtrer par nom du repr\u00e9sentant.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "representative_first_name",
+                                    "value": "",
+                                    "description": "Filtrer par pr\u00e9nom du repr\u00e9sentant.",
+                                    "disabled": true
+                                },
+                                {
                                     "key": "with_caf",
                                     "value": "",
                                     "description": "Afficher le caf.",
@@ -3076,7 +3118,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/deadline-postponed?caf_id=&credit_number=&deadline_number=&new_date=&request_path=&memo_path=&status=&comment=&with_caf=&paginate="
+                            "raw": "{{baseUrl}}\/api\/deadline-postponed?caf_id=&credit_number=&deadline_number=&old_date=&new_date=&request_path=&memo_path=&status=&comment=&extension=&beneficiary_label=&loan_amount=&representative_civility=&representative_last_name=&representative_first_name=&with_caf=&paginate="
                         },
                         "method": "GET",
                         "header": [
@@ -3170,7 +3212,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"caf_id\":1,\"credit_number\":\"d4s1d4sds\",\"deadline_number\":1,\"new_date\":\"2024-04-04\",\"request\":\"test\",\"memo\":\"test\"}"
+                            "raw": "{\"caf_id\":1,\"credit_number\":\"d4s1d4sds\",\"deadline_number\":1,\"old_date\":\"2024-03-03\",\"new_date\":\"2024-04-04\",\"request\":\"test\",\"memo\":\"test\",\"extension\":0,\"beneficiary_label\":\"David GUETTA\",\"loan_amount\":15000000,\"representative_civility\":\"Mr\",\"representative_last_name\":\"GUETTA\",\"representative_first_name\":\"David\"}"
                         },
                         "description": ""
                     },
@@ -3213,7 +3255,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"caf_id\":1,\"credit_number\":\"d4s1d4sds\",\"deadline_number\":1,\"new_date\":\"2024-04-04\",\"request\":\"test\",\"memo\":\"test\"}"
+                            "raw": "{\"caf_id\":1,\"credit_number\":\"d4s1d4sds\",\"deadline_number\":1,\"old_date\":\"2024-03-03\",\"new_date\":\"2024-04-04\",\"request\":\"test\",\"memo\":\"test\",\"extension\":0,\"beneficiary_label\":\"David GUETTA\",\"loan_amount\":15000000,\"representative_civility\":\"Mr\",\"representative_last_name\":\"GUETTA\",\"representative_first_name\":\"David\"}"
                         },
                         "description": ""
                     },
@@ -3687,7 +3729,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "7",
+                                    "value": "17",
                                     "description": "L'ID du type de cr\u00e9dit"
                                 }
                             ]
@@ -3921,7 +3963,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "9",
+                                    "value": "6",
                                     "description": "L'ID du type de demandeur de cr\u00e9dit"
                                 }
                             ]
@@ -4195,7 +4237,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "9",
+                                    "value": "20",
                                     "description": "L'ID de l'utilisateur"
                                 }
                             ]

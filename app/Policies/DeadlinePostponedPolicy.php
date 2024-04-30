@@ -43,10 +43,6 @@ class DeadlinePostponedPolicy
 	{
 		return $this->check(["change_status"], "deadline-postponed", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
-	public function upload(User $connectedUser, DeadlinePostponed $deadlinePostponed)
-	{
-		return $this->check(["upload"], "deadline-postponed", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
-	}
 	public function download(User $connectedUser, DeadlinePostponed $deadlinePostponed)
 	{
 		return $this->check(["download"], "deadline-postponed", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");

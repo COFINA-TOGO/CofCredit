@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CATController;
+use App\Http\Controllers\API\DeadlinePostponedController;
 use App\Http\Controllers\API\GuarantorController;
 use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\UserController;
@@ -10,7 +11,6 @@ use App\Http\Controllers\API\TypeOfApplicantController;
 use App\Http\Controllers\API\TypeOfCreditController;
 use App\Http\Controllers\API\TypeOfGuaranteeController;
 use App\Http\Controllers\API\VerbalTrialController;
-use App\Http\Controllers\DeadlinePostponedController;
 use Illuminate\Support\Facades\Route;
 
 /*

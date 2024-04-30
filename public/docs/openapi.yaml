@@ -3415,6 +3415,16 @@ paths:
             example: null
         -
           in: query
+          name: old_date
+          description: 'Filtrer par ancienne date.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par ancienne date.'
+            example: null
+        -
+          in: query
           name: new_date
           description: 'Filtrer par nouvelle date.'
           example: null
@@ -3462,6 +3472,66 @@ paths:
           schema:
             type: string
             description: 'Filtrer par commentaire sur le report.'
+            example: null
+        -
+          in: query
+          name: extension
+          description: 'Filtrer par rallonge.'
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: 'Filtrer par rallonge.'
+            example: null
+        -
+          in: query
+          name: beneficiary_label
+          description: 'Filtrer par applelation du bénéficiaire.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par applelation du bénéficiaire.'
+            example: null
+        -
+          in: query
+          name: loan_amount
+          description: 'Filtrer par montant du crédit.'
+          example: null
+          required: false
+          schema:
+            type: number
+            description: 'Filtrer par montant du crédit.'
+            example: null
+        -
+          in: query
+          name: representative_civility
+          description: 'Filtrer par civilité du représentant.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par civilité du représentant.'
+            example: null
+        -
+          in: query
+          name: representative_last_name
+          description: 'Filtrer par nom du représentant.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par nom du représentant.'
+            example: null
+        -
+          in: query
+          name: representative_first_name
+          description: 'Filtrer par prénom du représentant.'
+          example: null
+          required: false
+          schema:
+            type: string
+            description: 'Filtrer par prénom du représentant.'
             example: null
         -
           in: query
@@ -3529,6 +3599,10 @@ paths:
                   type: integer
                   description: "Le numéro d'échéance."
                   example: 1
+                old_date:
+                  type: string
+                  description: "L'ancienne date."
+                  example: '2024-03-03'
                 new_date:
                   type: string
                   description: "La nouvelle date d'échéance."
@@ -3541,13 +3615,44 @@ paths:
                   type: string
                   description: 'Le mémo de la demande.'
                   example: test
+                extension:
+                  type: integer
+                  description: 'La rallonge.'
+                  example: 0
+                beneficiary_label:
+                  type: string
+                  description: "L'applelation du bénéficiaire."
+                  example: 'David GUETTA'
+                loan_amount:
+                  type: number
+                  description: 'Le montant du crédit.'
+                  example: 15000000.0
+                representative_civility:
+                  type: string
+                  description: 'La civilité du représentant.'
+                  example: Mr
+                representative_last_name:
+                  type: string
+                  description: 'Le nom du représentant.'
+                  example: GUETTA
+                representative_first_name:
+                  type: string
+                  description: 'Le prénom du représentant.'
+                  example: David
               required:
                 - caf_id
                 - credit_number
                 - deadline_number
+                - old_date
                 - new_date
                 - request
                 - memo
+                - extension
+                - beneficiary_label
+                - loan_amount
+                - representative_civility
+                - representative_last_name
+                - representative_first_name
   '/api/deadline-postponed/{id}':
     get:
       summary: "Affiche un report d'échéance"
@@ -3610,6 +3715,10 @@ paths:
                   type: integer
                   description: "Le numéro d'échéance."
                   example: 1
+                old_date:
+                  type: string
+                  description: "L'ancienne date."
+                  example: '2024-03-03'
                 new_date:
                   type: string
                   description: "La nouvelle date d'échéance."
@@ -3622,13 +3731,42 @@ paths:
                   type: string
                   description: 'Le mémo de la demande.'
                   example: test
+                extension:
+                  type: integer
+                  description: 'La rallonge.'
+                  example: 0
+                beneficiary_label:
+                  type: string
+                  description: "L'applelation du bénéficiaire."
+                  example: 'David GUETTA'
+                loan_amount:
+                  type: number
+                  description: 'Le montant du crédit.'
+                  example: 15000000.0
+                representative_civility:
+                  type: string
+                  description: 'La civilité du représentant.'
+                  example: Mr
+                representative_last_name:
+                  type: string
+                  description: 'Le nom du représentant.'
+                  example: GUETTA
+                representative_first_name:
+                  type: string
+                  description: 'Le prénom du représentant.'
+                  example: David
               required:
                 - caf_id
                 - credit_number
                 - deadline_number
+                - old_date
                 - new_date
-                - request
-                - memo
+                - extension
+                - beneficiary_label
+                - loan_amount
+                - representative_civility
+                - representative_last_name
+                - representative_first_name
     delete:
       summary: "Supprime un report d'échéance"
       operationId: supprimeUnReportDchance

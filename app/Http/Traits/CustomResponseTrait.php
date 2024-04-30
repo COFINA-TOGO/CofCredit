@@ -25,7 +25,7 @@ trait CustomResponseTrait
 		} else {
 			$data = $query->orderByDesc($orderColumn)->paginate($paginateCount)->toArray();
 		}
-		return $this->responseOk(data: $data, status: $status, messages: $messages);
+		return $this->responseOkPaginate(data: $data, status: $status, messages: $messages);
 	}
 
 	/**

@@ -153,7 +153,7 @@ class User extends Authenticatable
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
 					],
 					[
-						"action" => ["read", "historical", "change_status"],
+						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],
 					]
 				];
@@ -192,7 +192,7 @@ class User extends Authenticatable
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
 					],
 					[
-						"action" => ["read", "historical", "change_status"],
+						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],
 					]
 				];
@@ -213,6 +213,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read"],
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+					],
+					[
+						"action" => ["read", "historical", "change_status", "download"],
+						"subject" => ["deadline-postponed"],
 					]
 				];
 			case ('legal'):
@@ -245,7 +249,7 @@ class User extends Authenticatable
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
 					],
 					[
-						"action" => ["read", "historical", "change_status"],
+						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],
 					]
 				];
@@ -272,21 +276,21 @@ class User extends Authenticatable
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
 					],
 					[
-						"action" => ["read", "historical", "create", "update", "delete"],
+						"action" => ["read", "historical", "create", "update", "download", "upload", "delete"],
 						"subject" => ["deadline-postponed"],
 					]
 				];
 			case ('ca'):
 				return [
 					[
-						"action" => ["read", "historical", "change_status"],
+						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],
 					]
 				];
 			case ('md'):
 				return [
 					[
-						"action" => ["read", "historical", "change_status"],
+						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],
 					]
 				];
