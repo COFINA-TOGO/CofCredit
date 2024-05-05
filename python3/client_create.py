@@ -35,7 +35,7 @@ colonnes = [
     ('TYPE_PIECE', 'VARCHAR(50)'),
     ('NUMERO_PIECE_IDENTITE', 'VARCHAR(50) UNIQUE'),
 ]
-cursor.execute("DROP TABLE clients;")
+cursor.execute("DROP TABLE IF EXISTS clients;")
 
 create_table_query = f"CREATE TABLE clients ({', '.join([f'`{table_name}` {table_type}' for table_name, table_type in colonnes])})"
 cursor.execute(create_table_query)

@@ -25,19 +25,64 @@ class DatabaseSeeder extends Seeder
 	 */
 	public function run(): void
 	{
-		$admin = User::factory(1)->create(["full_name" => "Charles GAMLIGO DD", "name" => "charles.gamligo", "email" => "charles.gamligo@cofinacorp.com", "profile" => "admin", "activated" => true, "password_change_required" => false, "password" => "Coftg2021"])->first();
-		$credit_analyst = User::factory(1)->create(["full_name" => "admin", "profile" => "admin", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "admin@cofinacorp.com"])->first();
-		$credit_analyst = User::factory(1)->create(["full_name" => "credit_analyst", "profile" => "credit_analyst", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "credit_analyst@cofinacorp.com"])->first();
-		$credit_admin = User::factory(1)->create(["full_name" => "credit_admin", "profile" => "credit_admin", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "credit_admin@cofinacorp.com"])->first();
-		$credit_admin2 = User::factory(1)->create(["full_name" => "credit_admin2", "profile" => "credit_admin", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "credit_admin2@cofinacorp.com"])->first();
-		$head_credit = User::factory(1)->create(["full_name" => "head_credit", "profile" => "head_credit", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "head_credit@cofinacorp.com"])->first();
-		$operation = User::factory(1)->create(["full_name" => "operation", "profile" => "operation", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "operation@cofinacorp.com"])->first();
-		$legal = User::factory(1)->create(["full_name" => "legal", "profile" => "legal", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "legal@cofinacorp.com"])->first();
-		$dex = User::factory(1)->create(["full_name" => "dex", "profile" => "dex", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "dex@cofinacorp.com"])->first();
-		$caf = User::factory(1)->create(["full_name" => "caf", "profile" => "caf", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "caf@cofinacorp.com"])->first();
-		$caf2 = User::factory(1)->create(["full_name" => "caf2", "profile" => "caf", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "caf2@cofinacorp.com"])->first();
-		$ca = User::factory(1)->create(["full_name" => "ca", "profile" => "ca", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "ca@cofinacorp.com"])->first();
-		$md = User::factory(1)->create(["full_name" => "md", "profile" => "md", "password" => "Coftg2021", "password_change_required" => false, "activated" => true, "email" => "md@cofinacorp.com"])->first();
+		$admin = User::factory(1)->create(["name" => "admin", "full_name" => "admin", "profile" => "admin", "password" => "Coftg@20$*21ù!ad", "password_change_required" => false, "activated" => true, "email" => "admin@cofinacorp.com"])->first();
+		
+		$credit_analyst = User::factory(1)->create(["name" => "ovidio.de-souza", "full_name" => "Ovidio De SOUZA", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "ovidio.de-souza@cofinacorp.com"])->first();
+		$credit_analyst = User::factory(1)->create(["name" => "prudence.ayena", "full_name" => "Prudence AYENA", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "prudence.ayena@cofinacorp.com"])->first();
+
+		$credit_admin = User::factory(1)->create(["name" => "espoir.ayewoutse", "full_name" => "Komlan A. Espoir AYEWOUTSE", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "espoir.ayewoutse@cofinacorp.com"])->first();
+		$credit_admin = User::factory(1)->create(["name" => "tadjoudine.memem", "full_name" => "Tadjoudine MEMEM", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "tadjoudine.memem@cofinacorp.com"])->first();
+
+		$head_credit = User::factory(1)->create(["name" => "charles.gamado", "full_name" => "Koffi Djramedo GAMADO", "profile" => "head_credit", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "charles.gamado@cofinacorp.com"])->first();
+		
+		$operation = User::factory(1)->create(["name" => "samb.souleymane", "full_name" => "Souleymane Sambe", "profile" => "operation", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "samb.souleymane@cofinacorp.com"])->first();
+		
+		$legal = User::factory(1)->create(["name" => "mireille.messangan", "full_name" => "Mireille MESSANGAN", "profile" => "legal", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "mireille.messangan@cofinacorp.com"])->first();
+		
+		$dex = User::factory(1)->create(["name" => "christele.febon", "full_name" => "Christele FEBON JOHNSON", "profile" => "dex", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "christele.febon@cofinacorp.com"])->first();
+		
+		foreach([
+			["full_name" => "Abdou Kabirou YOMENOU", "email" => "kabirou.yomenou@cofinacorp.com"],
+			["full_name" => "Abire KPENIFEI KPATCHA", "email" => "abire.kpenifei@cofinacorp.com"],
+			["full_name" => "Ablam Samuel AKAKPO", "email" => "samuel.akakpo@cofinacorp.com"],
+			["full_name" => "Abra DOUGAME", "email" => "abra.dougame@cofinacorp.com"],
+			["full_name" => "Aimé Edem HOUNSOU DEGBE", "email" => "aime.hounsou-degbe@cofinacorp.com"],
+			["full_name" => "Amah AYIKOE", "email" => "amah.ayikoe@cofinacorp.com"],
+			["full_name" => "Améyo Chimène Edwige ATTILA", "email" => "edwige.attila@cofinacorp.com"],
+			["full_name" => "Assowè MABOUGRE", "email" => "assowe.mabougre@cofinacorp.com"],
+			["full_name" => "Baliza TEKPEZI", "email" => "baliza.tekpezi@cofinacorp.com"],
+			["full_name" => "Chimene AZEGUE", "email" => "chimene.azegue@cofinacorp.com"],
+			["full_name" => "David Martial SOUSSOUKPO", "email" => "david-martial.soussoukpo@cofinacorp.com"],
+			["full_name" => "Fatima Badoawè TCHA-COROUDOU","email" => "fatima.tcha-coroudou@cofinacorp.com"],
+			["full_name" => "Francis K GAVISSE","email" => "francis.gavisse@cofinacorp.com"],
+			["full_name" => "Gafar Tchapo NABINE","email" => "gafar.nabine@cofinacorp.com"],
+			["full_name" => "Gianni Patrick Attiogbe KOUDOSSOU","email" => "gianni.koudossou@cofinacorp.com"],
+			["full_name" => "Gnonyarou WALLA","email" => "gnonyarou.walla@cofinacorp.com"],
+			["full_name" => "Joseph AGBI","email" => "joseph.agbi@cofinacorp.com"],
+			["full_name" => "Kadiko Pyalo SOHOU","email" => "kadiko-pyalo.sohou@cofinacorp.com"],
+			["full_name" => "Koffi WOEKPO","email" => "koffi.woekpo@cofinacorp.com"],
+			["full_name" => "Koffivi Amenyo TOLESSI","email" => "koffivi.tolessi@cofinacorp.com"],
+			["full_name" => "Komi Dogbéda NOLI","email" => "komi.noli@cofinacorp.com"],
+			["full_name" => "Komi Elom ZAGARAGO","email" => "elom.zagarago@cofinacorp.com"],
+			["full_name" => "Komi Vienyeawu KUNAKEY","email" => "komi.kunakey@cofinacorp.com"],
+			["full_name" => "Komla Nopeli AHONDE","email" => "komla.ahonde@cofinacorp.com"],
+			["full_name" => "Komlan DADZIE","email" => "komlan.dadzie@cofinacorp.com"],
+			["full_name" => "Komlan Somefa AHATEFOU","email" => "somefa.ahatefou@cofinacorp.com"],
+			["full_name" => "Kosi Mensa DUYIBOE","email" => "kosi-mensa.duyiboe@cofinacorp.com"],
+			["full_name" => "Kossi AGBLEVON","email" => "kossi.agblevon@cofinacorp.com"],
+			["full_name" => "Kossi Dodji AMEGBEDJI","email" => "dodji.amegbedji@cofinacorp.com"],
+			["full_name" => "Mawule Kokou DOGBE","email" => "kokou.dogbe@cofinacorp.com"],
+			["full_name" => "Nyokpogbe AGBENOWOSI","email" => "nykpogbe.agbenowosi@cofinacorp.com"],
+			["full_name" => "Simen Broklyn MEBA","email" => "simen.meba@cofinacorp.com"],
+			["full_name" => "Yao HOETOWOU","email" => "yao.hoetowou@cofinacorp.com"],
+		] as $userData){
+			$elements = explode("@cofinacorp.com", $userData["email"]);
+			$caf = User::factory(1)->create(["name" => strtolower($elements[0]), "full_name" => $userData["full_name"], "profile" => "caf", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => $userData["email"]])->first();
+		}
+		
+		$ca = User::factory(1)->create(["name" => "mawulolo.yebovi", "full_name" => "Ayi Mawulolo YEBOVI", "profile" => "ca", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "mawulolo.yebovi@cofinacorp.com"])->first();
+		
+		$md = User::factory(1)->create(["name" => "marcel.digbe", "full_name" => "Marcel DIGBE", "profile" => "md", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "marcel.digbe@cofinacorp.com"])->first();
 
 		$physical_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Physique"])->first();
 		$moral_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Morale"])->first();
@@ -80,52 +125,54 @@ class DatabaseSeeder extends Seeder
 			TypeOfGuarantee::factory(1)->create(["name" => $typeOfGuaranteeName]);
 		}
 
+		if(false){
+			VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
+				Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+				Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "individual_business", "creator_id" => $credit_admin->id])->each(function ($contract) {
+					Guarantor::factory(3)->create(["contract_id" => $contract->id]);
+					IndividualBusiness::factory(1)->create(["contract_id" => $contract->id]);
+				});
+			});
+			//Pv avec contrat de société
+			VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
+				Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+				Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "company", "creator_id" => $credit_admin->id])->each(function ($contract) {
+					Guarantor::factory(3)->create(["contract_id" => $contract->id]);
+					Company::factory(1)->create(["contract_id" => $contract->id]);
+				});
+			});
+			//Pv avec contrat particulier
+			VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
+				Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+				Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
+					Guarantor::factory(3)->create(["contract_id" => $contract->id]);
+				});
+			});
+	
+			//Pv avec contrat et avec CAT
+			VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) use ($credit_admin) {
+				Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+				Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
+					Guarantor::factory(3)->create(["contract_id" => $contract->id]);
+					CAT::factory(1)->create(["contract_id" => $contract->id]);
+				});
+			});
+	
+			//Pv sans contrat
+			VerbalTrial::factory(15)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) {
+				Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
+			});
+	
+			//Pv hypothécaire non validé
+			VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) {
+				Guarantee::factory(2)->create(["verbal_trial_id" => $verbalTrial->id, "type_of_guarantee_id" => 9]);
+			});
+			//Pv hypothécaire validés
+			VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) {
+				Guarantee::factory(2)->create(["verbal_trial_id" => $verbalTrial->id, "type_of_guarantee_id" => 9]);
+			});
+		}
 		// //Pv avec contrat individuel
-		VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
-			Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-			Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "individual_business", "creator_id" => $credit_admin->id])->each(function ($contract) {
-				Guarantor::factory(3)->create(["contract_id" => $contract->id]);
-				IndividualBusiness::factory(1)->create(["contract_id" => $contract->id]);
-			});
-		});
-		//Pv avec contrat de société
-		VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
-			Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-			Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "company", "creator_id" => $credit_admin->id])->each(function ($contract) {
-				Guarantor::factory(3)->create(["contract_id" => $contract->id]);
-				Company::factory(1)->create(["contract_id" => $contract->id]);
-			});
-		});
-		//Pv avec contrat particulier
-		VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) use ($credit_admin) {
-			Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-			Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
-				Guarantor::factory(3)->create(["contract_id" => $contract->id]);
-			});
-		});
-
-		//Pv avec contrat et avec CAT
-		VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) use ($credit_admin) {
-			Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-			Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "particular", "creator_id" => $credit_admin->id])->each(function ($contract) {
-				Guarantor::factory(3)->create(["contract_id" => $contract->id]);
-				CAT::factory(1)->create(["contract_id" => $contract->id]);
-			});
-		});
-
-		//Pv sans contrat
-		VerbalTrial::factory(15)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) {
-			Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
-		});
-
-		//Pv hypothécaire non validé
-		VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id])->each(function ($verbalTrial) {
-			Guarantee::factory(2)->create(["verbal_trial_id" => $verbalTrial->id, "type_of_guarantee_id" => 9]);
-		});
-		//Pv hypothécaire validés
-		VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated"])->each(function ($verbalTrial) {
-			Guarantee::factory(2)->create(["verbal_trial_id" => $verbalTrial->id, "type_of_guarantee_id" => 9]);
-		});
 
 		$plainTextToken = $admin->createToken("auth-token")->plainTextToken;
 		DB::update("update personal_access_tokens set TOKEN = '8fb55a1d50842403ddc4ea7dc0c80a5d2e44eeb029f1077341babd46b68fe0ba' where ID = 1");
@@ -146,5 +193,7 @@ class DatabaseSeeder extends Seeder
 		}
 
 		echo "admin Token: " . $plainTextToken . "\n";
+
+
 	}
 }

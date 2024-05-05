@@ -35,7 +35,7 @@ colonnes = [
     ('TYPE_PIECE', 'VARCHAR(50)'),
     ('NUMERO_PIECE_IDENTITE', 'VARCHAR(50) UNIQUE'),
 ]
-cursor.execute("DROP TABLE prets;")
+cursor.execute("DROP TABLE IF EXISTS prets;")
 
 create_table_query = f"CREATE TABLE prets ({', '.join([f'`{table_name}` {table_type}' for table_name, table_type in colonnes])})"
 cursor.execute(create_table_query)
