@@ -31,7 +31,7 @@ class User extends Authenticatable
 		"password_change_required",
 	];
 
-	protected $appends = ['ability_rules'];
+	protected $appends = ['ability_rules', 'profile_fr'];
 
 	/**
 	 * The attributes that should be hidden for serialization.
@@ -83,6 +83,21 @@ class User extends Authenticatable
 	public function deadline_postponeds(): HasMany
 	{
 		return $this->hasMany(DeadlinePostponed::class, "caf_id", "id");
+	}
+
+	public function getProfileFrAttribute(){
+		return [
+			"admin" => "Administrateur",
+			"credit_analyst" => "Analyste Crédit",
+			"credit_admin" => "Admin Crédit",
+			"head_credit" => "Head Crédit",
+			"operation" => "Opérations",
+			"legal" => "Juridique",
+			"dex" => "DEX",
+			"caf" => "CAF",
+			"ca" => "Chef d'agence",
+			"md" => "MD",
+		][$this->profile];
 	}
 
 	public function getAbilityRulesAttribute()

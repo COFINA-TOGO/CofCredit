@@ -66,6 +66,7 @@ const login = async () => {
         "avatar": "/images/avatars/avatar-1.png",
         "email": user.email,
         "role": user.profile,
+        "role_fr": user.profile_fr,
       }
       useCookie('userToken').value = userToken
       await nextTick(() => {
