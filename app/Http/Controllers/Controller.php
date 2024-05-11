@@ -22,11 +22,12 @@ class Controller extends BaseController
 	 * @param 	array 		$validations		Les données des validations à effectuer
 	 * @param 	callable 	$beforeCreate		Une fonction à appeler avant l'insertion
 	 * @param 	callable 	$afterCreate		Une fonction à appeler après l'insertion
+	 * @param 	string		$authName			Le nom de la fonction de vérification dans la policy
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function modelStore($modelClass, array $requestData, array $validations, callable $manualValidations = null, callable $beforeCreate = null, callable $afterCreate = null)
+	public function modelStore($modelClass, array $requestData, array $validations, callable $manualValidations = null, callable $beforeCreate = null, callable $afterCreate = null, string $authName = "store")
 	{
-		if (($authorisation = Gate::inspect('create', $modelClass))->allowed()) {
+		if (($authorisation = Gate::inspect($authName, $modelClass))->allowed()) {
 			$validator = Validator::make($requestData, $validations);
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
@@ -56,16 +57,17 @@ class Controller extends BaseController
 	 * @param 	array 		$manualValidations	Une fonction de validations manuelles
 	 * @param 	array 		$validations		Les données des validations à effectuer
 	 * @param 	callable 	$beforeUpdate		Une fonction à appeler avant la mise à jour
-	 * @param 	callable 	$afterUpdate		Une fonction à appeler après la mise à jour
+	 * @param 	callable	$afterUpdate		Une fonction à appeler après la mise à jour
+	 * @param 	string		$authName			Le nom de la fonction de vérification dans la policy
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function modelUpdate(int $modelId, $modelClass, array $requestData, array $validations, callable $manualValidations = null, callable $beforeUpdate = null, callable $afterUpdate = null)
+	public function modelUpdate(int $modelId, $modelClass, array $requestData, array $validations, callable $manualValidations = null, callable $beforeUpdate = null, callable $afterUpdate = null, string $authName = "update")
 	{
 		$modelClassExployed = explode("\\", $modelClass);
 		$model = call_user_func_array([$modelClass, 'find'], [$modelId]);
 		$modelClassName = lcfirst(end($modelClassExployed));
 		if ($model) {
-			if (($authorisation = Gate::inspect('update', $model))->allowed()) {
+			if (($authorisation = Gate::inspect($authName, $model))->allowed()) {
 				$validator = Validator::make($requestData, $validations);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
@@ -96,15 +98,16 @@ class Controller extends BaseController
 	 * @param 	array 		$manualValidations	Une fonction de validations manuelles
 	 * @param 	callable 	$beforeDelete		Une fonction à appeler avant la suppression
 	 * @param 	callable 	$afterDelete		Une fonction à appeler après la suppression
+	 * @param 	string		$authName			Le nom de la fonction de vérification dans la policy
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function modelDelete(int $modelId, $modelClass, callable $manualValidations = null, callable $beforeDelete = null, callable $afterDelete = null)
+	public function modelDelete(int $modelId, $modelClass, callable $manualValidations = null, callable $beforeDelete = null, callable $afterDelete = null, string $authName = "delete")
 	{
 		$modelClassExployed = explode("\\", $modelClass);
 		$model = call_user_func_array([$modelClass, 'find'], [$modelId]);
 		$modelClassName = lcfirst(end($modelClassExployed));
 		if ($model) {
-			if (($authorisation = Gate::inspect('delete', $model))->allowed()) {
+			if (($authorisation = Gate::inspect($authName, $model))->allowed()) {
 				$manualValidationsErrors = ($manualValidations) ? $manualValidations() : null;
 				if ($manualValidationsErrors) {
 					return $manualValidationsErrors;

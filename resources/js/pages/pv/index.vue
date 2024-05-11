@@ -48,10 +48,6 @@ const headers = [
     key: 'amount_fr',
   },
   {
-    title: 'CAF',
-    key: 'caf.full_name',
-  },
-  {
     title: 'Statut',
     key: 'status',
   },
@@ -126,9 +122,6 @@ const apiDelete = async id => {
 const apiChangeStatus = async id => {
   await $api(`verbal-trial/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
   actionComment.value = ""
-  if (actionStatus.value == "validated") {
-    router.push(`/contract/add?id=${id}`)
-  }
   fetchPv()
 }
 
@@ -215,11 +208,11 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
         <template #item.status="{ item }">
           <VChip label :color="{ 'validated': 'success', 'rejected': 'error', 'waiting': 'warning' }[item.status]">
-            <VTooltip v-if="item.status_observation" activator="parent" transition="scroll-x-transition"
-              location="start">Raison: {{ item.status_observation }}</VTooltip>
-            {{ item.status == 'validated' ? 'Validé' : null }}
-            {{ item.status == 'waiting' ? 'En attente' : null }}
-            {{ item.status == 'rejected' ? 'Rejeté' : null }}
+            <VTooltip v-if="item.comment" activator="parent" transition="scroll-x-transition"
+              location="start">Raison: {{ item.comment }}
+            </VTooltip>
+            {{ {'validated': 'Validé', 'waiting': 'En attente', 'rejected': 'Rejeté'}[item.status] }}
+            ({{ {'dex': 'DEX', 'head_credit': "Head Crédit", 'md': 'MD'}[item.validation_level] }})
           </VChip>
         </template>
 
@@ -252,8 +245,8 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
               <VIcon icon="tabler-trash" color='error' />
             </IconBtn>
           </div>
-
-          <div v-if="$can('reject', 'pv') || $can('validate', 'pv') || $can('create', 'contract')">
+          <div
+            v-if="($can('reject', 'pv') || $can('validate', 'pv') || $can('create', 'contract')) && useCookie('userData').value['role'] == item.validation_level">
             <VDivider />
             <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected'"
               @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">

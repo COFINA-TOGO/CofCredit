@@ -35,6 +35,6 @@ EXCEPTION
 END DISCONNECT_USER;
 /
 
-EXEC disconnect_user('COFINA_COF_CREDIT');
+EXEC disconnect_user('COFINA_CREDIT');
 
 exit;

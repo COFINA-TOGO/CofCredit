@@ -179,7 +179,7 @@ class User extends Authenticatable
 						"subject" => ["non-mortgage-contract", "mortgage-contract"]
 					],
 					[
-						"action" => ["read", "historical", "download"],
+						"action" => ["read", "historical", "download", "reject", "validate", "change_status"],
 						"subject" => ["pv"],
 					],
 					[
@@ -249,7 +249,11 @@ class User extends Authenticatable
 				return [
 					[
 						"action" => ["simple-notification", "read", "historical", "download"],
-						"subject" => ["pv", "contract", "cat", "guarantor", "non-mortgage-contract", "mortgage-contract", "notification", "simple-notification"]
+						"subject" => ["contract", "cat", "guarantor", "non-mortgage-contract", "mortgage-contract", "notification", "simple-notification"]
+					],
+					[
+						"action" => ["read", "historical", "download", "reject", "validate", "change_status"],
+						"subject" => ["pv"],
 					],
 					[
 						"action" => ["without-signed-contract"],
@@ -304,6 +308,10 @@ class User extends Authenticatable
 				];
 			case ('md'):
 				return [
+					[
+						"action" => ["read", "historical", "download", "reject", "validate", "change_status"],
+						"subject" => ["pv"],
+					],
 					[
 						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],

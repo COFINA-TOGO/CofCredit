@@ -7,15 +7,15 @@ if [[ $EUID -ne 0 ]]; then
     fi
 fi
 #Suppression de l'ancien container
-docker stop oracle_cofina_cof_credit;
-docker rm oracle_cofina_cof_credit;
+docker stop oracle_cofina_credit;
+docker rm oracle_cofina_credit;
 
 #Création de la base de données:
-docker container create -it --name oracle_cofina_cof_credit -p 1521:1521 -e ORACLE_PWD=welcome123 container-registry.oracle.com/database/express:latest;
-docker update --restart=always oracle_cofina_cof_credit;
+docker container create -it --name oracle_cofina_credit -p 1521:1521 -e ORACLE_PWD=welcome123 container-registry.oracle.com/database/express:latest;
+docker update --restart=always oracle_cofina_credit;
 
 #Démarage de la base de données:
-docker start oracle_cofina_cof_credit;
+docker start oracle_cofina_credit;
 
 #Attendre pour le démarage de la bd
 sleep 30;

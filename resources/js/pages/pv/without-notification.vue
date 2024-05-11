@@ -218,8 +218,8 @@ const actionStatus = ref("waiting")
 
         <template #item.status="{ item }">
           <VChip label :color="{ 'validated': 'success', 'rejected': 'error', 'waiting': 'warning' }[item.status]">
-            <VTooltip v-if="item.status_observation" activator="parent" transition="scroll-x-transition"
-              location="start">Raison: {{ item.status_observation }}</VTooltip>
+            <VTooltip v-if="item.comment" activator="parent" transition="scroll-x-transition"
+              location="start">Raison: {{ item.comment }}</VTooltip>
             {{ item.status == 'validated' ? 'Validé' : null }}
             {{ item.status == 'waiting' ? 'En attente' : null }}
             {{ item.status == 'rejected' ? 'Rejeté' : null }}

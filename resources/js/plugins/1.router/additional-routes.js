@@ -16,9 +16,12 @@ export const redirects = [
 				return { name: 'pv' }
 
 			if (userRole === 'credit_admin')
-				return { name: 'contract' }
+				return { name: 'pv' }
 
-			if (userRole === 'head_credit' || userRole === 'operation')
+			if (userRole === 'head_credit')
+				return { name: 'pv' }
+
+			if (userRole === 'operation')
 				return { name: 'cat' }
 
 			if (userRole === 'caf')
@@ -34,7 +37,7 @@ export const redirects = [
 				return { name: 'deadline-postponed' }
 
 			if (userRole === 'md')
-				return { name: 'deadline-postponed' }
+				return { name: 'pv' }
 
 			return { name: 'login', query: to.query }
 		},

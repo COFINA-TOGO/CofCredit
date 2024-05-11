@@ -35,8 +35,9 @@ class VerbalTrial extends Model
         'tax_fee_interest_rate',
         'caf_id',
         'creator_id',
+        'validation_level',
         'status',
-        'status_observation',
+        'comment',
     ];
 
     protected $appends = ["applicant_full_name", "label", "amount_fr"];

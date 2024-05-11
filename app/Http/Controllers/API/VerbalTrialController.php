@@ -10,16 +10,13 @@ use App\Models\Guarantee;
 use App\Models\User;
 use App\Models\VerbalTrial;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Pandoc\Pandoc;
 use PhpOffice\PhpWord\TemplateProcessor;
-use PhpOffice\PhpWord\PhpWord;
-use Dompdf\Dompdf;
 
 /**
  * @group Procès Verbal
@@ -211,7 +208,7 @@ class VerbalTrialController extends Controller
 		$verbalTrial = VerbalTrial::find($id);
 		if ($verbalTrial) {
 			// if (($authorisation = Gate::inspect('view', $verbalTrial))->allowed()) {
-			$templateProcessor = new TemplateProcessor("../document_templates/PVs/PV.docx");
+			$templateProcessor = new TemplateProcessor("../document_templates/PVs/PV-$verbalTrial->status-$verbalTrial->validation_level.docx");
 			$data = $verbalTrial->toArray();
 			$data = array_merge($data, collect($verbalTrial->caf)->mapWithKeys(function ($value, $key) {
 				return ['caf.' . $key => $value];
@@ -236,6 +233,12 @@ class VerbalTrialController extends Controller
 				$guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
 					return ['type_of_guarantee.' . $key => $value];
 				})->all());
+			}
+			foreach(["dex", "head_credit", "md"] as $signatoryProfile){
+				$currentSignatory = User::where('profile', $signatoryProfile)->first();
+				if($currentSignatory){
+					($currentSignatory->signatory_path) ? $templateProcessor->setImageValue($signatoryProfile . "_sign", array("path" => $currentSignatory->signatory_path, 'width' => 250, 'height' => 250, 'ratio' => true)) : $templateProcessor->setValue($signatoryProfile . "_sign", "");
+				}
 			}
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 			unset($data["caf.ability_rules"]);
@@ -339,6 +342,7 @@ class VerbalTrialController extends Controller
 					DB::beginTransaction();
 					try {
 						$requestData["creator_id"] = $request->user()->id;
+						$requestData["validation_level"] = "head_credit";
 						$verbalTrial = VerbalTrial::create($requestData);
 						if (isset($requestData["guarantees"])) {
 							$guaranteesCollection = new Collection($requestData["guarantees"]);
@@ -461,6 +465,7 @@ class VerbalTrialController extends Controller
 						DB::beginTransaction();
 						try {
 							$requestData["creator_id"] = $request->user()->id;
+							$requestData["validation_level"] = "head_credit";
 							$verbalTrial->guarantees()->delete();
 							if (isset($requestData["guarantees"])) {
 								$guaranteesCollection = new Collection($requestData["guarantees"]);
@@ -524,10 +529,17 @@ class VerbalTrialController extends Controller
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
 				} else {
-					$verbalTrial->update([
-						"status" => $requestData["status"],
-						"status_observation" => $requestData["comment"],
-					]);
+					$requestData = $validator->validated();
+					$connectedUser = User::find($request->user()->id);
+					if($requestData["status"] =="validated"){
+						$requestData["validation_level"] = [
+							"dex" => "head_credit",
+							"head_credit" => "md",
+							"md" => "md",
+						][$connectedUser->profile];
+						$requestData["status"] = ($connectedUser->profile == "md") ? "validated" : "waiting";
+					}
+					$verbalTrial->update($requestData);
 					return $verbalTrial;
 				}
 			} else {

@@ -21,6 +21,7 @@ return new class extends Migration {
 			$table->string('si_profile_id')->nullable();
 			$table->boolean('activated')->default(false);
 			$table->boolean('password_change_required')->default(true);
+			$table->string('signatory_path')->nullable()->default(null);
 			$table->rememberToken();
 			$table->timestamps();
 		});

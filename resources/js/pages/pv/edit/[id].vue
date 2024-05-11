@@ -191,8 +191,8 @@ const snackbarMessage = ref("")
               <VCardText>
                 <VRow>
                   <VCol>
-                    <VAlert v-if="verbalTrial.status == 'rejected' && verbalTrial.status_observation" color="warning">
-                      Motif du refus : {{ verbalTrial.status_observation }}
+                    <VAlert v-if="verbalTrial.status == 'rejected' && verbalTrial.comment" color="warning">
+                      Motif du refus : {{ verbalTrial.comment }}
                     </VAlert>
                   </VCol>
                 </VRow>
