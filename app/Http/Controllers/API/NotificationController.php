@@ -7,8 +7,8 @@ use App\Http\Traits\CustomResponseTrait;
 use App\Jobs\SendEmail;
 use App\Models\Notification;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -16,10 +16,13 @@ use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Rmunate\Utilities\SpellNumber;
 
+/**
+ * @group Notification
+ *
+ * EndPoints pour gérer les notification
+ */
 class NotificationController extends Controller
 {
-
-    
 
     /**
      * Affiche les notification
@@ -165,7 +168,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Affiche un notification
+     * Affiche une notification
      *
      * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
      *
@@ -201,7 +204,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Télécharge la version word d'un notification
+     * Télécharge la version word d'une notification
      *
      * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
      *
@@ -427,7 +430,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Mettre à jour un notification
+     * Mettre à jour une notification
      *
      * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
      *
@@ -654,7 +657,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Supprime un notification
+     * Supprime une notification
      *
      * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
      *

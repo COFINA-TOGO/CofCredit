@@ -31,6 +31,16 @@ const userProfileList = [
   { type: 'divider' },
   {
     type: 'navItem',
+    icon: 'tabler-settings',
+    title: 'Paramètres',
+    to: {
+      name: 'settings-user-tab',
+      params: { tab: 'account' },
+    },
+  },
+  { type: 'divider' },
+  {
+    type: 'navItem',
     icon: 'tabler-logout',
     title: 'Logout',
     onClick: logout,

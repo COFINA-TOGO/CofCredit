@@ -85,7 +85,8 @@ class User extends Authenticatable
 		return $this->hasMany(DeadlinePostponed::class, "caf_id", "id");
 	}
 
-	public function getProfileFrAttribute(){
+	public function getProfileFrAttribute()
+	{
 		return [
 			"admin" => "Administrateur",
 			"credit_analyst" => "Analyste Crédit",
@@ -127,6 +128,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read"],
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+					],
+					[
+						"action" => ["manage"],
+						"subject" => ["settings-user"]
 					]
 				];
 			case ('credit_admin'):
@@ -170,6 +175,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],
+					],
+					[
+						"action" => ["manage"],
+						"subject" => ["settings-user"]
 					]
 				];
 			case ('head_credit'):
@@ -209,6 +218,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],
+					],
+					[
+						"action" => ["manage"],
+						"subject" => ["settings-user"]
 					]
 				];
 			case ('operation'):
@@ -232,6 +245,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],
+					],
+					[
+						"action" => ["manage"],
+						"subject" => ["settings-user"]
 					]
 				];
 			case ('legal'):
@@ -244,6 +261,10 @@ class User extends Authenticatable
 						"action" => ["without-signed-contract", "upload_signed_notification"],
 						"subject" => ["notification"]
 					],
+					[
+						"action" => ["manage"],
+						"subject" => ["settings-user"]
+					]
 				];
 			case ('dex'):
 				return [
@@ -270,6 +291,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],
+					],
+					[
+						"action" => ["manage"],
+						"subject" => ["settings-user"]
 					]
 				];
 			case ('caf'):
@@ -297,6 +322,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read", "historical", "create", "update", "download", "upload", "delete"],
 						"subject" => ["deadline-postponed"],
+					],
+					[
+						"action" => ["manage"],
+						"subject" => ["settings-user"]
 					]
 				];
 			case ('ca'):
@@ -304,6 +333,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],
+					],
+					[
+						"action" => ["manage"],
+						"subject" => ["settings-user"]
 					]
 				];
 			case ('md'):
@@ -315,6 +348,10 @@ class User extends Authenticatable
 					[
 						"action" => ["read", "historical", "change_status", "download"],
 						"subject" => ["deadline-postponed"],
+					],
+					[
+						"action" => ["manage"],
+						"subject" => ["settings-user"]
 					]
 				];
 		}
