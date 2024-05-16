@@ -16,7 +16,6 @@ use App\Models\User;
 use App\Models\VerbalTrial;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Dotenv;
 
 class DatabaseSeeder extends Seeder
 {

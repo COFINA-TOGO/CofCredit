@@ -40,7 +40,7 @@ class UserPolicy
     }
     public function update_password(User $connectedUser, User $user)
     {
-        return $this->check(["update_password"], "user", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+        return Response::allow();
     }
 
     public function delete(User $connectedUser, User $user)

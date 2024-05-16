@@ -225,7 +225,7 @@ class UserController extends Controller
 		if ($user) {
 			if (($authorisation = Gate::inspect('update_password', $user))->allowed()) {
 				$validator = Validator::make($request->all(), [
-					"old_password" => 'required|min:8',
+					"old_password" => 'required|min:2',
 					"new_password" => 'required|min:8',
 					"new_password_confirmation" => 'required|min:8|same:new_password',
 				]);

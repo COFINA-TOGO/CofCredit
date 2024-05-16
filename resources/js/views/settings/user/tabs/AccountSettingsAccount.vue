@@ -117,6 +117,7 @@ const resetAvatar = () => {
                   v-model="accountDataLocal.firstName"
                   placeholder="John"
                   label="Nom complet"
+                  readonly
                 />
               </VCol>
 
@@ -129,6 +130,7 @@ const resetAvatar = () => {
                   v-model="accountDataLocal.lastName"
                   placeholder="Doe"
                   label="Profil"
+                  readonly
                 />
               </VCol>
 
@@ -142,11 +144,11 @@ const resetAvatar = () => {
                   label="E-mail"
                   placeholder="johndoe@gmail.com"
                   type="email"
+                  readonly
                 />
               </VCol>
 
-              <!-- 👉 Form Actions -->
-              <VCol
+              <!-- <VCol
                 cols="12"
                 class="d-flex flex-wrap gap-4"
               >
@@ -160,7 +162,7 @@ const resetAvatar = () => {
                 >
                   Réinitialiser
                 </VBtn>
-              </VCol>
+              </VCol> -->
             </VRow>
           </VForm>
         </VCardText>
