@@ -85,6 +85,7 @@ declare module 'vue-router/auto/routes' {
     'pv-historical': RouteRecordInfo<'pv-historical', '/pv/historical', Record<never, never>, Record<never, never>>,
     'pv-historical-mortgage': RouteRecordInfo<'pv-historical-mortgage', '/pv/historical/mortgage', Record<never, never>, Record<never, never>>,
     'pv-without-notification': RouteRecordInfo<'pv-without-notification', '/pv/without-notification', Record<never, never>, Record<never, never>>,
+    'pv-without-notification-old': RouteRecordInfo<'pv-without-notification-old', '/pv/without-notification-old', Record<never, never>, Record<never, never>>,
     'settings-user-tab': RouteRecordInfo<'settings-user-tab', '/settings/user/:tab', { tab: ParamValue<true> }, { tab: ParamValue<false> }>,
     'simple-notification': RouteRecordInfo<'simple-notification', '/simple-notification', Record<never, never>, Record<never, never>>,
     'simple-notification-id': RouteRecordInfo<'simple-notification-id', '/simple-notification/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,

@@ -406,21 +406,21 @@ class NotificationController extends Controller
             $receiver->email = "charles.gamligo@cofinacorp.com";
             $receiver->full_name = "Head Crédit";
             $link = env("APP_URL") . "/notification";
-            SendEmail::dispatch(
-                $receiver->email,
-                "Notification de mise en place d'un pv",
-                "
-            <h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e) $receiver->full_name,</U></h1>
+//             SendEmail::dispatch(
+//                 $receiver->email,
+//                 "Notification de mise en place d'un pv",
+//                 "
+//             <h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e) $receiver->full_name,</U></h1>
 
-            <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement la notification de validation: <a href='$link'>Consulter l</a></p>
+//             <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement la notification de validation: <a href='$link'>Consulter l</a></p>
 
-            <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+//             <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
-            <hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+//             <hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
 
-            <p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-"
-            );
+//             <p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+// "
+//             );
             return $this->responseOk([
                 "notification" => $notification
             ], status: 201);

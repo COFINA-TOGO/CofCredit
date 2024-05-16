@@ -3,7 +3,7 @@
 <script setup>
 definePage({
   meta: {
-    action: 'read' || 'historical',
+    action: 'read',
     subject: 'pv',
   },
 })
@@ -18,18 +18,7 @@ const router = useRouter()
 const type_of_credit_id = ref()
 const status = ref()
 const searchQuery = ref('')
-const loadings = ref([])
-const itemsPerPage = ref(8)
-const page = ref(1)
-const selectedItemId = ref(0)
-const isActionDialogVisible = ref(false)
-const actionTitle = ref("")
-const actionText = ref("")
-const actionButtonText = ref("")
-const actionFunction = ref()
-const actionComment = ref("")
-const commentPresence = ref(false)
-const actionStatus = ref("waiting")
+
 const headers = [
   {
     title: 'Numéro comitée',
@@ -48,6 +37,10 @@ const headers = [
     key: 'amount_fr',
   },
   {
+    title: 'CAF',
+    key: 'caf.full_name',
+  },
+  {
     title: 'Statut',
     key: 'status',
   },
@@ -57,6 +50,23 @@ const headers = [
     sortable: false,
   },
 ]
+
+const loadings = ref([])
+
+const load = i => {
+  loadings.value[i] = true
+  setTimeout(() => {
+    loadings.value[i] = false
+  }, 1000)
+}
+
+const itemsPerPage = ref(8)
+const page = ref(1)
+
+const updateOptions = options => {
+  page.value = options.page
+}
+
 const {
   data: pvData,
   execute: fetchPv,
@@ -80,18 +90,6 @@ const {
     paginate: 0,
   },
 }))
-
-
-const load = i => {
-  loadings.value[i] = true
-  setTimeout(() => {
-    loadings.value[i] = false
-  }, 1000)
-}
-
-const updateOptions = options => {
-  page.value = options.page
-}
 
 const downloadFile = async (url, fileName) => {
   const userToken = useCookie('userToken').value
@@ -128,7 +126,17 @@ const pvList = computed(() => pvData.value.data)
 const totalPv = computed(() => pvData.value.total)
 const lastPage = computed(() => pvData.value.last_page)
 const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
+
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
+const selectedItemId = ref(0)
+const isActionDialogVisible = ref(false)
+const actionTitle = ref("")
+const actionText = ref("")
+const actionButtonText = ref("")
+const actionFunction = ref()
+const actionComment = ref("")
+const commentPresence = ref(false)
+const actionStatus = ref("waiting")
 </script>
 
 <template>
@@ -139,7 +147,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
         <VRow>
           <VCardText>
             <h2>
-              Liste des Procès verbaux sans contrat
+              Liste des Procès verbaux sans notification
             </h2>
           </VCardText>
         </VRow>
@@ -207,11 +215,11 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
         <template #item.status="{ item }">
           <VChip label :color="{ 'validated': 'success', 'rejected': 'error', 'waiting': 'warning' }[item.status]">
-            <VTooltip v-if="item.comment" activator="parent" transition="scroll-x-transition" location="start">Raison:
-              {{ item.comment }}
-            </VTooltip>
-            {{ { 'validated': 'Validé', 'waiting': 'En attente', 'rejected': 'Rejeté' }[item.status] }}
-            ({{ { 'dex': 'DEX', 'head_credit': "Head Crédit", 'md': 'MD' }[item.validation_level] }})
+            <VTooltip v-if="item.comment" activator="parent" transition="scroll-x-transition"
+              location="start">Raison: {{ item.comment }}</VTooltip>
+            {{ item.status == 'validated' ? 'Validé' : null }}
+            {{ item.status == 'waiting' ? 'En attente' : null }}
+            {{ item.status == 'rejected' ? 'Rejeté' : null }}
           </VChip>
         </template>
 
@@ -229,7 +237,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
             </IconBtn>
           </div>
 
-          <div v-if="$can('update', 'pv') || $can('delete', 'pv')">
+          <div>
             <VDivider />
             <IconBtn v-if="$can('update', 'pv')" :to="{ name: 'pv-edit-id', params: { id: item.id } }"
               :disabled="item.status == 'validated'">
@@ -237,42 +245,33 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
               <VIcon icon="tabler-edit" />
             </IconBtn>
 
-            <IconBtn v-if="$can('delete', 'pv')" :disabled="item.status == 'validated'" @click=" selectedItemId = item.id; actionTitle = 'Supprimer le PV',
-              actionText = 'Voulez vous vraiment supprimer ce pv?', actionFunction = apiDelete;
-            actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;">
+            <IconBtn v-if="$can('delete', 'pv')" :disabled="item.status == 'validated'"
+              @click="selectedItemId = item.id; actionTitle = 'Supprimer le PV', actionText = 'Voulez vous vraiment supprimer ce pv?', actionFunction = apiDelete; actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;">
               <VTooltip activator="parent" transition="scroll-x-transition" location="end">Supprimer</VTooltip>
               <VIcon icon="tabler-trash" color='error' />
             </IconBtn>
           </div>
 
-          <div
-            v-if="(($can('reject', 'pv') || $can('validate', 'pv')) && useCookie('userData').value['role'] == item.validation_level)">
-            <VDivider />
-            <span :class="(item.status == 'validated') ? 'full-width-icon' : ''">
-              <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected'"
-                @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
-                <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
-                <VIcon icon="tabler-x" color="error" />
-              </IconBtn>
-            </span>
-            <span v-if="item.status == 'waiting'">
-              <IconBtn v-if="$can('validate', 'pv')"
-                @click="selectedItemId = item.id; actionTitle = 'Valider le PV', actionText = 'Voulez vous vraiment valider ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = false; actionStatus = 'validated'; isActionDialogVisible = true;">
-                <VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider</VTooltip>
-                <VIcon icon="tabler-check" color="success" />
-              </IconBtn>
-            </span>
-          </div>
-
-          <div v-if="$can('create', 'notification') && item.status == 'validated'">
-            <VDivider />
-            <span class="full-width-icon" col="12" v-if="item.status == 'validated'">
-              <IconBtn v-if="$can('create', 'notification')" :to="{ name: 'notification-add', query: { id: item.id } }">
-                <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le contrat</VTooltip>
-                <VIcon icon="tabler-file-plus" color="success" />
-              </IconBtn>
-            </span>
-          </div>
+          <VDivider />
+          <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected'"
+            @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
+            <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
+            <VIcon icon="tabler-x" color="error" />
+          </IconBtn>
+          <span v-if="item.status == 'waiting'">
+            <IconBtn v-if="$can('validate', 'pv')"
+              @click="selectedItemId = item.id; actionTitle = 'Valider le PV', actionText = 'Voulez vous vraiment valider ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = false; actionStatus = 'validated'; isActionDialogVisible = true;">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider</VTooltip>
+              <VIcon icon="tabler-check" color="success" />
+            </IconBtn>
+          </span>
+          <span v-if="item.status == 'validated'">
+            <IconBtn v-if="$can('create', 'notification')" :to="{ name: 'notification-add', query: { id: item.id } }">
+              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer la notification
+              </VTooltip>
+              <VIcon icon="tabler-file-plus" color="success" />
+            </IconBtn>
+          </span>
         </template>
 
         <template #bottom>
@@ -347,14 +346,5 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
   to {
     transform: rotate(360deg);
   }
-}
-
-
-.full-width-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
 }
 </style>

@@ -246,13 +246,15 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
             </IconBtn>
           </div>
           <div
-            v-if="($can('reject', 'pv') || $can('validate', 'pv') || $can('create', 'contract')) && useCookie('userData').value['role'] == item.validation_level">
+            v-if="(($can('reject', 'pv') || $can('validate', 'pv')) && useCookie('userData').value['role'] == item.validation_level)">
             <VDivider />
-            <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected'"
-              @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
-              <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
-              <VIcon icon="tabler-x" color="error" />
-            </IconBtn>
+            <span :class="(item.status == 'validated') ? 'full-width-icon' : ''">
+              <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected'"
+                @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
+                <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
+                <VIcon icon="tabler-x" color="error" />
+              </IconBtn>
+            </span>
             <span v-if="item.status == 'waiting'">
               <IconBtn v-if="$can('validate', 'pv')"
                 @click="selectedItemId = item.id; actionTitle = 'Valider le PV', actionText = 'Voulez vous vraiment valider ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = false; actionStatus = 'validated'; isActionDialogVisible = true;">
@@ -260,11 +262,14 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
                 <VIcon icon="tabler-check" color="success" />
               </IconBtn>
             </span>
-            <span v-if="item.status == 'validated'">
+          </div>
+          <div v-if="$can('create', 'contract') &&  item.status == 'validated'">
+            <VDivider  />
+            <span class="full-width-icon" col="12" v-if="item.status == 'validated'">
               <IconBtn v-if="$can('create', 'contract')" :to="{ name: 'contract-add', query: { id: item.id } }">
                 <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le contrat</VTooltip>
                 <VIcon icon="tabler-file-plus" color="success" />
-              </IconBtn>
+                </IconBtn>
             </span>
           </div>
         </template>
@@ -342,4 +347,13 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
     transform: rotate(360deg);
   }
 }
+
+.full-width-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
 </style>

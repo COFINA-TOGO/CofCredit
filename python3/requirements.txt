@@ -1,4 +1,4 @@
 pandas
 mysql.connector
-mysql-connector-python3
+mysql-connector-python
 openpyxl

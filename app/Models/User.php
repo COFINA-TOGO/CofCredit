@@ -141,7 +141,7 @@ class User extends Authenticatable
 						"subject" => ["non-mortgage-contract", "mortgage-contract"]
 					],
 					[
-						"action" => ["read", "historical", "download", "reject", "validate", "change_status"],
+						"action" => ["read", "historical", "download", "change_status"],
 						"subject" => ["pv"],
 					],
 					[
@@ -342,8 +342,36 @@ class User extends Authenticatable
 			case ('md'):
 				return [
 					[
+						"action" => "read",
+						"subject" => ["non-mortgage-contract", "mortgage-contract"]
+					],
+					[
 						"action" => ["read", "historical", "download", "reject", "validate", "change_status"],
 						"subject" => ["pv"],
+					],
+					[
+						"action" => ["read", "historical", "download"],
+						"subject" => ["contract"],
+					],
+					[
+						"action" => ["read", "without-signed-contract", "historical", "download", "validate", "reject", "change_head_credit_status"],
+						"subject" => ["notification"],
+					],
+					[
+						"action" => ["read", "simple-notification", "without-signed-notification", "historical", "download", "validate", "reject", "change_head_credit_status"],
+						"subject" => ["simple-notification"],
+					],
+					[
+						"action" => ["read", "download"],
+						"subject" => ["guarantor"],
+					],
+					[
+						"action" => ["read", "download", "validate", "reject_validation", "download"],
+						"subject" => ["cat"],
+					],
+					[
+						"action" => ["read"],
+						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
 					],
 					[
 						"action" => ["read", "historical", "change_status", "download"],

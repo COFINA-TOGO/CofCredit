@@ -237,13 +237,13 @@ export default [
 			}
 		],
 	},
-	// {
-	//   title: 'Remboursement anticipé'
-	// },
-	// {
-	//   title: 'Lettre de mise en demeure'
-	// },
-	// {
-	//   title: 'Checking post-deblocage'
-	// },
+	{
+	  title: 'Remboursement anticipé'
+	},
+	{
+	  title: 'Lettre de mise en demeure'
+	},
+	{
+	  title: 'Checking post-deblocage'
+	},
 ]

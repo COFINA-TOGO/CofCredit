@@ -7,8 +7,8 @@ df = pd.read_excel('clients_nafa.xlsx')
 # Connexion à la base de données MySQL
 conn = mysql.connector.connect(
     host="localhost",
-    user="cofina_credit_user",
-    password="root",
+    user="pim",
+    password="licdovic",
     database="cofina_credit"
 )
 cursor = conn.cursor()
