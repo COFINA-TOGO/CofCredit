@@ -32,7 +32,7 @@ return new class extends Migration {
 			$table->foreignId('caf_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
 			$table->foreignId('credit_admin_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
 			$table->foreignId("creator_id")->constrained(table: "users", column: "id")->cascadeOnDelete();
-			$table->enum("validation_level", ["dex", "head_credit", "md"])->default('head_credit');
+			$table->enum("validation_level", ["credit_admin", "head_credit", "md"])->default('credit_admin');
 			$table->enum('status', ["waiting", 'rejected', "validated"])->default('waiting');
 			$table->string("comment")->nullable();
 			$table->timestamps();

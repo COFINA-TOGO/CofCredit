@@ -208,11 +208,11 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
         <template #item.status="{ item }">
           <VChip label :color="{ 'validated': 'success', 'rejected': 'error', 'waiting': 'warning' }[item.status]">
-            <VTooltip v-if="item.comment" activator="parent" transition="scroll-x-transition"
-              location="start">Raison: {{ item.comment }}
+            <VTooltip v-if="item.comment" activator="parent" transition="scroll-x-transition" location="start">Raison:
+              {{ item.comment }}
             </VTooltip>
-            {{ {'validated': 'Validé', 'waiting': 'En attente', 'rejected': 'Rejeté'}[item.status] }}
-            ({{ {'dex': 'DEX', 'head_credit': "Head Crédit", 'md': 'MD'}[item.validation_level] }})
+            {{ { 'validated': 'Validé', 'waiting': 'En attente', 'rejected': 'Rejeté' }[item.status] }}
+            ({{ { 'credit_admin': 'Admin Crédit', 'head_credit': "Head Crédit", 'md': 'MD' }[item.validation_level] }})
           </VChip>
         </template>
 
@@ -245,6 +245,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
               <VIcon icon="tabler-trash" color='error' />
             </IconBtn>
           </div>
+
           <div
             v-if="(($can('reject', 'pv') || $can('validate', 'pv')) && useCookie('userData').value['role'] == item.validation_level)">
             <VDivider />
@@ -263,13 +264,13 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
               </IconBtn>
             </span>
           </div>
-          <div v-if="$can('create', 'contract') &&  item.status == 'validated'">
-            <VDivider  />
-            <span class="full-width-icon" col="12" v-if="item.status == 'validated'">
+          <div v-if="$can('create', 'contract') && item.status == 'validated'">
+            <VDivider />
+            <span class="full-width-icon" v-if="item.status == 'validated'">
               <IconBtn v-if="$can('create', 'contract')" :to="{ name: 'contract-add', query: { id: item.id } }">
                 <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le contrat</VTooltip>
                 <VIcon icon="tabler-file-plus" color="success" />
-                </IconBtn>
+              </IconBtn>
             </span>
           </div>
         </template>
@@ -355,5 +356,4 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
   width: 100%;
   height: 100%;
 }
-
 </style>

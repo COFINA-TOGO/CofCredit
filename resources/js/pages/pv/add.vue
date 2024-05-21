@@ -13,29 +13,28 @@ import { ref } from 'vue'
 const router = useRouter()
 
 const pvData = ref({
-  committee_id: null,
-  committee_date: null,
-  caf_id: null,
-  civility: null,
-  applicant_first_name: null,
-  applicant_last_name: null,
-  account_number: null,
-  activity: null,
-  purpose_of_financing: null,
-  type_of_credit_id: null,
-  amount: null,
-  duration: null,
-  periodicity: null,
-  due_amount: null,
-  insurance_premium: null,
-  administrative_fees_percentage: null,
-  taf: null,
+  committee_id: "test",
+  committee_date: "2024-02-02",
+  caf_id: 18,
+  civility: "Mr",
+  applicant_first_name: "test",
+  applicant_last_name: "test",
+  account_number: "251012345678",
+  activity: "test",
+  purpose_of_financing: "test",
+  type_of_credit_id: 1,
+  amount: 15000000,
+  duration: 22,
+  periodicity: "mensual",
+  due_amount: 2100000,
+  insurance_premium: 0,
+  administrative_fees_percentage: 10,
+  taf: 14,
   tax_fee_interest_rate: 14,
+  credit_admin_id: 4,
   guarantees: [{
-    type_of_guarantee_id: null,
-    expiration_date: null,
-    value: null,
-    comment: null,
+    type_of_guarantee_id: 1,
+    comment: "...",
   }]
 })
 
@@ -59,6 +58,7 @@ const getResetPvError = () => {
     administrative_fees_percentage: "",
     taf: "",
     tax_fee_interest_rate: "",
+    credit_admin_id: "",
   }
 }
 
@@ -97,6 +97,7 @@ const {
     "profile": "caf",
   },
 }))
+const cafList = computed(() => cafListData.value.data)
 
 const {
   data: creditAdminListData,
@@ -107,7 +108,6 @@ const {
   },
 }))
 
-const cafList = computed(() => cafListData.value.data)
 const creditAdminList = computed(() => creditAdminListData.value.data)
 
 const refForm = ref()
@@ -137,6 +137,7 @@ const onSubmit = () => {
           taf: pvData.value.taf,
           tax_fee_interest_rate: pvData.value.tax_fee_interest_rate,
           guarantees: pvData.value.guarantees,
+          credit_admin_id: pvData.value.credit_admin_id,
         },
       })
 

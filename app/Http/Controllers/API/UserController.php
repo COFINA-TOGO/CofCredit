@@ -66,7 +66,7 @@ class UserController extends Controller
 			$connectedUser = $request->user();
 
 			if ($connectedUser->profile == "credit_analyst") {
-				$userList->where(function($query){
+				$userList->where(function ($query) {
 					$query->where('profile', 'caf')->orWhere('profile', 'credit_admin');
 				});
 			}
@@ -230,6 +230,8 @@ class UserController extends Controller
 					"old_password" => 'required|min:2',
 					"new_password" => 'required|min:8',
 					"new_password_confirmation" => 'required|min:8|same:new_password',
+				], [
+					"same" => "Ce mot de passe est différent"
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
@@ -237,6 +239,9 @@ class UserController extends Controller
 					if (Hash::check($request->old_password, $user->password)) {
 						$user->update(["password" => $request->new_password, "password_change_required" => false]);
 						// $user->load("agency.head");
+						$request->user()->tokens()->each(function ($token, $key) {
+							$token->delete();
+						});
 						return $this->responseOk([
 							"user" => $user
 						]);

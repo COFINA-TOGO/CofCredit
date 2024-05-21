@@ -1,15 +1,13 @@
 <script setup>
-import { VDataTable } from 'vuetify/labs/VDataTable'
-import laptopGirl from '@images/illustrations/laptop-girl.png'
-import { errorMessages } from 'vue/compiler-sfc';
+const router = useRouter()
 
 const isCurrentPasswordVisible = ref(false)
 const isNewPasswordVisible = ref(false)
 const isConfirmPasswordVisible = ref(false)
 const passwordData = ref({
-  old_password: '',
-  new_password: '',
-  new_password_confirmation: '',
+  old_password: 'P@sse123',
+  new_password: '#LegendarY2000?',
+  new_password_confirmation: '#LegendarY2000?',
 })
 
 const getResetPasswordError = () => {
@@ -21,10 +19,6 @@ const getResetPasswordError = () => {
 }
 
 const passwordErrors = ref(getResetPasswordError())
-
-const currentPassword = ref('')
-const newPassword = ref('')
-const confirmPassword = ref('')
 
 const passwordRequirements = [
   'Au minimum 8 charactères',
@@ -43,10 +37,11 @@ const onSubmit = () => {
         body: passwordData.value,
       })
 
-      let nextRoute = "/login";
       passwordErrors.value = getResetPasswordError()
       if (res.status == 200) {
-        router.push(nextRoute)
+        useCookie('userToken').value = null
+        useCookie('userData').value = null
+        await router.push('/login')
       } else {
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
