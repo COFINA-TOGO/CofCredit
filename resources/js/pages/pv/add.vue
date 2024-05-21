@@ -98,7 +98,17 @@ const {
   },
 }))
 
+const {
+  data: creditAdminListData,
+} = await useApi(createUrl('/user', {
+  query: {
+    "paginate": 0,
+    "profile": "credit_admin",
+  },
+}))
+
 const cafList = computed(() => cafListData.value.data)
+const creditAdminList = computed(() => creditAdminListData.value.data)
 
 const refForm = ref()
 
@@ -188,16 +198,20 @@ const addGuaranteeItem = () => {
               <VRow>
                 <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="pvData.committee_id" :error-messages="pvError.committee_id"
-                    label="Numéro du comitée" placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" />
+                    label="Numéro du comitée" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppDateTimePicker v-model="pvData.committee_date" :error-messages="pvError.committee_date"
-                    label="Date du comitée" placeholder="Ex: 2024-12-12" :rules="[requiredValidator]" />
+                    label="Date du comitée" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppAutocomplete v-model="pvData.caf_id" :items="cafList" :error-messages="pvError.caf_id"
-                    label="Chargé d'affaire" placeholder="Ex: DJANTE Komla" item-title="full_name" item-value="id"
-                    :rules="[requiredValidator]" />
+                    label="Chargé d'affaire" item-title="full_name" item-value="id" :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="4">
+                  <AppAutocomplete v-model="pvData.credit_admin_id" :items="creditAdminList"
+                    :error-messages="pvError.credit_admin_id" label="Administrateur Crédit" item-title="full_name"
+                    item-value="id" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppSelect v-model="pvData.civility" :items="civilityItemList" :error-messages="pvError.civility"
@@ -242,10 +256,6 @@ const addGuaranteeItem = () => {
                   <AppSelect v-model="pvData.periodicity" :items="periodicityItemList"
                     :error-messages="pvError.periodicity" label="Periodicité" placeholder="Ex: Mensuelle"
                     :rules="[requiredValidator]" />
-                </VCol>
-                <VCol cols="12" md="6" lg="4">
-                  <AppTextField v-model="pvData.due_amount" type="number" :error-messages="pvError.due_amount"
-                    label="Montant d'une échéance" placeholder="Ex: 150 000" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="pvData.insurance_premium" type="number"

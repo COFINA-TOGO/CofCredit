@@ -46,18 +46,10 @@ const removeGuarantee = () => {
     <!-- 👉 Left Form -->
     <div class="pa-5 flex-grow-1">
       <VRow>
-        <VCol cols="12" md="6" lg="4">
+        <VCol cols="12">
           <AppSelect v-model="localGuaranteeData.type_of_guarantee_id" :items="typeOfGuaranteeList" item-title="name"
             item-value="id" label="Type de cautionie" placeholder="Choisir le type de cautionie" class="mb-3"
             :rules="[requiredValidator]" />
-        </VCol>
-        <VCol cols="12" md="6" lg="4">
-          <AppDateTimePicker v-model="localGuaranteeData.expiration_date" label="Date d'expiration"
-            placeholder="Selectionner la date d'expiration" class="mb-3" :rules="[requiredValidator]" />
-        </VCol>
-        <VCol cols="12" lg="4">
-          <AppTextField type="number" v-model="localGuaranteeData.value" label="Valeur"
-            placeholder="Entrer la valeur de la garantie" class="mb-3" />
         </VCol>
       </VRow>
       <VRow>

@@ -20,8 +20,6 @@ class GuaranteeFactory extends Factory
     {
         return [
             "verbal_trial_id" => VerbalTrial::inRandomOrder()->first()->id,
-            "expiration_date" => $this->faker->date,
-            "value" => $this->faker->randomFloat(),
             "type_of_guarantee_id" => TypeOfGuarantee::where('id', '!=', 9)->inRandomOrder()->first()->id,
             "comment" => $this->faker->sentence(15),
         ];

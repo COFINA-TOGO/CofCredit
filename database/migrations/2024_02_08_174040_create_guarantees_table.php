@@ -13,8 +13,6 @@ return new class extends Migration {
 		Schema::create('guarantees', function (Blueprint $table) {
 			$table->id();
 			$table->foreignId('verbal_trial_id')->constrained(table: 'verbals_trials', column: 'id')->cascadeOnDelete();
-			$table->decimal('value', 21, 2);
-			$table->date('expiration_date');
 			$table->foreignId('type_of_guarantee_id')->constrained(table: 'types_of_guarantee', column: 'id')->cascadeOnDelete();
 			$table->text('comment')->nullable();
 			$table->timestamps();

@@ -379,12 +379,12 @@ const lastPage = computed(() => contractData.value.last_page)
 
           <span v-if="$can('reject', 'contract') || $can('validate', 'contract') || $can('create', 'cat')">
             <VDivider />
-            <IconBtn v-if="$can('reject', 'pv') && item.status != 'rejected' && item.observations.length == 0"
-              @click="selectedItemId = item.id; actionTitle = 'Rejeter le contrat', actionText = 'Voulez vous vraiment rejeter ce contrat?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
+            <IconBtn v-if="$can('reject', 'contract') && item.status != 'rejected' && item.observations.length == 0"
+            @click="selectedItemId = item.id; actionTitle = 'Rejeter le contrat', actionText = 'Voulez vous vraiment rejeter ce contrat?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
               <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
               <VIcon icon="tabler-x" color="error" />
             </IconBtn>
-            <IconBtn v-if="$can('validate', 'pv') && item.status == 'waiting' && item.observations.length == 0"
+            <IconBtn v-if="$can('validate', 'contract') && item.status == 'waiting' && item.observations.length == 0"
               @click="selectedItemId = item.id; actionTitle = 'Valider le contrat', actionText = 'Voulez vous vraiment valider ce contrat?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = false; actionStatus = 'validated'; isActionDialogVisible = true;">
               <VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider</VTooltip>
               <VIcon icon="tabler-check" color="success" />

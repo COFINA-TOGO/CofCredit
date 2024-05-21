@@ -145,7 +145,7 @@ class User extends Authenticatable
 						"subject" => ["pv"],
 					],
 					[
-						"action" => ["create", "read", "historical", "update", "change_status", "delete", "download"],
+						"action" => ["create", "read", "historical", "update", "change_status", "reject", "validate", "delete", "download"],
 						"subject" => ["contract"],
 					],
 					[

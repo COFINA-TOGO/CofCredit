@@ -234,9 +234,9 @@ class VerbalTrialController extends Controller
 					return ['type_of_guarantee.' . $key => $value];
 				})->all());
 			}
-			foreach(["dex", "head_credit", "md"] as $signatoryProfile){
+			foreach (["dex", "head_credit", "md"] as $signatoryProfile) {
 				$currentSignatory = User::where('profile', $signatoryProfile)->first();
-				if($currentSignatory){
+				if ($currentSignatory) {
 					($currentSignatory->signatory_path) ? $templateProcessor->setImageValue($signatoryProfile . "_sign", array("path" => $currentSignatory->signatory_path, 'width' => 250, 'height' => 250, 'ratio' => true)) : $templateProcessor->setValue($signatoryProfile . "_sign", "");
 				}
 			}
@@ -330,70 +330,71 @@ class VerbalTrialController extends Controller
 				'insurance_premium' => 'required|numeric',
 				'tax_fee_interest_rate' => 'required|numeric',
 				'caf_id' => 'required|exists:users,id',
+				'credit_admin_id' => 'required|exists:users,id',
 				"guarantees" => "array",
 				"guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id",
-				"guarantees.*.value" => "required|numeric",
-				"guarantees.*.expiration_date" => "required|date",
 			]);
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
 			} else {
-				if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
-					DB::beginTransaction();
-					try {
-						$requestData["creator_id"] = $request->user()->id;
-						$requestData["validation_level"] = "head_credit";
-						$verbalTrial = VerbalTrial::create($requestData);
-						if (isset($requestData["guarantees"])) {
-							$guaranteesCollection = new Collection($requestData["guarantees"]);
-							if (
-								$guaranteesCollection->contains(function ($objet) {
-									return $objet["type_of_guarantee_id"] === 9;
-								})
-							) {
-								$verbalTrial->update(["has_mortgage" => true]);
+				if (User::where("profile", "credit_admin")->where('id', $requestData["credit_admin_id"])->exists()) {
+					if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
+						DB::beginTransaction();
+						try {
+							$requestData["creator_id"] = $request->user()->id;
+							$requestData["validation_level"] = "head_credit";
+							$verbalTrial = VerbalTrial::create($requestData);
+							if (isset($requestData["guarantees"])) {
+								$guaranteesCollection = new Collection($requestData["guarantees"]);
+								if (
+									$guaranteesCollection->contains(function ($objet) {
+										return $objet["type_of_guarantee_id"] === 9;
+									})
+								) {
+									$verbalTrial->update(["has_mortgage" => true]);
+								}
+								foreach ($requestData["guarantees"] as $guarantee) {
+									Guarantee::create([
+										"verbal_trial_id" => $verbalTrial->id,
+										"type_of_guarantee_id" => $guarantee["type_of_guarantee_id"],
+										"comment" => $guarantee["comment"]
+									]);
+								}
 							}
-							foreach ($requestData["guarantees"] as $guarantee) {
-								Guarantee::create([
-									"verbal_trial_id" => $verbalTrial->id,
-									"type_of_guarantee_id" => $guarantee["type_of_guarantee_id"],
-									"expiration_date" => $guarantee["expiration_date"],
-									"value" => $guarantee["value"],
-									"comment" => $guarantee["comment"]
-								]);
-							}
-						}
-						$receiver = User::find($requestData["caf_id"]);
-						$link = env("APP_URL") . "/contract/add";
-						// foreach (User::where('profile', 'credit_admin')->get() as $receiver) {
-						// 	SendEmail::dispatch(
-						// 		$receiver->email,
-						// 		"Notification de mise en place d'un contrat",
-						// 		"
-                        //         <h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
-        
-                        //         <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de contrat: <a href='$link'>Créer le contrat</a></p>
-        
-                        //         <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-        
-                        //         <hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-        
-                        //         <p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-                        //     "
-						// 	);
-						// }
-					} catch (\Exception $e) {
-						DB::rollback();
-						throw $e;
-					}
-					DB::commit(); // Valider les opérations
+							$receiver = User::find($requestData["caf_id"]);
+							$link = env("APP_URL") . "/contract/add";
+							// foreach (User::where('profile', 'credit_admin')->get() as $receiver) {
+							// 	SendEmail::dispatch(
+							// 		$receiver->email,
+							// 		"Notification de mise en place d'un contrat",
+							// 		"
+							//         <h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
 
-					$verbalTrial->load(["type_of_credit.type_of_applicant", "guarantees", "caf"]);
-					return $this->responseOk([
-						"verbalTrial" => $verbalTrial
-					], status: 201);
+							//         <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de contrat: <a href='$link'>Créer le contrat</a></p>
+
+							//         <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+
+							//         <hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+							//         <p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+							//     "
+							// 	);
+							// }
+						} catch (\Exception $e) {
+							DB::rollback();
+							throw $e;
+						}
+						DB::commit(); // Valider les opérations
+
+						$verbalTrial->load(["type_of_credit.type_of_applicant", "guarantees", "caf"]);
+						return $this->responseOk([
+							"verbalTrial" => $verbalTrial
+						], status: 201);
+					} else {
+						return $this->responseError(["caf_id" => ["Le CAF n'existe pas"]], 404);
+					}
 				} else {
-					return $this->responseError(["caf_id" => ["Le CAF n'existe pas"]], 404);
+					return $this->responseError(["credit_admin_id" => ["L'admin crédit n'existe pas"]], 404);
 				}
 			}
 		} else {
@@ -453,48 +454,49 @@ class VerbalTrialController extends Controller
 					'insurance_premium' => 'required|numeric',
 					'tax_fee_interest_rate' => 'required|numeric',
 					'caf_id' => 'required|exists:users,id',
+					'credit_admin_id' => 'required|exists:users,id',
 					"guarantees" => "array",
 					"guarantees.*.value" => "required|numeric",
-					"guarantees.*.expiration_date" => "required|date",
-					"guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id"
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
 				} else {
-					if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
-						DB::beginTransaction();
-						try {
-							$requestData["creator_id"] = $request->user()->id;
-							$requestData["validation_level"] = "head_credit";
-							$verbalTrial->guarantees()->delete();
-							if (isset($requestData["guarantees"])) {
-								$guaranteesCollection = new Collection($requestData["guarantees"]);
-								$requestData["has_mortgage"] = $guaranteesCollection->contains(function ($objet) {
-									return $objet["type_of_guarantee_id"] === 9;
-								});
-								foreach ($requestData["guarantees"] as $guarantee) {
-									Guarantee::create([
-										"verbal_trial_id" => $verbalTrial->id,
-										"type_of_guarantee_id" => $guarantee["type_of_guarantee_id"],
-										"expiration_date" => $guarantee["expiration_date"],
-										"value" => $guarantee["value"],
-										"comment" => $guarantee["comment"]
-									]);
+					if (User::where("profile", "credit_admin")->where('id', $requestData["credit_admin"])->exists()) {
+						if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
+							DB::beginTransaction();
+							try {
+								$requestData["creator_id"] = $request->user()->id;
+								$requestData["validation_level"] = "head_credit";
+								$verbalTrial->guarantees()->delete();
+								if (isset($requestData["guarantees"])) {
+									$guaranteesCollection = new Collection($requestData["guarantees"]);
+									$requestData["has_mortgage"] = $guaranteesCollection->contains(function ($objet) {
+										return $objet["type_of_guarantee_id"] === 9;
+									});
+									foreach ($requestData["guarantees"] as $guarantee) {
+										Guarantee::create([
+											"verbal_trial_id" => $verbalTrial->id,
+											"type_of_guarantee_id" => $guarantee["type_of_guarantee_id"],
+											"comment" => $guarantee["comment"]
+										]);
+									}
 								}
+								$requestData["status"] = "waiting";
+								$verbalTrial->update($requestData);
+							} catch (\Exception $e) {
+								DB::rollback();
+								throw $e;
 							}
-							$requestData["status"] = "waiting";
-							$verbalTrial->update($requestData);
-						} catch (\Exception $e) {
-							DB::rollback();
-							throw $e;
+							DB::commit(); // Valider les opérations
+							$verbalTrial->load(["type_of_credit.type_of_applicant", "guarantees", "contract", "caf"]);
+							return $this->responseOk([
+								"verbalTrial" => $verbalTrial
+							]);
+						} else {
+							return $this->responseError(["caf_id" => ["Le CAF n'existe pas"]], 404);
 						}
-						DB::commit(); // Valider les opérations
-						$verbalTrial->load(["type_of_credit.type_of_applicant", "guarantees", "contract", "caf"]);
-						return $this->responseOk([
-							"verbalTrial" => $verbalTrial
-						]);
 					} else {
-						return $this->responseError(["caf_id" => ["Le CAF n'existe pas"]], 404);
+						return $this->responseError(["credit_admin_id" => ["L'admin crédit n'existe pas"]], 404);
 					}
 				}
 			} else {
@@ -531,7 +533,7 @@ class VerbalTrialController extends Controller
 				} else {
 					$requestData = $validator->validated();
 					$connectedUser = User::find($request->user()->id);
-					if($requestData["status"] =="validated"){
+					if ($requestData["status"] == "validated") {
 						$requestData["validation_level"] = [
 							"dex" => "head_credit",
 							"head_credit" => "md",

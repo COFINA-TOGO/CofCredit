@@ -66,7 +66,9 @@ class UserController extends Controller
 			$connectedUser = $request->user();
 
 			if ($connectedUser->profile == "credit_analyst") {
-				$userList->where('profile', 'caf');
+				$userList->where(function($query){
+					$query->where('profile', 'caf')->orWhere('profile', 'credit_admin');
+				});
 			}
 
 			if (isset($request["paginate"]) && ($request->paginate == false)) {

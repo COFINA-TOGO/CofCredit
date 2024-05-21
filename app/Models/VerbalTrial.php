@@ -33,6 +33,7 @@ class VerbalTrial extends Model
         'administrative_fees_percentage',
         'insurance_premium',
         'tax_fee_interest_rate',
+        'credit_admin_id',
         'caf_id',
         'creator_id',
         'validation_level',
@@ -76,6 +77,10 @@ class VerbalTrial extends Model
     public function caf(): BelongsTo
     {
         return $this->belongsTo(User::class, 'caf_id', "id");
+    }
+    public function credit_admin(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'credit_admin_id', "id");
     }
 
     public function creator(): BelongsTo
