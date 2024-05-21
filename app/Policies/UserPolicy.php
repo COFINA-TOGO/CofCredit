@@ -40,9 +40,14 @@ class UserPolicy
     }
     public function update_password(User $connectedUser, User $user)
     {
-        return Response::allow();
+        if ($connectedUser->id == $user->id)
+            return Response::allow();
+        return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
     }
-
+    public function update_signatory(User $connectedUser, User $user)
+    {
+        return $this->update_password($connectedUser, $user);
+    }
     public function delete(User $connectedUser, User $user)
     {
         return $this->check(["delete"], "user", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");

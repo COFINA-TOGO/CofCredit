@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
-use App\Http\Traits\WordToolsTrait;
 use App\Jobs\SendEmail;
 use App\Models\Guarantee;
 use App\Models\User;
@@ -26,7 +25,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 class VerbalTrialController extends Controller
 {
 
-  use CustomResponseTrait, WordToolsTrait;
+  use CustomResponseTrait;
 
   /**
    * Affiche les Procès verbaux
@@ -241,7 +240,7 @@ class VerbalTrialController extends Controller
       foreach (["head_credit", "md"] as $signatoryProfile) {
         $currentSignatory = User::where('profile', $signatoryProfile)->first();
         if ($currentSignatory) {
-          ($currentSignatory->signatory_path) ? $templateProcessor->setImageValue($signatoryProfile . "_sign", array("path" => $currentSignatory->signatory_path, 'width' => 250, 'height' => 250, 'ratio' => true)) : $templateProcessor->setValue($signatoryProfile . "_sign", "");
+          ($currentSignatory->signatory_path) ? $templateProcessor->setImageValue($signatoryProfile . "_sign", array("path" => "storage" . $currentSignatory->signatory_path, 'width' => 240, 'height' => 240, 'ratio' => true)) : $templateProcessor->setValue($signatoryProfile . "_sign", "");
         }
       }
       $templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);

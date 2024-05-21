@@ -5,9 +5,9 @@ const isCurrentPasswordVisible = ref(false)
 const isNewPasswordVisible = ref(false)
 const isConfirmPasswordVisible = ref(false)
 const passwordData = ref({
-  old_password: 'P@sse123',
-  new_password: '#LegendarY2000?',
-  new_password_confirmation: '#LegendarY2000?',
+  old_password: '',
+  new_password: '',
+  new_password_confirmation: '',
 })
 
 const getResetPasswordError = () => {

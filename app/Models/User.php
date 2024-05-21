@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\URL;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -29,6 +30,7 @@ class User extends Authenticatable
 		"si_profile_id",
 		"activated",
 		"password_change_required",
+		"signatory_path"
 	];
 
 	protected $appends = ['ability_rules', 'profile_fr'];
@@ -59,6 +61,7 @@ class User extends Authenticatable
 		$data["created_at_fr"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
 		$data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
 		$data["email_verified_at_fr"] = Carbon::parse($data["email_verified_at"])->format("d/m/Y H:i:s");
+		$data["signatory_path"] = "/storage" . $data["signatory_path"];
 		return $data;
 	}
 

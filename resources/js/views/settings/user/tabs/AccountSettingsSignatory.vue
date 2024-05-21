@@ -1,31 +1,14 @@
 <script setup>
-import avatar1 from '@images/avatars/avatar-14.png'
+import { useCookie } from '@/@core/composable/useCookie';
 
 const accountData = {
-  avatarImg: avatar1,
-  firstName: 'john',
-  lastName: 'Doe',
-  email: 'johnDoe@example.com',
-  org: 'Pixinvent',
-  phone: '+1 (917) 543-9876',
-  address: '123 Main St, New York, NY 10001',
-  state: 'New York',
-  zip: '10001',
-  country: 'USA',
-  language: 'English',
-  timezone: '(GMT-11:00) International Date Line West',
-  currency: 'USD',
+  avatarImg: useCookie('userData').value["signatory"],
 }
+const error = ref("")
 
 const refInputEl = ref()
-const isConfirmDialogOpen = ref(false)
 const accountDataLocal = ref(structuredClone(accountData))
-const isAccountDeactivated = ref(false)
-const validateAccountDeactivation = [v => !!v || 'Please confirm account deactivation']
 
-const resetForm = () => {
-  accountDataLocal.value = structuredClone(accountData)
-}
 
 const changeAvatar = file => {
   const fileReader = new FileReader()
@@ -33,18 +16,46 @@ const changeAvatar = file => {
   if (files && files.length) {
     fileReader.readAsDataURL(files[0])
     fileReader.onload = () => {
-      if (typeof fileReader.result === 'string')
+      if (typeof fileReader.result === 'string') {
         accountDataLocal.value.avatarImg = fileReader.result
+      }
     }
   }
 }
 
-// reset avatar image
 const resetAvatar = () => {
   accountDataLocal.value.avatarImg = accountData.avatarImg
 }
 
+const updateAvatar = async () => {
+  const res = await $api('/user/update-signatory/' + useCookie('userData').value["id"], {
+    method: 'PUT',
+    body: {
+      signatory: accountDataLocal.value.avatarImg,
+    },
+  })
 
+  error.value = ""
+  if (res.status == 200) {
+    useCookie('userData').value.signatory = "http://credit.cofina.localhost" + res.data.user.signatory_path;
+    snackbarColor.value = "success"
+    snackbarMessage.value = "Signature uploadé avec succès"
+    isSnackbarScrollReverseVisible.value = true
+  } else {
+    snackbarMessage.value = ""
+    snackbarColor.value = "error"
+    for (const key in res.errors) {
+      res.errors[key].forEach(message => {
+        snackbarMessage.value += message + "\n";
+      })
+    }
+    isSnackbarScrollReverseVisible.value = true
+  }
+}
+
+const isSnackbarScrollReverseVisible = ref(false)
+const snackbarMessage = ref("")
+const snackbarColor = ref("error")
 </script>
 
 <template>
@@ -53,70 +64,37 @@ const resetAvatar = () => {
       <VCard title="Signature du compte">
         <VCardText class="d-flex">
           <!-- 👉 Avatar -->
-          <VAvatar
-            rounded
-            size="140"
-            class="me-6"
-            :image="accountDataLocal.avatarImg"
-          />
+          <VAvatar rounded size="140" class="me-6" :image="accountDataLocal.avatarImg" />
 
           <!-- 👉 Upload Photo -->
-          <form class="d-flex flex-column justify-center gap-4">
+
+          <VForm @submit.prevent="updateAvatar" class="d-flex flex-column justify-center gap-4">
             <div class="d-flex flex-wrap gap-2">
-              <VBtn
-                color="primary"
-                @click="refInputEl?.click()"
-              >
-                <VIcon
-                  icon="tabler-cloud-upload"
-                  class="d-sm-none"
-                />
+              <VBtn color="primary" @click="refInputEl?.click()">
+                <VIcon icon="tabler-cloud-upload" class="d-sm-none" />
                 <span class="d-none d-sm-block">Ajouter une nouvelle signature</span>
               </VBtn>
 
-              <input
-                ref="refInputEl"
-                type="file"
-                name="file"
-                accept=".jpeg,.png,.jpg,GIF"
-                hidden
-                @input="changeAvatar"
-              >
+              <input ref="refInputEl" type="file" name="file" accept=".jpeg,.png,.jpg,GIF" hidden @input="changeAvatar">
 
-              <VBtn
-                type="reset"
-                color="secondary"
-                variant="tonal"
-                @click="resetAvatar"
-              >
+              <VBtn type="reset" color="secondary" variant="tonal" @click="resetAvatar">
                 <span class="d-none d-sm-block">Réinitialiser</span>
-                <VIcon
-                  icon="tabler-refresh"
-                  class="d-sm-none"
-                />
+                <VIcon icon="tabler-refresh" class="d-sm-none" />
               </VBtn>
-              
+
             </div>
-            
+
             <p class="text-body-1 mb-0">
               Autorisés JPG, GIF ou PNG. Taille Max of 800K
             </p>
-            <VBtn>Enregistrer</VBtn>
-          </form>
+            <VBtn type="submit">Enregistrer</VBtn>
+          </VForm>
         </VCardText>
       </VCard>
     </VCol>
-
-    
+    <VSnackbar v-model="isSnackbarScrollReverseVisible" transition="scroll-y-reverse-transition" location="bottom end"
+      :color="snackbarColor">
+      {{ snackbarMessage }}
+    </VSnackbar>
   </VRow>
-
-  <!-- Confirm Dialog -->
-  <ConfirmDialog
-    v-model:isDialogVisible="isConfirmDialogOpen"
-    confirmation-question="Are you sure you want to deactivate your account?"
-    confirm-title="Deactivated!"
-    confirm-msg="Your account has been deactivated successfully."
-    cancel-title="Cancelled"
-    cancel-msg="Account Deactivation Cancelled!"
-  />
 </template>

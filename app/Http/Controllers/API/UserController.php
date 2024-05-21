@@ -8,7 +8,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 /**
  * @group Utilisateur
@@ -255,6 +257,34 @@ class UserController extends Controller
 		} else {
 			return $this->responseError(["id" => "L'utilisateur n'existe pas"], 404);
 		}
+	}
+
+	public function update_signatory(Request $request, int $id)
+	{
+		$validatedExtentions = ["png", "jpg", "gif", "jpeg"];
+		return $this->modelUpdate(
+			modelId: $id,
+			modelClass: "App\Models\User",
+			requestData: $request->all(),
+			validations: [
+				"signatory" => "required|min:5"
+			],
+			manualValidations: function ($requestData, $model) use ($validatedExtentions) {
+				if (!$this->checkIsBase64Validated($requestData["signatory"], $validatedExtentions)) {
+					return ["errors" => $this->responseError(["signatory" => ["le fichier n'est pas une image valide"]], 400)];
+				}
+				if ($signatory_path = $this->saveImageFromBase64($requestData["signatory"], "/upload/signatory/$model->id/" . Str::random(10) . ".png", $validatedExtentions)) {
+					return ["data" => ["signatory_path" => $signatory_path]];
+				} else {
+					return ["errors" => $this->responseError(["signatory" => ["Une erreur est survenu durant l'insertion de l'image"]])];
+				}
+			},
+			beforeUpdate: function ($requestData, $model, $data) use ($validatedExtentions) {
+				$requestData["signatory_path"] = $data["signatory_path"];
+				return $requestData;
+			},
+			authName: "update_signatory"
+		);
 	}
 
 	/**
