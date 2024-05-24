@@ -6,11 +6,13 @@ CREATE USER COFINA_CREDIT IDENTIFIED BY Coftg2021;
 
 GRANT ALL PRIVILEGES TO COFINA_CREDIT;
 
+COMMIT;
+
+exit;
+
 -- CONNECT cofina_credit/Coftg2021@localhost:1521/xe
 
 -- SELECT
 --     TABLE_NAME
 -- FROM
 --     USER_TABLES;
-
-exit;

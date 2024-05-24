@@ -20,8 +20,6 @@ use Illuminate\Support\Str;
 class UserController extends Controller
 {
 
-
-
 	//  * @apiResourceCollection App\Http\Resources\UserResource
 	//  * @apiResourceModel App\Models\User
 	//  * @apiResourceAdditional status=200 messages="Utilisateurs récupérés avec succès"

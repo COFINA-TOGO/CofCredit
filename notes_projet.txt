@@ -30,7 +30,7 @@ le pv diffère pour les entreprises
 #A ne pas prendre en compte pour le moment
 
 mettre l'option de la prime d'assurance et de la prime de risque
-la prime de risque est un pourcentage
+la prime de risque est un pourcentagej
 #Demander comment on va afficher la prime de risque ou d'assurance selon les cas
 
 préciser que le frais de dossier est hors taxe
