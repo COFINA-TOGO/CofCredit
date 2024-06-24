@@ -74,11 +74,11 @@ const getEmptyError = () => {
     duration: "",
     periodicity: "",
     due_amount: "",
-    insurance_premium: "",
     administrative_fees_percentage: "",
     taf: "",
     tax_fee_interest_rate: "",
     credit_admin_id: "",
+    reserve: "",
   }
 }
 
@@ -124,6 +124,7 @@ const onSubmit = () => {
           tax_fee_interest_rate: verbalTrial.value.tax_fee_interest_rate,
           guarantees: verbalTrial.value.guarantees,
           credit_admin_id: verbalTrial.value.credit_admin_id,
+          reserve: verbalTrial.value.reserve,
         },
       })
 
@@ -264,22 +265,17 @@ const snackbarMessage = ref("")
                       item-title="name" item-value="id" :rules="[requiredValidator]" />
                   </VCol>
                   <VCol cols="12" md="6" lg="4">
-                    <AppTextField v-model="verbalTrial.amount" type="number" :error-messages="verbalTrialError.amount"
-                      label="Montant" placeholder="" :rules="[requiredValidator]" />
-                  </VCol>
-                  <VCol cols="12" md="6" lg="4">
                     <AppTextField v-model="verbalTrial.duration" type="number"
                       :error-messages="verbalTrialError.duration" label="Durée du crédit en mois" placeholder=""
                       append-inner-icon="tabler-calendar" :rules="[requiredValidator]" />
                   </VCol>
+                  <VCol cols="12" md="6" lg="8">
+                    <AppTextField v-model="verbalTrial.amount" type="number" :error-messages="verbalTrialError.amount"
+                      label="Montant" placeholder="" :rules="[requiredValidator]" />
+                  </VCol>
                   <VCol cols="12" md="6" lg="4">
                     <AppSelect v-model="verbalTrial.periodicity" :items="periodicityItemList"
                       :error-messages="verbalTrialError.periodicity" label="Periodicité" placeholder=""
-                      :rules="[requiredValidator]" />
-                  </VCol>
-                  <VCol cols="12" md="12" lg="4">
-                    <AppTextField v-model="verbalTrial.insurance_premium" type="number"
-                      :error-messages="verbalTrialError.insurance_premium" label="Prime d'assurance" placeholder=""
                       :rules="[requiredValidator]" />
                   </VCol>
                   <VCol cols="12">
@@ -313,10 +309,13 @@ const snackbarMessage = ref("")
                       </template>
                     </VSlider>
                   </VCol>
+                  <VCol cols="12">
+                    <AppTextarea v-model="verbalTrial.reserve" rows="5" label="Reserve" placeholder=""/>
+                  </VCol>
                 </VRow>
               </VCardText>
             </VCard>
-            <VCard class="mb-6" title="Information des cautionies">
+            <VCard class="mb-6" title="Information des cautions">
               <VCardText class="add-products-form">
                 <div v-for="(guarantee, index) in verbalTrial.guarantees" class="my-4 ma-sm-4">
                   <GuaranteeEdit :id="index" :data="guarantee" @remove-guarantee="removeGuaranteeItem" />

@@ -27,7 +27,6 @@ return new class extends Migration {
 			$table->float('taf');
 			$table->decimal('due_amount', 21, 2);
 			$table->decimal('administrative_fees_percentage', 21, 2);
-			$table->decimal('insurance_premium', 21, 2);
 			$table->float('tax_fee_interest_rate');
 			$table->foreignId('caf_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
 			$table->foreignId('credit_admin_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
@@ -35,6 +34,7 @@ return new class extends Migration {
 			$table->enum("validation_level", ["credit_admin", "head_credit", "md"])->default('credit_admin');
 			$table->enum('status', ["waiting", 'rejected', "validated"])->default('waiting');
 			$table->string("comment")->nullable();
+			$table->string("reserve")->nullable();
 			$table->timestamps();
 		});
 	}

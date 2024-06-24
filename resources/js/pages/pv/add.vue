@@ -9,13 +9,14 @@ definePage({
   },
 })
 import { ref } from 'vue'
+import { VAlert, VTextarea } from 'vuetify/lib/components/index.mjs';
 
 const router = useRouter()
 
 const pvData = ref({
   committee_id: "test",
   committee_date: "2024-02-02",
-  caf_id: 18,
+  caf_id: 8,
   civility: "Mr",
   applicant_first_name: "test",
   applicant_last_name: "test",
@@ -27,11 +28,11 @@ const pvData = ref({
   duration: 22,
   periodicity: "mensual",
   due_amount: 2100000,
-  insurance_premium: 0,
   administrative_fees_percentage: 10,
   taf: 14,
   tax_fee_interest_rate: 14,
-  credit_admin_id: 4,
+  credit_admin_id: 3,
+  reserve: "",
   guarantees: [{
     type_of_guarantee_id: 1,
     comment: "...",
@@ -54,11 +55,11 @@ const getResetPvError = () => {
     duration: "",
     periodicity: "",
     due_amount: "",
-    insurance_premium: "",
     administrative_fees_percentage: "",
     taf: "",
     tax_fee_interest_rate: "",
     credit_admin_id: "",
+    reserve: "",
   }
 }
 
@@ -132,12 +133,12 @@ const onSubmit = () => {
           duration: pvData.value.duration,
           periodicity: pvData.value.periodicity,
           due_amount: pvData.value.due_amount,
-          insurance_premium: pvData.value.insurance_premium,
           administrative_fees_percentage: pvData.value.administrative_fees_percentage,
           taf: pvData.value.taf,
           tax_fee_interest_rate: pvData.value.tax_fee_interest_rate,
           guarantees: pvData.value.guarantees,
           credit_admin_id: pvData.value.credit_admin_id,
+          reserve: pvData.value.reserve,
         },
       })
 
@@ -245,22 +246,17 @@ const addGuaranteeItem = () => {
                     :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
-                  <AppTextField v-model="pvData.amount" type="number" :error-messages="pvError.amount" label="Montant"
-                    placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
-                </VCol>
-                <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="pvData.duration" type="number" :error-messages="pvError.duration"
-                    label="Durée du crédit en mois" placeholder="Ex: 18" append-inner-icon="tabler-calendar"
-                    :rules="[requiredValidator]" />
-                </VCol>
+                  label="Durée du crédit en mois" placeholder="Ex: 18" append-inner-icon="tabler-calendar"
+                  :rules="[requiredValidator]" />
+                  </VCol>
+                    <VCol cols="12" md="6" lg="8">
+                      <AppTextField v-model="pvData.amount" type="number" :error-messages="pvError.amount" label="Montant"
+                        placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
+                    </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppSelect v-model="pvData.periodicity" :items="periodicityItemList"
                     :error-messages="pvError.periodicity" label="Periodicité" placeholder="Ex: Mensuelle"
-                    :rules="[requiredValidator]" />
-                </VCol>
-                <VCol cols="12" md="6" lg="4">
-                  <AppTextField v-model="pvData.insurance_premium" type="number"
-                    :error-messages="pvError.insurance_premium" label="Prime d'assurance" placeholder="Ex: 25000"
                     :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12">
@@ -293,10 +289,13 @@ const addGuaranteeItem = () => {
                     </template>
                   </VSlider>
                 </VCol>
+                <VCol cols="12">
+                  <AppTextarea v-model="pvData.reserve" rows="5" label="Reserve" placeholder=""/>
+                </VCol>
               </VRow>
             </VCardText>
           </VCard>
-          <VCard class="mb-6" title="Information des cautionies">
+          <VCard class="mb-6" title="Information des cautions">
             <VCardText class="add-products-form">
               <div v-for="(guarantee, index) in pvData.guarantees" class="my-4 ma-sm-4">
                 <GuaranteeEdit :id="index" :data="guarantee" @remove-guarantee="removeGuaranteeItem" />

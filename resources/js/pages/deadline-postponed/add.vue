@@ -285,7 +285,7 @@ const addGuaranteeItem = () => {
               </VRow>
             </VCardText>
           </VCard>
-          <VCard class="mb-6" title="Information des cautionies">
+          <VCard class="mb-6" title="Information des cautions">
             <VCardText class="add-products-form">
               <div v-for="(guarantee, index) in pvData.guarantees" class="my-4 ma-sm-4">
                 <GuaranteeEdit :id="index" :data="guarantee" @remove-guarantee="removeGuaranteeItem" />

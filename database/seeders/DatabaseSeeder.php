@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
 	 */
 	public function run(): void
 	{
-		$admin = User::factory(1)->create(["name" => "admin", "full_name" => "admin", "profile" => "admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "admin@cofinacorp.com"])->first();
+		$admin = User::factory(1)->create(["name" => "admin", "full_name" => "admin", "profile" => "admin", "password" => "Coftg@20$*21ù!ad", "password_change_required" => false, "activated" => true, "email" => "admin@cofinacorp.com"])->first();
 
 		$credit_analyst = User::factory(1)->create(["name" => "credit_analyst", "full_name" => "Credit Analyst", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_analyst@cofinacorp.com"])->first();
 
@@ -89,7 +89,7 @@ class DatabaseSeeder extends Seeder
 			TypeOfGuarantee::factory(1)->create(["name" => $typeOfGuaranteeName]);
 		}
 
-		if (true) {
+		if (false) {
 			VerbalTrial::factory(5)->create(["creator_id" => $credit_analyst->id, "status" => "validated", "credit_admin_id" => $credit_admin->id])->each(function ($verbalTrial) use ($credit_admin) {
 				Guarantee::factory(5)->create(["verbal_trial_id" => $verbalTrial->id]);
 				Contract::factory(1)->create(["verbal_trial_id" => $verbalTrial->id, "type" => "individual_business", "creator_id" => $credit_admin->id])->each(function ($contract) {
@@ -136,7 +136,6 @@ class DatabaseSeeder extends Seeder
 				Guarantee::factory(2)->create(["verbal_trial_id" => $verbalTrial->id, "type_of_guarantee_id" => 9]);
 			});
 		}
-		// //Pv avec contrat individuel
 
 		$plainTextToken = $credit_admin->createToken("auth-token")->plainTextToken;
 		DB::update("update personal_access_tokens set TOKEN = '8fb55a1d50842403ddc4ea7dc0c80a5d2e44eeb029f1077341babd46b68fe0ba' where ID = 1");

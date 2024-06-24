@@ -31,7 +31,6 @@ class VerbalTrial extends Model
         'taf',
         'due_amount',
         'administrative_fees_percentage',
-        'insurance_premium',
         'tax_fee_interest_rate',
         'credit_admin_id',
         'caf_id',
@@ -39,6 +38,7 @@ class VerbalTrial extends Model
         'validation_level',
         'status',
         'comment',
+        'reserve',
     ];
 
     protected $appends = ["applicant_full_name", "label", "amount_fr"];
@@ -53,7 +53,6 @@ class VerbalTrial extends Model
         $data["taf"] = (float) $data["taf"];
         $data["due_amount"] = (float) $data["due_amount"];
         $data["administrative_fees_percentage"] = (float) $data["administrative_fees_percentage"];
-        $data["insurance_premium"] = (float) $data["insurance_premium"];
         $data["tax_fee_interest_rate"] = (float) $data["tax_fee_interest_rate"];
         $data["caf_id"] = (int) $data["caf_id"];
         return $data;

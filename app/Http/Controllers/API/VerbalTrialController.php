@@ -45,7 +45,6 @@ class VerbalTrialController extends Controller
    * @queryParam  taf                                                     float               Filtrer par TAF                                                         No-example
    * @queryParam  due_amount                                              float               Filtrer par montant d'une échéance                                      No-example
    * @queryParam  administrative_fees_percentage                          float               Filtrer par frais de dossier(pourcentage)                               No-example
-   * @queryParam  insurance_premium                                       float               Filtrer par prime d'assurance                                           No-example
    * @queryParam  tax_fee_interest_rate                                   float               Filter par taux d'intérêt hors taxe(%)                                  No-example
    * @queryParam  caf_id                                                  int                 Filtrer par ID du CAF                                                   No-example
    * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
@@ -89,13 +88,13 @@ class VerbalTrialController extends Controller
               ->orWhere('taf', 'LIKE', "%$search%")
               ->orWhere('due_amount', 'LIKE', "%$search%")
               ->orWhere('administrative_fees_percentage', 'LIKE', "%$search%")
-              ->orWhere('insurance_premium', 'LIKE', "%$search%")
+              ->orWhere('reserve', 'LIKE', "%$search%")
               ->orWhere(DB::raw("CONCAT(applicant_first_name, ' ', applicant_last_name)"), 'LIKE', "%$search%");
           });
         ;
       }
 
-      foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "insurance_premium", "caf_id", "creator_id"] as $filter) {
+      foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "caf_id", "creator_id"] as $filter) {
         if (isset($request[$filter]) && $request[$filter] != "") {
           $verbalTrialList->where($filter, $request[$filter]);
         }
@@ -225,9 +224,8 @@ class VerbalTrialController extends Controller
       $data["created_at"] = Carbon::parse($verbalTrial->created_at)->format("d/m/Y");
       $data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
       $data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
-      $data["insurance_premium"] = number_format(((float) $data["insurance_premium"]), 0, ',', ' ');
       $data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
-      $data["line_review_bonus"] = (((float) $data["duration"]) < 18) ? "" : "Prime de révision de ligne                                          : « 1% du capital restant dû après 12 mois »";
+      $data["line_review_bonus"] = (((float) $data["duration"]) < 18) ? "" : "Prime de révision de ligne			: « 1% du capital restant dû après 12 mois »";
 
 
       $guaranteeList = [];
@@ -304,9 +302,9 @@ class VerbalTrialController extends Controller
    * @bodyParam   taf                                 float           La TAF(%)                                               Example: 10
    * @bodyParam   due_amount                          float           Le montant d'une échéance                               Example: 500000
    * @bodyParam   administrative_fees_percentage      float           Les frais de dossier(%)                                 Example: 2.5
-   * @bodyParam   insurance_premium                   float           La prime d'assurance                                    Example: 45000
    * @bodyParam   tax_fee_interest_rate               float           Le taux d'intérêt hors taxe(%)                          Example: 10
    * @bodyParam   caf_id                              int             L'ID du CAF                                             Example: 4
+   * @bodyParam   reserve                             string          La reserve de l'analyste credit                         Example: Okay
    *
    * @response 200
    */
@@ -330,7 +328,6 @@ class VerbalTrialController extends Controller
         'taf' => 'required|numeric',
         'due_amount' => 'required|numeric',
         'administrative_fees_percentage' => 'required|numeric',
-        'insurance_premium' => 'required|numeric',
         'tax_fee_interest_rate' => 'required|numeric',
         'caf_id' => 'required|exists:users,id',
         'credit_admin_id' => 'required|exists:users,id',
@@ -426,9 +423,9 @@ class VerbalTrialController extends Controller
    * @bodyParam   taf                                 float           La TAF(%)                                               Example: 10
    * @bodyParam   due_amount                          float           Le montant d'une échéance                               Example: 500000
    * @bodyParam   administrative_fees_percentage      float           Les frais de dossier(%)                                 Example: 2.5
-   * @bodyParam   insurance_premium                   float           La prime d'assurance                                    Example: 45000
    * @bodyParam   tax_fee_interest_rate               float           Le taux d'intérêt hors taxe(%)                          Example: 10
    * @bodyParam   caf_id                              int             L'ID du CAF                                             Example: 4
+   * @bodyParam   reserve                             string          La reserve de l'analyste credit                         Example: Okay
    *
    * @response 200
    *
@@ -455,7 +452,6 @@ class VerbalTrialController extends Controller
           'taf' => 'required|numeric',
           'due_amount' => 'required|numeric',
           'administrative_fees_percentage' => 'required|numeric',
-          'insurance_premium' => 'required|numeric',
           'tax_fee_interest_rate' => 'required|numeric',
           'caf_id' => 'required|exists:users,id',
           'credit_admin_id' => 'required|exists:users,id',

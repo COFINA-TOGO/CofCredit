@@ -33,7 +33,7 @@ const tableData = [
   { "title": "TAF", "value": verbalTrial.value.taf + "%" },
   { "title": "Echéance TTC", "value": String(verbalTrial.value.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Frais de dossier", "value": String((verbalTrial.value.amount * verbalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Prime d'assurance", "value": String(verbalTrial.value.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Reserve", "value": verbalTrial.value.reserve ? verbalTrial.value.reserve : "-"},
 ]
 
 if (verbalTrial.value.duration > 13) {
@@ -151,8 +151,7 @@ verbalTrial.value.guarantees.forEach(guarantee => {
               <p>
               <ul>
                 <li v-for="(item, index) in verbalTrial.guarantees" :key="index" style="font-size: 20px">
-                  {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
-                  CFA : {{ item.comment }}
+                  {{ item.type_of_guarantee.name }} : {{ item.comment }}
                 </li>
               </ul>
               </p>
