@@ -40,6 +40,8 @@ class VerbalTrial extends Model
         'status',
         'comment',
         'reserve',
+        'entity_name',
+        'release_type',
     ];
 
     protected $appends = ["applicant_full_name", "label", "amount_fr"];

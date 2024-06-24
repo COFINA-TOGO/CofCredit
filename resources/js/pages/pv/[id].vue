@@ -17,6 +17,11 @@ const frenchMensuality = {
   "in-fine": "À la fin",
 }
 
+const frenchReleaseType = {
+  "non-progressive": "Non Progressif",
+  "progressive": "Progressif",
+}
+
 const { data: verbalTrial } = await useApi(
   createUrl(`/verbal-trial/${Number(route.params.id)}`, {
   query: {
@@ -35,7 +40,10 @@ if (verbalTrial.value.status == 200) {
   router.push("/pv")
 }
 
+
+
 const tableData = [
+  { "title": "Nom de l'entié", "value": verbalTrial.value.entity_name ? verbalTrial.value.entity_name : "-"},
   { "title": "Montant", "value": String(verbalTrial.value.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Durée", "value": verbalTrial.value.duration + " mois" },
   { "title": "Périodicité", "value": frenchMensuality[verbalTrial.value.periodicity] },
@@ -44,6 +52,7 @@ const tableData = [
   { "title": "Echéance TTC", "value": String(verbalTrial.value.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Frais de dossier", "value": String((verbalTrial.value.amount * verbalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Reserve", "value": verbalTrial.value.reserve ? verbalTrial.value.reserve : "-"},
+  { "title": "Type de déblocage", "value": frenchReleaseType[verbalTrial.value.release_type]},
   { "title": "Admin Crédit", "value": verbalTrial.value.credit_admin.full_name},
   { "title": "Analyst Crédit", "value": verbalTrial.value.credit_analyst.full_name},
 ]

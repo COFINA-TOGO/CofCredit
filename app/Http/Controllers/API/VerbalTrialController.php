@@ -50,10 +50,11 @@ class VerbalTrialController extends Controller
    * @queryParam  credit_admin_id                                         int                 Filtrer par ID de l'admin credit                                        No-example
    * @queryParam  credit_analyst_id                                       int                 Filtrer par ID de l'analyste credit                                     No-example
    * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
-   * @queryParam  has_contract                                            int                 Filtrer par présence de contrat                                         Example: 0
-   * @queryParam  has_notification                                        int                 Filtrer par présence de notification                                    Example: 0
-   * @queryParam  has_mortgage                                            int                 Filtrer par présence d'hypothèque                                       Example: 0
-   * @queryParam  status                                                  string              Filtrer par statut du pv                                                Example: waiting
+   * @queryParam  has_contract                                            int                 Filtrer par présence de contrat                                         No-example
+   * @queryParam  has_notification                                        int                 Filtrer par présence de notification                                    No-example
+   * @queryParam  has_mortgage                                            int                 Filtrer par présence d'hypothèque                                       No-example
+   * @queryParam  status                                                  string              Filtrer par statut du pv                                                No-example
+   * @queryParam  entity_name                                             string              Filtrer par nom de l'entité                                             No-example
    *
    * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
    * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur du type de crédit.                        Example: 1
@@ -64,7 +65,7 @@ class VerbalTrialController extends Controller
    * @queryParam  with_credit_amdin                                       int                 Afficher l'admin Credit.                                                Example: 1
    * @queryParam  with_credit_analyst                                     int                 Afficher l'analyst credit.                                              Example: 1
    * @queryParam  with_creator                                            int                 Afficher le créateur du pv.                                             Example: 0
-   * @queryParam  paginate                                                int                 Utiliser la pagination.                                 Example: 0
+   * @queryParam  paginate                                                int                 Utiliser la pagination.                                                 Example: 0
    *
    * @response 200
    */
@@ -311,7 +312,9 @@ class VerbalTrialController extends Controller
    * @bodyParam   caf_id                              int             L'ID du CAF                                             Example: 4
    * @bodyParam   credit_admin_id                     int             L'ID de l'admin credit                                  Example: 4
    * @bodyParam   credit_analyst_id                   int             L'ID de l'analyste credit                               Example: 4
-   * @bodyParam   reserve                             string          La reserve de l'
+   * @bodyParam   reserve                             string          La reserve de l'analyste credit                         Example: RAS
+   * @bodyParam   entity_name                         string          Le nom de l'entité                                      Example: ETS Cling
+   * @bodyParam   release_type                        string          Le type de deblocage                                    Example: progressive
    *
    * @response 200
    */
@@ -342,6 +345,7 @@ class VerbalTrialController extends Controller
         "guarantees" => "array",
         "guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id",
         "guarantees.*.comment" => "required|min:2",
+        "release_type" => "required|in:non-progressive,progressive",
       ]);
       if ($validator->fails()) {
         return $this->responseError($validator->errors(), 400);
@@ -435,7 +439,9 @@ class VerbalTrialController extends Controller
    * @bodyParam   caf_id                              int             L'ID du CAF                                             Example: 4
    * @bodyParam   credit_admin_id                     int             L'ID de l'admin credit                                  Example: 4
    * @bodyParam   credit_analyst_id                   int             L'ID de l'analyste credit                               Example: 4
-   * @bodyParam   reserve                             string          La reserve de l'analyste credit                         Example: Okay
+   * @bodyParam   reserve                             string          La reserve de l'analyste credit                         Example: RAS
+   * @bodyParam   entity_name                         string          Le nom de l'entité                                      Example: ETS Cling
+   * @bodyParam   release_type                        string          Le type de deblocage                                    Example: progressive
    *
    * @response 200
    *
@@ -469,6 +475,7 @@ class VerbalTrialController extends Controller
           "guarantees" => "array",
           "guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id",
           "guarantees.*.comment" => "required|min:2",
+          "release_type" => "required|in:non-progressive,progressive",
         ]);
         if ($validator->fails()) {
           return $this->responseError($validator->errors(), 400);

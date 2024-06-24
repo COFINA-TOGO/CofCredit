@@ -34,6 +34,8 @@ const pvData = ref({
   credit_admin_id: 5,
   credit_analyst_id: 2,
   reserve: "",
+  entity_name: "",
+  release_type: "non-progressive",
   guarantees: [{
     type_of_guarantee_id: 1,
     comment: "...",
@@ -62,6 +64,8 @@ const getResetPvError = () => {
     credit_admin_id: "",
     credit_analyst_id: "",
     reserve: "",
+    entity_name: "",
+    release_type: "",
   }
 }
 
@@ -151,6 +155,8 @@ const onSubmit = () => {
           credit_admin_id: pvData.value.credit_admin_id,
           credit_analyst_id: pvData.value.credit_analyst_id,
           reserve: pvData.value.reserve,
+          release_type: pvData.value.release_type,
+          entity_name: pvData.value.entity_name,
         },
       })
 
@@ -219,6 +225,10 @@ const addGuaranteeItem = () => {
                     label="Date du comitée" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
+                  <AppTextField v-model="pvData.entity_name" :error-messages="pvError.entity_name"
+                    label="Nom de l'entitié" />
+                </VCol>
+                <VCol cols="12" md="6" lg="4">
                   <AppAutocomplete v-model="pvData.caf_id" :items="cafList" :error-messages="pvError.caf_id"
                     label="Chargé d'affaire" item-title="full_name" item-value="id" :rules="[requiredValidator]" />
                 </VCol>
@@ -262,18 +272,24 @@ const addGuaranteeItem = () => {
                     placeholder="Ex: Avance sur salaire" item-title="full_name" item-value="id"
                     :rules="[requiredValidator]" />
                 </VCol>
+
+                <VCol cols="12" md="6" lg="8">
+                  <AppTextField v-model="pvData.amount" type="number" :error-messages="pvError.amount" label="Montant"
+                    placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
+                </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="pvData.duration" type="number" :error-messages="pvError.duration"
-                  label="Durée du crédit en mois" placeholder="Ex: 18" append-inner-icon="tabler-calendar"
-                  :rules="[requiredValidator]" />
-                  </VCol>
-                    <VCol cols="12" md="6" lg="4">
-                      <AppTextField v-model="pvData.amount" type="number" :error-messages="pvError.amount" label="Montant"
-                        placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
-                    </VCol>
+                    label="Durée du crédit en mois" placeholder="Ex: 18" append-inner-icon="tabler-calendar"
+                    :rules="[requiredValidator]" />
+                </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppSelect v-model="pvData.periodicity" :items="periodicityItemList"
                     :error-messages="pvError.periodicity" label="Periodicité" placeholder="Ex: Mensuelle"
+                    :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="4">
+                  <AppSelect v-model="pvData.release_type" :items="[{value: 'non-progressive', title: 'Non Progressif'}, {value: 'progressive', title: 'Progressif'}]"
+                    :error-messages="pvError.release_type" label="Type de deblocage" placeholder=""
                     :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12">
@@ -281,7 +297,7 @@ const addGuaranteeItem = () => {
                     thumb-label="always" :rules="[requiredValidator]" step="0.1" readonly>
                     <template #append>
                       <VTextField v-model="pvData.taf" :error-messages="pvError.taf" type="number" style="width:80px"
-                        density="compact" hide-details variant="outlined" suffix="%" readonly/>
+                        density="compact" hide-details variant="outlined" suffix="%" readonly />
                     </template>
                   </VSlider>
                 </VCol>
@@ -307,7 +323,7 @@ const addGuaranteeItem = () => {
                   </VSlider>
                 </VCol>
                 <VCol cols="12">
-                  <AppTextarea v-model="pvData.reserve" rows="5" label="Reserve" placeholder=""/>
+                  <AppTextarea v-model="pvData.reserve" rows="5" label="Reserve" placeholder="" />
                 </VCol>
               </VRow>
             </VCardText>

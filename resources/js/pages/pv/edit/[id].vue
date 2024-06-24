@@ -91,6 +91,8 @@ const getEmptyError = () => {
     credit_admin_id: "",
     credit_analyst_id: "",
     reserve: "",
+    entity_name: "",
+    release_type: "",
   }
 }
 
@@ -138,6 +140,8 @@ const onSubmit = () => {
           credit_admin_id: verbalTrial.value.credit_admin_id,
           credit_analyst_id: verbalTrial.value.credit_analyst_id,
           reserve: verbalTrial.value.reserve,
+          entity_name: verbalTrial.value.entity_name,
+          release_type: verbalTrial.value.release_type,
         },
       })
 
@@ -235,6 +239,10 @@ const snackbarMessage = ref("")
                       :rules="[requiredValidator]" />
                   </VCol>
                   <VCol cols="12" md="6" lg="4">
+                    <AppTextField v-model="verbalTrial.entity_name" :error-messages="verbalTrialError.entity_name"
+                      label="Nom de l'entitié" />
+                  </VCol>
+                  <VCol cols="12" md="6" lg="4">
                     <AppAutocomplete v-model="verbalTrial.caf_id" :items="cafList"
                       :error-messages="verbalTrialError.caf_id" label="Chargé d'affaire" placeholder=""
                       item-title="full_name" item-value="id" :rules="[requiredValidator]" />
@@ -282,18 +290,24 @@ const snackbarMessage = ref("")
                       :error-messages="verbalTrialError.type_of_credit_id" label="Type de credit" placeholder=""
                       item-title="name" item-value="id" :rules="[requiredValidator]" />
                   </VCol>
+                  <VCol cols="12" md="6" lg="8">
+                    <AppTextField v-model="verbalTrial.amount" type="number" :error-messages="verbalTrialError.amount"
+                      label="Montant" placeholder="" :rules="[requiredValidator]" />
+                  </VCol>
                   <VCol cols="12" md="6" lg="4">
                     <AppTextField v-model="verbalTrial.duration" type="number"
                       :error-messages="verbalTrialError.duration" label="Durée du crédit en mois" placeholder=""
                       append-inner-icon="tabler-calendar" :rules="[requiredValidator]" />
                   </VCol>
                   <VCol cols="12" md="6" lg="4">
-                    <AppTextField v-model="verbalTrial.amount" type="number" :error-messages="verbalTrialError.amount"
-                      label="Montant" placeholder="" :rules="[requiredValidator]" />
-                  </VCol>
-                  <VCol cols="12" md="6" lg="4">
                     <AppSelect v-model="verbalTrial.periodicity" :items="periodicityItemList"
                       :error-messages="verbalTrialError.periodicity" label="Periodicité" placeholder=""
+                      :rules="[requiredValidator]" />
+                  </VCol>
+                  <VCol cols="12" md="6" lg="4">
+                    <AppSelect v-model="verbalTrial.release_type"
+                      :items="[{ value: 'non-progressive', title: 'Non Progressif' }, { value: 'progressive', title: 'Progressif' }]"
+                      :error-messages="verbalTrialError.release_type" label="Type de deblocage" placeholder=""
                       :rules="[requiredValidator]" />
                   </VCol>
                   <VCol cols="12">
@@ -328,7 +342,7 @@ const snackbarMessage = ref("")
                     </VSlider>
                   </VCol>
                   <VCol cols="12">
-                    <AppTextarea v-model="verbalTrial.reserve" rows="5" label="Reserve" placeholder=""/>
+                    <AppTextarea v-model="verbalTrial.reserve" rows="5" label="Reserve" placeholder="" />
                   </VCol>
                 </VRow>
               </VCardText>

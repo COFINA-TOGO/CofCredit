@@ -36,6 +36,8 @@ return new class extends Migration {
 			$table->enum('status', ["waiting", 'rejected', "validated"])->default('waiting');
 			$table->string("comment")->nullable();
 			$table->string("reserve")->nullable();
+			$table->string("entity_name")->nullable();
+			$table->enum("release_type", ["non-progressive", "progressive"])->default('non-progressive');
 			$table->timestamps();
 		});
 	}
