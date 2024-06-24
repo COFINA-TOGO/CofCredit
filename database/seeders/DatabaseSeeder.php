@@ -27,8 +27,12 @@ class DatabaseSeeder extends Seeder
 		$admin = User::factory(1)->create(["name" => "admin", "full_name" => "admin", "profile" => "admin", "password" => "Coftg@20$*21ù!ad", "password_change_required" => false, "activated" => true, "email" => "admin@cofinacorp.com"])->first();
 
 		$credit_analyst = User::factory(1)->create(["name" => "credit_analyst", "full_name" => "Credit Analyst", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_analyst@cofinacorp.com"])->first();
+		$credit_analyst2 = User::factory(1)->create(["name" => "credit_analyst2", "full_name" => "Credit Analyst 2", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_analyst2@cofinacorp.com"])->first();
+		$credit_analyst3 = User::factory(1)->create(["name" => "credit_analyst3", "full_name" => "Credit Analyst 3", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_analyst3@cofinacorp.com"])->first();
 
 		$credit_admin = User::factory(1)->create(["name" => "credit_admin", "full_name" => "Credit Admin", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_admin@cofinacorp.com"])->first();
+		$credit_admin2 = User::factory(1)->create(["name" => "credit_admin2", "full_name" => "Credit Admin 2", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_admin2@cofinacorp.com"])->first();
+		$credit_admin3 = User::factory(1)->create(["name" => "credit_admin3", "full_name" => "Credit Admin 3", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_admin3@cofinacorp.com"])->first();
 
 		$head_credit = User::factory(1)->create(["name" => "head_credit", "full_name" => "Head Credit", "profile" => "head_credit", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "head_credit@cofinacorp.com"])->first();
 
@@ -43,6 +47,8 @@ class DatabaseSeeder extends Seeder
 		// 	$caf = User::factory(1)->create(["name" => strtolower($elements[0]), "full_name" => $userData["full_name"], "profile" => "caf", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => $userData["email"]])->first();
 		// }
 		$caf = User::factory(1)->create(["name" => strtolower("caf"), "full_name" => "CAF", "profile" => "caf", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "caf@cofinacorp.com"])->first();
+		$caf2 = User::factory(1)->create(["name" => strtolower("caf2"), "full_name" => "CAF 2", "profile" => "caf", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "caf2@cofinacorp.com"])->first();
+		$caf3 = User::factory(1)->create(["name" => strtolower("caf3"), "full_name" => "CAF 3", "profile" => "caf", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "caf3@cofinacorp.com"])->first();
 		
 		$ca = User::factory(1)->create(["name" => "ca", "full_name" => "CA", "profile" => "ca", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "ca@cofinacorp.com"])->first();
 

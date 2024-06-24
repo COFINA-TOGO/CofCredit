@@ -58,6 +58,17 @@ const {
 
 const creditAdminList = computed(() => creditAdminListData.value.data)
 
+const {
+  data: creditAnalystListData,
+} = await useApi(createUrl('/user', {
+  query: {
+    "paginate": 0,
+    "profile": "credit_analyst",
+  },
+}))
+
+const creditAnalystList = computed(() => creditAnalystListData.value.data)
+
 const getEmptyError = () => {
   return {
     committee_id: "",
@@ -78,6 +89,7 @@ const getEmptyError = () => {
     taf: "",
     tax_fee_interest_rate: "",
     credit_admin_id: "",
+    credit_analyst_id: "",
     reserve: "",
   }
 }
@@ -124,6 +136,7 @@ const onSubmit = () => {
           tax_fee_interest_rate: verbalTrial.value.tax_fee_interest_rate,
           guarantees: verbalTrial.value.guarantees,
           credit_admin_id: verbalTrial.value.credit_admin_id,
+          credit_analyst_id: verbalTrial.value.credit_analyst_id,
           reserve: verbalTrial.value.reserve,
         },
       })
@@ -228,7 +241,12 @@ const snackbarMessage = ref("")
                   </VCol>
                   <VCol cols="12" md="6" lg="4">
                     <AppAutocomplete v-model="verbalTrial.credit_admin_id" :items="creditAdminList"
-                      :error-messages="verbalTrialError.credit_adminœ_id" label="Administrateur Crédit" placeholder=""
+                      :error-messages="verbalTrialError.credit_admin_id" label="Administrateur Crédit" placeholder=""
+                      item-title="full_name" item-value="id" :rules="[requiredValidator]" />
+                  </VCol>
+                  <VCol cols="12" md="6" lg="4">
+                    <AppAutocomplete v-model="verbalTrial.credit_analyst_id" :items="creditAnalystList"
+                      :error-messages="verbalTrialError.credit_analyst_id" label="Analyste Crédit" placeholder=""
                       item-title="full_name" item-value="id" :rules="[requiredValidator]" />
                   </VCol>
                   <VCol cols="12" md="6" lg="4">
@@ -269,7 +287,7 @@ const snackbarMessage = ref("")
                       :error-messages="verbalTrialError.duration" label="Durée du crédit en mois" placeholder=""
                       append-inner-icon="tabler-calendar" :rules="[requiredValidator]" />
                   </VCol>
-                  <VCol cols="12" md="6" lg="8">
+                  <VCol cols="12" md="6" lg="4">
                     <AppTextField v-model="verbalTrial.amount" type="number" :error-messages="verbalTrialError.amount"
                       label="Montant" placeholder="" :rules="[requiredValidator]" />
                   </VCol>
@@ -281,7 +299,7 @@ const snackbarMessage = ref("")
                   <VCol cols="12">
                     <VSlider v-model="verbalTrial.taf" label="TAF(%)" :error-messages="verbalTrialError.taf"
                       :thumb-size="15" thumb-label="always" :rules="[requiredValidator]" step="0.1">
-                      <template #append>
+                      <template #append readonly>
                         <VTextField v-model="verbalTrial.taf" :error-messages="verbalTrialError.taf" type="number"
                           style="width:80px" density="compact" hide-details variant="outlined" suffix="%" />
                       </template>

@@ -47,6 +47,8 @@ class VerbalTrialController extends Controller
    * @queryParam  administrative_fees_percentage                          float               Filtrer par frais de dossier(pourcentage)                               No-example
    * @queryParam  tax_fee_interest_rate                                   float               Filter par taux d'intérêt hors taxe(%)                                  No-example
    * @queryParam  caf_id                                                  int                 Filtrer par ID du CAF                                                   No-example
+   * @queryParam  credit_admin_id                                         int                 Filtrer par ID de l'admin credit                                        No-example
+   * @queryParam  credit_analyst_id                                       int                 Filtrer par ID de l'analyste credit                                     No-example
    * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
    * @queryParam  has_contract                                            int                 Filtrer par présence de contrat                                         Example: 0
    * @queryParam  has_notification                                        int                 Filtrer par présence de notification                                    Example: 0
@@ -59,6 +61,8 @@ class VerbalTrialController extends Controller
    * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 1
    * @queryParam  with_contract                                           int                 Afficher le contrat.                                                    Example: 1
    * @queryParam  with_caf                                                int                 Afficher le CAF.                                                        Example: 1
+   * @queryParam  with_credit_amdin                                       int                 Afficher l'admin Credit.                                                Example: 1
+   * @queryParam  with_credit_analyst                                     int                 Afficher l'analyst credit.                                              Example: 1
    * @queryParam  with_creator                                            int                 Afficher le créateur du pv.                                             Example: 0
    * @queryParam  paginate                                                int                 Utiliser la pagination.                                 Example: 0
    *
@@ -94,7 +98,7 @@ class VerbalTrialController extends Controller
         ;
       }
 
-      foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "caf_id", "creator_id"] as $filter) {
+      foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "caf_id", "credit_admin_id", "credit_analyst_di", "creator_id"] as $filter) {
         if (isset($request[$filter]) && $request[$filter] != "") {
           $verbalTrialList->where($filter, $request[$filter]);
         }
@@ -141,7 +145,8 @@ class VerbalTrialController extends Controller
         }
       }
 
-      foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf", "with_creator" => "creator"] as $key => $value) {
+      // dd($request["with_credit_admin"]);
+      foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf", "with_credit_admin" => "credit_admin", "with_credit_analyst" => "credit_analyst", "with_creator" => "creator"] as $key => $value) {
         if (isset($request[$key]) && $request[$key]) {
           $verbalTrialList->with($value);
         }
@@ -184,7 +189,7 @@ class VerbalTrialController extends Controller
     if ($verbalTrial) {
       if (($authorisation = Gate::inspect('view', $verbalTrial))->allowed()) {
         $suplementList = [];
-        foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf", "with_creator" => "creator"] as $key => $value) {
+        foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf", "with_credit_admin" => "credit_admin", "with_credit_analyst" => "credit_analyst", "with_creator" => "creator"] as $key => $value) {
           if (isset($request[$key]) && $request[$key]) {
             $suplementList[] = $value;
           }
@@ -304,7 +309,9 @@ class VerbalTrialController extends Controller
    * @bodyParam   administrative_fees_percentage      float           Les frais de dossier(%)                                 Example: 2.5
    * @bodyParam   tax_fee_interest_rate               float           Le taux d'intérêt hors taxe(%)                          Example: 10
    * @bodyParam   caf_id                              int             L'ID du CAF                                             Example: 4
-   * @bodyParam   reserve                             string          La reserve de l'analyste credit                         Example: Okay
+   * @bodyParam   credit_admin_id                     int             L'ID de l'admin credit                                  Example: 4
+   * @bodyParam   credit_analyst_id                   int             L'ID de l'analyste credit                               Example: 4
+   * @bodyParam   reserve                             string          La reserve de l'
    *
    * @response 200
    */
@@ -331,6 +338,7 @@ class VerbalTrialController extends Controller
         'tax_fee_interest_rate' => 'required|numeric',
         'caf_id' => 'required|exists:users,id',
         'credit_admin_id' => 'required|exists:users,id',
+        'credit_analyst_id' => 'required|exists:users,id',
         "guarantees" => "array",
         "guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id",
         "guarantees.*.comment" => "required|min:2",
@@ -425,6 +433,8 @@ class VerbalTrialController extends Controller
    * @bodyParam   administrative_fees_percentage      float           Les frais de dossier(%)                                 Example: 2.5
    * @bodyParam   tax_fee_interest_rate               float           Le taux d'intérêt hors taxe(%)                          Example: 10
    * @bodyParam   caf_id                              int             L'ID du CAF                                             Example: 4
+   * @bodyParam   credit_admin_id                     int             L'ID de l'admin credit                                  Example: 4
+   * @bodyParam   credit_analyst_id                   int             L'ID de l'analyste credit                               Example: 4
    * @bodyParam   reserve                             string          La reserve de l'analyste credit                         Example: Okay
    *
    * @response 200
@@ -455,6 +465,7 @@ class VerbalTrialController extends Controller
           'tax_fee_interest_rate' => 'required|numeric',
           'caf_id' => 'required|exists:users,id',
           'credit_admin_id' => 'required|exists:users,id',
+          'credit_analyst_id' => 'required|exists:users,id',
           "guarantees" => "array",
           "guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id",
           "guarantees.*.comment" => "required|min:2",

@@ -30,6 +30,7 @@ return new class extends Migration {
 			$table->float('tax_fee_interest_rate');
 			$table->foreignId('caf_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
 			$table->foreignId('credit_admin_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
+			$table->foreignId('credit_analyst_id')->constrained(table: "users", column: "id")->cascadeOnDelete();
 			$table->foreignId("creator_id")->constrained(table: "users", column: "id")->cascadeOnDelete();
 			$table->enum("validation_level", ["credit_admin", "head_credit", "md"])->default('credit_admin');
 			$table->enum('status', ["waiting", 'rejected', "validated"])->default('waiting');

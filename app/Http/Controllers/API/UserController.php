@@ -67,7 +67,7 @@ class UserController extends Controller
 
 			if ($connectedUser->profile == "credit_analyst") {
 				$userList->where(function ($query) {
-					$query->where('profile', 'caf')->orWhere('profile', 'credit_admin');
+					$query->where('profile', 'caf')->orWhere('profile', 'credit_admin')->orWhere('profile', 'credit_analyst');
 				});
 			}
 

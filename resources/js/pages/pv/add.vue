@@ -16,7 +16,7 @@ const router = useRouter()
 const pvData = ref({
   committee_id: "test",
   committee_date: "2024-02-02",
-  caf_id: 8,
+  caf_id: 12,
   civility: "Mr",
   applicant_first_name: "test",
   applicant_last_name: "test",
@@ -29,9 +29,10 @@ const pvData = ref({
   periodicity: "mensual",
   due_amount: 2100000,
   administrative_fees_percentage: 10,
-  taf: 14,
+  taf: 10,
   tax_fee_interest_rate: 14,
-  credit_admin_id: 3,
+  credit_admin_id: 5,
+  credit_analyst_id: 2,
   reserve: "",
   guarantees: [{
     type_of_guarantee_id: 1,
@@ -59,6 +60,7 @@ const getResetPvError = () => {
     taf: "",
     tax_fee_interest_rate: "",
     credit_admin_id: "",
+    credit_analyst_id: "",
     reserve: "",
   }
 }
@@ -108,8 +110,17 @@ const {
     "profile": "credit_admin",
   },
 }))
-
 const creditAdminList = computed(() => creditAdminListData.value.data)
+
+const {
+  data: creditAnalystListData,
+} = await useApi(createUrl('/user', {
+  query: {
+    "paginate": 0,
+    "profile": "credit_analyst",
+  },
+}))
+const creditAnalystList = computed(() => creditAnalystListData.value.data)
 
 const refForm = ref()
 
@@ -138,6 +149,7 @@ const onSubmit = () => {
           tax_fee_interest_rate: pvData.value.tax_fee_interest_rate,
           guarantees: pvData.value.guarantees,
           credit_admin_id: pvData.value.credit_admin_id,
+          credit_analyst_id: pvData.value.credit_analyst_id,
           reserve: pvData.value.reserve,
         },
       })
@@ -216,6 +228,11 @@ const addGuaranteeItem = () => {
                     item-value="id" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
+                  <AppAutocomplete v-model="pvData.credit_analyst_id" :items="creditAnalystList"
+                    :error-messages="pvError.credit_analyst_id" label="Analyste Crédit" item-title="full_name"
+                    item-value="id" :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="6" lg="4">
                   <AppSelect v-model="pvData.civility" :items="civilityItemList" :error-messages="pvError.civility"
                     label="Civilité" placeholder="Ex: Mr" :rules="[requiredValidator]" />
                 </VCol>
@@ -250,7 +267,7 @@ const addGuaranteeItem = () => {
                   label="Durée du crédit en mois" placeholder="Ex: 18" append-inner-icon="tabler-calendar"
                   :rules="[requiredValidator]" />
                   </VCol>
-                    <VCol cols="12" md="6" lg="8">
+                    <VCol cols="12" md="6" lg="4">
                       <AppTextField v-model="pvData.amount" type="number" :error-messages="pvError.amount" label="Montant"
                         placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
                     </VCol>
@@ -261,10 +278,10 @@ const addGuaranteeItem = () => {
                 </VCol>
                 <VCol cols="12">
                   <VSlider v-model="pvData.taf" label="TAF(%)" :error-messages="pvError.taf" :thumb-size="15"
-                    thumb-label="always" :rules="[requiredValidator]" step="0.1">
+                    thumb-label="always" :rules="[requiredValidator]" step="0.1" readonly>
                     <template #append>
                       <VTextField v-model="pvData.taf" :error-messages="pvError.taf" type="number" style="width:80px"
-                        density="compact" hide-details variant="outlined" suffix="%" />
+                        density="compact" hide-details variant="outlined" suffix="%" readonly/>
                     </template>
                   </VSlider>
                 </VCol>

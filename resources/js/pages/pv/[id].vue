@@ -17,7 +17,17 @@ const frenchMensuality = {
   "in-fine": "À la fin",
 }
 
-const { data: verbalTrial } = await useApi(`/verbal-trial/${Number(route.params.id)}?with_caf=1&with_type_of_credit=1&with_type_of_guarantees=1`)
+const { data: verbalTrial } = await useApi(
+  createUrl(`/verbal-trial/${Number(route.params.id)}`, {
+  query: {
+    with_caf: 1,
+    with_credit_admin: 1,
+    with_credit_analyst: 1,
+    with_type_of_credit: 1,
+    with_type_of_guarantees: 1,
+  },
+})
+)
 
 if (verbalTrial.value.status == 200) {
   verbalTrial.value = verbalTrial.value.data.verbalTrial
@@ -34,6 +44,8 @@ const tableData = [
   { "title": "Echéance TTC", "value": String(verbalTrial.value.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Frais de dossier", "value": String((verbalTrial.value.amount * verbalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Reserve", "value": verbalTrial.value.reserve ? verbalTrial.value.reserve : "-"},
+  { "title": "Admin Crédit", "value": verbalTrial.value.credit_admin.full_name},
+  { "title": "Analyst Crédit", "value": verbalTrial.value.credit_analyst.full_name},
 ]
 
 if (verbalTrial.value.duration > 13) {
