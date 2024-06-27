@@ -51,6 +51,8 @@ class ContractController extends Controller
 	 * @queryParam  status                                                  string              Filtrer par statut du contrat                                           Example: waiting
 	 *
 	 * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
+	 * @queryParam  with_verbal_trial_credit_admin                          int                 Afficher l'admin crédit du PV.                                          Example: 0
+	 * @queryParam  with_verbal_trial_credit_analyst                        int                 Afficher l'analyst crédit du PV.                                        Example: 0
 	 * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
 	 * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                          Example: 0
 	 * @queryParam  with_caf                                                int                 Afficher le caf en charge du dossier.                                   Example: 0
@@ -119,7 +121,7 @@ class ContractController extends Controller
 				});
 			}
 
-			foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_creator" => "creator", "with_pledges" => "pledges"] as $key => $value) {
+			foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_creator" => "creator", "with_pledges" => "pledges", "with_verbal_trial_credit_analyst" => "verbal_trial.credit_analyst", "with_verbal_trial_credit_admin" => "verbal_trial.credit_admin"] as $key => $value) {
 				if (isset($request[$key]) && $request[$key]) {
 					$contractList->with($value);
 				}
@@ -176,6 +178,8 @@ class ContractController extends Controller
 	 * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
 	 *
 	 * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
+	 * @queryParam  with_verbal_trial_credit_admin                          int                 Afficher l'admin crédit du PV.                                          Example: 0
+	 * @queryParam  with_verbal_trial_credit_analyst                        int                 Afficher l'analyst crédit du PV.                                        Example: 0
 	 * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
 	 * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                          Example: 0
 	 * @queryParam  with_caf                                                int                 Afficher le CAF en charge du dossier.                                   Example: 0
@@ -194,7 +198,7 @@ class ContractController extends Controller
 		if ($contract) {
 			if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
 				$suplementList = [];
-				foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_pledges" => "pledges", "with_creator" => "creator"] as $key => $value) {
+				foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_pledges" => "pledges", "with_creator" => "creator", "with_verbal_trial_credit_analyst" => "verbal_trial.credit_analyst", "with_verbal_trial_credit_admin" => "verbal_trial.credit_admin"] as $key => $value) {
 					if (isset($request[$key]) && $request[$key]) {
 						$suplementList[] = $value;
 					}
@@ -273,13 +277,11 @@ class ContractController extends Controller
 				$data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
 				$data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
 				$data["verbal_trial.administrative_fees_percentage"] = number_format(((float) $data["verbal_trial.administrative_fees_percentage"]), 0, ',', ' ');
-				$data["verbal_trial.insurance_premium"] = number_format(((float) $data["verbal_trial.insurance_premium"]), 0, ',', ' ');
 				$data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
 
 				$guaranteeList = [];
 				foreach ($contract->verbal_trial->guarantees as $guarantee) {
 					$tmp = $guarantee->toArray();
-					$tmp["value"] = number_format((float) $tmp["value"], 0, ',', ' ');
 					$guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
 						return ['type_of_guarantee.' . $key => $value];
 					})->all());

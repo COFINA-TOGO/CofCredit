@@ -27,7 +27,7 @@ const contractData = ref({
   due_amount:null,
   number_of_due_dates:null,
   type:null,
-  has_pledges:null,
+  has_pledges:'0',
   company_denomination:null,
   company_legal_status:null,
   company_head_office_address:null,

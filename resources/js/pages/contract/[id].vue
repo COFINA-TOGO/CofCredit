@@ -20,6 +20,11 @@ const frenchMensuality = {
   "in-fine": "À la fin",
 }
 
+const frenchReleaseType = {
+  "non-progressive": "Non Progressif",
+  "progressive": "Progressif",
+}
+
 const documentTypeList = {
   "cni": 'Carte d\'identité nationale',
   "passport": 'Passeport',
@@ -40,6 +45,8 @@ const {
     with_caf: 1,
     with_type_of_guarantees: 1,
     with_pledges: 1,
+    with_verbal_trial_credit_admin: 1,
+    with_verbal_trial_credit_analyst: 1,
   },
 }))
 
@@ -50,6 +57,7 @@ if (contract.value.status == 200) {
 }
 
 const tableData = [
+  { "title": "Nom de l'entié", "value": contract.value.verbal_trial.entity_name ? contract.value.verbal_trial.entity_name : "-"},
   { "title": "Montant", "value": String(contract.value.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Durée", "value": contract.value.verbal_trial.duration + " mois" },
   { "title": "Périodicité", "value": frenchMensuality[contract.value.verbal_trial.periodicity] },
@@ -57,7 +65,10 @@ const tableData = [
   { "title": "TAF", "value": contract.value.verbal_trial.taf + "%" },
   { "title": "Echéance TTC", "value": String(contract.value.verbal_trial.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Frais de dossier", "value": String((contract.value.verbal_trial.amount * contract.value.verbal_trial.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Prime d'assurance", "value": String(contract.value.verbal_trial.insurance_premium).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Reserve", "value": contract.value.verbal_trial.reserve ? contract.value.verbal_trial.reserve : "-"},
+  { "title": "Type de déblocage", "value": frenchReleaseType[contract.value.verbal_trial.release_type]},
+  { "title": "Admin Crédit", "value": contract.value.verbal_trial.credit_admin.full_name},
+  { "title": "Analyst Crédit", "value": contract.value.verbal_trial.credit_analyst.full_name},
 ]
 
 if (contract.value.verbal_trial.duration > 13) {
@@ -258,8 +269,7 @@ if (contract.value.observations.length == 0) {
               <p>
               <ul>
                 <li v-for="(item, index) in contract.verbal_trial.guarantees" :key="index" style="font-size: 20px">
-                  {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
-                  CFA : {{ item.comment }}
+                  {{ item.type_of_guarantee.name }} : {{ item.comment }}
                 </li>
               </ul>
               </p>
