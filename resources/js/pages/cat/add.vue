@@ -13,15 +13,15 @@ const router = useRouter()
 
 const cat = ref({
   "contract_id": null,
-  "credit_number": "978456123",
-  "sector": "So BAD",
-  "first_deadline": "2024-03-03",
-  "last_deadline": "2024-05-03",
-  "source_of_reimbursement": "revenue_from_the_activity",
-  "instructions_from_the_risk_and_credit_department": "Restriction sur le compte sous reserve du retrait du tableau d’amortissement et du contrat",
-  "outstanding_number_ready_to_settle": 147896325,
-  "other_expenses": 147896325,
-  "teg": 147896325,
+  "credit_number": "",
+  "sector": "",
+  "first_deadline": "",
+  "last_deadline": "",
+  "source_of_reimbursement": "",
+  "instructions_from_the_risk_and_credit_department": "",
+  "outstanding_number_ready_to_settle": 0,
+  "other_expenses": 0,
+  "teg": 0,
 })
 
 const getResetCATError = () => {
