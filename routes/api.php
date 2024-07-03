@@ -67,7 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
 	});
 	Route::prefix("verbal-trial")->name("verbal-trial.")->group(function () {
 		Route::get("/", [VerbalTrialController::class, "index"])->name("index");
-		Route::get("/download/{id}", [VerbalTrialController::class, "download"])->withoutMiddleware("auth:sanctum")->name("download");
+		Route::get("/download/{id}", [VerbalTrialController::class, "download"])->name("download");
 		Route::get("/{id}", [VerbalTrialController::class, "show"])->name("show");
 		Route::post("/", [VerbalTrialController::class, "store"])->name("store");
 		Route::put("/{id}", [VerbalTrialController::class, "update"])->name("update");
@@ -76,9 +76,9 @@ Route::middleware('auth:sanctum')->group(function () {
 	});
 	Route::prefix("contract")->name("contract.")->group(function () {
 		Route::get("/", [ContractController::class, "index"])->name("index");
-		Route::get("/download/{id}", [ContractController::class, "download"])->withoutMiddleware("auth:sanctum")->name("download");
+		Route::get("/download/{id}", [ContractController::class, "download"])->name("download");
 		Route::post("/upload/{id}", [ContractController::class, "upload"])->name("upload");
-		Route::get("/promissory-note/download/{id}", [ContractController::class, "promissory_note"])->withoutMiddleware("auth:sanctum")->name("promissory-note.download");
+		Route::get("/promissory-note/download/{id}", [ContractController::class, "promissory_note"])->name("promissory-note.download");
 		Route::get("/{id}", [ContractController::class, "show"])->name("show");
 		Route::post("/", [ContractController::class, "store"])->name("store");
 		Route::put("/{id}", [ContractController::class, "update"])->name("update");
@@ -87,9 +87,9 @@ Route::middleware('auth:sanctum')->group(function () {
 	});
 	Route::prefix("guarantor")->name("guarantor.")->group(function () {
 		Route::get("/", [GuarantorController::class, "index"])->name("index");
-		Route::get("/download/{id}", [GuarantorController::class, "download"])->withoutMiddleware("auth:sanctum")->name("download");
+		Route::get("/download/{id}", [GuarantorController::class, "download"])->name("download");
 		Route::post("/upload/{id}", [GuarantorController::class, "upload"])->name("upload");
-		Route::get("/promissory-note/download/{id}", [GuarantorController::class, "promissory_note"])->withoutMiddleware("auth:sanctum")->name("promissory-note.download");
+		Route::get("/promissory-note/download/{id}", [GuarantorController::class, "promissory_note"])->name("promissory-note.download");
 		Route::get("/{id}", [GuarantorController::class, "show"])->name("show");
 		Route::post("/", [GuarantorController::class, "store"])->name("store");
 		Route::put("/{id}", [GuarantorController::class, "update"])->name("update");
@@ -97,8 +97,8 @@ Route::middleware('auth:sanctum')->group(function () {
 	});
 	Route::prefix("notification")->name("notification.")->group(function () {
 		Route::get("/", [NotificationController::class, "index"])->name("index");
-		Route::get("/download/{id}", [NotificationController::class, "download"])->withoutMiddleware("auth:sanctum")->name("download");
-		Route::get("/promissory-note/download/{id}", [NotificationController::class, "promissory_note"])->withoutMiddleware("auth:sanctum")->name("promissory-note.download");
+		Route::get("/download/{id}", [NotificationController::class, "download"])->name("download");
+		Route::get("/promissory-note/download/{id}", [NotificationController::class, "promissory_note"])->name("promissory-note.download");
 		Route::get("/{id}", [NotificationController::class, "show"])->name("show");
 		Route::post("/", [NotificationController::class, "store"])->name("store");
 		Route::post("/upload/{id}", [NotificationController::class, "upload"])->name("upload");
@@ -110,7 +110,7 @@ Route::middleware('auth:sanctum')->group(function () {
 	});
 	Route::prefix("cat")->name("cat.")->group(function () {
 		Route::get("/", [CATController::class, "index"])->name("index");
-		Route::get("/download/{id}", [CATController::class, "download"])->withoutMiddleware("auth:sanctum")->name("download");
+		Route::get("/download/{id}", [CATController::class, "download"])->name("download");
 		Route::get("/{id}", [CATController::class, "show"])->name("show");
 		Route::post("/", [CATController::class, "store"])->name("store");
 		Route::put("/{id}", [CATController::class, "update"])->name("update");
@@ -128,3 +128,5 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::delete("/{id}", [DeadlinePostponedController::class, "destroy"])->name("destroy");
 	});
 });
+
+// Route::get("/download/{id}", [CATController::class, "download"])->withoutMiddleware("auth:sanctum")->name("download");
