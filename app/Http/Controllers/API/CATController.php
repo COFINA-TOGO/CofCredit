@@ -38,6 +38,7 @@ class CATController extends Controller
 	 * @queryParam  has_notification                                        int                 Filtrer par présence de notification.                                   No-example
 	 * @queryParam  has_contract                                            int                 Filtrer par présence de contrat.                                        No-example
 	 * @queryParam  is_simple                                               int                 Filtrer par type de notifcation.                                        No-example
+	 * @queryParam  guarantees_total_amount                                 int                 Filtrer par montant total des garanties.                                No-example
 	 *
 	 * @queryParam  with_contract                                           int                 Afficher le contrat.                                                    Example: 0
 	 * @queryParam  with_notification                                       int                 Afficher le notification.                                               Example: 0
@@ -220,7 +221,6 @@ class CATController extends Controller
 			$data["$parentRelation.verbal_trial.tax_fee_interest_rate.value"] = number_format((float) ($data["$parentRelation.verbal_trial.tax_fee_interest_rate"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
 			$data["$parentRelation.verbal_trial.administrative_fees_percentage.value"] = number_format((float) ($data["$parentRelation.verbal_trial.administrative_fees_percentage"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
 			$data["$parentRelation.risk_premium_percentage.value"] = number_format((float) ($data["$parentRelation.risk_premium_percentage"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
-			$data["guarantee_amount_total"] = number_format($cat->$parentRelation->verbal_trial->guarantees->sum("value"), 0, ',', ' ');
 			$data["security_deposit"] = number_format($data["$parentRelation.verbal_trial.amount"] * 0.2, 0, ',', ' ');
 			$data["teg"] = number_format($data["teg"], 0, ',', ' ');
 			$data["$parentRelation.verbal_trial.amount"] = number_format($data["$parentRelation.verbal_trial.amount"], 0, ',', ' ');
@@ -274,6 +274,7 @@ class CATController extends Controller
 	 * @bodyParam   outstanding_number_ready_to_settle                      string              Numéro encours prêt à solder.                               Example: 1534820
 	 * @bodyParam   other_expenses                                          string              Autres frais.                                               Example: 25000
 	 * @bodyParam   teg                                                     int                 TEG.                                                        Example: 58563242
+	 * @bodyParam   guarantees_total_amount                                 int                 Montant total des garanties.                                Example: 250000
 	 *
 	 * @response 200
 	 */
@@ -303,6 +304,7 @@ class CATController extends Controller
 				'outstanding_number_ready_to_settle' => 'required|min:2',
 				'other_expenses' => 'required|numeric',
 				'teg' => 'required|numeric',
+				'guarantees_total_amount' => 'required|numeric',
 			]);
 
 			if ($validator->fails()) {
@@ -372,6 +374,7 @@ class CATController extends Controller
 					'outstanding_number_ready_to_settle' => 'required|min:2',
 					'other_expenses' => 'required|numeric',
 					'teg' => 'required|numeric',
+					'guarantees_total_amount' => 'required|numeric',
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);

@@ -211,7 +211,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
               {{ item.comment }}
             </VTooltip>
             {{ { 'validated': 'Validé', 'waiting': 'En attente', 'rejected': 'Rejeté' }[item.status] }}
-            ({{ { 'dex': 'DEX', 'head_credit': "Head Crédit", 'md': 'MD' }[item.validation_level] }})
+            ({{ { 'credit_admin': 'Admin Crédit', 'head_credit': "Head Crédit", 'md': 'MD' }[item.validation_level] }})
           </VChip>
         </template>
 

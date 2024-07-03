@@ -13,15 +13,16 @@ const router = useRouter()
 const refForm = ref()
 const cat = ref({
   "notification_id": null,
-  "credit_number": "978456123",
-  "sector": "So BAD",
-  "first_deadline": "2024-03-03",
-  "last_deadline": "2024-05-03",
-  "source_of_reimbursement": "revenue_from_the_activity",
-  "instructions_from_the_risk_and_credit_department": "Restriction sur le compte sous reserve du retrait du tableau d’amortissement et du contrat",
-  "outstanding_number_ready_to_settle": 147896325,
-  "other_expenses": 147896325,
-  "teg": 147896325,
+  "credit_number": "",
+  "sector": "",
+  "first_deadline": "",
+  "last_deadline": "",
+  "source_of_reimbursement": "",
+  "instructions_from_the_risk_and_credit_department": "",
+  "outstanding_number_ready_to_settle": 0,
+  "other_expenses": 0,
+  "teg": 0,
+  "guarantees_total_amount": 0,
 })
 
 const getResetCATError = () => {
@@ -36,6 +37,7 @@ const getResetCATError = () => {
     "outstanding_number_ready_to_settle": "",
     "other_expenses": "",
     "teg": "",
+    "guarantees_total_amount": "",
   }
 }
 
@@ -65,6 +67,7 @@ const onSubmit = () => {
         outstanding_number_ready_to_settle: cat.value.outstanding_number_ready_to_settle,
         other_expenses: cat.value.other_expenses,
         teg: cat.value.teg,
+        guarantees_total_amount: cat.value.guarantees_total_amount,
       }
 
       const res = await $api('/cat', {
@@ -114,11 +117,15 @@ if (route.query.id) {
           <VCard class="mb-6" title="Information sur CAT">
             <VCardText>
               <VRow>
-                <VCol cols="12" md="12" lg="12">
+                <VCol cols="12" md="6" lg="6">
                   <AppAutocomplete v-model="cat.notification_id" :items="notificationList"
                     :error-messages="catError.notification_id" label="Notification"
                     placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]"
                     item-title="verbal_trial.label" item-value="id" />
+                </VCol>
+                <VCol cols="12" md="6" lg="6">
+                  <AppTextField type="number" v-model="cat.guarantees_total_amount" :error-messages="catError.guarantees_total_amount" label="Montant total des garanties"
+                    placeholder="Ex: 85000000" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
                   <AppTextField v-model="cat.credit_number" :error-messages="catError.credit_number"
@@ -138,10 +145,10 @@ if (route.query.id) {
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
                   <AppSelect v-model="cat.source_of_reimbursement" :items="[
-      { value: 'revenue_from_the_activity', title: 'Recettes de l’activité' },
-      { value: 'final_payer_settlement', title: 'Règlement du payeur final' },
-      { value: 'resale_of_goods', title: 'Reventes des marchandises' }
-    ]" :error-messages="catError.source_of_reimbursement" label="Source du remboursement"
+                    { value: 'revenue_from_the_activity', title: 'Recettes de l’activité' },
+                    { value: 'final_payer_settlement', title: 'Règlement du payeur final' },
+                    { value: 'resale_of_goods', title: 'Reventes des marchandises' }
+                  ]" :error-messages="catError.source_of_reimbursement" label="Source du remboursement"
                     placeholder="Ex: Recettes de l’activité" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">

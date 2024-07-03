@@ -42,6 +42,7 @@ const tableData = [
   { "title": "Encours à solder", "value": cat.value.outstanding_number_ready_to_settle },
   { "title": "Autres frais", "value": String(cat.value.other_expenses).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "TEG", "value": String(cat.value.teg).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Montant total des garanties", "value": String(cat.value.guarantees_total_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
 ]
 </script>
 

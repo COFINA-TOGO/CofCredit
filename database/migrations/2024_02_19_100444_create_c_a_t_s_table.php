@@ -29,6 +29,7 @@ return new class extends Migration {
             $table->foreignId("unblocker_user_id")->nullable()->constrained(table: 'users', column: 'id')->cascadeOnDelete();       //Le débloqueur du CAT
             $table->enum("unblock_status", ["waiting", "rejected", "validated"]);                                                   //Le statut de déblocage du CAT
             $table->string("unblock_comment")->nullable();                                                                          //Le commentaire de changement de status de déblocage du CAT
+            $table->decimal("guarantees_total_amount")->nullable();                                                                  //Le montant total des garanties
             $table->timestamps();
         });
     }
