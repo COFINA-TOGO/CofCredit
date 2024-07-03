@@ -1,0 +1,12 @@
+test: credit:
+1-Analyste Crédit:
+ovidio.de-souza@cofinacorp.com
+2-Admin Crédit:
+tadjoudine.memem@cofinacorp.com
+3-Head Crédit:
+charles.gamado@cofinacorp.com
+4-MD
+marcel.digbe@cofinacorp.com
+5-OPS
+samb.souleymane@cofinacorp.com
+    

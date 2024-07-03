@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\CustomResponseTrait;
 use App\Models\Guarantor;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -183,7 +182,6 @@ class GuarantorController extends Controller
             $data["contract.total_amount_of_interest"] = number_format(((float) $data["contract.total_amount_of_interest"]), 0, ',', ' ');
             $data["contract.verbal_trial.due_amount"] = number_format(((float) $data["contract.verbal_trial.due_amount"]), 0, ',', ' ');
             $data["contract.verbal_trial.administrative_fees_percentage"] = number_format(((float) $data["contract.verbal_trial.administrative_fees_percentage"]), 0, ',', ' ');
-            $data["contract.verbal_trial.insurance_premium"] = number_format(((float) $data["contract.verbal_trial.insurance_premium"]), 0, ',', ' ');
             $data["contract.total_to_pay"] = number_format(((float) $data["contract.total_to_pay"]), 0, ',', ' ');
 
             $guaranteeList = [];
