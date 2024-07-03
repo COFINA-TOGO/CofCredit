@@ -259,7 +259,6 @@ class NotificationController extends Controller
             $guaranteeList = [];
             foreach ($notification->verbal_trial->guarantees as $guarantee) {
                 $tmp = $guarantee->toArray();
-                $tmp["value"] = number_format((float) $tmp["value"], 0, ',', ' ');
                 $guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
                     return ['type_of_guarantee.' . $key => $value];
                 })->all());

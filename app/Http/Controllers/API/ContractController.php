@@ -228,7 +228,7 @@ class ContractController extends Controller
 		$contract = Contract::find($id);
 		if ($contract) {
 			if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
-				$templatePath = ($contract->has_pledges == "0") ? "../document_templates/Contracts/$contract->type/contract_$contract->type.docx" : "../document_templates/Contracts/$contract->type/with_pledge/contract_$contract->type" . "_with_pledge.docx";
+				$templatePath = ($contract->has_pledges) ? "../document_templates/Contracts/$contract->type/with_pledge/contract_$contract->type" . "_with_pledge.docx" : "../document_templates/Contracts/$contract->type/contract_$contract->type.docx";
 				$templateProcessor = new TemplateProcessor($templatePath);
 
 				$data = $contract->toArray();
@@ -291,7 +291,7 @@ class ContractController extends Controller
 				}
 				$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 
-				if ($contract->has_pledges == "true") {
+				if ($contract->has_pledges) {
 					$pledgeList = [];
 					foreach ($contract->pledges as $pledge) {
 						$tmp = $pledge->toArray();
@@ -510,7 +510,7 @@ class ContractController extends Controller
 				}
 
 				if (isset($requestData["has_pledges"])) {
-					if ($requestData["has_pledges"]) {
+					if ($requestData["has_pledges"] == "1") {
 						$validator = Validator::make($requestData, [
 							"pledges" => "required|array|min:1",
 							"pledges.*.type" => "required|in:vehicle,stock",
@@ -529,6 +529,8 @@ class ContractController extends Controller
 						$relationList[] = "pledges";
 					}
 				}
+				$requestData["has_pledges"] = $requestData["has_pledges"] == "1";
+				$contract->update($requestData);
 				$contract->load($relationList);
 			} catch (Exception $e) {
 				DB::rollback();
@@ -665,7 +667,7 @@ class ContractController extends Controller
 					}
 
 					if (isset($requestData["has_pledges"])) {
-						if ($requestData["has_pledges"]) {
+						if ($requestData["has_pledges"] == "1") {
 							$validator = Validator::make($requestData, [
 								"pledges" => "required|array|min:1",
 								"pledges.*.type" => "required|in:vehicle,stock",
@@ -674,6 +676,7 @@ class ContractController extends Controller
 							if ($validator->fails()) {
 								return $this->responseError($validator->errors(), 400);
 							}
+							$contract->pledges()->delete();
 							foreach ($requestData["pledges"] as $pledge) {
 								Pledge::create([
 									"contract_id" => $contract->id,
@@ -684,6 +687,9 @@ class ContractController extends Controller
 							$relationList[] = "pledges";
 						}
 					}
+					$requestData["has_pledges"] = $requestData["has_pledges"] == "1";
+					$contract->update($requestData);
+
 					$contract->load($relationList);
 				} catch (Exception $e) {
 					DB::rollback();

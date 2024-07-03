@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\CustomResponseTrait;
 use App\Models\CAT;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -235,7 +234,6 @@ class CATController extends Controller
 			$guaranteeList = [];
 			foreach ($cat->$parentRelation->verbal_trial->guarantees as $guarantee) {
 				$tmp = $guarantee->toArray();
-				$tmp["value"] = number_format((float) $tmp["value"], 0, ',', ' ');
 				$guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
 					return ['type_of_guarantee.' . $key => $value];
 				})->all());
