@@ -269,7 +269,10 @@ class ContractController extends Controller
 					"cni" => "Carte d'identité nationale",
 					"passport" => "Passeport",
 					"residence_certificate" => "Certificat de résidence",
-					"driving_licence" => "Permis de conduire"
+					"driving_licence" => "Permis de conduire",
+					"consular_card" => "Carte consulaire",
+					"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
+					"residence_permit" => "Carte de séjour",
 				][$data["representative_type_of_identity_document"]];
 
 				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
@@ -380,7 +383,10 @@ class ContractController extends Controller
 					"cni" => "Carte d'identité nationale",
 					"passport" => "Passeport",
 					"residence_certificate" => "Certificat de résidence",
-					"driving_licence" => "Permis de conduire"
+					"driving_licence" => "Permis de conduire",
+					"consular_card" => "Carte consulaire",
+					"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
+					"residence_permit" => "Carte de séjour",
 				][$data["representative_type_of_identity_document"]];
 
 				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');

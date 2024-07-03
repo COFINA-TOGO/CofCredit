@@ -22,6 +22,9 @@ const documentTypeList = {
   "passport": 'Passeport',
   "residence_certificate": 'Certificat de résidence',
   "driving_licence": 'Permis de conduire',
+  "consular_card" : "Carte consulaire",
+  "ECOWAS_identity_card" : "Carte d’identité de la CEDEAO",
+  "residence_permit" : "Carte de séjour",
 }
 
 const {

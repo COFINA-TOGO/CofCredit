@@ -29,6 +29,9 @@ const documentTypeList = [
   { value: "passport", title: 'Passeport' },
   { value: "residence_certificate", title: 'Certificat de résidence' },
   { value: "driving_licence", title: 'Permis de conduire' },
+  { value: "consular_card", title: 'Carte consulaire' },
+  { value: "ECOWAS_identity_card", title: 'Carte d’identité de la CEDEAO' },
+  { value: "residence_permit", title: 'Carte de séjour' },
 ]
 
 const getEmptyError = () => {
