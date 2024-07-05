@@ -701,4 +701,37 @@ INSERT INTO `users` VALUES (
     'j0JBXgBFky',
     '2024-05-06 09:36:26',
     '2024-05-06 09:36:26'
-);
+),
+(
+    45,
+    'sandra.akakpo',
+    'sandra.akakpo@cofinacorp.com',
+    'Sandra AKAKPO-DJAKPATA',
+    'credit_analyst',
+    '2024-05-06 09:35:59',
+    '$2y$12$VE1RDrm6VAvGFC7KThiOlOrESVro/pjRiIFmpXRfZGbDUWL5SotGa',
+    NULL,
+    1,
+    0,
+    NULL,
+    'dXhsrrpI40',
+    '2024-05-06 09:36:00',
+    '2024-05-06 09:36:00'
+),
+(
+    46,
+    'claude.gbedema-kogbe',
+    'claude.gbedema-kogbe@cofinacorp.com',
+    'Claude GBEDEMA-KOGBE',
+    'credit_analyst',
+    '2024-05-06 09:35:59',
+    '$2y$12$VE1RDrm6VAvGFC7KThiOlOrESVro/pjRiIFmpXRfZGbDUWL5SotGa',
+    NULL,
+    1,
+    0,
+    NULL,
+    'dXhsrrpI40',
+    '2024-05-06 09:36:00',
+    '2024-05-06 09:36:00'
+)
+;
