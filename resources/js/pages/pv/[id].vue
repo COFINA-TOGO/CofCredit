@@ -24,14 +24,14 @@ const frenchReleaseType = {
 
 const { data: verbalTrial } = await useApi(
   createUrl(`/verbal-trial/${Number(route.params.id)}`, {
-  query: {
-    with_caf: 1,
-    with_credit_admin: 1,
-    with_credit_analyst: 1,
-    with_type_of_credit: 1,
-    with_type_of_guarantees: 1,
-  },
-})
+    query: {
+      with_caf: 1,
+      with_credit_admin: 1,
+      with_credit_analyst: 1,
+      with_type_of_credit: 1,
+      with_type_of_guarantees: 1,
+    },
+  })
 )
 
 if (verbalTrial.value.status == 200) {
@@ -43,7 +43,7 @@ if (verbalTrial.value.status == 200) {
 
 
 const tableData = [
-  { "title": "Nom de l'entié", "value": verbalTrial.value.entity_name ? verbalTrial.value.entity_name : "-"},
+  { "title": "Nom de l'entié", "value": verbalTrial.value.entity_name ? verbalTrial.value.entity_name : "-" },
   { "title": "Montant", "value": String(verbalTrial.value.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Durée", "value": verbalTrial.value.duration + " mois" },
   { "title": "Périodicité", "value": frenchMensuality[verbalTrial.value.periodicity] },
@@ -51,10 +51,9 @@ const tableData = [
   { "title": "TAF", "value": verbalTrial.value.taf + "%" },
   { "title": "Echéance TTC", "value": String(verbalTrial.value.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Frais de dossier", "value": String((verbalTrial.value.amount * verbalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Reserve", "value": verbalTrial.value.reserve ? verbalTrial.value.reserve : "-"},
-  { "title": "Type de déblocage", "value": frenchReleaseType[verbalTrial.value.release_type]},
-  { "title": "Admin Crédit", "value": verbalTrial.value.credit_admin.full_name},
-  { "title": "Analyst Crédit", "value": verbalTrial.value.credit_analyst.full_name},
+  { "title": "Reserve", "value": verbalTrial.value.reserve ? verbalTrial.value.reserve : "-" },
+  { "title": "Type de déblocage", "value": frenchReleaseType[verbalTrial.value.release_type] },
+  { "title": "Admin Crédit", "value": verbalTrial.value.credit_admin.full_name },
 ]
 
 if (verbalTrial.value.duration > 13) {
@@ -102,6 +101,9 @@ verbalTrial.value.guarantees.forEach(guarantee => {
                 CAF
               </p>
               <p style="font-size: 20px">
+                Analyste
+              </p>
+              <p style="font-size: 20px">
                 Emprunteur
               </p>
               <p style="font-size: 20px">
@@ -126,8 +128,10 @@ verbalTrial.value.guarantees.forEach(guarantee => {
                 : {{ verbalTrial.caf.full_name }}
               </p>
               <p style="font-size: 20px">
-                : <strong> {{ verbalTrial.applicant_last_name + " " + verbalTrial.applicant_first_name
-                  }}</strong>
+                : {{ verbalTrial.credit_analyst.full_name }}
+              </p>
+              <p style="font-size: 20px">
+                : <strong> {{ verbalTrial.entity_name }}</strong>
               </p>
               <p style="font-size: 20px">
                 : {{ verbalTrial.account_number }}

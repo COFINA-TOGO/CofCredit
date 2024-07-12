@@ -39,7 +39,7 @@ const headers = [
   },
   {
     title: 'Nom client',
-    key: 'verbal_trial.applicant_full_name',
+    key: 'verbal_trial.entity_name',
   },
   {
     title: 'Type de contrat',

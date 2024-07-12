@@ -222,6 +222,9 @@ class VerbalTrialController extends Controller
       $data = array_merge($data, collect($verbalTrial->caf)->mapWithKeys(function ($value, $key) {
         return ['caf.' . $key => $value];
       })->all());
+      $data = array_merge($data, collect($verbalTrial->credit_analyst)->mapWithKeys(function ($value, $key) {
+        return ['credit_analyst.' . $key => $value];
+      })->all());
       $data = array_merge($data, collect($verbalTrial->type_of_credit)->mapWithKeys(function ($value, $key) {
         return ['type_of_credit.' . $key => $value];
       })->all());
@@ -249,6 +252,7 @@ class VerbalTrialController extends Controller
       }
       $templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
       unset($data["caf.ability_rules"]);
+      unset($data["credit_analyst.ability_rules"]);
       $templateProcessor->setValues($data);
       // return $data;
 
@@ -326,6 +330,7 @@ class VerbalTrialController extends Controller
         "committee_id" => "required|unique:verbals_trials",
         "committee_date" => "required|date",
         'civility' => 'required|in:Mr,Mme,Mlle',
+        'entity_name' => 'min:2',
         'applicant_first_name' => 'required|min:2',
         'applicant_last_name' => 'required|min:2',
         'account_number' => 'required|min:12',
@@ -356,6 +361,9 @@ class VerbalTrialController extends Controller
             try {
               $requestData["creator_id"] = $request->user()->id;
               $requestData["validation_level"] = "credit_admin";
+              if(!isset($requestData["entity_name"])){
+                $requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
+              }
               $verbalTrial = VerbalTrial::create($requestData);
               if (isset($requestData["guarantees"])) {
                 $guaranteesCollection = new Collection($requestData["guarantees"]);
@@ -456,6 +464,7 @@ class VerbalTrialController extends Controller
           "committee_id" => "required|unique:verbals_trials,committee_id," . $id,
           "committee_date" => "required|date",
           'civility' => 'required|in:Mr,Mme,Mlle',
+          'entity_name' => 'min:2',
           'applicant_first_name' => 'required|min:2',
           'applicant_last_name' => 'required|min:2',
           'account_number' => 'required|min:12',
@@ -487,6 +496,10 @@ class VerbalTrialController extends Controller
                 $requestData["creator_id"] = $request->user()->id;
                 $requestData["validation_level"] = "credit_admin";
                 $verbalTrial->guarantees()->delete();
+                if(!isset($requestData["entity_name"])){
+                  $requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
+                }
+
                 if (isset($requestData["guarantees"])) {
                   $guaranteesCollection = new Collection($requestData["guarantees"]);
                   $requestData["has_mortgage"] = $guaranteesCollection->contains(function ($objet) {

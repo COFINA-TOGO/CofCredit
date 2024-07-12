@@ -64,16 +64,16 @@ TADJ:
 +Mettre le taux TAF à 10% systématiquement et non modifiable ;
 +Pour les garanties garder que les champs Type et commentaire et supprimer montant et durée de validité ;
 +Ajouter un champ analyse crédit sur le PV pour faciliter les attributions ;
-+Ajouter un champ optionnel intitulé « nom l’entité » dans le cadre de l’élaboration des PV et contrat pour pouvoir mieux designer les entreprises individuelles et les sociétés;
 +Ajouter un champ mode de déblocage sur le PV pour un meilleur suivi du déblocage;
 +Pour les pièces d’identité ajouter aux types de pièces d’identité carte consulaire, carte d’identité de la CEDEAO et carte de séjour
 +Ajouter « Dépôt libre de documents administratifs d’un immeuble » aux types de garanties ;
 +Enlever les guillemets dans le billet à ordre et le contrat ;
 +Au niveau du contrat de prêt : obtenir l’échéance quotidien à payer par le client en divisant l’échéance mensuelle par 20 ;
-
-
 -Créer un profil analyste avec possibilité d’éditer les PV pour les administrateurs de crédits afin de pouvoir faire les PV si cela s’avère indispensable ;
 
+
+
++Ajouter un champ optionnel intitulé « nom l’entité » dans le cadre de l’élaboration des PV et contrat pour pouvoir mieux designer les entreprises individuelles et les sociétés;
 -Pour le numéro de compte (importer si possible de FLEXCUBE pour limiter les marges d’erreurs)
 -Charger le nom de tous les CAF de la filiale sur la plateforme pour faciliter les attributions;
 -Charger la table FLEXCUBE des types de crédits sur la plateforme pour le choix du type de crédit sur la plateforme ;

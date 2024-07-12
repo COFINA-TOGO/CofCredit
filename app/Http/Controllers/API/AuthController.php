@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller
 {
 
-
-
     /**
      * Connecte un utilisateur
      *

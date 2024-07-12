@@ -37,7 +37,7 @@ const headers = [
   },
   {
     title: 'client',
-    key: 'applicant_full_name',
+    key: 'entity_name',
   },
   {
     title: 'Type Credit',

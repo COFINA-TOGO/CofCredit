@@ -38,6 +38,7 @@ const {
     with_caf: 1,
     with_creator: 1,
     with_verbal_trial: 1,
+    with_credit_analyst: 1,
     with_type_of_guarantees: 1,
   },
 }))
@@ -119,6 +120,9 @@ if (notification.value.head_credit_validation == 'validated') {
                 CAF
               </p>
               <p style="font-size: 20px">
+                Analyste
+              </p>
+              <p style="font-size: 20px">
                 Emprunteur
               </p>
               <p style="font-size: 20px">
@@ -141,6 +145,9 @@ if (notification.value.head_credit_validation == 'validated') {
             <VCol cols="6">
               <p style="font-size: 20px">
                 : {{ notification.verbal_trial.caf.full_name }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ notification.verbal_trial.credit_analyst.full_name }}
               </p>
               <p style="font-size: 20px">
                 : <strong> {{ notification.verbal_trial.applicant_last_name + " " +
