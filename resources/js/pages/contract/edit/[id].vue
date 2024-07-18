@@ -98,6 +98,7 @@ const onSubmit = () => {
         representative_date_of_issue_of_identity_document: contract.value.representative_date_of_issue_of_identity_document,
         risk_premium_percentage: contract.value.risk_premium_percentage,
         total_amount_of_interest: contract.value.total_amount_of_interest,
+        due_amount: contract.value.due_amount,
         number_of_due_dates: contract.value.number_of_due_dates,
         type: contract.value.type,
         has_pledges: contract.value.has_pledges,
@@ -230,23 +231,26 @@ if (contract.value.individual_business == null) {
               <VRow>
                 <VCol cols="12" md="6" lg="6">
                   <AppAutocomplete v-model="contract.verbal_trial_id" :items="verbalTrialList"
-                    :error-messages="errorData.verbal_trial_id" label="Procès verbal"
-                    placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]" item-title="label"
-                    item-value="id" />
+                    :error-messages="errorData.verbal_trial_id" label="Procès verbal" :rules="[requiredValidator]"
+                    item-title="label" item-value="id" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
                   <AppTextField v-model="contract.total_amount_of_interest" type="number"
                     :error-messages="errorData.total_amount_of_interest" label="Montant total des intérêts"
-                    placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
-                </VCol>
-                <VCol cols="12" md="6" lg="6">
-                  <AppTextField v-model="contract.number_of_due_dates" type="number"
-                    :error-messages="errorData.number_of_due_dates" label="Nombre d'échéance" placeholder="Ex: 18"
                     :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="4" lg="4">
+                  <AppTextField v-model="contract.number_of_due_dates" type="number"
+                    :error-messages="errorData.number_of_due_dates" label="Nombre d'échéance"
+                    :rules="[requiredValidator]" />
+                </VCol>
+                <VCol cols="12" md="4" lg="4">
+                  <AppTextField v-model="contract.due_amount" type="number" :error-messages="errorData.due_amount"
+                    label="Montant d'une échéance" :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="6">
                   <AppSelect v-model="contract.type" :items="typeList" :error-messages="errorData.type" label="Type"
-                    placeholder="Ex: Particulier" :rules="[requiredValidator]" />
+                    :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="10">
                   <VSlider v-model="contract.risk_premium_percentage"

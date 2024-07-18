@@ -25,6 +25,7 @@ class Contract extends Model
 		"representative_date_of_issue_of_identity_document",
 		"risk_premium_percentage",
 		"total_amount_of_interest",
+		"due_amount",
 		"number_of_due_dates",
 		'type',
 		'has_pledges',

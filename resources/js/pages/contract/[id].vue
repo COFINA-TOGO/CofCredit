@@ -30,9 +30,9 @@ const documentTypeList = {
   "passport": 'Passeport',
   "residence_certificate": 'Certificat de résidence',
   "driving_licence": 'Permis de conduire',
-  "consular_card" : "Carte consulaire",
-  "ECOWAS_identity_card" : "Carte d’identité de la CEDEAO",
-  "residence_permit" : "Carte de séjour",
+  "consular_card": "Carte consulaire",
+  "ECOWAS_identity_card": "Carte d’identité de la CEDEAO",
+  "residence_permit": "Carte de séjour",
 }
 
 const garanteeTypeList = {
@@ -60,22 +60,20 @@ if (contract.value.status == 200) {
 }
 
 const tableData = [
-  { "title": "Nom de l'entié", "value": contract.value.verbal_trial.entity_name ? contract.value.verbal_trial.entity_name : "-"},
   { "title": "Montant", "value": String(contract.value.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
   { "title": "Durée", "value": contract.value.verbal_trial.duration + " mois" },
   { "title": "Périodicité", "value": frenchMensuality[contract.value.verbal_trial.periodicity] },
   { "title": "Taux d'intérêt HT", "value": contract.value.verbal_trial.tax_fee_interest_rate + "%" },
   { "title": "TAF", "value": contract.value.verbal_trial.taf + "%" },
-  { "title": "Echéance TTC", "value": String(contract.value.verbal_trial.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Frais de dossier", "value": String((contract.value.verbal_trial.amount * contract.value.verbal_trial.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Reserve", "value": contract.value.verbal_trial.reserve ? contract.value.verbal_trial.reserve : "-"},
-  { "title": "Type de déblocage", "value": frenchReleaseType[contract.value.verbal_trial.release_type]},
-  { "title": "Admin Crédit", "value": contract.value.verbal_trial.credit_admin.full_name},
-  { "title": "Analyst Crédit", "value": contract.value.verbal_trial.credit_analyst.full_name},
+  { "title": "Frais de dossier (" + contract.value.verbal_trial.administrative_fees_percentage + " %)", "value": String((contract.value.verbal_trial.amount * contract.value.verbal_trial.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Montant d'une echéance", "value": String(contract.value.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Reserve (Analyste)", "value": contract.value.verbal_trial.reserve ? contract.value.verbal_trial.reserve : "-" },
+  { "title": "Type de déblocage", "value": frenchReleaseType[contract.value.verbal_trial.release_type] },
+  { "title": "Admin Crédit", "value": contract.value.verbal_trial.credit_admin.full_name },
 ]
 
 if (contract.value.verbal_trial.duration > 13) {
-  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
+  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 18 mois" })
 }
 if (contract.value.observations.length == 0) {
   backRoute = "/contract/historical"
@@ -115,6 +113,9 @@ if (contract.value.observations.length == 0) {
                 CAF
               </p>
               <p style="font-size: 20px">
+                Analyste
+              </p>
+              <p style="font-size: 20px">
                 Emprunteur
               </p>
               <p style="font-size: 20px">
@@ -139,9 +140,10 @@ if (contract.value.observations.length == 0) {
                 : {{ contract.verbal_trial.caf.full_name }}
               </p>
               <p style="font-size: 20px">
-                : <strong> {{ contract.verbal_trial.applicant_last_name + " " +
-    contract.verbal_trial.applicant_first_name
-                  }}</strong>
+                : {{ contract.verbal_trial.credit_analyst.full_name }}
+              </p>
+              <p style="font-size: 20px">
+                : <strong> {{ contract.verbal_trial.entity_name }}</strong>
               </p>
               <p style="font-size: 20px">
                 : {{ contract.verbal_trial.account_number }}

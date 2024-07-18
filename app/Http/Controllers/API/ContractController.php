@@ -91,8 +91,7 @@ class ContractController extends Controller
 							->orWhereHas('verbal_trial', function ($query) use ($search) {
 								$query->where('committee_id', 'LIKE', "%$search%")
 									->orWhere(DB::raw("CONCAT(applicant_first_name, ' ', applicant_last_name)"), 'LIKE', "%$search%");
-							})
-						;
+							});
 					});
 			}
 
@@ -251,12 +250,12 @@ class ContractController extends Controller
 					})->all());
 				}
 				$data["ht_rate"] = "17";
-				$data["verbal_trial.day_due_amount"] = ((float) $data["verbal_trial.due_amount"]) / 20;
-				$data["verbal_trial.day_due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.day_due_amount"])->locale('fr')->toLetters();
+				$data["day_due_amount"] = ((float) $data["due_amount"]) / 20;
+				$data["day_due_amount.fr"] = SpellNumber::value((float) $data["day_due_amount"])->locale('fr')->toLetters();
 				$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
 				$data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-				$data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
+				$data["due_amount.fr"] = SpellNumber::value((float) $data["due_amount"])->locale('fr')->toLetters();
 				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
 				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
@@ -264,7 +263,9 @@ class ContractController extends Controller
 				$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
-				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      : « 1% du capital restant dû après 12 mois »";
+				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
+				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      		: 1% du capital restant dû après 18 mois";
+				$data["line_risk_premium_percentage"] = (((float) $data["risk_premium_percentage"]) == 0) ? "" : "Prime de risque (".$data["risk_premium_percentage"]." %)      			: " . number_format($data["risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "Carte d'identité nationale",
 					"passport" => "Passeport",
@@ -276,10 +277,11 @@ class ContractController extends Controller
 				][$data["representative_type_of_identity_document"]];
 
 				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
-				$data["verbal_trial.day_due_amount"] = number_format(((float) $data["verbal_trial.day_due_amount"]), 0, ',', ' ');
+				$data["day_due_amount"] = number_format(((float) $data["day_due_amount"]), 0, ',', ' ');
 				$data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
-				$data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
-				$data["verbal_trial.administrative_fees_percentage"] = number_format(((float) $data["verbal_trial.administrative_fees_percentage"]), 0, ',', ' ');
+				$data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
+				$tmp_fees = (float) $data["verbal_trial.administrative_fees_percentage"];
+				$data["verbal_trial.administrative_fees_percentage"] = number_format($tmp_fees, ($tmp_fees == (int) $tmp_fees) ? 0 : 2, ',', ' ');
 				$data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
 
 				$guaranteeList = [];
@@ -370,7 +372,7 @@ class ContractController extends Controller
 				$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
 				$data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-				$data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
+				$data["due_amount.fr"] = SpellNumber::value((float) $data["due_amount"])->locale('fr')->toLetters();
 				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
 				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
@@ -378,7 +380,8 @@ class ContractController extends Controller
 				$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
-				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      : « 1% du capital restant dû après 12 mois »";
+				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
+				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      : 1% du capital restant dû après 18 mois";
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "Carte d'identité nationale",
 					"passport" => "Passeport",
@@ -391,7 +394,7 @@ class ContractController extends Controller
 
 				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
 				$data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
-				$data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
+				$data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
 				$data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
 
 				unset($data["observations"]);
@@ -429,6 +432,7 @@ class ContractController extends Controller
 	 * @bodyParam   number_of_due_dates                                     int                 Le nombre d'échéance du crédit.                                         Example: 3
 	 * @bodyParam   type                                                    string              Le type du contrat.                                                     Example: company
 	 * @bodyParam   has_pledges                                             string              La présence de gage.                                                    Example: 0
+	 * @bodyParam   due_amount                                             	int              	Le montant d'une échéance.                                              Example: 250000
 	 *
 	 * @response 200
 	 */
@@ -451,6 +455,7 @@ class ContractController extends Controller
 				'number_of_due_dates' => 'required|numeric',
 				'type' => 'required|in:particular,company,individual_business',
 				'has_pledges' => 'required|boolean',
+				'due_amount' => 'required|numeric',
 			]);
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
@@ -823,6 +828,5 @@ class ContractController extends Controller
 		} else {
 			return $this->responseError(["id" => ["Le contrat n'existe pas"]], 404);
 		}
-
 	}
 }

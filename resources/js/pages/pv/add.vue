@@ -27,7 +27,6 @@ const pvData = ref({
   amount: 15000000,
   duration: 22,
   periodicity: "",
-  due_amount: 2100000,
   administrative_fees_percentage: 10,
   taf: 10,
   tax_fee_interest_rate: 14,
@@ -57,7 +56,6 @@ const getResetPvError = () => {
     amount: "",
     duration: "",
     periodicity: "",
-    due_amount: "",
     administrative_fees_percentage: "",
     taf: "",
     tax_fee_interest_rate: "",
@@ -147,7 +145,6 @@ const onSubmit = () => {
           amount: pvData.value.amount,
           duration: pvData.value.duration,
           periodicity: pvData.value.periodicity,
-          due_amount: pvData.value.due_amount,
           administrative_fees_percentage: pvData.value.administrative_fees_percentage,
           taf: pvData.value.taf,
           tax_fee_interest_rate: pvData.value.tax_fee_interest_rate,
@@ -288,7 +285,8 @@ const addGuaranteeItem = () => {
                     :rules="[requiredValidator]" />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
-                  <AppSelect v-model="pvData.release_type" :items="[{value: 'non-progressive', title: 'Non Progressif'}, {value: 'progressive', title: 'Progressif'}]"
+                  <AppSelect v-model="pvData.release_type"
+                    :items="[{ value: 'non-progressive', title: 'Non Progressif' }, { value: 'progressive', title: 'Progressif' }]"
                     :error-messages="pvError.release_type" label="Type de deblocage" placeholder=""
                     :rules="[requiredValidator]" />
                 </VCol>
@@ -296,7 +294,7 @@ const addGuaranteeItem = () => {
                   <VSlider v-model="pvData.taf" label="TAF(%)" :error-messages="pvError.taf" :thumb-size="15"
                     thumb-label="always" :rules="[requiredValidator]" step="0.1" readonly>
                     <template #append>
-                      <VTextField v-model="pvData.taf" :error-messages="pvError.taf" type="number" style="width:80px"
+                      <VTextField v-model="pvData.taf" :error-messages="pvError.taf" type="number" style="width:100px"
                         density="compact" hide-details variant="outlined" suffix="%" readonly />
                     </template>
                   </VSlider>
@@ -307,7 +305,7 @@ const addGuaranteeItem = () => {
                     :rules="[requiredValidator]" step="0.1">
                     <template #append>
                       <VTextField v-model="pvData.administrative_fees_percentage"
-                        :error-messages="pvError.administrative_fees_percentage" type="number" style="width:80px"
+                        :error-messages="pvError.administrative_fees_percentage" type="number" style="width:100px"
                         density="compact" hide-details variant="outlined" suffix="%" />
                     </template>
                   </VSlider>
@@ -318,7 +316,7 @@ const addGuaranteeItem = () => {
                     :rules="[requiredValidator]" step="0.1">
                     <template #append>
                       <VTextField v-model="pvData.tax_fee_interest_rate" :error-messages="pvError.tax_fee_interest_rate"
-                        type="number" style="width:80px" density="compact" hide-details variant="outlined" suffix="%" />
+                        type="number" style="width:100px" density="compact" hide-details variant="outlined" suffix="%" />
                     </template>
                   </VSlider>
                 </VCol>

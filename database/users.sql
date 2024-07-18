@@ -733,5 +733,21 @@ INSERT INTO `users` VALUES (
     'dXhsrrpI40',
     '2024-05-06 09:36:00',
     '2024-05-06 09:36:00'
+),
+(
+    47,
+    'ibrahim.tamboura',
+    'ibrahim.tamboura@cofinacorp.com',
+    'Ibrahim TAMBOURA',
+    'credit_analyst',
+    '2024-05-06 09:35:59',
+    '$2y$12$VE1RDrm6VAvGFC7KThiOlOrESVro/pjRiIFmpXRfZGbDUWL5SotGa',
+    NULL,
+    1,
+    0,
+    NULL,
+    'dXhsrrpI40',
+    '2024-05-06 09:36:00',
+    '2024-05-06 09:36:00'
 )
 ;

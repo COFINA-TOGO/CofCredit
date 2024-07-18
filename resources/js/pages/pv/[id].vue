@@ -49,15 +49,14 @@ const tableData = [
   { "title": "Périodicité", "value": frenchMensuality[verbalTrial.value.periodicity] },
   { "title": "Taux d'intérêt HT", "value": verbalTrial.value.tax_fee_interest_rate + "%" },
   { "title": "TAF", "value": verbalTrial.value.taf + "%" },
-  { "title": "Echéance TTC", "value": String(verbalTrial.value.due_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-  { "title": "Frais de dossier", "value": String((verbalTrial.value.amount * verbalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Frais de dossier (" + verbalTrial.value.administrative_fees_percentage + " %)", "value": String((verbalTrial.value.amount * verbalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + " F CFA" },
   { "title": "Reserve", "value": verbalTrial.value.reserve ? verbalTrial.value.reserve : "-" },
   { "title": "Type de déblocage", "value": frenchReleaseType[verbalTrial.value.release_type] },
   { "title": "Admin Crédit", "value": verbalTrial.value.credit_admin.full_name },
 ]
 
 if (verbalTrial.value.duration > 13) {
-  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
+  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 18 mois" })
 }
 
 verbalTrial.value.guarantees.forEach(guarantee => {

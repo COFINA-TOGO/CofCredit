@@ -84,7 +84,6 @@ const getEmptyError = () => {
     amount: "",
     duration: "",
     periodicity: "",
-    due_amount: "",
     administrative_fees_percentage: "",
     taf: "",
     tax_fee_interest_rate: "",
@@ -131,7 +130,6 @@ const onSubmit = () => {
           amount: verbalTrial.value.amount,
           duration: verbalTrial.value.duration,
           periodicity: verbalTrial.value.periodicity,
-          due_amount: verbalTrial.value.due_amount,
           insurance_premium: verbalTrial.value.insurance_premium,
           administrative_fees_percentage: verbalTrial.value.administrative_fees_percentage,
           taf: verbalTrial.value.taf,
@@ -198,6 +196,9 @@ verbalTrial.value.guarantees.forEach(guarantee => {
 
 const isSnackbarScrollReverseVisible = ref(false)
 const snackbarMessage = ref("")
+if ((verbalTrial.value.applicant_first_name + " " + verbalTrial.value.applicant_last_name) == verbalTrial.value.entity_name) {
+  verbalTrial.value.entity_name = ""
+}
 </script>
 
 <template>
@@ -315,7 +316,7 @@ const snackbarMessage = ref("")
                       :thumb-size="15" thumb-label="always" :rules="[requiredValidator]" step="0.1">
                       <template #append readonly>
                         <VTextField v-model="verbalTrial.taf" :error-messages="verbalTrialError.taf" type="number"
-                          style="width:80px" density="compact" hide-details variant="outlined" suffix="%" />
+                          style="width:100px" density="compact" hide-details variant="outlined" suffix="%" />
                       </template>
                     </VSlider>
                   </VCol>
@@ -326,7 +327,7 @@ const snackbarMessage = ref("")
                       <template #append>
                         <VTextField v-model="verbalTrial.administrative_fees_percentage"
                           :error-messages="verbalTrialError.administrative_fees_percentage" type="number"
-                          style="width:80px" density="compact" hide-details variant="outlined" suffix="%" />
+                          style="width:100px" density="compact" hide-details variant="outlined" suffix="%" />
                       </template>
                     </VSlider>
                   </VCol>
@@ -336,7 +337,7 @@ const snackbarMessage = ref("")
                       :rules="[requiredValidator]" step="0.1">
                       <template #append>
                         <VTextField v-model="verbalTrial.tax_fee_interest_rate"
-                          :error-messages="verbalTrialError.tax_fee_interest_rate" type="number" style="width:80px"
+                          :error-messages="verbalTrialError.tax_fee_interest_rate" type="number" style="width:100px"
                           density="compact" hide-details variant="outlined" suffix="%" />
                       </template>
                     </VSlider>

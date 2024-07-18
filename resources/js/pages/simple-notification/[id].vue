@@ -74,7 +74,7 @@ const notificationData = [
 ]
 
 if (notification.value.verbal_trial.duration > 13) {
-  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 13 mois" })
+  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 18 mois" })
 }
 
 let backRouteName = 'notification'
