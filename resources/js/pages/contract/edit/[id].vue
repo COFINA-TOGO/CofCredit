@@ -248,7 +248,7 @@ if (contract.value.individual_business == null) {
                   <AppTextField v-model="contract.due_amount" type="number" :error-messages="errorData.due_amount"
                     label="Montant d'une échéance" :rules="[requiredValidator]" />
                 </VCol>
-                <VCol cols="12" md="6" lg="6">
+                <VCol cols="12" md="4" lg="4">
                   <AppSelect v-model="contract.type" :items="typeList" :error-messages="errorData.type" label="Type"
                     :rules="[requiredValidator]" />
                 </VCol>
@@ -259,7 +259,7 @@ if (contract.value.individual_business == null) {
                     :rules="[requiredValidator]" step="0.1">
                     <template #append>
                       <VTextField v-model="contract.risk_premium_percentage"
-                        :error-messages="errorData.risk_premium_percentage" type="number" style="width:80px"
+                        :error-messages="errorData.risk_premium_percentage" type="number" style="width:100px"
                         density="compact" hide-details variant="outlined" suffix="%" />
                     </template>
                   </VSlider>

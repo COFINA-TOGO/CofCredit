@@ -213,7 +213,7 @@ const documentTypeList = [
                     :rules="[requiredValidator]" step="0.1">
                     <template #append>
                       <VTextField v-model="notification.risk_premium_percentage"
-                        :error-messages="formError.risk_premium_percentage" type="number" style="width:80px"
+                        :error-messages="formError.risk_premium_percentage" type="number" style="width:100px"
                         density="compact" hide-details variant="outlined" suffix="%" />
                     </template>
                   </VSlider>
