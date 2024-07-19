@@ -202,7 +202,7 @@ verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value
                   <VSlider v-model="notification.risk_premium_percentage"
                     label="Prime de risque (en pourcentage) du demandeur"
                     :error-messages="formError.risk_premium_percentage" :thumb-size="15" thumb-label="always"
-                    :rules="[requiredValidator]" step="0.1">
+                    :rules="[requiredValidator]" step="0.25">
                     <template #append>
                       <VTextField v-model="notification.risk_premium_percentage"
                         :error-messages="formError.risk_premium_percentage" type="number" style="width:100px"

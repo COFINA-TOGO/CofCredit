@@ -272,7 +272,7 @@ const snackbarMessage = ref("")
                   </VCol>
                   <VCol cols="12">
                     <VSlider v-model="verbalTrial.taf" label="TAF(%)" :error-messages="verbalTrialError.taf"
-                      :thumb-size="15" thumb-label="always" :rules="[requiredValidator]" step="0.1">
+                      :thumb-size="15" thumb-label="always" :rules="[requiredValidator]" step="0.25">
                       <template #append>
                         <VTextField v-model="verbalTrial.taf" :error-messages="verbalTrialError.taf" type="number"
                           style="width:100px" density="compact" hide-details variant="outlined" suffix="%" />
@@ -282,7 +282,7 @@ const snackbarMessage = ref("")
                   <VCol cols="12">
                     <VSlider v-model="verbalTrial.administrative_fees_percentage" label="Frais de dossier(%)"
                       :error-messages="verbalTrialError.administrative_fees_percentage" :thumb-size="15"
-                      thumb-label="always" :rules="[requiredValidator]" step="0.1">
+                      thumb-label="always" :rules="[requiredValidator]" step="0.25">
                       <template #append>
                         <VTextField v-model="verbalTrial.administrative_fees_percentage"
                           :error-messages="verbalTrialError.administrative_fees_percentage" type="number"
@@ -293,7 +293,7 @@ const snackbarMessage = ref("")
                   <VCol cols="12">
                     <VSlider v-model="verbalTrial.tax_fee_interest_rate" label="Taux d'intérêt HT(%)"
                       :error-messages="verbalTrialError.tax_fee_interest_rate" :thumb-size="15" thumb-label="always"
-                      :rules="[requiredValidator]" step="0.1">
+                      :rules="[requiredValidator]" step="0.25">
                       <template #append>
                         <VTextField v-model="verbalTrial.tax_fee_interest_rate"
                           :error-messages="verbalTrialError.tax_fee_interest_rate" type="number" style="width:100px"
