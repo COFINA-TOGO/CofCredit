@@ -75,12 +75,19 @@ const login = async () => {
         router.replace(route.query.to ? String(route.query.to) : '/')
       })
     } else {
-      if (res.status == 400) {
+      if (res.status != 200) {
         if (res.errors.email) {
           errors.value.email = res.errors.email[0]
-        }
-        if (res.errors.password) {
+        } else if (res.errors.password) {
           errors.value.password = res.errors.password[0]
+        } else {
+          isSnackbarScrollReverseVisible.value = true
+          snackbarMessage.value = ""
+          for (const key in res.errors) {
+            res.errors[key].forEach(message => {
+              snackbarMessage.value += message + "\n";
+            })
+          }
         }
       }
     }
@@ -97,6 +104,8 @@ const onSubmit = () => {
       login()
   })
 }
+const isSnackbarScrollReverseVisible = ref(false)
+const snackbarMessage = ref("")
 </script>
 
 <template>
@@ -150,6 +159,10 @@ const onSubmit = () => {
       </VCard>
     </VCol>
   </VRow>
+  <VSnackbar v-model="isSnackbarScrollReverseVisible" transition="scroll-y-reverse-transition" location="bottom end"
+    color="error">
+    {{ snackbarMessage }}
+  </VSnackbar>
 </template>
 
 <style lang="scss">
