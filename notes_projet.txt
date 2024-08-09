@@ -75,5 +75,5 @@ TADJ:
 
 +Ajouter un champ optionnel intitulé « nom l’entité » dans le cadre de l’élaboration des PV et contrat pour pouvoir mieux designer les entreprises individuelles et les sociétés;
 -Pour le numéro de compte (importer si possible de FLEXCUBE pour limiter les marges d’erreurs)
--Charger le nom de tous les CAF de la filiale sur la plateforme pour faciliter les attributions;
++Charger le nom de tous les CAF de la filiale sur la plateforme pour faciliter les attributions;
 -Charger la table FLEXCUBE des types de crédits sur la plateforme pour le choix du type de crédit sur la plateforme ;

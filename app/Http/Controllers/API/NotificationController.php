@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
 use App\Jobs\SendEmail;
 use App\Models\Notification;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,41 +28,41 @@ class NotificationController extends Controller
 	/**
 	 * Affiche les notification
 	 *
-	 * @queryParam  verbal_trial_id                                         int                 Filtrer par ID du PV.                                                   No-example
-	 * @queryParam  representative_phone_number                             string              Filtrer par Numéro de téléphone du demandeur.                           No-example
-	 * @queryParam  representative_home_address                             string              Filtrer par statut de validation du head credit                         No-example
-	 * @queryParam  number_of_due_dates                                     int                 Filtrer par nombre d'échéance.                                          Example: 0
-	 * @queryParam  risk_premium_percentage                                 int                 Filtrer par prime de risque (en pourcentage) du crédit du demandeur.    No-example
-	 * @queryParam  head_credit_observation                                 string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  head_credit_validation                                  string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  status                                                  string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  status_observation                                      string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  signed_notification_path                                string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  signed_contract_path                                    string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  signed_promissory_note_path                             string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  creator_id                                              int                 Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  sent                                                    int                 Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  total_amount_of_interest                                int                 Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  representative_type_of_identity_document                string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  representative_number_of_identity_document              string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  representative_date_of_issue_of_identity_document       string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  type                                                    string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  business_denomination                                   string              Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  is_simple                                               int                 Filtrer par présence de cat.                                            Example: 0
+	 * @queryParam  verbal_trial_id										int				Filtrer par ID du PV.												  No-example
+	 * @queryParam  representative_phone_number							string			 Filtrer par Numéro de téléphone du demandeur.						  No-example
+	 * @queryParam  representative_home_address							string			 Filtrer par statut de validation du head credit						No-example
+	 * @queryParam  number_of_due_dates									int				Filtrer par nombre d'échéance.										 Example: 0
+	 * @queryParam  risk_premium_percentage								int				Filtrer par prime de risque (en pourcentage) du crédit du demandeur.	No-example
+	 * @queryParam  head_credit_observation								string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  head_credit_validation								string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  status												string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  status_observation									string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  signed_notification_path							string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  signed_contract_path								string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  signed_promissory_note_path							string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  creator_id											int				Filtrer par présence de cat.											Example: 0
+	 * @queryParam  sent												int				Filtrer par présence de cat.											Example: 0
+	 * @queryParam  total_amount_of_interest							int				Filtrer par présence de cat.											Example: 0
+	 * @queryParam  representative_type_of_identity_document			string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  representative_number_of_identity_document			string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  representative_date_of_issue_of_identity_document	string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  type												string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  business_denomination								string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  is_simple											int				Filtrer par présence de cat.											Example: 0
 	 * 
 	 * 
-	 * @queryParam  has_signed_contract                                     int                 Filtrer par présence de contrat signé.                                  Example: 0
-	 * @queryParam  has_upload_completed                                    int                 Filtrer par billet à ordre.                                             Example: 0
-	 * @queryParam  has_cat                                                 int                 Filtrer par présence de cat.                                            Example: 0
+	 * @queryParam  has_signed_contract									int				Filtrer par présence de contrat signé.								 Example: 0
+	 * @queryParam  has_upload_completed								int				Filtrer par billet à ordre.											Example: 0
+	 * @queryParam  has_cat												int				Filtrer par présence de cat.											Example: 0
 	 *
-	 * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
-	 * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
-	 * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                          Example: 0
-	 * @queryParam  with_caf                                                int                 Afficher le caf en charge du dossier.                                   Example: 0
-	 * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                 Example: 0
-	 * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
-	 * @queryParam  with_creator                                            int                 Afficher le créateur de la notification.                                Example: 0
-	 * @queryParam  paginate                                                int                 Utiliser la pagination.                                                 Example: 0
+	 * @queryParam  with_verbal_trial									int				Afficher le PV.														Example: 0
+	 * @queryParam  with_type_of_credit									int				Afficher le type de crédit.											Example: 0
+	 * @queryParam  with_type_of_applicant								int				Afficher le type de demandeur.										 Example: 0
+	 * @queryParam  with_caf											int				Afficher le caf en charge du dossier.								  Example: 0
+	 * @queryParam  with_guarantees										int				Afficher les garanties.												Example: 0
+	 * @queryParam  with_type_of_guarantees								int				Afficher les types des garanties.									  Example: 0
+	 * @queryParam  with_creator										int				Afficher le créateur de la notification.								Example: 0
+	 * @queryParam  paginate											int				Utiliser la pagination.												Example: 0
 	 *
 	 * @response 200
 	 */
@@ -168,15 +169,15 @@ class NotificationController extends Controller
 	/**
 	 * Affiche une notification
 	 *
-	 * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
+	 * @urlParam	id													int	required	L'ID de la notification.														Example: 1
 	 *
-	 * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                                 Example: 0
-	 * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                                     Example: 0
-	 * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                                  Example: 0
-	 * @queryParam  with_caf                                                int                 Afficher le CAF en charge du dossier.                                           Example: 0
-	 * @queryParam  with_creator                                            int                 Afficher le créateur de la notification.                                        Example: 0
-	 * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                         Example: 0
-	 * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                               Example: 0
+	 * @queryParam  with_verbal_trial									int				Afficher le PV.																Example: 0
+	 * @queryParam  with_type_of_credit									int				Afficher le type de crédit.													Example: 0
+	 * @queryParam  with_type_of_applicant								int				Afficher le type de demandeur.												 Example: 0
+	 * @queryParam  with_caf											int				Afficher le CAF en charge du dossier.										  Example: 0
+	 * @queryParam  with_creator										int				Afficher le créateur de la notification.										Example: 0
+	 * @queryParam  with_guarantees										int				Afficher les garanties.														Example: 0
+	 * @queryParam  with_type_of_guarantees								int				Afficher les types des garanties.											  Example: 0
 	 *
 	 * @response 200
 	 */
@@ -204,7 +205,7 @@ class NotificationController extends Controller
 	/**
 	 * Télécharge la version word d'une notification
 	 *
-	 * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
+	 * @urlParam	id													 int	required	L'ID de la notification.														Example: 1
 	 *
 	 * @response 200
 	 */
@@ -237,20 +238,15 @@ class NotificationController extends Controller
 			$data["ht_rate"] = "17";
 			$data["verbal_trial.civility.2"] = ["Mr" => "Monsieur", "Mme" => "Madame", "Mlle" => "Madame"][$data["verbal_trial.civility"]];
 			$data["current_date"] = Carbon::now()->translatedFormat('d F Y');
-			$data["verbal_trial.day_due_amount"] = ((float) $data["verbal_trial.due_amount"]) / 20;
 			$data["verbal_trial.administrative_fees_percentage.value"] = number_format((float) $data["verbal_trial.administrative_fees_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', ' ');
-			$data["verbal_trial.day_due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.day_due_amount"])->locale('fr')->toLetters();
 			$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
 			$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-			$data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
 			$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 			$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
 			$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 			$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
-			$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne                               : 1% du capital restant dû après 18 mois";
+			$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne							  : 1% du capital restant dû après 18 mois";
 			$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
-			$data["verbal_trial.day_due_amount"] = number_format(((float) $data["verbal_trial.day_due_amount"]), 0, ',', ' ');
-			$data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
 			$data["verbal_trial.administrative_fees_percentage"] = number_format(((float) $data["verbal_trial.administrative_fees_percentage"]), 0, ',', ' ');
 			//$data["verbal_trial.insurance_premium"] = number_format(((float) $data["verbal_trial.insurance_premium"]), 0, ',', ' ');
 
@@ -260,6 +256,10 @@ class NotificationController extends Controller
 				$guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
 					return ['type_of_guarantee.' . $key => $value];
 				})->all());
+			}
+			$currentSignatory = User::where('profile', "head_credit")->first();
+			if ($currentSignatory) {
+				($currentSignatory->signatory_path) ? $templateProcessor->setImageValue("head_credit_sign", array("path" => "storage" . $currentSignatory->signatory_path, 'width' => 240, 'height' => 240, 'ratio' => true)) : $templateProcessor->setValue("head_credit_sign", "");
 			}
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 
@@ -273,7 +273,7 @@ class NotificationController extends Controller
 
 			return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 			// } else {
-			//     return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			//	return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			// }
 		} else {
 			return $this->responseError(["id" => "La notification n'existe pas"], 404);
@@ -283,7 +283,7 @@ class NotificationController extends Controller
 	/**
 	 * Télécharge le billet à ordre d'une notification
 	 *
-	 * @urlParam    id                                                      int     required    L'ID de la notification.                                                    Example: 1
+	 * @urlParam	id													 int	required	L'ID de la notification.													Example: 1
 	 *
 	 * @response 200
 	 */
@@ -311,7 +311,7 @@ class NotificationController extends Controller
 				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
 				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
 				$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
-				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      : 1% du capital restant dû après 18 mois";
+				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne	 : 1% du capital restant dû après 18 mois";
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "Carte d'identité nationale",
 					"passport" => "Passeport",
@@ -326,13 +326,11 @@ class NotificationController extends Controller
 
 				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
-				$data["verbal_trial.due_amount.fr"] = SpellNumber::value((float) $data["verbal_trial.due_amount"])->locale('fr')->toLetters();
 				$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
 				$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
-				$data["verbal_trial.due_amount"] = number_format(((float) $data["verbal_trial.due_amount"]), 0, ',', ' ');
 				unset($data["observations"]);
 				unset($data["guarantors"]);
 				$templateProcessor->setValues($data);
@@ -354,16 +352,16 @@ class NotificationController extends Controller
 	/**
 	 * Créer un nouveau notification
 	 *
-	 * @bodyParam   verbal_trial_id                                         int                 L'ID du PV.                                                             Example: 1
-	 * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
-	 * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
-	 * @bodyParam   number_of_due_dates                                     int                 Le nombre d'échéance du crédit.                                         Example: 3
-	 * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
-	 * @bodyParam   total_amount_of_interest                                int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
-	 * @bodyParam   representative_type_of_identity_document                int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
-	 * @bodyParam   representative_number_of_identity_document              int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
-	 * @bodyParam   representative_date_of_issue_of_identity_document       int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
-	 * @bodyParam   type                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
+	 * @bodyParam   verbal_trial_id											int				L'ID du PV.																				 Example: 1
+	 * @bodyParam   representative_phone_number								string			Le numéro de téléphone du demandeur.													 Example: +228 90 90 90 90
+	 * @bodyParam   representative_home_address								string			L'addresse du domicile du demandeur.													 Example: Zip 85
+	 * @bodyParam   number_of_due_dates										int				Le nombre d'échéance du crédit.															 Example: 3
+	 * @bodyParam   risk_premium_percentage									int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   total_amount_of_interest								int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   representative_type_of_identity_document				int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   representative_number_of_identity_document				int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   representative_date_of_issue_of_identity_document		int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   type													int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 *
 	 * @response 200
 	 */
@@ -406,21 +404,21 @@ class NotificationController extends Controller
 			$receiver->email = "charles.gamligo@cofinacorp.com";
 			$receiver->full_name = "Head Crédit";
 			$link = env("APP_URL") . "/notification";
-			//             SendEmail::dispatch(
-			//                 $receiver->email,
-			//                 "Notification de mise en place d'un pv",
-			//                 "
-			//             <h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e) $receiver->full_name,</U></h1>
+			//			SendEmail::dispatch(
+			//				$receiver->email,
+			//				"Notification de mise en place d'un pv",
+			//				"
+			//			<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e) $receiver->full_name,</U></h1>
 
-			//             <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement la notification de validation: <a href='$link'>Consulter l</a></p>
+			//			<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement la notification de validation: <a href='$link'>Consulter l</a></p>
 
-			//             <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+			//			<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
-			//             <hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+			//			<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
 
-			//             <p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+			//			<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
 			// "
-			//             );
+			//			);
 			return $this->responseOk([
 				"notification" => $notification
 			], status: 201);
@@ -432,13 +430,18 @@ class NotificationController extends Controller
 	/**
 	 * Mettre à jour une notification
 	 *
-	 * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
+	 * @urlParam	id													int	required	L'ID de la notification.														Example: 1
 	 *
-	 * @bodyParam   verbal_trial_id                                         int                 L'ID du PV.                                                             Example: 1
-	 * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
-	 * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
-	 * @bodyParam   number_of_due_dates                                     int                 Le nombre d'échéance du crédit.                                         Example: 3
-	 * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
+	 * @bodyParam   verbal_trial_id											int				L'ID du PV.																				 Example: 1
+	 * @bodyParam   representative_phone_number								string			Le numéro de téléphone du demandeur.													 Example: +228 90 90 90 90
+	 * @bodyParam   representative_home_address								string			L'addresse du domicile du demandeur.													 Example: Zip 85
+	 * @bodyParam   number_of_due_dates										int				Le nombre d'échéance du crédit.															 Example: 3
+	 * @bodyParam   risk_premium_percentage									int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   total_amount_of_interest								int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   representative_type_of_identity_document				int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   representative_number_of_identity_document				int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   representative_date_of_issue_of_identity_document		int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   type													int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @response 200
 	 *
 	 */
@@ -495,10 +498,10 @@ class NotificationController extends Controller
 	/**
 	 * Mettre à jour le statut de validation head_credit d'une notification
 	 *
-	 * @urlParam    id      required                    int             L'ID d'une notification.                                Example: 1
+	 * @urlParam	id	 required					int			L'ID d'une notification.								Example: 1
 	 *
-	 * @bodyParam   head_credit_validation              string          Le nouveau statut                                       Example: rejected
-	 * @bodyParam   head_credit_observation             string          Commentaire du changement                               Example: Trop bas
+	 * @bodyParam   head_credit_validation			 string		 Le nouveau statut									  Example: rejected
+	 * @bodyParam   head_credit_observation			string		 Commentaire du changement							  Example: Trop bas
 	 *
 	 * @response 200
 	 *
@@ -532,7 +535,7 @@ class NotificationController extends Controller
 	/**
 	 * Envoyer les modifications à porter au dossier à validation
 	 *
-	 * @urlParam    id      required                    int             L'ID d'une notification.                                Example: 1
+	 * @urlParam	id	 required					int			L'ID d'une notification.								Example: 1
 	 *
 	 * @response 200
 	 *
@@ -558,10 +561,10 @@ class NotificationController extends Controller
 	/**
 	 * Mettre à jour le statut d'un procès verbal
 	 *
-	 * @urlParam    id      required                    int             L'ID du procès verbal.                                  Example: 1
+	 * @urlParam	id	 required					int			L'ID du procès verbal.								 Example: 1
 	 *
-	 * @bodyParam   status                              string          Le nouveau statut                                       Example: rejected
-	 * @bodyParam   comment                             string          Commentaire du changement                               Example: Trop bas
+	 * @bodyParam   status							 string		 Le nouveau statut									  Example: rejected
+	 * @bodyParam   comment							string		 Commentaire du changement							  Example: Trop bas
 	 *
 	 * @response 200
 	 *
@@ -600,7 +603,7 @@ class NotificationController extends Controller
 	/**
 	 * Sauvegarde la notification ou procès verbal signé
 	 *
-	 * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
+	 * @urlParam	id													 int	required	L'ID de la notification.														Example: 1
 	 *
 	 * @response 204
 	 */
@@ -659,7 +662,7 @@ class NotificationController extends Controller
 	/**
 	 * Supprime une notification
 	 *
-	 * @urlParam    id                                                      int     required    L'ID de la notification.                                                        Example: 1
+	 * @urlParam	id													 int	required	L'ID de la notification.														Example: 1
 	 *
 	 * @response 204
 	 */
