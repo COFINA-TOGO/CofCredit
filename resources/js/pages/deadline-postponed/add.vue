@@ -254,9 +254,9 @@ const addGuaranteeItem = () => {
                 </VCol>
                 <VCol cols="12">
                   <VSlider v-model="pvData.taf" label="TAF(%)" :error-messages="pvError.taf" :thumb-size="15"
-                    thumb-label="always" :rules="[requiredValidator]" step="0.25">
+                    thumb-label="always" :rules="[requiredValidator]" step="0.01">
                     <template #append>
-                      <VTextField v-model="pvData.taf" :error-messages="pvError.taf" type="number" style="width:100px"
+                      <VTextField v-model="pvData.taf" :error-messages="pvError.taf" type="number" style="width:120px"
                         density="compact" hide-details variant="outlined" suffix="%" />
                     </template>
                   </VSlider>
@@ -264,10 +264,10 @@ const addGuaranteeItem = () => {
                 <VCol cols="12">
                   <VSlider v-model="pvData.administrative_fees_percentage" label="Frais de dossier(%)"
                     :error-messages="pvError.administrative_fees_percentage" :thumb-size="15" thumb-label="always"
-                    :rules="[requiredValidator]" step="0.25">
+                    :rules="[requiredValidator]" step="0.01">
                     <template #append>
                       <VTextField v-model="pvData.administrative_fees_percentage"
-                        :error-messages="pvError.administrative_fees_percentage" type="number" style="width:100px"
+                        :error-messages="pvError.administrative_fees_percentage" type="number" style="width:120px"
                         density="compact" hide-details variant="outlined" suffix="%" />
                     </template>
                   </VSlider>
@@ -275,10 +275,10 @@ const addGuaranteeItem = () => {
                 <VCol cols="12">
                   <VSlider v-model="pvData.tax_fee_interest_rate" label="Taux d'intérêt HT(%)"
                     :error-messages="pvError.tax_fee_interest_rate" :thumb-size="15" thumb-label="always"
-                    :rules="[requiredValidator]" step="0.25">
+                    :rules="[requiredValidator]" step="0.01">
                     <template #append>
                       <VTextField v-model="pvData.tax_fee_interest_rate" :error-messages="pvError.tax_fee_interest_rate"
-                        type="number" style="width:100px" density="compact" hide-details variant="outlined" suffix="%" />
+                        type="number" style="width:120px" density="compact" hide-details variant="outlined" suffix="%" />
                     </template>
                   </VSlider>
                 </VCol>

@@ -256,10 +256,10 @@ if (contract.value.individual_business == null) {
                   <VSlider v-model="contract.risk_premium_percentage"
                     label="Prime de risque (en pourcentage) du demandeur"
                     :error-messages="errorData.risk_premium_percentage" :thumb-size="15" thumb-label="always"
-                    step="0.25">
+                    step="0.01">
                     <template #append>
                       <VTextField v-model="contract.risk_premium_percentage"
-                        :error-messages="errorData.risk_premium_percentage" type="number" style="width:100px"
+                        :error-messages="errorData.risk_premium_percentage" type="number" style="width:120px"
                         density="compact" hide-details variant="outlined" suffix="%" />
                     </template>
                   </VSlider>

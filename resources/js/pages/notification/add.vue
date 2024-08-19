@@ -201,11 +201,11 @@ const documentTypeList = [
 									<VSlider v-model="notificationData.risk_premium_percentage"
 										label="Prime de risque (en pourcentage) du demandeur"
 										:error-messages="formError.risk_premium_percentage" :thumb-size="15"
-										thumb-label="always" :rules="[requiredValidator]" step="0.25">
+										thumb-label="always" :rules="[requiredValidator]" step="0.01">
 										<template #append>
 											<VTextField v-model="notificationData.risk_premium_percentage"
 												:error-messages="formError.risk_premium_percentage" type="number"
-												style="width:100px" density="compact" hide-details variant="outlined"
+												style="width:120px" density="compact" hide-details variant="outlined"
 												suffix="%" />
 										</template>
 									</VSlider>
