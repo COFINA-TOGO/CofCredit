@@ -91,11 +91,11 @@ class VerbalTrialController extends Controller
 							->orWhere('duration', 'LIKE', "%$search%")
 							->orWhere('periodicity', 'LIKE', "%$search%")
 							->orWhere('taf', 'LIKE', "%$search%")
-							->orWhere('due_amount', 'LIKE', "%$search%")
 							->orWhere('administrative_fees_percentage', 'LIKE', "%$search%")
 							->orWhere('reserve', 'LIKE', "%$search%")
 							->orWhere(DB::raw("CONCAT(applicant_first_name, ' ', applicant_last_name)"), 'LIKE', "%$search%");
-					});;
+					});
+				;
 			}
 
 			foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "caf_id", "credit_admin_id", "credit_analyst_di", "creator_id"] as $filter) {
