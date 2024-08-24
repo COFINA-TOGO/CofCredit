@@ -196,7 +196,7 @@ class UserController extends Controller
 				} else {
 					if (isset($requestData["password"])) {
 						$requestData["password"] = Hash::make($request->password);
-						$requestData["password_change_required"] = true;
+						// $requestData["password_change_required"] = true;
 					}
 					$user->update($requestData);
 					// $user->load("agency.head");
