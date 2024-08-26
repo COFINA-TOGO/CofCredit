@@ -41,7 +41,7 @@ class AuthController extends Controller
                         "user" => $user
                     ]);
                 } else {
-                    return $this->responseError(["activated" => ["Votre compte est désactivé"]], 403);
+                    return $this->responseError(["activated" => ["Votre compte est désactivé"], "sub_code" => ["001"]], 403);
                 }
             } else {
                 return $this->responseError(["password" => ["Mot de passe incorrect"]], 400);

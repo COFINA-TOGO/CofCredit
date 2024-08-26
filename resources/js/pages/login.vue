@@ -83,9 +83,11 @@ const login = async () => {
 				} else {
 					isSnackbarScrollReverseVisible.value = true
 					for (const key in res.errors) {
-						res.errors[key].forEach(message => {
-							snackbarMessage.value += message + "\n";
-						})
+						if(key !="sub_code"){
+							res.errors[key].forEach(message => {
+								snackbarMessage.value += message + "\n";
+							})
+						}
 					}
 				}
 			}

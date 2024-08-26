@@ -9,32 +9,32 @@ use Illuminate\Http\Request;
 
 class Authenticate extends Middleware
 {
-    use CustomResponseTrait;
+	use CustomResponseTrait;
 
-    public function handle($request, Closure $next, ...$guards)
-    {
-        $this->authenticate($request, $guards);
-        if (auth()->check()) {
-            $user = $request->user();
-            if ($user->activated) {
-                if ($user->password_change_required) {
-                    if ($request->route()->getName() !== 'user.update-password' && $request->route()->getName() !== 'logout') {
-                        return $this->responseError(["activated" => ["Vous devez changer votre mot de passe"]], 403);
-                    }
-                }
-            } else {
-                return $this->responseError(["activated" => ["Votre compte est désactivé"]], 403);
-            }
-        }
+	public function handle($request, Closure $next, ...$guards)
+	{
+		$this->authenticate($request, $guards);
+		if (auth()->check()) {
+			$user = $request->user();
+			if ($user->activated) {
+				if ($user->password_change_required) {
+					if ($request->route()->getName() !== 'user.update-password' && $request->route()->getName() !== 'logout') {
+						return $this->responseError(["activated" => ["Vous devez changer votre mot de passe"], "sub_code" => ["002"]], 403);
+					}
+				}
+			} else {
+				return $this->responseError(["activated" => ["Votre compte est désactivé"], "sub_code" => ["001"]], 403);
+			}
+		}
 
-        return $next($request);
-    }
+		return $next($request);
+	}
 
-    /**
-     * Get the path the user should be redirected to when they are not authenticated.
-     */
-    protected function redirectTo(Request $request): ?string
-    {
-        return $request->expectsJson() ? null : route('login');
-    }
+	/**
+	 * Get the path the user should be redirected to when they are not authenticated.
+	 */
+	protected function redirectTo(Request $request): ?string
+	{
+		return $request->expectsJson() ? null : route('login');
+	}
 }
