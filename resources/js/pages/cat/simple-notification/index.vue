@@ -252,7 +252,7 @@ const rejectUnblockCAT = async id => {
                     <VListItemTitle>Voir la notification</VListItemTitle>
                   </VListItem>
                   <VListItem v-if="$can('download', 'cat')"
-                    @click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.notification.verbal_trial.committee_id}.docx`)">
+                    @click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.notification.verbal_trial.committee_id}.pdf`)">
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>

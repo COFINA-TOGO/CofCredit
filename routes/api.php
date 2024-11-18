@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('auth/login', [AuthController::class, "login"])->name("auth.login");
-Route::get("/test/contract/download/{id}", [ContractController::class, "download"])->name("free.contract.word");
 // Route::get("/test/contract/promissory-note/{id}", [ContractController::class, "promissory_note"])->name("free.contract.promissory-note");
 // Route::get("/test/guarantor/word/{id}", [GuarantorController::class, "download"])->name("free.guarantor.word");
 // Route::get("/test/guarantor/promissory-note/{id}", [GuarantorController::class, "promissory_note"])->name("free.guarantor.promissory-note");
@@ -128,5 +127,3 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::delete("/{id}", [DeadlinePostponedController::class, "destroy"])->name("destroy");
 	});
 });
-
-// Route::get("/download/{id}", [CATController::class, "download"])->withoutMiddleware("auth:sanctum")->name("download");

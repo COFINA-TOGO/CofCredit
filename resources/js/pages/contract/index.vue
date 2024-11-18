@@ -302,7 +302,7 @@ const lastPage = computed(() => contractData.value.last_page)
                       <VDivider />
                       <!-- Télécharger contrat non-signé -->
                       <VListItem
-                        @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
+                        @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.pdf`)">
   
                         <template #prepend>
                           <VIcon icon="tabler-download" />
@@ -320,7 +320,7 @@ const lastPage = computed(() => contractData.value.last_page)
                       </VListItem>
                       <!-- Télécharger billet à ordre non-signé -->
                       <VListItem
-                        @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
+                        @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`);">
   
                         <template #prepend>
                           <VIcon icon="tabler-download" />

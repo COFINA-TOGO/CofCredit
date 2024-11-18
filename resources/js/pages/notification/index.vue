@@ -289,7 +289,7 @@ const lastPage = computed(() => notificationData.value.last_page)
                     <VDivider />
                     <!-- Télécharger notification non-signé -->
                     <VListItem
-                      @click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.docx`);">
+                      @click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.pdf`);">
 
                       <template #prepend>
                         <VIcon icon="tabler-download" />
@@ -298,7 +298,7 @@ const lastPage = computed(() => notificationData.value.last_page)
                     </VListItem>
                     <!-- Télécharger billet à ordre non-signé -->
                     <VListItem
-                      @click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
+                      @click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`);">
 
                       <template #prepend>
                         <VIcon icon="tabler-download" />

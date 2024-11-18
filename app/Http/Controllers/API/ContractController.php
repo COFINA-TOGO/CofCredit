@@ -13,11 +13,13 @@ use App\Models\IndividualBusiness;
 use Illuminate\Support\Facades\DB;
 use Rmunate\Utilities\SpellNumber;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\Process\Process;
 
 
 /**
@@ -31,39 +33,39 @@ class ContractController extends Controller
 	/**
 	 * Affiche les contrats
 	 *
-	 * @queryParam  verbal_trial_id                                         int                 Filtrer par ID du PV.                                                   No-example
-	 * @queryParam  representative_birth_date                               string              Filtrer par date de naissance du demandeur.                             No-example
-	 * @queryParam  representative_birth_place                              string              Filtrer par lieu de naissance du demandeur.                             No-example
-	 * @queryParam  representative_nationality                              string              Filtrer par nationalité du demandeur.                                   No-example
-	 * @queryParam  represenstative_home_address                            string              Filtrer par addresse du domicile du demandeur.                          No-example
-	 * @queryParam  representative_type_of_identity_document                string              Filtrer par type de la pièce d'identité du demandeur.                   No-example
-	 * @queryParam  representative_number_of_identity_document              string              Filtrer par numéro de la pièce d'identité du demandeur.                 No-example
-	 * @queryParam  representative_date_of_issue_of_identity_document       string              Filtrer par date de délivrance de la pièce d'identité du demandeur.     No-example
-	 * @queryParam  representative_phone_number                             string              Filtrer par numéro de téléphone du demandeur.                           No-example
-	 * @queryParam  risk_premium_percentage                                 int                 Filtrer par prime de risque (en pourcentage) du crédit du demandeur.    No-example
-	 * @queryParam  total_amount_of_interest                                int                 Filtrer par montant total des intérêts du crédit du demandeur.          No-example
-	 * @queryParam  number_of_due_dates                                     int                 Filtrer par nombre d'échéance.                                          No-example
-	 * @queryParam  type                                                    string              Filtrer par type de contract.                                           No-example
-	 * @queryParam  has_pledges                                             int                 Filtrer par présence de gage                                            No-example
-	 * @queryParam  creator_id                                              int                 Filtrer par ID du créateur                                              No-example
-	 * @queryParam  has_upload_completed                                    int                 Filtrer par finalisation du dossier du contrat.                         Example: 0
-	 * @queryParam  has_cat                                                 int                 Filtrer par présence de cat.                                            Example: 0
-	 * @queryParam  status                                                  string              Filtrer par statut du contrat                                           Example: waiting
+	 * @queryParam  verbal_trial_id										 int				 Filtrer par ID du PV.												   No-example
+	 * @queryParam  representative_birth_date							   string			  Filtrer par date de naissance du demandeur.							 No-example
+	 * @queryParam  representative_birth_place							  string			  Filtrer par lieu de naissance du demandeur.							 No-example
+	 * @queryParam  representative_nationality							  string			  Filtrer par nationalité du demandeur.								   No-example
+	 * @queryParam  represenstative_home_address							string			  Filtrer par addresse du domicile du demandeur.						  No-example
+	 * @queryParam  representative_type_of_identity_document				string			  Filtrer par type de la pièce d'identité du demandeur.				   No-example
+	 * @queryParam  representative_number_of_identity_document			  string			  Filtrer par numéro de la pièce d'identité du demandeur.				 No-example
+	 * @queryParam  representative_date_of_issue_of_identity_document	   string			  Filtrer par date de délivrance de la pièce d'identité du demandeur.	 No-example
+	 * @queryParam  representative_phone_number							 string			  Filtrer par numéro de téléphone du demandeur.						   No-example
+	 * @queryParam  risk_premium_percentage								 int				 Filtrer par prime de risque (en pourcentage) du crédit du demandeur.	No-example
+	 * @queryParam  total_amount_of_interest								int				 Filtrer par montant total des intérêts du crédit du demandeur.		  No-example
+	 * @queryParam  number_of_due_dates									 int				 Filtrer par nombre d'échéance.										  No-example
+	 * @queryParam  type													string			  Filtrer par type de contract.										   No-example
+	 * @queryParam  has_pledges											 int				 Filtrer par présence de gage											No-example
+	 * @queryParam  creator_id											  int				 Filtrer par ID du créateur											  No-example
+	 * @queryParam  has_upload_completed									int				 Filtrer par finalisation du dossier du contrat.						 Example: 0
+	 * @queryParam  has_cat												 int				 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  status												  string			  Filtrer par statut du contrat										   Example: waiting
 	 *
-	 * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
-	 * @queryParam  with_verbal_trial_credit_admin                          int                 Afficher l'admin crédit du PV.                                          Example: 0
-	 * @queryParam  with_verbal_trial_credit_analyst                        int                 Afficher l'analyst crédit du PV.                                        Example: 0
-	 * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
-	 * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                          Example: 0
-	 * @queryParam  with_caf                                                int                 Afficher le caf en charge du dossier.                                   Example: 0
-	 * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                 Example: 0
-	 * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
-	 * @queryParam  with_company                                            int                 Afficher les informations de la société                                 Example: 0
-	 * @queryParam  with_individual_business                                int                 Afficher les informations de l'entreprise individuelle                  Example: 0
-	 * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
-	 * @queryParam  with_creator                                            int                 Afficher le créateur du contrat.                                        Example: 0
-	 * @queryParam  with_pledges                                            int                 Afficher les gages.                                                     Example: 0
-	 * @queryParam  paginate                                                int                 Utiliser la pagination.                                                 Example: 0
+	 * @queryParam  with_verbal_trial									   int				 Afficher le PV.														 Example: 0
+	 * @queryParam  with_verbal_trial_credit_admin						  int				 Afficher l'admin crédit du PV.										  Example: 0
+	 * @queryParam  with_verbal_trial_credit_analyst						int				 Afficher l'analyst crédit du PV.										Example: 0
+	 * @queryParam  with_type_of_credit									 int				 Afficher le type de crédit.											 Example: 0
+	 * @queryParam  with_type_of_applicant								  int				 Afficher le type de demandeur.										  Example: 0
+	 * @queryParam  with_caf												int				 Afficher le caf en charge du dossier.								   Example: 0
+	 * @queryParam  with_guarantees										 int				 Afficher les garanties.												 Example: 0
+	 * @queryParam  with_type_of_guarantees								 int				 Afficher les types des garanties.									   Example: 0
+	 * @queryParam  with_company											int				 Afficher les informations de la société								 Example: 0
+	 * @queryParam  with_individual_business								int				 Afficher les informations de l'entreprise individuelle				  Example: 0
+	 * @queryParam  with_type_of_guarantees								 int				 Afficher les types des garanties.									   Example: 0
+	 * @queryParam  with_creator											int				 Afficher le créateur du contrat.										Example: 0
+	 * @queryParam  with_pledges											int				 Afficher les gages.													 Example: 0
+	 * @queryParam  paginate												int				 Utiliser la pagination.												 Example: 0
 	 *
 	 * @response 200
 	 */
@@ -174,20 +176,20 @@ class ContractController extends Controller
 	/**
 	 * Affiche un contrat
 	 *
-	 * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+	 * @urlParam	id													  int	 required	L'ID du contrat.														Example: 1
 	 *
-	 * @queryParam  with_verbal_trial                                       int                 Afficher le PV.                                                         Example: 0
-	 * @queryParam  with_verbal_trial_credit_admin                          int                 Afficher l'admin crédit du PV.                                          Example: 0
-	 * @queryParam  with_verbal_trial_credit_analyst                        int                 Afficher l'analyst crédit du PV.                                        Example: 0
-	 * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
-	 * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur.                                          Example: 0
-	 * @queryParam  with_caf                                                int                 Afficher le CAF en charge du dossier.                                   Example: 0
-	 * @queryParam  with_guarantees                                         int                 Afficher les garanties.                                                 Example: 0
-	 * @queryParam  with_company                                            int                 Afficher les informations de la société                                 Example: 0
-	 * @queryParam  with_individual_business                                int                 Afficher les informations de l'entreprise individuelle                  Example: 0
-	 * @queryParam  with_type_of_guarantees                                 int                 Afficher les types des garanties.                                       Example: 0
-	 * @queryParam  with_creator                                            int                 Afficher le créateur du contrat.                                        Example: 0
-	 * @queryParam  with_pledges                                            int                 Afficher les gages.                                                     Example: 0
+	 * @queryParam  with_verbal_trial									   int				 Afficher le PV.														 Example: 0
+	 * @queryParam  with_verbal_trial_credit_admin						  int				 Afficher l'admin crédit du PV.										  Example: 0
+	 * @queryParam  with_verbal_trial_credit_analyst						int				 Afficher l'analyst crédit du PV.										Example: 0
+	 * @queryParam  with_type_of_credit									 int				 Afficher le type de crédit.											 Example: 0
+	 * @queryParam  with_type_of_applicant								  int				 Afficher le type de demandeur.										  Example: 0
+	 * @queryParam  with_caf												int				 Afficher le CAF en charge du dossier.								   Example: 0
+	 * @queryParam  with_guarantees										 int				 Afficher les garanties.												 Example: 0
+	 * @queryParam  with_company											int				 Afficher les informations de la société								 Example: 0
+	 * @queryParam  with_individual_business								int				 Afficher les informations de l'entreprise individuelle				  Example: 0
+	 * @queryParam  with_type_of_guarantees								 int				 Afficher les types des garanties.									   Example: 0
+	 * @queryParam  with_creator											int				 Afficher le créateur du contrat.										Example: 0
+	 * @queryParam  with_pledges											int				 Afficher les gages.													 Example: 0
 	 *
 	 * @response 200
 	 */
@@ -218,7 +220,7 @@ class ContractController extends Controller
 	/**
 	 * Télécharge la version word d'un contrat
 	 *
-	 * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+	 * @urlParam	id													  int	 required	L'ID du contrat.														Example: 1
 	 *
 	 * @response 200
 	 */
@@ -264,8 +266,13 @@ class ContractController extends Controller
 				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
-				$data["line_risk_premium_percentage"] = (((float) $data["risk_premium_percentage"]) == 0) ? "" : "<br/><br/>	Prime de risque (".$data["risk_premium_percentage"]." %)		: " . number_format($data["risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
-				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "<br/><br/>	Prime de révision de ligne		: 1% du capital restant dû après 18 mois";
+
+				$data["line_risk_premium_percentage"] = (((float) $data["risk_premium_percentage"]) == 0) ? "" : "Prime de risque (" . $data["risk_premium_percentage"] . " %)";
+				$data["line_risk_premium_percentage_value"] = (((float) $data["risk_premium_percentage"]) == 0) ? "" : ": " . number_format($data["risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
+				
+				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne";
+				$data["line_review_bonus_value"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : ": 1% du capital restant dû après 12 mois";
+				
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "Carte d'identité nationale",
 					"passport" => "Passeport",
@@ -320,10 +327,21 @@ class ContractController extends Controller
 				$templateProcessor->setValues($data);
 
 				// Enregistrez les modifications dans un nouveau fichier
-				$outputFilePath = public_path("Contrat-" . $contract->verbal_trial->committee_id . ".docx");
+				$outputFilePath = public_path("generated/docx/Contrat-" . $contract->verbal_trial->committee_id . ".docx");
 				$templateProcessor->saveAs($outputFilePath);
+				$outputFilePdfFolderPath = public_path("generated/pdf");
+				$outputFilePdfPath = public_path("generated/pdf/Contrat-" . $contract->verbal_trial->committee_id . ".pdf");
 
-				return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
+
+				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
+				$output = [];
+				$returnVar = 0;
+				exec($command, $output, $returnVar);
+				// Vérification du succès
+				if ($returnVar === 0) {
+					File::delete($outputFilePath);
+					return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+				}
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
@@ -333,10 +351,11 @@ class ContractController extends Controller
 	}
 
 
+
 	/**
 	 * Télécharge le billet à ordre d'un contrat
 	 *
-	 * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+	 * @urlParam	id													  int	 required	L'ID du contrat.														Example: 1
 	 *
 	 * @response 200
 	 */
@@ -381,7 +400,7 @@ class ContractController extends Controller
 				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
-				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      : 1% du capital restant dû après 18 mois";
+				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne	  : 1% du capital restant dû après 12 mois";
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "Carte d'identité nationale",
 					"passport" => "Passeport",
@@ -402,11 +421,21 @@ class ContractController extends Controller
 				$templateProcessor->setValues($data);
 
 				// Enregistrez les modifications dans un nouveau fichier
-				$outputFilePath = public_path("Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx");
+				$outputFilePath = public_path("generated/docx/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx");
 				$templateProcessor->saveAs($outputFilePath);
+				$outputFilePdfFolderPath = public_path("generated/pdf");
+				$outputFilePdfPath = public_path("generated/pdf/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".pdf");
 
-				// return response()->download($outputFilePath)->deleteFileAfterSend(true);
-				return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]);
+
+				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
+				$output = [];
+				$returnVar = 0;
+				exec($command, $output, $returnVar);
+				// Vérification du succès
+				if ($returnVar === 0) {
+					File::delete($outputFilePath);
+					return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+				}
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
@@ -418,21 +447,21 @@ class ContractController extends Controller
 	/**
 	 * Créer un nouveau contrat
 	 *
-	 * @bodyParam   verbal_trial_id                                         int                 L'ID du PV.                                                             Example: 1
-	 * @bodyParam   representative_birth_date                               string              La date de naissance du demandeur.                                      Example: 1988-05-01
-	 * @bodyParam   representative_birth_place                              string              Le lieu de naissance du demandeur.                                      Example: Lomé
-	 * @bodyParam   representative_nationality                              string              La nationalité du demandeur.                                            Example: Togolaise
-	 * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
-	 * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'identité du demandeur.                           Example: cni
-	 * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'identité du demandeur.                         Example: CND-4D8-84S-52S
-	 * @bodyParam   representative_date_of_issue_of_identity_document       string              La date de délivrance de la pièce d'identité du demandeur.              Example: 2020-01-01
-	 * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
-	 * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
-	 * @bodyParam   total_amount_of_interest                                int                 Le montant total des intérêts du crédit du demandeur.                   Example: 152369
-	 * @bodyParam   number_of_due_dates                                     int                 Le nombre d'échéance du crédit.                                         Example: 3
-	 * @bodyParam   type                                                    string              Le type du contrat.                                                     Example: company
-	 * @bodyParam   has_pledges                                             string              La présence de gage.                                                    Example: 0
-	 * @bodyParam   due_amount                                             	int              	Le montant d'une échéance.                                              Example: 250000
+	 * @bodyParam   verbal_trial_id										 int				 L'ID du PV.															 Example: 1
+	 * @bodyParam   representative_birth_date							   string			  La date de naissance du demandeur.									  Example: 1988-05-01
+	 * @bodyParam   representative_birth_place							  string			  Le lieu de naissance du demandeur.									  Example: Lomé
+	 * @bodyParam   representative_nationality							  string			  La nationalité du demandeur.											Example: Togolaise
+	 * @bodyParam   representative_home_address							 string			  L'addresse du domicile du demandeur.									Example: Zip 85
+	 * @bodyParam   representative_type_of_identity_document				string			  Le type de la pièce d'identité du demandeur.						   Example: cni
+	 * @bodyParam   representative_number_of_identity_document			  string			  Le numéro de la pièce d'identité du demandeur.						 Example: CND-4D8-84S-52S
+	 * @bodyParam   representative_date_of_issue_of_identity_document	   string			  La date de délivrance de la pièce d'identité du demandeur.			  Example: 2020-01-01
+	 * @bodyParam   representative_phone_number							 string			  Le numéro de téléphone du demandeur.									Example: +228 90 90 90 90
+	 * @bodyParam   risk_premium_percentage								 int				 La prime de risque (en pourcentage) du crédit du demandeur.			 Example: 2
+	 * @bodyParam   total_amount_of_interest								int				 Le montant total des intérêts du crédit du demandeur.				   Example: 152369
+	 * @bodyParam   number_of_due_dates									 int				 Le nombre d'échéance du crédit.										 Example: 3
+	 * @bodyParam   type													string			  Le type du contrat.													 Example: company
+	 * @bodyParam   has_pledges											 string			  La présence de gage.													Example: 0
+	 * @bodyParam   due_amount											 	int			  	Le montant d'une échéance.											  Example: 250000
 	 *
 	 * @response 200
 	 */
@@ -548,15 +577,15 @@ class ContractController extends Controller
 			// 		$receiver->email,
 			// 		"Notification de mise en place d'un pv",
 			// 		"
-			//     <h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e) $receiver->full_name,</U></h1>
+			//	 <h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e) $receiver->full_name,</U></h1>
 
-			//     <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat en attente de signature par le client: <a href='$link'>Consulter l</a></p>
+			//	 <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat en attente de signature par le client: <a href='$link'>Consulter l</a></p>
 
-			//     <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+			//	 <p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
-			//     <hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+			//	 <hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
 
-			//     <p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+			//	 <p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
 			// "
 			// 	);
 			return $this->responseOk([
@@ -570,21 +599,22 @@ class ContractController extends Controller
 	/**
 	 * Mettre à jour un contrat
 	 *
-	 * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+	 * @urlParam	id													  int	 required	L'ID du contrat.														Example: 1
 	 *
-	 * @bodyParam   verbal_trial_id                                         int                 L'ID du PV.                                                             Example: 1
-	 * @bodyParam   representative_birth_date                               string              La date de naissance du demandeur.                                      Example: 1988-05-01
-	 * @bodyParam   representative_birth_place                              string              Le lieu de naissance du demandeur.                                      Example: Lomé
-	 * @bodyParam   representative_nationality                              string              La nationalité du demandeur.                                            Example: Togolaise
-	 * @bodyParam   representative_home_address                             string              L'addresse du domicile du demandeur.                                    Example: Zip 85
-	 * @bodyParam   representative_type_of_identity_document                string              Le type de la pièce d'identité du demandeur.                           Example: cni
-	 * @bodyParam   representative_number_of_identity_document              string              Le numéro de la pièce d'identité du demandeur.                         Example: CND-4D8-84S-52S
-	 * @bodyParam   representative_date_of_issue_of_identity_document       string              La date de délivrance de la pièce d'identité du demandeur.              Example: 2020-01-01
-	 * @bodyParam   representative_phone_number                             string              Le numéro de téléphone du demandeur.                                    Example: +228 90 90 90 90
-	 * @bodyParam   risk_premium_percentage                                 int                 La prime de risque (en pourcentage) du crédit du demandeur.             Example: 2
-	 * @bodyParam   total_amount_of_interest                                int                 Le montant total des intérêts du crédit du demandeur.                   Example: 152369
-	 * @bodyParam   number_of_due_dates                                     int                 Le nombre d'échéance du crédit.                                         Example: 3
-	 * @bodyParam   type                                                    string              Le type du contrat.                                                     Example: company
+	 * @bodyParam   verbal_trial_id										 int				 L'ID du PV.															 Example: 1
+	 * @bodyParam   representative_birth_date							   string			  La date de naissance du demandeur.									  Example: 1988-05-01
+	 * @bodyParam   representative_birth_place							  string			  Le lieu de naissance du demandeur.									  Example: Lomé
+	 * @bodyParam   representative_nationality							  string			  La nationalité du demandeur.											Example: Togolaise
+	 * @bodyParam   representative_home_address							 string			  L'addresse du domicile du demandeur.									Example: Zip 85
+	 * @bodyParam   representative_type_of_identity_document				string			  Le type de la pièce d'identité du demandeur.						   Example: cni
+	 * @bodyParam   representative_number_of_identity_document			  string			  Le numéro de la pièce d'identité du demandeur.						 Example: CND-4D8-84S-52S
+	 * @bodyParam   representative_date_of_issue_of_identity_document	   string			  La date de délivrance de la pièce d'identité du demandeur.			  Example: 2020-01-01
+	 * @bodyParam   representative_phone_number							 string			  Le numéro de téléphone du demandeur.									Example: +228 90 90 90 90
+	 * @bodyParam   risk_premium_percentage								 int				 La prime de risque (en pourcentage) du crédit du demandeur.			 Example: 2
+	 * @bodyParam   total_amount_of_interest								int				 Le montant total des intérêts du crédit du demandeur.				   Example: 152369
+	 * @bodyParam   number_of_due_dates									 int				 Le nombre d'échéance du crédit.										 Example: 3
+	 * @bodyParam   type													string			  Le type du contrat.													 Example: company
+	 * @bodyParam   due_amount											 	int			  	Le montant d'une échéance.											  Example: 250000
 	 *
 	 * @response 200
 	 *
@@ -610,6 +640,7 @@ class ContractController extends Controller
 					'number_of_due_dates' => 'required|numeric',
 					'type' => 'required|in:particular,company,individual_business',
 					'has_pledges' => 'required|boolean',
+					'due_amount' => 'required|numeric',
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
@@ -715,7 +746,7 @@ class ContractController extends Controller
 	/**
 	 * Sauvegarde le contrat ou procès verbal signé
 	 *
-	 * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+	 * @urlParam	id													  int	 required	L'ID du contrat.														Example: 1
 	 *
 	 * @response 204
 	 */
@@ -771,10 +802,10 @@ class ContractController extends Controller
 	/**
 	 * Mettre à jour le statut d'un contrat
 	 *
-	 * @urlParam    id      required                    int             L'ID du contrat.                                        Example: 1
+	 * @urlParam	id	  required					int			 L'ID du contrat.										Example: 1
 	 *
-	 * @bodyParam   status                              string          Le nouveau statut                                       Example: rejected
-	 * @bodyParam   comment                             string          Commentaire du changement                               Example: Trop bas
+	 * @bodyParam   status							  string		  Le nouveau statut									   Example: rejected
+	 * @bodyParam   comment							 string		  Commentaire du changement							   Example: Trop bas
 	 *
 	 * @response 200
 	 *
@@ -808,7 +839,7 @@ class ContractController extends Controller
 	/**
 	 * Supprime un contrat
 	 *
-	 * @urlParam    id                                                      int     required    L'ID du contrat.                                                        Example: 1
+	 * @urlParam	id													  int	 required	L'ID du contrat.														Example: 1
 	 *
 	 * @response 204
 	 */

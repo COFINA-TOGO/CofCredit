@@ -71,7 +71,7 @@ const notificationData = [
   { "title": "Type de notification", "value": notificationTypeList[notification.value.type] },
 ]
 if (notification.value.verbal_trial.duration > 13) {
-  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 18 mois" })
+  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 12 mois" })
 }
 if (notification.value.head_credit_validation == 'validated') {
   if (notification.value.status == 'validated') {

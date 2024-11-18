@@ -7,9 +7,11 @@ use App\Models\CAT;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Illuminate\Support\Facades\Response;
 
 
 /**
@@ -248,14 +250,20 @@ class CATController extends Controller
 			// return $data;
 
 			// Enregistrez les modifications dans un nouveau fichier
-			$outputFilePath = public_path("CAT-" . $cat->$parentRelation->verbal_trial->committee_id . ".docx");
-			$templateProcessor->saveAs($outputFilePath);
+			$bsaseName = "CAT-" . $cat->$parentRelation->verbal_trial->committee_id;
+			$wordFilePath = public_path( $bsaseName . ".docx");
+			$templateProcessor->saveAs($wordFilePath);
+			$outputFilePdfFolderPath = public_path("generated/pdf");
 
-			return response()->download($outputFilePath)->deleteFileAfterSend(true);
-			// return $this->responseOk(["c_a_t" => $cat]);
-			// } else {
-			//     return $this->responseError(["auth" => [$authorisation->message()]], 403);
-			// }
+			$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+			$output = [];
+			$returnVar = 0;
+			exec($command, $output, $returnVar);
+			// Vérification du succès
+			if ($returnVar === 0) {
+				File::delete($wordFilePath);
+				return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+			}
 		} else {
 			return $this->responseError(["id" => "Le CAT n'existe pas"], 404);
 		}

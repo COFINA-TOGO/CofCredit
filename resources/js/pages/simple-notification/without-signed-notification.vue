@@ -290,7 +290,7 @@ const lastPage = computed(() => notificationData.value.last_page)
                       <VDivider />
                       <!-- Télécharger notification non-signé -->
                       <VListItem
-                        @click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.docx`);">
+                        @click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.pdf`);">
                         <template #prepend>
                           <VIcon icon="tabler-download" />
                         </template>

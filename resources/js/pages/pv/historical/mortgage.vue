@@ -199,7 +199,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
             <VIcon icon=" tabler-eye" />
           </IconBtn>
           <IconBtn v-if="$can('download', 'pv')"
-            @click="downloadFile(`/api/verbal-trial/download/${item.id}`, `PV-${item.committee_id}.docx`)">
+            @click="downloadFile(`/api/verbal-trial/download/${item.id}`, `PV-${item.committee_id}.pdf`)">
             <VIcon icon="tabler-download" />
           </IconBtn>
         </template>

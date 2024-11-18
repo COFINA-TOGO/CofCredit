@@ -73,7 +73,7 @@ const tableData = [
 ]
 
 if (contract.value.verbal_trial.duration > 13) {
-  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 18 mois" })
+  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 12 mois" })
 }
 if (contract.value.observations.length == 0) {
   backRoute = "/contract/historical"

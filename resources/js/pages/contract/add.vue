@@ -22,7 +22,7 @@ const contractData = ref({
 	representative_type_of_identity_document: null,
 	representative_number_of_identity_document: null,
 	representative_date_of_issue_of_identity_document: null,
-	risk_premium_percentage: null,
+	risk_premium_percentage: 0.5,
 	total_amount_of_interest: null,
 	due_amount: null,
 	number_of_due_dates: null,
@@ -241,12 +241,12 @@ if (route.query.id) {
 									<VSlider v-model="contractData.risk_premium_percentage"
 										label="Prime de risque (en pourcentage) du demandeur"
 										:error-messages="formError.risk_premium_percentage" :thumb-size="15"
-										thumb-label="always" step="0.01">
+										thumb-label="always" step="0.01" readonly>
 										<template #append>
 											<VTextField v-model="contractData.risk_premium_percentage"
 												:error-messages="formError.risk_premium_percentage" type="number"
 												style="width:120px" density="compact" hide-details variant="outlined"
-												suffix="%" />
+												suffix="%" readonly/>
 										</template>
 									</VSlider>
 								</VCol>

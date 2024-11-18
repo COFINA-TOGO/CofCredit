@@ -7,6 +7,7 @@ use App\Models\Guarantor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -80,7 +81,7 @@ class GuarantorController extends Controller
 				}
 			}
 
-			foreach (["with_contract" => "contract", "with_verbal_trial" => "contract.verbal_trial", "with_notification" => "notification"] as $key => $value) {
+			foreach (["with_contract" => "contract", "with_verbal_trial" => "contract.verbal_trial", "with_notification" => "notification", "with_notification_verbal_trial" => "notification.verbal_trial"] as $key => $value) {
 				if (isset($request[$key]) && $request[$key]) {
 					$guarantorList->with($value);
 				}
@@ -149,16 +150,17 @@ class GuarantorController extends Controller
 			$templateProcessor = new TemplateProcessor('../document_templates/Contracts/particular/contract_caution_particular.docx');
 
 			$data = $guarantor->toArray();
-			$data = array_merge($data, collect($guarantor->contract)->mapWithKeys(function ($value, $key) {
+			$parent = $guarantor->notification ? $guarantor->notification : $guarantor->contract;
+			$data = array_merge($data, collect($parent)->mapWithKeys(function ($value, $key) {
 				return ['contract.' . $key => $value];
 			})->all());
-			$data = array_merge($data, collect($guarantor->contract->verbal_trial)->mapWithKeys(function ($value, $key) {
+			$data = array_merge($data, collect($parent->verbal_trial)->mapWithKeys(function ($value, $key) {
 				return ['contract.verbal_trial.' . $key => $value];
 			})->all());
-			$data = array_merge($data, collect($guarantor->contract->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
+			$data = array_merge($data, collect($parent->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
 				return ['contract.verbal_trial.type_of_credit.' . $key => $value];
 			})->all());
-			$data = array_merge($data, collect($guarantor->contract->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
+			$data = array_merge($data, collect($parent->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
 				return ['contract.verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
 			})->all());
 
@@ -174,7 +176,10 @@ class GuarantorController extends Controller
 			$data["contract.verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["contract.verbal_trial.periodicity"]];
-			$data["line_review_bonus"] = (((float) $data["contract.verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      : 1% du capital restant dû après 18 mois";
+			
+			$data["line_review_bonus"] = (((float) $data["contract.verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne";
+			$data["line_review_bonus_value"] = (((float) $data["contract.verbal_trial.duration"]) < 13) ? "" : ": 1% du capital restant dû après 12 mois";
+
 			$data["signatory"] = (((float) $data["contract.verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 
 			$data["contract.verbal_trial.amount"] = number_format(((float) $data["contract.verbal_trial.amount"]), 0, ',', ' ');
@@ -184,7 +189,7 @@ class GuarantorController extends Controller
 			$data["contract.total_to_pay"] = number_format(((float) $data["contract.total_to_pay"]), 0, ',', ' ');
 
 			$guaranteeList = [];
-			foreach ($guarantor->contract->verbal_trial->guarantees as $guarantee) {
+			foreach ($parent->verbal_trial->guarantees as $guarantee) {
 				$guaranteeList[] = array_merge($guarantee->toArray(), collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
 					return ['type_of_guarantee.' . $key => $value];
 				})->all());
@@ -196,10 +201,20 @@ class GuarantorController extends Controller
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 
 			// Enregistrez les modifications dans un nouveau fichier
-			$outputFilePath = public_path("Contrat-caution-" . $guarantor->contract->verbal_trial->committee_id . ".docx");
-			$templateProcessor->saveAs($outputFilePath);
+			$bsaseName = "Contrat-caution-" . $parent->verbal_trial->committee_id;
+			$wordFilePath = public_path( $bsaseName . ".docx");
+			$templateProcessor->saveAs($wordFilePath);
+			$outputFilePdfFolderPath = public_path("generated/pdf");
 
-			return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]);
+			$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+			$output = [];
+			$returnVar = 0;
+			exec($command, $output, $returnVar);
+			// Vérification du succès
+			if ($returnVar === 0) {
+				File::delete($wordFilePath);
+				return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+			}
 		} else {
 			return $this->responseError(["id" => "La caution n'existe pas"], 404);
 		}
@@ -219,16 +234,17 @@ class GuarantorController extends Controller
 			$templateProcessor = new TemplateProcessor('../document_templates/Contracts/particular/billet_a_ordre_caution_particular.docx');
 
 			$data = $guarantor->toArray();
-			$data = array_merge($data, collect($guarantor->contract)->mapWithKeys(function ($value, $key) {
+			$parent = $guarantor->notification ? $guarantor->notification : $guarantor->contract;
+			$data = array_merge($data, collect($parent)->mapWithKeys(function ($value, $key) {
 				return ['contract.' . $key => $value];
 			})->all());
-			$data = array_merge($data, collect($guarantor->contract->verbal_trial)->mapWithKeys(function ($value, $key) {
+			$data = array_merge($data, collect($parent->verbal_trial)->mapWithKeys(function ($value, $key) {
 				return ['contract.verbal_trial.' . $key => $value];
 			})->all());
-			$data = array_merge($data, collect($guarantor->contract->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
+			$data = array_merge($data, collect($parent->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
 				return ['contract.verbal_trial.type_of_credit.' . $key => $value];
 			})->all());
-			$data = array_merge($data, collect($guarantor->contract->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
+			$data = array_merge($data, collect($parent->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
 				return ['contract.verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
 			})->all());
 
@@ -237,6 +253,7 @@ class GuarantorController extends Controller
 			$data["contract.verbal_trial.amount.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.amount"])->locale('fr')->toLetters();
 			$data["contract.total_amount_of_interest.fr"] = SpellNumber::value((float) $data["contract.total_amount_of_interest"])->locale('fr')->toLetters();
 			$data["contract.verbal_trial.duration.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.duration"])->locale('fr')->toLetters();
+			
 			$data["contract.due_amount.fr"] = SpellNumber::value((float) $data["contract.due_amount"])->locale('fr')->toLetters();
 			$data["contract.total_to_pay"] = (float) $data["contract.total_amount_of_interest"] + (float) $data["contract.verbal_trial.amount"];
 			$data["contract.total_to_pay.fr"] = SpellNumber::value((float) $data["contract.total_to_pay"])->locale('fr')->toLetters();
@@ -244,7 +261,7 @@ class GuarantorController extends Controller
 			$data["contract.verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["contract.verbal_trial.periodicity"]];
-			$data["line_review_bonus"] = (((float) $data["contract.verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne      : 1% du capital restant dû après 18 mois";
+			$data["line_review_bonus"] = (((float) $data["contract.verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne      : 1% du capital restant dû après 12 mois";
 			$data["signatory"] = (((float) $data["contract.verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 
 
@@ -258,11 +275,20 @@ class GuarantorController extends Controller
 			unset($data["contract.guarantors"]);
 			$templateProcessor->setValues($data);
 
-			// Enregistrez les modifications dans un nouveau fichier
-			$outputFilePath = public_path("Billet-a-ordre-caution-" . $guarantor->contract->verbal_trial->committee_id . ".docx");
-			$templateProcessor->saveAs($outputFilePath);
+			$bsaseName = "Billet-a-ordre-caution-" . $parent->verbal_trial->committee_id;
+			$wordFilePath = public_path( $bsaseName . ".docx");
+			$templateProcessor->saveAs($wordFilePath);
+			$outputFilePdfFolderPath = public_path("generated/pdf");
 
-			return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]);
+			$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+			$output = [];
+			$returnVar = 0;
+			exec($command, $output, $returnVar);
+			// Vérification du succès
+			if ($returnVar === 0) {
+				File::delete($wordFilePath);
+				return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+			}
 		} else {
 			return $this->responseError(["id" => ["La caution n'existe pas"]], 404);
 		}

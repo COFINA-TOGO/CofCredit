@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -245,7 +246,10 @@ class NotificationController extends Controller
 			$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
 			$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 			$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
-			$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne							  : 1% du capital restant dû après 18 mois";
+			
+			$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne";
+			$data["line_review_bonus_value"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : ": 1% du capital restant dû après 12 mois";
+
 			$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
 			$data["verbal_trial.administrative_fees_percentage"] = number_format(((float) $data["verbal_trial.administrative_fees_percentage"]), 0, ',', ' ');
 			//$data["verbal_trial.insurance_premium"] = number_format(((float) $data["verbal_trial.insurance_premium"]), 0, ',', ' ');
@@ -267,14 +271,20 @@ class NotificationController extends Controller
 			unset($data["guarantors"]);
 			$templateProcessor->setValues($data);
 
-			// Enregistrez les modifications dans un nouveau fichier
-			$outputFilePath = public_path("Contrat-" . $notification->verbal_trial->committee_id . ".docx");
-			$templateProcessor->saveAs($outputFilePath);
+			$bsaseName = "Contrat-" . $notification->verbal_trial->committee_id;
+			$wordFilePath = public_path( $bsaseName . ".docx");
+			$templateProcessor->saveAs($wordFilePath);
+			$outputFilePdfFolderPath = public_path("generated/pdf");
 
-			return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
-			// } else {
-			//	return $this->responseError(["auth" => [$authorisation->message()]], 403);
-			// }
+			$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+			$output = [];
+			$returnVar = 0;
+			exec($command, $output, $returnVar);
+			// Vérification du succès
+			if ($returnVar === 0) {
+				File::delete($wordFilePath);
+				return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+			}
 		} else {
 			return $this->responseError(["id" => "La notification n'existe pas"], 404);
 		}
@@ -311,7 +321,7 @@ class NotificationController extends Controller
 				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
 				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
 				$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
-				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 18) ? "" : "Prime de révision de ligne	 : 1% du capital restant dû après 18 mois";
+				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne	 : 1% du capital restant dû après 12 mois";
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "Carte d'identité nationale",
 					"passport" => "Passeport",
@@ -336,11 +346,20 @@ class NotificationController extends Controller
 				$templateProcessor->setValues($data);
 
 				// Enregistrez les modifications dans un nouveau fichier
-				$outputFilePath = public_path("Billet-a-ordre-" . $notification->verbal_trial->committee_id . ".docx");
-				$templateProcessor->saveAs($outputFilePath);
+				$bsaseName = "Billet-a-ordre-" . $notification->verbal_trial->committee_id;
+				$wordFilePath = public_path( $bsaseName . ".docx");
+				$templateProcessor->saveAs($wordFilePath);
+				$outputFilePdfFolderPath = public_path("generated/pdf");
 
-				// return response()->download($outputFilePath)->deleteFileAfterSend(true);
-				return Response::file($outputFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]);
+				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+				$output = [];
+				$returnVar = 0;
+				exec($command, $output, $returnVar);
+				// Vérification du succès
+				if ($returnVar === 0) {
+					File::delete($wordFilePath);
+					return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+				}
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
@@ -362,6 +381,7 @@ class NotificationController extends Controller
 	 * @bodyParam   representative_number_of_identity_document				int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   representative_date_of_issue_of_identity_document		int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   type													int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   due_amount											 	int			  	Le montant d'une échéance.											  Example: 250000
 	 *
 	 * @response 200
 	 */
@@ -380,12 +400,12 @@ class NotificationController extends Controller
 				'representative_number_of_identity_document' => 'required|min:2',
 				'representative_date_of_issue_of_identity_document' => 'required|date',
 				'type' => 'required|in:particular,company,individual_business',
+				'due_amount' => 'required|numeric',
 			]);
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
 			}
-
-			if ($requestData["type"] != "particual") {
+			if ($requestData["type"] != "particular") {
 				$validator = Validator::make($requestData, [
 					'business_denomination' => "required|min:2",
 				]);
@@ -395,7 +415,7 @@ class NotificationController extends Controller
 			}
 			$requestData["creator_id"] = $request->user()->id;
 			$requestData["sent"] = false;
-
+			
 			$relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
 			$notification = Notification::create($requestData);
 			$notification->load($relationList);
@@ -442,6 +462,8 @@ class NotificationController extends Controller
 	 * @bodyParam   representative_number_of_identity_document				int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   representative_date_of_issue_of_identity_document		int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   type													int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
+	 * @bodyParam   due_amount											 	int			  	Le montant d'une échéance.											  Example: 250000
+	 * 
 	 * @response 200
 	 *
 	 */
@@ -462,12 +484,13 @@ class NotificationController extends Controller
 					'representative_number_of_identity_document' => 'required|min:2',
 					'representative_date_of_issue_of_identity_document' => 'required|date',
 					'type' => 'required|in:particular,company,individual_business',
+					'due_amount' => 'required|numeric',
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
 				}
 
-				if ($requestData["type"] != "particual") {
+				if ($requestData["type"] != "particular") {
 					$validator = Validator::make($requestData, [
 						'business_denomination' => "required|min:2",
 					]);

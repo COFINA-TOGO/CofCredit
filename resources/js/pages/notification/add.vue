@@ -13,16 +13,17 @@ const router = useRouter()
 
 const notificationData = ref({
 	verbal_trial_id: null,
-	representative_phone_number: "+228 90 90 90 90",
-	representative_home_address: "Adewi",
-	number_of_due_dates: 15,
-	risk_premium_percentage: 0,
-	total_amount_of_interest: 1500000,
-	representative_type_of_identity_document: "passport",
-	representative_number_of_identity_document: "KJH-VCVG-FGH-HBJN",
-	representative_date_of_issue_of_identity_document: "2026-02-02",
-	type: "company",
-	business_denomination: "ETS Alberta",
+	representative_phone_number: null,
+	representative_home_address: null,
+	due_amount: null,
+	number_of_due_dates: null,
+	risk_premium_percentage: null,
+	total_amount_of_interest: null,
+	representative_type_of_identity_document: null,
+	representative_number_of_identity_document: null,
+	representative_date_of_issue_of_identity_document: null,
+	type: null,
+	business_denomination: null,
 })
 
 const getResetFormError = () => {
@@ -30,6 +31,7 @@ const getResetFormError = () => {
 		verbal_trial_id: "",
 		representative_phone_number: "",
 		representative_home_address: "",
+		due_amount: "",
 		number_of_due_dates: "",
 		risk_premium_percentage: "",
 		total_amount_of_interest: "",
@@ -70,6 +72,7 @@ const onSubmit = () => {
 				number_of_due_dates: notificationData.value.number_of_due_dates,
 				risk_premium_percentage: notificationData.value.risk_premium_percentage,
 				total_amount_of_interest: notificationData.value.total_amount_of_interest,
+				due_amount: notificationData.value.due_amount,
 				representative_type_of_identity_document: notificationData.value.representative_type_of_identity_document,
 				representative_number_of_identity_document: notificationData.value.representative_number_of_identity_document,
 				representative_date_of_issue_of_identity_document: notificationData.value.representative_date_of_issue_of_identity_document,
@@ -163,7 +166,11 @@ const documentTypeList = [
 										:error-messages="formError.number_of_due_dates" label="Nombre d'échéance"
 										placeholder="Ex: 4" :rules="[requiredValidator]" />
 								</VCol>
-
+								<VCol cols="12" md="4" lg="4">
+									<AppTextField v-model="notificatinData.due_amount" type="number"
+										:error-messages="formError.due_amount" label="Montant d'une échéance"
+										:rules="[requiredValidator]" />
+								</VCol>
 								<VCol cols="12" md="6" lg="4">
 									<AppTextField v-model="notificationData.total_amount_of_interest" type="number"
 										:error-messages="formError.total_amount_of_interest"

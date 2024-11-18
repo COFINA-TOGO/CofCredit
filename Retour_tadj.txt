@@ -1,0 +1,22 @@
+Je te prie de noter que la phase de formation des collègues sur l’utilisation de la plateforme d’édition automatisée des contrats a été effectué.
+
+ 
+
+Je te prie de bien vouloir faire les ajustements suivants pour permettre un déploiement effectif et à compter de la semaine prochaine :
+
+ 
+
+    Merci d’Integer tout le profil de l’ensemble des CAF (y compris les CAF de demain) pour leur permettre d’accéder à leurs contrats
+    Merci d’intégrer le profil de tous les analystes crédits pour leur permettre tous d’éditer désormais les PV sur la plateforme.
+
+    Sur le Contrat merci d’harmoniser les signataires des contrats pour que soit désormais que Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique et Monsieur Koffi Djramedo GAMADO, Head Crédit.
+    
+	Sur le PV merci d’ajouter un champ prime avec un taux fixe de 0.5% HT pour tous les dossiers sous seing privé.
+    Sur le PV, la prime de renouvellement de ligne se prélève à après 12 mois et non 13 comme actuellement indiqué.
+    
+	---Pour les contrats merci de revoir le format Word utilisé pour permettre une lecture après téléchargement.
+
+    ---Pour les contrats et les billets à ordre merci de convertir automatiquement en PDF la version téléchargeable par les CAFS.  
+ 
+
+Dernièrement une modification a été apporté à nos contrats par le département juridique avec l’insertion de deux nouveaux articles et la modification du taux de la pénalité de retard (merci de trouver en fichier joint le contrat actualisé avec en surbrillance vert les articles modifié et ajouté)

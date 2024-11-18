@@ -226,7 +226,7 @@ const apiDelete = async id => {
                 <div v-if="$can('download', 'guarantor')">
                   <!-- Télécharger billet à ordre non-signé -->
                   <VListItem
-                    @click="downloadFile(`/api/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.notification.verbal_trial.committee_id}.docx`);">
+                    @click="downloadFile(`/api/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.notification.verbal_trial.committee_id}.pdf`);">
 
                     <template #prepend>
                       <VIcon icon="tabler-download" />

@@ -74,6 +74,7 @@ const onSubmit = () => {
 				number_of_due_dates: notification.value.number_of_due_dates,
 				risk_premium_percentage: notification.value.risk_premium_percentage,
 				total_amount_of_interest: notification.value.total_amount_of_interest,
+				due_amount: notification.value.due_amount,
 				representative_type_of_identity_document: notification.value.representative_type_of_identity_document,
 				representative_number_of_identity_document: notification.value.representative_number_of_identity_document,
 				representative_date_of_issue_of_identity_document: notification.value.representative_date_of_issue_of_identity_document,
@@ -171,7 +172,11 @@ verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value
 										:error-messages="formError.number_of_due_dates" label="Nombre d'échéance"
 										placeholder="Ex: 4" :rules="[requiredValidator]" />
 								</VCol>
-
+								<VCol cols="12" md="4" lg="4">
+									<AppTextField v-model="notification.due_amount" type="number"
+										:error-messages="formError.due_amount" label="Montant d'une échéance"
+										:rules="[requiredValidator]" />
+								</VCol>
 								<VCol cols="12" md="6" lg="4">
 									<AppTextField v-model="notification.total_amount_of_interest" type="number"
 										:error-messages="formError.total_amount_of_interest"

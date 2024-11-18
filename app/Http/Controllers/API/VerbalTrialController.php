@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -232,8 +233,9 @@ class VerbalTrialController extends Controller
 			$data["created_at"] = Carbon::parse($verbalTrial->created_at)->format("d/m/Y");
 			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
 			$data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
-			$data["line_review_bonus"] = (((float) $data["duration"]) < 18) ? "" : "Prime de révision de ligne			: 1% du capital restant dû après 18 mois";
-
+			
+			$data["line_review_bonus"] = (((float) $data["duration"]) < 13) ? "" : "Prime de révision de ligne";
+			$data["line_review_bonus_value"] = (((float) $data["duration"]) < 13) ? "" : ": 1% du capital restant dû après 12 mois";
 
 			$guaranteeList = [];
 			foreach ($verbalTrial->guarantees as $guarantee) {
@@ -255,35 +257,21 @@ class VerbalTrialController extends Controller
 			// return $data;
 
 			// Enregistrez les modifications dans un nouveau fichier
-			$wordFilePath = public_path("PV-" . $verbalTrial->committee_id . ".docx");
+			$bsaseName = "PV-" . $verbalTrial->committee_id;
+			$wordFilePath = public_path( $bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
-			// $pdfDirectoryPath = public_path("/");
-			// $pdfFileName = public_path("PV-" . $verbalTrial->committee_id . ".pdf");
-			// $pdfFilePath = public_path("PV-" . $verbalTrial->committee_id . ".pdf");
-
-			// $command = "soffice --headless --convert-to pdf $wordFilePath";
-
-			// exec($command, $output);
-
-			// foreach ($output as $line) {
-			//     echo $line . "<br>";
-			// }
-
-			// // $this->wordToPdf($wordFilePath, $pdfFilePath);
-			// // exec("dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock");
-			// // $output = shell_exec('dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock');
-			// // exec("soffice --headless --convert-to pdf --outdir $pdfDirectoryPath $wordFilePath");
+			$outputFilePdfFolderPath = public_path("generated/pdf");
 
 
-			// \PhpOffice\PhpWord\Settings::setPdfRendererPath(base_path('vendor/dompdf/dompdf'));
-			// \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
-			// $Content = \PhpOffice\PhpWord\IOFactory::load($wordFilePath);
-			// $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'PDF');
-			// $PDFWriter->save($pdfFilePath);
-
-			// if (file_exists($wordFilePath)) {
-			//     unlink($wordFilePath);
-			// }
+			$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+			$output = [];
+			$returnVar = 0;
+			exec($command, $output, $returnVar);
+			// Vérification du succès
+			if ($returnVar === 0) {
+				File::delete($wordFilePath);
+				return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+			}
 
 			// return response()->download($pdfFilePath)->deleteFileAfterSend();
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);

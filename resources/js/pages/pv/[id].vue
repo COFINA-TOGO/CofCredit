@@ -56,7 +56,7 @@ const tableData = [
 ]
 
 if (verbalTrial.value.duration > 13) {
-  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 18 mois" })
+  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 12 mois" })
 }
 
 verbalTrial.value.guarantees.forEach(guarantee => {
