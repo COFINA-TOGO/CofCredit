@@ -257,7 +257,7 @@ class VerbalTrialController extends Controller
 			// return $data;
 
 			// Enregistrez les modifications dans un nouveau fichier
-			$bsaseName = "PV-" . $verbalTrial->committee_id;
+			$bsaseName = "generated/docx/PV-" . $verbalTrial->committee_id;
 			$wordFilePath = public_path( $bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			$outputFilePdfFolderPath = public_path("generated/pdf");
