@@ -124,6 +124,7 @@ class UserController extends Controller
 	 * @bodyParam   name                        string  required    Le username de l'utilsateur.                Example: mawena
 	 * @bodyParam   full_name                   string  required    Le nom complet de l'utilisateur.            Example: Charles GAMLIGO
 	 * @bodyParam   profile                     string  required    Le profil de l'utilisateur.                 Example: admin
+	 * @bodyParam   email                       string  required    L'email de l'utilisateur.                   Example: gamligocharles@gmail.com
 	 * @bodyParam   activated                   int     required    Le statut d'activation de l'utilisateur     Example: 1
 	 * @bodyParam   password                    string  required    Le mot de passe de l'utilisateur.           Example: password
 	 * @bodyParam   password_change_required    int     required    Le statut d'activation de l'utilisateur     Example: 1
