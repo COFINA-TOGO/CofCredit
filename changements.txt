@@ -1,0 +1,52 @@
+    1-Absence de prime de risque sur les PV : Les analystes n’ont pas la possibilité de renseigner la prime de risque sur les PV. Pour pallier à cela, nous souhaitons que le champs prime de risque qu’on renseigne en faisant les contrats soit déplacé sur le PV, de sorte que les analystes puissent la renseigner en faisant le PV. En conséquence, la prime de risque va apparaitre à la fois sur le PV et dans contrat.
+
+ 
+
+    2-Absence de différé sur les PV et contrat : Dans un dossier validé sur 4 mois pour une échéance de 100 000 par mois par exemple, on peut accorder la possibilité au client de payer 50 000 les trois 1er mois et 250 000 le dernier mois. Il s’agit là d’un différé. Nous souhaitons que les analystes puissent avoir un champs ‘’différé’’, de sorte que lorsqu’il y a différé, le nombre de mois de différé sera renseigné sur le PV pour que ça impacte également le contrat. Un modèle de contrat avec différé est joint.
+
+ 
+
+    3-Présentation des parties: En début des contrats au niveau de la présentation de l’institution COFINA, il y a toujours le nom de DEX qui apparait. Il va falloir le changer. Les personnes qui signent en fin de contrat c’est leur nom qui doivent apparaitre là-bas.
+[Done]
+	
+
+    4-Prime de révision de ligne : La prime de révision de ligne doit figurer uniquement sur les contrats dont la durée est supérieure ou égale à 18 mois. Sur les contrats générés par l’application actuellement, on les voit même sur les contrats de 15 mois. Nous proposons deux solutions à ce niveau. Soit il faut faire en sorte que la prime de risque apparait sur les contrats uniquement quand la durée du contrat est égale ou supérieure à 18 mois, soit rendre ce champ manuel au niveau du PV de sorte que l’on le renseigne s’il y a prime de révision de ligne ou mettre zéro s’il Il n’y en a pas.
+
+ 
+
+    5-Revoir l’entête du contrat de cautionnement : Actuellement on peut lire CONTRAT DE. Il faut plutôt mettre CONTRAT DE ‘’CAUTIONNEMENT’’.
+[Done]
+ 
+
+    6-Incohérence dans L’article 1er du contrat de cautionnement des clients Entreprise individuelle et société et au niveau des pieds de page : Lorsqu’il s’agit des ETS et Société, la personne cautionnée c’est l’entreprise et non son représentant comme ça se présente dans les contrats de cautionnement générés. Nous avons cette erreur qui se répète également sur les billets à ordre et en pied de page des contrats de cautionnement.
+[Done]
+ 
+
+Ex : Monsieur DIOP est le responsable des ETS ABALO ou ABALO SARL U. Lorsqu’on veut parler de la personne cautionnée, ce ne n’est pas Monsieur MAR, mais plutôt ETS ABALO ou ABALO SARL U. En conséquence, le nom qui doit apparaitre dans l’article 1er comme personne cautionnée, c’est le nom des ETS ABALO ou ABALO SARU. C’est ce nom qui doit apparaitre également en pied de page du contrat, et sur le billet à ordre également.
+
+Lorsqu’il s’agit d’un client particulier, le problème ne se pose pas. Un modèle de contrat de cautionnement est joint.
+
+ 
+
+    7-Les noms sur les billets à ordre. Sur les billets à ordre, on a une virgule qui sépare le nom et les prénoms. Nous souhaitons que les noms et prénoms soient plutôt séparés par un espace et non une virgule.
+[Done]
+ 
+
+    8-Intégration d’un système d’alerte : Nous souhaitons que soit intégré, un système d’alerte, pour permettre à chaque intervenant de savoir qu’il a un dossier en attente dans sa corbeille, surtout pour les Crédits Officers qui doivent valider les PV. A défaut, nous devons faire des relances physiques ou téléphoniques à chaque fois et cela peut parfois constituer un élément de blocage ou de retard dans le traitement des dossiers.
+
+ 
+
+    9-Profils CAFs de demains : Nous souhaitons qu’un profil soit créé aux CAFs de demains, afin qu’ils puissent avoir directement accès à leurs contrats sans passer par leur superviseur, ce qui pourrait constituer un élément de blocage. La liste des CAFs de demain est jointe.
+
+ 
+
+    10-Impossibilité de modification du PV : Au jours d’aujourd’hui, les analystes peuvent toujours modifier le PV même si ce dernier est validé et le contrat généré. Nous souhaitons que le PV ne soit plus modifiable une fois validé et le contrat généré.
+
+ 
+
+    11-Les analyses souhaiteraient avoir uniquement accès au PV qui les concernent. Autrement dit, SANDRA ne pourra voir que les PV qu’il a fait, et JOSIAS ne peut voir que ses PV ainsi de suite. Les administrateurs par contre auront accès à tous les PV.
+[Done]
+
+ 
+
+    12-Parmi les documents générés dans le système il manque la mention manuscrite à recopier par le client sur le contrat de cautionnement. Modèle joint.

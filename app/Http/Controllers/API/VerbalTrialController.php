@@ -95,8 +95,7 @@ class VerbalTrialController extends Controller
 							->orWhere('administrative_fees_percentage', 'LIKE', "%$search%")
 							->orWhere('reserve', 'LIKE', "%$search%")
 							->orWhere(DB::raw("CONCAT(applicant_first_name, ' ', applicant_last_name)"), 'LIKE', "%$search%");
-					});
-				;
+					});;
 			}
 
 			foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "caf_id", "credit_admin_id", "credit_analyst_di", "creator_id"] as $filter) {
@@ -146,7 +145,6 @@ class VerbalTrialController extends Controller
 				}
 			}
 
-			// dd($request["with_credit_admin"]);
 			foreach (["with_type_of_credit" => "type_of_credit", "with_type_of_applicant" => "type_of_credit.type_of_applicant", "with_guarantees" => "guarantees", "with_type_of_guarantees" => "guarantees.type_of_guarantee", "with_contract" => "contract", "with_caf" => "caf", "with_credit_admin" => "credit_admin", "with_credit_analyst" => "credit_analyst", "with_creator" => "creator"] as $key => $value) {
 				if (isset($request[$key]) && $request[$key]) {
 					$verbalTrialList->with($value);
@@ -155,6 +153,9 @@ class VerbalTrialController extends Controller
 
 			if ($currentUser->profile == "credit_admin") {
 				$verbalTrialList->where('credit_admin_id', $currentUser->id);
+			}
+			if ($currentUser->profile == "credit_analyst") {
+				$verbalTrialList->where('credit_analyst_id', $currentUser->id);
 			}
 
 			if (isset($request["paginate"]) && ($request->paginate == false)) {
@@ -233,7 +234,7 @@ class VerbalTrialController extends Controller
 			$data["created_at"] = Carbon::parse($verbalTrial->created_at)->format("d/m/Y");
 			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
 			$data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
-			
+
 			$data["line_review_bonus"] = (((float) $data["duration"]) < 13) ? "" : "Prime de révision de ligne";
 			$data["line_review_bonus_value"] = (((float) $data["duration"]) < 13) ? "" : ": 1% du capital restant dû après 12 mois";
 
@@ -258,7 +259,7 @@ class VerbalTrialController extends Controller
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "PV-" . $verbalTrial->committee_id;
-			$wordFilePath = public_path( "generated/docx/".$bsaseName . ".docx");
+			$wordFilePath = public_path("generated/docx/" . $bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			$outputFilePdfFolderPath = public_path("generated/pdf");
 
@@ -409,7 +410,8 @@ class VerbalTrialController extends Controller
 	/**
 	 * Mettre à jour un procès verbal
 	 *
-	 * @urlParam id required L'ID du procès verbal. Example: 1
+	 * @urlParam id required L'ID du procès verbal. Example: 1			return Response::deny("Vous n'êtes plus autorisé à effectuer cette action");
+
 	 *
 	 * @bodyParam   committee_id                        string          L'ID comitée venant de créditFlow                       Example: CFNTG-044-13-12-23-01212
 	 * @bodyParam   committee_date                      string          La date du comitée                                      Example: 2024-02-09

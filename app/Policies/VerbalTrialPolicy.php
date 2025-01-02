@@ -35,7 +35,22 @@ class VerbalTrialPolicy
 
 	public function update(User $connectedUser, VerbalTrial $verbalTrial)
 	{
-		return $this->check(["update"], "pv", $connectedUser) ? (($verbalTrial->status == "validated") ? Response::deny("vous n'etes plus autorisé à modifier ce pv") : Response::allow()) : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		$checkFunction = [
+			"waiting" => function ($connectedUser, $verbalTrial) {
+				return $verbalTrial->validation_level == "credit_admin";
+			},
+			"rejected" => function ($connectedUser, $verbalTrial) {
+				return true;
+			},
+			"validated" => function ($connectedUser, $verbalTrial) {
+				return false;
+			},
+		];
+		if ($this->check(["update"], "pv", $connectedUser)) {
+			return $checkFunction[$verbalTrial->status]($connectedUser, $verbalTrial) ? Response::allow() : Response::deny("vous n'etes pas autorisé à modifier ce pv");
+		} else {
+			return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		}
 	}
 	public function change_status(User $connectedUser, VerbalTrial $verbalTrial)
 	{
