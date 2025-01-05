@@ -1,5 +1,5 @@
     1-Absence de prime de risque sur les PV : Les analystes n’ont pas la possibilité de renseigner la prime de risque sur les PV. Pour pallier à cela, nous souhaitons que le champs prime de risque qu’on renseigne en faisant les contrats soit déplacé sur le PV, de sorte que les analystes puissent la renseigner en faisant le PV. En conséquence, la prime de risque va apparaitre à la fois sur le PV et dans contrat.
-
+[Done]
  
 
     2-Absence de différé sur les PV et contrat : Dans un dossier validé sur 4 mois pour une échéance de 100 000 par mois par exemple, on peut accorder la possibilité au client de payer 50 000 les trois 1er mois et 250 000 le dernier mois. Il s’agit là d’un différé. Nous souhaitons que les analystes puissent avoir un champs ‘’différé’’, de sorte que lorsqu’il y a différé, le nombre de mois de différé sera renseigné sur le PV pour que ça impacte également le contrat. Un modèle de contrat avec différé est joint.
@@ -46,7 +46,7 @@ Lorsqu’il s’agit d’un client particulier, le problème ne se pose pas. Un 
  
 
     11-Les analyses souhaiteraient avoir uniquement accès au PV qui les concernent. Autrement dit, SANDRA ne pourra voir que les PV qu’il a fait, et JOSIAS ne peut voir que ses PV ainsi de suite. Les administrateurs par contre auront accès à tous les PV.
-[Done]
+[Done] 
 
  
 

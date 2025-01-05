@@ -33,39 +33,38 @@ class ContractController extends Controller
 	/**
 	 * Affiche les contrats
 	 *
-	 * @queryParam  verbal_trial_id										 int				 Filtrer par ID du PV.												   No-example
-	 * @queryParam  representative_birth_date							   string			  Filtrer par date de naissance du demandeur.							 No-example
-	 * @queryParam  representative_birth_place							  string			  Filtrer par lieu de naissance du demandeur.							 No-example
-	 * @queryParam  representative_nationality							  string			  Filtrer par nationalité du demandeur.								   No-example
-	 * @queryParam  represenstative_home_address							string			  Filtrer par addresse du domicile du demandeur.						  No-example
-	 * @queryParam  representative_type_of_identity_document				string			  Filtrer par type de la pièce d'identité du demandeur.				   No-example
-	 * @queryParam  representative_number_of_identity_document			  string			  Filtrer par numéro de la pièce d'identité du demandeur.				 No-example
-	 * @queryParam  representative_date_of_issue_of_identity_document	   string			  Filtrer par date de délivrance de la pièce d'identité du demandeur.	 No-example
-	 * @queryParam  representative_phone_number							 string			  Filtrer par numéro de téléphone du demandeur.						   No-example
-	 * @queryParam  risk_premium_percentage								 int				 Filtrer par prime de risque (en pourcentage) du crédit du demandeur.	No-example
-	 * @queryParam  total_amount_of_interest								int				 Filtrer par montant total des intérêts du crédit du demandeur.		  No-example
-	 * @queryParam  number_of_due_dates									 int				 Filtrer par nombre d'échéance.										  No-example
-	 * @queryParam  type													string			  Filtrer par type de contract.										   No-example
-	 * @queryParam  has_pledges											 int				 Filtrer par présence de gage											No-example
-	 * @queryParam  creator_id											  int				 Filtrer par ID du créateur											  No-example
-	 * @queryParam  has_upload_completed									int				 Filtrer par finalisation du dossier du contrat.						 Example: 0
-	 * @queryParam  has_cat												 int				 Filtrer par présence de cat.											Example: 0
-	 * @queryParam  status												  string			  Filtrer par statut du contrat										   Example: waiting
+	 * @queryParam  verbal_trial_id										 	int				Filtrer par ID du PV.													No-example
+	 * @queryParam  representative_birth_date							   	string			Filtrer par date de naissance du demandeur.							 	No-example
+	 * @queryParam  representative_birth_place							  	string			Filtrer par lieu de naissance du demandeur.							 	No-example
+	 * @queryParam  representative_nationality							  	string			Filtrer par nationalité du demandeur.								   	No-example
+	 * @queryParam  represenstative_home_address							string			Filtrer par addresse du domicile du demandeur.						  	No-example
+	 * @queryParam  representative_type_of_identity_document				string			Filtrer par type de la pièce d'identité du demandeur.				   	No-example
+	 * @queryParam  representative_number_of_identity_document			  	string			Filtrer par numéro de la pièce d'identité du demandeur.				 	No-example
+	 * @queryParam  representative_date_of_issue_of_identity_document	   	string			Filtrer par date de délivrance de la pièce d'identité du demandeur.	 	No-example
+	 * @queryParam  representative_phone_number							 	string			Filtrer par numéro de téléphone du demandeur.						   	No-example
+	 * @queryParam  total_amount_of_interest								int				Filtrer par montant total des intérêts du crédit du demandeur.		  	No-example
+	 * @queryParam  number_of_due_dates									 	int				Filtrer par nombre d'échéance.										  	No-example
+	 * @queryParam  type													string		 	Filtrer par type de contract.										   	No-example
+	 * @queryParam  has_pledges											 	int				Filtrer par présence de gage											No-example
+	 * @queryParam  creator_id											  	int				Filtrer par ID du créateur											  	No-example
+	 * @queryParam  has_upload_completed									int				Filtrer par finalisation du dossier du contrat.						 	Example: 0
+	 * @queryParam  has_cat												 	int				Filtrer par présence de cat.											Example: 0
+	 * @queryParam  status												  	string			Filtrer par statut du contrat										   	Example: waiting
 	 *
-	 * @queryParam  with_verbal_trial									   int				 Afficher le PV.														 Example: 0
-	 * @queryParam  with_verbal_trial_credit_admin						  int				 Afficher l'admin crédit du PV.										  Example: 0
-	 * @queryParam  with_verbal_trial_credit_analyst						int				 Afficher l'analyst crédit du PV.										Example: 0
-	 * @queryParam  with_type_of_credit									 int				 Afficher le type de crédit.											 Example: 0
-	 * @queryParam  with_type_of_applicant								  int				 Afficher le type de demandeur.										  Example: 0
-	 * @queryParam  with_caf												int				 Afficher le caf en charge du dossier.								   Example: 0
-	 * @queryParam  with_guarantees										 int				 Afficher les garanties.												 Example: 0
-	 * @queryParam  with_type_of_guarantees								 int				 Afficher les types des garanties.									   Example: 0
-	 * @queryParam  with_company											int				 Afficher les informations de la société								 Example: 0
-	 * @queryParam  with_individual_business								int				 Afficher les informations de l'entreprise individuelle				  Example: 0
-	 * @queryParam  with_type_of_guarantees								 int				 Afficher les types des garanties.									   Example: 0
-	 * @queryParam  with_creator											int				 Afficher le créateur du contrat.										Example: 0
-	 * @queryParam  with_pledges											int				 Afficher les gages.													 Example: 0
-	 * @queryParam  paginate												int				 Utiliser la pagination.												 Example: 0
+	 * @queryParam  with_verbal_trial									   	int				Afficher le PV.														 	Example: 0
+	 * @queryParam  with_verbal_trial_credit_admin						  	int				Afficher l'admin crédit du PV.										  	Example: 0
+	 * @queryParam  with_verbal_trial_credit_analyst						int				Afficher l'analyst crédit du PV.										Example: 0
+	 * @queryParam  with_type_of_credit									 	int				Afficher le type de crédit.											 	Example: 0
+	 * @queryParam  with_type_of_applicant								  	int				Afficher le type de demandeur.										  	Example: 0
+	 * @queryParam  with_caf												int				Afficher le caf en charge du dossier.								   	Example: 0
+	 * @queryParam  with_guarantees										 	int				Afficher les garanties.												 	Example: 0
+	 * @queryParam  with_type_of_guarantees								 	int				Afficher les types des garanties.									   	Example: 0
+	 * @queryParam  with_company											int				Afficher les informations de la société								 	Example: 0
+	 * @queryParam  with_individual_business								int				Afficher les informations de l'entreprise individuelle				  	Example: 0
+	 * @queryParam  with_type_of_guarantees								 	int				Afficher les types des garanties.									   	Example: 0
+	 * @queryParam  with_creator											int				Afficher le créateur du contrat.										Example: 0
+	 * @queryParam  with_pledges											int				Afficher les gages.													 	Example: 0
+	 * @queryParam  paginate												int				Utiliser la pagination.												 	Example: 0
 	 *
 	 * @response 200
 	 */
@@ -85,7 +84,6 @@ class ContractController extends Controller
 							->orWhere('representative_number_of_identity_document', 'LIKE', "%$search%")
 							->orWhere('representative_date_of_issue_of_identity_document', 'LIKE', "%$search%")
 							->orWhere('representative_phone_number', 'LIKE', "%$search%")
-							->orWhere('risk_premium_percentage', 'LIKE', "%$search%")
 							->orWhere('total_amount_of_interest', 'LIKE', "%$search%")
 							->orWhere('number_of_due_dates', 'LIKE', "%$search%")
 							->orWhere('type', 'LIKE', "%$search%")
@@ -106,7 +104,7 @@ class ContractController extends Controller
 				}
 			}
 
-			foreach (["verbal_trial_id", "representative_birth_date", "representative_birth_place", "representative_nationality", "representative_home_address", "representative_type_of_identity_document", "representative_number_of_identity_document", "representative_date_of_issue_of_identity_document", "representative_phone_number", "risk_premium_percentage", "total_amount_of_interest", "number_of_due_dates", "type", "has_pledges", "creator_id"] as $filter) {
+			foreach (["verbal_trial_id", "representative_birth_date", "representative_birth_place", "representative_nationality", "representative_home_address", "representative_type_of_identity_document", "representative_number_of_identity_document", "representative_date_of_issue_of_identity_document", "representative_phone_number", "total_amount_of_interest", "number_of_due_dates", "type", "has_pledges", "creator_id"] as $filter) {
 				if (isset($request[$filter]) && $request[$filter]) {
 					$contractList->where($filter, $request[$filter]);
 				}
@@ -156,8 +154,6 @@ class ContractController extends Controller
 					});
 				}
 			}
-			// return $contractList->toSql();
-
 
 			if (isset($request["paginate"]) && ($request->paginate == false)) {
 				$contractList = $contractList->orderByDesc('updated_at')->get();
@@ -267,8 +263,8 @@ class ContractController extends Controller
 				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
 
-				$data["line_risk_premium_percentage"] = (((float) $data["risk_premium_percentage"]) == 0) ? "" : "Prime de risque (" . $data["risk_premium_percentage"] . " %)";
-				$data["line_risk_premium_percentage_value"] = (((float) $data["risk_premium_percentage"]) == 0) ? "" : ": " . number_format($data["risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
+				$data["line_risk_premium_percentage"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "" : "Prime de risque (" . $data["verbal_trial.risk_premium_percentage"] . " %)";
+				$data["line_risk_premium_percentage_value"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "" : ": " . number_format($data["verbal_trial.risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
 
 				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne";
 				$data["line_review_bonus_value"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : ": 1% du capital restant dû après 12 mois";
@@ -522,7 +518,6 @@ class ContractController extends Controller
 				'representative_number_of_identity_document' => 'required|min:2',
 				'representative_date_of_issue_of_identity_document' => 'required|date',
 				'representative_phone_number' => 'required|min:2',
-				'risk_premium_percentage' => 'required|numeric',
 				'total_amount_of_interest' => 'required|numeric',
 				'number_of_due_dates' => 'required|numeric',
 				'type' => 'required|in:particular,company,individual_business',
@@ -678,7 +673,6 @@ class ContractController extends Controller
 					'representative_number_of_identity_document' => 'required|min:2',
 					'representative_date_of_issue_of_identity_document' => 'required|date',
 					'representative_phone_number' => 'required|min:2',
-					'risk_premium_percentage' => 'required|numeric',
 					'total_amount_of_interest' => 'required|numeric',
 					'number_of_due_dates' => 'required|numeric',
 					'type' => 'required|in:particular,company,individual_business',

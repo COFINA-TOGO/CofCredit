@@ -92,6 +92,7 @@ const getEmptyError = () => {
 		reserve: "",
 		entity_name: "",
 		release_type: "",
+		risk_premium_percentage: "",
 	}
 }
 
@@ -140,6 +141,7 @@ const onSubmit = () => {
 					reserve: verbalTrial.value.reserve,
 					entity_name: verbalTrial.value.entity_name,
 					release_type: verbalTrial.value.release_type,
+					risk_premium_percentage: verbalTrial.value.risk_premium_percentage,
 				},
 			})
 
@@ -357,6 +359,19 @@ if ((verbalTrial.value.applicant_first_name + " " + verbalTrial.value.applicant_
 											<template #append>
 												<VTextField v-model="verbalTrial.tax_fee_interest_rate"
 													:error-messages="verbalTrialError.tax_fee_interest_rate"
+													type="number" style="width:120px" density="compact" hide-details
+													variant="outlined" suffix="%" />
+											</template>
+										</VSlider>
+									</VCol>
+									<VCol cols="12">
+										<VSlider v-model="verbalTrial.risk_premium_percentage"
+											label="Prime de risque (en pourcentage) du demandeur"
+											:error-messages="verbalTrialError.risk_premium_percentage" :thumb-size="15"
+											thumb-label="always" step="0.01">
+											<template #append>
+												<VTextField v-model="verbalTrial.risk_premium_percentage"
+													:error-messages="verbalTrialError.risk_premium_percentage"
 													type="number" style="width:120px" density="compact" hide-details
 													variant="outlined" suffix="%" />
 											</template>

@@ -56,6 +56,7 @@ class VerbalTrialController extends Controller
 	 * @queryParam  has_mortgage                                            int                 Filtrer par présence d'hypothèque                                       No-example
 	 * @queryParam  status                                                  string              Filtrer par statut du pv                                                No-example
 	 * @queryParam  entity_name                                             string              Filtrer par nom de l'entité                                             No-example
+	 * @queryParam  risk_premium_percentage								 	int					Filtrer par prime de risque (en pourcentage) du crédit du demandeur.	No-example
 	 *
 	 * @queryParam  with_type_of_credit                                     int                 Afficher le type de crédit.                                             Example: 0
 	 * @queryParam  with_type_of_applicant                                  int                 Afficher le type de demandeur du type de crédit.                        Example: 1
@@ -98,7 +99,7 @@ class VerbalTrialController extends Controller
 					});;
 			}
 
-			foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "caf_id", "credit_admin_id", "credit_analyst_di", "creator_id"] as $filter) {
+			foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "caf_id", "credit_admin_id", "credit_analyst_di", "creator_id", "risk_premium_percentage"] as $filter) {
 				if (isset($request[$filter]) && $request[$filter] != "") {
 					$verbalTrialList->where($filter, $request[$filter]);
 				}
@@ -268,14 +269,12 @@ class VerbalTrialController extends Controller
 			$output = [];
 			$returnVar = 0;
 			exec($command, $output, $returnVar);
-			// Vérification du succès
 			if ($returnVar === 0) {
 				File::delete($wordFilePath);
-				return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+				return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])
+					->deleteFileAfterSend(true)
+				;
 			}
-
-			// return response()->download($pdfFilePath)->deleteFileAfterSend();
-			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 		} else {
 			return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
 		}
@@ -284,27 +283,28 @@ class VerbalTrialController extends Controller
 	/**
 	 * Créer un nouveau procès verbal
 	 *
-	 * @bodyParam   committee_id                        string          L'ID comitée venant de créditFlow                       Example: CFNTG-044-13-12-23-01212
-	 * @bodyParam   committee_date                      string          La date du comitée                                      Example: 2024-02-09
-	 * @bodyParam   civility                            string          La Civilité                                             Example: Mr
-	 * @bodyParam   applicant_first_name                string          Le prénom du demandeur                                  Example: Cesar
-	 * @bodyParam   applicant_last_name                 string          Le nom du demandeur                                     Example: Endure
-	 * @bodyParam   account_number                      string          Le numéro de compte                                     Example: 012345678901
-	 * @bodyParam   activity                            string          L'activé                                                Example: Homme d'affaire
-	 * @bodyParam   purpose_of_financing                string          L'objet du financement                                  Example: Achat nouveau locaux
-	 * @bodyParam   type_of_credit_id                   int             L'ID du type de credit                                  Example: 1
-	 * @bodyParam   amount                              float           Le montant                                              Example: 10000000
-	 * @bodyParam   duration                            int             La durée en mois                                        Example: 12
-	 * @bodyParam   periodicity                         string          La periodicité                                          Example: mensual
-	 * @bodyParam   taf                                 float           La TAF(%)                                               Example: 10
-	 * @bodyParam   administrative_fees_percentage      float           Les frais de dossier(%)                                 Example: 2.5
-	 * @bodyParam   tax_fee_interest_rate               float           Le taux d'intérêt hors taxe(%)                          Example: 10
-	 * @bodyParam   caf_id                              int             L'ID du CAF                                             Example: 4
-	 * @bodyParam   credit_admin_id                     int             L'ID de l'admin credit                                  Example: 4
-	 * @bodyParam   credit_analyst_id                   int             L'ID de l'analyste credit                               Example: 4
-	 * @bodyParam   reserve                             string          La reserve de l'analyste credit                         Example: RAS
-	 * @bodyParam   entity_name                         string          Le nom de l'entité                                      Example: ETS Cling
-	 * @bodyParam   release_type                        string          Le type de deblocage                                    Example: progressive
+	 * @bodyParam   committee_id                        string          L'ID comitée venant de créditFlow                       				Example: CFNTG-044-13-12-23-01212
+	 * @bodyParam   committee_date                      string          La date du comitée                                      				Example: 2024-02-09
+	 * @bodyParam   civility                            string          La Civilité                                             				Example: Mr
+	 * @bodyParam   applicant_first_name                string          Le prénom du demandeur                                  				Example: Cesar
+	 * @bodyParam   applicant_last_name                 string          Le nom du demandeur                                     				Example: Endure
+	 * @bodyParam   account_number                      string          Le numéro de compte                                     				Example: 012345678901
+	 * @bodyParam   activity                            string          L'activé                                                				Example: Homme d'affaire
+	 * @bodyParam   purpose_of_financing                string          L'objet du financement                                  				Example: Achat nouveau locaux
+	 * @bodyParam   type_of_credit_id                   int             L'ID du type de credit                                  				Example: 1
+	 * @bodyParam   amount                              float           Le montant                                              				Example: 10000000
+	 * @bodyParam   duration                            int             La durée en mois                                        				Example: 12
+	 * @bodyParam   periodicity                         string          La periodicité                                          				Example: mensual
+	 * @bodyParam   taf                                 float           La TAF(%)                                               				Example: 10
+	 * @bodyParam   administrative_fees_percentage      float           Les frais de dossier(%)                                 				Example: 2.5
+	 * @bodyParam   tax_fee_interest_rate               float           Le taux d'intérêt hors taxe(%)                          				Example: 10
+	 * @bodyParam   caf_id                              int             L'ID du CAF                                             				Example: 4
+	 * @bodyParam   credit_admin_id                     int             L'ID de l'admin credit                                  				Example: 4
+	 * @bodyParam   credit_analyst_id                   int             L'ID de l'analyste credit                               				Example: 4
+	 * @bodyParam   reserve                             string          La reserve de l'analyste credit                         				Example: RAS
+	 * @bodyParam   entity_name                         string          Le nom de l'entité                                      				Example: ETS Cling
+	 * @bodyParam   release_type                        string          Le type de deblocage                                    				Example: progressive
+	 * @bodyParam   risk_premium_percentage				int				La prime de risque (en pourcentage) du crédit du demandeur.				Example: 2
 	 *
 	 * @response 200
 	 */
@@ -335,6 +335,7 @@ class VerbalTrialController extends Controller
 				"guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id",
 				"guarantees.*.comment" => "required|min:2",
 				"release_type" => "required|in:non-progressive,progressive",
+				'risk_premium_percentage' => 'required|numeric',
 			]);
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
@@ -410,30 +411,30 @@ class VerbalTrialController extends Controller
 	/**
 	 * Mettre à jour un procès verbal
 	 *
-	 * @urlParam id required L'ID du procès verbal. Example: 1			return Response::deny("Vous n'êtes plus autorisé à effectuer cette action");
-
+	 * @urlParam 	id 									int 			L'ID du procès verbal. 													Example: 1
 	 *
-	 * @bodyParam   committee_id                        string          L'ID comitée venant de créditFlow                       Example: CFNTG-044-13-12-23-01212
-	 * @bodyParam   committee_date                      string          La date du comitée                                      Example: 2024-02-09
-	 * @bodyParam   civility                            string          La Civilité                                             Example: Mr
-	 * @bodyParam   applicant_first_name                string          Le prénom du demandeur                                  Example: Cesar
-	 * @bodyParam   applicant_last_name                 string          Le nom du demandeur                                     Example: Endure
-	 * @bodyParam   account_number                      string          Le numéro de compte                                     Example: 012345678901
-	 * @bodyParam   activity                            string          L'activé                                                Example: Homme d'affaire
-	 * @bodyParam   purpose_of_financing                string          L'objet du financement                                  Example: Achat nouveau locaux
-	 * @bodyParam   type_of_credit_id                   int             L'ID du type de credit                                  Example: 1
-	 * @bodyParam   amount                              float           Le montant                                              Example: 10000000
-	 * @bodyParam   duration                            int             La durée en mois                                        Example: 12
-	 * @bodyParam   periodicity                         string          La periodicité                                          Example: mensual
-	 * @bodyParam   taf                                 float           La TAF(%)                                               Example: 10
-	 * @bodyParam   administrative_fees_percentage      float           Les frais de dossier(%)                                 Example: 2.5
-	 * @bodyParam   tax_fee_interest_rate               float           Le taux d'intérêt hors taxe(%)                          Example: 10
-	 * @bodyParam   caf_id                              int             L'ID du CAF                                             Example: 4
-	 * @bodyParam   credit_admin_id                     int             L'ID de l'admin credit                                  Example: 4
-	 * @bodyParam   credit_analyst_id                   int             L'ID de l'analyste credit                               Example: 4
-	 * @bodyParam   reserve                             string          La reserve de l'analyste credit                         Example: RAS
-	 * @bodyParam   entity_name                         string          Le nom de l'entité                                      Example: ETS Cling
-	 * @bodyParam   release_type                        string          Le type de deblocage                                    Example: progressive
+	 * @bodyParam   committee_id                        string          L'ID comitée venant de créditFlow                       				Example: CFNTG-044-13-12-23-01212
+	 * @bodyParam   committee_date                      string          La date du comitée                                      				Example: 2024-02-09
+	 * @bodyParam   civility                            string          La Civilité                                             				Example: Mr
+	 * @bodyParam   applicant_first_name                string          Le prénom du demandeur                                  				Example: Cesar
+	 * @bodyParam   applicant_last_name                 string          Le nom du demandeur                                     				Example: Endure
+	 * @bodyParam   account_number                      string          Le numéro de compte                                     				Example: 012345678901
+	 * @bodyParam   activity                            string          L'activé                                                				Example: Homme d'affaire
+	 * @bodyParam   purpose_of_financing                string          L'objet du financement                                  				Example: Achat nouveau locaux
+	 * @bodyParam   type_of_credit_id                   int             L'ID du type de credit                                  				Example: 1
+	 * @bodyParam   amount                              float           Le montant                                              				Example: 10000000
+	 * @bodyParam   duration                            int             La durée en mois                                        				Example: 12
+	 * @bodyParam   periodicity                         string          La periodicité                                          				Example: mensual
+	 * @bodyParam   taf                                 float           La TAF(%)                                               				Example: 10
+	 * @bodyParam   administrative_fees_percentage      float           Les frais de dossier(%)                                 				Example: 2.5
+	 * @bodyParam   tax_fee_interest_rate               float           Le taux d'intérêt hors taxe(%)                          				Example: 10
+	 * @bodyParam   caf_id                              int             L'ID du CAF                                             				Example: 4
+	 * @bodyParam   credit_admin_id                     int             L'ID de l'admin credit                                  				Example: 4
+	 * @bodyParam   credit_analyst_id                   int             L'ID de l'analyste credit                               				Example: 4
+	 * @bodyParam   reserve                             string          La reserve de l'analyste credit                         				Example: RAS
+	 * @bodyParam   entity_name                         string          Le nom de l'entité                                      				Example: ETS Cling
+	 * @bodyParam   release_type                        string          Le type de deblocage                                    				Example: progressive
+	 * @bodyParam   risk_premium_percentage				int				La prime de risque (en pourcentage) du crédit du demandeur.				Example: 2
 	 *
 	 * @response 200
 	 *
@@ -467,6 +468,7 @@ class VerbalTrialController extends Controller
 					"guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id",
 					"guarantees.*.comment" => "required|min:2",
 					"release_type" => "required|in:non-progressive,progressive",
+					'risk_premium_percentage' => 'required|numeric',
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);

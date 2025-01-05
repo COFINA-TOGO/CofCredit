@@ -246,6 +246,8 @@ export default [
 	{
 		title: 'Checking post-deblocage'
 	},
+
+	{ heading: 'Paramétrage' },
 	{
 		icon: { icon: 'tabler-user' },
 		title: 'Utilisateurs',

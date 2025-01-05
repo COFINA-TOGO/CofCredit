@@ -41,6 +41,7 @@ class VerbalTrial extends Model
 		'reserve',
 		'entity_name',
 		'release_type',
+		'risk_premium_percentage',
 	];
 
 	protected $appends = ["applicant_full_name", "label", "amount_fr"];
