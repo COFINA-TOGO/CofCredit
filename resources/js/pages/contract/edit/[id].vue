@@ -246,7 +246,7 @@ if (contract.value.individual_business == null) {
 								</VCol>
 							</VRow>
 							<VRow>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="6">
 									<AppAutocomplete
 										v-model="contract.verbal_trial_id"
 										:items="verbalTrialList"
@@ -257,7 +257,7 @@ if (contract.value.individual_business == null) {
 										item-value="id"
 									/>
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="6">
 									<AppTextField
 										v-model="contract.total_amount_of_interest"
 										type="number"
@@ -268,7 +268,7 @@ if (contract.value.individual_business == null) {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="12" md="4" lg="4">
+								<VCol cols="12" md="6" lg="6">
 									<AppTextField
 										v-model="contract.number_of_due_dates"
 										type="number"
@@ -277,7 +277,7 @@ if (contract.value.individual_business == null) {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="12" md="4" lg="5">
+								<VCol cols="12" md="6" lg="6">
 									<AppTextField
 										v-model="contract.due_amount"
 										type="number"
@@ -286,7 +286,7 @@ if (contract.value.individual_business == null) {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="12" md="4" lg="5">
+								<VCol cols="12" md="6" lg="6">
 									<AppSelect
 										v-model="contract.type"
 										:items="typeList"
@@ -295,17 +295,16 @@ if (contract.value.individual_business == null) {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="2">
-									<br />
-									<VCheckbox
-										v-model="contract.has_pledges"
-										:true-value="'1'"
-										:false-value="'0'"
-										:label="hasPledgesLabel[contract.has_pledges]"
+								<VCol cols="10" md="6" lg="6">
+									<AppSelect
+										v-model="contractData.has_pledges"
+										:items="[
+											{ value: '0', title: 'Sans gage' },
+											{ value: '1', title: 'Avec gage' },
+										]"
 										:error-messages="errorData.has_pledges"
-										true-icon="tabler-check"
-										false-icon="tabler-circle-x"
-										color="success"
+										label="Gage"
+										:rules="[requiredValidator]"
 									/>
 								</VCol>
 							</VRow>

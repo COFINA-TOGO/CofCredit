@@ -36,6 +36,7 @@ const pvData = ref({
 	entity_name: "Batman",
 	release_type: "progressive",
 	risk_premium_percentage: 0.5,
+	has_line_review_bonus: false,
 	guarantees: [
 		{
 			type_of_guarantee_id: 1,
@@ -68,6 +69,7 @@ const getResetPvError = () => {
 		entity_name: "",
 		release_type: "",
 		risk_premium_percentage: "",
+		has_line_review_bonus: "",
 	};
 };
 
@@ -159,6 +161,7 @@ const onSubmit = () => {
 					release_type: pvData.value.release_type,
 					entity_name: pvData.value.entity_name,
 					risk_premium_percentage: pvData.value.risk_premium_percentage,
+					has_line_review_bonus: pvData.value.has_line_review_bonus,
 				},
 			});
 
@@ -341,13 +344,25 @@ const addGuaranteeItem = () => {
 									/>
 								</VCol>
 
-								<VCol cols="12" md="6" lg="8">
+								<VCol cols="12" md="6" lg="4">
 									<AppTextField
 										v-model="pvData.amount"
 										type="number"
 										:error-messages="pvError.amount"
 										label="Montant"
 										placeholder="Ex: 15 000 000"
+										:rules="[requiredValidator]"
+									/>
+								</VCol>
+								<VCol cols="12" md="6" lg="4">
+									<AppSelect
+										v-model="pvData.has_line_review_bonus"
+										:items="[
+											{ value: false, title: 'Sans la prime' },
+											{ value: true, title: 'Avec la prime' },
+										]"
+										:error-messages="pvError.has_line_review_bonus"
+										label="Prime de révision de ligne"
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
