@@ -51,9 +51,11 @@ class UserController extends Controller
 				});
 			}
 
-
-			foreach (["name", "full_name", "email", "profile"] as $filter) {
+			foreach (["name", "full_name", "email", "profile", "activated"] as $filter) {
 				if (isset($request[$filter]) && $request[$filter]) {
+					if (in_array($request[$filter], ["true", "false"])) {
+						$request[$filter] = ($request[$filter] == "true") ? 1 : 0;
+					}
 					$userList->where($filter, $request[$filter]);
 				}
 			}
@@ -121,7 +123,6 @@ class UserController extends Controller
 	/**
 	 * Créer un nouvel utilisateur
 	 *
-	 * @bodyParam   name                        string  required    Le username de l'utilsateur.                Example: mawena
 	 * @bodyParam   full_name                   string  required    Le nom complet de l'utilisateur.            Example: Charles GAMLIGO
 	 * @bodyParam   profile                     string  required    Le profil de l'utilisateur.                 Example: admin
 	 * @bodyParam   email                       string  required    L'email de l'utilisateur.                   Example: gamligocharles@gmail.com
@@ -137,7 +138,6 @@ class UserController extends Controller
 		if (($authorisation = Gate::inspect('create', User::class))->allowed()) {
 			$requestData = $request->all();
 			$validator = Validator::make($requestData, [
-				'name' => 'required|unique:users',
 				'full_name' => 'required|unique:users',
 				"profile" => 'required|in:admin,credit_analyst,credit_admin,head_credit,operation,legal,dex,caf,ca,md',
 				'email' => 'required|unique:users',
@@ -150,6 +150,7 @@ class UserController extends Controller
 			} else {
 				$requestData["password"] = Hash::make($request->password);
 				$requestData["email_verified_at"] = Carbon::now();
+				$requestData["name"] = Str::slug($requestData["full_name"]);
 				$user = User::create($requestData);
 				// $user->load("agency.head");
 				return $this->responseOk([
@@ -166,7 +167,6 @@ class UserController extends Controller
 	 *
 	 * @urlParam id required L'ID de l'utilisateur. Example: 1
 	 *
-	 * @bodyParam   name                        string  required    Le username de l'utilsateur.                Example: mawena
 	 * @bodyParam   full_name                   string  required    Le nom complet de l'utilisateur.            Example: Charles GAMLIGO
 	 * @bodyParam   profile                     string  required    Le profil de l'utilisateur.                 Example: admin
 	 * @bodyParam   email                       string  required    L'email de l'utilisateur.                   Example: gamligocharles@gmail.com
@@ -184,7 +184,6 @@ class UserController extends Controller
 			if (($authorisation = Gate::inspect('update', $user))->allowed()) {
 				$requestData = $request->all();
 				$validator = Validator::make($requestData, [
-					'name' => 'required',
 					'full_name' => 'required|unique:users,full_name,' . $id,
 					'email' => 'required|unique:users,email,' . $id,
 					"profile" => 'required|in:admin,credit_analyst,credit_admin,head_credit,operation,legal,dex,caf,ca,md',
@@ -199,6 +198,7 @@ class UserController extends Controller
 						$requestData["password"] = Hash::make($request->password);
 						$requestData["password_change_required"] = true;
 					}
+					$requestData["name"] = Str::slug($requestData["full_name"]);
 					$user->update($requestData);
 					// $user->load("agency.head");
 					return $this->responseOk([
@@ -309,6 +309,5 @@ class UserController extends Controller
 		} else {
 			return $this->responseError(["id" => ["L'utilisateur n'existe pas"]], 404);
 		}
-
 	}
 }

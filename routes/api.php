@@ -78,6 +78,7 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::get("/download/{id}", [ContractController::class, "download"])->name("download");
 		Route::post("/upload/{id}", [ContractController::class, "upload"])->name("upload");
 		Route::get("/promissory-note/download/{id}", [ContractController::class, "promissory_note"])->name("promissory-note.download");
+		Route::get("/handwritten-mention/download/{id}", [ContractController::class, "handwritten_mention"])->name("handwritten-mention.download");
 		Route::get("/{id}", [ContractController::class, "show"])->name("show");
 		Route::post("/", [ContractController::class, "store"])->name("store");
 		Route::put("/{id}", [ContractController::class, "update"])->name("update");
@@ -98,6 +99,7 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::get("/", [NotificationController::class, "index"])->name("index");
 		Route::get("/download/{id}", [NotificationController::class, "download"])->name("download");
 		Route::get("/promissory-note/download/{id}", [NotificationController::class, "promissory_note"])->name("promissory-note.download");
+		Route::get("/handwritten-mention/download/{id}", [NotificationController::class, "handwritten_mention"])->name("handwritten-mention.download");
 		Route::get("/{id}", [NotificationController::class, "show"])->name("show");
 		Route::post("/", [NotificationController::class, "store"])->name("store");
 		Route::post("/upload/{id}", [NotificationController::class, "upload"])->name("upload");

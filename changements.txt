@@ -41,6 +41,7 @@ Lorsqu’il s’agit d’un client particulier, le problème ne se pose pas. Un 
  
 
     10-Impossibilité de modification du PV : Au jours d’aujourd’hui, les analystes peuvent toujours modifier le PV même si ce dernier est validé et le contrat généré. Nous souhaitons que le PV ne soit plus modifiable une fois validé et le contrat généré.
+[Done]
 
  
 

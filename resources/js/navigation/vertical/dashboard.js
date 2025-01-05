@@ -238,12 +238,31 @@ export default [
 		],
 	},
 	{
-	  title: 'Remboursement anticipé'
+		title: 'Remboursement anticipé'
 	},
 	{
-	  title: 'Lettre de mise en demeure'
+		title: 'Lettre de mise en demeure'
 	},
 	{
-	  title: 'Checking post-deblocage'
+		title: 'Checking post-deblocage'
+	},
+	{
+		icon: { icon: 'tabler-user' },
+		title: 'Utilisateurs',
+		subject: 'user',
+		action: 'read',
+		children: [
+			{
+				title: 'Nouveau',
+				to: 'user-add',
+				action: 'create',
+				subject: 'user',
+			}, {
+				title: 'Historique',
+				to: 'user',
+				action: 'read',
+				subject: 'user',
+			}
+		],
 	},
 ]

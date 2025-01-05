@@ -246,7 +246,7 @@ class NotificationController extends Controller
 			$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
 			$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 			$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
-			
+
 			$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne";
 			$data["line_review_bonus_value"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : ": 1% du capital restant dû après 12 mois";
 
@@ -272,7 +272,7 @@ class NotificationController extends Controller
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Contrat-" . $notification->verbal_trial->committee_id;
-			$wordFilePath = public_path( $bsaseName . ".docx");
+			$wordFilePath = public_path($bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			$outputFilePdfFolderPath = public_path("generated/pdf");
 
@@ -347,7 +347,7 @@ class NotificationController extends Controller
 
 				// Enregistrez les modifications dans un nouveau fichier
 				$bsaseName = "Billet-a-ordre-" . $notification->verbal_trial->committee_id;
-				$wordFilePath = public_path( $bsaseName . ".docx");
+				$wordFilePath = public_path($bsaseName . ".docx");
 				$templateProcessor->saveAs($wordFilePath);
 				$outputFilePdfFolderPath = public_path("generated/pdf");
 
@@ -364,7 +364,48 @@ class NotificationController extends Controller
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
 		} else {
-			return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
+			return $this->responseError(["id" => "La notification n'existe pas"], 404);
+		}
+	}
+
+	/**
+	 * Télécharge la mention manuscrite
+	 *
+	 * @urlParam	id													  int	 required	L'ID de la notification.															Example: 1
+	 *
+	 * @response 200
+	 */
+	public function handwritten_mention(Request $request, int $id)
+	{
+		$notification = Notification::find($id);
+		if ($notification) {
+			if (($authorisation = Gate::inspect('download', $notification))->allowed()) {
+				$templateProcessor = new TemplateProcessor("../document_templates/Notifications/$notification->type/billet_a_ordre_$notification->type.docx");
+				$data = $notification->toArray();
+				$data["amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
+				SpellNumber::value((float) $data["due_amount"])->locale('fr')->toLetters();
+				$templateProcessor->setValues($data);
+
+				// Enregistrez les modifications dans un nouveau fichier
+				$bsaseName = "HandwrittenMention-" . $notification->verbal_trial->committee_id;
+				$wordFilePath = public_path($bsaseName . ".docx");
+				$templateProcessor->saveAs($wordFilePath);
+				$outputFilePdfFolderPath = public_path("generated/pdf");
+
+				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+				$output = [];
+				$returnVar = 0;
+				exec($command, $output, $returnVar);
+				// Vérification du succès
+				if ($returnVar === 0) {
+					File::delete($wordFilePath);
+					return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+				}
+			} else {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
+		} else {
+			return $this->responseError(["id" => "La notification n'existe pas"], 404);
 		}
 	}
 
@@ -415,7 +456,7 @@ class NotificationController extends Controller
 			}
 			$requestData["creator_id"] = $request->user()->id;
 			$requestData["sent"] = false;
-			
+
 			$relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
 			$notification = Notification::create($requestData);
 			$notification->load($relationList);

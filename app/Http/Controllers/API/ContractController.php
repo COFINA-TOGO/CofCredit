@@ -269,10 +269,10 @@ class ContractController extends Controller
 
 				$data["line_risk_premium_percentage"] = (((float) $data["risk_premium_percentage"]) == 0) ? "" : "Prime de risque (" . $data["risk_premium_percentage"] . " %)";
 				$data["line_risk_premium_percentage_value"] = (((float) $data["risk_premium_percentage"]) == 0) ? "" : ": " . number_format($data["risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
-				
+
 				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne";
 				$data["line_review_bonus_value"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : ": 1% du capital restant dû après 12 mois";
-				
+
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "Carte d'identité nationale",
 					"passport" => "Passeport",
@@ -425,6 +425,49 @@ class ContractController extends Controller
 				$templateProcessor->saveAs($outputFilePath);
 				$outputFilePdfFolderPath = public_path("generated/pdf");
 				$outputFilePdfPath = public_path("generated/pdf/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".pdf");
+
+
+				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
+				$output = [];
+				$returnVar = 0;
+				exec($command, $output, $returnVar);
+				// Vérification du succès
+				if ($returnVar === 0) {
+					File::delete($outputFilePath);
+					return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+				}
+			} else {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
+		} else {
+			return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
+		}
+	}
+
+
+	/**
+	 * Télécharge la mention manuscrite
+	 *
+	 * @urlParam	id													  int	 required	L'ID du contrat.														Example: 1
+	 *
+	 * @response 200
+	 */
+	public function handwritten_mention(Request $request, int $id)
+	{
+		$contract = Contract::find($id);
+		if ($contract) {
+			if (($authorisation = Gate::inspect('download', $contract))->allowed()) {
+				$templateProcessor = new TemplateProcessor("../document_templates/Mention-manuscrite/mention_manuscrite.docx");
+				$data = $contract->toArray();
+				$data["amount"] = number_format(((float) $data["total_amount_of_interest"]) + $contract->verbal_trial->amount, 0, ',', ' ');
+				SpellNumber::value((float) $data["amount"])->locale('fr')->toLetters();
+				$templateProcessor->setValues($data);
+
+				// Enregistrez les modifications dans un nouveau fichier
+				$outputFilePath = public_path("generated/docx/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".docx");
+				$templateProcessor->saveAs($outputFilePath);
+				$outputFilePdfFolderPath = public_path("generated/pdf");
+				$outputFilePdfPath = public_path("generated/pdf/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".pdf");
 
 
 				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
