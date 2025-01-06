@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Response;
 class CATController extends Controller
 {
 
-	
+
 
 	/**
 	 * Affiche les CAT
@@ -222,7 +222,7 @@ class CATController extends Controller
 
 			$data["$parentRelation.verbal_trial.tax_fee_interest_rate.value"] = number_format((float) ($data["$parentRelation.verbal_trial.tax_fee_interest_rate"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
 			$data["$parentRelation.verbal_trial.administrative_fees_percentage.value"] = number_format((float) ($data["$parentRelation.verbal_trial.administrative_fees_percentage"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
-			$data["$parentRelation.risk_premium_percentage.value"] = number_format((float) ($data["$parentRelation.risk_premium_percentage"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
+			$data["$parentRelation.verbal_trial.risk_premium_percentage.value"] = number_format((float) ($data["$parentRelation.verbal_trial.risk_premium_percentage"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
 			$data["security_deposit"] = number_format($data["$parentRelation.verbal_trial.amount"] * 0.2, 0, ',', ' ');
 			$data["teg"] = number_format($data["teg"], 0, ',', ' ');
 			$data["$parentRelation.verbal_trial.amount"] = number_format($data["$parentRelation.verbal_trial.amount"], 0, ',', ' ');
@@ -251,7 +251,7 @@ class CATController extends Controller
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "CAT-" . $cat->$parentRelation->verbal_trial->committee_id;
-			$wordFilePath = public_path( $bsaseName . ".docx");
+			$wordFilePath = public_path($bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			$outputFilePdfFolderPath = public_path("generated/pdf");
 

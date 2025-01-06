@@ -24,23 +24,64 @@ class DatabaseSeeder extends Seeder
 	 */
 	public function run(): void
 	{
-		$user = False;
-		$vt = False;
+		$user = True;
+		$vt = True;
 
 		if (!$user) {
 			DB::unprepared(file_get_contents("./database/users.sql"));
 		}
 
 		if ($user) {
-			$admin = User::factory(1)->create(["name" => "admin", "full_name" => "admin", "profile" => "admin", "password" => "Coftg@20$*21ù!ad", "password_change_required" => false, "activated" => true, "email" => "admin@cofinacorp.com"])->first();
+			$physical_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Physique"])->first();
+			$moral_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Morale"])->first();
+
+			$typeOfCredit = TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR FACTURE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id])->first();
+			TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR FACTURE ", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR LOYER", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "AVANCE MARCHE/BC", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "AVANCE MARCHE/BC_SOLO ", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "AV SALAIRE/PENSION ", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT DE CAMPAGNE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT DE CAMPAGNE", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT EXPLOITATION", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT EXPLOITATION", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT DE GROUPE", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "ESCOMPTE DE CHEQUE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "ESCOMPTE DE TRAITE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "ESCOMPTE DE TRAITE_SOLO", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR ", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR ", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT DE IMMOBILIER", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT EXPLOITATION", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT DE GROUPE", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR ", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $moral_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT IMMOBILIER", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 36, "max_month" => 120, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 36, "max_month" => 120, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT  BFR", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
+			TypeOfCredit::factory(1)->create(["name" => "CREDIT  BFR", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
+
+			foreach (["Dépôt de garantie", "Caution personnelle et solidaire", "Gage de véhicule", "Gage d'équipement", "Billet à ordre", "Engagement de domiciliation de paiement", "Constitution de PEP", "Constitution de dépôt hebdomadaire", "Hypothèque", "Nantissement de Dépôt à terme (DAT)", "Dépôt libre de documents administratifs d’un immeuble"] as $typeOfGuaranteeName) {
+				TypeOfGuarantee::factory(1)->create(["name" => $typeOfGuaranteeName]);
+			}
+			$admin = User::create(["name" => "admin", "full_name" => "admin", "profile" => "admin", "password" => "Coftg@20$*21ù!ad", "password_change_required" => false, "activated" => true, "email" => "admin@cofinacorp.com"])->first();
+			$charles_admin = User::create(["name" => "charles.gamligo", "full_name" => "Charles GAMLIGO", "profile" => "admin", "password" => "Coftg@20$*21ù!ad", "password_change_required" => false, "activated" => true, "email" => "charles.gamligo@cofinacorp.com"])->first();
 
 			$credit_analyst = User::factory(1)->create(["name" => "credit_analyst", "full_name" => "Credit Analyst", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_analyst@cofinacorp.com"])->first();
-			$credit_analyst2 = User::factory(1)->create(["name" => "credit_analyst2", "full_name" => "Credit Analyst 2", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_analyst2@cofinacorp.com"])->first();
-			$credit_analyst3 = User::factory(1)->create(["name" => "credit_analyst3", "full_name" => "Credit Analyst 3", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_analyst3@cofinacorp.com"])->first();
+			// $credit_analyst2 = User::factory(1)->create(["name" => "credit_analyst2", "full_name" => "Credit Analyst 2", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_analyst2@cofinacorp.com"])->first();
+			// $credit_analyst3 = User::factory(1)->create(["name" => "credit_analyst3", "full_name" => "Credit Analyst 3", "profile" => "credit_analyst", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_analyst3@cofinacorp.com"])->first();
 
 			$credit_admin = User::factory(1)->create(["name" => "credit_admin", "full_name" => "Credit Admin", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_admin@cofinacorp.com"])->first();
-			$credit_admin2 = User::factory(1)->create(["name" => "credit_admin2", "full_name" => "Credit Admin 2", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_admin2@cofinacorp.com"])->first();
-			$credit_admin3 = User::factory(1)->create(["name" => "credit_admin3", "full_name" => "Credit Admin 3", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_admin3@cofinacorp.com"])->first();
+			// $credit_admin2 = User::factory(1)->create(["name" => "credit_admin2", "full_name" => "Credit Admin 2", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_admin2@cofinacorp.com"])->first();
+			// $credit_admin3 = User::factory(1)->create(["name" => "credit_admin3", "full_name" => "Credit Admin 3", "profile" => "credit_admin", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "credit_admin3@cofinacorp.com"])->first();
 
 			$head_credit = User::factory(1)->create(["name" => "head_credit", "full_name" => "Head Credit", "profile" => "head_credit", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "head_credit@cofinacorp.com"])->first();
 
@@ -55,8 +96,8 @@ class DatabaseSeeder extends Seeder
 			// 	$caf = User::factory(1)->create(["name" => strtolower($elements[0]), "full_name" => $userData["full_name"], "profile" => "caf", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => $userData["email"]])->first();
 			// }
 			$caf = User::factory(1)->create(["name" => strtolower("caf"), "full_name" => "CAF", "profile" => "caf", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "caf@cofinacorp.com"])->first();
-			$caf2 = User::factory(1)->create(["name" => strtolower("caf2"), "full_name" => "CAF 2", "profile" => "caf", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "caf2@cofinacorp.com"])->first();
-			$caf3 = User::factory(1)->create(["name" => strtolower("caf3"), "full_name" => "CAF 3", "profile" => "caf", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "caf3@cofinacorp.com"])->first();
+			// $caf2 = User::factory(1)->create(["name" => strtolower("caf2"), "full_name" => "CAF 2", "profile" => "caf", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "caf2@cofinacorp.com"])->first();
+			// $caf3 = User::factory(1)->create(["name" => strtolower("caf3"), "full_name" => "CAF 3", "profile" => "caf", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "caf3@cofinacorp.com"])->first();
 
 			$ca = User::factory(1)->create(["name" => "ca", "full_name" => "CA", "profile" => "ca", "password" => "P@sse123", "password_change_required" => false, "activated" => true, "email" => "ca@cofinacorp.com"])->first();
 
@@ -129,52 +170,6 @@ class DatabaseSeeder extends Seeder
 			}
 
 			echo "admin Token: " . $plainTextToken . "\n";
-
 		}
-
-		$physical_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Physique"])->first();
-		$moral_person = TypeOfApplicant::factory(1)->create(["name" => "Personne Morale"])->first();
-
-		$typeOfCredit = TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR FACTURE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id])->first();
-		TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR FACTURE ", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "AVANCE SUR LOYER", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "AVANCE MARCHE/BC", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "AVANCE MARCHE/BC_SOLO ", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "AV SALAIRE/PENSION ", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT DE CAMPAGNE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT DE CAMPAGNE", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT EXPLOITATION", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT EXPLOITATION", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT DE GROUPE", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "ESCOMPTE DE CHEQUE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "ESCOMPTE DE TRAITE", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "ESCOMPTE DE TRAITE_SOLO", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR ", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR ", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT DE IMMOBILIER", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT EXPLOITATION", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT DE GROUPE", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT FDR ", "min_month" => 12, "max_month" => 24, "type_of_applicant_id" => $moral_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT IMMOBILIER", "min_month" => 24, "max_month" => 36, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT D'INVESTISSEMENT", "min_month" => 36, "max_month" => 120, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT  CONSO", "min_month" => 36, "max_month" => 120, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT  BFR", "min_month" => 0, "max_month" => 6, "type_of_applicant_id" => $physical_person->id]);
-		TypeOfCredit::factory(1)->create(["name" => "CREDIT  BFR", "min_month" => 6, "max_month" => 12, "type_of_applicant_id" => $physical_person->id]);
-
-		foreach (["Dépôt de garantie", "Caution personnelle et solidaire", "Gage de véhicule", "Gage d'équipement", "Billet à ordre", "Engagement de domiciliation de paiement", "Constitution de PEP", "Constitution de dépôt hebdomadaire", "Hypothèque", "Nantissement de Dépôt à terme (DAT)", "Dépôt libre de documents administratifs d’un immeuble"] as $typeOfGuaranteeName) {
-			TypeOfGuarantee::factory(1)->create(["name" => $typeOfGuaranteeName]);
-		}
-
-
-
-
 	}
 }
