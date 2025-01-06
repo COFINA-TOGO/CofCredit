@@ -263,11 +263,12 @@ class ContractController extends Controller
 				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
 
-				$data["line_risk_premium_percentage"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "" : "Prime de risque (" . $data["verbal_trial.risk_premium_percentage"] . " %)";
+				$data["line_risk_premium_percentage"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "" : "<br/> \n Prime de risque (" . $data["verbal_trial.risk_premium_percentage"] . " %)";
 				$data["line_risk_premium_percentage_value"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "" : ": " . number_format($data["verbal_trial.risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
+				$data["verbal_trial.risk_premium"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "0" : number_format($data["verbal_trial.risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
 
-				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne";
-				$data["line_review_bonus_value"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : ": 1% du capital restant dû après 12 mois";
+				$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne" : "";
+				$data["line_review_bonus_value"] = $data["verbal_trial.has_line_review_bonus"] ? ": 1% du capital restant dû après 18 mois" : "";
 
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "Carte d'identité nationale",
@@ -396,7 +397,7 @@ class ContractController extends Controller
 				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
-				$data["line_review_bonus"] = (((float) $data["verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne	  : 1% du capital restant dû après 12 mois";
+				$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne	  : 1% du capital restant dû après 18 mois" : "";
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "Carte d'identité nationale",
 					"passport" => "Passeport",
@@ -455,9 +456,10 @@ class ContractController extends Controller
 			if (($authorisation = Gate::inspect('download', $contract))->allowed()) {
 				$templateProcessor = new TemplateProcessor("../document_templates/Mention-manuscrite/mention_manuscrite.docx");
 				$data = $contract->toArray();
-				$data["amount"] = number_format(((float) $data["total_amount_of_interest"]) + $contract->verbal_trial->amount, 0, ',', ' ');
-				SpellNumber::value((float) $data["amount"])->locale('fr')->toLetters();
-				$templateProcessor->setValues($data);
+				$data["amount_float"] = ((float) $data["total_amount_of_interest"]) + $contract->verbal_trial->amount;
+				$data["amount"] = number_format($data["amount_float"], 0, ',', ' ');
+				$data["amount.fr"] = SpellNumber::value((float) $data["amount_float"])->locale('fr')->toLetters();
+				$templateProcessor->setValues(["amount" => $data["amount"], "amount.fr" => $data["amount.fr"],]);
 
 				// Enregistrez les modifications dans un nouveau fichier
 				$outputFilePath = public_path("generated/docx/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".docx");

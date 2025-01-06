@@ -176,9 +176,9 @@ class GuarantorController extends Controller
 			$data["contract.verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["contract.verbal_trial.periodicity"]];
-			
-			$data["line_review_bonus"] = (((float) $data["contract.verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne";
-			$data["line_review_bonus_value"] = (((float) $data["contract.verbal_trial.duration"]) < 13) ? "" : ": 1% du capital restant dû après 12 mois";
+
+			$data["line_review_bonus"] = $data["contract.verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne" : "";
+			$data["line_review_bonus_value"] = $data["contract.verbal_trial.has_line_review_bonus"] ? ": 1% du capital restant dû après 18 mois" : "";
 
 			$data["signatory"] = (((float) $data["contract.verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 
@@ -202,7 +202,7 @@ class GuarantorController extends Controller
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "Contrat-caution-" . $parent->verbal_trial->committee_id;
-			$wordFilePath = public_path( $bsaseName . ".docx");
+			$wordFilePath = public_path($bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			$outputFilePdfFolderPath = public_path("generated/pdf");
 
@@ -253,7 +253,7 @@ class GuarantorController extends Controller
 			$data["contract.verbal_trial.amount.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.amount"])->locale('fr')->toLetters();
 			$data["contract.total_amount_of_interest.fr"] = SpellNumber::value((float) $data["contract.total_amount_of_interest"])->locale('fr')->toLetters();
 			$data["contract.verbal_trial.duration.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.duration"])->locale('fr')->toLetters();
-			
+
 			$data["contract.due_amount.fr"] = SpellNumber::value((float) $data["contract.due_amount"])->locale('fr')->toLetters();
 			$data["contract.total_to_pay"] = (float) $data["contract.total_amount_of_interest"] + (float) $data["contract.verbal_trial.amount"];
 			$data["contract.total_to_pay.fr"] = SpellNumber::value((float) $data["contract.total_to_pay"])->locale('fr')->toLetters();
@@ -261,7 +261,7 @@ class GuarantorController extends Controller
 			$data["contract.verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["contract.verbal_trial.periodicity"]];
-			$data["line_review_bonus"] = (((float) $data["contract.verbal_trial.duration"]) < 13) ? "" : "Prime de révision de ligne      : 1% du capital restant dû après 12 mois";
+			$data["line_review_bonus"] = $data["contract.verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne      : 1% du capital restant dû après 18 mois" : "";
 			$data["signatory"] = (((float) $data["contract.verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 
 
@@ -276,7 +276,7 @@ class GuarantorController extends Controller
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Billet-a-ordre-caution-" . $parent->verbal_trial->committee_id;
-			$wordFilePath = public_path( $bsaseName . ".docx");
+			$wordFilePath = public_path($bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			$outputFilePdfFolderPath = public_path("generated/pdf");
 

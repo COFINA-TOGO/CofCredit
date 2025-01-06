@@ -236,8 +236,8 @@ class VerbalTrialController extends Controller
 			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
 			$data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
 
-			$data["line_review_bonus"] = (((float) $data["duration"]) < 13) ? "" : "Prime de révision de ligne";
-			$data["line_review_bonus_value"] = (((float) $data["duration"]) < 13) ? "" : ": 1% du capital restant dû après 12 mois";
+			$data["line_review_bonus"] = $data["has_line_review_bonus"] ? "Prime de révision de ligne" : "";
+			$data["line_review_bonus_value"] = $data["has_line_review_bonus"] ? ": 1% du capital restant dû après 18 mois" : "";
 
 			$guaranteeList = [];
 			foreach ($verbalTrial->guarantees as $guarantee) {
@@ -336,6 +336,7 @@ class VerbalTrialController extends Controller
 				"guarantees.*.comment" => "required|min:2",
 				"release_type" => "required|in:non-progressive,progressive",
 				'risk_premium_percentage' => 'required|numeric',
+				'has_line_review_bonus' => 'required|boolean',
 			]);
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
@@ -469,6 +470,7 @@ class VerbalTrialController extends Controller
 					"guarantees.*.comment" => "required|min:2",
 					"release_type" => "required|in:non-progressive,progressive",
 					'risk_premium_percentage' => 'required|numeric',
+					'has_line_review_bonus' => 'required|boolean',
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
@@ -498,6 +500,7 @@ class VerbalTrialController extends Controller
 									}
 								}
 								$requestData["status"] = "waiting";
+								$requestData["has_line_review_bonus"] = (bool) $requestData["has_line_review_bonus"];
 								$verbalTrial->update($requestData);
 							} catch (\Exception $e) {
 								DB::rollback();

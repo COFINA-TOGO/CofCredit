@@ -297,7 +297,7 @@ if (contract.value.individual_business == null) {
 								</VCol>
 								<VCol cols="10" md="6" lg="6">
 									<AppSelect
-										v-model="contractData.has_pledges"
+										v-model="contract.has_pledges"
 										:items="[
 											{ value: '0', title: 'Sans gage' },
 											{ value: '1', title: 'Avec gage' },

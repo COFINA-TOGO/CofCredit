@@ -42,6 +42,7 @@ class VerbalTrial extends Model
 		'entity_name',
 		'release_type',
 		'risk_premium_percentage',
+		'has_line_review_bonus',
 	];
 
 	protected $appends = ["applicant_full_name", "label", "amount_fr"];
@@ -57,6 +58,7 @@ class VerbalTrial extends Model
 		$data["administrative_fees_percentage"] = (float) $data["administrative_fees_percentage"];
 		$data["tax_fee_interest_rate"] = (float) $data["tax_fee_interest_rate"];
 		$data["caf_id"] = (int) $data["caf_id"];
+		// $data["has_line_review_bonus"] = (bool) $data["has_line_review_bonus"];
 		return $data;
 	}
 
