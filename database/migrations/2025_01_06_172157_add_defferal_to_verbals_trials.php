@@ -11,8 +11,8 @@ return new class extends Migration
 	 */
 	public function up(): void
 	{
-		Schema::table('contracts', function (Blueprint $table) {
-			$table->decimal('due_amount', 21, 2)->after('status_observation');
+		Schema::table('verbals_trials', function (Blueprint $table) {
+			$table->integer('number_deferred')->default(0)->after('has_line_review_bonus');
 		});
 	}
 
@@ -21,8 +21,8 @@ return new class extends Migration
 	 */
 	public function down(): void
 	{
-		Schema::table('contracts', function (Blueprint $table) {
-			$table->dropColumn('due_amount');
+		Schema::table('verbals_trials', function (Blueprint $table) {
+			$table->dropColumn('number_deferred');
 		});
 	}
 };

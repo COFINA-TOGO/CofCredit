@@ -219,7 +219,8 @@ class VerbalTrialController extends Controller
 		$verbalTrial = VerbalTrial::find($id);
 		if ($verbalTrial) {
 			// if (($authorisation = Gate::inspect('view', $verbalTrial))->allowed()) {
-			$templateProcessor = new TemplateProcessor("../document_templates/PVs/PV-$verbalTrial->status-$verbalTrial->validation_level.docx");
+			$pv_dir = $verbalTrial->number_deferred == 0 ? "PVs" : "PVs-deferral";
+			$templateProcessor = new TemplateProcessor("../document_templates/$pv_dir/PV-$verbalTrial->status-$verbalTrial->validation_level.docx");
 			$data = $verbalTrial->toArray();
 			$data = array_merge($data, collect($verbalTrial->caf)->mapWithKeys(function ($value, $key) {
 				return ['caf.' . $key => $value];
@@ -337,6 +338,7 @@ class VerbalTrialController extends Controller
 				"release_type" => "required|in:non-progressive,progressive",
 				'risk_premium_percentage' => 'required|numeric',
 				'has_line_review_bonus' => 'required|boolean',
+				'number_deferred' => 'required|numeric',
 			]);
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
@@ -471,6 +473,7 @@ class VerbalTrialController extends Controller
 					"release_type" => "required|in:non-progressive,progressive",
 					'risk_premium_percentage' => 'required|numeric',
 					'has_line_review_bonus' => 'required|boolean',
+					'number_deferred' => 'required|numeric',
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);

@@ -229,17 +229,6 @@ if (route.query.id) {
 								</VCol>
 								<VCol cols="12" md="6" lg="6">
 									<AppTextField
-										v-model="contractData.total_amount_of_interest"
-										type="number"
-										:error-messages="
-											formError.total_amount_of_interest
-										"
-										label="Montant total des intérêts"
-										:rules="[requiredValidator]"
-									/>
-								</VCol>
-								<VCol cols="12" md="6" lg="6">
-									<AppTextField
 										v-model="contractData.number_of_due_dates"
 										type="number"
 										:error-messages="formError.number_of_due_dates"
@@ -256,7 +245,16 @@ if (route.query.id) {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="10" md="6" lg="6">
+								<VCol cols="12" md="6" lg="6">
+									<AppTextField
+										v-model="contractData.due_amount"
+										type="number"
+										:error-messages="formError.due_amount"
+										label="Montant d'une échéance différée"
+										:rules="[requiredValidator]"
+									/>
+								</VCol>
+								<VCol cols="10" md="6" lg="4">
 									<AppSelect
 										v-model="contractData.type"
 										:items="typeList"
@@ -265,7 +263,18 @@ if (route.query.id) {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="10" md="6" lg="6">
+								<VCol cols="12" md="6" lg="4">
+									<AppTextField
+										v-model="contractData.total_amount_of_interest"
+										type="number"
+										:error-messages="
+											formError.total_amount_of_interest
+										"
+										label="Montant total des intérêts"
+										:rules="[requiredValidator]"
+									/>
+								</VCol>
+								<VCol cols="10" md="6" lg="4">
 									<AppSelect
 										v-model="contractData.has_pledges"
 										:items="[

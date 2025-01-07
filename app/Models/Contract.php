@@ -33,6 +33,7 @@ class Contract extends Model
 		'signed_promissory_note_path',
 		'status',
 		'status_observation',
+		'deferred_amount',
 	];
 
 	// protected $with = ['company', 'individual_business'];

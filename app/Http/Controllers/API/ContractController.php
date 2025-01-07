@@ -525,6 +525,7 @@ class ContractController extends Controller
 				'type' => 'required|in:particular,company,individual_business',
 				'has_pledges' => 'required|boolean',
 				'due_amount' => 'required|numeric',
+				'deferred_amount' => 'required|numeric',
 			]);
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
@@ -680,6 +681,7 @@ class ContractController extends Controller
 					'type' => 'required|in:particular,company,individual_business',
 					'has_pledges' => 'required|boolean',
 					'due_amount' => 'required|numeric',
+					'deferred_amount' => 'required|numeric',
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);

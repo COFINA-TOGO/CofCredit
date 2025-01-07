@@ -37,6 +37,7 @@ const pvData = ref({
 	release_type: "progressive",
 	risk_premium_percentage: 0.5,
 	has_line_review_bonus: false,
+	number_deferred: 0,
 	guarantees: [
 		{
 			type_of_guarantee_id: 1,
@@ -70,6 +71,7 @@ const getResetPvError = () => {
 		release_type: "",
 		risk_premium_percentage: "",
 		has_line_review_bonus: "",
+		number_deferred: "",
 	};
 };
 
@@ -162,6 +164,7 @@ const onSubmit = () => {
 					entity_name: pvData.value.entity_name,
 					risk_premium_percentage: pvData.value.risk_premium_percentage,
 					has_line_review_bonus: pvData.value.has_line_review_bonus,
+					number_deferred: pvData.value.number_deferred,
 				},
 			});
 
@@ -366,7 +369,7 @@ const addGuaranteeItem = () => {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="3">
 									<AppTextField
 										v-model="pvData.duration"
 										type="number"
@@ -377,7 +380,18 @@ const addGuaranteeItem = () => {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="3">
+									<AppTextField
+										v-model="pvData.number_deferred"
+										type="number"
+										:error-messages="pvError.number_deferred"
+										label="Nombre de différé en mois"
+										placeholder="Ex: 18"
+										append-inner-icon="tabler-calendar"
+										:rules="[requiredValidator]"
+									/>
+								</VCol>
+								<VCol cols="12" md="6" lg="3">
 									<AppSelect
 										v-model="pvData.periodicity"
 										:items="periodicityItemList"
@@ -387,7 +401,7 @@ const addGuaranteeItem = () => {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="3">
 									<AppSelect
 										v-model="pvData.release_type"
 										:items="[
@@ -493,7 +507,6 @@ const addGuaranteeItem = () => {
 										:thumb-size="15"
 										thumb-label="always"
 										step="0.01"
-										readonly
 									>
 										<template #append>
 											<VTextField
@@ -507,7 +520,6 @@ const addGuaranteeItem = () => {
 												hide-details
 												variant="outlined"
 												suffix="%"
-												readonly
 											/>
 										</template>
 									</VSlider>

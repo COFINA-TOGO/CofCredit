@@ -33,6 +33,7 @@ class ContractFactory extends Factory
 			"number_of_due_dates" => $this->faker->numberBetween(1, 25),
 			"type" => $this->faker->randomElement(['particular', 'company', 'individual_business']),
 			"creator_id" => User::where('profile', 'credit_admin')->inRandomOrder()->first()->id ?? 1,
+			"deferred_amount" => $this->faker->randomFloat(0, 15000, 5000000),
 		];
 	}
 }

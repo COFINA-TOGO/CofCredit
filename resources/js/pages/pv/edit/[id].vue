@@ -93,6 +93,7 @@ const getEmptyError = () => {
 		release_type: "",
 		risk_premium_percentage: "",
 		has_line_review_bonus: "",
+		number_deferred: "",
 	};
 };
 
@@ -144,6 +145,7 @@ const onSubmit = () => {
 					release_type: verbalTrial.value.release_type,
 					risk_premium_percentage: verbalTrial.value.risk_premium_percentage,
 					has_line_review_bonus: verbalTrial.value.has_line_review_bonus,
+					number_deferred: verbalTrial.value.number_deferred,
 				},
 			});
 
@@ -418,18 +420,33 @@ if (
 											:rules="[requiredValidator]"
 										/>
 									</VCol>
-									<VCol cols="12" md="6" lg="4">
+									<VCol cols="12" md="6" lg="3">
 										<AppTextField
 											v-model="verbalTrial.duration"
 											type="number"
 											:error-messages="verbalTrialError.duration"
 											label="Durée du crédit en mois"
 											placeholder=""
+											min="0"
 											append-inner-icon="tabler-calendar"
 											:rules="[requiredValidator]"
 										/>
 									</VCol>
-									<VCol cols="12" md="6" lg="4">
+									<VCol cols="12" md="6" lg="3">
+										<AppTextField
+											v-model="verbalTrial.number_deferred"
+											type="number"
+											:error-messages="
+												verbalTrialError.number_deferred
+											"
+											label="Nombre de différé en mois"
+											placeholder=""
+											min="0"
+											append-inner-icon="tabler-calendar"
+											:rules="[requiredValidator]"
+										/>
+									</VCol>
+									<VCol cols="12" md="6" lg="3">
 										<AppSelect
 											v-model="verbalTrial.periodicity"
 											:items="periodicityItemList"
@@ -439,7 +456,7 @@ if (
 											:rules="[requiredValidator]"
 										/>
 									</VCol>
-									<VCol cols="12" md="6" lg="4">
+									<VCol cols="12" md="6" lg="3">
 										<AppSelect
 											v-model="verbalTrial.release_type"
 											:items="[

@@ -43,6 +43,7 @@ class VerbalTrial extends Model
 		'release_type',
 		'risk_premium_percentage',
 		'has_line_review_bonus',
+		'number_deferred',
 	];
 
 	protected $appends = ["applicant_full_name", "label", "amount_fr"];

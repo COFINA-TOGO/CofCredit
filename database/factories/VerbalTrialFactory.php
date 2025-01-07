@@ -33,17 +33,18 @@ class VerbalTrialFactory extends Factory
 			"purpose_of_financing" => $this->faker->company(),
 			"type_of_credit_id" => TypeOfCredit::inRandomOrder()->first()->id,
 			"amount" => $this->faker->randomFloat(0, 15000000, 150000000),
-			"duration" => $this->faker->randomFloat(0, 1, 120),
+			"duration" => $this->faker->numberBetween(1, 120),
 			"periodicity" => $this->faker->randomElement(['mensual', 'quarterly', "semi-annual", "annual", 'in-fine']),
 			"taf" => 10,
 			"administrative_fees_percentage" => $this->faker->randomFloat(0, 0, 100),
 			"tax_fee_interest_rate" => $this->faker->randomFloat(0, 0, 100),
-			"caf_id" => User::inRandomOrder()->where("profile", "caf")->first()->id ?? 13,
+			"caf_id" => User::inRandomOrder()->where("profile", "caf")->first()->id ?? 9,
 			"credit_analyst_id" => User::inRandomOrder()->where("profile", "credit_analyst")->first()->id ?? 3,
-			"credit_admin_id" => User::inRandomOrder()->where("profile", "credit_admin")->first()->id ?? 6,
+			"credit_admin_id" => User::inRandomOrder()->where("profile", "credit_admin")->first()->id ?? 4,
 			"creator_id" => User::where('profile', 'credit_analyst')->inRandomOrder()->first()->id ?? 3,
 			"risk_premium_percentage" => $this->faker->numberBetween(10, 30),
 			"has_line_review_bonus" => $this->faker->boolean(),
+			"number_deferred" => $this->faker->numberBetween(0, 5),
 		];
 	}
 }
