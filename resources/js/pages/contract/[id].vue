@@ -71,6 +71,8 @@ const tableData = [
 	{ "title": "Type de déblocage", "value": frenchReleaseType[contract.value.verbal_trial.release_type] },
 	{ "title": "Admin Crédit", "value": contract.value.verbal_trial.credit_admin.full_name },
 	{ "title": "Prime de risque", "value": contract.value.verbal_trial.risk_premium_percentage + " %" },
+	{ "title": "Différé", "value": contract.value.verbal_trial.number_deferred + " mois(s)" },
+	{ "title": "Type de contrat", "value": contract.value.type_fr },
 ]
 
 if (contract.value.verbal_trial.duration > 13) {

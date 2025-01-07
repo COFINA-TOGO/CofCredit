@@ -225,7 +225,8 @@ class ContractController extends Controller
 		$contract = Contract::find($id);
 		if ($contract) {
 			if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
-				$templatePath = ($contract->has_pledges) ? "../document_templates/Contracts/$contract->type/with_pledge/contract_$contract->type" . "_with_pledge.docx" : "../document_templates/Contracts/$contract->type/contract_$contract->type.docx";
+				$contract_dir = $contract->verbal_trial->number_deferred == 0 ? "Contracts" : "Contracts-deferral";
+				$templatePath = ($contract->has_pledges) ? "../document_templates/$contract_dir/$contract->type/with_pledge/contract_$contract->type" . "_with_pledge.docx" : "../document_templates/$contract_dir/$contract->type/contract_$contract->type.docx";
 				$templateProcessor = new TemplateProcessor($templatePath);
 
 				$data = $contract->toArray();
@@ -260,7 +261,7 @@ class ContractController extends Controller
 				$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 				$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
-				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
+				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance"][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
 
 				$data["line_risk_premium_percentage"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "" : "<br/> \n Prime de risque (" . $data["verbal_trial.risk_premium_percentage"] . " %)";
@@ -287,6 +288,18 @@ class ContractController extends Controller
 				$tmp_fees = (float) $data["verbal_trial.administrative_fees_percentage"];
 				$data["verbal_trial.administrative_fees_percentage"] = number_format($tmp_fees, ($tmp_fees == (int) $tmp_fees) ? 0 : 2, ',', ' ');
 				$data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
+
+				if ($contract->verbal_trial->number_deferred > 0) {
+					$data["deferred_amount.fr"] = SpellNumber::value((float) $data["deferred_amount"])->locale('fr')->toLetters();
+					$data["deferred_amount"] = number_format(((float) $data["deferred_amount"]), 0, ',', ' ');
+					$data["number_deferred_fr"] = "le " . SpellNumber::value((float) $data["verbal_trial.number_deferred"])->locale('fr')->toLetters() . " mois";
+					if ($data["verbal_trial.number_deferred"] == 1) {
+						$data["number_deferred_fr"] = "le premier mois";
+					} else {
+						$data["number_deferred_fr"] = "les " . SpellNumber::value($contract->verbal_trial->number_deferred)->locale('fr')->toLetters() . " premiers mois";
+					}
+				}
+
 
 				$guaranteeList = [];
 				foreach ($contract->verbal_trial->guarantees as $guarantee) {
@@ -321,6 +334,7 @@ class ContractController extends Controller
 				}
 				unset($data["observations"]);
 				unset($data["guarantors"]);
+				unset($data["verbal_trial"]);
 				$templateProcessor->setValues($data);
 
 				// Enregistrez les modifications dans un nouveau fichier
@@ -395,7 +409,7 @@ class ContractController extends Controller
 				$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 				$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
-				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["verbal_trial.periodicity"]];
+				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance"][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
 				$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne	  : 1% du capital restant dû après 18 mois" : "";
 				$data["representative_type_of_identity_document"] = [

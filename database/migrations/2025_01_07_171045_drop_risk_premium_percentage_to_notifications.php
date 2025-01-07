@@ -12,7 +12,7 @@ return new class extends Migration
 	public function up(): void
 	{
 		Schema::table('notifications', function (Blueprint $table) {
-			$table->decimal('due_amount', 21, 2)->after('is_simple');
+			$table->dropColumn('risk_premium_percentage');
 		});
 	}
 
@@ -22,7 +22,7 @@ return new class extends Migration
 	public function down(): void
 	{
 		Schema::table('notifications', function (Blueprint $table) {
-			$table->dropColumn('due_amount');
+			$table->float('risk_premium_percentage')->after('due_amount')->default(0.5);
 		});
 	}
 };

@@ -37,7 +37,7 @@ class Contract extends Model
 	];
 
 	// protected $with = ['company', 'individual_business'];
-	protected $appends = ['guarantors_count', 'observations', 'upload_completed'];
+	protected $appends = ['guarantors_count', 'observations', 'upload_completed', "type_fr"];
 
 
 	public function toArray()
@@ -111,5 +111,14 @@ class Contract extends Model
 	public function getUploadCompletedAttribute()
 	{
 		return empty($this->observations);
+	}
+
+	public function getTypeFrAttribute()
+	{
+		return [
+			"particular" => "Particulier",
+			"company" => "Société",
+			"individual_business" => "Entreprise individuelle",
+		][$this->type];
 	}
 }

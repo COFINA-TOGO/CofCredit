@@ -24,6 +24,7 @@ const contractData = ref({
 	representative_date_of_issue_of_identity_document: null,
 	total_amount_of_interest: null,
 	due_amount: null,
+	deferred_amount: null,
 	number_of_due_dates: null,
 	type: null,
 	has_pledges: "0",
@@ -58,6 +59,7 @@ const getResetPvError = () => {
 		representative_date_of_issue_of_identity_document: "",
 		total_amount_of_interest: "",
 		due_amount: "",
+		deferred_amount: "",
 		number_of_due_dates: "",
 		type: "",
 		has_pledges: "",
@@ -131,6 +133,7 @@ const onSubmit = () => {
 				number_of_due_dates: contractData.value.number_of_due_dates,
 				type: contractData.value.type,
 				has_pledges: contractData.value.has_pledges,
+				deferred_amount: contractData.value.deferred_amount,
 			};
 
 			if (contractData.value.type == "company") {
@@ -247,9 +250,9 @@ if (route.query.id) {
 								</VCol>
 								<VCol cols="12" md="6" lg="6">
 									<AppTextField
-										v-model="contractData.due_amount"
+										v-model="contractData.deferred_amount"
 										type="number"
-										:error-messages="formError.due_amount"
+										:error-messages="formError.deferred_amount"
 										label="Montant d'une échéance différée"
 										:rules="[requiredValidator]"
 									/>

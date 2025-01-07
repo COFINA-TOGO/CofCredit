@@ -100,6 +100,7 @@ const onSubmit = () => {
 					contract.value.representative_date_of_issue_of_identity_document,
 				total_amount_of_interest: contract.value.total_amount_of_interest,
 				due_amount: contract.value.due_amount,
+				deferred_amount: contract.value.deferred_amount,
 				number_of_due_dates: contract.value.number_of_due_dates,
 				type: contract.value.type,
 				has_pledges: contract.value.has_pledges,
@@ -259,17 +260,6 @@ if (contract.value.individual_business == null) {
 								</VCol>
 								<VCol cols="12" md="6" lg="6">
 									<AppTextField
-										v-model="contract.total_amount_of_interest"
-										type="number"
-										:error-messages="
-											errorData.total_amount_of_interest
-										"
-										label="Montant total des intérêts"
-										:rules="[requiredValidator]"
-									/>
-								</VCol>
-								<VCol cols="12" md="6" lg="6">
-									<AppTextField
 										v-model="contract.number_of_due_dates"
 										type="number"
 										:error-messages="errorData.number_of_due_dates"
@@ -286,7 +276,21 @@ if (contract.value.individual_business == null) {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="12" md="6" lg="6">
+								<VCol
+									v-if="contract.verbal_trial.number_deferred != 0"
+									cols="12"
+									md="6"
+									lg="6"
+								>
+									<AppTextField
+										v-model="contract.deferred_amount"
+										type="number"
+										:error-messages="errorData.deferred_amount"
+										label="Montant d'une échéance différée"
+										:rules="[requiredValidator]"
+									/>
+								</VCol>
+								<VCol cols="12" md="6" lg="4">
 									<AppSelect
 										v-model="contract.type"
 										:items="typeList"
@@ -295,7 +299,18 @@ if (contract.value.individual_business == null) {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="10" md="6" lg="6">
+								<VCol cols="12" md="6" lg="4">
+									<AppTextField
+										v-model="contract.total_amount_of_interest"
+										type="number"
+										:error-messages="
+											errorData.total_amount_of_interest
+										"
+										label="Montant total des intérêts"
+										:rules="[requiredValidator]"
+									/>
+								</VCol>
+								<VCol cols="10" md="6" lg="4">
 									<AppSelect
 										v-model="contract.has_pledges"
 										:items="[
