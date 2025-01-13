@@ -28,7 +28,7 @@ const pvData = ref({
 	periodicity: null,
 	administrative_fees_percentage: null,
 	taf: null,
-	tax_fee_interest_rate: null,
+	tax_fee_interest_rate: 14,
 	credit_admin_id: null,
 	credit_analyst_id: null,
 	reserve: null,
