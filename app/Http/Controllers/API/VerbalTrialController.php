@@ -382,11 +382,10 @@ class VerbalTrialController extends Controller
 							}
 							$receiver = User::find($requestData["caf_id"]);
 							$link = env("APP_URL") . "/pv";
-							foreach (User::where('profile', 'credit_admin')->get() as $receiver) {
-								SendEmail::dispatch(
-									$receiver->email,
-									"Notification de mise en place d'un contrat",
-									"
+							SendEmail::dispatch(
+								$verbalTrial->credit_admin->email,
+								"Notification de mise en place d'un PV " . $verbalTrial->committee_id,
+								"
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='$link'>Voir les pvs</a></p>
@@ -397,8 +396,7 @@ class VerbalTrialController extends Controller
 
 										<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
 									"
-								);
-							}
+							);
 						} catch (Exception $e) {
 							DB::rollback();
 							throw $e;
@@ -515,6 +513,22 @@ class VerbalTrialController extends Controller
 								$requestData["status"] = "waiting";
 								$requestData["has_line_review_bonus"] = (bool) $requestData["has_line_review_bonus"];
 								$verbalTrial->update($requestData);
+								$link = env("APP_URL") . "/pv";
+								SendEmail::dispatch(
+									$verbalTrial->credit_admin->email,
+									"Notification de mise à jour du PV " . $verbalTrial->committee_id,
+									"
+											<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
+
+											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='$link'>Voir les pvs</a></p>
+
+											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+
+											<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+											<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+										"
+								);
 							} catch (\Exception $e) {
 								DB::rollback();
 								throw $e;
@@ -572,8 +586,7 @@ class VerbalTrialController extends Controller
 							"md" => "md",
 						][$connectedUser->profile];
 						$requestData["status"] = ($connectedUser->profile == "md") ? "validated" : "waiting";
-					}
-					else if($requestData["status"] == "rejected"){
+					} else if ($requestData["status"] == "rejected") {
 						$requestData["validation_level"] = "md";
 					}
 					$verbalTrial->update($requestData);
@@ -589,11 +602,11 @@ class VerbalTrialController extends Controller
 							"md" => [
 								[
 									"receiverList" => $receiverList["credit_admin_list"],
-									"subject" => "Notification de validation du PV ".$verbalTrial->committee_id,
+									"subject" => "Notification de validation du PV " . $verbalTrial->committee_id,
 									"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
 
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de contrat: <a href='".env("APP_URL") . "/contract/add?id=".$verbalTrial->id."'>Créer le contrat</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de contrat: <a href='" . env("APP_URL") . "/contract/add?id=" . $verbalTrial->id . "'>Créer le contrat</a></p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
@@ -608,11 +621,11 @@ class VerbalTrialController extends Controller
 							"md" => [
 								[
 									"receiverList" => $receiverList["md_list"],
-									"subject" => "Notification de validation du PV ".$verbalTrial->committee_id,
+									"subject" => "Notification de validation du PV " . $verbalTrial->committee_id,
 									"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher MD,</U></h1>
 
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de validation: <a href='".env("APP_URL") . "/pv"."'>Voir les pvs</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de validation: <a href='" . env("APP_URL") . "/pv" . "'>Voir les pvs</a></p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
@@ -625,11 +638,11 @@ class VerbalTrialController extends Controller
 							"head_credit" => [
 								[
 									"receiverList" => $receiverList["head_credit_list"],
-									"subject" => "Notification de validation du PV ".$verbalTrial->committee_id,
+									"subject" => "Notification de validation du PV " . $verbalTrial->committee_id,
 									"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher Head Credit,</U></h1>
 
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de validation: <a href='".env("APP_URL") . "/pv"."'>Voir les pvs</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de validation: <a href='" . env("APP_URL") . "/pv" . "'>Voir les pvs</a></p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
@@ -642,7 +655,7 @@ class VerbalTrialController extends Controller
 							"credit_admin" => [
 								[
 									"receiverList" => $receiverList["head_credit_list"],
-									"subject" => "Notifcation de validation du PV ".$verbalTrial->committee_id,
+									"subject" => "Notifcation de validation du PV " . $verbalTrial->committee_id,
 									"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
 			
@@ -660,17 +673,17 @@ class VerbalTrialController extends Controller
 						"rejected" => [
 							"md" => [
 								[
-									"receiverList" => $receiverList["caf_list"],
-									"subject" => "Notifcation de rejet du PV ".$verbalTrial->committee_id,
+									"receiverList" => $receiverList["credit_analyst_list"],
+									"subject" => "Notifcation de rejet du PV " . $verbalTrial->committee_id,
 									"message" => "
-										<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) Chargé(e) d'affaire,</h1>
+										<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) Analyste Crédit,</h1>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Nous vous informons que le PV <strong>".$verbalTrial->committee_id."</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
+										Nous vous informons que le PV <strong>" . $verbalTrial->committee_id . "</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Pour accéder directement au PV concerné, cliquez sur le lien suivant : <a href='#'>Voir le PV rejeté</a>.
+										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='#'>Voir les PV</a>.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
@@ -687,17 +700,17 @@ class VerbalTrialController extends Controller
 							],
 							"head_credit" => [
 								[
-									"receiverList" => $receiverList["caf_list"],
-									"subject" => "Notifcation de rejet du PV ".$verbalTrial->committee_id,
+									"receiverList" => $receiverList["credit_analyst_list"],
+									"subject" => "Notifcation de rejet du PV " . $verbalTrial->committee_id,
 									"message" => "
-										<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) Chargé(e) d'affaire,</h1>
+										<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) Analyste Crédit,</h1>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Nous vous informons que le PV <strong>".$verbalTrial->committee_id."</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
+										Nous vous informons que le PV <strong>" . $verbalTrial->committee_id . "</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Pour accéder directement au PV concerné, cliquez sur le lien suivant : <a href='#'>Voir le PV rejeté</a>.
+										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='#'>Voir les PV</a>.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
@@ -714,17 +727,17 @@ class VerbalTrialController extends Controller
 							],
 							"credit_admin" => [
 								[
-									"receiverList" => $receiverList["caf_list"],
-									"subject" => "Notifcation de rejet du PV ".$verbalTrial->committee_id,
+									"receiverList" => $receiverList["credit_analyst_list"],
+									"subject" => "Notifcation de rejet du PV " . $verbalTrial->committee_id,
 									"message" => "
-										<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) Chargé(e) d'affaire,</h1>
+										<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) Analyste Crédit,</h1>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Nous vous informons que le PV <strong>".$verbalTrial->committee_id."</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
+										Nous vous informons que le PV <strong>" . $verbalTrial->committee_id . "</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Pour accéder directement au PV concerné, cliquez sur le lien suivant : <a href='#'>Voir le PV rejeté</a>.
+										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='#'>Voir les PV</a>.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>

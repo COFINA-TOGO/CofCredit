@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\User;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Pledge;
@@ -628,21 +629,25 @@ class ContractController extends Controller
 			DB::commit(); // Valider les opérations
 			$receiver = $contract->verbal_trial->caf;
 			$link = env("APP_URL") . "/contract";
-				SendEmail::dispatch(
-					$receiver->email,
-					"Notification de mise en place d'un contrat",
-					"
-						<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e) $receiver->full_name,</U></h1>
+			SendEmail::dispatch(
+				$receiver->email,
+				"Notification de mise en place d'un contrat",
+				"
+				<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
+					$receiver->full_name,</U></h1>
 
-						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat en attente de signature par le client: <a href='$link'>Consulter l</a></p>
+				<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
+					cofina credit digital et de prendre en charge immédiatement le contrat en attente de signature par le client: <a
+						href='$link'>Consulter les contrats</a></p>
 
-						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+				<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
+					n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
-						<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+				<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
 
-						<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-			"
-				);
+				<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+				"
+			);
 			return $this->responseOk([
 				"contract" => $contract
 			], status: 201);
@@ -781,6 +786,27 @@ class ContractController extends Controller
 					$requestData["has_pledges"] = $requestData["has_pledges"] == "1";
 					$contract->update($requestData);
 
+					$receiver = $contract->verbal_trial->caf;
+					$link = env("APP_URL") . "/contract";
+					SendEmail::dispatch(
+						$receiver->email,
+						"Notification de modification d'un contrat",
+						"
+						<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
+							$receiver->full_name,</U></h1>
+		
+						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
+							cofina credit digital et de prendre en charge immédiatement le contrat en attente de signature par le client: <a
+								href='$link'>Consulter les contrats</a></p>
+		
+						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
+							n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+		
+						<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+		
+						<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+						"
+					);
 					$contract->load($relationList);
 				} catch (Exception $e) {
 					DB::rollback();
@@ -878,6 +904,64 @@ class ContractController extends Controller
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
 				} else {
+					$receiverList = [
+						"caf_list" => [User::find($contract->verbalTrial->caf_id)],
+						"credit_admin_list" => [User::find($contract->verbalTrial->credit_admin_id)],
+						"credit_analyst_list" => [User::find($contract->verbalTrial->credit_analyst_id)],
+						"head_credit_list" => User::where('profile', 'head_credit')->get(),
+						"md_list" => User::where('profile', 'md')->get(),
+					];
+					$mailsDataList = [
+						"validated" =>
+						[
+							"receiverList" => $receiverList["credit_admin_list"],
+							"subject" => "Notification de validation du PV " . $contract->verbalTrial->committee_id,
+							"message" => "
+										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
+
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat" . $contract->verbalTrial->committee_id . "en attente de cat: <a href='" . env("APP_URL") . "/cat/add?id=" . $contract->id . "'>Créer le cat</a></p>
+
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+
+										<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+										<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+									",
+						],
+						"rejected" =>
+						[
+
+							"receiverList" => $receiverList["caf_list"],
+							"subject" => "Notifcation de rejet du PV " . $contract->verbalTrial->committee_id,
+							"message" => "
+										<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) Analyste Crédit,</h1>
+
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
+										Nous vous informons que le contrat <strong>" . $contract->verbalTrial->committee_id . "</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
+										</p>
+
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
+										Pour accéder directement aux contrats, cliquez sur le lien suivant : <a href='#'>Voir les contrats</a>.
+										</p>
+
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
+										Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous restons à votre disposition pour toute assistance !
+										</p>
+
+										<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+										<p style='color: #999999; font-size: 12px;'>
+										Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.
+										</p>
+									",
+						],
+					];
+					$mailsData = $mailsDataList[$requestData["status"]];
+					foreach ($mailsData as $mailData) {
+						foreach ($mailData["receiverList"] as $receiver) {
+							SendEmail::dispatch($receiver->email, $mailData["subject"], $mailData["message"]);
+						}
+					}
 					$contract->update([
 						"status" => $requestData["status"],
 						"status_observation" => $requestData["comment"],
@@ -887,7 +971,7 @@ class ContractController extends Controller
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
 		} else {
-			return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
+			return $this->responseError(["id" => ["Le contrat n'existe pas"]], 404);
 		}
 	}
 
