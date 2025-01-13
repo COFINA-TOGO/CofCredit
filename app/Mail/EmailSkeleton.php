@@ -32,7 +32,7 @@ class EmailSkeleton extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('gamligocharles2@gmail.com', 'COFINA-TOGO-CREDIT-DIGITAL'),
+            from: new Address('report_tg@cofinacorp.com', 'COFINA-TOGO-CREDIT-DIGITAL'),
             cc: ['charles.gamligo@cofinacorp.com'],
             subject: "COFINA TOGO CREDIT DIGITAL - $this->emailSubject",
         );

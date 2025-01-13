@@ -28,27 +28,26 @@ class NotificationController extends Controller
 
 	/**
 	 * Affiche les notification
-	 *
-	 * @queryParam  verbal_trial_id										int				Filtrer par ID du PV.												  No-example
-	 * @queryParam  representative_phone_number							string			 Filtrer par Numéro de téléphone du demandeur.						  No-example
-	 * @queryParam  representative_home_address							string			 Filtrer par statut de validation du head credit						No-example
-	 * @queryParam  number_of_due_dates									int				Filtrer par nombre d'échéance.										 Example: 0
-	 * @queryParam  risk_premium_percentage								int				Filtrer par prime de risque (en pourcentage) du crédit du demandeur.	No-example
-	 * @queryParam  head_credit_observation								string			 Filtrer par présence de cat.											Example: 0
-	 * @queryParam  head_credit_validation								string			 Filtrer par présence de cat.											Example: 0
-	 * @queryParam  status												string			 Filtrer par présence de cat.											Example: 0
-	 * @queryParam  status_observation									string			 Filtrer par présence de cat.											Example: 0
-	 * @queryParam  signed_notification_path							string			 Filtrer par présence de cat.											Example: 0
-	 * @queryParam  signed_contract_path								string			 Filtrer par présence de cat.											Example: 0
-	 * @queryParam  signed_promissory_note_path							string			 Filtrer par présence de cat.											Example: 0
+	 * 
+	 * @queryParam  verbal_trial_id										int				Filtrer par ID du PV.												  	 No-example
+	 * @queryParam  representative_phone_number							string			Filtrer par Numéro de téléphone du demandeur.						  	 No-example
+	 * @queryParam  representative_home_address							string			Filtrer par statut de validation du head credit							 No-example
+	 * @queryParam  number_of_due_dates									int				Filtrer par nombre d'échéance.										 	Example: 0
+	 * @queryParam  head_credit_observation								string			Filtrer par présence de cat.											Example: 0
+	 * @queryParam  head_credit_validation								string			Filtrer par présence de cat.											Example: 0
+	 * @queryParam  status												string			Filtrer par présence de cat.											Example: 0
+	 * @queryParam  status_observation									string			Filtrer par présence de cat.											Example: 0
+	 * @queryParam  signed_notification_path							string			Filtrer par présence de cat.											Example: 0
+	 * @queryParam  signed_contract_path								string			Filtrer par présence de cat.											Example: 0
+	 * @queryParam  signed_promissory_note_path							string			Filtrer par présence de cat.											Example: 0
 	 * @queryParam  creator_id											int				Filtrer par présence de cat.											Example: 0
 	 * @queryParam  sent												int				Filtrer par présence de cat.											Example: 0
 	 * @queryParam  total_amount_of_interest							int				Filtrer par présence de cat.											Example: 0
-	 * @queryParam  representative_type_of_identity_document			string			 Filtrer par présence de cat.											Example: 0
-	 * @queryParam  representative_number_of_identity_document			string			 Filtrer par présence de cat.											Example: 0
-	 * @queryParam  representative_date_of_issue_of_identity_document	string			 Filtrer par présence de cat.											Example: 0
-	 * @queryParam  type												string			 Filtrer par présence de cat.											Example: 0
-	 * @queryParam  business_denomination								string			 Filtrer par présence de cat.											Example: 0
+	 * @queryParam  representative_type_of_identity_document			string			Filtrer par présence de cat.											Example: 0
+	 * @queryParam  representative_number_of_identity_document			string			Filtrer par présence de cat.											Example: 0
+	 * @queryParam  representative_date_of_issue_of_identity_document	string			Filtrer par présence de cat.											Example: 0
+	 * @queryParam  type												string			Filtrer par présence de cat.											Example: 0
+	 * @queryParam  business_denomination								string			Filtrer par présence de cat.											Example: 0
 	 * @queryParam  is_simple											int				Filtrer par présence de cat.											Example: 0
 	 * 
 	 * 
@@ -101,13 +100,23 @@ class NotificationController extends Controller
 				$notificationList->where(function ($query) use ($request) {
 					foreach (str_split($request["head_credit_validation"]) as $char) {
 						if (in_array($char, ['w', 'v', 'r', 'c'])) {
-							$query->orWhere("head_credit_validation", ["w" => "waiting", "v" => "validated", "r" => "rejected"][$char]);
+							$query->orWhere("head_credit_validation", ["w" => "waiting", "v" => "validated", "r" => "rejected", "c" => "canceled"][$char]);
 						}
 					}
 				});
 			}
 
-			foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_creator" => "creator", "with_pledges" => "pledges"] as $key => $value) {
+			if (isset($request["status"])) {
+				$notificationList->where(function ($query) use ($request) {
+					foreach (str_split($request["status"]) as $char) {
+						if (in_array($char, ['w', 'v', 'r', 'c'])) {
+							$query->orWhere("status", ["w" => "waiting", "v" => "validated", "r" => "rejected", "c" => "canceled"][$char]);
+						}
+					}
+				});
+			}
+
+			foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_creator" => "creator", "with_pledges" => "pledges", "with_credit_analyst" => "verbal_trial.credit_analyst"] as $key => $value) {
 				if (isset($request[$key]) && $request[$key]) {
 					$notificationList->with($value);
 				}
@@ -188,7 +197,7 @@ class NotificationController extends Controller
 		if ($notification) {
 			if (($authorisation = Gate::inspect('view', $notification))->allowed()) {
 				$suplementList = [];
-				foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_creator" => "creator"] as $key => $value) {
+				foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_creator" => "creator", "with_credit_analyst" => "verbal_trial.credit_analyst"] as $key => $value) {
 					if (isset($request[$key]) && $request[$key]) {
 						$suplementList[] = $value;
 					}
@@ -416,7 +425,6 @@ class NotificationController extends Controller
 	 * @bodyParam   representative_phone_number								string			Le numéro de téléphone du demandeur.													 Example: +228 90 90 90 90
 	 * @bodyParam   representative_home_address								string			L'addresse du domicile du demandeur.													 Example: Zip 85
 	 * @bodyParam   number_of_due_dates										int				Le nombre d'échéance du crédit.															 Example: 3
-	 * @bodyParam   risk_premium_percentage									int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   total_amount_of_interest								int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   representative_type_of_identity_document				int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   representative_number_of_identity_document				int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
@@ -435,7 +443,6 @@ class NotificationController extends Controller
 				'representative_phone_number' => 'required|min:2',
 				'representative_home_address' => 'required|min:2',
 				'number_of_due_dates' => 'required|numeric',
-				'risk_premium_percentage' => 'required|numeric',
 				'total_amount_of_interest' => 'required|numeric',
 				'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence',
 				'representative_number_of_identity_document' => 'required|min:2',
@@ -497,7 +504,6 @@ class NotificationController extends Controller
 	 * @bodyParam   representative_phone_number								string			Le numéro de téléphone du demandeur.													 Example: +228 90 90 90 90
 	 * @bodyParam   representative_home_address								string			L'addresse du domicile du demandeur.													 Example: Zip 85
 	 * @bodyParam   number_of_due_dates										int				Le nombre d'échéance du crédit.															 Example: 3
-	 * @bodyParam   risk_premium_percentage									int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   total_amount_of_interest								int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   representative_type_of_identity_document				int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   representative_number_of_identity_document				int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
@@ -519,7 +525,6 @@ class NotificationController extends Controller
 					'representative_phone_number' => 'required|min:2',
 					'representative_home_address' => 'required|min:2',
 					'number_of_due_dates' => 'required|numeric',
-					'risk_premium_percentage' => 'required|numeric',
 					'total_amount_of_interest' => 'required|numeric',
 					'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence',
 					'representative_number_of_identity_document' => 'required|min:2',

@@ -11,12 +11,9 @@
 
     <div
         style="background-color: #ffffff; max-width: 800px; margin: 0 auto; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 20px; margin-top: 20px;">
-        <img src="{{ $message->embed('public/logo.png') }}" alt="Votre Logo" style="display: block; margin: 0 auto 20px;">
-
-
+		<img src="{{ $message->embed('logo.png') }}" alt="Votre Logo" style="display: block; margin: 0 auto 20px;">
         <?php echo $content; ?>
     </div>
-
 </body>
 
 </html>

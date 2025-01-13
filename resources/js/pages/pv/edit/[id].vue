@@ -209,10 +209,12 @@ if (
 ) {
 	verbalTrial.value.entity_name = "";
 }
+
+console.log(verbalTrial.value.comment)
 </script>
 
 <template>
-	<VRow>
+	<VRow v-if="verbalTrial.status == 'rejected'">
 		<VCol cols="12" md="12">
 			<VForm ref="refForm" @submit.prevent="onSubmit">
 				<VRow>

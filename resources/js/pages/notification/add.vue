@@ -17,7 +17,6 @@ const notificationData = ref({
 	representative_home_address: null,
 	due_amount: null,
 	number_of_due_dates: null,
-	risk_premium_percentage: null,
 	total_amount_of_interest: null,
 	representative_type_of_identity_document: null,
 	representative_number_of_identity_document: null,
@@ -33,7 +32,6 @@ const getResetFormError = () => {
 		representative_home_address: "",
 		due_amount: "",
 		number_of_due_dates: "",
-		risk_premium_percentage: "",
 		total_amount_of_interest: "",
 		representative_type_of_identity_document: "",
 		representative_number_of_identity_document: "",
@@ -70,7 +68,6 @@ const onSubmit = () => {
 				representative_phone_number: notificationData.value.representative_phone_number,
 				representative_home_address: notificationData.value.representative_home_address,
 				number_of_due_dates: notificationData.value.number_of_due_dates,
-				risk_premium_percentage: notificationData.value.risk_premium_percentage,
 				total_amount_of_interest: notificationData.value.total_amount_of_interest,
 				due_amount: notificationData.value.due_amount,
 				representative_type_of_identity_document: notificationData.value.representative_type_of_identity_document,
@@ -144,78 +141,65 @@ const documentTypeList = [
 					<VCard class="mb-6" title="Information sur notification">
 						<VCardText>
 							<VRow>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="6">
 									<AppAutocomplete v-model="notificationData.verbal_trial_id" :items="verbalTrialList"
 										:error-messages="formError.verbal_trial_id" label="Procès verbal"
 										placeholder="Ex: CFNTG-044-13-12-23-01212" :rules="[requiredValidator]"
 										item-title="label" item-value="id" />
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="6">
 									<AppTextField v-model="notificationData.representative_phone_number"
 										:error-messages="formError.representative_phone_number"
 										label="Numéro de téléphone" placeholder="Ex: +228 96 96 96 96"
 										:rules="[requiredValidator]" />
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="6">
 									<AppTextField v-model="notificationData.representative_home_address"
 										:error-messages="formError.representative_home_address" label="Addresse"
 										placeholder="Ex: Adewi" :rules="[requiredValidator]" />
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
-									<AppTextField type="number" v-model="notificationData.number_of_due_dates"
-										:error-messages="formError.number_of_due_dates" label="Nombre d'échéance"
-										placeholder="Ex: 4" :rules="[requiredValidator]" />
-								</VCol>
-								<VCol cols="12" md="4" lg="4">
-									<AppTextField v-model="notificatinData.due_amount" type="number"
+								<VCol cols="12" md="4" lg="6">
+									<AppTextField v-model="notificationData.due_amount" type="number"
 										:error-messages="formError.due_amount" label="Montant d'une échéance"
 										:rules="[requiredValidator]" />
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="6">
 									<AppTextField v-model="notificationData.total_amount_of_interest" type="number"
 										:error-messages="formError.total_amount_of_interest"
 										label="Montant total des intérêts" placeholder="Ex: 15 000 000"
 										:rules="[requiredValidator]" />
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+
+								<VCol cols="12" md="6" lg="6">
+									<AppTextField type="number" v-model="notificationData.number_of_due_dates"
+										:error-messages="formError.number_of_due_dates" label="Nombre d'échéance"
+										placeholder="Ex: 4" :rules="[requiredValidator]" />
+								</VCol>
+								<VCol cols="12" md="6" lg="6">
 									<AppSelect v-model="notificationData.type" :items="typeList"
 										:error-messages="formError.type" label="Type" placeholder="Ex: Particulier"
 										:rules="[requiredValidator]" />
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="6">
 									<AppSelect v-model="notificationData.representative_type_of_identity_document"
 										:items="documentTypeList"
 										:error-messages="formError.representative_type_of_identity_document"
 										label="Type de la pièce d'identité" placeholder="Ex: Passeport"
 										:rules="[requiredValidator]" />
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="6">
 									<AppTextField v-model="notificationData.representative_number_of_identity_document"
 										:error-messages="formError.representative_number_of_identity_document"
 										label="Numéro de la pièce d'identité" placeholder="Ex: 251012345678"
 										:rules="[requiredValidator]" />
 								</VCol>
 
-								<VCol cols="12" md="12" lg="4">
+								<VCol cols="12" md="12" lg="6">
 									<AppDateTimePicker
 										v-model="notificationData.representative_date_of_issue_of_identity_document"
 										:error-messages="formError.representative_date_of_issue_of_identity_document"
 										label="Date de délivrance de la pièce d'identité" placeholder="Ex: 2022-01-01"
 										:rules="[requiredValidator]" />
-								</VCol>
-
-								<VCol cols="12">
-									<VSlider v-model="notificationData.risk_premium_percentage"
-										label="Prime de risque (en pourcentage) du demandeur"
-										:error-messages="formError.risk_premium_percentage" :thumb-size="15"
-										thumb-label="always" :rules="[requiredValidator]" step="0.01">
-										<template #append>
-											<VTextField v-model="notificationData.risk_premium_percentage"
-												:error-messages="formError.risk_premium_percentage" type="number"
-												style="width:120px" density="compact" hide-details variant="outlined"
-												suffix="%" />
-										</template>
-									</VSlider>
 								</VCol>
 							</VRow>
 						</VCardText>

@@ -18,7 +18,6 @@ class Notification extends Model
 		'representative_phone_number',
 		'representative_home_address',
 		'number_of_due_dates',
-		'risk_premium_percentage',
 		'head_credit_observation',
 		'head_credit_validation',
 		'status',

@@ -9,14 +9,13 @@ definePage({
 	},
 });
 import { ref } from "vue";
-import { VAlert, VTextarea } from "vuetify/lib/components/index.mjs";
 
 const router = useRouter();
 
 const pvData = ref({
 	committee_id: "CNFTG-4578-2-8-6-2-6--22",
 	committee_date: "2023-05-05",
-	caf_id: 12,
+	caf_id: 9,
 	civility: "Mr",
 	applicant_first_name: "Albert",
 	applicant_last_name: "Einstein",
@@ -30,13 +29,13 @@ const pvData = ref({
 	administrative_fees_percentage: 10,
 	taf: 10,
 	tax_fee_interest_rate: 14,
-	credit_admin_id: 5,
-	credit_analyst_id: 2,
+	credit_admin_id: 4,
+	credit_analyst_id: 3,
 	reserve: "",
 	entity_name: "Batman",
 	release_type: "progressive",
 	risk_premium_percentage: 0.5,
-	has_line_review_bonus: false,
+	has_line_review_bonus: 0,
 	number_deferred: 0,
 	guarantees: [
 		{
@@ -361,8 +360,8 @@ const addGuaranteeItem = () => {
 									<AppSelect
 										v-model="pvData.has_line_review_bonus"
 										:items="[
-											{ value: false, title: 'Sans la prime' },
-											{ value: true, title: 'Avec la prime' },
+											{ value: 0, title: 'Sans la prime' },
+											{ value: 1, title: 'Avec la prime' },
 										]"
 										:error-messages="pvError.has_line_review_bonus"
 										label="Prime de révision de ligne"

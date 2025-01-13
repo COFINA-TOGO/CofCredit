@@ -79,9 +79,14 @@ verbalTrial.value.guarantees.forEach(guarantee => {
 								Procès verbaux
 							</VBtn>
 						</VCol>
-						<VCol cols="2" class="text-right">
-							<VBtn append-icon="tabler-edit" :to="{ name: 'pv-edit-id', params: { id: verbalTrial.id } }"
-								:disabled="verbalTrial.status == 'validated'">
+						<VCol v-if="
+							$can('update', 'pv') &&
+							(verbalTrial.status == 'rejected' ||
+								(verbalTrial.status == 'waiting' &&
+									verbalTrial.validation_level == 'credit_admin'))
+						" cols="2" class="text-right">
+							<VBtn append-icon="tabler-edit"
+								:to="{ name: 'pv-edit-id', params: { id: verbalTrial.id } }">
 								Modifier
 							</VBtn>
 						</VCol>
