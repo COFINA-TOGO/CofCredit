@@ -659,7 +659,7 @@ class VerbalTrialController extends Controller
 									"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
 			
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='#'>Voir les pvs</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='" . env("APP_URL") . "/pv" . "'>Voir les pvs</a></p>
 			
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 			
@@ -683,7 +683,7 @@ class VerbalTrialController extends Controller
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='#'>Voir les PV</a>.
+										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='" . env("APP_URL") . "/pv" . "'>Voir les PV</a>.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
@@ -710,7 +710,7 @@ class VerbalTrialController extends Controller
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='#'>Voir les PV</a>.
+										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='" . env("APP_URL") . "/pv" . "'>Voir les PV</a>.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
@@ -737,7 +737,7 @@ class VerbalTrialController extends Controller
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='#'>Voir les PV</a>.
+										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='" . env("APP_URL") . "/pv" . "'>Voir les PV</a>.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
