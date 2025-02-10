@@ -77,7 +77,7 @@ const {
 		head_credit_validation: 'v',
 		has_cat: 0,
 		is_simple: 0,
-		has_upload_completed: 0,
+		//has_upload_completed: 0,
 	},
 }))
 
