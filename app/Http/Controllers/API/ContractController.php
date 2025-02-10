@@ -905,9 +905,9 @@ class ContractController extends Controller
 					return $this->responseError($validator->errors(), 400);
 				} else {
 					$receiverList = [
-						"caf_list" => [User::find($contract->verbalTrial->caf_id)],
-						"credit_admin_list" => [User::find($contract->verbalTrial->credit_admin_id)],
-						"credit_analyst_list" => [User::find($contract->verbalTrial->credit_analyst_id)],
+						"caf_list" => [User::find($contract->verbal_trial->caf_id)],
+						"credit_admin_list" => [User::find($contract->verbal_trial->credit_admin_id)],
+						"credit_analyst_list" => [User::find($contract->verbal_trial->credit_analyst_id)],
 						"head_credit_list" => User::where('profile', 'head_credit')->get(),
 						"md_list" => User::where('profile', 'md')->get(),
 					];
@@ -915,11 +915,11 @@ class ContractController extends Controller
 						"validated" =>
 						[
 							"receiverList" => $receiverList["credit_admin_list"],
-							"subject" => "Notification de validation du PV " . $contract->verbalTrial->committee_id,
+							"subject" => "Notification de validation du PV " . $contract->verbal_trial->committee_id,
 							"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
 
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat" . $contract->verbalTrial->committee_id . "en attente de cat: <a href='" . env("APP_URL") . "/cat/add?id=" . $contract->id . "'>Créer le cat</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat" . $contract->verbal_trial->committee_id . "en attente de cat: <a href='" . env("APP_URL") . "/cat/add?id=" . $contract->id . "'>Créer le cat</a></p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
@@ -932,12 +932,12 @@ class ContractController extends Controller
 						[
 
 							"receiverList" => $receiverList["caf_list"],
-							"subject" => "Notifcation de rejet du PV " . $contract->verbalTrial->committee_id,
+							"subject" => "Notifcation de rejet du PV " . $contract->verbal_trial->committee_id,
 							"message" => "
 										<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) Analyste Crédit,</h1>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Nous vous informons que le contrat <strong>" . $contract->verbalTrial->committee_id . "</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
+										Nous vous informons que le contrat <strong>" . $contract->verbal_trial->committee_id . "</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
