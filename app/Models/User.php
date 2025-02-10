@@ -263,7 +263,7 @@ class User extends Authenticatable
 						"subject" => ["mortgage-contract"]
 					],
 					[
-						"action" => ["without-signed-contract", "upload_signed_notification", "upload"],
+						"action" => ["without-signed-contract", "upload_signed_notification", "upload", "download"],
 						"subject" => ["notification"]
 					],
 					[
