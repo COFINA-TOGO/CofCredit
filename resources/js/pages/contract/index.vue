@@ -188,14 +188,20 @@ const lastPage = computed(() => contractData.value.last_page);
 			<VCardText>
 				<VRow>
 					<VCol cols="12" sm="4">
-						<AppSelect v-model="selectedType" placeholder="Type de contrat" :items="[
-							{ value: 'company', title: 'Société' },
-							{ value: 'particular', title: 'Particulier' },
-							{
-								value: 'individual_business',
-								title: 'Entreprise Individuel',
-							},
-						]" clearable clear-icon="tabler-x" />
+						<AppSelect
+							v-model="selectedType"
+							placeholder="Type de contrat"
+							:items="[
+								{ value: 'company', title: 'Société' },
+								{ value: 'particular', title: 'Particulier' },
+								{
+									value: 'individual_business',
+									title: 'Entreprise Individuel',
+								},
+							]"
+							clearable
+							clear-icon="tabler-x"
+						/>
 					</VCol>
 				</VRow>
 			</VCardText>
@@ -204,24 +210,42 @@ const lastPage = computed(() => contractData.value.last_page);
 
 			<div class="d-flex flex-wrap gap-4 mx-5">
 				<div class="d-flex align-center">
-					<AppTextField v-model="searchQuery" placeholder="Rechercher un contrat" density="compact"
-						style="inline-size: 200px" class="me-3" />
+					<AppTextField
+						v-model="searchQuery"
+						placeholder="Rechercher un contrat"
+						density="compact"
+						style="inline-size: 200px"
+						class="me-3"
+					/>
 				</div>
 
 				<VSpacer />
 				<div class="d-flex gap-4 flex-wrap align-center">
-					<VBtn variant="tonal" color="secondary" prepend-icon="tabler-download">
+					<VBtn
+						variant="tonal"
+						color="secondary"
+						prepend-icon="tabler-download"
+					>
 						Export
 					</VBtn>
 
-					<VBtn v-if="$can('create', 'contract')" color="primary" prepend-icon="tabler-plus"
-						:to="{ name: 'contract-add' }">
+					<VBtn
+						v-if="$can('create', 'contract')"
+						color="primary"
+						prepend-icon="tabler-plus"
+						:to="{ name: 'contract-add' }"
+					>
 						Ajouter
 					</VBtn>
-					<VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh" @click="
-						fetchContracts();
-					load(3);
-					">
+					<VBtn
+						:loading="loadings[3]"
+						:disabled="loadings[3]"
+						prepend-icon="tabler-refresh"
+						@click="
+							fetchContracts();
+							load(3);
+						"
+					>
 						Recharger
 						<template #loader>
 							<span class="custom-loader">
@@ -234,8 +258,15 @@ const lastPage = computed(() => contractData.value.last_page);
 
 			<VDivider class="mt-4" />
 
-			<VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
-				:items="contractList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
+			<VDataTableServer
+				v-model:items-per-page="itemsPerPage"
+				v-model:page="page"
+				:headers="headers"
+				:items="contractList"
+				:items-length="totalPv"
+				class="text-no-wrap"
+				@update:options="updateOptions"
+			>
 				<template #item.type="{ item }">
 					{{ typeList[item.type] }}
 				</template>
@@ -263,15 +294,23 @@ const lastPage = computed(() => contractData.value.last_page);
 
 					<VList density="compact" v-if="item.observations.length == 0">
 						<VListItem>
-							<VChip label :color="{
-									validated: 'success',
-									rejected: 'error',
-									waiting: 'warning',
-								}[item.status]
-								">
-								<VTooltip v-if="item.status_observation" activator="parent"
-									transition="scroll-x-transition" location="start">Raison: {{ item.status_observation
-									}}</VTooltip>
+							<VChip
+								label
+								:color="
+									{
+										validated: 'success',
+										rejected: 'error',
+										waiting: 'warning',
+									}[item.status]
+								"
+							>
+								<VTooltip
+									v-if="item.status_observation"
+									activator="parent"
+									transition="scroll-x-transition"
+									location="start"
+									>Raison: {{ item.status_observation }}</VTooltip
+								>
 								{{ item.status == "validated" ? "Dossier validé" : null }}
 								{{
 									item.status == "waiting"
@@ -287,25 +326,47 @@ const lastPage = computed(() => contractData.value.last_page);
 				<template #item.actions="{ item }">
 					<div class="text-center">
 						<span>
-							<IconBtn :to="{ name: 'contract-id', params: { id: item.id } }">
-								<VTooltip activator="parent" transition="scroll-x-transition" location="start">Details
-								</VTooltip>
+							<IconBtn
+								:to="{ name: 'contract-id', params: { id: item.id } }"
+							>
+								<VTooltip
+									activator="parent"
+									transition="scroll-x-transition"
+									location="start"
+									>Details</VTooltip
+								>
 								<VIcon icon="tabler-eye" />
 							</IconBtn>
-							<VBtn icon variant="text" size="small" color="medium-emphasis">
+							<VBtn
+								icon
+								variant="text"
+								size="small"
+								color="medium-emphasis"
+							>
 								<VIcon size="24" icon="tabler-dots-vertical" />
 								<VMenu activator="parent">
 									<VList>
-										<input ref="refInputEl" type="file" name="signed_contract"
-											accept=".pdf,.png,.jpg" hidden @input="uploadFile(item.id, $event)" />
+										<input
+											ref="refInputEl"
+											type="file"
+											name="signed_contract"
+											accept=".pdf,.png,.jpg"
+											hidden
+											@input="uploadFile(item.id, $event)"
+										/>
 
-										<VBadge v-if="$can('read', 'guarantor')" inline
-											:content="item.guarantors_count">
-											<VListItem :to="{
-												name:
-													'contract-contract_id-guarantor',
-												params: { contract_id: item.id },
-											}">
+										<VBadge
+											v-if="$can('read', 'guarantor')"
+											inline
+											:content="item.guarantors_count"
+										>
+											<VListItem
+												:to="{
+													name:
+														'contract-contract_id-guarantor',
+													params: { contract_id: item.id },
+												}"
+											>
 												<template #prepend>
 													<VIcon icon="tabler-users" />
 												</template>
@@ -315,10 +376,13 @@ const lastPage = computed(() => contractData.value.last_page);
 												</VListItemTitle>
 											</VListItem>
 										</VBadge>
-										<VListItem v-if="$can('read', 'pv')" :to="{
-											name: 'pv-id',
-											params: { id: item.verbal_trial.id },
-										}">
+										<VListItem
+											v-if="$can('read', 'pv')"
+											:to="{
+												name: 'pv-id',
+												params: { id: item.verbal_trial.id },
+											}"
+										>
 											<template #prepend>
 												<VIcon icon="tabler-eye" />
 											</template>
@@ -329,105 +393,141 @@ const lastPage = computed(() => contractData.value.last_page);
 										<div v-if="$can('download', 'contract')">
 											<VDivider />
 											<!-- Télécharger contrat non-signé -->
-											<VListItem >
+											<VListItem
+												@click="
+													downloadFile(
+														`/api/contract/download/${item.id}`,
+														`Contrat-${item.verbal_trial.committee_id}.pdf`
+													)
+												"
+											>
 												<template #prepend>
 													<VIcon icon="tabler-download" />
 												</template>
-												<a :href="`/api/contract/download/${item.id}`"
-													:download="`Contrat-${item.verbal_trial.committee_id}.pdf`"
-													style="text-decoration: none; color: inherit;"></a>
-												<VListItemTitle>Télécharger Contrat
-													non-signé</VListItemTitle>
+												<VListItemTitle
+													>Télécharger Contrat
+													non-signé</VListItemTitle
+												>
 											</VListItem>
 											<!-- Télécharger contrat signé -->
-											<VListItem v-if="item.signed_contract_path" @click="
-												downloadFile(
-													item.signed_contract_path,
-													`Contrat-${item.signed_contract_path
-														.split('/')
-														.slice(-1)[0]
-													}`
-												)
-												">
+											<VListItem
+												v-if="item.signed_contract_path"
+												@click="
+													downloadFile(
+														item.signed_contract_path,
+														`Contrat-${
+															item.signed_contract_path
+																.split('/')
+																.slice(-1)[0]
+														}`
+													)
+												"
+											>
 												<template #prepend>
 													<VIcon icon="tabler-download" />
 												</template>
-												<VListItemTitle>Télécharger Contrat
-													signé</VListItemTitle>
+												<VListItemTitle
+													>Télécharger Contrat
+													signé</VListItemTitle
+												>
 											</VListItem>
 											<!-- Télécharger billet à ordre non-signé -->
-											<VListItem @click="
-												downloadFile(
-													`/api/contract/promissory-note/download/${item.id}`,
-													`Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`
-												)
-												">
+											<VListItem
+												@click="
+													downloadFile(
+														`/api/contract/promissory-note/download/${item.id}`,
+														`Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`
+													)
+												"
+											>
 												<template #prepend>
 													<VIcon icon="tabler-download" />
 												</template>
-												<VListItemTitle>Télécharger Billet à ordre non
-													signé</VListItemTitle>
+												<VListItemTitle
+													>Télécharger Billet à ordre non
+													signé</VListItemTitle
+												>
 											</VListItem>
 											<!-- Télécharger mention manuscrite -->
-											<VListItem @click="
-												downloadFile(
-													`/api/contract/handwritten-mention/download/${item.id}`,
-													`Mention-manuscrite-${item.verbal_trial.committee_id}.pdf`
-												)
-												">
+											<VListItem
+												@click="
+													downloadFile(
+														`/api/contract/handwritten-mention/download/${item.id}`,
+														`Mention-manuscrite-${item.verbal_trial.committee_id}.pdf`
+													)
+												"
+											>
 												<template #prepend>
 													<VIcon icon="tabler-download" />
 												</template>
-												<VListItemTitle>Télécharger Mention
-													manuscrite</VListItemTitle>
+												<VListItemTitle
+													>Télécharger Mention
+													manuscrite</VListItemTitle
+												>
 											</VListItem>
 											<!-- Télécharger billet à ordre signé -->
-											<VListItem v-if="item.signed_promissory_note_path" @click="
-												downloadFile(
-													item.signed_promissory_note_path,
-													`Billet-à-ordre-${item.signed_promissory_note_path
-														.split('/')
-														.slice(-1)[0]
-													}`
-												)
-												">
+											<VListItem
+												v-if="item.signed_promissory_note_path"
+												@click="
+													downloadFile(
+														item.signed_promissory_note_path,
+														`Billet-à-ordre-${
+															item.signed_promissory_note_path
+																.split('/')
+																.slice(-1)[0]
+														}`
+													)
+												"
+											>
 												<template #prepend>
 													<VIcon icon="tabler-download" />
 												</template>
-												<VListItemTitle>Télécharger Billet à ordre
-													signé</VListItemTitle>
+												<VListItemTitle
+													>Télécharger Billet à ordre
+													signé</VListItemTitle
+												>
 											</VListItem>
 										</div>
 
 										<div v-if="$can('upload', 'contract')">
 											<VDivider />
 											<!-- Ajouter Contrat signé -->
-											<VListItem v-if="
-												item.signed_contract_path == null ||
-												item.status == 'rejected'
-											" @click="
+											<VListItem
+												v-if="
+													item.signed_contract_path == null ||
+													item.status == 'rejected'
+												"
+												@click="
 													uploadState = 'signed_contract';
-												refInputEl?.click();
-												">
+													refInputEl?.click();
+												"
+											>
 												<template #prepend>
 													<VIcon icon="tabler-cloud-upload" />
 												</template>
-												<VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
+												<VListItemTitle color="error"
+													>Ajouter contrat signé</VListItemTitle
+												>
 											</VListItem>
 											<!-- Ajouter Billet à ordre -->
-											<VListItem v-if="
-												item.signed_promissory_note_path ==
-												null || item.status == 'rejected'
-											" @click="
+											<VListItem
+												v-if="
+													item.signed_promissory_note_path ==
+														null || item.status == 'rejected'
+												"
+												@click="
 													uploadState =
-													'signed_promissory_note';
-												refInputEl?.click();
-												">
+														'signed_promissory_note';
+													refInputEl?.click();
+												"
+											>
 												<template #prepend>
 													<VIcon icon="tabler-cloud-upload" />
 												</template>
-												<VListItemTitle>Ajouter billet à ordre
-													signé</VListItemTitle>
+												<VListItemTitle
+													>Ajouter billet à ordre
+													signé</VListItemTitle
+												>
 											</VListItem>
 										</div>
 									</VList>
@@ -435,82 +535,121 @@ const lastPage = computed(() => contractData.value.last_page);
 							</VBtn>
 						</span>
 
-						<span v-if="
-							$can('update', 'contract') || $can('delete', 'contract')
-						">
+						<span
+							v-if="
+								$can('update', 'contract') || $can('delete', 'contract')
+							"
+						>
 							<VDivider />
-							<IconBtn v-if="$can('update', 'contract')" :to="{
-								name: 'contract-edit-id',
-								params: { id: item.id },
-							}" :disabled="item.status == 'validated'">
-								<VTooltip activator="parent" transition="scroll-x-transition" location="start">Modifier
-								</VTooltip>
+							<IconBtn
+								v-if="$can('update', 'contract')"
+								:to="{
+									name: 'contract-edit-id',
+									params: { id: item.id },
+								}"
+								:disabled="item.status == 'validated'"
+							>
+								<VTooltip
+									activator="parent"
+									transition="scroll-x-transition"
+									location="start"
+									>Modifier</VTooltip
+								>
 								<VIcon icon="tabler-edit" />
 							</IconBtn>
-							<IconBtn v-if="$can('delete', 'contract')" @click="
-								selectedItemId = item.id;
-							(actionTitle = 'Supprimer le contrat'),
-								(actionText =
-									'Voulez vous vraiment supprimer ce contrat?'),
-								(actionFunction = apiDelete);
-							actionButtonText = 'Supprimer';
-							commentPresence = false;
-							isActionDialogVisible = true;
-							">
-								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Supprimer
-								</VTooltip>
+							<IconBtn
+								v-if="$can('delete', 'contract')"
+								@click="
+									selectedItemId = item.id;
+									(actionTitle = 'Supprimer le contrat'),
+										(actionText =
+											'Voulez vous vraiment supprimer ce contrat?'),
+										(actionFunction = apiDelete);
+									actionButtonText = 'Supprimer';
+									commentPresence = false;
+									isActionDialogVisible = true;
+								"
+							>
+								<VTooltip
+									activator="parent"
+									transition="scroll-x-transition"
+									location="end"
+									>Supprimer</VTooltip
+								>
 								<VIcon icon="tabler-trash" color="error" />
 							</IconBtn>
 						</span>
 
-						<span v-if="
-							$can('reject', 'contract') ||
-							$can('validate', 'contract') ||
-							$can('create', 'cat')
-						">
+						<span
+							v-if="
+								$can('reject', 'contract') ||
+								$can('validate', 'contract') ||
+								$can('create', 'cat')
+							"
+						>
 							<VDivider />
-							<IconBtn v-if="
-								$can('reject', 'contract') &&
-								item.status != 'rejected' &&
-								item.observations.length == 0
-							" @click="
+							<IconBtn
+								v-if="
+									$can('reject', 'contract') &&
+									item.status != 'rejected' &&
+									item.observations.length == 0
+								"
+								@click="
 									selectedItemId = item.id;
-								(actionTitle = 'Rejeter le contrat'),
-									(actionText =
-										'Voulez vous vraiment rejeter ce contrat?'),
-									(actionFunction = apiChangeStatus);
-								actionButtonText = 'Rejeter';
-								commentPresence = true;
-								actionStatus = 'rejected';
-								isActionDialogVisible = true;
-								">
-								<VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter
-								</VTooltip>
+									(actionTitle = 'Rejeter le contrat'),
+										(actionText =
+											'Voulez vous vraiment rejeter ce contrat?'),
+										(actionFunction = apiChangeStatus);
+									actionButtonText = 'Rejeter';
+									commentPresence = true;
+									actionStatus = 'rejected';
+									isActionDialogVisible = true;
+								"
+							>
+								<VTooltip
+									activator="parent"
+									transition="scroll-x-transition"
+									location="start"
+									>Rejeter</VTooltip
+								>
 								<VIcon icon="tabler-x" color="error" />
 							</IconBtn>
-							<IconBtn v-if="
-								$can('validate', 'contract') &&
-								item.status == 'waiting' &&
-								item.observations.length == 0
-							" @click="
+							<IconBtn
+								v-if="
+									$can('validate', 'contract') &&
+									item.status == 'waiting' &&
+									item.observations.length == 0
+								"
+								@click="
 									selectedItemId = item.id;
-								(actionTitle = 'Valider le contrat'),
-									(actionText =
-										'Voulez vous vraiment valider ce contrat?'),
-									(actionFunction = apiChangeStatus);
-								actionButtonText = 'Valider';
-								commentPresence = false;
-								actionStatus = 'validated';
-								isActionDialogVisible = true;
-								">
-								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider
-								</VTooltip>
+									(actionTitle = 'Valider le contrat'),
+										(actionText =
+											'Voulez vous vraiment valider ce contrat?'),
+										(actionFunction = apiChangeStatus);
+									actionButtonText = 'Valider';
+									commentPresence = false;
+									actionStatus = 'validated';
+									isActionDialogVisible = true;
+								"
+							>
+								<VTooltip
+									activator="parent"
+									transition="scroll-x-transition"
+									location="end"
+									>Valider</VTooltip
+								>
 								<VIcon icon="tabler-check" color="success" />
 							</IconBtn>
-							<IconBtn v-if="$can('create', 'cat') && item.status == 'validated'"
-								:to="{ name: 'cat-add', query: { id: item.id } }">
-								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le
-									CAT</VTooltip>
+							<IconBtn
+								v-if="$can('create', 'cat') && item.status == 'validated'"
+								:to="{ name: 'cat-add', query: { id: item.id } }"
+							>
+								<VTooltip
+									activator="parent"
+									transition="scroll-x-transition"
+									location="end"
+									>Créer le CAT</VTooltip
+								>
 								<VIcon icon="tabler-file-plus" color="success" />
 							</IconBtn>
 						</span>
@@ -520,22 +659,39 @@ const lastPage = computed(() => contractData.value.last_page);
 				<template #bottom>
 					<VDivider />
 
-					<div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
+					<div
+						class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3"
+					>
 						<p class="text-sm text-medium-emphasis mb-0">
 							{{ paginationMeta({ page, itemsPerPage }, totalPv) }}
 						</p>
 
-						<VPagination v-model="page" :length="lastPage" :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)
-							">
+						<VPagination
+							v-model="page"
+							:length="lastPage"
+							:total-visible="
+								$vuetify.display.xs ? 1 : Math.min(lastPage, 5)
+							"
+						>
 							<template #prev="slotProps">
-								<VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+								<VBtn
+									variant="tonal"
+									color="default"
+									v-bind="slotProps"
+									:icon="false"
+								>
 									<VIcon start icon="tabler-arrow-left" />
 									Précedent
 								</VBtn>
 							</template>
 
 							<template #next="slotProps">
-								<VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+								<VBtn
+									variant="tonal"
+									color="default"
+									v-bind="slotProps"
+									:icon="false"
+								>
 									Suivant
 									<VIcon end icon="tabler-arrow-right" />
 								</VBtn>
@@ -555,18 +711,29 @@ const lastPage = computed(() => contractData.value.last_page);
 				<VCardText>
 					{{ actionText }}
 
-					<AppTextarea v-if="commentPresence" class="mt-3" v-model="actionComment" label="Commentaire"
-						placeholder="Ex: RAS" />
+					<AppTextarea
+						v-if="commentPresence"
+						class="mt-3"
+						v-model="actionComment"
+						label="Commentaire"
+						placeholder="Ex: RAS"
+					/>
 				</VCardText>
 
 				<VCardText class="d-flex justify-end gap-3 flex-wrap">
-					<VBtn color="secondary" variant="tonal" @click="isActionDialogVisible = false">
+					<VBtn
+						color="secondary"
+						variant="tonal"
+						@click="isActionDialogVisible = false"
+					>
 						Annuler
 					</VBtn>
-					<VBtn @click="
-						actionFunction(selectedItemId);
-					isActionDialogVisible = false;
-					">
+					<VBtn
+						@click="
+							actionFunction(selectedItemId);
+							isActionDialogVisible = false;
+						"
+					>
 						{{ actionButtonText }}
 					</VBtn>
 				</VCardText>
