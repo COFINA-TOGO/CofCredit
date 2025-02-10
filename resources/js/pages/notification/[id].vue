@@ -1,7 +1,7 @@
 <script setup>
 definePage({
 	meta: {
-		action: ['read'],
+		action: 'read',
 		subject: 'notification',
 	},
 })
