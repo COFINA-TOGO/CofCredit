@@ -869,8 +869,30 @@ class ContractController extends Controller
 				$path = 'upload/Contracts/signed_' . $document_category . 's/' . $contract->verbal_trial->committee_id . '-signed.' . $extension;
 				Storage::disk("public")->put($path, $documentData);
 				$contract->update(["signed_{$document_category}_path" => "/storage/" . $path, "status" => "waiting"]);
-
 				DB::commit();
+				$receiver = $contract->verbal_trial->credit_admin;
+				$link = env("APP_URL") . "/contract";
+				$document_type = ["contract" => "contrat", "promissory_note" => "billet à ordre"][$document_category];
+				$pv_commitee_id = $contract->verbal_trial->committee_id;
+				SendEmail::dispatch(
+					$receiver->email,
+					"Notification de chargement de $document_type signé du contrat $pv_commitee_id",
+					"
+					<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
+						$receiver->full_name,</U></h1>
+	
+					<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
+						cofina credit digital et de valider le $document_type chargé par le caf du dossier $pv_commitee_id: <a
+							href='$link'>Consulter les contrats</a></p>
+	
+					<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
+						n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+	
+					<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+	
+					<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+					"
+				);
 				return $this->responseOk(["contract" => $contract]);
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
@@ -936,7 +958,7 @@ class ContractController extends Controller
 								"receiverList" => $receiverList["caf_list"],
 								"subject" => "Notifcation de rejet du PV " . $contract->verbal_trial->committee_id,
 								"message" => "
-											<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) Analyste Crédit,</h1>
+											<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) CAF,</h1>
 	
 											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
 											Nous vous informons que le contrat <strong>" . $contract->verbal_trial->committee_id . "</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.

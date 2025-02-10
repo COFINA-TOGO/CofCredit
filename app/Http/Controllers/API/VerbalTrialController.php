@@ -597,6 +597,9 @@ class VerbalTrialController extends Controller
 						"head_credit_list" => User::where('profile', 'head_credit')->get(),
 						"md_list" => User::where('profile', 'md')->get(),
 					];
+					$nextStep = $verbalTrial->has_mortgage ? "notification" : "contrat";
+					$nextStepName = $verbalTrial->has_mortgage ? "la notification" : "le contrat";
+					$nextStepLink = $verbalTrial->has_mortgage ? "notification" : "contract";
 					$mailsDataList = [
 						"validated" => [
 							"md" => [
@@ -606,7 +609,7 @@ class VerbalTrialController extends Controller
 									"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
 
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de contrat: <a href='" . env("APP_URL") . "/contract/add?id=" . $verbalTrial->id . "'>Créer le contrat</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de $nextStep: <a href='" . env("APP_URL") . "/$nextStepLink/add?id=" . $verbalTrial->id . "'>Créer $nextStepName</a></p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
