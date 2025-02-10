@@ -119,7 +119,7 @@ class User extends Authenticatable
 			case ('credit_analyst'):
 				return [
 					[
-						"action" => "read",
+						"action" => ["read"],
 						"subject" => ["non-mortgage-contract", "mortgage-contract"]
 					],
 					[
@@ -142,7 +142,7 @@ class User extends Authenticatable
 			case ('credit_admin'):
 				return [
 					[
-						"action" => "read",
+						"action" => ["read"],
 						"subject" => ["non-mortgage-contract", "mortgage-contract"]
 					],
 					[
@@ -189,7 +189,7 @@ class User extends Authenticatable
 			case ('head_credit'):
 				return [
 					[
-						"action" => "read",
+						"action" => ["read"],
 						"subject" => ["non-mortgage-contract", "mortgage-contract"]
 					],
 					[
@@ -305,11 +305,11 @@ class User extends Authenticatable
 			case ('caf'):
 				return [
 					[
-						"action" => "read",
+						"action" => ["read"],
 						"subject" => ["non-mortgage-contract", "mortgage-contract"]
 					],
 					[
-						"action" => "read",
+						"action" => ["read"],
 						"subject" => ["pv"]
 					],
 					[
@@ -351,7 +351,7 @@ class User extends Authenticatable
 			case ('md'):
 				return [
 					[
-						"action" => "read",
+						"action" => ["read"],
 						"subject" => ["non-mortgage-contract", "mortgage-contract"]
 					],
 					[
