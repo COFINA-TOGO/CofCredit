@@ -306,7 +306,11 @@ class User extends Authenticatable
 				return [
 					[
 						"action" => "read",
-						"subject" => ["non-mortgage-contract", "mortgage-contract", "pv"]
+						"subject" => ["non-mortgage-contract", "mortgage-contract"]
+					],
+					[
+						"action" => "read",
+						"subject" => ["pv"]
 					],
 					[
 						"action" => ["read", "upload", "download", "send"],
