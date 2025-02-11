@@ -264,10 +264,11 @@ class ContractController extends Controller
 				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance"][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
+				$data["verbal_trial.risk_premium"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "0" : number_format($data["verbal_trial.risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
 
 				$data["line_risk_premium_percentage"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "" : "<br/> \n Prime de risque (" . $data["verbal_trial.risk_premium_percentage"] . " %)";
 				$data["line_risk_premium_percentage_value"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "" : ": " . number_format($data["verbal_trial.risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
-				$data["verbal_trial.risk_premium"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "0" : number_format($data["verbal_trial.risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
+				
 
 				$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne" : "";
 				$data["line_review_bonus_value"] = $data["verbal_trial.has_line_review_bonus"] ? ": 1% du capital restant dû après 18 mois" : "";
@@ -282,7 +283,6 @@ class ContractController extends Controller
 					"residence_permit" => "Carte de séjour",
 				][$data["representative_type_of_identity_document"]];
 
-				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
 				$data["day_due_amount"] = number_format(((float) $data["day_due_amount"]), 0, ',', ' ');
 				$data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
 				$data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
@@ -310,8 +310,15 @@ class ContractController extends Controller
 					})->all());
 				}
 				$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+				
 				$insuranceList = $contract->verbal_trial->has_insurance ? [["key" => "Prime d’assurance", "value" => "Selon la grille de l’assureur"]] : [];
 				$templateProcessor->cloneBlock('insurance', 0, true, false, $insuranceList);
+				
+				$riskPremiumPercentageList = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["verbal_trial.risk_premium_percentage"] . " %)", "value" => "" . number_format($data["verbal_trial.risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA"]];
+				$templateProcessor->cloneBlock('riskPremiumPercentage', 0, true, false, $riskPremiumPercentageList);
+
+				$reviewBonusList = $data["verbal_trial.has_line_review_bonus"] ? [["key" => "Prime de révision de ligne", "value" => "1% du capital restant dû après 18 mois"]] : [];
+				$templateProcessor->cloneBlock('reviewBonus', 0, true, false, $reviewBonusList);
 
 				if ($contract->has_pledges) {
 					$pledgeList = [];
@@ -338,6 +345,7 @@ class ContractController extends Controller
 				unset($data["observations"]);
 				unset($data["guarantors"]);
 				unset($data["verbal_trial"]);
+				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
 				$templateProcessor->setValues($data);
 
 				// Enregistrez les modifications dans un nouveau fichier
@@ -414,7 +422,9 @@ class ContractController extends Controller
 				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance"][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
+
 				$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne	  : 1% du capital restant dû après 18 mois" : "";
+				
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "Carte d'identité nationale",
 					"passport" => "Passeport",
