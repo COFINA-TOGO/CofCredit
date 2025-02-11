@@ -94,6 +94,7 @@ const getEmptyError = () => {
 		risk_premium_percentage: "",
 		has_line_review_bonus: "",
 		number_deferred: "",
+		has_insurance: "",
 	};
 };
 
@@ -146,6 +147,7 @@ const onSubmit = () => {
 					risk_premium_percentage: verbalTrial.value.risk_premium_percentage,
 					has_line_review_bonus: verbalTrial.value.has_line_review_bonus,
 					number_deferred: verbalTrial.value.number_deferred,
+					has_insurance: verbalTrial.value.has_insurance,
 				},
 			});
 
@@ -210,11 +212,10 @@ if (
 	verbalTrial.value.entity_name = "";
 }
 
-console.log(verbalTrial.value.comment)
 </script>
 
 <template>
-	<VRow v-if="verbalTrial.status == 'rejected'">
+	<VRow>
 		<VCol cols="12" md="12">
 			<VForm ref="refForm" @submit.prevent="onSubmit">
 				<VRow>
@@ -383,7 +384,7 @@ console.log(verbalTrial.value.comment)
 											:rules="[requiredValidator]"
 										/>
 									</VCol>
-									<VCol cols="12" md="6" lg="4">
+									<VCol cols="12" md="6" lg="3">
 										<AppAutocomplete
 											v-model="verbalTrial.type_of_credit_id"
 											:items="typeOfCreditList"
@@ -397,7 +398,7 @@ console.log(verbalTrial.value.comment)
 											:rules="[requiredValidator]"
 										/>
 									</VCol>
-									<VCol cols="12" md="6" lg="4">
+									<VCol cols="12" md="6" lg="3">
 										<AppTextField
 											v-model="verbalTrial.amount"
 											type="number"
@@ -408,7 +409,7 @@ console.log(verbalTrial.value.comment)
 										/>
 									</VCol>
 
-									<VCol cols="12" md="6" lg="4">
+									<VCol cols="12" md="6" lg="3">
 										<AppSelect
 											v-model="verbalTrial.has_line_review_bonus"
 											:items="[
@@ -419,6 +420,21 @@ console.log(verbalTrial.value.comment)
 												verbalTrialError.has_line_review_bonus
 											"
 											label="Prime de révision de ligne"
+											:rules="[requiredValidator]"
+										/>
+									</VCol>
+									
+									<VCol cols="12" md="6" lg="3">
+										<AppSelect
+											v-model="verbalTrial.has_insurance"
+											:items="[
+											{ value: 0, title: 'Sans l\'assurance' },
+											{ value: 1, title: 'Avec l\'assurance' },
+											]"
+											:error-messages="
+												verbalTrialError.has_insurance
+											"
+											label="Assurance"
 											:rules="[requiredValidator]"
 										/>
 									</VCol>

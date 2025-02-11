@@ -26,7 +26,7 @@ const pvData = ref({
 	amount: null,
 	duration: null,
 	periodicity: null,
-	administrative_fees_percentage: null,
+	administrative_fees_percentage: 0,
 	taf: 10,
 	tax_fee_interest_rate: 14,
 	credit_admin_id: null,
@@ -34,8 +34,9 @@ const pvData = ref({
 	reserve: null,
 	entity_name: null,
 	release_type: null,
-	risk_premium_percentage: null,
+	risk_premium_percentage: 0,
 	has_line_review_bonus: null,
+	has_insurance: null,
 	number_deferred: null,
 	guarantees: [
 		{
@@ -71,6 +72,7 @@ const getResetPvError = () => {
 		risk_premium_percentage: "",
 		has_line_review_bonus: "",
 		number_deferred: "",
+		has_insurance: "",
 	};
 };
 
@@ -164,6 +166,7 @@ const onSubmit = () => {
 					risk_premium_percentage: pvData.value.risk_premium_percentage,
 					has_line_review_bonus: pvData.value.has_line_review_bonus,
 					number_deferred: pvData.value.number_deferred,
+					has_insurance: pvData.value.has_insurance,
 				},
 			});
 
@@ -333,7 +336,7 @@ const addGuaranteeItem = () => {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="3">
 									<AppAutocomplete
 										v-model="pvData.type_of_credit_id"
 										:items="typeOfCreditList"
@@ -346,7 +349,7 @@ const addGuaranteeItem = () => {
 									/>
 								</VCol>
 
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="3">
 									<AppTextField
 										v-model="pvData.amount"
 										type="number"
@@ -356,7 +359,7 @@ const addGuaranteeItem = () => {
 										:rules="[requiredValidator]"
 									/>
 								</VCol>
-								<VCol cols="12" md="6" lg="4">
+								<VCol cols="12" md="6" lg="3">
 									<AppSelect
 										v-model="pvData.has_line_review_bonus"
 										:items="[
@@ -365,6 +368,18 @@ const addGuaranteeItem = () => {
 										]"
 										:error-messages="pvError.has_line_review_bonus"
 										label="Prime de révision de ligne"
+										:rules="[requiredValidator]"
+									/>
+								</VCol>
+								<VCol cols="12" md="6" lg="3">
+									<AppSelect
+										v-model="pvData.has_insurance"
+										:items="[
+											{ value: 0, title: 'Sans l\'assurance' },
+											{ value: 1, title: 'Avec l\'assurance' },
+										]"
+										:error-messages="pvError.has_insurance"
+										label="Assurance"
 										:rules="[requiredValidator]"
 									/>
 								</VCol>

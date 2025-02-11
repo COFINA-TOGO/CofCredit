@@ -310,6 +310,8 @@ class ContractController extends Controller
 					})->all());
 				}
 				$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+				$insuranceList = $contract->verbal_trial->has_insurance ? [["key" => "Prime d’assurance", "value" => "Selon la grille de l’assureur"]] : [];
+				$templateProcessor->cloneBlock('insurance', 0, true, false, $insuranceList);
 
 				if ($contract->has_pledges) {
 					$pledgeList = [];

@@ -316,6 +316,8 @@ class VerbalTrialController extends Controller
 	 * @bodyParam   entity_name                         string          Le nom de l'entité                                      				Example: ETS Cling
 	 * @bodyParam   release_type                        string          Le type de deblocage                                    				Example: progressive
 	 * @bodyParam   risk_premium_percentage				int				La prime de risque (en pourcentage) du crédit du demandeur.				Example: 2
+	 * @bodyParam   has_line_review_bonus				int				Présence de la ligne de revision de ligne.								Example: 0
+	 * @bodyParam   has_insurance						int				Présence d'assurance.													Example: 1
 	 *
 	 * @response 200
 	 */
@@ -349,6 +351,7 @@ class VerbalTrialController extends Controller
 				'risk_premium_percentage' => 'required|numeric',
 				'has_line_review_bonus' => 'required|boolean',
 				'number_deferred' => 'required|numeric',
+				'has_insurance' => 'required|boolean',
 			]);
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
@@ -446,6 +449,8 @@ class VerbalTrialController extends Controller
 	 * @bodyParam   entity_name                         string          Le nom de l'entité                                      				Example: ETS Cling
 	 * @bodyParam   release_type                        string          Le type de deblocage                                    				Example: progressive
 	 * @bodyParam   risk_premium_percentage				int				La prime de risque (en pourcentage) du crédit du demandeur.				Example: 2
+	 * @bodyParam   has_line_review_bonus				int				Présence de la ligne de revision de ligne.								Example: 0
+	 * @bodyParam   has_insurance						int				Présence d'assurance.													Example: 1
 	 *
 	 * @response 200
 	 *
@@ -482,6 +487,7 @@ class VerbalTrialController extends Controller
 					'risk_premium_percentage' => 'required|numeric',
 					'has_line_review_bonus' => 'required|boolean',
 					'number_deferred' => 'required|numeric',
+					'has_insurance' => 'required|boolean',
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
