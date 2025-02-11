@@ -582,12 +582,12 @@ class VerbalTrialController extends Controller
 					if ($requestData["status"] == "validated") {
 						$requestData["validation_level"] = [
 							"credit_admin" => "head_credit",
-							"head_credit" => "md",
+							"head_credit" => "head_credit",
 							"md" => "md",
 						][$connectedUser->profile];
-						$requestData["status"] = ($connectedUser->profile == "md") ? "validated" : "waiting";
+						$requestData["status"] = ($connectedUser->profile == "head_credit") ? "validated" : "waiting";
 					} else if ($requestData["status"] == "rejected") {
-						$requestData["validation_level"] = "md";
+						$requestData["validation_level"] = "head_credit";
 					}
 					$verbalTrial->update($requestData);
 					$receiverList = [

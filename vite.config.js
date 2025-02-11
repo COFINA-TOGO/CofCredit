@@ -124,7 +124,8 @@ export default defineConfig({
     // Configurations du serveur...
     watch: {
       // Ignorer les changements dans les dossiers storage et public
-      ignored: ['storage/**', 'public/**']
+    //   ignored: ['storage/**', 'public/**']
+	  ignored: ['**/storage/**']
     }
   }
 })
