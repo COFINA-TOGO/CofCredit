@@ -116,34 +116,173 @@ class User extends Authenticatable
 						'subject' => ['all'],
 					]
 				];
+				case ('caf'):
+					return [
+						[
+							"action" => ["menu"],
+							"subject" => ["pv-notification", "basic-contract", "contract"]
+						],
+						[
+							"action" => ["read"],
+							"subject" => ["non-mortgage-contract", "mortgage-contract","pv", "user", "contract", "guarantor", "type-of-guarantee", "type-of-credit", "type-of-applicant", "deadline-postponed", "pv-notification", "basic-contract"]
+						],
+						[
+							"action" => ["hitorical"],
+							"subject" => ["deadline-postponed", "pv-notification"],
+						],
+						[
+							"action" => ["read-without-pv"],
+							"subject" => ["pv-notification"],
+						],
+						[
+							"action" => ["read-historical"],
+							"subject" => ["pv-notification", "basic-contract"],
+						],
+						[
+							"action" => ["without-signed-contract"],
+							"subject" => ["notification"],
+						],
+						[
+							"action" => ["simple-notification"],
+							"subject" => ["simple-notification"],
+						],
+						[
+							"action" => ["without-signed-notification"],
+							"subject" => ["simple-notification"],
+						],
+						[
+							"action" => ["read-without-cat"],
+							"subject" => ["basic-contract"],
+						],
+						[
+							"action" => ['create'],
+							"subject" => ["pv", "deadline-postponed", "pv-notification"]
+						],
+						[
+							"action" => ["update"],
+							"subject" => ["deadline-postponed", "pv-notification"]
+						],
+						[
+							"action" => ["upload"],
+							"subject" => ["basic-contract", "contract", "guarantor", "notification", "simple-notification", "deadline-postponed", "pv-notification"],
+						],
+						[
+							"action" => ["download"],
+							"subject" => ["basic-contract", "contract", "guarantor", "notification", "simple-notification", "deadline-postponed", "pv-notification"],
+						],
+						[
+							"action" => ["send"],
+							"subject" => ["contract", "guarantor", "notification", "simple-notification"],
+						],
+						[
+							"action" => ["delete"],
+							"subject" => ["deadline-postponed", "pv-notification"]
+						],
+						[
+							"action" => ["manage"],
+							"subject" => ["settings-user"]
+						],
+					];
 			case ('credit_analyst'):
 				return [
 					[
-						"action" => ["read"],
-						"subject" => ["non-mortgage-contract", "mortgage-contract"]
+						"action" => ["menu"],
+						"subject" => ["pv-notification", "pv"]
 					],
 					[
-						"action" => ["read", "historical", "create", "update", "delete", "download"],
+						"action" => ["read"],
+						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant", "non-mortgage-contract", "mortgage-contract", "pv", "pv-notification"]
+					],
+					[
+						"action" => ["historical"],
 						"subject" => ["pv"],
+					],
+					[
+						"action" => ["read-without-pv"],
+						"subject" => ["pv-notification"],
+					],
+					[
+						"action" => ["read-historical"],
+						"subject" => ["pv-notification"],
 					],
 					[
 						"action" => ["read_caf"],
 						"subject" => ["user"]
 					],
 					[
-						"action" => ["read"],
-						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
+						"action" => ["create"],
+						"subject" => ["pv"]
+					],
+					[
+						"action" => ["update"],
+						"subject" => ["pv"]
+					],
+					[
+						"action" => ["delete"],
+						"subject" => ["pv"]
+					],
+					[
+						"action" => ["download"],
+						"subject" => ["pv"]
+					],
+					[
+						"action" => ["check"],
+						"subject" => ["pv-notification"]
+					],
+					[
+						"action" => ["analyst_delete"],
+						"subject" => ["pv"]
 					],
 					[
 						"action" => ["manage"],
 						"subject" => ["settings-user"]
-					]
+					],
 				];
 			case ('credit_admin'):
 				return [
 					[
+						"action" => ["menu"],
+						"subject" => ["pv", "contract", "basic-contract", "cat", "basic-cat"]
+					],
+					[
 						"action" => ["read"],
-						"subject" => ["non-mortgage-contract", "mortgage-contract"]
+						"subject" => ["non-mortgage-contract", "mortgage-contract", "basic-contract", "contract", "basic-cat"]
+					],
+					[
+						"action" => ["read-without-cat"],
+						"subject" => ["basic-contract", "contract"]
+					],
+					[
+						"action" => ["read-historical"],
+						"subject" => ["basic-contract", "contract"]
+					],
+					[
+						"action" => ["historical"],
+						"subject" => ["basic-contract", "contract"]
+					],
+					[
+						"action" => ["change_status"],
+						"subject" => ["basic-contract", "contract"]
+					],
+					[
+						"action" => ["validate"],
+						"subject" => ["basic-contract", "contract"]
+					],
+					[
+						"action" => ["reject"],
+						"subject" => ["basic-contract", "contract"]
+					],
+					[
+						"action" => ["create"],
+						"subject" => ["basic-contract", "contract", "cat", "basic-cat"]
+					],
+					[
+						"action" => ["update"],
+						"subject" => ["basic-contract", "contract", "cat", "basic-cat"]
+					],
+					[
+						"action" => ["delete"],
+						"subject" => ["basic-contract", "contract", "cat", "basic-cat"]
 					],
 					[
 						"action" => ["read", "historical", "download", "change_status", "validate", "reject"],
@@ -151,7 +290,7 @@ class User extends Authenticatable
 					],
 					[
 						"action" => ["create", "read", "historical", "update", "change_status", "reject", "validate", "delete", "download"],
-						"subject" => ["contract"],
+						"subject" => ["basic-contract"],
 					],
 					[
 						"action" => ["create", "read", "without-signed-contract", "historical", "update", "delete", "download", "change_status"],
@@ -189,23 +328,31 @@ class User extends Authenticatable
 			case ('head_credit'):
 				return [
 					[
-						"action" => ["read"],
-						"subject" => ["non-mortgage-contract", "mortgage-contract"]
+						"action" => ["menu"],
+						"subject" => ["pv","contract", "basic-contract","cat", "basic-cat"]
 					],
 					[
-						"action" => ["read", "historical", "download", "reject", "validate", "change_status"],
+						"action" => ["read"],
+						"subject" => ["non-mortgage-contract", "mortgage-contract", "contract", "basic-contract", "cat", "basic-cat", "notification", "simple-notification"]
+					],
+					[
+						"action" => ["historical"],
+						"subject" => ["pv", "contract", "notification", "simple-notification", "cat", "basic-cat"]
+					],
+					[
+						"action" => ["read", "download", "reject", "validate", "change_status"],
 						"subject" => ["pv"],
 					],
 					[
-						"action" => ["read", "historical", "download"],
+						"action" => ["read", "download"],
 						"subject" => ["contract"],
 					],
 					[
-						"action" => ["read", "without-signed-contract", "historical", "download", "validate", "reject", "change_head_credit_status"],
+						"action" => ["without-signed-contract", "download", "validate", "reject", "change_head_credit_status"],
 						"subject" => ["notification"],
 					],
 					[
-						"action" => ["read", "simple-notification", "without-signed-notification", "historical", "download", "validate", "reject", "change_head_credit_status"],
+						"action" => [ "simple-notification", "without-signed-notification", "download", "validate", "reject", "change_head_credit_status"],
 						"subject" => ["simple-notification"],
 					],
 					[
@@ -214,15 +361,11 @@ class User extends Authenticatable
 					],
 					[
 						"action" => ["read", "download", "validate", "reject_validation", "download"],
-						"subject" => ["cat"],
+						"subject" => ["cat", "basic-cat"],
 					],
 					[
 						"action" => ["read"],
 						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
-					],
-					[
-						"action" => ["read", "historical", "change_status", "download"],
-						"subject" => ["deadline-postponed"],
 					],
 					[
 						"action" => ["manage"],
@@ -232,24 +375,32 @@ class User extends Authenticatable
 			case ('operation'):
 				return [
 					[
+						"action" => ["menu"],
+						"subject" => ["cat", "basic-cat"]
+					],
+					[
 						"action" => ["read"],
-						"subject" => ["non-mortgage-contract", "mortgage-contract", "simple-notification"]
+						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant", "non-mortgage-contract", "mortgage-contract", "simple-notification", "cat", "basic-cat"]
+					],
+					[
+						"action" => ["historical"],
+						"subject" => []
+					],
+					[
+						"action" => ["download"],
+						"subject" => ["cat", "basic-cat"]
+					],
+					[
+						"action" => ["unblock"],
+						"subject" => ["cat", "basic-cat"]
+					],
+					[
+						"action" => ["reject_unblock"],
+						"subject" => ["cat", "basic-cat"]
 					],
 					[
 						"action" => ["simple-notification"],
 						"subject" => ["simple-notification"]
-					],
-					[
-						"action" => ["read", "download", "unblock", "reject_unblock"],
-						"subject" => ["cat"],
-					],
-					[
-						"action" => ["read"],
-						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
-					],
-					[
-						"action" => ["read", "historical", "change_status", "download"],
-						"subject" => ["deadline-postponed"],
 					],
 					[
 						"action" => ["manage"],
@@ -295,41 +446,6 @@ class User extends Authenticatable
 					],
 					[
 						"action" => ["read", "historical", "change_status", "download"],
-						"subject" => ["deadline-postponed"],
-					],
-					[
-						"action" => ["manage"],
-						"subject" => ["settings-user"]
-					]
-				];
-			case ('caf'):
-				return [
-					[
-						"action" => ["read"],
-						"subject" => ["non-mortgage-contract", "mortgage-contract"]
-					],
-					[
-						"action" => ["read"],
-						"subject" => ["pv"]
-					],
-					[
-						"action" => ["read", "upload", "download", "send"],
-						"subject" => ["contract", "guarantor"],
-					],
-					[
-						"action" => ["without-signed-contract", "upload", "download", "send"],
-						"subject" => ["notification"]
-					],
-					[
-						"action" => ["simple-notification", "without-signed-notification", "upload", "download", "send"],
-						"subject" => ["simple-notification"]
-					],
-					[
-						"action" => ["read"],
-						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
-					],
-					[
-						"action" => ["read", "historical", "create", "update", "download", "upload", "delete"],
 						"subject" => ["deadline-postponed"],
 					],
 					[

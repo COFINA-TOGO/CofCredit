@@ -4,7 +4,7 @@
 definePage({
 	meta: {
 		action: 'read',
-		subject: 'contract',
+		subject: 'basic-contract',
 	},
 })
 const router = useRouter()
@@ -75,12 +75,9 @@ const tableData = [
 	{ "title": "Type de contrat", "value": contract.value.type_fr },
 ]
 
-if (contract.value.verbal_trial.duration > 13) {
-	tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 12 mois" })
-}
-if (contract.value.observations.length == 0) {
-	backRoute = "/contract/historical"
-}
+
+const nextRoute = contract.value.cat ? {name: 'contract-historicarl'} : {name: 'contract'}
+
 </script>
 
 <template>

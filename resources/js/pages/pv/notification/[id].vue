@@ -2,7 +2,7 @@
 definePage({
 	meta: {
 		action: 'read',
-		subject: 'pv',
+		subject: 'pv-notification',
 	},
 })
 const router = useRouter()
@@ -36,7 +36,7 @@ const { data: verbalTrial } = await useApi(
 if (verbalTrial.value.status == 200) {
 	verbalTrial.value = verbalTrial.value.data.verbalTrial
 } else {
-	router.push({name: 'pv'})
+	router.push({ name: "pv-notification-without-pv" })
 }
 
 
@@ -61,8 +61,12 @@ if (verbalTrial.value. has_insurance ) {
 	tableData.push({ "title": "Prime d'assurance", "value": "Selon la grille de l'assureur" })
 }
 
-let nextRoute = verbalTrial.value.contract ? {name: 'pv-historical'} : {name: 'pv'};
-
+// verbalTrial.value.guarantees.forEach(guarantee => {
+// 	if (guarantee.type_of_guarantee_id == 9) {
+// 		nextRoute = '/pv/without-notification'
+// 	}
+// })
+let nextRoute = verbalTrial.value.validation_level == "credit_analyst" ? {name: 'pv-notification-without-pv'}: {name: 'pv-notification-historical'};
 
 </script>
 
@@ -76,7 +80,7 @@ let nextRoute = verbalTrial.value.contract ? {name: 'pv-historical'} : {name: 'p
 						<VCol cols="10">
 							<VBtn prepend-icon="tabler-arrow-narrow-left" :to="nextRoute"
 								:disabled="verbalTrial.status == 'vaidated'">
-								Procès verbaux
+								Notification de caf
 							</VBtn>
 						</VCol>
 						<VCol v-if="
@@ -97,7 +101,7 @@ let nextRoute = verbalTrial.value.contract ? {name: 'pv-historical'} : {name: 'p
 						</VCol>
 						<VCol cols="12">
 							<h2 class="text-center">
-								Procès Verbal N°{{ verbalTrial.committee_id }}
+								Notification de caf N°{{ verbalTrial.committee_id }}
 							</h2>
 						</VCol>
 						<VCol cols="6">

@@ -19,14 +19,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\TemplateProcessor;
 
-
-use App\Mail\EmailSkeleton;
 use Exception;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 /**
  * @group Procès Verbal
@@ -124,6 +117,16 @@ class VerbalTrialController extends Controller
 					}
 				});
 			}
+			
+			if (isset($request["in_validation_level"])) {
+				$verbalTrialList->where(function ($query) use ($request) {
+					foreach (str_split($request["in_validation_level"]) as $char) {
+						if (in_array($char, ['y', 'a', 'h', 'm'])) {
+							$query->orWhere("validation_level", ["y" => "credit_analyst", "a" => "credit_admin", "h" => "head_credit", "m" => "md"][$char]);
+						}
+					}
+				});
+			}
 
 			if (isset($request["has_contract"])) {
 				$has_contract = (int) $request["has_contract"];
@@ -140,6 +143,17 @@ class VerbalTrialController extends Controller
 					$verbalTrialList->whereHas('notification');
 				} else if ($has_notification == 0) {
 					$verbalTrialList->whereDoesntHave('notification');
+				}
+			}
+			
+			if (isset($request["has_next"])) {
+				$has_next = (int) $request["has_next"];
+				if ($has_next == 1) {
+					$verbalTrialList->where(function($query){
+						$query->whereHas('notification')->orWhereHas('contract');
+					});
+				} else if ($has_next == 0) {
+					$verbalTrialList->whereDoesntHave('notification')->whereDoesntHave('contract');
 				}
 			}
 
@@ -168,9 +182,12 @@ class VerbalTrialController extends Controller
 			if ($currentUser->profile == "credit_analyst") {
 				$verbalTrialList->where('credit_analyst_id', $currentUser->id);
 			}
+			if ($currentUser->profile == "caf") {
+				$verbalTrialList->where('caf_id', $currentUser->id);
+			}
 
 			if (isset($request["paginate"]) && ($request->paginate == false)) {
-				$verbalTrialList = $verbalTrialList->orderByDesc('updated_at')->get();
+				$verbalTrialList = $verbalTrialList->orderByDesc('created_at')->get();
 				$data = ["data" => $verbalTrialList, "total" => count($verbalTrialList)];
 			} else {
 				$data = $verbalTrialList->orderByDesc('updated_at')->paginate(8)->toArray();
@@ -265,6 +282,7 @@ class VerbalTrialController extends Controller
 			}
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 			unset($data["caf.ability_rules"]);
+			unset($data["guarantees"]);
 			unset($data["credit_analyst.ability_rules"]);
 			$templateProcessor->setValues($data);
 			// return $data;
@@ -361,7 +379,7 @@ class VerbalTrialController extends Controller
 						DB::beginTransaction();
 						try {
 							$requestData["creator_id"] = $request->user()->id;
-							$requestData["validation_level"] = "credit_admin";
+							$requestData["validation_level"] = "credit_analyst";
 							if (!isset($requestData["entity_name"])) {
 								$requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
 							}
@@ -457,6 +475,7 @@ class VerbalTrialController extends Controller
 	 */
 	public function update(Request $request, int $id)
 	{
+		$connectedUser = $request->user();
 		$verbalTrial = VerbalTrial::find($id);
 		if ($verbalTrial) {
 			if (($authorisation = Gate::inspect('update', $verbalTrial))->allowed()) {
@@ -497,7 +516,7 @@ class VerbalTrialController extends Controller
 							DB::beginTransaction();
 							try {
 								$requestData["creator_id"] = $request->user()->id;
-								$requestData["validation_level"] = "credit_admin";
+								$requestData["validation_level"] = $connectedUser->profile == 'caf' ? "credit_analyst" : "credit_admin";
 								$verbalTrial->guarantees()->delete();
 								if (!isset($requestData["entity_name"])) {
 									$requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
@@ -549,6 +568,119 @@ class VerbalTrialController extends Controller
 						}
 					} else {
 						return $this->responseError(["credit_admin_id" => ["L'admin crédit n'existe pas"]], 404);
+					}
+				}
+			} else {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
+		} else {
+			return $this->responseError(["id" => "Le procès verbal n'existe pas"], 404);
+		}
+	}
+
+	public function check(Request $request, int $id)
+	{
+		$verbalTrial = VerbalTrial::find($id);
+		if ($verbalTrial) {
+			if (($authorisation = Gate::inspect('check_notification', $verbalTrial))->allowed()) {
+				$requestData = $request->all();
+				$validator = Validator::make($requestData, [
+					"committee_id" => "required|unique:verbals_trials,committee_id," . $id,
+					"committee_date" => "required|date",
+					'civility' => 'required|in:Mr,Mme,Mlle',
+					'applicant_first_name' => 'required|min:2',
+					'applicant_last_name' => 'required|min:2',
+					'account_number' => 'required|min:12',
+					'activity' => 'required|min:2',
+					'purpose_of_financing' => 'required|min:2',
+					'type_of_credit_id' => 'required|exists:types_of_credit,id',
+					'amount' => 'required|numeric',
+					'duration' => 'required|numeric',
+					'periodicity' => 'required|in:mensual,quarterly,semi-annual,annual,in-fine',
+					'taf' => 'required|numeric',
+					'administrative_fees_percentage' => 'required|numeric',
+					'tax_fee_interest_rate' => 'required|numeric',
+					'caf_id' => 'required|exists:users,id',
+					'credit_admin_id' => 'required|exists:users,id',
+					'credit_analyst_id' => 'required|exists:users,id',
+					"guarantees" => "array",
+					"guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id",
+					"guarantees.*.comment" => "required|min:2",
+					"release_type" => "required|in:non-progressive,progressive",
+					'risk_premium_percentage' => 'required|numeric',
+					'has_line_review_bonus' => 'required|boolean',
+					'number_deferred' => 'required|numeric',
+					'has_insurance' => 'required|boolean',
+					'action' => "required|in:validate,reject",
+					'comment' => "nullable|min:1"
+				]);
+				if ($validator->fails()) {
+					return $this->responseError($validator->errors(), 400);
+				} else {
+					if($requestData["action"] == "reject"){
+						$verbalTrial->update(["status" => "rejected", "comment" => $requestData["comment"]]);
+						return $this->responseOk([
+							"verbalTrial" => $verbalTrial
+						]);
+					}else{
+						if (User::where("profile", "credit_admin")->where('id', $requestData["credit_admin_id"])->exists()) {
+							if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
+								DB::beginTransaction();
+								try {
+									$requestData["creator_id"] = $request->user()->id;
+									$requestData["validation_level"] = "credit_admin";
+									$verbalTrial->guarantees()->delete();
+									if (!isset($requestData["entity_name"])) {
+										$requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
+									}
+	
+									if (isset($requestData["guarantees"])) {
+										$guaranteesCollection = new Collection($requestData["guarantees"]);
+										$requestData["has_mortgage"] = $guaranteesCollection->contains(function ($objet) {
+											return $objet["type_of_guarantee_id"] === 9;
+										});
+										foreach ($requestData["guarantees"] as $guarantee) {
+											Guarantee::create([
+												"verbal_trial_id" => $verbalTrial->id,
+												"type_of_guarantee_id" => $guarantee["type_of_guarantee_id"],
+												"comment" => $guarantee["comment"]
+											]);
+										}
+									}
+									$requestData["status"] = "waiting";
+									$requestData["has_line_review_bonus"] = (bool) $requestData["has_line_review_bonus"];
+									$verbalTrial->update($requestData);
+									$link = env("APP_URL") . "/pv";
+									SendEmail::dispatch(
+										$verbalTrial->credit_admin->email,
+										"Notification de mise à jour du PV " . $verbalTrial->committee_id,
+										"
+												<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
+	
+												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='$link'>Voir les pvs</a></p>
+	
+												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+	
+												<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+	
+												<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+											"
+									);
+								} catch (\Exception $e) {
+									DB::rollback();
+									throw $e;
+								}
+								DB::commit(); // Valider les opérations
+								$verbalTrial->load(["type_of_credit.type_of_applicant", "guarantees", "contract", "caf"]);
+								return $this->responseOk([
+									"verbalTrial" => $verbalTrial
+								]);
+							} else {
+								return $this->responseError(["caf_id" => ["Le CAF n'existe pas"]], 404);
+							}
+						} else {
+							return $this->responseError(["credit_admin_id" => ["L'admin crédit n'existe pas"]], 404);
+						}
 					}
 				}
 			} else {
@@ -615,7 +747,23 @@ class VerbalTrialController extends Controller
 									"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
 
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de $nextStep: <a href='" . env("APP_URL") . "/$nextStepLink/add?id=" . $verbalTrial->id . "'>Créer $nextStepName</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de $nextStep: <a href='" . env("APP_URL") . "/$nextStepLink/add?id=" . $verbalTrial->id . "'>Créer $nextStepName</a></p>
+
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+
+										<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+										<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+									",
+								]
+							],"head_credit" => [
+								[
+									"receiverList" => $receiverList["head_credit_list"],
+									"subject" => "Notification de validation du PV " . $verbalTrial->committee_id,
+									"message" => "
+										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Head,</U></h1>
+
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de $nextStep: <a href='" . env("APP_URL") . "/$nextStepLink/add?id=" . $verbalTrial->id . "'>Créer $nextStepName</a></p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
@@ -801,6 +949,22 @@ class VerbalTrialController extends Controller
 			}
 		} else {
 			return $this->responseError(["id" => ["Le procès verbal n'existe pas"]], 404);
+		}
+	}
+
+	public function analyst_destroy(int $id){
+		$verbalTrial = VerbalTrial::find($id);
+		if ($verbalTrial) {
+			if (($authorisation = Gate::inspect('analyst_delete', $verbalTrial))->allowed()) {
+				$verbalTrial->update(["status" => "rejected", "validation_level" => "credit_analyst"]);
+				return $this->responseOk([
+					"verbalTrial" => $verbalTrial
+				]);
+			} else {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
+		} else {
+			return $this->responseError(["id" => ["Le pv n'existe pas"]], 404);
 		}
 	}
 }

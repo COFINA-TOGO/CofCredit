@@ -71,7 +71,9 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::post("/", [VerbalTrialController::class, "store"])->name("store");
 		Route::put("/{id}", [VerbalTrialController::class, "update"])->name("update");
 		Route::put("/change-status/{id}", [VerbalTrialController::class, "change_status"])->name("change_status");
+		Route::put("/check/{id}", [VerbalTrialController::class, "check"])->name("check");
 		Route::delete("/{id}", [VerbalTrialController::class, "destroy"])->name("destroy");
+		Route::delete("/analyst/{id}", [VerbalTrialController::class, "analyst_destroy"])->name("analyst_destroy");
 	});
 	Route::prefix("contract")->name("contract.")->group(function () {
 		Route::get("/", [ContractController::class, "index"])->name("index");

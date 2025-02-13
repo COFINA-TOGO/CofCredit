@@ -76,8 +76,7 @@ const { data: pvData, execute: fetchPv } = await useApi(
 			search: searchQuery,
 			type_of_credit_id: type_of_credit_id,
 			page: page,
-			has_contract: 1,
-			has_mortgage: 0,
+			has_next: 1,
 			status: "v",
 			with_caf: 1,
 			with_type_of_credit: 1,
@@ -176,15 +175,6 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 					<!-- 👉 Export button -->
 					<VBtn variant="tonal" color="secondary" prepend-icon="tabler-upload">
 						Export
-					</VBtn>
-
-					<VBtn
-						v-if="$can('create', 'pv')"
-						color="primary"
-						prepend-icon="tabler-plus"
-						:to="{ name: 'pv-add' }"
-					>
-						Ajouter
 					</VBtn>
 					<VBtn
 						:loading="loadings[3]"

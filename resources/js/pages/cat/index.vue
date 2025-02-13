@@ -3,7 +3,7 @@
 definePage({
 	meta: {
 		action: 'read',
-		subject: 'cat',
+		subject: 'basic-cat',
 	},
 })
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
@@ -185,7 +185,7 @@ const rejectUnblockCAT = async id => {
 							Exporter
 						</VBtn>
 
-						<VBtn v-if="$can('create', 'cat')" color="primary" prepend-icon="tabler-plus"
+						<VBtn v-if="$can('create', 'basic-cat')" color="primary" prepend-icon="tabler-plus"
 							:to="{ name: 'cat-add' }">
 							Ajouter
 						</VBtn>
@@ -231,7 +231,7 @@ const rejectUnblockCAT = async id => {
 
 				<template #item.actions="{ item }">
 					<span>
-						<IconBtn v-if="$can('read', 'cat')" :to="{ name: 'cat-id', params: { id: item.id } }">
+						<IconBtn v-if="$can('read', 'basic-cat')" :to="{ name: 'cat-id', params: { id: item.id } }">
 							<VTooltip activator="parent" transition="scroll-x-transition" location="top">Details
 							</VTooltip>
 							<VIcon icon="tabler-eye" />
@@ -256,15 +256,15 @@ const rejectUnblockCAT = async id => {
 
 										<VListItemTitle>Voir Contrat</VListItemTitle>
 									</VListItem>
-									<VListItem v-if="$can('download', 'cat')"
+									<VListItem v-if="$can('download', 'basic-cat')"
 										@click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.contract.verbal_trial.committee_id}.pdf`)">
 										<template #prepend>
 											<VIcon icon="tabler-download" />
 										</template>
 										<VListItemTitle>Télécharger CAT</VListItemTitle>
 									</VListItem>
-									<VDivider v-if="$can('validate', 'cat') && item.validation_status == 'waiting'" />
-									<VListItem v-if="$can('validate', 'cat') && item.validation_status == 'waiting'"
+									<VDivider v-if="$can('validate', 'basic-cat') && item.validation_status == 'waiting'" />
+									<VListItem v-if="$can('validate', 'basic-cat') && item.validation_status == 'waiting'"
 										@click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Valider CAT', actionText = 'Voulez vous vraiment valider ce CAT?', actionFunction = validateCAT; actionButtonText = 'Valider'; needComment = false">
 										<template #prepend>
 											<VIcon icon="tabler-check" />
@@ -272,7 +272,7 @@ const rejectUnblockCAT = async id => {
 										<VListItemTitle>Valider CAT</VListItemTitle>
 									</VListItem>
 									<VListItem
-										v-if="$can('reject_validation', 'cat') && item.validation_status == 'waiting'"
+										v-if="$can('reject_validation', 'basic-cat') && item.validation_status == 'waiting'"
 										@click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Rejeter CAT', actionText = 'Voulez vous vraiment rejeter ce CAT?', actionFunction = rejectValidationCAT; actionButtonText = 'Rejeter'; needComment = true">
 										<template #prepend>
 											<VIcon icon="tabler-x" />
@@ -280,9 +280,9 @@ const rejectUnblockCAT = async id => {
 										<VListItemTitle>Rejeter CAT</VListItemTitle>
 									</VListItem>
 									<VDivider
-										v-if="$can('unblock', 'cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'" />
+										v-if="$can('unblock', 'basic-cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'" />
 									<VListItem
-										v-if="$can('unblock', 'cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'"
+										v-if="$can('unblock', 'basic-cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'"
 										@click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Débloquer CAT', actionText = 'Voulez vous vraiment débloquer ce CAT?', actionFunction = unblockCAT; actionButtonText = 'Débloquer'; needComment = false">
 										<template #prepend>
 											<VIcon icon="tabler-lock-open" />
@@ -290,7 +290,7 @@ const rejectUnblockCAT = async id => {
 										<VListItemTitle>Débloquer CAT</VListItemTitle>
 									</VListItem>
 									<VListItem
-										v-if="$can('reject_unblock', 'cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'"
+										v-if="$can('reject_unblock', 'basic-cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'"
 										@click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Rejeter deblocage CAT', actionText = 'Voulez vous vraiment rejeter le déblocage de ce CAT?', actionFunction = rejectUnblockCAT; actionButtonText = 'Rejeter'; needComment = true">
 										<template #prepend>
 											<VIcon icon="tabler-x" />
@@ -301,13 +301,13 @@ const rejectUnblockCAT = async id => {
 							</VMenu>
 						</VBtn>
 					</span>
-					<span>
+					<span v-if="$can('update', 'basic-cat') || $can('delete', 'basic-cat')">
 						<VDivider />
-						<IconBtn v-if="$can('update', 'cat')" :to="{ name: 'cat-edit-id', params: { id: item.id } }"
+						<IconBtn v-if="$can('update', 'basic-cat')" :to="{ name: 'cat-edit-id', params: { id: item.id } }"
 							:disabled="item.validation_status == 'validated'">
 							<VIcon icon="tabler-edit" />
 						</IconBtn>
-						<IconBtn v-if="$can('delete', 'cat')" @click="catSelectedId = item.id; isDialogVisible = true"
+						<IconBtn v-if="$can('delete', 'basic-cat')" @click="catSelectedId = item.id; isDialogVisible = true"
 							:disabled="item.validation_status == 'validated'">
 							<VIcon icon="tabler-trash" color='error' />
 						</IconBtn>

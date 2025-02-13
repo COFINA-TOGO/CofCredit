@@ -3,8 +3,8 @@
 <script setup>
 definePage({
 	meta: {
-		action: "read",
-		subject: "contract",
+		action: "read-historical",
+		subject: "basic-contract",
 	},
 });
 import { VDataTableServer } from "vuetify/labs/VDataTable";
@@ -72,7 +72,7 @@ const { data: contractData, execute: fetchContracts } = await useApi(
 			with_individual_business: 1,
 			with_creator: 1,
 			has_upload_completed: 1,
-			has_cat: 0,
+			has_cat: 1,
 			status: "v",
 		},
 	})
@@ -131,20 +131,14 @@ const apiDelete = async (id) => {
 			<VCardText>
 				<VRow>
 					<VCol cols="12" sm="4">
-						<AppSelect
-							v-model="selectedType"
-							placeholder="Type de contrat"
-							:items="[
-								{ value: 'company', title: 'Société' },
-								{ value: 'particular', title: 'Particulier' },
-								{
-									value: 'individual_business',
-									title: 'Entreprise Individuel',
-								},
-							]"
-							clearable
-							clear-icon="tabler-x"
-						/>
+						<AppSelect v-model="selectedType" placeholder="Type de contrat" :items="[
+							{ value: 'company', title: 'Société' },
+							{ value: 'particular', title: 'Particulier' },
+							{
+								value: 'individual_business',
+								title: 'Entreprise Individuel',
+							},
+						]" clearable clear-icon="tabler-x" />
 					</VCol>
 				</VRow>
 			</VCardText>
@@ -153,42 +147,24 @@ const apiDelete = async (id) => {
 
 			<div class="d-flex flex-wrap gap-4 mx-5">
 				<div class="d-flex align-center">
-					<AppTextField
-						v-model="searchQuery"
-						placeholder="Rechercher un contrat"
-						density="compact"
-						style="inline-size: 200px"
-						class="me-3"
-					/>
+					<AppTextField v-model="searchQuery" placeholder="Rechercher un contrat" density="compact"
+						style="inline-size: 200px" class="me-3" />
 				</div>
 
 				<VSpacer />
 				<div class="d-flex gap-4 flex-wrap align-center">
-					<VBtn
-						variant="tonal"
-						color="secondary"
-						prepend-icon="tabler-download"
-					>
+					<VBtn variant="tonal" color="secondary" prepend-icon="tabler-download">
 						Export
 					</VBtn>
 
-					<VBtn
-						v-if="$can('create', 'contract')"
-						color="primary"
-						prepend-icon="tabler-plus"
-						:to="{ name: 'contract-add' }"
-					>
+					<VBtn v-if="$can('create', 'basic-contract')" color="primary" prepend-icon="tabler-plus"
+						:to="{ name: 'contract-add' }">
 						Ajouter
 					</VBtn>
-					<VBtn
-						:loading="loadings[3]"
-						:disabled="loadings[3]"
-						prepend-icon="tabler-refresh"
-						@click="
-							fetchContracts();
-							load(3);
-						"
-					>
+					<VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh" @click="
+						fetchContracts();
+					load(3);
+					">
 						Recharger
 						<template #loader>
 							<span class="custom-loader">
@@ -201,15 +177,8 @@ const apiDelete = async (id) => {
 
 			<VDivider class="mt-4" />
 
-			<VDataTableServer
-				v-model:items-per-page="itemsPerPage"
-				v-model:page="page"
-				:headers="headers"
-				:items="contractList"
-				:items-length="totalPv"
-				class="text-no-wrap"
-				@update:options="updateOptions"
-			>
+			<VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
+				:items="contractList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
 				<template #item.type="{ item }">
 					{{ typeList[item.type] }}
 				</template>
@@ -226,29 +195,18 @@ const apiDelete = async (id) => {
 
 				<template #item.actions="{ item }">
 					<IconBtn :to="{ name: 'contract-id', params: { id: item.id } }">
-						<VTooltip
-							activator="parent"
-							transition="scroll-x-transition"
-							location="top"
-							>Details</VTooltip
-						>
+						<VTooltip activator="parent" transition="scroll-x-transition" location="top">Details</VTooltip>
 						<VIcon icon="tabler-eye" />
 					</IconBtn>
 					<VBtn icon variant="text" size="small" color="medium-emphasis">
 						<VIcon size="24" icon="tabler-dots-vertical" />
 						<VMenu activator="parent">
 							<VList>
-								<VBadge
-									v-if="$can('read', 'guarantor')"
-									inline
-									:content="item.guarantors_count"
-								>
-									<VListItem
-										:to="{
-											name: 'contract-contract_id-guarantor',
-											params: { contract_id: item.id },
-										}"
-									>
+								<VBadge v-if="$can('read', 'guarantor')" inline :content="item.guarantors_count">
+									<VListItem :to="{
+										name: 'contract-contract_id-guarantor',
+										params: { contract_id: item.id },
+									}">
 										<template #prepend>
 											<VIcon icon="tabler-users" />
 										</template>
@@ -258,13 +216,10 @@ const apiDelete = async (id) => {
 										</VListItemTitle>
 									</VListItem>
 								</VBadge>
-								<VListItem
-									v-if="$can('read', 'pv')"
-									:to="{
-										name: 'pv-id',
-										params: { id: item.verbal_trial.id },
-									}"
-								>
+								<VListItem v-if="$can('read', 'pv')" :to="{
+									name: 'pv-id',
+									params: { id: item.verbal_trial.id },
+								}">
 									<template #prepend>
 										<VIcon icon="tabler-eye" />
 									</template>
@@ -272,83 +227,77 @@ const apiDelete = async (id) => {
 									<VListItemTitle>Voir le Pv</VListItemTitle>
 								</VListItem>
 
-								<div v-if="$can('download', 'contract')">
+								<div v-if="$can('download', 'basic-contract')">
 									<VDivider />
 									<!-- Télécharger contrat non-signé -->
-									<VListItem
-										@click="
-											downloadFile(
-												`/api/contract/download/${item.id}`,
-												`Contrat-${item.verbal_trial.committee_id}.pdf`
-											)
-										"
-									>
+									<VListItem @click="
+										downloadFile(
+											`/api/contract/download/${item.id}`,
+											`Contrat-${item.verbal_trial.committee_id}.pdf`
+										)
+										">
 										<template #prepend>
 											<VIcon icon="tabler-download" />
 										</template>
-										<VListItemTitle
-											>Télécharger Contrat non-signé</VListItemTitle
-										>
+										<VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
 									</VListItem>
 									<!-- Télécharger contrat signé -->
-									<VListItem
-										v-if="item.signed_contract_path"
-										@click="
-											downloadFile(
-												item.signed_contract_path,
-												`Contrat-${
-													item.signed_contract_path
-														.split('/')
-														.slice(-1)[0]
-												}`
-											)
-										"
-									>
+									<VListItem v-if="item.signed_contract_path" @click="
+										downloadFile(
+											item.signed_contract_path,
+											`Contrat-${item.signed_contract_path
+												.split('/')
+												.slice(-1)[0]
+											}`
+										)
+										">
 										<template #prepend>
 											<VIcon icon="tabler-download" />
 										</template>
-										<VListItemTitle
-											>Télécharger Contrat signé</VListItemTitle
-										>
+										<VListItemTitle>Télécharger Contrat signé</VListItemTitle>
 									</VListItem>
 									<!-- Télécharger billet à ordre non-signé -->
-									<VListItem
-										@click="
-											downloadFile(
-												`/api/contract/promissory-note/download/${item.id}`,
-												`Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`
-											)
-										"
-									>
+									<VListItem @click="
+										downloadFile(
+											`/api/contract/promissory-note/download/${item.id}`,
+											`Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`
+										)
+										">
 										<template #prepend>
 											<VIcon icon="tabler-download" />
 										</template>
-										<VListItemTitle
-											>Télécharger Billet à ordre non
-											signé</VListItemTitle
-										>
+										<VListItemTitle>Télécharger Billet à ordre non
+											signé</VListItemTitle>
 									</VListItem>
 									<!-- Télécharger billet à ordre signé -->
-									<VListItem
-										v-if="item.signed_promissory_note_path"
-										@click="
-											downloadFile(
-												item.signed_promissory_note_path,
-												`Billet-à-ordre-${
-													item.signed_promissory_note_path
-														.split('/')
-														.slice(-1)[0]
-												}`
-											)
-										"
-									>
+									<VListItem v-if="item.signed_promissory_note_path" @click="
+										downloadFile(
+											item.signed_promissory_note_path,
+											`Billet-à-ordre-${item.signed_promissory_note_path
+												.split('/')
+												.slice(-1)[0]
+											}`
+										)
+										">
 										<template #prepend>
 											<VIcon icon="tabler-download" />
 										</template>
-										<VListItemTitle
-											>Télécharger Billet à ordre
-											signé</VListItemTitle
-										>
+										<VListItemTitle>Télécharger Billet à ordre
+											signé</VListItemTitle>
+									</VListItem>
+
+									<!-- Télécharger mention manuscrite -->
+									<VListItem @click="
+										downloadFile(
+											`/api/contract/handwritten-mention/download/${item.id}`,
+											`Mention-manuscrite-${item.verbal_trial.committee_id}.pdf`
+										)
+										">
+										<template #prepend>
+											<VIcon icon="tabler-download" />
+										</template>
+										<VListItemTitle>Télécharger Mention
+											manuscrite</VListItemTitle>
 									</VListItem>
 								</div>
 							</VList>
@@ -359,39 +308,22 @@ const apiDelete = async (id) => {
 				<template #bottom>
 					<VDivider />
 
-					<div
-						class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3"
-					>
+					<div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
 						<p class="text-sm text-medium-emphasis mb-0">
 							{{ paginationMeta({ page, itemsPerPage }, totalPv) }}
 						</p>
 
-						<VPagination
-							v-model="page"
-							:length="lastPage"
-							:total-visible="
-								$vuetify.display.xs ? 1 : Math.min(lastPage, 5)
-							"
-						>
+						<VPagination v-model="page" :length="lastPage" :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)
+							">
 							<template #prev="slotProps">
-								<VBtn
-									variant="tonal"
-									color="default"
-									v-bind="slotProps"
-									:icon="false"
-								>
+								<VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
 									<VIcon start icon="tabler-arrow-left" />
 									Précedent
 								</VBtn>
 							</template>
 
 							<template #next="slotProps">
-								<VBtn
-									variant="tonal"
-									color="default"
-									v-bind="slotProps"
-									:icon="false"
-								>
+								<VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
 									Suivant
 									<VIcon end icon="tabler-arrow-right" />
 								</VBtn>
@@ -411,19 +343,13 @@ const apiDelete = async (id) => {
 				<VCardText> Etes vous sûr de vouloir supprimer ce contrat? </VCardText>
 
 				<VCardText class="d-flex justify-end gap-3 flex-wrap">
-					<VBtn
-						color="secondary"
-						variant="tonal"
-						@click="isDialogVisible = false"
-					>
+					<VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
 						Annuler
 					</VBtn>
-					<VBtn
-						@click="
-							apiDelete(contractIdToDelete);
-							isDialogVisible = false;
-						"
-					>
+					<VBtn @click="
+						apiDelete(contractIdToDelete);
+					isDialogVisible = false;
+					">
 						Supprimer
 					</VBtn>
 				</VCardText>

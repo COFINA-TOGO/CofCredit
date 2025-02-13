@@ -5,7 +5,7 @@ import PledgeEdit from "@/views/contract/PledgeEdit.vue";
 definePage({
 	meta: {
 		action: "update",
-		subject: "contract",
+		subject: "basic-contract",
 	},
 });
 import { ref } from "vue";
@@ -78,6 +78,7 @@ const { data: contractData } = await useApi(
 			with_company: 1,
 			with_individual_business: 1,
 			with_pledges: 1,
+			with_cat: 1,
 		},
 	})
 );
@@ -137,7 +138,7 @@ const onSubmit = () => {
 
 			errorData.value = getEmptyError();
 			if (res.status == 200) {
-				router.push("/contract");
+				router.push(nextRoute);
 			} else if (res.status == 403) {
 				isSnackbarScrollReverseVisible.value = true;
 				snackbarMessage.value = "";
@@ -199,6 +200,8 @@ if (contract.value.individual_business == null) {
 		phone_number: "",
 	};
 }
+
+const nextRoute = contract.value.cat ? {name: 'contract-historicarl'} : {name: 'contract'}
 </script>
 
 <template>
@@ -214,7 +217,7 @@ if (contract.value.individual_business == null) {
 		<VForm ref="refForm" @submit.prevent="onSubmit">
 			<VRow>
 				<VCol cols="11">
-					<VBtn :to="{ name: 'contract' }">
+					<VBtn :to="nextRoute">
 						<VIcon icon="tabler-arrow-left" />
 						Contrats
 					</VBtn>

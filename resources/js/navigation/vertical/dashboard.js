@@ -1,38 +1,167 @@
 export default [
 	{
-		title: 'Ajouter PV',
-		to: 'pv-add',
-		icon: { icon: 'tabler-file-plus' },
-		action: 'create',
-		subject: 'pv',
+		title: "Notification CAF",
+		action: "menu",
+		subject: "pv-notification",
+		children:[
+			{
+				title: 'Créer',
+				to: {name: 'pv-notification-add'},
+				action: 'create',
+				subject: 'pv-notification',
+			},
+			{
+				title: 'Sans pv',
+				to: {name: 'pv-notification-without-pv'},
+				action: 'read-without-pv',
+				subject: 'pv-notification',
+			},
+			{
+				title: 'Historique',
+				to: {name: 'pv-notification-historical'},
+				action: 'read-historical',
+				subject: 'pv-notification',
+			},
+		],
 	},
+	{
+		title: 'Pv Comité',
+		subject: 'pv',
+		action: 'menu',
+		children: [
+			{
+				title: 'Sans contrat',
+				to: {name: 'pv'},
+				action: 'read',
+				subject: 'pv',
+			},
+			{
+				title: 'Historique',
+				to: { name: 'pv-historical' },
+				action: 'historical',
+				subject: 'pv',
+				// badgeContent: historicalVpCount.value,
+				// badgeClass: 'bg-global-primary',
+			},
+		],
+	},
+	{
+		title: 'Contrat',
+		subject: 'contract',
+		action: 'menu',
+		children: [
+			{
+				title: 'Basique',
+				action: 'menu',
+				subject: 'basic-contract',
+				children: [
+					{
+						title: 'Créer',
+						to: {name: 'contract-add'},
+						action: 'create',
+						subject: 'basic-contract',
+					},
+					{
+						title: 'Sans CAT',
+						to: {name: 'contract'},
+						action: 'read-without-cat',
+						subject: 'basic-contract',
+					},
+					{
+						title: 'Historique',
+						to: {name: 'contract-historical'},
+						action: 'read-historical',
+						subject: 'basic-contract',
+					},
+				],
+			},{
+				title: 'Hypothécaire',
+				action: 'menu',
+				subject: 'notarized-contract',
+				children: [
+					{
+						title: 'Sans Contrat notarié',
+						// to: {name: 'contract-without-notarized-contract'},
+						action: 'read-without-notarized-contract',
+						subject: 'notarized-contract',
+					},
+					{
+						title: 'Sans CAT',
+						to: {name: 'contract'},
+						action: 'read-without-cat',
+						subject: 'notarized-contract',
+					},
+					{
+						title: 'Historique',
+						to: {name: 'contract-historical'},
+						action: 'read-historical',
+						subject: 'notarized-contract',
+					},
+				]
+			},
+		],
+	},
+	{
+		title: 'CAT',
+		subject: 'cat',
+		action: 'menu',
+		children: [
+			{
+				title: 'Basique',
+				action: 'menu',
+				subject: 'basic-cat',
+				children: [
+					{
+						title: 'Créer',
+						to: {name: 'cat-add'},
+						action: 'create',
+						subject: 'basic-cat',
+					},
+					{
+						title: 'Historique',
+						to: {name: 'cat'},
+						action: 'read',
+						subject: 'basic-cat',
+					},
+				],
+			},{
+				title: 'Hypothécaire',
+				action: 'menu',
+				subject: 'notarized-contract',
+				children: [
+					{
+						title: 'Sans Contrat notarié',
+						// to: {name: 'contract-without-notarized-contract'},
+						action: 'read-without-notarized-contract',
+						subject: 'notarized-contract',
+					},
+					{
+						title: 'Sans CAT',
+						to: {name: 'contract'},
+						action: 'read-without-cat',
+						subject: 'notarized-contract',
+					},
+					{
+						title: 'Historique',
+						to: {name: 'contract-historical'},
+						action: 'read-historical',
+						subject: 'notarized-contract',
+					},
+				]
+			},
+		],
+	},
+
+
+/*
+	// -----------------------------------
 	{
 		title: 'Contrat',
 		icon: { icon: 'tabler-writing-sign' },
 		action: 'read',
 		subject: 'non-mortgage-contract',
 		children: [
-			{
-				title: 'Pv Comité',
-				subject: 'pv',
-				action: 'historical',
-				children: [
-					{
-						title: 'Sans contrat',
-						to: 'pv',
-						action: 'read',
-						subject: 'pv',
-					},
-					{
-						title: 'Historique',
-						to: { name: 'pv-historical' },
-						action: 'historical',
-						subject: 'pv',
-						// badgeContent: historicalVpCount.value,
-						// badgeClass: 'bg-global-primary',
-					},
-				],
-			},
+			
 			{
 				title: 'Contract',
 				action: 'read',
@@ -213,11 +342,12 @@ export default [
 			},
 		]
 	},
+*/
 	{
 		title: 'Report d\'échéance',
 		icon: { icon: "tabler-calendar-repeat" },
 		subject: 'deadline-postponed',
-		action: 'read',
+		action: 'menu',
 		children: [
 			{
 				title: 'Ajouter',
@@ -252,7 +382,7 @@ export default [
 		icon: { icon: 'tabler-user' },
 		title: 'Utilisateurs',
 		subject: 'user',
-		action: 'read',
+		action: 'menu',
 		children: [
 			{
 				title: 'Nouveau',

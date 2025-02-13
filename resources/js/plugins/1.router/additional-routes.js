@@ -9,11 +9,12 @@ export const redirects = [
 			// TODO: Get type from backend
 			const userData = useCookie('userData')
 			const userRole = userData.value?.role
-			if (userRole === 'admin')
-				return { name: 'pv' }
+
+			if (userRole === 'caf')
+				return { name: 'pv-notification-without-pv' }
 
 			if (userRole === 'credit_analyst')
-				return { name: 'pv' }
+				return { name: 'pv-notification-without-pv' }
 
 			if (userRole === 'credit_admin')
 				return { name: 'pv' }
@@ -23,9 +24,6 @@ export const redirects = [
 
 			if (userRole === 'operation')
 				return { name: 'cat' }
-
-			if (userRole === 'caf')
-				return { name: 'contract' }
 
 			if (userRole === 'dex')
 				return { name: 'pv' }
@@ -37,6 +35,9 @@ export const redirects = [
 				return { name: 'deadline-postponed' }
 
 			if (userRole === 'md')
+				return { name: 'pv' }
+
+			if (userRole === 'admin')
 				return { name: 'pv' }
 
 			return { name: 'login', query: to.query }

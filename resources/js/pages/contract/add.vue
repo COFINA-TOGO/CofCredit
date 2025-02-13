@@ -4,12 +4,12 @@ import PledgeEdit from "@/views/contract/PledgeEdit.vue";
 definePage({
 	meta: {
 		action: "create",
-		subject: "contract",
+		subject: "basic-contract",
 	},
 });
 import { ref } from "vue";
 
-const route = useRoute("pv-add");
+const route = useRoute("contract-add");
 const router = useRouter();
 
 const contractData = ref({
@@ -167,7 +167,7 @@ const onSubmit = () => {
 
 			formError.value = getResetPvError();
 			if (res.status == 201) {
-				router.push("/contract");
+				router.push({name: 'contract'});
 			} else {
 				for (const key in res.errors) {
 					res.errors[key].forEach((message) => {

@@ -246,6 +246,9 @@ class CATController extends Controller
 			unset($data["$parentRelation.verbal_trial.caf.ability_rules"]);
 			unset($data["$parentRelation"]);
 			unset($data["status"]);
+			unset($data["contract.verbal_trial.next"]);
+			unset($data["contract.verbal_trial.guarantees"]);
+			unset($data["contract.verbal_trial.contract"]);
 			$templateProcessor->setValues($data);
 			// return $data;
 

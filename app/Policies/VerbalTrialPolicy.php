@@ -37,7 +37,7 @@ class VerbalTrialPolicy
 	{
 		$checkFunction = [
 			"waiting" => function ($connectedUser, $verbalTrial) {
-				return $verbalTrial->validation_level == "credit_admin";
+				return $verbalTrial->validation_level == "credit_admin" || $verbalTrial->validation_level == "credit_analyst";
 			},
 			"rejected" => function ($connectedUser, $verbalTrial) {
 				return true;
@@ -46,7 +46,7 @@ class VerbalTrialPolicy
 				return false;
 			},
 		];
-		if ($this->check(["update"], "pv", $connectedUser)) {
+		if ($this->check(["update"], "pv", $connectedUser) || $this->check(["update"], "pv-notification", $connectedUser)) {
 			return $checkFunction[$verbalTrial->status]($connectedUser, $verbalTrial) ? Response::allow() : Response::deny("vous n'etes pas autorisé à modifier ce pv");
 		} else {
 			return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
@@ -56,6 +56,15 @@ class VerbalTrialPolicy
 	{
 		return $this->check(["change_status"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
+	public function check_notification(User $connectedUser, VerbalTrial $verbalTrial)
+	{
+		return $this->check(["check"], "pv-notification", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+	}
+	
+	public function analyst_delete(User $connectedUser, VerbalTrial $verbalTrial)
+	{
+		return $this->check(["analyst_delete"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+	}
 	public function download(User $connectedUser, VerbalTrial $verbalTrial)
 	{
 		return $this->check(["download"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
@@ -63,6 +72,6 @@ class VerbalTrialPolicy
 
 	public function delete(User $connectedUser, VerbalTrial $verbalTrial)
 	{
-		return $this->check(["delete"], "pv", $connectedUser) ? (($verbalTrial->status == "validated") ? Response::deny("vous n'etes plus autorisé à supprimer ce pv") : Response::allow()) : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		return $this->check(["delete"], "pv", $connectedUser) || $this->check(["delete"], "pv-notification", $connectedUser) ? (($verbalTrial->status == "validated") ? Response::deny("vous n'etes plus autorisé à supprimer ce pv") : Response::allow()) : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
 }

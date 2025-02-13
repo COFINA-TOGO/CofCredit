@@ -46,7 +46,7 @@ class VerbalTrial extends Model
 		'number_deferred',
 	];
 
-	protected $appends = ["applicant_full_name", "label", "amount_fr"];
+	protected $appends = ["applicant_full_name", "label", "amount_fr", "has_mortgage", "next"];
 
 	public function toArray()
 	{
@@ -114,5 +114,18 @@ class VerbalTrial extends Model
 	public function notification(): HasOne
 	{
 		return $this->hasOne(Notification::class, 'verbal_trial_id', 'id');
+	}
+
+	public function getHasMortgageAttribute(){
+		foreach($this->guarantees as $guarantee){
+			if($guarantee->type_of_guarantee_id == 9){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function getNextAttribute(){
+		return $this->contract??$this->notification;
 	}
 }

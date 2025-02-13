@@ -5,13 +5,14 @@ import GuaranteeEdit from "@/views/pv/GuaranteeEdit.vue";
 definePage({
 	meta: {
 		action: "create",
-		subject: "pv",
+		subject: "pv-notification",
 	},
 });
 import { ref } from "vue";
 
 const router = useRouter();
 
+const connectedUser = useCookie('userData').value;
 const pvData = ref({
 	committee_id: null,
 	committee_date: null,
@@ -142,7 +143,7 @@ const onSubmit = () => {
 				body: {
 					committee_id: pvData.value.committee_id,
 					committee_date: pvData.value.committee_date,
-					caf_id: pvData.value.caf_id,
+					caf_id: connectedUser.id,
 					civility: pvData.value.civility,
 					applicant_first_name: pvData.value.applicant_first_name,
 					applicant_last_name: pvData.value.applicant_last_name,
@@ -170,12 +171,12 @@ const onSubmit = () => {
 				},
 			});
 
-			let nextRoute = "/pv";
+			let nextRoute = {name: 'pv-notification-without-pv'};
 			pvError.value = getResetPvError();
 			if (res.status == 201) {
 				pvData.value.guarantees.forEach((guarantee) => {
 					if (guarantee.type_of_guarantee_id == 9) {
-						nextRoute = "/pv/without-notification";
+						nextRoute = {name: 'pv-notification-without-pv'};
 					}
 				});
 				router.push(nextRoute);
@@ -214,17 +215,39 @@ const addGuaranteeItem = () => {
 			class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6"
 		>
 			<div class="d-flex flex-column justify-center">
-				<h4 class="text-h4 font-weight-medium">Ajouter un nouveau PV</h4>
-				<span>Procès verbal pour un nouveau crédit</span>
+				<h4 class="text-h4 font-weight-medium">Ajouter une nouvelle notification</h4>
+				<span>Notification pour un nouveau crédit</span>
 			</div>
 		</div>
 		<VForm ref="refForm" @submit.prevent="onSubmit">
 			<VRow>
 				<VCol md="12">
 					<!-- 👉 PV Information -->
-					<VCard class="mb-6" title="Information du pv">
+					<VCard class="mb-6" title="Information de la notification">
 						<VCardText>
 							<VRow>
+								<VCol cols="12" md="6" lg="6">
+									<AppAutocomplete
+										v-model="pvData.credit_admin_id"
+										:items="creditAdminList"
+										:error-messages="pvError.credit_admin_id"
+										label="Administrateur Crédit"
+										item-title="full_name"
+										item-value="id"
+										:rules="[requiredValidator]"
+									/>
+								</VCol>
+								<VCol cols="12" md="6" lg="6">
+									<AppAutocomplete
+										v-model="pvData.credit_analyst_id"
+										:items="creditAnalystList"
+										:error-messages="pvError.credit_analyst_id"
+										label="Analyste Crédit"
+										item-title="full_name"
+										item-value="id"
+										:rules="[requiredValidator]"
+									/>
+								</VCol>
 								<VCol cols="12" md="6" lg="4">
 									<AppTextField
 										v-model="pvData.committee_id"
@@ -246,39 +269,6 @@ const addGuaranteeItem = () => {
 										v-model="pvData.entity_name"
 										:error-messages="pvError.entity_name"
 										label="Nom de l'entitié"
-									/>
-								</VCol>
-								<VCol cols="12" md="6" lg="4">
-									<AppAutocomplete
-										v-model="pvData.caf_id"
-										:items="cafList"
-										:error-messages="pvError.caf_id"
-										label="Chargé d'affaire"
-										item-title="full_name"
-										item-value="id"
-										:rules="[requiredValidator]"
-									/>
-								</VCol>
-								<VCol cols="12" md="6" lg="4">
-									<AppAutocomplete
-										v-model="pvData.credit_admin_id"
-										:items="creditAdminList"
-										:error-messages="pvError.credit_admin_id"
-										label="Administrateur Crédit"
-										item-title="full_name"
-										item-value="id"
-										:rules="[requiredValidator]"
-									/>
-								</VCol>
-								<VCol cols="12" md="6" lg="4">
-									<AppAutocomplete
-										v-model="pvData.credit_analyst_id"
-										:items="creditAnalystList"
-										:error-messages="pvError.credit_analyst_id"
-										label="Analyste Crédit"
-										item-title="full_name"
-										item-value="id"
-										:rules="[requiredValidator]"
 									/>
 								</VCol>
 								<VCol cols="12" md="6" lg="4">

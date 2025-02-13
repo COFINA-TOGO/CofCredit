@@ -268,7 +268,7 @@ class ContractController extends Controller
 
 				$data["line_risk_premium_percentage"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "" : "<br/> \n Prime de risque (" . $data["verbal_trial.risk_premium_percentage"] . " %)";
 				$data["line_risk_premium_percentage_value"] = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? "" : ": " . number_format($data["verbal_trial.risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA";
-				
+
 
 				$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne" : "";
 				$data["line_review_bonus_value"] = $data["verbal_trial.has_line_review_bonus"] ? ": 1% du capital restant dû après 18 mois" : "";
@@ -310,10 +310,10 @@ class ContractController extends Controller
 					})->all());
 				}
 				$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
-				
+
 				$insuranceList = $contract->verbal_trial->has_insurance ? [["key" => "Prime d’assurance", "value" => "Selon la grille de l’assureur"]] : [];
 				$templateProcessor->cloneBlock('insurance', 0, true, false, $insuranceList);
-				
+
 				$riskPremiumPercentageList = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["verbal_trial.risk_premium_percentage"] . " %)", "value" => "" . number_format($data["verbal_trial.risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA"]];
 				$templateProcessor->cloneBlock('riskPremiumPercentage', 0, true, false, $riskPremiumPercentageList);
 
@@ -345,6 +345,9 @@ class ContractController extends Controller
 				unset($data["observations"]);
 				unset($data["guarantors"]);
 				unset($data["verbal_trial"]);
+				unset($data["verbal_trial.next"]);
+				unset($data["verbal_trial.guarantees"]);
+				unset($data["verbal_trial.contract"]);
 				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
 				$templateProcessor->setValues($data);
 
@@ -385,83 +388,82 @@ class ContractController extends Controller
 	{
 		$contract = Contract::find($id);
 		if ($contract) {
-			if (($authorisation = Gate::inspect('download', $contract))->allowed()) {
-				$templateProcessor = new TemplateProcessor("../document_templates/Contracts/$contract->type/billet_a_ordre_$contract->type.docx");
-				$data = $contract->toArray();
-				$data = array_merge($data, collect($contract->verbal_trial)->mapWithKeys(function ($value, $key) {
-					return ['verbal_trial.' . $key => $value];
+			$templateProcessor = new TemplateProcessor("../document_templates/Contracts/$contract->type/billet_a_ordre_$contract->type.docx");
+			$data = $contract->toArray();
+			$data = array_merge($data, collect($contract->verbal_trial)->mapWithKeys(function ($value, $key) {
+				return ['verbal_trial.' . $key => $value];
+			})->all());
+
+			$data = array_merge($data, collect($contract->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
+				return ['verbal_trial.type_of_credit.' . $key => $value];
+			})->all());
+			$data = array_merge($data, collect($contract->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
+				return ['verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
+			})->all());
+			if ($contract->type == "company") {
+				$data = array_merge($data, collect($contract->company)->mapWithKeys(function ($value, $key) {
+					return ['company.' . $key => $value];
 				})->all());
-
-				$data = array_merge($data, collect($contract->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
-					return ['verbal_trial.type_of_credit.' . $key => $value];
+			} elseif ($contract->type == "individual_business") {
+				$data = array_merge($data, collect($contract->individual_business)->mapWithKeys(function ($value, $key) {
+					return ['individual_business.' . $key => $value];
 				})->all());
-				$data = array_merge($data, collect($contract->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
-					return ['verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
-				})->all());
-				if ($contract->type == "company") {
-					$data = array_merge($data, collect($contract->company)->mapWithKeys(function ($value, $key) {
-						return ['company.' . $key => $value];
-					})->all());
-				} elseif ($contract->type == "individual_business") {
-					$data = array_merge($data, collect($contract->individual_business)->mapWithKeys(function ($value, $key) {
-						return ['individual_business.' . $key => $value];
-					})->all());
-				}
+			}
 
-				$data["ht_rate"] = "17";
-				$data["current_date"] = Carbon::now()->format("d/m/Y");
-				$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
-				$data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
-				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-				$data["due_amount.fr"] = SpellNumber::value((float) $data["due_amount"])->locale('fr')->toLetters();
-				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
-				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
-				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-				$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
-				$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
-				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
-				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance"][$data["verbal_trial.periodicity"]];
-				$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
+			$data["ht_rate"] = "17";
+			$data["current_date"] = Carbon::now()->format("d/m/Y");
+			$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
+			$data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
+			$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
+			$data["due_amount.fr"] = SpellNumber::value((float) $data["due_amount"])->locale('fr')->toLetters();
+			$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
+			$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
+			$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
+			$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
+			$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
+			$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
+			$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance"][$data["verbal_trial.periodicity"]];
+			$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
 
-				$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne	  : 1% du capital restant dû après 18 mois" : "";
-				
-				$data["representative_type_of_identity_document"] = [
-					"cni" => "Carte d'identité nationale",
-					"passport" => "Passeport",
-					"residence_certificate" => "Certificat de résidence",
-					"driving_licence" => "Permis de conduire",
-					"consular_card" => "Carte consulaire",
-					"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
-					"residence_permit" => "Carte de séjour",
-				][$data["representative_type_of_identity_document"]];
+			$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne	  : 1% du capital restant dû après 18 mois" : "";
 
-				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
-				$data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
-				$data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
-				$data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
+			$data["representative_type_of_identity_document"] = [
+				"cni" => "Carte d'identité nationale",
+				"passport" => "Passeport",
+				"residence_certificate" => "Certificat de résidence",
+				"driving_licence" => "Permis de conduire",
+				"consular_card" => "Carte consulaire",
+				"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
+				"residence_permit" => "Carte de séjour",
+			][$data["representative_type_of_identity_document"]];
 
-				unset($data["observations"]);
-				unset($data["guarantors"]);
-				$templateProcessor->setValues($data);
+			$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
+			$data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
+			$data["due_amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
+			$data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
 
-				// Enregistrez les modifications dans un nouveau fichier
-				$outputFilePath = public_path("generated/docx/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx");
-				$templateProcessor->saveAs($outputFilePath);
-				$outputFilePdfFolderPath = public_path("generated/pdf");
-				$outputFilePdfPath = public_path("generated/pdf/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".pdf");
+			unset($data["observations"]);
+			unset($data["guarantors"]);
+			unset($data["verbal_trial.next"]);
+			unset($data["verbal_trial.guarantees"]);
+			unset($data["verbal_trial.contract"]);
+			$templateProcessor->setValues($data);
+
+			// Enregistrez les modifications dans un nouveau fichier
+			$outputFilePath = public_path("generated/docx/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx");
+			$templateProcessor->saveAs($outputFilePath);
+			$outputFilePdfFolderPath = public_path("generated/pdf");
+			$outputFilePdfPath = public_path("generated/pdf/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".pdf");
 
 
-				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
-				$output = [];
-				$returnVar = 0;
-				exec($command, $output, $returnVar);
-				// Vérification du succès
-				if ($returnVar === 0) {
-					File::delete($outputFilePath);
-					return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
-				}
-			} else {
-				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
+			$output = [];
+			$returnVar = 0;
+			exec($command, $output, $returnVar);
+			// Vérification du succès
+			if ($returnVar === 0) {
+				File::delete($outputFilePath);
+				return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
 			}
 		} else {
 			return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
@@ -480,32 +482,28 @@ class ContractController extends Controller
 	{
 		$contract = Contract::find($id);
 		if ($contract) {
-			if (($authorisation = Gate::inspect('download', $contract))->allowed()) {
-				$templateProcessor = new TemplateProcessor("../document_templates/Mention-manuscrite/mention_manuscrite.docx");
-				$data = $contract->toArray();
-				$data["amount_float"] = ((float) $data["total_amount_of_interest"]) + $contract->verbal_trial->amount;
-				$data["amount"] = number_format($data["amount_float"], 0, ',', ' ');
-				$data["amount.fr"] = SpellNumber::value((float) $data["amount_float"])->locale('fr')->toLetters();
-				$templateProcessor->setValues(["amount" => $data["amount"], "amount.fr" => $data["amount.fr"],]);
+			$templateProcessor = new TemplateProcessor("../document_templates/Mention-manuscrite/mention_manuscrite.docx");
+			$data = $contract->toArray();
+			$data["amount_float"] = ((float) $data["total_amount_of_interest"]) + $contract->verbal_trial->amount;
+			$data["amount"] = number_format($data["amount_float"], 0, ',', ' ');
+			$data["amount.fr"] = SpellNumber::value((float) $data["amount_float"])->locale('fr')->toLetters();
+			$templateProcessor->setValues(["amount" => $data["amount"], "amount.fr" => $data["amount.fr"],]);
 
-				// Enregistrez les modifications dans un nouveau fichier
-				$outputFilePath = public_path("generated/docx/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".docx");
-				$templateProcessor->saveAs($outputFilePath);
-				$outputFilePdfFolderPath = public_path("generated/pdf");
-				$outputFilePdfPath = public_path("generated/pdf/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".pdf");
+			// Enregistrez les modifications dans un nouveau fichier
+			$outputFilePath = public_path("generated/docx/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".docx");
+			$templateProcessor->saveAs($outputFilePath);
+			$outputFilePdfFolderPath = public_path("generated/pdf");
+			$outputFilePdfPath = public_path("generated/pdf/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".pdf");
 
 
-				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
-				$output = [];
-				$returnVar = 0;
-				exec($command, $output, $returnVar);
-				// Vérification du succès
-				if ($returnVar === 0) {
-					File::delete($outputFilePath);
-					return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
-				}
-			} else {
-				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
+			$output = [];
+			$returnVar = 0;
+			exec($command, $output, $returnVar);
+			// Vérification du succès
+			if ($returnVar === 0) {
+				File::delete($outputFilePath);
+				return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
 			}
 		} else {
 			return $this->responseError(["id" => "Le contrat n'existe pas"], 404);

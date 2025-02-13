@@ -3,8 +3,8 @@
 <script setup>
 definePage({
 	meta: {
-		action: "read" || "historical",
-		subject: "pv",
+		action: "read-without-pv",
+		subject: "pv-notification",
 	},
 });
 import { VDataTableServer } from "vuetify/labs/VDataTable";
@@ -12,8 +12,10 @@ import { paginationMeta } from "@api-utils/paginationMeta";
 import AppAutocomplete from "@/@core/components/app-form-elements/AppAutocomplete.vue";
 import JsFileDownloader from "js-file-downloader";
 import { $api } from "@/utils/api";
+import { useCookie } from "@/@core/composable/useCookie";
 
 const router = useRouter();
+const connectedUser = useCookie("userData").value;
 
 const type_of_credit_id = ref();
 const status = ref();
@@ -30,7 +32,6 @@ const actionFunction = ref();
 const actionComment = ref("");
 const commentPresence = ref(false);
 const actionStatus = ref("waiting");
-const validation_level = ref("ahm");
 const headers = [
 	{
 		title: "Numéro comitée",
@@ -63,12 +64,10 @@ const { data: pvData, execute: fetchPv } = await useApi(
 		query: {
 			search: searchQuery,
 			type_of_credit_id: type_of_credit_id,
-			status: status,
+			in_validation_level: "ahm",
 			page: page,
-			has_next: 0,
 			with_caf: 1,
 			with_type_of_credit: 1,
-			in_validation_level: validation_level
 		},
 	})
 );
@@ -112,7 +111,7 @@ const downloadFile = async (url, fileName) => {
 };
 
 const apiDelete = async (id) => {
-	await $api(`verbal-trial/analyst/${id}`, { method: "DELETE" });
+	await $api(`verbal-trial/${id}`, { method: "DELETE" });
 	actionComment.value = "";
 	fetchPv();
 };
@@ -140,7 +139,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 			<VCardText>
 				<VRow>
 					<VCardText>
-						<h2>Liste des Procès verbaux sans contrat</h2>
+						<h2>Liste des notifications de caf sans PV</h2>
 					</VCardText>
 				</VRow>
 			</VCardText>
@@ -153,21 +152,6 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 					<VCol cols="12" sm="4">
 						<AppAutocomplete v-model="type_of_credit_id" placeholder="Type de crédit" item-title="full_name"
 							item-value="id" :items="type_of_credit_list" clearable clear-icon="tabler-x" />
-					</VCol>
-					<VCol cols="12" sm="4">
-						<VSelect v-model="status" placeholder="Statut" :items="[
-							{ value: 'v', title: 'Validé' },
-							{ value: 'w', title: 'En attente' },
-							{ value: 'r', title: 'Rejeté' },
-						]" clear-icon="tabler-x" clearable="" />
-					</VCol>
-					<VCol cols="12" sm="4">
-						<VSelect v-model="validation_level" placeholder="Niveau de validation" :items="[
-							{ value: 'ahm', title: 'Tout' },
-							{ value: 'a', title: 'Admin Credit' },
-							{ value: 'h', title: 'Head Credit' },
-							{ value: 'm', title: 'MD' },
-						]" clear-icon="tabler-x" clearable="" />
 					</VCol>
 				</VRow>
 			</VCardText>
@@ -186,6 +170,11 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 					<!-- 👉 Export button -->
 					<VBtn variant="tonal" color="secondary" prepend-icon="tabler-upload">
 						Export
+					</VBtn>
+
+					<VBtn v-if="$can('create', 'pv-notification')" color="primary" prepend-icon="tabler-plus"
+						:to="{ name: 'pv-notification-add' }">
+						Ajouter
 					</VBtn>
 					<VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh" @click="
 						fetchPv();
@@ -212,10 +201,10 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 
 				<template #item.status="{ item }">
 					<VChip label :color="{
-							validated: 'success',
-							rejected: 'error',
-							waiting: 'warning',
-						}[item.status]
+						validated: 'success',
+						rejected: 'error',
+						waiting: 'warning',
+					}[item.status]
 						">
 						<VTooltip v-if="item.comment" activator="parent" transition="scroll-x-transition"
 							location="start">Raison:
@@ -242,111 +231,11 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 				<template #item.actions="{ item }">
 					<div class="text-center">
 						<div>
-							<IconBtn v-if="$can('read', 'pv') || $can('historical', 'pv')"
-								:to="{ name: 'pv-id', params: { id: item.id } }">
+							<IconBtn v-if="$can('read', 'pv-notification') || $can('historical', 'pv-notification')"
+								:to="{ name: 'pv-notification-id', params: { id: item.id } }">
 								<VTooltip activator="parent" transition="scroll-x-transition" location="start">Details
 								</VTooltip>
 								<VIcon icon=" tabler-eye" />
-							</IconBtn>
-							<IconBtn v-if="$can('download', 'pv')" @click="
-								downloadFile(
-									`/api/verbal-trial/download/${item.id}`,
-									`PV-${item.committee_id} .pdf`
-								)
-								">
-								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Télécharger
-								</VTooltip>
-								<VIcon icon="tabler-download" v-tooltip="'Ceci est une icône'" />
-							</IconBtn>
-						</div>
-						<div v-if="
-							($can('update', 'pv') || $can('delete', 'pv')) &&
-							(item.status == 'rejected' ||
-								(item.status == 'waiting' &&
-									item.validation_level == 'credit_admin'))
-						">
-							<VDivider />
-							<IconBtn v-if="
-								$can('update', 'pv') &&
-								(item.status == 'rejected' ||
-									(item.status == 'waiting' &&
-										item.validation_level == 'credit_admin'))
-							" :to="{ name: 'pv-edit-id', params: { id: item.id } }">
-								<VTooltip activator="parent" transition="scroll-x-transition" location="start">Modifier
-								</VTooltip>
-								<VIcon icon="tabler-edit" />
-							</IconBtn>
-
-							<IconBtn v-if="
-								$can('analyst_delete', 'pv') &&
-								(item.status == 'rejected' ||
-									(item.status == 'waiting' &&
-										item.validation_level == 'credit_admin'))
-							" @click="
-									selectedItemId = item.id;
-								(actionTitle = 'Supprimer le PV'),
-									(actionText =
-										'Voulez vous vraiment supprimer ce pv?'),
-									(actionFunction = apiDelete);
-								actionButtonText = 'Supprimer';
-								commentPresence = false;
-								isActionDialogVisible = true;
-								">
-								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Supprimer
-								</VTooltip>
-								<VIcon icon="tabler-trash" color="error" />
-							</IconBtn>
-						</div>
-						<div v-if="
-							($can('reject', 'pv') || $can('validate', 'pv')) &&
-							useCookie('userData').value['role'] ==
-							item.validation_level
-						">
-							<VDivider />
-							<span :class="item.status == 'validated' ? 'full-width-icon' : ''
-								">
-								<IconBtn v-if="
-									$can('reject', 'pv') && item.status != 'rejected'
-								" @click="
-										selectedItemId = item.id;
-									(actionTitle = 'Rejeter le PV'),
-										(actionText =
-											'Voulez vous vraiment rejeter ce PV?'),
-										(actionFunction = apiChangeStatus);
-									actionButtonText = 'Rejeter';
-									commentPresence = true;
-									actionStatus = 'rejected';
-									isActionDialogVisible = true;
-									">
-									<VTooltip activator="parent" transition="scroll-x-transition" location="start">
-										Rejeter</VTooltip>
-									<VIcon icon="tabler-x" color="error" />
-								</IconBtn>
-							</span>
-							<span v-if="item.status == 'waiting'">
-								<IconBtn v-if="$can('validate', 'pv')" @click="
-									selectedItemId = item.id;
-								(actionTitle = 'Valider le PV'),
-									(actionText =
-										'Voulez vous vraiment valider ce PV?'),
-									(actionFunction = apiChangeStatus);
-								actionButtonText = 'Valider';
-								commentPresence = false;
-								actionStatus = 'validated';
-								isActionDialogVisible = true;
-								">
-									<VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider
-									</VTooltip>
-									<VIcon icon="tabler-check" color="success" />
-								</IconBtn>
-							</span>
-						</div>
-						<div v-if="$can('create', 'basic-contract') && item.status == 'validated' && !item.has_mortgage">
-							<VDivider />
-							<IconBtn :to="{ name: 'contract-add', query: { id: item.id } }">
-								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le
-									contrat</VTooltip>
-								<VIcon icon="tabler-file-plus" color="success" />
 							</IconBtn>
 						</div>
 					</div>
