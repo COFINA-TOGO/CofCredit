@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 use Exception;
+use Rmunate\Utilities\SpellNumber;
 
 /**
  * @group Procès Verbal
@@ -117,7 +118,7 @@ class VerbalTrialController extends Controller
 					}
 				});
 			}
-			
+
 			if (isset($request["in_validation_level"])) {
 				$verbalTrialList->where(function ($query) use ($request) {
 					foreach (str_split($request["in_validation_level"]) as $char) {
@@ -145,11 +146,11 @@ class VerbalTrialController extends Controller
 					$verbalTrialList->whereDoesntHave('notification');
 				}
 			}
-			
+
 			if (isset($request["has_next"])) {
 				$has_next = (int) $request["has_next"];
 				if ($has_next == 1) {
-					$verbalTrialList->where(function($query){
+					$verbalTrialList->where(function ($query) {
 						$query->whereHas('notification')->orWhereHas('contract');
 					});
 				} else if ($has_next == 0) {
@@ -309,6 +310,86 @@ class VerbalTrialController extends Controller
 		}
 	}
 
+	public function download_notification(Request $request, int $id)
+	{
+		$pv = VerbalTrial::find($id);
+		if ($pv) {
+			// if (($authorisation = Gate::inspect('view', $notification))->allowed()) {
+			$templateProcessor = new TemplateProcessor(($pv->head_credit_validation == "validated") ? "../document_templates/Notifications/PV-Notification-validated.docx" : "../document_templates/Notifications/PV-Notification.docx");
+
+			$data = $pv->toArray();
+			$data = array_merge($data, collect($pv->type_of_credit)->mapWithKeys(function ($value, $key) {
+				return ['type_of_credit.' . $key => $value];
+			})->all());
+			$data = array_merge($data, collect($pv->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
+				return ['type_of_credit.type_of_applicant.' . $key => $value];
+			})->all());
+			if ($pv->type == "company") {
+				$data = array_merge($data, collect($pv->company)->mapWithKeys(function ($value, $key) {
+					return ['company.' . $key => $value];
+				})->all());
+			} elseif ($pv->type == "individual_business") {
+				$data = array_merge($data, collect($pv->individual_business)->mapWithKeys(function ($value, $key) {
+					return ['individual_business.' . $key => $value];
+				})->all());
+			}
+			$data["ht_rate"] = "17";
+			$data["civility.2"] = ["Mr" => "Monsieur", "Mme" => "Madame", "Mlle" => "Madame"][$data["civility"]];
+			$data["current_date"] = Carbon::now()->translatedFormat('d F Y');
+			$data["administrative_fees_percentage.value"] = number_format((float) $data["administrative_fees_percentage"] * $data["amount"] / 100, 0, ',', ' ');
+			$data["amount.fr"] = SpellNumber::value((float) $data["amount"])->locale('fr')->toLetters();
+			$data["duration.fr"] = SpellNumber::value((float) $data["duration"])->locale('fr')->toLetters();
+			$data["duration.fr"] = SpellNumber::value((float) $data["duration"])->locale('fr')->toLetters();
+			$data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
+			$data["periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["periodicity"]];
+			$data["periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["periodicity"]];
+
+			$data["line_review_bonus"] = $data["has_line_review_bonus"] ? "Prime de révision de ligne" : "";
+			$data["line_review_bonus_value"] = $data["has_line_review_bonus"] ? ": 1% du capital restant dû après 18 mois" : "";
+
+			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
+			$data["administrative_fees_percentage"] = number_format(((float) $data["administrative_fees_percentage"]), 0, ',', ' ');
+			//$data["insurance_premium"] = number_format(((float) $data["insurance_premium"]), 0, ',', ' ');
+
+			$guaranteeList = [];
+			foreach ($pv->guarantees as $guarantee) {
+				$tmp = $guarantee->toArray();
+				$guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
+					return ['type_of_guarantee.' . $key => $value];
+				})->all());
+			}
+			$currentSignatory = User::where('profile', "head_credit")->first();
+			if ($currentSignatory) {
+				($currentSignatory->signatory_path) ? $templateProcessor->setImageValue("head_credit_sign", array("path" => "storage" . $currentSignatory->signatory_path, 'width' => 240, 'height' => 240, 'ratio' => true)) : $templateProcessor->setValue("head_credit_sign", "");
+			}
+			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+
+			unset($data["observations"]);
+			unset($data["guarantors"]);
+			unset($data["next"]);
+			unset($data["guarantees"]);
+			unset($data["notification"]);
+			$templateProcessor->setValues($data);
+
+			$bsaseName = "Contrat-" . $pv->committee_id;
+			$wordFilePath = public_path($bsaseName . ".docx");
+			$templateProcessor->saveAs($wordFilePath);
+			$outputFilePdfFolderPath = public_path("generated/pdf");
+
+			$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+			$output = [];
+			$returnVar = 0;
+			exec($command, $output, $returnVar);
+			// Vérification du succès
+			if ($returnVar === 0) {
+				File::delete($wordFilePath);
+				return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+			}
+		} else {
+			return $this->responseError(["id" => "La notification n'existe pas"], 404);
+		}
+	}
+
 	/**
 	 * Créer un nouveau procès verbal
 	 *
@@ -370,6 +451,7 @@ class VerbalTrialController extends Controller
 				'has_line_review_bonus' => 'required|boolean',
 				'number_deferred' => 'required|numeric',
 				'has_insurance' => 'required|boolean',
+				'representative_phone_number' => 'required',
 			]);
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
@@ -507,6 +589,7 @@ class VerbalTrialController extends Controller
 					'has_line_review_bonus' => 'required|boolean',
 					'number_deferred' => 'required|numeric',
 					'has_insurance' => 'required|boolean',
+					'representative_phone_number' => 'required',
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
@@ -612,17 +695,18 @@ class VerbalTrialController extends Controller
 					'number_deferred' => 'required|numeric',
 					'has_insurance' => 'required|boolean',
 					'action' => "required|in:validate,reject",
-					'comment' => "nullable|min:1"
+					'comment' => "nullable|min:1",
+					'representative_phone_number' => 'required',
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
 				} else {
-					if($requestData["action"] == "reject"){
+					if ($requestData["action"] == "reject") {
 						$verbalTrial->update(["status" => "rejected", "comment" => $requestData["comment"]]);
 						return $this->responseOk([
 							"verbalTrial" => $verbalTrial
 						]);
-					}else{
+					} else {
 						if (User::where("profile", "credit_admin")->where('id', $requestData["credit_admin_id"])->exists()) {
 							if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
 								DB::beginTransaction();
@@ -633,7 +717,7 @@ class VerbalTrialController extends Controller
 									if (!isset($requestData["entity_name"])) {
 										$requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
 									}
-	
+
 									if (isset($requestData["guarantees"])) {
 										$guaranteesCollection = new Collection($requestData["guarantees"]);
 										$requestData["has_mortgage"] = $guaranteesCollection->contains(function ($objet) {
@@ -756,7 +840,8 @@ class VerbalTrialController extends Controller
 										<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
 									",
 								]
-							],"head_credit" => [
+							],
+							"head_credit" => [
 								[
 									"receiverList" => $receiverList["head_credit_list"],
 									"subject" => "Notification de validation du PV " . $verbalTrial->committee_id,
@@ -952,7 +1037,8 @@ class VerbalTrialController extends Controller
 		}
 	}
 
-	public function analyst_destroy(int $id){
+	public function analyst_destroy(int $id)
+	{
 		$verbalTrial = VerbalTrial::find($id);
 		if ($verbalTrial) {
 			if (($authorisation = Gate::inspect('analyst_delete', $verbalTrial))->allowed()) {

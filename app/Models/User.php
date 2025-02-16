@@ -120,11 +120,31 @@ class User extends Authenticatable
 					return [
 						[
 							"action" => ["menu"],
-							"subject" => ["pv-notification", "basic-contract", "contract"]
+							"subject" => ["pv-notification", "basic-contract", "contract", "notarized-contract"]
 						],
 						[
 							"action" => ["read"],
-							"subject" => ["non-mortgage-contract", "mortgage-contract","pv", "user", "contract", "guarantor", "type-of-guarantee", "type-of-credit", "type-of-applicant", "deadline-postponed", "pv-notification", "basic-contract"]
+							"subject" => ["non-mortgage-contract", "mortgage-contract","pv", "user", "contract", "guarantor", "type-of-guarantee", "type-of-credit", "type-of-applicant", "deadline-postponed", "pv-notification", "basic-contract", "notarized-contract"]
+						],
+						[
+							"action" => ["read-without-notarized-contract"],
+							"subject" => ["notarized-contract"]
+						],
+						[
+							"action" => ["read-historical"],
+							"subject" => ["notarized-contract"]
+						],
+						[
+							"action" => ["without-signed-contract"],
+							"subject" => ["notification"]
+						],
+						[
+							"action" => ["download"],
+							"subject" => ["notarized-contract"]
+						],
+						[
+							"action" => ["upload"],
+							"subject" => ["notarized-contract"]
 						],
 						[
 							"action" => ["hitorical"],
@@ -242,43 +262,51 @@ class User extends Authenticatable
 				return [
 					[
 						"action" => ["menu"],
-						"subject" => ["pv", "contract", "basic-contract", "cat", "basic-cat"]
+						"subject" => ["pv", "contract", "basic-contract", "notarized-contract", "cat", "basic-cat"]
 					],
 					[
 						"action" => ["read"],
-						"subject" => ["non-mortgage-contract", "mortgage-contract", "basic-contract", "contract", "basic-cat"]
+						"subject" => ["non-mortgage-contract", "mortgage-contract", "basic-contract", "contract", "notarized-contract", "basic-cat"]
 					],
 					[
 						"action" => ["read-without-cat"],
-						"subject" => ["basic-contract", "contract"]
+						"subject" => ["basic-contract", "contract", "notarized-contract"]
 					],
 					[
 						"action" => ["read-historical"],
-						"subject" => ["basic-contract", "contract"]
+						"subject" => ["basic-contract", "contract", "notarized-contract"]
+					],
+					[
+						"action" => ["read-without-notarized-contract"],
+						"subject" => ["notarized-contract"]
+					],
+					[
+						"action" => ["read-without-head-validation"],
+						"subject" => ["notarized-contract"]
 					],
 					[
 						"action" => ["historical"],
-						"subject" => ["basic-contract", "contract"]
+						"subject" => ["basic-contract", "contract", "notarized-contract"]
 					],
 					[
 						"action" => ["change_status"],
-						"subject" => ["basic-contract", "contract"]
+						"subject" => ["basic-contract", "contract", "notarized-contract"]
 					],
 					[
 						"action" => ["validate"],
-						"subject" => ["basic-contract", "contract"]
+						"subject" => ["basic-contract", "contract", "notarized-contract"]
 					],
 					[
 						"action" => ["reject"],
-						"subject" => ["basic-contract", "contract"]
+						"subject" => ["basic-contract", "contract", "notarized-contract"]
 					],
 					[
 						"action" => ["create"],
-						"subject" => ["basic-contract", "contract", "cat", "basic-cat"]
+						"subject" => ["basic-contract", "contract", "notarized-contract", "cat", "basic-cat"]
 					],
 					[
 						"action" => ["update"],
-						"subject" => ["basic-contract", "contract", "cat", "basic-cat"]
+						"subject" => ["basic-contract", "contract", "notarized-contract", "cat", "basic-cat"]
 					],
 					[
 						"action" => ["delete"],
@@ -329,11 +357,19 @@ class User extends Authenticatable
 				return [
 					[
 						"action" => ["menu"],
-						"subject" => ["pv","contract", "basic-contract","cat", "basic-cat"]
+						"subject" => ["pv", "contract", "basic-contract", "notarized-contract", "cat", "basic-cat"]
 					],
 					[
 						"action" => ["read"],
 						"subject" => ["non-mortgage-contract", "mortgage-contract", "contract", "basic-contract", "cat", "basic-cat", "notification", "simple-notification"]
+					],
+					[
+						"action" => ["read-without-notarized-contract"],
+						"subject" => ["notarized-contract"]
+					],
+					[
+						"action" => ["read-without-head-validation"],
+						"subject" => ["notarized-contract"]
 					],
 					[
 						"action" => ["historical"],
@@ -410,12 +446,40 @@ class User extends Authenticatable
 			case ('legal'):
 				return [
 					[
-						"action" => ["read"],
-						"subject" => ["mortgage-contract"]
+						"action" => ["menu"],
+						"subject" => ["contract","notarized-contract"],
 					],
 					[
-						"action" => ["without-signed-contract", "upload_signed_notification", "upload", "download"],
+						"action" => ["read"],
+						"subject" => ["notarized-contract"]
+					],
+					[
+						"action" => ["historical"],
+						"subject" => ["pv"]
+					],
+					[
+						"action" => ["read-without-notarized-contract"],
+						"subject" => ["notarized-contract"]
+					],
+					[
+						"action" => ["read-historical"],
+						"subject" => ["notarized-contract"]
+					],
+					[
+						"action" => ["without-signed-contract"],
 						"subject" => ["notification"]
+					],
+					[
+						"action" => ["download"],
+						"subject" => ["notarized-contract"]
+					],
+					[
+						"action" => ["upload"],
+						"subject" => ["notarized-contract"]
+					],
+					[
+						"action" => ["send"],
+						"subject" => ["contract", "guarantor", "notification", "simple-notification"],
 					],
 					[
 						"action" => ["manage"],

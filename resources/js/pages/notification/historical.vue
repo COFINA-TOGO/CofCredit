@@ -73,7 +73,7 @@ const {
 		// with_type_of_credit: 1,
 		// with_creator: 1,
 		// has_upload_completed: 1,
-		// has_cat: 1,
+		has_cat: 1,
 		is_simple: 0,
 		head_credit_validation: 'v',
 		status: 'wrv',

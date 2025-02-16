@@ -44,6 +44,7 @@ class VerbalTrial extends Model
 		'risk_premium_percentage',
 		'has_line_review_bonus',
 		'number_deferred',
+		'representative_phone_number',
 	];
 
 	protected $appends = ["applicant_full_name", "label", "amount_fr", "has_mortgage", "next"];

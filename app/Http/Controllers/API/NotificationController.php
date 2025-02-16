@@ -278,6 +278,9 @@ class NotificationController extends Controller
 
 			unset($data["observations"]);
 			unset($data["guarantors"]);
+			unset($data["verbal_trial.next"]);
+			unset($data["verbal_trial.guarantees"]);
+			unset($data["verbal_trial.notification"]);
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Contrat-" . $notification->verbal_trial->committee_id;
@@ -440,7 +443,6 @@ class NotificationController extends Controller
 			$requestData = $request->all();
 			$validator = Validator::make($requestData, [
 				'verbal_trial_id' => "required|exists:verbals_trials,id|unique:notifications",
-				'representative_phone_number' => 'required|min:2',
 				'representative_home_address' => 'required|min:2',
 				'number_of_due_dates' => 'required|numeric',
 				'total_amount_of_interest' => 'required|numeric',
@@ -527,7 +529,6 @@ class NotificationController extends Controller
 				$requestData = $request->all();
 				$validator = Validator::make($requestData, [
 					'verbal_trial_id' => "required|exists:verbals_trials,id|unique:notifications,verbal_trial_id," . $id,
-					'representative_phone_number' => 'required|min:2',
 					'representative_home_address' => 'required|min:2',
 					'number_of_due_dates' => 'required|numeric',
 					'total_amount_of_interest' => 'required|numeric',
@@ -686,7 +687,7 @@ class NotificationController extends Controller
 	{
 		$notification = Notification::find($id);
 		if ($notification) {
-			if (($authorisation = Gate::inspect('upload', $notification))->allowed()) {
+			// if (($authorisation = Gate::inspect('upload', $notification))->allowed()) {
 				DB::beginTransaction();
 				if ($request->has('signed_notification')) {
 					$document_category = "notification";
@@ -725,9 +726,9 @@ class NotificationController extends Controller
 
 				DB::commit();
 				return $this->responseOk(["notification" => $notification]);
-			} else {
-				return $this->responseError(["auth" => [$authorisation->message()]], 403);
-			}
+			// } else {
+			// 	return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			// }
 		} else {
 			return $this->responseError(["id" => "La notification n'existe pas"], 404);
 		}

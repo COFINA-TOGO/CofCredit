@@ -80,20 +80,26 @@ export default [
 				subject: 'notarized-contract',
 				children: [
 					{
+						title: 'Créer',
+						to: {name: 'notification-add'},
+						action: 'create',
+						subject: 'notarized-contract',
+					},
+					{
+						title: 'Sans Validation Head',
+						to: {name: 'notification'},
+						action: 'read-without-head-validation',
+						subject: 'notarized-contract',
+					},
+					{
 						title: 'Sans Contrat notarié',
-						// to: {name: 'contract-without-notarized-contract'},
+						to: {name: 'notification-without-signed-contract'},
 						action: 'read-without-notarized-contract',
 						subject: 'notarized-contract',
 					},
 					{
-						title: 'Sans CAT',
-						to: {name: 'contract'},
-						action: 'read-without-cat',
-						subject: 'notarized-contract',
-					},
-					{
 						title: 'Historique',
-						to: {name: 'contract-historical'},
+						to: {name: 'notification-historical'},
 						action: 'read-historical',
 						subject: 'notarized-contract',
 					},
@@ -124,30 +130,24 @@ export default [
 						subject: 'basic-cat',
 					},
 				],
-			},{
+			},
+			{
 				title: 'Hypothécaire',
-				action: 'menu',
-				subject: 'notarized-contract',
+				subject: 'cat',
+				action: 'read',
 				children: [
 					{
-						title: 'Sans Contrat notarié',
-						// to: {name: 'contract-without-notarized-contract'},
-						action: 'read-without-notarized-contract',
-						subject: 'notarized-contract',
-					},
-					{
-						title: 'Sans CAT',
-						to: {name: 'contract'},
-						action: 'read-without-cat',
-						subject: 'notarized-contract',
-					},
-					{
+						title: 'Ajouter',
+						to: 'cat-notification-add',
+						action: 'create',
+						subject: 'cat',
+					}, {
 						title: 'Historique',
-						to: {name: 'contract-historical'},
-						action: 'read-historical',
-						subject: 'notarized-contract',
-					},
-				]
+						to: 'cat-notification',
+						action: 'read',
+						subject: 'cat',
+					}
+				],
 			},
 		],
 	},

@@ -148,12 +148,6 @@ const documentTypeList = [
 										item-title="label" item-value="id" />
 								</VCol>
 								<VCol cols="12" md="6" lg="6">
-									<AppTextField v-model="notificationData.representative_phone_number"
-										:error-messages="formError.representative_phone_number"
-										label="Numéro de téléphone" placeholder="Ex: +228 96 96 96 96"
-										:rules="[requiredValidator]" />
-								</VCol>
-								<VCol cols="12" md="6" lg="6">
 									<AppTextField v-model="notificationData.representative_home_address"
 										:error-messages="formError.representative_home_address" label="Addresse"
 										placeholder="Ex: Adewi" :rules="[requiredValidator]" />
@@ -180,21 +174,21 @@ const documentTypeList = [
 										:error-messages="formError.type" label="Type" placeholder="Ex: Particulier"
 										:rules="[requiredValidator]" />
 								</VCol>
-								<VCol cols="12" md="6" lg="6">
+								<VCol cols="12" md="6" lg="4">
 									<AppSelect v-model="notificationData.representative_type_of_identity_document"
 										:items="documentTypeList"
 										:error-messages="formError.representative_type_of_identity_document"
 										label="Type de la pièce d'identité" placeholder="Ex: Passeport"
 										:rules="[requiredValidator]" />
 								</VCol>
-								<VCol cols="12" md="6" lg="6">
+								<VCol cols="12" md="6" lg="4">
 									<AppTextField v-model="notificationData.representative_number_of_identity_document"
 										:error-messages="formError.representative_number_of_identity_document"
 										label="Numéro de la pièce d'identité" placeholder="Ex: 251012345678"
 										:rules="[requiredValidator]" />
 								</VCol>
 
-								<VCol cols="12" md="12" lg="6">
+								<VCol cols="12" md="12" lg="4">
 									<AppDateTimePicker
 										v-model="notificationData.representative_date_of_issue_of_identity_document"
 										:error-messages="formError.representative_date_of_issue_of_identity_document"

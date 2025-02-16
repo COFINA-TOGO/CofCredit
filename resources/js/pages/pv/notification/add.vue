@@ -39,6 +39,7 @@ const pvData = ref({
 	has_line_review_bonus: null,
 	has_insurance: null,
 	number_deferred: null,
+	representative_phone_number: null,
 	guarantees: [
 		{
 			type_of_guarantee_id: 1,
@@ -74,6 +75,7 @@ const getResetPvError = () => {
 		has_line_review_bonus: "",
 		number_deferred: "",
 		has_insurance: "",
+		representative_phone_number: "",
 	};
 };
 
@@ -168,15 +170,16 @@ const onSubmit = () => {
 					has_line_review_bonus: pvData.value.has_line_review_bonus,
 					number_deferred: pvData.value.number_deferred,
 					has_insurance: pvData.value.has_insurance,
+					representative_phone_number: pvData.value.representative_phone_number,
 				},
 			});
 
-			let nextRoute = {name: 'pv-notification-without-pv'};
+			let nextRoute = { name: 'pv-notification-without-pv' };
 			pvError.value = getResetPvError();
 			if (res.status == 201) {
 				pvData.value.guarantees.forEach((guarantee) => {
 					if (guarantee.type_of_guarantee_id == 9) {
-						nextRoute = {name: 'pv-notification-without-pv'};
+						nextRoute = { name: 'pv-notification-without-pv' };
 					}
 				});
 				router.push(nextRoute);
@@ -211,9 +214,7 @@ const addGuaranteeItem = () => {
 
 <template>
 	<div>
-		<div
-			class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6"
-		>
+		<div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
 			<div class="d-flex flex-column justify-center">
 				<h4 class="text-h4 font-weight-medium">Ajouter une nouvelle notification</h4>
 				<span>Notification pour un nouveau crédit</span>
@@ -226,338 +227,172 @@ const addGuaranteeItem = () => {
 					<VCard class="mb-6" title="Information de la notification">
 						<VCardText>
 							<VRow>
-								<VCol cols="12" md="6" lg="6">
-									<AppAutocomplete
-										v-model="pvData.credit_admin_id"
-										:items="creditAdminList"
-										:error-messages="pvError.credit_admin_id"
-										label="Administrateur Crédit"
-										item-title="full_name"
-										item-value="id"
-										:rules="[requiredValidator]"
-									/>
-								</VCol>
-								<VCol cols="12" md="6" lg="6">
-									<AppAutocomplete
-										v-model="pvData.credit_analyst_id"
-										:items="creditAnalystList"
-										:error-messages="pvError.credit_analyst_id"
-										label="Analyste Crédit"
-										item-title="full_name"
-										item-value="id"
-										:rules="[requiredValidator]"
-									/>
+								<VCol cols="12" md="6" lg="4">
+									<AppTextField v-model="pvData.committee_id" :error-messages="pvError.committee_id"
+										label="Numéro du comitée" :rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="4">
-									<AppTextField
-										v-model="pvData.committee_id"
-										:error-messages="pvError.committee_id"
-										label="Numéro du comitée"
-										:rules="[requiredValidator]"
-									/>
+									<AppDateTimePicker v-model="pvData.committee_date"
+										:error-messages="pvError.committee_date" label="Date du comitée"
+										:rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="4">
-									<AppDateTimePicker
-										v-model="pvData.committee_date"
-										:error-messages="pvError.committee_date"
-										label="Date du comitée"
-										:rules="[requiredValidator]"
-									/>
+									<AppTextField v-model="pvData.entity_name" :error-messages="pvError.entity_name"
+										label="Nom de l'entitié" />
 								</VCol>
 								<VCol cols="12" md="6" lg="4">
-									<AppTextField
-										v-model="pvData.entity_name"
-										:error-messages="pvError.entity_name"
-										label="Nom de l'entitié"
-									/>
+									<AppAutocomplete v-model="pvData.credit_admin_id" :items="creditAdminList"
+										:error-messages="pvError.credit_admin_id" label="Administrateur Crédit"
+										item-title="full_name" item-value="id" :rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="4">
-									<AppSelect
-										v-model="pvData.civility"
-										:items="civilityItemList"
-										:error-messages="pvError.civility"
-										label="Civilité"
-										placeholder="Ex: Mr"
-										:rules="[requiredValidator]"
-									/>
+									<AppAutocomplete v-model="pvData.credit_analyst_id" :items="creditAnalystList"
+										:error-messages="pvError.credit_analyst_id" label="Analyste Crédit"
+										item-title="full_name" item-value="id" :rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="4">
-									<AppTextField
-										v-model="pvData.applicant_first_name"
-										:error-messages="pvError.applicant_first_name"
-										label="Prénom du demandeur"
-										placeholder="Ex: Cesar"
-										:rules="[requiredValidator]"
-									/>
+									<AppTextField v-model="pvData.representative_phone_number"
+										:error-messages="pvError.representative_phone_number"
+										label="Numéro de téléphone" placeholder="Ex: +228 96 96 96 96"
+										:rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="4">
-									<AppTextField
-										v-model="pvData.applicant_last_name"
-										:error-messages="pvError.applicant_last_name"
-										label="Nom du demandeur"
-										placeholder="Ex: Endure"
-										:rules="[requiredValidator]"
-									/>
+									<AppSelect v-model="pvData.civility" :items="civilityItemList"
+										:error-messages="pvError.civility" label="Civilité" placeholder="Ex: Mr"
+										:rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="4">
-									<AppTextField
-										v-model="pvData.account_number"
-										:error-messages="pvError.account_number"
-										label="Numéro de compte"
-										placeholder="Ex: 251012345678"
-										:rules="[requiredValidator]"
-									/>
+									<AppTextField v-model="pvData.applicant_first_name"
+										:error-messages="pvError.applicant_first_name" label="Prénom du demandeur"
+										placeholder="Ex: Cesar" :rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="4">
-									<AppTextField
-										v-model="pvData.activity"
-										:error-messages="pvError.activity"
-										label="Activé"
-										placeholder="Ex: Homme d'affaire"
-										:rules="[requiredValidator]"
-									/>
+									<AppTextField v-model="pvData.applicant_last_name"
+										:error-messages="pvError.applicant_last_name" label="Nom du demandeur"
+										placeholder="Ex: Endure" :rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="4">
-									<AppTextField
-										v-model="pvData.purpose_of_financing"
-										:error-messages="pvError.purpose_of_financing"
-										label="Objet du financement"
-										placeholder="Ex: Achat nouveau locaux"
-										:rules="[requiredValidator]"
-									/>
+									<AppTextField v-model="pvData.account_number"
+										:error-messages="pvError.account_number" label="Numéro de compte"
+										placeholder="Ex: 251012345678" :rules="[requiredValidator]" />
+								</VCol>
+								<VCol cols="12" md="6" lg="4">
+									<AppTextField v-model="pvData.activity" :error-messages="pvError.activity"
+										label="Activé" placeholder="Ex: Homme d'affaire" :rules="[requiredValidator]" />
+								</VCol>
+								<VCol cols="12" md="6" lg="4">
+									<AppTextField v-model="pvData.purpose_of_financing"
+										:error-messages="pvError.purpose_of_financing" label="Objet du financement"
+										placeholder="Ex: Achat nouveau locaux" :rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="3">
-									<AppAutocomplete
-										v-model="pvData.type_of_credit_id"
-										:items="typeOfCreditList"
-										:error-messages="pvError.type_of_credit_id"
-										label="Type de credit"
-										placeholder="Ex: Avance sur salaire"
-										item-title="full_name"
-										item-value="id"
-										:rules="[requiredValidator]"
-									/>
+									<AppAutocomplete v-model="pvData.type_of_credit_id" :items="typeOfCreditList"
+										:error-messages="pvError.type_of_credit_id" label="Type de credit"
+										placeholder="Ex: Avance sur salaire" item-title="full_name" item-value="id"
+										:rules="[requiredValidator]" />
 								</VCol>
 
 								<VCol cols="12" md="6" lg="3">
-									<AppTextField
-										v-model="pvData.amount"
-										type="number"
-										:error-messages="pvError.amount"
-										label="Montant"
-										placeholder="Ex: 15 000 000"
-										:rules="[requiredValidator]"
-									/>
+									<AppTextField v-model="pvData.amount" type="number" :error-messages="pvError.amount"
+										label="Montant" placeholder="Ex: 15 000 000" :rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="3">
-									<AppSelect
-										v-model="pvData.has_line_review_bonus"
-										:items="[
-											{ value: 0, title: 'Sans la prime' },
-											{ value: 1, title: 'Avec la prime' },
-										]"
-										:error-messages="pvError.has_line_review_bonus"
-										label="Prime de révision de ligne"
-										:rules="[requiredValidator]"
-									/>
+									<AppSelect v-model="pvData.has_line_review_bonus" :items="[
+										{ value: 0, title: 'Sans la prime' },
+										{ value: 1, title: 'Avec la prime' },
+									]" :error-messages="pvError.has_line_review_bonus" label="Prime de révision de ligne"
+										:rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="3">
-									<AppSelect
-										v-model="pvData.has_insurance"
-										:items="[
-											{ value: 0, title: 'Sans l\'assurance' },
-											{ value: 1, title: 'Avec l\'assurance' },
-										]"
-										:error-messages="pvError.has_insurance"
-										label="Assurance"
-										:rules="[requiredValidator]"
-									/>
+									<AppSelect v-model="pvData.has_insurance" :items="[
+										{ value: 0, title: 'Sans l\'assurance' },
+										{ value: 1, title: 'Avec l\'assurance' },
+									]" :error-messages="pvError.has_insurance" label="Assurance" :rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="3">
-									<AppTextField
-										v-model="pvData.duration"
-										type="number"
-										:error-messages="pvError.duration"
-										label="Durée du crédit en mois"
-										placeholder="Ex: 18"
-										append-inner-icon="tabler-calendar"
-										:rules="[requiredValidator]"
-									/>
+									<AppTextField v-model="pvData.duration" type="number"
+										:error-messages="pvError.duration" label="Durée du crédit en mois"
+										placeholder="Ex: 18" append-inner-icon="tabler-calendar"
+										:rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="3">
-									<AppTextField
-										v-model="pvData.number_deferred"
-										type="number"
-										:error-messages="pvError.number_deferred"
-										label="Nombre de différé en mois"
-										placeholder="Ex: 18"
-										append-inner-icon="tabler-calendar"
-										:rules="[requiredValidator]"
-									/>
+									<AppTextField v-model="pvData.number_deferred" type="number"
+										:error-messages="pvError.number_deferred" label="Nombre de différé en mois"
+										placeholder="Ex: 18" append-inner-icon="tabler-calendar"
+										:rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="3">
-									<AppSelect
-										v-model="pvData.periodicity"
-										:items="periodicityItemList"
-										:error-messages="pvError.periodicity"
-										label="Periodicité"
-										placeholder="Ex: Mensuelle"
-										:rules="[requiredValidator]"
-									/>
+									<AppSelect v-model="pvData.periodicity" :items="periodicityItemList"
+										:error-messages="pvError.periodicity" label="Periodicité"
+										placeholder="Ex: Mensuelle" :rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="6" lg="3">
-									<AppSelect
-										v-model="pvData.release_type"
-										:items="[
-											{
-												value: 'non-progressive',
-												title: 'Non Progressif',
-											},
-											{ value: 'progressive', title: 'Progressif' },
-										]"
-										:error-messages="pvError.release_type"
-										label="Type de deblocage"
-										placeholder=""
-										:rules="[requiredValidator]"
-									/>
+									<AppSelect v-model="pvData.release_type" :items="[
+										{
+											value: 'non-progressive',
+											title: 'Non Progressif',
+										},
+										{ value: 'progressive', title: 'Progressif' },
+									]" :error-messages="pvError.release_type" label="Type de deblocage" placeholder=""
+										:rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12">
-									<VSlider
-										v-model="pvData.taf"
-										label="TAF(%)"
-										:error-messages="pvError.taf"
-										:thumb-size="15"
-										thumb-label="always"
-										:rules="[requiredValidator]"
-										step="0.01"
-										readonly
-									>
+									<VSlider v-model="pvData.taf" label="TAF(%)" :error-messages="pvError.taf"
+										:thumb-size="15" thumb-label="always" :rules="[requiredValidator]" step="0.01"
+										readonly>
 										<template #append>
-											<VTextField
-												v-model="pvData.taf"
-												:error-messages="pvError.taf"
-												type="number"
-												style="width: 120px"
-												density="compact"
-												hide-details
-												variant="outlined"
-												suffix="%"
-												readonly
-											/>
+											<VTextField v-model="pvData.taf" :error-messages="pvError.taf" type="number"
+												style="width: 120px" density="compact" hide-details variant="outlined"
+												suffix="%" readonly />
 										</template>
 									</VSlider>
 								</VCol>
 								<VCol cols="12">
-									<VSlider
-										v-model="pvData.administrative_fees_percentage"
-										label="Frais de dossier(%)"
-										:error-messages="
-											pvError.administrative_fees_percentage
-										"
-										:thumb-size="15"
-										thumb-label="always"
-										:rules="[requiredValidator]"
-										step="0.01"
-									>
+									<VSlider v-model="pvData.administrative_fees_percentage" label="Frais de dossier(%)"
+										:error-messages="pvError.administrative_fees_percentage
+											" :thumb-size="15" thumb-label="always" :rules="[requiredValidator]" step="0.01">
 										<template #append>
-											<VTextField
-												v-model="
-													pvData.administrative_fees_percentage
-												"
-												:error-messages="
-													pvError.administrative_fees_percentage
-												"
-												type="number"
-												style="width: 120px"
-												density="compact"
-												hide-details
-												variant="outlined"
-												suffix="%"
-											/>
+											<VTextField v-model="pvData.administrative_fees_percentage
+												" :error-messages="pvError.administrative_fees_percentage
+													" type="number" style="width: 120px" density="compact" hide-details variant="outlined" suffix="%" />
 										</template>
 									</VSlider>
 								</VCol>
 								<VCol cols="12">
-									<VSlider
-										v-model="pvData.tax_fee_interest_rate"
-										label="Taux d'intérêt HT(%)"
-										:error-messages="pvError.tax_fee_interest_rate"
-										:thumb-size="15"
-										thumb-label="always"
-										:rules="[requiredValidator]"
-										step="0.01"
-									>
+									<VSlider v-model="pvData.tax_fee_interest_rate" label="Taux d'intérêt HT(%)"
+										:error-messages="pvError.tax_fee_interest_rate" :thumb-size="15"
+										thumb-label="always" :rules="[requiredValidator]" step="0.01">
 										<template #append>
-											<VTextField
-												v-model="pvData.tax_fee_interest_rate"
-												:error-messages="
-													pvError.tax_fee_interest_rate
-												"
-												type="number"
-												style="width: 120px"
-												density="compact"
-												hide-details
-												variant="outlined"
-												suffix="%"
-											/>
+											<VTextField v-model="pvData.tax_fee_interest_rate" :error-messages="pvError.tax_fee_interest_rate
+												" type="number" style="width: 120px" density="compact" hide-details variant="outlined" suffix="%" />
 										</template>
 									</VSlider>
 								</VCol>
 								<VCol cols="12">
-									<VSlider
-										v-model="pvData.risk_premium_percentage"
+									<VSlider v-model="pvData.risk_premium_percentage"
 										label="Prime de risque du demandeur (en pourcentage)"
-										:error-messages="pvError.risk_premium_percentage"
-										:thumb-size="15"
-										thumb-label="always"
-										step="0.01"
-									>
+										:error-messages="pvError.risk_premium_percentage" :thumb-size="15"
+										thumb-label="always" step="0.01">
 										<template #append>
-											<VTextField
-												v-model="pvData.risk_premium_percentage"
-												:error-messages="
-													pvError.risk_premium_percentage
-												"
-												type="number"
-												style="width: 120px"
-												density="compact"
-												hide-details
-												variant="outlined"
-												suffix="%"
-											/>
+											<VTextField v-model="pvData.risk_premium_percentage" :error-messages="pvError.risk_premium_percentage
+												" type="number" style="width: 120px" density="compact" hide-details variant="outlined" suffix="%" />
 										</template>
 									</VSlider>
 								</VCol>
 								<VCol cols="12">
-									<AppTextarea
-										v-model="pvData.reserve"
-										rows="5"
-										label="Reserve"
-										placeholder=""
-									/>
+									<AppTextarea v-model="pvData.reserve" rows="5" label="Reserve" placeholder="" />
 								</VCol>
 							</VRow>
 						</VCardText>
 					</VCard>
 					<VCard class="mb-6" title="Information des cautions">
 						<VCardText class="add-products-form">
-							<div
-								v-for="(guarantee, index) in pvData.guarantees"
-								:key="guarantee"
-								class="my-4 ma-sm-4"
-							>
-								<GuaranteeEdit
-									:id="index"
-									:data="guarantee"
-									@remove-guarantee="removeGuaranteeItem"
-								/>
+							<div v-for="(guarantee, index) in pvData.guarantees" :key="guarantee" class="my-4 ma-sm-4">
+								<GuaranteeEdit :id="index" :data="guarantee" @remove-guarantee="removeGuaranteeItem" />
 							</div>
 
 							<div class="mt-4 ma-sm-4">
-								<VBtn
-									prepend-icon="tabler-plus"
-									@click="addGuaranteeItem"
-								>
+								<VBtn prepend-icon="tabler-plus" @click="addGuaranteeItem">
 									Ajouter
 								</VBtn>
 							</div>
@@ -565,9 +400,7 @@ const addGuaranteeItem = () => {
 					</VCard>
 				</VCol>
 				<VCol cols="12">
-					<div
-						class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6"
-					>
+					<div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
 						<div class="d-flex flex-column justify-center" />
 						<div class="d-flex gap-4 align-center flex-wrap">
 							<VBtn type="reset" variant="tonal" color="primary">
@@ -595,6 +428,7 @@ const addGuaranteeItem = () => {
 
 <style lang="scss">
 .inventory-card {
+
 	.v-radio-group,
 	.v-checkbox {
 		.v-selection-control {

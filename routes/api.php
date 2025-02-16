@@ -67,6 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::prefix("verbal-trial")->name("verbal-trial.")->group(function () {
 		Route::get("/", [VerbalTrialController::class, "index"])->name("index");
 		Route::get("/download/{id}", [VerbalTrialController::class, "download"])->name("download");
+		Route::get("/notification/download/{id}", [VerbalTrialController::class, "download_notification"])->name("download_notification");
 		Route::get("/{id}", [VerbalTrialController::class, "show"])->name("show");
 		Route::post("/", [VerbalTrialController::class, "store"])->name("store");
 		Route::put("/{id}", [VerbalTrialController::class, "update"])->name("update");

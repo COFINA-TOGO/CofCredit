@@ -349,6 +349,14 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 								<VIcon icon="tabler-file-plus" color="success" />
 							</IconBtn>
 						</div>
+						<div v-if="$can('create', 'notarized-contract') && item.status == 'validated' && item.has_mortgage">
+							<VDivider />
+							<IconBtn :to="{ name: 'notification-add', query: { id: item.id } }">
+								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer la
+									notification notarié</VTooltip>
+								<VIcon icon="tabler-file-plus" color="success" />
+							</IconBtn>
+						</div>
 					</div>
 				</template>
 

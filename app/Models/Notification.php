@@ -15,7 +15,6 @@ class Notification extends Model
 
 	protected $fillable = [
 		'verbal_trial_id',
-		'representative_phone_number',
 		'representative_home_address',
 		'number_of_due_dates',
 		'head_credit_observation',
@@ -71,8 +70,6 @@ class Notification extends Model
 			return ["Notification rejetée"];
 		if ($this->head_credit_validation == "waiting")
 			$observations[] = "Validation head credit manquante";
-		if (!$this->signed_notification_path)
-			$observations[] = "Notification signé manquante";
 
 		if (!$this->is_simple) {
 			if (!$this->signed_contract_path)
