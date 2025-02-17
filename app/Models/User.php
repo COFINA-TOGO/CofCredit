@@ -243,7 +243,7 @@ class User extends Authenticatable
 					],
 					[
 						"action" => ["download"],
-						"subject" => ["pv"]
+						"subject" => ["pv", "pv-notification"]
 					],
 					[
 						"action" => ["check"],
@@ -313,6 +313,10 @@ class User extends Authenticatable
 						"subject" => ["basic-contract", "contract", "cat", "basic-cat"]
 					],
 					[
+						"action" => ["download"],
+						"subject" => ["pv-notification"]
+					],
+					[
 						"action" => ["read", "historical", "download", "change_status", "validate", "reject"],
 						"subject" => ["pv"],
 					],
@@ -380,8 +384,12 @@ class User extends Authenticatable
 						"subject" => ["pv"],
 					],
 					[
-						"action" => ["read", "download"],
+						"action" => ["read"],
 						"subject" => ["contract"],
+					],
+					[
+						"action" => ["download"],
+						"subject" => ["pv-notification"],
 					],
 					[
 						"action" => ["without-signed-contract", "download", "validate", "reject", "change_head_credit_status"],

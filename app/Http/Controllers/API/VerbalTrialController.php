@@ -879,7 +879,7 @@ class VerbalTrialController extends Controller
 					$nextStepLink = $verbalTrial->has_mortgage ? "notification" : "contract";
 					$mailsDataList = [
 						"validated" => [
-							"md" => [
+							"head_credit" => [
 								[
 									"receiverList" => $receiverList["credit_admin_list"],
 									"subject" => "Notification de validation du PV " . $verbalTrial->committee_id,
@@ -895,24 +895,7 @@ class VerbalTrialController extends Controller
 										<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
 									",
 								]
-							],
-							"head_credit" => [
-								[
-									"receiverList" => $receiverList["head_credit_list"],
-									"subject" => "Notification de validation du PV " . $verbalTrial->committee_id,
-									"message" => "
-										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Head,</U></h1>
-
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de $nextStep: <a href='" . env("APP_URL") . "/$nextStepLink/add?id=" . $verbalTrial->id . "'>Créer $nextStepName</a></p>
-
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-
-										<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-
-										<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-									",
-								]
-							],
+							]
 						],
 						"waiting" => [
 							"md" => [
