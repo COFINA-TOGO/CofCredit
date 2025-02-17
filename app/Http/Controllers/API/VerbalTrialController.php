@@ -285,6 +285,8 @@ class VerbalTrialController extends Controller
 			unset($data["caf.ability_rules"]);
 			unset($data["guarantees"]);
 			unset($data["credit_analyst.ability_rules"]);
+			unset($data["notification"]);
+			unset($data["next"]);
 			$templateProcessor->setValues($data);
 			// return $data;
 
@@ -315,8 +317,7 @@ class VerbalTrialController extends Controller
 		$pv = VerbalTrial::find($id);
 		if ($pv) {
 			// if (($authorisation = Gate::inspect('view', $notification))->allowed()) {
-			$templateProcessor = new TemplateProcessor(($pv->head_credit_validation == "validated") ? "../document_templates/Notifications/PV-Notification-validated.docx" : "../document_templates/Notifications/PV-Notification.docx");
-
+			$templateProcessor = new TemplateProcessor((($pv->validation_level == "head_credit") && ($pv->status == "validated")) ? "../document_templates/Notifications/PV-Notification-validated.docx" : "../document_templates/Notifications/PV-Notification.docx");
 			$data = $pv->toArray();
 			$data = array_merge($data, collect($pv->type_of_credit)->mapWithKeys(function ($value, $key) {
 				return ['type_of_credit.' . $key => $value];
@@ -483,15 +484,14 @@ class VerbalTrialController extends Controller
 									]);
 								}
 							}
-							$receiver = User::find($requestData["caf_id"]);
-							$link = env("APP_URL") . "/pv";
+							$link = env("APP_URL") . "/pv/notification/without-pv";
 							SendEmail::dispatch(
-								$verbalTrial->credit_admin->email,
-								"Notification de mise en place d'un PV " . $verbalTrial->committee_id,
+								$verbalTrial->credit_analyst->email,
+								"Notification de mise en place d'une notification " . $verbalTrial->committee_id,
 								"
-										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
+										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Analyste,</U></h1>
 
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='$link'>Voir les pvs</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement la notification $verbalTrial->committee_id en attente de validation: <a href='$link'>Voir les notifications</a></p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
@@ -622,21 +622,39 @@ class VerbalTrialController extends Controller
 								$requestData["has_line_review_bonus"] = (bool) $requestData["has_line_review_bonus"];
 								$verbalTrial->update($requestData);
 								$link = env("APP_URL") . "/pv";
-								SendEmail::dispatch(
-									$verbalTrial->credit_admin->email,
-									"Notification de mise à jour du PV " . $verbalTrial->committee_id,
-									"
-											<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
-
-											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='$link'>Voir les pvs</a></p>
-
-											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-
-											<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-
-											<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+								if($connectedUser->profile == "caf"){
+									SendEmail::dispatch(
+										$verbalTrial->credit_admin->email,
+										"Notification de mise à jour de la notification " . $verbalTrial->committee_id,
 										"
-								);
+												<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Analyste,</U></h1>
+	
+												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement la notification $verbalTrial->committee_id en attente de vérification: <a href='" . env("APP_URL") . "/pv/notification/without-pv" . "'>Voir les notifications</a></p>
+	
+												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+	
+												<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+	
+												<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+											"
+									);
+								}else if($connectedUser->profile == "credit_analyst"){
+									SendEmail::dispatch(
+										$verbalTrial->credit_admin->email,
+										"Notification de mise à jour du PV " . $verbalTrial->committee_id,
+										"
+												<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
+	
+												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='/pv'>Voir les pvs</a></p>
+	
+												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+	
+												<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+	
+												<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+											"
+									);
+								}
 							} catch (\Exception $e) {
 								DB::rollback();
 								throw $e;
@@ -703,6 +721,27 @@ class VerbalTrialController extends Controller
 				} else {
 					if ($requestData["action"] == "reject") {
 						$verbalTrial->update(["status" => "rejected", "comment" => $requestData["comment"]]);
+						SendEmail::dispatch($verbalTrial->caf->email, "Rejet de la notification " . $verbalTrial->committee_id, "
+							<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) CAF,</h1>
+
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
+							Nous vous informons que la notification <strong>" . $verbalTrial->committee_id . "</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
+							</p>
+
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
+							Pour accéder directement aux notifications, cliquez sur le lien suivant : <a href='" . env("APP_URL") . "/pv/notification/without-pv" . "'>Voir les notifications</a>.
+							</p>
+
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
+							Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous restons à votre disposition pour toute assistance !
+							</p>
+
+							<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+							<p style='color: #999999; font-size: 12px;'>
+							Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.
+							</p>
+						");
 						return $this->responseOk([
 							"verbalTrial" => $verbalTrial
 						]);
@@ -734,14 +773,13 @@ class VerbalTrialController extends Controller
 									$requestData["status"] = "waiting";
 									$requestData["has_line_review_bonus"] = (bool) $requestData["has_line_review_bonus"];
 									$verbalTrial->update($requestData);
-									$link = env("APP_URL") . "/pv";
 									SendEmail::dispatch(
-										$verbalTrial->credit_admin->email,
-										"Notification de mise à jour du PV " . $verbalTrial->committee_id,
+										$verbalTrial->caf->email,
+										"Notification de validation de notification " . $verbalTrial->committee_id,
 										"
-												<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
+												<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher CAF,</U></h1>
 	
-												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='$link'>Voir les pvs</a></p>
+												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Votre Notification $verbalTrial->committee_id a été validé par l'analyste crédit</p>
 	
 												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 	
@@ -749,6 +787,23 @@ class VerbalTrialController extends Controller
 	
 												<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
 											"
+									);
+									$link = env("APP_URL") . "/pv";
+
+									SendEmail::dispatch(
+										$verbalTrial->credit_admin->email,
+										"Notification de création de PV " . $verbalTrial->committee_id,
+										"
+											<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
+
+											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='$link'>Voir les pvs</a></p>
+
+											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+
+											<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+											<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+										"
 									);
 								} catch (\Exception $e) {
 									DB::rollback();

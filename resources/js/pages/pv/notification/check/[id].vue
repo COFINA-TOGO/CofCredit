@@ -167,7 +167,9 @@ const apiCheck = () => {
 
 			verbalTrialError.value = getEmptyError();
 			if (res.status == 200) {
-				nextRoute = { name: 'pv' }
+				if(actionStatus.value == "validate"){
+					nextRoute = { name: 'pv' }
+				}
 				router.push(nextRoute);
 			} else if (res.status == 403) {
 				isSnackbarScrollReverseVisible.value = true;
