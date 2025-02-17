@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 	public function run(): void
 	{
 		$user = True;
-		$vt = True;
+		$vt = False;
 
 		if (!$user) {
 			DB::unprepared(file_get_contents("./database/users.sql"));
