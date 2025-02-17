@@ -271,7 +271,7 @@ class ContractController extends Controller
 
 
 				$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne" : "";
-				$data["line_review_bonus_value"] = $data["verbal_trial.has_line_review_bonus"] ? ": 1% du capital restant dû après 18 mois" : "";
+				$data["line_review_bonus_value"] = $data["verbal_trial.has_line_review_bonus"] ? ": 1% du capital restant dû après 12 mois" : "";
 
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "Carte d'identité nationale",
@@ -317,7 +317,7 @@ class ContractController extends Controller
 				$riskPremiumPercentageList = (((float) $data["verbal_trial.risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["verbal_trial.risk_premium_percentage"] . " %)", "value" => "" . number_format($data["verbal_trial.risk_premium_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', " ") . " F CFA"]];
 				$templateProcessor->cloneBlock('riskPremiumPercentage', 0, true, false, $riskPremiumPercentageList);
 
-				$reviewBonusList = $data["verbal_trial.has_line_review_bonus"] ? [["key" => "Prime de révision de ligne", "value" => "1% du capital restant dû après 18 mois"]] : [];
+				$reviewBonusList = $data["verbal_trial.has_line_review_bonus"] ? [["key" => "Prime de révision de ligne", "value" => "1% du capital restant dû après 12 mois"]] : [];
 				$templateProcessor->cloneBlock('reviewBonus', 0, true, false, $reviewBonusList);
 
 				if ($contract->has_pledges) {
@@ -425,7 +425,7 @@ class ContractController extends Controller
 			$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance"][$data["verbal_trial.periodicity"]];
 			$data["verbal_trial.periodicity.fr3"] .= ($data["number_of_due_dates"] > 1) ? "s" : "";
 
-			$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne	  : 1% du capital restant dû après 18 mois" : "";
+			$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne	  : 1% du capital restant dû après 12 mois" : "";
 
 			$data["representative_type_of_identity_document"] = [
 				"cni" => "Carte d'identité nationale",

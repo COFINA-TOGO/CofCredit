@@ -178,7 +178,7 @@ class GuarantorController extends Controller
 			$data["contract.verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["contract.verbal_trial.periodicity"]];
 
 			$data["line_review_bonus"] = $data["contract.verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne" : "";
-			$data["line_review_bonus_value"] = $data["contract.verbal_trial.has_line_review_bonus"] ? ": 1% du capital restant dû après 18 mois" : "";
+			$data["line_review_bonus_value"] = $data["contract.verbal_trial.has_line_review_bonus"] ? ": 1% du capital restant dû après 12 mois" : "";
 
 			$data["signatory"] = (((float) $data["contract.verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 
@@ -265,7 +265,7 @@ class GuarantorController extends Controller
 			$data["contract.verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["contract.verbal_trial.periodicity"]];
-			$data["line_review_bonus"] = $data["contract.verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne      : 1% du capital restant dû après 18 mois" : "";
+			$data["line_review_bonus"] = $data["contract.verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne      : 1% du capital restant dû après 12 mois" : "";
 			$data["signatory"] = (((float) $data["contract.verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 
 

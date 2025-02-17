@@ -55,7 +55,7 @@ const tableData = [
 ]
 
 if (verbalTrial.value.has_line_review_bonus) {
-	tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 18 mois" })
+	tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 12 mois" })
 }
 if (verbalTrial.value. has_insurance ) {
 	tableData.push({ "title": "Prime d'assurance", "value": "Selon la grille de l'assureur" })

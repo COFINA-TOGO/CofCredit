@@ -266,7 +266,7 @@ class VerbalTrialController extends Controller
 			$data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
 
 			$data["line_review_bonus"] = $data["has_line_review_bonus"] ? "Prime de révision de ligne" : "";
-			$data["line_review_bonus_value"] = $data["has_line_review_bonus"] ? ": 1% du capital restant dû après 18 mois" : "";
+			$data["line_review_bonus_value"] = $data["has_line_review_bonus"] ? ": 1% du capital restant dû après 12 mois" : "";
 
 			$guaranteeList = [];
 			foreach ($verbalTrial->guarantees as $guarantee) {
@@ -346,7 +346,7 @@ class VerbalTrialController extends Controller
 			$data["periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["periodicity"]];
 
 			$data["line_review_bonus"] = $data["has_line_review_bonus"] ? "Prime de révision de ligne" : "";
-			$data["line_review_bonus_value"] = $data["has_line_review_bonus"] ? ": 1% du capital restant dû après 18 mois" : "";
+			$data["line_review_bonus_value"] = $data["has_line_review_bonus"] ? ": 1% du capital restant dû après 12 mois" : "";
 
 			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
 			$data["administrative_fees_percentage"] = number_format(((float) $data["administrative_fees_percentage"]), 0, ',', ' ');
