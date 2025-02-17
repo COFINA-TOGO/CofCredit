@@ -201,7 +201,6 @@ class GuarantorController extends Controller
 			unset($data["guarantors"]);
 			unset($data["contract.verbal_trial.guarantees"]);
 			unset($data["contract.verbal_trial.contract"]);
-			dd($data);
 			$templateProcessor->setValues($data);
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 
@@ -278,7 +277,10 @@ class GuarantorController extends Controller
 			unset($data["observations"]);
 			unset($data["contract.observations"]);
 			unset($data["contract.guarantors"]);
-			dd($data);
+			unset($data["contract.verbal_trial.next"]);
+			unset($data["guarantors"]);
+			unset($data["contract.verbal_trial.guarantees"]);
+			unset($data["contract.verbal_trial.contract"]);
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Billet-a-ordre-caution-" . $parent->verbal_trial->committee_id;
