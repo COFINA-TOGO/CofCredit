@@ -959,7 +959,7 @@ class VerbalTrialController extends Controller
 										<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) Analyste Crédit,</h1>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Nous vous informons que le PV <strong>" . $verbalTrial->committee_id . "</strong> a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
+										Nous vous informons que le PV <strong>" . $verbalTrial->committee_id . "</strong> a été rejeté. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>

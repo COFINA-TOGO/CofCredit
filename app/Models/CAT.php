@@ -67,6 +67,10 @@ class CAT extends Model
         return $this->belongsTo(Notification::class, 'notification_id', 'id');
     }
 
+	public function getBackStepAttribute(){
+		return $this->contract??$this->notification;
+	}
+
     public function getStatusAttribute()
     {
         if ($this->validation_status == "waiting") {
