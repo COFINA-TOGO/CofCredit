@@ -10,7 +10,7 @@
 [Done]
 	
 
-    4-Prime de révision de ligne : La prime de révision de ligne doit figurer uniquement sur les contrats dont la durée est supérieure ou égale à 18 mois. Sur les contrats générés par l’application actuellement, on les voit même sur les contrats de 15 mois. Nous proposons deux solutions à ce niveau. Soit il faut faire en sorte que la prime de risque apparait sur les contrats uniquement quand la durée du contrat est égale ou supérieure à 18 mois, soit rendre ce champ manuel au niveau du PV de sorte que l’on le renseigne s’il y a prime de révision de ligne ou mettre zéro s’il Il n’y en a pas.
+    4-Prime de révision de ligne : La prime de révision de ligne doit figurer uniquement sur les contrats dont la durée est supérieure ou égale à 12 mois. Sur les contrats générés par l’application actuellement, on les voit même sur les contrats de 15 mois. Nous proposons deux solutions à ce niveau. Soit il faut faire en sorte que la prime de risque apparait sur les contrats uniquement quand la durée du contrat est égale ou supérieure à 12 mois, soit rendre ce champ manuel au niveau du PV de sorte que l’on le renseigne s’il y a prime de révision de ligne ou mettre zéro s’il Il n’y en a pas.
 [Done]
  
 
