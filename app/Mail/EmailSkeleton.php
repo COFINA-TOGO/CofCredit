@@ -33,7 +33,7 @@ class EmailSkeleton extends Mailable
     {
         return new Envelope(
             from: new Address('report_tg@cofinacorp.com', 'COFINA-TOGO-CREDIT-DIGITAL'),
-            cc: ['charles.gamligo@cofinacorp.com'],
+            cc: ['helpdesk.ittogo@cofinacorp.com'],
             subject: "COFINA TOGO CREDIT DIGITAL - $this->emailSubject",
         );
     }

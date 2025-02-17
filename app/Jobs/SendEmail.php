@@ -24,8 +24,8 @@ class SendEmail implements ShouldQueue
      */
     public function __construct(string $receiverEmail, string $subject, string $content)
     {
-        // $this->receiverEmail = $receiverEmail;
-        $this->receiverEmail = "charles.gamligo@cofinacorp.com";
+        $this->receiverEmail = $receiverEmail;
+        // $this->receiverEmail = "charles.gamligo@cofinacorp.com";
         $this->subject = $subject;
         $this->content = $content;
     }
