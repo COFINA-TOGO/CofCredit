@@ -197,6 +197,7 @@ class GuarantorController extends Controller
 			unset($data["observations"]);
 			unset($data["contract.observations"]);
 			unset($data["contract.guarantors"]);
+			dd($data);
 			$templateProcessor->setValues($data);
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 
