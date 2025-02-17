@@ -58,6 +58,8 @@ class VerbalTrial extends Model
 		$data["type_of_credit_id"] = (int) $data["type_of_credit_id"];
 		$data["amount"] = (float) $data["amount"];
 		$data["taf"] = (float) $data["taf"];
+		$data["has_insurance"] = (float) $data["has_insurance"];
+		$data["has_line_review_bonus"] = (float) $data["has_line_review_bonus"];
 		$data["administrative_fees_percentage"] = (float) $data["administrative_fees_percentage"];
 		$data["tax_fee_interest_rate"] = (float) $data["tax_fee_interest_rate"];
 		$data["caf_id"] = (int) $data["caf_id"];
