@@ -348,6 +348,9 @@ class ContractController extends Controller
 				unset($data["verbal_trial.next"]);
 				unset($data["verbal_trial.guarantees"]);
 				unset($data["verbal_trial.contract"]);
+
+				$data["client_name"] = $contract->type == "particular" ? $contract->verbal_trial->civility . " " . $contract->verbal_trial->applicant_full_name : $contract->verbal_trial->entity_name;
+
 				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
 				$templateProcessor->setValues($data);
 

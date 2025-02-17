@@ -201,6 +201,9 @@ class GuarantorController extends Controller
 			unset($data["guarantors"]);
 			unset($data["contract.verbal_trial.guarantees"]);
 			unset($data["contract.verbal_trial.contract"]);
+			
+			$data["client_name"] = $parent->type == "particular" ? $parent->verbal_trial->civility . " " . $parent->verbal_trial->applicant_full_name : $parent->verbal_trial->entity_name;
+
 			$templateProcessor->setValues($data);
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 
