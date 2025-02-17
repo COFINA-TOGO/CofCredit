@@ -273,6 +273,7 @@ class GuarantorController extends Controller
 			unset($data["observations"]);
 			unset($data["contract.observations"]);
 			unset($data["contract.guarantors"]);
+			dd($data);
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Billet-a-ordre-caution-" . $parent->verbal_trial->committee_id;
