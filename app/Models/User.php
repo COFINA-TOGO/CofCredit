@@ -314,7 +314,7 @@ class User extends Authenticatable
 					],
 					[
 						"action" => ["download"],
-						"subject" => ["pv-notification"]
+						"subject" => ["pv-notification", "cat", "basic-cat"]
 					],
 					[
 						"action" => ["read", "historical", "download", "change_status", "validate", "reject"],
