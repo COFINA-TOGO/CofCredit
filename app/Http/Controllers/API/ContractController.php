@@ -367,7 +367,7 @@ class ContractController extends Controller
 				exec($command, $output, $returnVar);
 				// Vérification du succès
 				if ($returnVar === 0) {
-					// File::delete($outputFilePath);
+					File::delete($outputFilePath);
 					return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
 				}
 			} else {

@@ -888,7 +888,7 @@ class VerbalTrialController extends Controller
 						][$connectedUser->profile];
 						$requestData["status"] = ($connectedUser->profile == "head_credit") ? "validated" : "waiting";
 					} else if ($requestData["status"] == "rejected") {
-						$requestData["validation_level"] = "head_credit";
+						$requestData["validation_level"] = $connectedUser->profile;
 					}
 					$verbalTrial->update($requestData);
 					$receiverList = [
