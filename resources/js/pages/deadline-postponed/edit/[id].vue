@@ -243,7 +243,7 @@ const snackbarMessage = ref("")
                   <VCol cols="12" md="6" lg="4">
                     <AppAutocomplete v-model="verbalTrial.type_of_credit_id" :items="typeOfCreditList"
                       :error-messages="verbalTrialError.type_of_credit_id" label="Type de credit"
-                      placeholder="Ex: Avance sur salaire" item-title="name" item-value="id"
+                      placeholder="Ex: Avance sur salaire" item-title="full_name" item-value="id"
                       :rules="[requiredValidator]" />
                   </VCol>
                   <VCol cols="12" md="6" lg="4">

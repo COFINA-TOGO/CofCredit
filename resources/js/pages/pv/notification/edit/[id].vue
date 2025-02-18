@@ -309,7 +309,7 @@ if (
 									<VCol cols="12" md="6" lg="3">
 										<AppAutocomplete v-model="verbalTrial.type_of_credit_id"
 											:items="typeOfCreditList" :error-messages="verbalTrialError.type_of_credit_id
-												" label="Type de credit" placeholder="" item-title="name" item-value="id" :rules="[requiredValidator]" />
+												" label="Type de credit" placeholder="" item-title="full_name" item-value="id" :rules="[requiredValidator]" />
 									</VCol>
 									<VCol cols="12" md="6" lg="3">
 										<AppTextField v-model="verbalTrial.amount" type="number"
