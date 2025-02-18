@@ -648,7 +648,7 @@ class VerbalTrialController extends Controller
 								$link = env("APP_URL") . "/pv";
 								if($connectedUser->profile == "caf"){
 									SendEmail::dispatch(
-										$verbalTrial->credit_admin->email,
+										$verbalTrial->credit_analyst->email,
 										"Notification de mise à jour de la notification " . $verbalTrial->committee_id,
 										"
 												<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Analyste,</U></h1>
