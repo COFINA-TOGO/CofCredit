@@ -382,7 +382,7 @@ class VerbalTrialController extends Controller
 			$insuranceList = $verbal_trial->has_insurance ? [["key" => "Prime d’assurance", "value" => "Selon la grille de l’assureur"]] : [];
 			$templateProcessor->cloneBlock('insurance', 0, true, false, $insuranceList);
 
-			$riskPremiumPercentageList = (((float) $data["risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["risk_premium_percentage"] . " %)", "value" => "" . number_format($data["risk_premium_percentage"] * $data["amount"] / 100, 0, ',', " ") . " F CFA"]];
+			$riskPremiumPercentageList = (((float) $data["risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["risk_premium_percentage"] . " %)", "value" => "" . number_format(((float) $data["risk_premium_percentage"] * (float) $data["amount"] / 100), 0, ',', " ") . " F CFA"]];
 			$templateProcessor->cloneBlock('riskPremiumPercentage', 0, true, false, $riskPremiumPercentageList);
 
 			$reviewBonusList = $data["has_line_review_bonus"] ? [["key" => "Prime de révision de ligne", "value" => "1% du capital restant dû après 12 mois"]] : [];
