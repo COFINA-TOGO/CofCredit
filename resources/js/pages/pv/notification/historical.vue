@@ -3,7 +3,7 @@
 <script setup>
 definePage({
 	meta: {
-		action: "read-without-pv",
+		action: "read-historical",
 		subject: "pv-notification",
 	},
 });

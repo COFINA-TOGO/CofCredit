@@ -244,24 +244,25 @@ class VerbalTrialController extends Controller
 	 */
 	public function download(Request $request, int $id)
 	{
-		$verbalTrial = VerbalTrial::find($id);
-		if ($verbalTrial) {
+		$verbal_trial = VerbalTrial::find($id);
+		if ($verbal_trial) {
 			// if (($authorisation = Gate::inspect('view', $verbalTrial))->allowed()) {
-			$pv_dir = $verbalTrial->number_deferred == 0 ? "PVs" : "PVs-deferral";
-			$templateProcessor = new TemplateProcessor("../document_templates/$pv_dir/PV-$verbalTrial->status-$verbalTrial->validation_level.docx");
-			$data = $verbalTrial->toArray();
-			$data = array_merge($data, collect($verbalTrial->caf)->mapWithKeys(function ($value, $key) {
+			$pv_dir = $verbal_trial->number_deferred == 0 ? "PVs" : "PVs-deferral";
+			$template_path  = "../document_templates/$pv_dir/PV-$verbal_trial->status-$verbal_trial->validation_level.docx";
+			$templateProcessor = new TemplateProcessor($template_path);
+			$data = $verbal_trial->toArray();
+			$data = array_merge($data, collect($verbal_trial->caf)->mapWithKeys(function ($value, $key) {
 				return ['caf.' . $key => $value];
 			})->all());
-			$data = array_merge($data, collect($verbalTrial->credit_analyst)->mapWithKeys(function ($value, $key) {
+			$data = array_merge($data, collect($verbal_trial->credit_analyst)->mapWithKeys(function ($value, $key) {
 				return ['credit_analyst.' . $key => $value];
 			})->all());
-			$data = array_merge($data, collect($verbalTrial->type_of_credit)->mapWithKeys(function ($value, $key) {
+			$data = array_merge($data, collect($verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
 				return ['type_of_credit.' . $key => $value];
 			})->all());
 
 			$data["administrative_fees_percentage.value"] = number_format((float) $data["administrative_fees_percentage"] * $data["amount"] / 100, 0, ',', ' ');
-			$data["created_at"] = Carbon::parse($verbalTrial->created_at)->format("d/m/Y");
+			$data["created_at"] = Carbon::parse($verbal_trial->created_at)->format("d/m/Y");
 			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
 			$data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
 
@@ -269,7 +270,7 @@ class VerbalTrialController extends Controller
 			$data["line_review_bonus_value"] = $data["has_line_review_bonus"] ? ": 1% du capital restant dû après 12 mois" : "";
 
 			$guaranteeList = [];
-			foreach ($verbalTrial->guarantees as $guarantee) {
+			foreach ($verbal_trial->guarantees as $guarantee) {
 				$tmp = $guarantee->toArray();
 				$guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
 					return ['type_of_guarantee.' . $key => $value];
@@ -282,6 +283,17 @@ class VerbalTrialController extends Controller
 				}
 			}
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+
+
+			$insuranceList = $verbal_trial->has_insurance ? [["key" => "Prime d’assurance", "value" => "Selon la grille de l’assureur"]] : [];
+			$templateProcessor->cloneBlock('insurance', 0, true, false, $insuranceList);
+
+			$riskPremiumPercentageList = (((float) $data["risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["risk_premium_percentage"] . " %)", "value" => "" . number_format($data["risk_premium_percentage"] * $data["amount"] / 100, 0, ',', " ") . " F CFA"]];
+			$templateProcessor->cloneBlock('riskPremiumPercentage', 0, true, false, $riskPremiumPercentageList);
+
+			$reviewBonusList = $data["has_line_review_bonus"] ? [["key" => "Prime de révision de ligne", "value" => "1% du capital restant dû après 12 mois"]] : [];
+			$templateProcessor->cloneBlock('reviewBonus', 0, true, false, $reviewBonusList);
+
 			unset($data["caf.ability_rules"]);
 			unset($data["guarantees"]);
 			unset($data["credit_analyst.ability_rules"]);
@@ -291,7 +303,7 @@ class VerbalTrialController extends Controller
 			// return $data;
 
 			// Enregistrez les modifications dans un nouveau fichier
-			$bsaseName = "PV-" . $verbalTrial->committee_id;
+			$bsaseName = "PV-" . $verbal_trial->committee_id;
 			$wordFilePath = public_path("generated/docx/" . $bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			$outputFilePdfFolderPath = public_path("generated/pdf");
@@ -314,23 +326,25 @@ class VerbalTrialController extends Controller
 
 	public function download_notification(Request $request, int $id)
 	{
-		$pv = VerbalTrial::find($id);
-		if ($pv) {
+		$verbal_trial = VerbalTrial::find($id);
+		if ($verbal_trial) {
 			// if (($authorisation = Gate::inspect('view', $notification))->allowed()) {
-			$templateProcessor = new TemplateProcessor((($pv->validation_level == "head_credit") && ($pv->status == "validated")) ? "../document_templates/Notifications/PV-Notification-validated.docx" : "../document_templates/Notifications/PV-Notification.docx");
-			$data = $pv->toArray();
-			$data = array_merge($data, collect($pv->type_of_credit)->mapWithKeys(function ($value, $key) {
+			$template_path = (($verbal_trial->validation_level == "head_credit") && ($verbal_trial->status == "validated")) ? "../document_templates/Notifications/PV-Notification-validated.docx" : "../document_templates/Notifications/PV-Notification.docx";
+			// dd($template_path);
+			$templateProcessor = new TemplateProcessor($template_path);
+			$data = $verbal_trial->toArray();
+			$data = array_merge($data, collect($verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
 				return ['type_of_credit.' . $key => $value];
 			})->all());
-			$data = array_merge($data, collect($pv->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
+			$data = array_merge($data, collect($verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
 				return ['type_of_credit.type_of_applicant.' . $key => $value];
 			})->all());
-			if ($pv->type == "company") {
-				$data = array_merge($data, collect($pv->company)->mapWithKeys(function ($value, $key) {
+			if ($verbal_trial->type == "company") {
+				$data = array_merge($data, collect($verbal_trial->company)->mapWithKeys(function ($value, $key) {
 					return ['company.' . $key => $value];
 				})->all());
-			} elseif ($pv->type == "individual_business") {
-				$data = array_merge($data, collect($pv->individual_business)->mapWithKeys(function ($value, $key) {
+			} elseif ($verbal_trial->type == "individual_business") {
+				$data = array_merge($data, collect($verbal_trial->individual_business)->mapWithKeys(function ($value, $key) {
 					return ['individual_business.' . $key => $value];
 				})->all());
 			}
@@ -353,7 +367,7 @@ class VerbalTrialController extends Controller
 			//$data["insurance_premium"] = number_format(((float) $data["insurance_premium"]), 0, ',', ' ');
 
 			$guaranteeList = [];
-			foreach ($pv->guarantees as $guarantee) {
+			foreach ($verbal_trial->guarantees as $guarantee) {
 				$tmp = $guarantee->toArray();
 				$guaranteeList[] = array_merge($tmp, collect($guarantee->type_of_guarantee)->mapWithKeys(function ($value, $key) {
 					return ['type_of_guarantee.' . $key => $value];
@@ -365,14 +379,24 @@ class VerbalTrialController extends Controller
 			}
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 
+			$insuranceList = $verbal_trial->has_insurance ? [["key" => "Prime d’assurance", "value" => "Selon la grille de l’assureur"]] : [];
+			$templateProcessor->cloneBlock('insurance', 0, true, false, $insuranceList);
+
+			$riskPremiumPercentageList = (((float) $data["risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["risk_premium_percentage"] . " %)", "value" => "" . number_format($data["risk_premium_percentage"] * $data["amount"] / 100, 0, ',', " ") . " F CFA"]];
+			$templateProcessor->cloneBlock('riskPremiumPercentage', 0, true, false, $riskPremiumPercentageList);
+
+			$reviewBonusList = $data["has_line_review_bonus"] ? [["key" => "Prime de révision de ligne", "value" => "1% du capital restant dû après 12 mois"]] : [];
+			$templateProcessor->cloneBlock('reviewBonus', 0, true, false, $reviewBonusList);
+
 			unset($data["observations"]);
 			unset($data["guarantors"]);
 			unset($data["next"]);
 			unset($data["guarantees"]);
 			unset($data["notification"]);
+			unset($data["contract"]);
 			$templateProcessor->setValues($data);
 
-			$bsaseName = "Contrat-" . $pv->committee_id;
+			$bsaseName = "Contrat-" . $verbal_trial->committee_id;
 			$wordFilePath = public_path($bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			$outputFilePdfFolderPath = public_path("generated/pdf");

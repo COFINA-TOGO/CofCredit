@@ -36,7 +36,7 @@ const { data: verbalTrial } = await useApi(
 if (verbalTrial.value.status == 200) {
 	verbalTrial.value = verbalTrial.value.data.verbalTrial
 } else {
-	router.push({name: 'pv'})
+	router.push({ name: 'pv' })
 }
 
 
@@ -52,16 +52,17 @@ const tableData = [
 	{ "title": "Type de déblocage", "value": frenchReleaseType[verbalTrial.value.release_type] },
 	{ "title": "Admin Crédit", "value": verbalTrial.value.credit_admin.full_name },
 	{ "title": "Prime de risque", "value": verbalTrial.value.risk_premium_percentage + " %" },
+	{ "title": "Nombre de différés", "value": verbalTrial.value.number_deferred + " mois" },
 ]
 
 if (verbalTrial.value.has_line_review_bonus) {
 	tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 12 mois" })
 }
-if (verbalTrial.value. has_insurance ) {
+if (verbalTrial.value.has_insurance) {
 	tableData.push({ "title": "Prime d'assurance", "value": "Selon la grille de l'assureur" })
 }
 
-let nextRoute = verbalTrial.value.contract ? {name: 'pv-historical'} : {name: 'pv'};
+let nextRoute = verbalTrial.value.contract ? { name: 'pv-historical' } : { name: 'pv' };
 
 
 </script>

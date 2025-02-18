@@ -294,10 +294,9 @@ const lastPage = computed(() => notificationData.value.last_page)
 									</VListItem>
 
 
-									<span v-if="$can('download', 'notification')">
+									<!-- <span v-if="$can('download', 'notification')">
 										<span>
 											<VDivider />
-											<!-- Télécharger notification non-signé -->
 											<VListItem
 												@click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.pdf`);">
 												<template #prepend>
@@ -305,7 +304,6 @@ const lastPage = computed(() => notificationData.value.last_page)
 												</template>
 												<VListItemTitle>Télécharger Notification non signé</VListItemTitle>
 											</VListItem>
-											<!-- Télécharger billet à ordre non-signé -->
 											<VListItem
 												@click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`);">
 												<template #prepend>
@@ -317,7 +315,6 @@ const lastPage = computed(() => notificationData.value.last_page)
 
 										<span>
 											<VDivider />
-											<!-- Télécharger notification signé -->
 											<VListItem v-if="item.signed_notification_path"
 												@click="downloadFile(item.signed_notification_path, `Notification-${item.signed_notification_path.split('/').slice(-1)[0]}`)">
 
@@ -326,7 +323,6 @@ const lastPage = computed(() => notificationData.value.last_page)
 												</template>
 												<VListItemTitle>Télécharger Notification signé</VListItemTitle>
 											</VListItem>
-											<!-- Télécharger contrat signé -->
 											<VListItem v-if="item.signed_contract_path"
 												@click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
 
@@ -335,7 +331,6 @@ const lastPage = computed(() => notificationData.value.last_page)
 												</template>
 												<VListItemTitle>Télécharger Contrat signé</VListItemTitle>
 											</VListItem>
-											<!-- Télécharger billet à ordre signé -->
 											<VListItem v-if="item.signed_promissory_note_path"
 												@click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
 
@@ -345,7 +340,7 @@ const lastPage = computed(() => notificationData.value.last_page)
 												<VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
 											</VListItem>
 										</span>
-									</span>
+									</span> -->
 
 									<span v-if="$can('upload', 'notarized-contract')">
 										<!-- Ajouter Contrat signé -->

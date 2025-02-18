@@ -284,6 +284,7 @@ class GuarantorController extends Controller
 			unset($data["guarantors"]);
 			unset($data["contract.verbal_trial.guarantees"]);
 			unset($data["contract.verbal_trial.contract"]);
+			unset($data["contract.verbal_trial.notification"]);
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Billet-a-ordre-caution-" . $parent->verbal_trial->committee_id;

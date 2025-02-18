@@ -355,6 +355,10 @@ class NotificationController extends Controller
 				$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne	 : 1% du capital restant dû après 12 mois" : "";
 				unset($data["observations"]);
 				unset($data["guarantors"]);
+				unset($data["verbal_trial.next"]);
+				unset($data["verbal_trial.guarantees"]);
+				unset($data["verbal_trial.contract"]);
+				unset($data["verbal_trial.notification"]);
 				$templateProcessor->setValues($data);
 
 				// Enregistrez les modifications dans un nouveau fichier

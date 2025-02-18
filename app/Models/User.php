@@ -139,10 +139,6 @@ class User extends Authenticatable
 							"subject" => ["notification"]
 						],
 						[
-							"action" => ["download"],
-							"subject" => ["notarized-contract"]
-						],
-						[
 							"action" => ["upload"],
 							"subject" => ["notarized-contract"]
 						],
@@ -188,7 +184,7 @@ class User extends Authenticatable
 						],
 						[
 							"action" => ["download"],
-							"subject" => ["basic-contract", "contract", "guarantor", "notification", "simple-notification", "deadline-postponed", "pv-notification"],
+							"subject" => ["basic-contract", "contract", "guarantor", "notification", "simple-notification", "deadline-postponed", "pv-notification","notarized-contract"],
 						],
 						[
 							"action" => ["send"],
@@ -262,11 +258,11 @@ class User extends Authenticatable
 				return [
 					[
 						"action" => ["menu"],
-						"subject" => ["pv", "contract", "basic-contract", "notarized-contract", "cat", "basic-cat"]
+						"subject" => ["pv", "contract", "basic-contract", "notarized-contract", "cat", "basic-cat", "pv-notification"]
 					],
 					[
 						"action" => ["read"],
-						"subject" => ["non-mortgage-contract", "mortgage-contract", "basic-contract", "contract", "notarized-contract", "basic-cat"]
+						"subject" => ["non-mortgage-contract", "mortgage-contract", "basic-contract", "contract", "notarized-contract", "basic-cat", "pv-notification", "cat","type-of-guarantee", "type-of-credit", "type-of-applicant", "guarantor"]
 					],
 					[
 						"action" => ["read-without-cat"],
@@ -274,7 +270,7 @@ class User extends Authenticatable
 					],
 					[
 						"action" => ["read-historical"],
-						"subject" => ["basic-contract", "contract", "notarized-contract"]
+						"subject" => ["basic-contract", "contract", "notarized-contract", "pv-notification"]
 					],
 					[
 						"action" => ["read-without-notarized-contract"],
@@ -302,19 +298,19 @@ class User extends Authenticatable
 					],
 					[
 						"action" => ["create"],
-						"subject" => ["basic-contract", "contract", "notarized-contract", "cat", "basic-cat"]
+						"subject" => ["basic-contract", "contract", "notarized-contract", "cat", "basic-cat", "guarantor"]
 					],
 					[
 						"action" => ["update"],
-						"subject" => ["basic-contract", "contract", "notarized-contract", "cat", "basic-cat"]
-					],
-					[
-						"action" => ["delete"],
-						"subject" => ["basic-contract", "contract", "cat", "basic-cat"]
+						"subject" => ["basic-contract", "contract", "notarized-contract", "cat", "basic-cat", "guarantor"]
 					],
 					[
 						"action" => ["download"],
-						"subject" => ["pv-notification", "cat", "basic-cat"]
+						"subject" => ["pv-notification", "cat", "basic-cat", "guarantor", "pv-notification"]
+					],
+					[
+						"action" => ["delete"],
+						"subject" => ["basic-contract", "contract", "cat", "basic-cat", "guarantor"]
 					],
 					[
 						"action" => ["read", "historical", "download", "change_status", "validate", "reject"],
@@ -335,22 +331,6 @@ class User extends Authenticatable
 					[
 						"action" => ["create", "read", "historical", "delete", "download", "change_stsatus"],
 						"subject" => ["cat-simple-notification"]
-					],
-					[
-						"action" => ["create", "read", "update", "delete", "download"],
-						"subject" => ["guarantor"],
-					],
-					[
-						"action" => ["read", "create", "update", "delete", "download"],
-						"subject" => ["cat"],
-					],
-					[
-						"action" => ["read"],
-						"subject" => ["type-of-guarantee", "type-of-credit", "type-of-applicant"]
-					],
-					[
-						"action" => ["read", "historical", "change_status", "download"],
-						"subject" => ["deadline-postponed"],
 					],
 					[
 						"action" => ["manage"],
@@ -459,7 +439,7 @@ class User extends Authenticatable
 					],
 					[
 						"action" => ["read"],
-						"subject" => ["notarized-contract"]
+						"subject" => ["notarized-contract", "guarantor", "notification"]
 					],
 					[
 						"action" => ["historical"],
@@ -479,11 +459,11 @@ class User extends Authenticatable
 					],
 					[
 						"action" => ["download"],
-						"subject" => ["notarized-contract"]
+						"subject" => ["notarized-contract", "guarantor"]
 					],
 					[
 						"action" => ["upload"],
-						"subject" => ["notarized-contract"]
+						"subject" => ["notarized-contract", "guarantor"]
 					],
 					[
 						"action" => ["send"],

@@ -52,6 +52,7 @@ const tableData = [
 	{ "title": "Type de déblocage", "value": frenchReleaseType[verbalTrial.value.release_type] },
 	{ "title": "Admin Crédit", "value": verbalTrial.value.credit_admin.full_name },
 	{ "title": "Prime de risque", "value": verbalTrial.value.risk_premium_percentage + " %" },
+	{ "title": "Nombre de différés", "value": verbalTrial.value.number_deferred + " mois" },
 ]
 
 if (verbalTrial.value.has_line_review_bonus) {

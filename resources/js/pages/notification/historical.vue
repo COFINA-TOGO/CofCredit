@@ -218,15 +218,15 @@ const apiDelete = async id => {
 
 								<div v-if="$can('download', 'notification')">
 									<VDivider />
-									<!-- Télécharger contrat non-signé -->
-									<VListItem
+									<!-- Télécharger notification non-signé -->
+									<!-- <VListItem
 										@click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.pdf`)">
 
 										<template #prepend>
 											<VIcon icon="tabler-download" />
 										</template>
-										<VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
-									</VListItem>
+										<VListItemTitle>Télécharger notification non-signé</VListItemTitle>
+									</VListItem> -->
 									<!-- Télécharger billet à ordre non-signé -->
 									<VListItem
 										@click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`);">
@@ -244,7 +244,7 @@ const apiDelete = async id => {
 										<template #prepend>
 											<VIcon icon="tabler-download" />
 										</template>
-										<VListItemTitle>Télécharger Contrat signé</VListItemTitle>
+										<VListItemTitle>Télécharger Notification signé</VListItemTitle>
 									</VListItem>
 									<!-- Télécharger billet à ordre signé -->
 									<VListItem v-if="item.signed_promissory_note_path"

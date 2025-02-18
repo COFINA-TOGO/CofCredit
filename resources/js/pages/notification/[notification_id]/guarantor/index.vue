@@ -20,7 +20,7 @@ const uploadState = ref('signed_notification')
 const loadings = ref([])
 const itemsPerPage = ref(8)
 const page = ref(1)
-let backRouteName = 'notification'
+let backRouteName = {name: 'notification'}
 const headers = [
 	{
 		title: 'Nom',
@@ -62,8 +62,8 @@ const {
 }))
 
 const {
-	data: verbalTrialData,
-} = await useApi(createUrl(`/verbal-trial/${route.params.notification_id}`))
+	data: notificationData,
+} = await useApi(createUrl(`/notification/${route.params.notification_id}`))
 
 const load = i => {
 	loadings.value[i] = true
@@ -133,11 +133,11 @@ const apiDelete = async id => {
 	fetchGuarantors()
 }
 
-if (verbalTrialData.value.data.verbalTrial.head_credit_validation == 'validated') {
-	if (verbalTrialData.value.data.verbalTrial.status == 'validated') {
-		backRouteName = 'notification-historical'
+if (notificationData.value.data.notification.head_credit_validation == 'validated') {
+	if (notificationData.value.data.notification.status == 'validated') {
+		backRouteName = {name: 'notification-historical'}
 	} else {
-		backRouteName = 'notification-without-signed-contract'
+		backRouteName = {name: 'notification-without-signed-contract'}
 	}
 }
 
@@ -153,7 +153,7 @@ const lastPage = computed(() => guarantorData.value.last_page)
 				<div class="d-flex align-center">
 					<VRow>
 						<VCol>
-							<VBtn prepend-icon="tabler-arrow-left" :to="'../'">
+							<VBtn prepend-icon="tabler-arrow-left" :to="backRouteName">
 								Notifications
 							</VBtn>
 						</VCol>

@@ -291,16 +291,14 @@ const lastPage = computed(() => notificationData.value.last_page)
 
 									<div v-if="$can('download', 'notification')">
 										<VDivider />
-										<!-- Télécharger notification non-signé -->
-										<VListItem
+										<!-- <VListItem
 											@click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.pdf`);">
 
 											<template #prepend>
 												<VIcon icon="tabler-download" />
 											</template>
 											<VListItemTitle>Télécharger Notification non signé</VListItemTitle>
-										</VListItem>
-										<!-- Télécharger billet à ordre non-signé -->
+										</VListItem> -->
 										<VListItem
 											@click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`);">
 
