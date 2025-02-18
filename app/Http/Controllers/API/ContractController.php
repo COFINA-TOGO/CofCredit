@@ -362,7 +362,6 @@ class ContractController extends Controller
 
 
 				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
-				dd('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
 				$output = [];
 				$returnVar = 0;
 				exec($command, $output, $returnVar);
