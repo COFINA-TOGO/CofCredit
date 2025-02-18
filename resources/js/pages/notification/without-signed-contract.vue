@@ -294,16 +294,16 @@ const lastPage = computed(() => notificationData.value.last_page)
 									</VListItem>
 
 
-									<!-- <span v-if="$can('download', 'notification')">
+									<span v-if="$can('download', 'notification')">
 										<span>
 											<VDivider />
-											<VListItem
+											<!-- <VListItem
 												@click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.pdf`);">
 												<template #prepend>
 													<VIcon icon="tabler-download" />
 												</template>
 												<VListItemTitle>Télécharger Notification non signé</VListItemTitle>
-											</VListItem>
+											</VListItem> -->
 											<VListItem
 												@click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`);">
 												<template #prepend>
@@ -315,14 +315,14 @@ const lastPage = computed(() => notificationData.value.last_page)
 
 										<span>
 											<VDivider />
-											<VListItem v-if="item.signed_notification_path"
+											<!-- <VListItem v-if="item.signed_notification_path"
 												@click="downloadFile(item.signed_notification_path, `Notification-${item.signed_notification_path.split('/').slice(-1)[0]}`)">
 
 												<template #prepend>
 													<VIcon icon="tabler-download" />
 												</template>
 												<VListItemTitle>Télécharger Notification signé</VListItemTitle>
-											</VListItem>
+											</VListItem> -->
 											<VListItem v-if="item.signed_contract_path"
 												@click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
 
@@ -340,7 +340,7 @@ const lastPage = computed(() => notificationData.value.last_page)
 												<VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
 											</VListItem>
 										</span>
-									</span> -->
+									</span>
 
 									<span v-if="$can('upload', 'notarized-contract')">
 										<!-- Ajouter Contrat signé -->
