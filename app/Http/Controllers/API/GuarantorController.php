@@ -147,10 +147,13 @@ class GuarantorController extends Controller
 		if ($guarantor) {
 			// if (($authorisation = Gate::inspect('view', $guarantor))->allowed()) {
 			// $guarantor->load(["verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"]);
-			$templateProcessor = new TemplateProcessor('../document_templates/Contracts/particular/contract_caution_particular.docx');
-
 			$data = $guarantor->toArray();
 			$parent = $guarantor->notification ? $guarantor->notification : $guarantor->contract;
+			$templatePath =  "../document_templates/Contracts/$parent->type/contract_caution_$parent->type.docx";
+			$templateProcessor = new TemplateProcessor($templatePath);
+
+
+
 			$data = array_merge($data, collect($parent)->mapWithKeys(function ($value, $key) {
 				return ['contract.' . $key => $value];
 			})->all());
@@ -162,6 +165,14 @@ class GuarantorController extends Controller
 			})->all());
 			$data = array_merge($data, collect($parent->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
 				return ['contract.verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
+			})->all());
+
+			$data = array_merge($data, collect($parent->individual_business)->mapWithKeys(function ($value, $key) {
+				return ['individual_business.' . $key => $value];
+			})->all());
+
+			$data = array_merge($data, collect($parent->company)->mapWithKeys(function ($value, $key) {
+				return ['company.' . $key => $value];
 			})->all());
 
 			$data["ht_rate"] = "17";
@@ -201,11 +212,20 @@ class GuarantorController extends Controller
 			unset($data["guarantors"]);
 			unset($data["contract.verbal_trial.guarantees"]);
 			unset($data["contract.verbal_trial.contract"]);
-			
-			$data["client_name"] = $parent->type == "particular" ? $parent->verbal_trial->civility . " " . $parent->verbal_trial->applicant_full_name : $parent->verbal_trial->entity_name;
+			unset($data["contract"]);
+			$data["type_of_identity_document.fr"] = [
+				"cni" => "Carte d'identité nationale",
+				"passport" => "Passeport",
+				"residence_certificate" => "Certificat de résidence",
+				"driving_licence" => "Permis de conduire",
+				"consular_card" => "Carte consulaire",
+				"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
+				"residence_permit" => "Carte de séjour",
+			][$data["type_of_identity_document"]];
 
-			$templateProcessor->setValues($data);
+			$data["client_name"] = $parent->type == "particular" ? $parent->verbal_trial->civility . " " . $parent->verbal_trial->applicant_full_name : $parent->verbal_trial->entity_name;
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
+			$templateProcessor->setValues($data);
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "Contrat-caution-" . $parent->verbal_trial->committee_id;
@@ -238,10 +258,12 @@ class GuarantorController extends Controller
 		$guarantor = Guarantor::find($id);
 		if ($guarantor) {
 			// if (($authorisation = Gate::inspect('view', $guarantor))->allowed()) {
-			$templateProcessor = new TemplateProcessor('../document_templates/Contracts/particular/billet_a_ordre_caution_particular.docx');
 
 			$data = $guarantor->toArray();
 			$parent = $guarantor->notification ? $guarantor->notification : $guarantor->contract;
+			$templatePath =  "../document_templates/Contracts/$parent->type/billet_a_ordre_caution_$parent->type.docx";
+			$templateProcessor = new TemplateProcessor($templatePath);
+
 			$data = array_merge($data, collect($parent)->mapWithKeys(function ($value, $key) {
 				return ['contract.' . $key => $value];
 			})->all());
@@ -253,6 +275,14 @@ class GuarantorController extends Controller
 			})->all());
 			$data = array_merge($data, collect($parent->verbal_trial->type_of_credit->type_of_applicant)->mapWithKeys(function ($value, $key) {
 				return ['contract.verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
+			})->all());
+
+			$data = array_merge($data, collect($parent->individual_business)->mapWithKeys(function ($value, $key) {
+				return ['individual_business.' . $key => $value];
+			})->all());
+
+			$data = array_merge($data, collect($parent->company)->mapWithKeys(function ($value, $key) {
+				return ['company.' . $key => $value];
 			})->all());
 
 			$data["ht_rate"] = "17";
@@ -268,10 +298,19 @@ class GuarantorController extends Controller
 			$data["contract.verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["contract.verbal_trial.periodicity"]];
+			$data["contract.verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["contract.verbal_trial.periodicity"]];
 			$data["line_review_bonus"] = $data["contract.verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne      : 1% du capital restant dû après 12 mois" : "";
 			$data["signatory"] = (((float) $data["contract.verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
-
-
+			$data["type_of_identity_document.fr"] = [
+				"cni" => "Carte d'identité nationale",
+				"passport" => "Passeport",
+				"residence_certificate" => "Certificat de résidence",
+				"driving_licence" => "Permis de conduire",
+				"consular_card" => "Carte consulaire",
+				"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
+				"residence_permit" => "Carte de séjour",
+			][$data["type_of_identity_document"]];
+			
 			$data["contract.verbal_trial.amount"] = number_format(((float) $data["contract.verbal_trial.amount"]), 0, ',', ' ');
 			$data["contract.total_amount_of_interest"] = number_format(((float) $data["contract.total_amount_of_interest"]), 0, ',', ' ');
 			$data["contract.due_amount"] = number_format(((float) $data["contract.due_amount"]), 0, ',', ' ');
