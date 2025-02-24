@@ -261,14 +261,6 @@ class VerbalTrialController extends Controller
 				return ['type_of_credit.' . $key => $value];
 			})->all());
 
-			$data["administrative_fees_percentage.value"] = number_format((float) $data["administrative_fees_percentage"] * $data["amount"] / 100, 0, ',', ' ');
-			$data["created_at"] = Carbon::parse($verbal_trial->created_at)->format("d/m/Y");
-			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
-			$data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
-
-			$data["line_review_bonus"] = $data["has_line_review_bonus"] ? "Prime de révision de ligne" : "";
-			$data["line_review_bonus_value"] = $data["has_line_review_bonus"] ? ": 1% du capital restant dû après 12 mois" : "";
-
 			$guaranteeList = [];
 			foreach ($verbal_trial->guarantees as $guarantee) {
 				$tmp = $guarantee->toArray();
@@ -284,15 +276,28 @@ class VerbalTrialController extends Controller
 			}
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
 
-
 			$insuranceList = $verbal_trial->has_insurance ? [["key" => "Prime d’assurance", "value" => "Selon la grille de l’assureur"]] : [];
 			$templateProcessor->cloneBlock('insurance', 0, true, false, $insuranceList);
-			
-			$riskPremiumPercentageList = (((float) $data["risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["risk_premium_percentage"] . " %)", "value" => "" . number_format($data["risk_premium_percentage"] * $data["amount"] / 100, 0, ',', " ") . " F CFA"]];
+
+			$data["risk_premium_percentage.value"] = ($data["risk_premium_percentage"] * $data["amount"] / 100);
+
+			$riskPremiumPercentageList = (((float) $data["risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["risk_premium_percentage"] . " %)", "value" => "" . number_format($data["risk_premium_percentage.value"], 0, ',', " ") . " F CFA"]];
 			$templateProcessor->cloneBlock('riskPremiumPercentage', 0, true, false, $riskPremiumPercentageList);
 
 			$reviewBonusList = $data["has_line_review_bonus"] ? [["key" => "Prime de révision de ligne", "value" => "1% du capital restant dû après 12 mois"]] : [];
 			$templateProcessor->cloneBlock('reviewBonus', 0, true, false, $reviewBonusList);
+
+			$data["created_at"] = Carbon::parse($verbal_trial->created_at)->format("d/m/Y");
+			$data["civility.2"] = ["Mr" => "Monsieur", "Mme" => "Madame", "Mlle" => "Madame"][$data["civility"]];
+			$data["current_date"] = Carbon::now()->translatedFormat('d F Y');
+			$data["administrative_fees_percentage.value"] = number_format((float) $data["administrative_fees_percentage"] * $data["amount"] / 100, 0, ',', ' ');
+			$data["amount.fr"] = SpellNumber::value((float) $data["amount"])->locale('fr')->toLetters();
+			$data["duration.fr"] = SpellNumber::value((float) $data["duration"])->locale('fr')->toLetters();
+			$data["duration.fr"] = SpellNumber::value((float) $data["duration"])->locale('fr')->toLetters();
+			$data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
+			$data["periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["periodicity"]];
+			$data["periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["periodicity"]];
+			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
 
 			unset($data["caf.ability_rules"]);
 			unset($data["guarantees"]);
@@ -348,22 +353,7 @@ class VerbalTrialController extends Controller
 					return ['individual_business.' . $key => $value];
 				})->all());
 			}
-			$data["ht_rate"] = "17";
-			$data["civility.2"] = ["Mr" => "Monsieur", "Mme" => "Madame", "Mlle" => "Madame"][$data["civility"]];
-			$data["current_date"] = Carbon::now()->translatedFormat('d F Y');
-			$data["administrative_fees_percentage.value"] = number_format((float) $data["administrative_fees_percentage"] * $data["amount"] / 100, 0, ',', ' ');
-			$data["amount.fr"] = SpellNumber::value((float) $data["amount"])->locale('fr')->toLetters();
-			$data["duration.fr"] = SpellNumber::value((float) $data["duration"])->locale('fr')->toLetters();
-			$data["duration.fr"] = SpellNumber::value((float) $data["duration"])->locale('fr')->toLetters();
-			$data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
-			$data["periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["periodicity"]];
-			$data["periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["periodicity"]];
 
-			$data["line_review_bonus"] = $data["has_line_review_bonus"] ? "Prime de révision de ligne" : "";
-			$data["line_review_bonus_value"] = $data["has_line_review_bonus"] ? ": 1% du capital restant dû après 12 mois" : "";
-
-			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
-			$data["administrative_fees_percentage"] = number_format(((float) $data["administrative_fees_percentage"]), 0, ',', ' ');
 			//$data["insurance_premium"] = number_format(((float) $data["insurance_premium"]), 0, ',', ' ');
 
 			$guaranteeList = [];
@@ -382,11 +372,26 @@ class VerbalTrialController extends Controller
 			$insuranceList = $verbal_trial->has_insurance ? [["key" => "Prime d’assurance", "value" => "Selon la grille de l’assureur"]] : [];
 			$templateProcessor->cloneBlock('insurance', 0, true, false, $insuranceList);
 
-			$riskPremiumPercentageList = (((float) $data["risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["risk_premium_percentage"] . " %)", "value" => "" . number_format(((float) $data["risk_premium_percentage"] * (float) $data["amount"] / 100), 0, ',', " ") . " F CFA"]];
+			$data["risk_premium_percentage.value"] = ($data["risk_premium_percentage"] * $data["amount"] / 100);
+
+			$riskPremiumPercentageList = (((float) $data["risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["risk_premium_percentage"] . " %)", "value" => "" . number_format($data["risk_premium_percentage.value"], 0, ',', " ") . " F CFA"]];
 			$templateProcessor->cloneBlock('riskPremiumPercentage', 0, true, false, $riskPremiumPercentageList);
 
 			$reviewBonusList = $data["has_line_review_bonus"] ? [["key" => "Prime de révision de ligne", "value" => "1% du capital restant dû après 12 mois"]] : [];
 			$templateProcessor->cloneBlock('reviewBonus', 0, true, false, $reviewBonusList);
+
+			$data["ht_rate"] = "17";
+			$data["civility.2"] = ["Mr" => "Monsieur", "Mme" => "Madame", "Mlle" => "Madame"][$data["civility"]];
+			$data["current_date"] = Carbon::now()->translatedFormat('d F Y');
+			$data["administrative_fees_percentage.value"] = number_format((float) $data["administrative_fees_percentage"] * $data["amount"] / 100, 0, ',', ' ');
+			$data["amount.fr"] = SpellNumber::value((float) $data["amount"])->locale('fr')->toLetters();
+			$data["duration.fr"] = SpellNumber::value((float) $data["duration"])->locale('fr')->toLetters();
+			$data["duration.fr"] = SpellNumber::value((float) $data["duration"])->locale('fr')->toLetters();
+			$data["periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["periodicity"]];
+			$data["periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["periodicity"]];
+			$data["periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["periodicity"]];
+			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
+
 
 			unset($data["observations"]);
 			unset($data["guarantors"]);
