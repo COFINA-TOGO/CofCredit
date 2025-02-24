@@ -287,7 +287,7 @@ class VerbalTrialController extends Controller
 
 			$insuranceList = $verbal_trial->has_insurance ? [["key" => "Prime d’assurance", "value" => "Selon la grille de l’assureur"]] : [];
 			$templateProcessor->cloneBlock('insurance', 0, true, false, $insuranceList);
-
+			
 			$riskPremiumPercentageList = (((float) $data["risk_premium_percentage"]) == 0) ? [] : [["key" => "Prime de risque (" . $data["risk_premium_percentage"] . " %)", "value" => "" . number_format($data["risk_premium_percentage"] * $data["amount"] / 100, 0, ',', " ") . " F CFA"]];
 			$templateProcessor->cloneBlock('riskPremiumPercentage', 0, true, false, $riskPremiumPercentageList);
 
@@ -329,8 +329,8 @@ class VerbalTrialController extends Controller
 		$verbal_trial = VerbalTrial::find($id);
 		if ($verbal_trial) {
 			// if (($authorisation = Gate::inspect('view', $notification))->allowed()) {
-			$template_path = (($verbal_trial->validation_level == "head_credit") && ($verbal_trial->status == "validated")) ? "../document_templates/Notifications/PV-Notification-validated.docx" : "../document_templates/Notifications/PV-Notification.docx";
-			// dd($template_path);
+			// $template_path = (($verbal_trial->validation_level == "head_credit") && ($verbal_trial->status == "validated")) ? "../document_templates/Notifications/PV-Notification-validated.docx" : "../document_templates/Notifications/PV-Notification.docx";
+			$template_path = "../document_templates/Notifications/PV-Notification.docx";
 			$templateProcessor = new TemplateProcessor($template_path);
 			$data = $verbal_trial->toArray();
 			$data = array_merge($data, collect($verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
