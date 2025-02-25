@@ -391,7 +391,8 @@ class VerbalTrialController extends Controller
 			$data["periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["periodicity"]];
 			$data["periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["periodicity"]];
 			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
-
+			
+			$data["representator"] = $data["applicant_first_name"] . " " . $data["applicant_last_name"] == $data["entity_name"] ? "" : " représenté par " . $data["civility.2"] . " " . $data["applicant_first_name"] . " " . $data["applicant_last_name"];
 
 			unset($data["observations"]);
 			unset($data["guarantors"]);
