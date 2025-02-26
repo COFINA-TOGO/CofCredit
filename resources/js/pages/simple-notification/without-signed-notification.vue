@@ -260,7 +260,7 @@ const lastPage = computed(() => notificationData.value.last_page)
               <VIcon size="24" icon="tabler-dots-vertical" />
               <VMenu activator="parent">
                 <VList>
-                  <input ref="refInputEl" type="file" name="signed_notification" accept=".pdf,.png,.jpg" hidden
+                  <input ref="refInputEl" type="file" name="signed_notification" accept=".docx,.png,.jpg" hidden
                     @input="uploadFile(item.id, $event)" />
 
                   <VBadge v-if="$can('read', 'guarantor')" inline :content="item.guarantors_count">
@@ -290,7 +290,7 @@ const lastPage = computed(() => notificationData.value.last_page)
                       <VDivider />
                       <!-- Télécharger notification non-signé -->
                       <VListItem
-                        @click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.pdf`);">
+                        @click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.docx`);">
                         <template #prepend>
                           <VIcon icon="tabler-download" />
                         </template>

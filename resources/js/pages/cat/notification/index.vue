@@ -247,7 +247,7 @@ const lastPage = computed(() => catData.value.last_page)
                     <VListItemTitle>Voir la notification</VListItemTitle>
                   </VListItem>
                   <VListItem v-if="$can('download', 'cat')"
-                    @click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.notification.verbal_trial.committee_id}.pdf`)">
+                    @click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.notification.verbal_trial.committee_id}.docx`)">
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>

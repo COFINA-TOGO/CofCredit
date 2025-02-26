@@ -240,7 +240,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 							<IconBtn v-if="$can('download', 'pv-notification') && item.status == 'validated'" @click="
 								downloadFile(
 									`/api/verbal-trial/notification/download/${item.id}`,
-									`notification-${item.committee_id} .pdf`
+									`notification-${item.committee_id}.docx`
 								)
 								">
 								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Télécharger

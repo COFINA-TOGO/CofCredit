@@ -264,7 +264,7 @@ const lastPage = computed(() => notificationData.value.last_page)
 							<VMenu activator="parent">
 								<VList>
 									<input ref="refInputEl" type="file" name="signed_notification"
-										accept=".pdf,.png,.jpg" hidden @input="uploadFile(item.id, $event)" />
+										accept=".docx,.png,.jpg" hidden @input="uploadFile(item.id, $event)" />
 
 									<VBadge v-if="$can('read', 'guarantor')" inline :content="item.guarantors_count">
 										<VListItem
@@ -292,7 +292,7 @@ const lastPage = computed(() => notificationData.value.last_page)
 									<div v-if="$can('download', 'notification')">
 										<VDivider />
 										<!-- <VListItem
-											@click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.pdf`);">
+											@click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.docx`);">
 
 											<template #prepend>
 												<VIcon icon="tabler-download" />
@@ -300,7 +300,7 @@ const lastPage = computed(() => notificationData.value.last_page)
 											<VListItemTitle>Télécharger Notification non signé</VListItemTitle>
 										</VListItem> -->
 										<VListItem
-											@click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`);">
+											@click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
 
 											<template #prepend>
 												<VIcon icon="tabler-download" />

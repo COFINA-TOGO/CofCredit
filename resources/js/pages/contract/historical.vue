@@ -233,7 +233,7 @@ const apiDelete = async (id) => {
 									<VListItem @click="
 										downloadFile(
 											`/api/contract/download/${item.id}`,
-											`Contrat-${item.verbal_trial.committee_id}.pdf`
+											`Contrat-${item.verbal_trial.committee_id}.docx`
 										)
 										">
 										<template #prepend>
@@ -260,7 +260,7 @@ const apiDelete = async (id) => {
 									<VListItem @click="
 										downloadFile(
 											`/api/contract/promissory-note/download/${item.id}`,
-											`Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`
+											`Billet-à-ordre-${item.verbal_trial.committee_id}.docx`
 										)
 										">
 										<template #prepend>
@@ -290,7 +290,7 @@ const apiDelete = async (id) => {
 									<VListItem @click="
 										downloadFile(
 											`/api/contract/handwritten-mention/download/${item.id}`,
-											`Mention-manuscrite-${item.verbal_trial.committee_id}.pdf`
+											`Mention-manuscrite-${item.verbal_trial.committee_id}.docx`
 										)
 										">
 										<template #prepend>

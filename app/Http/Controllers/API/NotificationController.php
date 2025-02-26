@@ -286,17 +286,18 @@ class NotificationController extends Controller
 			$bsaseName = "Contrat-" . $notification->verbal_trial->committee_id;
 			$wordFilePath = public_path($bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
-			$outputFilePdfFolderPath = public_path("generated/pdf");
+			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 
-			$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
-			$output = [];
-			$returnVar = 0;
-			exec($command, $output, $returnVar);
-			// Vérification du succès
-			if ($returnVar === 0) {
-				File::delete($wordFilePath);
-				return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
-			}
+			// $outputFilePdfFolderPath = public_path("generated/pdf");
+			// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+			// $output = [];
+			// $returnVar = 0;
+			// exec($command, $output, $returnVar);
+			// // Vérification du succès
+			// if ($returnVar === 0) {
+			// 	File::delete($wordFilePath);
+			// 	return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+			// }
 		} else {
 			return $this->responseError(["id" => "La notification n'existe pas"], 404);
 		}
@@ -365,17 +366,17 @@ class NotificationController extends Controller
 				$bsaseName = "Billet-a-ordre-" . $notification->verbal_trial->committee_id;
 				$wordFilePath = public_path($bsaseName . ".docx");
 				$templateProcessor->saveAs($wordFilePath);
-				$outputFilePdfFolderPath = public_path("generated/pdf");
-
-				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
-				$output = [];
-				$returnVar = 0;
-				exec($command, $output, $returnVar);
-				// Vérification du succès
-				if ($returnVar === 0) {
-					File::delete($wordFilePath);
-					return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
-				}
+				return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
+				
+				// $outputFilePdfFolderPath = public_path("generated/pdf");$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+				// $output = [];
+				// $returnVar = 0;
+				// exec($command, $output, $returnVar);
+				// // Vérification du succès
+				// if ($returnVar === 0) {
+				// 	File::delete($wordFilePath);
+				// 	return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+				// }
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
@@ -406,17 +407,18 @@ class NotificationController extends Controller
 				$bsaseName = "HandwrittenMention-" . $notification->verbal_trial->committee_id;
 				$wordFilePath = public_path($bsaseName . ".docx");
 				$templateProcessor->saveAs($wordFilePath);
-				$outputFilePdfFolderPath = public_path("generated/pdf");
-
-				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
-				$output = [];
-				$returnVar = 0;
-				exec($command, $output, $returnVar);
-				// Vérification du succès
-				if ($returnVar === 0) {
-					File::delete($wordFilePath);
-					return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
-				}
+				return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
+				
+				// $outputFilePdfFolderPath = public_path("generated/pdf");
+				// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+				// $output = [];
+				// $returnVar = 0;
+				// exec($command, $output, $returnVar);
+				// // Vérification du succès
+				// if ($returnVar === 0) {
+				// 	File::delete($wordFilePath);
+				// 	return Response::file($outputFilePdfFolderPath . "/" . $bsaseName . ".pdf", ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+				// }
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}

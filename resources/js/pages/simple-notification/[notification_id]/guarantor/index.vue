@@ -220,13 +220,13 @@ const apiDelete = async id => {
             <VIcon size="24" icon="tabler-dots-vertical" />
             <VMenu activator="parent">
               <VList>
-                <input ref="refInputEl" type="file" name="signed_notification" accept=".pdf,.png,.jpg" hidden
+                <input ref="refInputEl" type="file" name="signed_notification" accept=".docx,.png,.jpg" hidden
                   @input="uploadFile(item.id, $event)" />
 
                 <div v-if="$can('download', 'guarantor')">
                   <!-- Télécharger billet à ordre non-signé -->
                   <VListItem
-                    @click="downloadFile(`/api/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.notification.verbal_trial.committee_id}.pdf`);">
+                    @click="downloadFile(`/api/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.notification.verbal_trial.committee_id}.docx`);">
 
                     <template #prepend>
                       <VIcon icon="tabler-download" />

@@ -227,7 +227,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 						@click="
 							downloadFile(
 								`/api/verbal-trial/download/${item.id}`,
-								`PV-${item.committee_id}.pdf`
+								`PV-${item.committee_id}.docx`
 							)
 						"
 					>

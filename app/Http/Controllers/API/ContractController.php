@@ -355,21 +355,21 @@ class ContractController extends Controller
 				$templateProcessor->setValues($data);
 
 				// Enregistrez les modifications dans un nouveau fichier
-				$outputFilePath = public_path("generated/docx/Contrat-" . $contract->verbal_trial->committee_id . ".docx");
-				$templateProcessor->saveAs($outputFilePath);
+				$wordFilePath = public_path("generated/docx/Contrat-" . $contract->verbal_trial->committee_id . ".docx");
+				$templateProcessor->saveAs($wordFilePath);
 				$outputFilePdfFolderPath = public_path("generated/pdf");
-				$outputFilePdfPath = public_path("generated/pdf/Contrat-" . $contract->verbal_trial->committee_id . ".pdf");
 
-
-				$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
-				$output = [];
-				$returnVar = 0;
-				exec($command, $output, $returnVar);
-				// Vérification du succès
-				if ($returnVar === 0) {
-					File::delete($outputFilePath);
-					return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
-				}
+				return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
+				// $outputFilePdfPath = public_path("generated/pdf/Contrat-" . $contract->verbal_trial->committee_id . ".pdf");
+				// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+				// $output = [];
+				// $returnVar = 0;
+				// exec($command, $output, $returnVar);
+				// // Vérification du succès
+				// if ($returnVar === 0) {
+				// 	File::delete($wordFilePath);
+				// 	return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+				// }
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
@@ -453,21 +453,21 @@ class ContractController extends Controller
 			$templateProcessor->setValues($data);
 
 			// Enregistrez les modifications dans un nouveau fichier
-			$outputFilePath = public_path("generated/docx/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx");
-			$templateProcessor->saveAs($outputFilePath);
-			$outputFilePdfFolderPath = public_path("generated/pdf");
-			$outputFilePdfPath = public_path("generated/pdf/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".pdf");
-
-
-			$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
-			$output = [];
-			$returnVar = 0;
-			exec($command, $output, $returnVar);
-			// Vérification du succès
-			if ($returnVar === 0) {
-				File::delete($outputFilePath);
-				return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
-			}
+			$wordFilePath = public_path("generated/docx/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx");
+			$templateProcessor->saveAs($wordFilePath);
+			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
+			
+			// $outputFilePdfFolderPath = public_path("generated/pdf");
+			// $outputFilePdfPath = public_path("generated/pdf/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".pdf");
+			// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+			// $output = [];
+			// $returnVar = 0;
+			// exec($command, $output, $returnVar);
+			// // Vérification du succès
+			// if ($returnVar === 0) {
+			// 	File::delete($wordFilePath);
+			// 	return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+			// }
 		} else {
 			return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
 		}
@@ -493,21 +493,21 @@ class ContractController extends Controller
 			$templateProcessor->setValues(["amount" => $data["amount"], "amount.fr" => $data["amount.fr"],]);
 
 			// Enregistrez les modifications dans un nouveau fichier
-			$outputFilePath = public_path("generated/docx/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".docx");
-			$templateProcessor->saveAs($outputFilePath);
-			$outputFilePdfFolderPath = public_path("generated/pdf");
-			$outputFilePdfPath = public_path("generated/pdf/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".pdf");
-
-
-			$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($outputFilePath), escapeshellarg($outputFilePdfFolderPath));
-			$output = [];
-			$returnVar = 0;
-			exec($command, $output, $returnVar);
-			// Vérification du succès
-			if ($returnVar === 0) {
-				File::delete($outputFilePath);
-				return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
-			}
+			$wordFilePath = public_path("generated/docx/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".docx");
+			$templateProcessor->saveAs($wordFilePath);
+			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
+			
+			// $outputFilePdfFolderPath = public_path("generated/pdf");
+			// $outputFilePdfPath = public_path("generated/pdf/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".pdf");
+			// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
+			// $output = [];
+			// $returnVar = 0;
+			// exec($command, $output, $returnVar);
+			// // Vérification du succès
+			// if ($returnVar === 0) {
+			// 	File::delete($wordFilePath);
+			// 	return Response::file($outputFilePdfPath, ["Content-Type" => "application/pdf"])->deleteFileAfterSend(true);
+			// }
 		} else {
 			return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
 		}

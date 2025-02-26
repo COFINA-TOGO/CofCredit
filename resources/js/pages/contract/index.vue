@@ -294,7 +294,7 @@ const lastPage = computed(() => contractData.value.last_page);
 								<VMenu activator="parent">
 									<VList>
 										<input ref="refInputEl" type="file" name="signed_contract"
-											accept=".pdf,.png,.jpg" hidden @input="uploadFile(item.id, $event)" />
+											accept=".docx,.png,.jpg" hidden @input="uploadFile(item.id, $event)" />
 
 										<VBadge v-if="$can('read', 'guarantor')" inline
 											:content="item.guarantors_count">
@@ -329,7 +329,7 @@ const lastPage = computed(() => contractData.value.last_page);
 											<VListItem @click="
 												downloadFile(
 													`/api/contract/download/${item.id}`,
-													`Contrat-${item.verbal_trial.committee_id}.pdf`
+													`Contrat-${item.verbal_trial.committee_id}.docx`
 												)
 												">
 												<template #prepend>
@@ -358,7 +358,7 @@ const lastPage = computed(() => contractData.value.last_page);
 											<VListItem @click="
 												downloadFile(
 													`/api/contract/promissory-note/download/${item.id}`,
-													`Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`
+													`Billet-à-ordre-${item.verbal_trial.committee_id}.docx`
 												)
 												">
 												<template #prepend>
@@ -387,7 +387,7 @@ const lastPage = computed(() => contractData.value.last_page);
 											<VListItem @click="
 												downloadFile(
 													`/api/contract/handwritten-mention/download/${item.id}`,
-													`Mention-manuscrite-${item.verbal_trial.committee_id}.pdf`
+													`Mention-manuscrite-${item.verbal_trial.committee_id}.docx`
 												)
 												">
 												<template #prepend>

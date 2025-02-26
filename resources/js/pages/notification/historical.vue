@@ -220,7 +220,7 @@ const apiDelete = async id => {
 									<VDivider />
 									<!-- Télécharger notification non-signé -->
 									<!-- <VListItem
-										@click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.pdf`)">
+										@click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.docx`)">
 
 										<template #prepend>
 											<VIcon icon="tabler-download" />
@@ -229,7 +229,7 @@ const apiDelete = async id => {
 									</VListItem> -->
 									<!-- Télécharger billet à ordre non-signé -->
 									<VListItem
-										@click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.pdf`);">
+										@click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
 
 										<template #prepend>
 											<VIcon icon="tabler-download" />
