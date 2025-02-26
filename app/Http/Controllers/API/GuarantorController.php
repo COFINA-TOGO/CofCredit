@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Rmunate\Utilities\SpellNumber;
 
@@ -229,7 +230,8 @@ class GuarantorController extends Controller
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "Contrat-caution-" . $parent->verbal_trial->committee_id;
-			$wordFilePath = public_path($bsaseName . ".docx");
+			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
+
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 			
@@ -328,7 +330,7 @@ class GuarantorController extends Controller
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Billet-a-ordre-caution-" . $parent->verbal_trial->committee_id;
-			$wordFilePath = public_path($bsaseName . ".docx");
+			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 			

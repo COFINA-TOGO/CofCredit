@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 use Exception;
@@ -309,7 +310,7 @@ class VerbalTrialController extends Controller
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "PV-" . $verbal_trial->committee_id;
-			$wordFilePath = public_path("generated/docx/" . $bsaseName . ".docx");
+			$wordFilePath = Str::slug(public_path("generated/docx/" . $bsaseName . ".docx"), "-");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 
@@ -403,7 +404,7 @@ class VerbalTrialController extends Controller
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Contrat-" . $verbal_trial->committee_id;
-			$wordFilePath = public_path($bsaseName . ".docx");
+			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 			

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Response;
 
@@ -256,7 +257,8 @@ class CATController extends Controller
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "CAT-" . $cat->$parentRelation->verbal_trial->committee_id;
-			$wordFilePath = public_path($bsaseName . ".docx");
+			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
+			
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 			

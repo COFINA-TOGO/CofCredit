@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Rmunate\Utilities\SpellNumber;
 
@@ -284,7 +285,7 @@ class NotificationController extends Controller
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Contrat-" . $notification->verbal_trial->committee_id;
-			$wordFilePath = public_path($bsaseName . ".docx");
+			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 
@@ -364,10 +365,10 @@ class NotificationController extends Controller
 
 				// Enregistrez les modifications dans un nouveau fichier
 				$bsaseName = "Billet-a-ordre-" . $notification->verbal_trial->committee_id;
-				$wordFilePath = public_path($bsaseName . ".docx");
+				$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
 				$templateProcessor->saveAs($wordFilePath);
 				return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
-				
+
 				// $outputFilePdfFolderPath = public_path("generated/pdf");$command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
 				// $output = [];
 				// $returnVar = 0;
@@ -405,10 +406,10 @@ class NotificationController extends Controller
 
 				// Enregistrez les modifications dans un nouveau fichier
 				$bsaseName = "HandwrittenMention-" . $notification->verbal_trial->committee_id;
-				$wordFilePath = public_path($bsaseName . ".docx");
+				$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
 				$templateProcessor->saveAs($wordFilePath);
 				return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
-				
+
 				// $outputFilePdfFolderPath = public_path("generated/pdf");
 				// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
 				// $output = [];
@@ -565,13 +566,13 @@ class NotificationController extends Controller
 				$notification->update($requestData);
 				$notification->load($relationList);
 				$receiverList = User::where('profile', 'head_credit')->get();
-			foreach ($receiverList as $receiver) {
-				$receiver->full_name = "Head Crédit";
-				$link = env("APP_URL") . "/notification";
-				SendEmail::dispatch(
-					$receiver->email,
-					"Notification de modification d'une notification",
-					"
+				foreach ($receiverList as $receiver) {
+					$receiver->full_name = "Head Crédit";
+					$link = env("APP_URL") . "/notification";
+					SendEmail::dispatch(
+						$receiver->email,
+						"Notification de modification d'une notification",
+						"
 					<h1 style='color:rgb(22, 4, 4);text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
 						$receiver->full_name,</U></h1>
 	
@@ -586,8 +587,8 @@ class NotificationController extends Controller
 	
 					<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
 					"
-				);
-			}
+					);
+				}
 				return $this->responseOk([
 					"notification" => $notification
 				], status: 200);
@@ -718,44 +719,44 @@ class NotificationController extends Controller
 		$notification = Notification::find($id);
 		if ($notification) {
 			// if (($authorisation = Gate::inspect('upload', $notification))->allowed()) {
-				DB::beginTransaction();
-				if ($request->has('signed_notification')) {
-					$document_category = "notification";
-					$base64Document = $request->input('signed_notification');
-				} else if ($request->has('signed_contract')) {
-					$document_category = "contract";
-					$base64Document = $request->input('signed_contract');
-				} else if ($request->has('signed_promissory_note')) {
-					$document_category = "promissory_note";
-					$base64Document = $request->input('signed_promissory_note');
-				} else {
-					DB::rollBack();
-					return $this->responseError(["error" => "Vous devez uploader une notification signée, un contrat signé ou un billet à ordre signé"], 400);
-				}
+			DB::beginTransaction();
+			if ($request->has('signed_notification')) {
+				$document_category = "notification";
+				$base64Document = $request->input('signed_notification');
+			} else if ($request->has('signed_contract')) {
+				$document_category = "contract";
+				$base64Document = $request->input('signed_contract');
+			} else if ($request->has('signed_promissory_note')) {
+				$document_category = "promissory_note";
+				$base64Document = $request->input('signed_promissory_note');
+			} else {
+				DB::rollBack();
+				return $this->responseError(["error" => "Vous devez uploader une notification signée, un contrat signé ou un billet à ordre signé"], 400);
+			}
 
-				// Vérifier si le document est un PDF
-				if (strpos($base64Document, 'data:application/pdf;base64,') === 0) {
-					// Le document est un PDF
-					$extension = 'pdf';
-				} elseif (strpos($base64Document, 'data:image/') === 0) {
-					// Le document est une image
-					// Extraire l'extension de l'image
-					$start = strpos($base64Document, '/') + 1;
-					$end = strpos($base64Document, ';');
-					$extension = substr($base64Document, $start, $end - $start);
-				} else {
-					// Type de document non pris en charge
-					DB::rollBack();
-					return $this->responseError(["error" => "Le document doit être un pdf ou une image"], 400);
-				}
+			// Vérifier si le document est un PDF
+			if (strpos($base64Document, 'data:application/pdf;base64,') === 0) {
+				// Le document est un PDF
+				$extension = 'pdf';
+			} elseif (strpos($base64Document, 'data:image/') === 0) {
+				// Le document est une image
+				// Extraire l'extension de l'image
+				$start = strpos($base64Document, '/') + 1;
+				$end = strpos($base64Document, ';');
+				$extension = substr($base64Document, $start, $end - $start);
+			} else {
+				// Type de document non pris en charge
+				DB::rollBack();
+				return $this->responseError(["error" => "Le document doit être un pdf ou une image"], 400);
+			}
 
-				$documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $base64Document));
-				$path = 'upload/Notifications/signed_' . $document_category . 's/' . $notification->verbal_trial->committee_id . '-signed.' . $extension;
-				Storage::disk("public")->put($path, $documentData);
-				$notification->update(["signed_{$document_category}_path" => "/storage/" . $path]);
+			$documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $base64Document));
+			$path = 'upload/Notifications/signed_' . $document_category . 's/' . $notification->verbal_trial->committee_id . '-signed.' . $extension;
+			Storage::disk("public")->put($path, $documentData);
+			$notification->update(["signed_{$document_category}_path" => "/storage/" . $path]);
 
-				DB::commit();
-				return $this->responseOk(["notification" => $notification]);
+			DB::commit();
+			return $this->responseOk(["notification" => $notification]);
 			// } else {
 			// 	return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			// }

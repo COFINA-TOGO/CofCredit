@@ -12,6 +12,7 @@ use App\Models\Contract;
 use Illuminate\Http\Request;
 use App\Models\IndividualBusiness;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Rmunate\Utilities\SpellNumber;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
@@ -355,7 +356,7 @@ class ContractController extends Controller
 				$templateProcessor->setValues($data);
 
 				// Enregistrez les modifications dans un nouveau fichier
-				$wordFilePath = public_path("generated/docx/Contrat-" . $contract->verbal_trial->committee_id . ".docx");
+				$wordFilePath = Str::slug(public_path("generated/docx/Contrat-" . $contract->verbal_trial->committee_id . ".docx"), "-");
 				$templateProcessor->saveAs($wordFilePath);
 				$outputFilePdfFolderPath = public_path("generated/pdf");
 
@@ -453,7 +454,7 @@ class ContractController extends Controller
 			$templateProcessor->setValues($data);
 
 			// Enregistrez les modifications dans un nouveau fichier
-			$wordFilePath = public_path("generated/docx/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx");
+			$wordFilePath = Str::slug(public_path("generated/docx/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx"), "-");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 			
@@ -493,7 +494,7 @@ class ContractController extends Controller
 			$templateProcessor->setValues(["amount" => $data["amount"], "amount.fr" => $data["amount.fr"],]);
 
 			// Enregistrez les modifications dans un nouveau fichier
-			$wordFilePath = public_path("generated/docx/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".docx");
+			$wordFilePath = Str::slug(public_path("generated/docx/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".docx"));
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 			
