@@ -261,10 +261,10 @@ const lastPage = computed(() => contractData.value.last_page);
 					<VList density="compact" v-if="item.observations.length == 0">
 						<VListItem>
 							<VChip label :color="{
-									validated: 'success',
-									rejected: 'error',
-									waiting: 'warning',
-								}[item.status]
+								validated: 'success',
+								rejected: 'error',
+								waiting: 'warning',
+							}[item.status]
 								">
 								<VTooltip v-if="item.status_observation" activator="parent"
 									transition="scroll-x-transition" location="start">Raison: {{ item.status_observation
@@ -293,8 +293,8 @@ const lastPage = computed(() => contractData.value.last_page);
 								<VIcon size="24" icon="tabler-dots-vertical" />
 								<VMenu activator="parent">
 									<VList>
-										<input ref="refInputEl" type="file" name="signed_contract"
-											accept=".docx,.png,.jpg" hidden @input="uploadFile(item.id, $event)" />
+										<input ref="refInputEl" type="file" name="signed_contract" hidden
+											@input="uploadFile(item.id, $event)" />
 
 										<VBadge v-if="$can('read', 'guarantor')" inline
 											:content="item.guarantors_count">
@@ -405,9 +405,9 @@ const lastPage = computed(() => contractData.value.last_page);
 												item.signed_contract_path == null ||
 												item.status == 'rejected'
 											" @click="
-													uploadState = 'signed_contract';
-												refInputEl?.click();
-												">
+												uploadState = 'signed_contract';
+											refInputEl?.click();
+											">
 												<template #prepend>
 													<VIcon icon="tabler-cloud-upload" />
 												</template>
@@ -418,10 +418,10 @@ const lastPage = computed(() => contractData.value.last_page);
 												item.signed_promissory_note_path ==
 												null || item.status == 'rejected'
 											" @click="
-													uploadState =
-													'signed_promissory_note';
-												refInputEl?.click();
-												">
+												uploadState =
+												'signed_promissory_note';
+											refInputEl?.click();
+											">
 												<template #prepend>
 													<VIcon icon="tabler-cloud-upload" />
 												</template>
@@ -473,16 +473,16 @@ const lastPage = computed(() => contractData.value.last_page);
 								item.status != 'rejected' &&
 								item.observations.length == 0
 							" @click="
-									selectedItemId = item.id;
-								(actionTitle = 'Rejeter le contrat'),
-									(actionText =
-										'Voulez vous vraiment rejeter ce contrat?'),
-									(actionFunction = apiChangeStatus);
-								actionButtonText = 'Rejeter';
-								commentPresence = true;
-								actionStatus = 'rejected';
-								isActionDialogVisible = true;
-								">
+								selectedItemId = item.id;
+							(actionTitle = 'Rejeter le contrat'),
+								(actionText =
+									'Voulez vous vraiment rejeter ce contrat?'),
+								(actionFunction = apiChangeStatus);
+							actionButtonText = 'Rejeter';
+							commentPresence = true;
+							actionStatus = 'rejected';
+							isActionDialogVisible = true;
+							">
 								<VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter
 								</VTooltip>
 								<VIcon icon="tabler-x" color="error" />
@@ -492,16 +492,16 @@ const lastPage = computed(() => contractData.value.last_page);
 								item.status == 'waiting' &&
 								item.observations.length == 0
 							" @click="
-									selectedItemId = item.id;
-								(actionTitle = 'Valider le contrat'),
-									(actionText =
-										'Voulez vous vraiment valider ce contrat?'),
-									(actionFunction = apiChangeStatus);
-								actionButtonText = 'Valider';
-								commentPresence = false;
-								actionStatus = 'validated';
-								isActionDialogVisible = true;
-								">
+								selectedItemId = item.id;
+							(actionTitle = 'Valider le contrat'),
+								(actionText =
+									'Voulez vous vraiment valider ce contrat?'),
+								(actionFunction = apiChangeStatus);
+							actionButtonText = 'Valider';
+							commentPresence = false;
+							actionStatus = 'validated';
+							isActionDialogVisible = true;
+							">
 								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider
 								</VTooltip>
 								<VIcon icon="tabler-check" color="success" />

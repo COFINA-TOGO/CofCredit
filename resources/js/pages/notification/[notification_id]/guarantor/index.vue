@@ -20,7 +20,7 @@ const uploadState = ref('signed_notification')
 const loadings = ref([])
 const itemsPerPage = ref(8)
 const page = ref(1)
-let backRouteName = {name: 'notification'}
+let backRouteName = { name: 'notification' }
 const headers = [
 	{
 		title: 'Nom',
@@ -135,9 +135,9 @@ const apiDelete = async id => {
 
 if (notificationData.value.data.notification.head_credit_validation == 'validated') {
 	if (notificationData.value.data.notification.status == 'validated') {
-		backRouteName = {name: 'notification-historical'}
+		backRouteName = { name: 'notification-historical' }
 	} else {
-		backRouteName = {name: 'notification-without-signed-contract'}
+		backRouteName = { name: 'notification-without-signed-contract' }
 	}
 }
 
@@ -232,8 +232,8 @@ const lastPage = computed(() => guarantorData.value.last_page)
 						<VIcon size="24" icon="tabler-dots-vertical" />
 						<VMenu activator="parent">
 							<VList>
-								<input ref="refInputEl" type="file" name="signed_notification" accept=".docx,.png,.jpg"
-									hidden @input="uploadFile(item.id, $event)" />
+								<input ref="refInputEl" type="file" name="signed_notification" hidden
+									@input="uploadFile(item.id, $event)" />
 
 								<div v-if="$can('download', 'guarantor')">
 									<!-- Télécharger billet à ordre non-signé -->

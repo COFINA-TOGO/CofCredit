@@ -227,7 +227,7 @@ const lastPage = computed(() => notificationData.value.last_page)
 
 				<template #item.observations="{ item }">
 					<VList density=" compact">
-						<VListItem v-if="item.observations.length > 0" v-for=" observation in item.observations">
+						<VListItem v-if="item.observations.length > 0" v-for="observation in item.observations">
 							<VListItemTitle>
 								<VChip label>
 									{{ observation }}
@@ -268,8 +268,8 @@ const lastPage = computed(() => notificationData.value.last_page)
 							<VIcon size="24" icon="tabler-dots-vertical" />
 							<VMenu activator="parent">
 								<VList>
-									<input ref="refInputEl" type="file" name="signed_notification"
-										accept=".docx,.png,.jpg" hidden @input="uploadFile(item.id, $event)" />
+									<input ref="refInputEl" type="file" name="signed_notification" hidden
+										@input="uploadFile(item.id, $event)" />
 
 									<VBadge v-if="$can('read', 'guarantor')" inline :content="item.guarantors_count">
 										<VListItem
