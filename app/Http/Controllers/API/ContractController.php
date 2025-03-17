@@ -235,6 +235,10 @@ class ContractController extends Controller
 				$data = array_merge($data, collect($contract->verbal_trial)->mapWithKeys(function ($value, $key) {
 					return ['verbal_trial.' . $key => $value];
 				})->all());
+				$data['verbal_trial.applicant_first_name'] = mb_convert_encoding($data['verbal_trial.applicant_first_name'], 'UTF-8', 'auto');
+				$data['verbal_trial.applicant_last_name'] = mb_convert_encoding($data['verbal_trial.applicant_last_name'], 'UTF-8', 'auto');
+				$data['verbal_trial.entity_name'] = mb_convert_encoding($data['verbal_trial.entity_name'], 'UTF-8', 'auto');
+
 				$data = array_merge($data, collect($contract->verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
 					return ['verbal_trial.type_of_credit.' . $key => $value];
 				})->all());
@@ -457,7 +461,7 @@ class ContractController extends Controller
 			$wordFilePath = Str::slug(public_path("generated/docx/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx"), "-");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
-			
+
 			// $outputFilePdfFolderPath = public_path("generated/pdf");
 			// $outputFilePdfPath = public_path("generated/pdf/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".pdf");
 			// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
@@ -497,7 +501,7 @@ class ContractController extends Controller
 			$wordFilePath = Str::slug(public_path("generated/docx/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".docx"));
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
-			
+
 			// $outputFilePdfFolderPath = public_path("generated/pdf");
 			// $outputFilePdfPath = public_path("generated/pdf/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".pdf");
 			// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
@@ -888,7 +892,7 @@ class ContractController extends Controller
 				$link = env("APP_URL") . "/contract";
 				$document_type = ["contract" => "contrat", "promissory_note" => "billet à ordre"][$document_category];
 				$pv_commitee_id = $contract->verbal_trial->committee_id;
-				if($contract->signed_contract_path && $contract->signed_promissory_note_path){
+				if ($contract->signed_contract_path && $contract->signed_promissory_note_path) {
 					SendEmail::dispatch(
 						$receiver->email,
 						"Notification de chargement de $document_type signé du contrat $pv_commitee_id",
