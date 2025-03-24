@@ -392,7 +392,7 @@ class VerbalTrialController extends Controller
 			$data["periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["periodicity"]];
 			$data["periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["periodicity"]];
 			$data["amount"] = number_format(((float) $data["amount"]), 0, ',', ' ');
-			
+
 			$data["representator"] = $data["applicant_first_name"] . " " . $data["applicant_last_name"] == $data["entity_name"] ? "" : " représenté par " . $data["civility.2"] . " " . $data["applicant_first_name"] . " " . $data["applicant_last_name"];
 
 			unset($data["observations"]);
@@ -407,7 +407,7 @@ class VerbalTrialController extends Controller
 			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
-			
+
 			// $outputFilePdfFolderPath = public_path("generated/pdf");
 			// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
 			// $output = [];
@@ -494,7 +494,7 @@ class VerbalTrialController extends Controller
 						DB::beginTransaction();
 						try {
 							$requestData["creator_id"] = $request->user()->id;
-							$requestData["validation_level"] = "credit_analyst";
+							$requestData["validation_level"] = "credit_admin";
 							if (!isset($requestData["entity_name"])) {
 								$requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
 							}
@@ -654,7 +654,7 @@ class VerbalTrialController extends Controller
 								$requestData["has_line_review_bonus"] = (bool) $requestData["has_line_review_bonus"];
 								$verbalTrial->update($requestData);
 								$link = env("APP_URL") . "/pv";
-								if($connectedUser->profile == "caf"){
+								if ($connectedUser->profile == "caf") {
 									SendEmail::dispatch(
 										$verbalTrial->credit_analyst->email,
 										"Notification de mise à jour de la notification " . $verbalTrial->committee_id,
@@ -670,7 +670,7 @@ class VerbalTrialController extends Controller
 												<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
 											"
 									);
-								}else if($connectedUser->profile == "credit_analyst"){
+								} else if ($connectedUser->profile == "credit_analyst") {
 									SendEmail::dispatch(
 										$verbalTrial->credit_admin->email,
 										"Notification de mise à jour du PV " . $verbalTrial->committee_id,

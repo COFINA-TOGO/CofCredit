@@ -212,10 +212,10 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 
 				<template #item.status="{ item }">
 					<VChip label :color="{
-							validated: 'success',
-							rejected: 'error',
-							waiting: 'warning',
-						}[item.status]
+						validated: 'success',
+						rejected: 'error',
+						waiting: 'warning',
+					}[item.status]
 						">
 						<VTooltip v-if="item.comment" activator="parent" transition="scroll-x-transition"
 							location="start">Raison:
@@ -255,6 +255,18 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 								)
 								">
 								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Télécharger
+									PV
+								</VTooltip>
+								<VIcon icon="tabler-download" v-tooltip="'Ceci est une icône'" />
+							</IconBtn>
+							<IconBtn v-if="$can('download', 'pv-notification') && item.status == 'validated'" @click="
+								downloadFile(
+									`/api/verbal-trial/notification/download/${item.id}`,
+									`notification-${item.committee_id}.docx`
+								)
+								">
+								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Télécharger
+									Notification
 								</VTooltip>
 								<VIcon icon="tabler-download" v-tooltip="'Ceci est une icône'" />
 							</IconBtn>
@@ -283,15 +295,15 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 									(item.status == 'waiting' &&
 										item.validation_level == 'credit_admin'))
 							" @click="
-									selectedItemId = item.id;
-								(actionTitle = 'Supprimer le PV'),
-									(actionText =
-										'Voulez vous vraiment supprimer ce pv?'),
-									(actionFunction = apiDelete);
-								actionButtonText = 'Supprimer';
-								commentPresence = false;
-								isActionDialogVisible = true;
-								">
+								selectedItemId = item.id;
+							(actionTitle = 'Supprimer le PV'),
+								(actionText =
+									'Voulez vous vraiment supprimer ce pv?'),
+								(actionFunction = apiDelete);
+							actionButtonText = 'Supprimer';
+							commentPresence = false;
+							isActionDialogVisible = true;
+							">
 								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Supprimer
 								</VTooltip>
 								<VIcon icon="tabler-trash" color="error" />
@@ -308,16 +320,16 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 								<IconBtn v-if="
 									$can('reject', 'pv') && item.status != 'rejected'
 								" @click="
-										selectedItemId = item.id;
-									(actionTitle = 'Rejeter le PV'),
-										(actionText =
-											'Voulez vous vraiment rejeter ce PV?'),
-										(actionFunction = apiChangeStatus);
-									actionButtonText = 'Rejeter';
-									commentPresence = true;
-									actionStatus = 'rejected';
-									isActionDialogVisible = true;
-									">
+									selectedItemId = item.id;
+								(actionTitle = 'Rejeter le PV'),
+									(actionText =
+										'Voulez vous vraiment rejeter ce PV?'),
+									(actionFunction = apiChangeStatus);
+								actionButtonText = 'Rejeter';
+								commentPresence = true;
+								actionStatus = 'rejected';
+								isActionDialogVisible = true;
+								">
 									<VTooltip activator="parent" transition="scroll-x-transition" location="start">
 										Rejeter</VTooltip>
 									<VIcon icon="tabler-x" color="error" />
@@ -341,7 +353,8 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 								</IconBtn>
 							</span>
 						</div>
-						<div v-if="$can('create', 'basic-contract') && item.status == 'validated' && !item.has_mortgage">
+						<div
+							v-if="$can('create', 'basic-contract') && item.status == 'validated' && !item.has_mortgage">
 							<VDivider />
 							<IconBtn :to="{ name: 'contract-add', query: { id: item.id } }">
 								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le
@@ -349,7 +362,8 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 								<VIcon icon="tabler-file-plus" color="success" />
 							</IconBtn>
 						</div>
-						<div v-if="$can('create', 'notarized-contract') && item.status == 'validated' && item.has_mortgage">
+						<div
+							v-if="$can('create', 'notarized-contract') && item.status == 'validated' && item.has_mortgage">
 							<VDivider />
 							<IconBtn :to="{ name: 'notification-add', query: { id: item.id } }">
 								<VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer la

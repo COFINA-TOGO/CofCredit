@@ -80,6 +80,7 @@ declare module 'vue-router/auto/routes' {
     'notification-without-signed-contract': RouteRecordInfo<'notification-without-signed-contract', '/notification/without-signed-contract', Record<never, never>, Record<never, never>>,
     'pv': RouteRecordInfo<'pv', '/pv', Record<never, never>, Record<never, never>>,
     'pv-id': RouteRecordInfo<'pv-id', '/pv/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    'pv-add': RouteRecordInfo<'pv-add', '/pv/add', Record<never, never>, Record<never, never>>,
     'pv-edit-id': RouteRecordInfo<'pv-edit-id', '/pv/edit/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'pv-historical': RouteRecordInfo<'pv-historical', '/pv/historical', Record<never, never>, Record<never, never>>,
     'pv-notification-id': RouteRecordInfo<'pv-notification-id', '/pv/notification/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,

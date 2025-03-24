@@ -143,15 +143,8 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 				<VRow>
 					<!-- 👉 Select Status -->
 					<VCol cols="12" sm="4">
-						<AppAutocomplete
-							v-model="type_of_credit_id"
-							placeholder="Type de crédit"
-							item-title="full_name"
-							item-value="id"
-							:items="type_of_credit_list"
-							clearable
-							clear-icon="tabler-x"
-						/>
+						<AppAutocomplete v-model="type_of_credit_id" placeholder="Type de crédit" item-title="full_name"
+							item-value="id" :items="type_of_credit_list" clearable clear-icon="tabler-x" />
 					</VCol>
 				</VRow>
 			</VCardText>
@@ -161,13 +154,8 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 			<div class="d-flex flex-wrap gap-4 mx-5">
 				<div class="d-flex align-center">
 					<!-- 👉 Search  -->
-					<AppTextField
-						v-model="searchQuery"
-						placeholder="Rechercher un pv"
-						density="compact"
-						style="inline-size: 200px"
-						class="me-3"
-					/>
+					<AppTextField v-model="searchQuery" placeholder="Rechercher un pv" density="compact"
+						style="inline-size: 200px" class="me-3" />
 				</div>
 
 				<VSpacer />
@@ -176,15 +164,10 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 					<VBtn variant="tonal" color="secondary" prepend-icon="tabler-upload">
 						Export
 					</VBtn>
-					<VBtn
-						:loading="loadings[3]"
-						:disabled="loadings[3]"
-						prepend-icon="tabler-refresh"
-						@click="
-							fetchPv();
-							load(3);
-						"
-					>
+					<VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh" @click="
+						fetchPv();
+					load(3);
+					">
 						Recharger
 						<template #loader>
 							<span class="custom-loader">
@@ -198,85 +181,58 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 			<VDivider class="mt-4" />
 
 			<!-- 👉 Datatable  -->
-			<VDataTableServer
-				v-model:items-per-page="itemsPerPage"
-				v-model:page="page"
-				:headers="headers"
-				:items="pvList"
-				:items-length="totalPv"
-				class="text-no-wrap"
-				@update:options="updateOptions"
-			>
+			<VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
+				:items="pvList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
 				<!-- Actions -->
 
 				<template #item.actions="{ item }">
-					<IconBtn
-						v-if="$can('read', 'pv') || $can('historical', 'pv')"
-						:to="{ name: 'pv-id', params: { id: item.id } }"
-					>
-						<VTooltip
-							activator="parent"
-							transition="scroll-x-transition"
-							location="top"
-							>Details</VTooltip
-						>
+					<IconBtn v-if="$can('read', 'pv') || $can('historical', 'pv')"
+						:to="{ name: 'pv-id', params: { id: item.id } }">
+						<VTooltip activator="parent" transition="scroll-x-transition" location="top">Details</VTooltip>
 						<VIcon icon=" tabler-eye" />
 					</IconBtn>
-					<IconBtn
-						v-if="$can('download', 'pv')"
-						@click="
-							downloadFile(
-								`/api/verbal-trial/download/${item.id}`,
-								`PV-${item.committee_id}.docx`
-							)
-						"
-					>
-						<VTooltip
-							activator="parent"
-							transition="scroll-x-transition"
-							location="top"
-							>Télécharger</VTooltip
-						>
+					<IconBtn v-if="$can('download', 'pv')" @click="
+						downloadFile(
+							`/api/verbal-trial/download/${item.id}`,
+							`PV-${item.committee_id}.docx`
+						)
+						">
+						<VTooltip activator="parent" transition="scroll-x-transition" location="top">Télécharger PV
+						</VTooltip>
 						<VIcon icon="tabler-download" />
+					</IconBtn>
+					<IconBtn v-if="$can('download', 'pv-notification') && item.status == 'validated'" @click="
+						downloadFile(
+							`/api/verbal-trial/notification/download/${item.id}`,
+							`notification-${item.committee_id}.docx`
+						)
+						">
+						<VTooltip activator="parent" transition="scroll-x-transition" location="end">Télécharger
+							Notification
+						</VTooltip>
+						<VIcon icon="tabler-download" v-tooltip="'Ceci est une icône'" />
 					</IconBtn>
 				</template>
 
 				<template #bottom>
 					<VDivider />
 
-					<div
-						class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3"
-					>
+					<div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
 						<p class="text-sm text-medium-emphasis mb-0">
 							{{ paginationMeta({ page, itemsPerPage }, totalPv) }}
 						</p>
 
-						<VPagination
-							v-model="page"
-							:length="lastPage"
-							:total-visible="
-								$vuetify.display.xs ? 1 : Math.min(lastPage, 5)
-							"
-						>
+						<VPagination v-model="page" :length="lastPage" :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)
+							">
 							<template #prev="slotProps">
-								<VBtn
-									variant="tonal"
-									color="default"
-									v-bind="slotProps"
-									:icon="false"
-								>
+								<VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
 									<VIcon start icon="tabler-arrow-left" />
 									Précedent
 								</VBtn>
 							</template>
 
 							<template #next="slotProps">
-								<VBtn
-									variant="tonal"
-									color="default"
-									v-bind="slotProps"
-									:icon="false"
-								>
+								<VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
 									Suivant
 									<VIcon end icon="tabler-arrow-right" />
 								</VBtn>
@@ -295,19 +251,13 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 				<VCardText> Etes vous sûr de vouloir supprimer ce pv? </VCardText>
 
 				<VCardText class="d-flex justify-end gap-3 flex-wrap">
-					<VBtn
-						color="secondary"
-						variant="tonal"
-						@click="isDialogVisible = false"
-					>
+					<VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
 						Annuler
 					</VBtn>
-					<VBtn
-						@click="
-							apiDelete(idToDelete);
-							isDialogVisible = false;
-						"
-					>
+					<VBtn @click="
+						apiDelete(idToDelete);
+					isDialogVisible = false;
+					">
 						Supprimer
 					</VBtn>
 				</VCardText>

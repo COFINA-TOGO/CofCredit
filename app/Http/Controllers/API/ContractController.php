@@ -677,11 +677,11 @@ class ContractController extends Controller
 	/**
 	 * Mettre à jour un contrat
 	 *
-	 * @urlParam	id													  int	 required	L'ID du contrat.														Example: 1
+	 * @urlParam	id														int	 required	L'ID du contrat.														Example: 1
 	 *
-	 * @bodyParam   verbal_trial_id										 int				 L'ID du PV.															 Example: 1
-	 * @bodyParam   representative_birth_date							   string			  La date de naissance du demandeur.									  Example: 1988-05-01
-	 * @bodyParam   representative_birth_place							  string			  Le lieu de naissance du demandeur.									  Example: Lomé
+	 * @bodyParam   verbal_trial_id											int				 L'ID du PV.															 Example: 1
+	 * @bodyParam   representative_birth_date								string			  La date de naissance du demandeur.									  Example: 1988-05-01
+	 * @bodyParam   representative_birth_place								string			  Le lieu de naissance du demandeur.									  Example: Lomé
 	 * @bodyParam   representative_nationality							  string			  La nationalité du demandeur.											Example: Togolaise
 	 * @bodyParam   representative_home_address							 string			  L'addresse du domicile du demandeur.									Example: Zip 85
 	 * @bodyParam   representative_type_of_identity_document				string			  Le type de la pièce d'identité du demandeur.						   Example: cni

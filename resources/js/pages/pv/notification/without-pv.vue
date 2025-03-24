@@ -256,7 +256,8 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 							</IconBtn>
 							<IconBtn v-if="$can('check', 'pv-notification') && item.status == 'waiting'"
 								:to="{ name: 'pv-notification-check-id', params: { id: item.id } }">
-								<VTooltip activator="parent" transition="scroll-x-transition" location="start">Vérifier</VTooltip>
+								<VTooltip activator="parent" transition="scroll-x-transition" location="start">Vérifier
+								</VTooltip>
 								<VIcon icon="tabler-eye-check" color="warning" />
 							</IconBtn>
 						</div>

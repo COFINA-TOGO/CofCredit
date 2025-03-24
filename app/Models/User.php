@@ -116,89 +116,89 @@ class User extends Authenticatable
 						'subject' => ['all'],
 					]
 				];
-				case ('caf'):
-					return [
-						[
-							"action" => ["menu"],
-							"subject" => ["pv-notification", "basic-contract", "contract", "notarized-contract"]
-						],
-						[
-							"action" => ["read"],
-							"subject" => ["non-mortgage-contract", "mortgage-contract","pv", "user", "contract", "guarantor", "type-of-guarantee", "type-of-credit", "type-of-applicant", "deadline-postponed", "pv-notification", "basic-contract", "notarized-contract"]
-						],
-						[
-							"action" => ["read-without-notarized-contract"],
-							"subject" => ["notarized-contract"]
-						],
-						[
-							"action" => ["read-historical"],
-							"subject" => ["notarized-contract"]
-						],
-						[
-							"action" => ["without-signed-contract"],
-							"subject" => ["notification"]
-						],
-						[
-							"action" => ["upload"],
-							"subject" => ["notarized-contract"]
-						],
-						[
-							"action" => ["hitorical"],
-							"subject" => ["deadline-postponed", "pv-notification"],
-						],
-						[
-							"action" => ["read-without-pv"],
-							"subject" => ["pv-notification"],
-						],
-						[
-							"action" => ["read-historical"],
-							"subject" => ["pv-notification", "basic-contract"],
-						],
-						[
-							"action" => ["without-signed-contract"],
-							"subject" => ["notification"],
-						],
-						[
-							"action" => ["simple-notification"],
-							"subject" => ["simple-notification"],
-						],
-						[
-							"action" => ["without-signed-notification"],
-							"subject" => ["simple-notification"],
-						],
-						[
-							"action" => ["read-without-cat"],
-							"subject" => ["basic-contract"],
-						],
-						[
-							"action" => ['create'],
-							"subject" => ["pv", "deadline-postponed", "pv-notification"]
-						],
-						[
-							"action" => ["update"],
-							"subject" => ["deadline-postponed", "pv-notification"]
-						],
-						[
-							"action" => ["upload"],
-							"subject" => ["basic-contract", "contract", "guarantor", "notification", "simple-notification", "deadline-postponed", "pv-notification"],
-						],
-						[
-							"action" => ["download"],
-							"subject" => ["basic-contract", "contract", "guarantor", "notification", "simple-notification", "deadline-postponed", "pv-notification","notarized-contract"],
-						],
-						[
-							"action" => ["send"],
-							"subject" => ["contract", "guarantor", "notification", "simple-notification"],
-						],
-						[
-							"action" => ["delete"],
-							"subject" => ["deadline-postponed", "pv-notification"]
-						],
-						[
-							"action" => ["manage"],
-							"subject" => ["settings-user"]
-						],
-					];
+			case ('caf'):
+				return [
+					[
+						"action" => ["menu"],
+						"subject" => ["pv-notification", "basic-contract", "contract", "notarized-contract"]
+					],
+					[
+						"action" => ["read"],
+						"subject" => ["non-mortgage-contract", "mortgage-contract", "pv", "user", "contract", "guarantor", "type-of-guarantee", "type-of-credit", "type-of-applicant", "deadline-postponed", "pv-notification", "basic-contract", "notarized-contract"]
+					],
+					[
+						"action" => ["read-without-notarized-contract"],
+						"subject" => ["notarized-contract"]
+					],
+					[
+						"action" => ["read-historical"],
+						"subject" => ["notarized-contract"]
+					],
+					[
+						"action" => ["without-signed-contract"],
+						"subject" => ["notification"]
+					],
+					[
+						"action" => ["upload"],
+						"subject" => ["notarized-contract"]
+					],
+					[
+						"action" => ["hitorical"],
+						"subject" => ["deadline-postponed", "pv-notification"],
+					],
+					[
+						"action" => ["read-without-pv"],
+						"subject" => ["pv-notification"],
+					],
+					[
+						"action" => ["read-historical"],
+						"subject" => ["pv-notification", "basic-contract"],
+					],
+					[
+						"action" => ["without-signed-contract"],
+						"subject" => ["notification"],
+					],
+					[
+						"action" => ["simple-notification"],
+						"subject" => ["simple-notification"],
+					],
+					[
+						"action" => ["without-signed-notification"],
+						"subject" => ["simple-notification"],
+					],
+					[
+						"action" => ["read-without-cat"],
+						"subject" => ["basic-contract"],
+					],
+					[
+						"action" => ['create'],
+						"subject" => ["pv", "deadline-postponed", "pv-notification"]
+					],
+					[
+						"action" => ["update"],
+						"subject" => ["deadline-postponed", "pv-notification"]
+					],
+					[
+						"action" => ["upload"],
+						"subject" => ["basic-contract", "contract", "guarantor", "notification", "simple-notification", "deadline-postponed", "pv-notification"],
+					],
+					[
+						"action" => ["download"],
+						"subject" => ["basic-contract", "contract", "guarantor", "notification", "simple-notification", "deadline-postponed", "pv-notification", "notarized-contract"],
+					],
+					[
+						"action" => ["send"],
+						"subject" => ["contract", "guarantor", "notification", "simple-notification"],
+					],
+					[
+						"action" => ["delete"],
+						"subject" => ["deadline-postponed", "pv-notification"]
+					],
+					[
+						"action" => ["manage"],
+						"subject" => ["settings-user"]
+					],
+				];
 			case ('credit_analyst'):
 				return [
 					[
@@ -262,7 +262,7 @@ class User extends Authenticatable
 					],
 					[
 						"action" => ["read"],
-						"subject" => ["non-mortgage-contract", "mortgage-contract", "basic-contract", "contract", "notarized-contract", "basic-cat", "pv-notification", "cat","type-of-guarantee", "type-of-credit", "type-of-applicant", "guarantor"]
+						"subject" => ["non-mortgage-contract", "mortgage-contract", "basic-contract", "contract", "notarized-contract", "basic-cat", "pv-notification", "cat", "type-of-guarantee", "type-of-credit", "type-of-applicant", "guarantor"]
 					],
 					[
 						"action" => ["read-without-cat"],
@@ -376,7 +376,7 @@ class User extends Authenticatable
 						"subject" => ["notification"],
 					],
 					[
-						"action" => [ "simple-notification", "without-signed-notification", "download", "validate", "reject", "change_head_credit_status"],
+						"action" => ["simple-notification", "without-signed-notification", "download", "validate", "reject", "change_head_credit_status"],
 						"subject" => ["simple-notification"],
 					],
 					[
@@ -435,7 +435,7 @@ class User extends Authenticatable
 				return [
 					[
 						"action" => ["menu"],
-						"subject" => ["contract","notarized-contract"],
+						"subject" => ["contract", "notarized-contract"],
 					],
 					[
 						"action" => ["read"],
