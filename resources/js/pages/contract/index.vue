@@ -167,6 +167,27 @@ const apiChangeStatus = async (id) => {
 const contractList = computed(() => contractData.value.data);
 const totalPv = computed(() => contractData.value.total);
 const lastPage = computed(() => contractData.value.last_page);
+
+// Définition des couleurs des statuts
+const statusColors = {
+	validated: "success",
+	rejected: "error",
+	waiting: "warning",
+};
+
+// Fonction pour récupérer le texte du statut
+const getStatusText = (status) => {
+	switch (status) {
+		case "validated":
+			return "Dossier validé";
+		case "waiting":
+			return "Dossier en attente de validation";
+		case "rejected":
+			return "Dossier rejeté";
+		default:
+			return "";
+	}
+};
 </script>
 
 <template>
@@ -248,34 +269,26 @@ const lastPage = computed(() => contractData.value.last_page);
 				</template>
 
 				<template #item.observations="{ item }">
-					<VList v-if="item.observations.length > 0" density=" compact">
-						<VListItem v-for="observation in item.observations">
+					<VList v-if="item.observations.length > 0" density="compact">
+						<VListItem v-for="(observation, index) in item.observations" :key="index">
 							<VListItemTitle>
 								<VChip label>
-									{{ observation }}
+									<div style="white-space: pre-wrap;">
+										{{ observation }}
+									</div>
 								</VChip>
 							</VListItemTitle>
 						</VListItem>
 					</VList>
 
-					<VList density="compact" v-if="item.observations.length == 0">
+					<VList v-else density="compact">
 						<VListItem>
-							<VChip label :color="{
-								validated: 'success',
-								rejected: 'error',
-								waiting: 'warning',
-							}[item.status]
-								">
+							<VChip label :color="statusColors[item.status]">
 								<VTooltip v-if="item.status_observation" activator="parent"
-									transition="scroll-x-transition" location="start">Raison: {{ item.status_observation
-									}}</VTooltip>
-								{{ item.status == "validated" ? "Dossier validé" : null }}
-								{{
-									item.status == "waiting"
-										? "Dossier en attente de validation"
-										: null
-								}}
-								{{ item.status == "rejected" ? "Dossier rejeté" : null }}
+									transition="scroll-x-transition" location="start">
+									Raison: {{ item.status_observation }}
+								</VTooltip>
+								{{ getStatusText(item.status) }}
 							</VChip>
 						</VListItem>
 					</VList>

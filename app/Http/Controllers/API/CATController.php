@@ -215,6 +215,7 @@ class CATController extends Controller
 				"final_payer_settlement" => "Règlement du payeur final",
 				"resale_of_goods" => "Reventes des marchandise",
 			];
+			$data["client_name"] = $data[$parentRelation . ".type"] == "particular" ? $data[$parentRelation . ".verbal_trial.civility"] . " " . $data[$parentRelation . ".verbal_trial.applicant_full_name"] : $data[$parentRelation . ".verbal_trial.entity_name"];
 
 			$data["ht_rate"] = "17";
 			$data["source_of_reimbursement.fr"] = $source_of_reimbursementTranslate[$data["source_of_reimbursement"]];
@@ -252,16 +253,22 @@ class CATController extends Controller
 			unset($data["contract.verbal_trial.next"]);
 			unset($data["contract.verbal_trial.guarantees"]);
 			unset($data["contract.verbal_trial.contract"]);
+			unset($data["guarantors"]);
+			unset($data["observations"]);
+			unset($data["notification.verbal_trial.next"]);
+			unset($data["notification.verbal_trial.guarantees"]);
+			unset($data["notification.verbal_trial.notification"]);
+			unset($data["observations"]);
 			$templateProcessor->setValues($data);
 			// return $data;
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "CAT-" . $cat->$parentRelation->verbal_trial->committee_id;
 			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
-			
+
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
-			
+
 			// $outputFilePdfFolderPath = public_path("generated/pdf");
 			// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
 			// $output = [];
