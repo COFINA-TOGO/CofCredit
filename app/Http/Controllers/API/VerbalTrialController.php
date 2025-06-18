@@ -305,6 +305,7 @@ class VerbalTrialController extends Controller
 			unset($data["credit_analyst.ability_rules"]);
 			unset($data["notification"]);
 			unset($data["next"]);
+			unset($data["contract"]);
 			$templateProcessor->setValues($data);
 			// return $data;
 
