@@ -120,7 +120,7 @@ class User extends Authenticatable
 				return [
 					[
 						"action" => ["menu"],
-						"subject" => ["pv-notification", "basic-contract", "contract", "notarized-contract"]
+						"subject" => ["pv", "pv-notification", "basic-contract", "contract", "notarized-contract"]
 					],
 					[
 						"action" => ["read"],
@@ -139,12 +139,8 @@ class User extends Authenticatable
 						"subject" => ["notification"]
 					],
 					[
-						"action" => ["upload"],
-						"subject" => ["notarized-contract"]
-					],
-					[
-						"action" => ["hitorical"],
-						"subject" => ["deadline-postponed", "pv-notification"],
+						"action" => ["historical"],
+						"subject" => ["pv", "deadline-postponed", "pv-notification"],
 					],
 					[
 						"action" => ["read-without-pv"],
@@ -179,12 +175,8 @@ class User extends Authenticatable
 						"subject" => ["deadline-postponed", "pv-notification"]
 					],
 					[
-						"action" => ["upload"],
-						"subject" => ["basic-contract", "contract", "guarantor", "notification", "simple-notification", "deadline-postponed", "pv-notification"],
-					],
-					[
 						"action" => ["download"],
-						"subject" => ["basic-contract", "contract", "guarantor", "notification", "simple-notification", "deadline-postponed", "pv-notification", "notarized-contract"],
+						"subject" => ["pv", "basic-contract", "contract", "guarantor", "notification", "simple-notification", "deadline-postponed", "pv-notification", "notarized-contract"],
 					],
 					[
 						"action" => ["send"],
@@ -303,6 +295,10 @@ class User extends Authenticatable
 					[
 						"action" => ["update"],
 						"subject" => ["basic-contract", "contract", "notarized-contract", "cat", "basic-cat", "guarantor"]
+					],
+					[
+						"action" => ["upload"],
+						"subject" => ["basic-contract", "contract", "notarized-contract", "guarantor", "notification", "simple-notification"]
 					],
 					[
 						"action" => ["download"],

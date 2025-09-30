@@ -11,7 +11,7 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
   app: {
     title: 'Credit Cofina',
     logo: h('img', { src: logo, alt: 'app-logo' }),
-    contentWidth: ContentWidth.Boxed,
+    contentWidth: ContentWidth.Fluid,
     contentLayoutNav: AppContentLayoutNav.Vertical,
     overlayNavFromBreakpoint: breakpointsVuetify.md + 16,
     i18n: {

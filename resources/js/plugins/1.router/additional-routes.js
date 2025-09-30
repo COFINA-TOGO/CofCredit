@@ -11,7 +11,7 @@ export const redirects = [
 			const userRole = userData.value?.role
 
 			if (userRole === 'caf')
-				return { name: 'pv-notification-without-pv' }
+				return { name: 'contract' }
 
 			if (userRole === 'credit_analyst')
 				return { name: 'pv-notification-without-pv' }

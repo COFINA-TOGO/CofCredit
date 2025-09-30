@@ -718,48 +718,48 @@ class NotificationController extends Controller
 	{
 		$notification = Notification::find($id);
 		if ($notification) {
-			// if (($authorisation = Gate::inspect('upload', $notification))->allowed()) {
-			DB::beginTransaction();
-			if ($request->has('signed_notification')) {
-				$document_category = "notification";
-				$base64Document = $request->input('signed_notification');
-			} else if ($request->has('signed_contract')) {
-				$document_category = "contract";
-				$base64Document = $request->input('signed_contract');
-			} else if ($request->has('signed_promissory_note')) {
-				$document_category = "promissory_note";
-				$base64Document = $request->input('signed_promissory_note');
+			if (($authorisation = Gate::inspect('upload', $notification))->allowed()) {
+				DB::beginTransaction();
+				if ($request->has('signed_notification')) {
+					$document_category = "notification";
+					$base64Document = $request->input('signed_notification');
+				} else if ($request->has('signed_contract')) {
+					$document_category = "contract";
+					$base64Document = $request->input('signed_contract');
+				} else if ($request->has('signed_promissory_note')) {
+					$document_category = "promissory_note";
+					$base64Document = $request->input('signed_promissory_note');
+				} else {
+					DB::rollBack();
+					return $this->responseError(["error" => "Vous devez uploader une notification signée, un contrat signé ou un billet à ordre signé"], 400);
+				}
+
+				// Vérifier si le document est un PDF
+				if (strpos($base64Document, 'data:application/pdf;base64,') === 0) {
+					// Le document est un PDF
+					$extension = 'pdf';
+				} elseif (strpos($base64Document, 'data:image/') === 0) {
+					// Le document est une image
+					// Extraire l'extension de l'image
+					$start = strpos($base64Document, '/') + 1;
+					$end = strpos($base64Document, ';');
+					$extension = substr($base64Document, $start, $end - $start);
+				} else {
+					// Type de document non pris en charge
+					DB::rollBack();
+					return $this->responseError(["error" => "Le document doit être un pdf ou une image"], 400);
+				}
+
+				$documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $base64Document));
+				$path = 'upload/Notifications/signed_' . $document_category . 's/' . $notification->verbal_trial->committee_id . '-signed.' . $extension;
+				Storage::disk("public")->put($path, $documentData);
+				$notification->update(["signed_{$document_category}_path" => "/storage/" . $path]);
+
+				DB::commit();
+				return $this->responseOk(["notification" => $notification]);
 			} else {
-				DB::rollBack();
-				return $this->responseError(["error" => "Vous devez uploader une notification signée, un contrat signé ou un billet à ordre signé"], 400);
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
-
-			// Vérifier si le document est un PDF
-			if (strpos($base64Document, 'data:application/pdf;base64,') === 0) {
-				// Le document est un PDF
-				$extension = 'pdf';
-			} elseif (strpos($base64Document, 'data:image/') === 0) {
-				// Le document est une image
-				// Extraire l'extension de l'image
-				$start = strpos($base64Document, '/') + 1;
-				$end = strpos($base64Document, ';');
-				$extension = substr($base64Document, $start, $end - $start);
-			} else {
-				// Type de document non pris en charge
-				DB::rollBack();
-				return $this->responseError(["error" => "Le document doit être un pdf ou une image"], 400);
-			}
-
-			$documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $base64Document));
-			$path = 'upload/Notifications/signed_' . $document_category . 's/' . $notification->verbal_trial->committee_id . '-signed.' . $extension;
-			Storage::disk("public")->put($path, $documentData);
-			$notification->update(["signed_{$document_category}_path" => "/storage/" . $path]);
-
-			DB::commit();
-			return $this->responseOk(["notification" => $notification]);
-			// } else {
-			// 	return $this->responseError(["auth" => [$authorisation->message()]], 403);
-			// }
 		} else {
 			return $this->responseError(["id" => "La notification n'existe pas"], 404);
 		}
