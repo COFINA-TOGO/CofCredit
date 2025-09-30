@@ -756,6 +756,37 @@ class NotificationController extends Controller
 				$notification->update(["signed_{$document_category}_path" => "/storage/" . $path]);
 
 				DB::commit();
+
+				// Envoyer notification au head credit si tous les documents sont uploadés
+				$notification->refresh();
+				if ($notification->signed_notification_path && $notification->signed_contract_path && $notification->signed_promissory_note_path) {
+					$head_credit_users = User::where('profile', 'head_credit')->get();
+					$link = env("APP_URL") . "/notification";
+					$pv_commitee_id = $notification->verbal_trial->committee_id;
+
+					foreach ($head_credit_users as $head_credit) {
+						SendEmail::dispatch(
+							$head_credit->email,
+							"Notification de chargement de documents signés de la notification $pv_commitee_id",
+							"
+							<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
+								Head Crédit,</h1>
+			
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
+								cofina credit digital et de valider les documents chargés pour le dossier $pv_commitee_id: <a
+									href='$link'>Consulter les notifications</a></p>
+			
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
+								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+			
+							<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+			
+							<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+							"
+						);
+					}
+				}
+
 				return $this->responseOk(["notification" => $notification]);
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);

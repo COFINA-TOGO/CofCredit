@@ -74,22 +74,22 @@ const headers = [
 // Configuration de la vue avec structure générique
 const viewData = reactive({
   filter: {
-    title: "Filtres"
+    title: "Filtres",
   },
   data: {
     title: {
       singular: 'Contrat',
-      plural: 'Contrats'
+      plural: 'Contrats',
     },
     actions: {
       singular: 'le contrat',
-      plural: 'les contrats'
+      plural: 'les contrats',
     },
     rule: {
-      name: 'basic-contract'
+      name: 'basic-contract',
     },
     link: {
-      base: 'contract'
+      base: 'contract',
     },
     api: {
       end_point: 'contract',
@@ -99,10 +99,10 @@ const viewData = reactive({
         with_company: 1,
         with_individual_business: 1,
         with_creator: 1,
-        has_cat: 0
-      }
-    }
-  }
+        has_cat: 0,
+      },
+    },
+  },
 })
 
 // Configuration des filtres dynamiques
@@ -116,13 +116,13 @@ const filterDataArray = reactive([
       name: {
         item_title: 'title',
         item_value: 'value',
-      }
+      },
     },
     base: {
       name: 'Type de contrat',
       data_source: 'array',
       api_endpoint: 'contract',
-      query: { paginate: 'false' }
+      query: { paginate: 'false' },
     },
     filter: {
       key: 'type',
@@ -132,10 +132,10 @@ const filterDataArray = reactive([
       datac: [
         { value: 'company', title: 'Société' },
         { value: 'particular', title: 'Particulier' },
-        { value: 'individual_business', title: 'Entreprise Individuel' }
+        { value: 'individual_business', title: 'Entreprise Individuel' },
       ],
-    }
-  }
+    },
+  },
 ])
 
 const typeList = {
@@ -145,15 +145,16 @@ const typeList = {
 }
 
 const more_query = {}
+
 for (let index = 0; index < filterDataArray.length; index++) {
   if (filterDataArray[index]['base']['data_source'] === "api") {
     const { data, execute } = await useApi(createUrl(`/${filterDataArray[index]['base']['api_endpoint']}`, {
       query: filterDataArray[index]['base']['query'],
-    }));
+    }))
 
-    filterDataArray[index].api.data = data;
-    filterDataArray[index].api.execute = execute;
-    filterDataArray[index].api.datac = filterDataArray[index].api.data.data;
+    filterDataArray[index].api.data = data
+    filterDataArray[index].api.execute = execute
+    filterDataArray[index].api.datac = filterDataArray[index].api.data.data
     more_query[filterDataArray[index]['filter']['key']] = filterDataArray[index]['filter']['value']
   }
 }
@@ -168,7 +169,7 @@ const itemListData = ref({ data: [], total: 0, last_page: 1 })
 const fetchItemList = async (id_list = []) => {
   id_list.forEach(id => {
     loadings.value[id] = true
-  });
+  })
   try {
     const { data } = await useApi(createUrl(viewData.data.api.end_point, {
       query: {
@@ -178,11 +179,12 @@ const fetchItemList = async (id_list = []) => {
         ...more_query,
       },
     }))
+
     itemListData.value = data.value
   } finally {
     id_list.forEach(id => {
       loadings.value[id] = false
-    });
+    })
   }
 }
 
@@ -239,8 +241,9 @@ const apiDelete = async id => {
   deleteLoadings.value[id] = true
   try {
     const response = await $api(`${viewData.data.api.end_point}/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
     })
+    
     if (response.status == 200) {
       isSnackbarScrollReverseVisible.value = true
       snackbarColor.value = "success"
@@ -251,7 +254,7 @@ const apiDelete = async id => {
       snackbarMessage.value = ""
       for (const key in response.errors) {
         response.errors[key].forEach(message => {
-          snackbarMessage.value += "" + message + "<br>";
+          snackbarMessage.value += "" + message + "<br>"
         })
       }
     }
@@ -271,6 +274,7 @@ const apiChangeStatus = async id => {
       method: "PUT",
       body: { status: actionStatus.value, comment: actionComment.value },
     })
+    
     if (response.status == 200) {
       isSnackbarScrollReverseVisible.value = true
       snackbarColor.value = "success"
@@ -362,7 +366,7 @@ const decorateObservations = observations => {
       return {
         text,
         color: "error",
-        icon: "tabler-receipt-x",
+        icon: "tabler-file-x",
         title: "Billet à ordre manquant",
         priority: "high",
         actionable: true,
@@ -381,7 +385,7 @@ const decorateObservations = observations => {
         priority: "medium",
         actionable: true,
         actionText: "Gérer les cautions",
-        category: "guarantor",
+        category: "Garanties",
       }
     }
 
@@ -470,11 +474,15 @@ watchEffect(async () => {
       </VCardText>
     </VCard>
 
-    <VCard :title="viewData.filter.title" class="mb-6">
+    <VCard 
+      :title="viewData.filter.title" 
+      class="mb-6"
+    >
       <VCardText>
         <VRow>
           <VCol 
             v-for="filterData in filterDataArray" 
+            :key="filterData.filter.key"
             :cols="filterData.view.cols.col"
             :sm="filterData.view.cols.sm ?? 6"
           >
@@ -491,7 +499,6 @@ watchEffect(async () => {
         </VRow>
 
         <VDivider class="my-4" />
-
       </VCardText>
       <div class="d-flex flex-wrap gap-4 mx-5">
         <div class="flex-grow-1">
@@ -536,13 +543,16 @@ watchEffect(async () => {
 
       <VDivider class="mt-4" />
 
-      <VDataTableServer
-        v-model:items-per-page="itemsPerPage"
+      <!-- 👉 Datatable  -->
+      <VDataTableServer 
+        v-model:items-per-page="itemsPerPage" 
         v-model:page="page"
-        :headers="headers"
-        :items="contractList"
-        :items-length="totalPv"
+        :loading="loadings[4]" 
+        :headers="headers" 
+        :items="contractList" 
+        :items-length="totalPv" 
         class="text-no-wrap"
+        loading-text="En cours de chargement"
         @update:options="updateOptions"
       >
         <template #item.type="{ item }">
@@ -731,14 +741,6 @@ watchEffect(async () => {
                         Créer CAT
                       </VBtn>
 
-                      <!-- Action générique -->
-                      <VBtn
-                        v-else
-                        size="small"
-                        variant="text"
-                        :color="observation.color"
-                        icon="tabler-arrow-right"
-                      />
                     </div>
                   </div>
                 </VCardText>
@@ -795,14 +797,18 @@ watchEffect(async () => {
         </template>
 
         <template #item.actions="{ item }">
-          <div class="text-center">
-            <span>
-              <IconBtn :to="{ name: 'contract-id', params: { id: item.id } }">
-                <VTooltip
-                  activator="parent"
-                  transition="scroll-x-transition"
-                  location="start"
-                >Details
+          <div class="text-right">
+            <div>
+              <IconBtn 
+                v-if="$can('read', viewData.data.rule.name)"
+                :to="{ name: `${viewData.data.link.base}-id`, params: { id: item.id } }"
+              >
+                <VTooltip 
+                  activator="parent" 
+                  transition="scroll-x-transition" 
+                  location="top"
+                >
+                  Details
                 </VTooltip>
                 <VIcon icon="tabler-eye" />
               </IconBtn>
@@ -875,8 +881,10 @@ watchEffect(async () => {
                         <template #prepend>
                           <VIcon icon="tabler-download" />
                         </template>
-                        <VListItemTitle>Télécharger Contrat
-                          non-signé</VListItemTitle>
+                        <VListItemTitle>
+                          Télécharger Contrat
+                          non-signé
+                        </VListItemTitle>
                       </VListItem>
                       <!-- Télécharger contrat signé -->
                       <VListItem
@@ -895,8 +903,10 @@ watchEffect(async () => {
                         <template #prepend>
                           <VIcon icon="tabler-download" />
                         </template>
-                        <VListItemTitle>Télécharger Contrat
-                          signé</VListItemTitle>
+                        <VListItemTitle>
+                          Télécharger Contrat
+                          signé
+                        </VListItemTitle>
                       </VListItem>
                       <!-- Télécharger billet à ordre non-signé -->
                       <VListItem
@@ -910,8 +920,10 @@ watchEffect(async () => {
                         <template #prepend>
                           <VIcon icon="tabler-download" />
                         </template>
-                        <VListItemTitle>Télécharger Billet à ordre non
-                          signé</VListItemTitle>
+                        <VListItemTitle>
+                          Télécharger Billet à ordre non
+                          signé
+                        </VListItemTitle>
                       </VListItem>
                       <!-- Télécharger billet à ordre signé -->
                       <VListItem
@@ -930,8 +942,10 @@ watchEffect(async () => {
                         <template #prepend>
                           <VIcon icon="tabler-download" />
                         </template>
-                        <VListItemTitle>Télécharger Billet à ordre
-                          signé</VListItemTitle>
+                        <VListItemTitle>
+                          Télécharger Billet à ordre
+                          signé
+                        </VListItemTitle>
                       </VListItem>
                       <!-- Télécharger mention manuscrite -->
                       <VListItem
@@ -945,8 +959,10 @@ watchEffect(async () => {
                         <template #prepend>
                           <VIcon icon="tabler-download" />
                         </template>
-                        <VListItemTitle>Télécharger Mention
-                          manuscrite</VListItemTitle>
+                        <VListItemTitle>
+                          Télécharger Mention
+                          manuscrite
+                        </VListItemTitle>
                       </VListItem>
                     </div>
                     <div
@@ -973,7 +989,9 @@ watchEffect(async () => {
                         <template #prepend>
                           <VIcon icon="tabler-cloud-upload" />
                         </template>
-                        <VListItemTitle color="error">Ajouter contrat signé</VListItemTitle>
+                        <VListItemTitle color="error">
+                          Ajouter contrat signé
+                        </VListItemTitle>
                       </VListItem>
                       <!-- Ajouter Billet à ordre -->
                       <VListItem
@@ -990,145 +1008,17 @@ watchEffect(async () => {
                         <template #prepend>
                           <VIcon icon="tabler-cloud-upload" />
                         </template>
-                        <VListItemTitle>Ajouter billet à ordre
-                          signé</VListItemTitle>
+                        <VListItemTitle>
+                          Ajouter billet à ordre
+                          signé
+                        </VListItemTitle>
                       </VListItem>
                     </div>
                   </VList>
                 </VMenu>
+                <!-- </span> -->
               </VBtn>
-            </span>
-
-            <span
-              v-if="
-                $can('update', 'basic-contract') ||
-                  $can('delete', 'basic-contract')
-              "
-            >
-              <VDivider />
-              <IconBtn
-                v-if="$can('update', 'basic-contract')"
-                :to="{
-                  name: 'contract-edit-id',
-                  params: { id: item.id },
-                }"
-                :disabled="item.status == 'validated'"
-              >
-                <VTooltip
-                  activator="parent"
-                  transition="scroll-x-transition"
-                  location="start"
-                >Modifier
-                </VTooltip>
-                <VIcon icon="tabler-edit" />
-              </IconBtn>
-              <IconBtn
-                v-if="$can('delete', 'basic-contract')"
-                @click="
-                  selectedItemId = item.id;
-                  (actionTitle = 'Supprimer le contrat'),
-                  (actionText =
-                    'Voulez vous vraiment supprimer ce contrat?'),
-                  (actionFunction = apiDelete);
-                  actionButtonText = 'Supprimer';
-                  commentPresence = false;
-                  isActionDialogVisible = true;
-                "
-              >
-                <VTooltip
-                  activator="parent"
-                  transition="scroll-x-transition"
-                  location="end"
-                >Supprimer
-                </VTooltip>
-                <VIcon
-                  icon="tabler-trash"
-                  color="error"
-                />
-              </IconBtn>
-            </span>
-
-            <span
-              v-if="
-                $can('reject', 'basic-contract') ||
-                  $can('validate', 'basic-contract') ||
-                  $can('create', 'cat')
-              "
-            >
-              <VDivider />
-              <IconBtn
-                v-if="
-                  $can('reject', 'basic-contract') &&
-                    item.status != 'rejected' &&
-                    item.observations.length == 0
-                "
-                @click="
-                  selectedItemId = item.id;
-                  (actionTitle = 'Rejeter le contrat'),
-                  (actionText =
-                    'Voulez vous vraiment rejeter ce contrat?'),
-                  (actionFunction = apiChangeStatus);
-                  actionButtonText = 'Rejeter';
-                  commentPresence = true;
-                  actionStatus = 'rejected';
-                  isActionDialogVisible = true;
-                "
-              >
-                <VTooltip
-                  activator="parent"
-                  transition="scroll-x-transition"
-                  location="start"
-                >Rejeter
-                </VTooltip>
-                <VIcon
-                  icon="tabler-x"
-                  color="error"
-                />
-              </IconBtn>
-              <IconBtn
-                v-if="
-                  $can('validate', 'basic-contract') &&
-                    item.status == 'waiting' &&
-                    item.observations.length == 0
-                "
-                @click="
-                  selectedItemId = item.id;
-                  (actionTitle = 'Valider le contrat'),
-                  (actionText =
-                    'Voulez vous vraiment valider ce contrat?'),
-                  (actionFunction = apiChangeStatus);
-                  actionButtonText = 'Valider';
-                  commentPresence = false;
-                  actionStatus = 'validated';
-                  isActionDialogVisible = true;
-                "
-              >
-                <VTooltip
-                  activator="parent"
-                  transition="scroll-x-transition"
-                  location="end"
-                >Valider
-                </VTooltip>
-                <VIcon
-                  icon="tabler-check"
-                  color="success"
-                />
-              </IconBtn>
-              <IconBtn
-                v-if="$can('create', 'cat') && item.status == 'validated'"
-                :to="{ name: 'cat-add', query: { id: item.id } }"
-              >
-                <VTooltip
-                  activator="parent"
-                  transition="scroll-x-transition"
-                  location="end"
-                >Créer le CAT</VTooltip>
-                <VIcon
-                  icon="tabler-file-plus"
-                  color="success"
-                />
-              </IconBtn>
-            </span>
+            </div>
           </div>
         </template>
 
@@ -1140,39 +1030,37 @@ watchEffect(async () => {
               {{ paginationMeta({ page, itemsPerPage }, totalPv) }}
             </p>
 
-            <VPagination
-              v-model="page"
+            <VPagination 
+              v-model="page" 
               :length="lastPage"
-              :total-visible="
-                $vuetify.display.xs ? 1 : Math.min(lastPage, 5)
-              "
+              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
             >
               <template #prev="slotProps">
-                <VBtn
-                  variant="tonal"
-                  color="default"
-                  v-bind="slotProps"
+                <VBtn 
+                  variant="tonal" 
+                  color="default" 
+                  v-bind="slotProps" 
                   :icon="false"
                 >
-                  <VIcon
-                    start
-                    icon="tabler-arrow-left"
+                  <VIcon 
+                    start 
+                    icon="tabler-arrow-left" 
                   />
                   Précedent
                 </VBtn>
               </template>
 
               <template #next="slotProps">
-                <VBtn
-                  variant="tonal"
-                  color="default"
-                  v-bind="slotProps"
+                <VBtn 
+                  variant="tonal" 
+                  color="default" 
+                  v-bind="slotProps" 
                   :icon="false"
                 >
                   Suivant
-                  <VIcon
-                    end
-                    icon="tabler-arrow-right"
+                  <VIcon 
+                    end 
+                    icon="tabler-arrow-right" 
                   />
                 </VBtn>
               </template>
@@ -1209,19 +1097,23 @@ watchEffect(async () => {
             variant="tonal"
             @click="isActionDialogVisible = false"
           >
-            Annuler
+            Retour
           </VBtn>
-          <VBtn
-            @click="
-              actionFunction(selectedItemId);
-              isActionDialogVisible = false;
-            "
-          >
+          <VBtn @click="actionFunction(selectedItemId); isActionDialogVisible = false">
             {{ actionButtonText }}
           </VBtn>
         </VCardText>
       </VCard>
     </VDialog>
+    
+    <VSnackbar 
+      v-model="isSnackbarScrollReverseVisible" 
+      transition="scale-transition" 
+      location="top end"
+      :color="snackbarColor"
+    >
+      <div v-html="snackbarMessage" />
+    </VSnackbar>
   </div>
 </template>
 

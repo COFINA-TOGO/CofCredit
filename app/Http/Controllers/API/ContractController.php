@@ -888,30 +888,35 @@ class ContractController extends Controller
 				Storage::disk("public")->put($path, $documentData);
 				$contract->update(["signed_{$document_category}_path" => "/storage/" . $path, "status" => "waiting"]);
 				DB::commit();
-				$receiver = $contract->verbal_trial->credit_admin;
+
+				// Envoyer directement au head credit au lieu de l'admin credit
+				$head_credit_users = User::where('profile', 'head_credit')->get();
 				$link = env("APP_URL") . "/contract";
 				$document_type = ["contract" => "contrat", "promissory_note" => "billet à ordre"][$document_category];
 				$pv_commitee_id = $contract->verbal_trial->committee_id;
+
 				if ($contract->signed_contract_path && $contract->signed_promissory_note_path) {
-					SendEmail::dispatch(
-						$receiver->email,
-						"Notification de chargement de $document_type signé du contrat $pv_commitee_id",
-						"
-						<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-							Admin Crédit,</U></h1>
-		
-						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
-							cofina credit digital et de valider les documents chargés par le caf du dossier $pv_commitee_id: <a
-								href='$link'>Consulter les contrats</a></p>
-		
-						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-							n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-		
-						<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-		
-						<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-						"
-					);
+					foreach ($head_credit_users as $head_credit) {
+						SendEmail::dispatch(
+							$head_credit->email,
+							"Notification de chargement de documents signés du contrat $pv_commitee_id",
+							"
+							<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
+								Head Crédit,</h1>
+			
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
+								cofina credit digital et de valider les documents chargés pour le dossier $pv_commitee_id: <a
+									href='$link'>Consulter les contrats</a></p>
+			
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
+								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+			
+							<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+			
+							<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+							"
+						);
+					}
 				}
 				return $this->responseOk(["contract" => $contract]);
 			} else {
@@ -955,11 +960,11 @@ class ContractController extends Controller
 					];
 					$mailsDataList = [
 						"validated" =>
-						[
 							[
-								"receiverList" => $receiverList["credit_admin_list"],
-								"subject" => "Notification de validation du contrat " . $contract->verbal_trial->committee_id,
-								"message" => "
+								[
+									"receiverList" => $receiverList["credit_admin_list"],
+									"subject" => "Notification de validation du contrat " . $contract->verbal_trial->committee_id,
+									"message" => "
 											<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
 	
 											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat" . $contract->verbal_trial->committee_id . "en attente de cat: <a href='" . env("APP_URL") . "/cat/add?id=" . $contract->id . "'>Créer le cat</a></p>
@@ -970,14 +975,14 @@ class ContractController extends Controller
 	
 											<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
 										",
-							]
-						],
+								]
+							],
 						"rejected" =>
-						[
 							[
-								"receiverList" => $receiverList["caf_list"],
-								"subject" => "Notifcation de rejet du PV " . $contract->verbal_trial->committee_id,
-								"message" => "
+								[
+									"receiverList" => $receiverList["caf_list"],
+									"subject" => "Notifcation de rejet du PV " . $contract->verbal_trial->committee_id,
+									"message" => "
 											<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) CAF,</h1>
 	
 											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
@@ -998,8 +1003,8 @@ class ContractController extends Controller
 											Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.
 											</p>
 										",
-							]
-						],
+								]
+							],
 					];
 					$mailsData = $mailsDataList[$requestData["status"]];
 					foreach ($mailsData as $mailData) {
