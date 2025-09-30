@@ -886,26 +886,49 @@ class ContractController extends Controller
 				$documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $base64Document));
 				$path = 'upload/Contracts/signed_' . $document_category . 's/' . $contract->verbal_trial->committee_id . '-signed.' . $extension;
 				Storage::disk("public")->put($path, $documentData);
-				$contract->update(["signed_{$document_category}_path" => "/storage/" . $path, "status" => "waiting"]);
+				
+				// Nouveau workflow : après upload, le statut devient pending_admin_validation
+				$updateData = ["signed_{$document_category}_path" => "/storage/" . $path];
+				
+				// Si tous les fichiers sont uploadés, passer en pending_admin_validation
+				if ($document_category === 'contract') {
+					$updateData['signed_contract_path'] = "/storage/" . $path;
+					if ($contract->signed_promissory_note_path) {
+						$updateData['status'] = 'pending_admin_validation';
+					}
+				} else {
+					$updateData['signed_promissory_note_path'] = "/storage/" . $path;
+					if ($contract->signed_contract_path) {
+						$updateData['status'] = 'pending_admin_validation';
+					}
+				}
+				
+				$contract->update($updateData);
 				DB::commit();
 
-				// Envoyer directement au head credit au lieu de l'admin credit
-				$head_credit_users = User::where('profile', 'head_credit')->get();
-				$link = env("APP_URL") . "/contract";
-				$document_type = ["contract" => "contrat", "promissory_note" => "billet à ordre"][$document_category];
+				// Notifier l'admin crédit que tous les fichiers sont uploadés et qu'il peut valider
 				$pv_commitee_id = $contract->verbal_trial->committee_id;
+				$link = env("APP_URL") . "/contract";
 
-				if ($contract->signed_contract_path && $contract->signed_promissory_note_path) {
-					foreach ($head_credit_users as $head_credit) {
+				// Rafraîchir le contrat pour avoir les dernières données
+				$contract->refresh();
+
+				if ($contract->signed_contract_path && $contract->signed_promissory_note_path && $contract->status === 'pending_admin_validation') {
+					// Notifier l'admin crédit qu'il peut maintenant valider l'envoi
+					$admin_credit = User::find($contract->creator_id);
+					if ($admin_credit) {
 						SendEmail::dispatch(
-							$head_credit->email,
-							"Notification de chargement de documents signés du contrat $pv_commitee_id",
+							$admin_credit->email,
+							"Validation requise pour le contrat $pv_commitee_id",
 							"
 							<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-								Head Crédit,</h1>
+								Admin Crédit,</h1>
 			
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
-								cofina credit digital et de valider les documents chargés pour le dossier $pv_commitee_id: <a
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Tous les documents ont été chargés pour le dossier $pv_commitee_id. 
+							Vous devez maintenant valider l'envoi avant que le Head Crédit puisse procéder à la validation finale.</p>
+							
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Connectez-vous à l'application
+								cofina credit digital pour valider l'envoi: <a
 									href='$link'>Consulter les contrats</a></p>
 			
 							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
@@ -1022,6 +1045,203 @@ class ContractController extends Controller
 			}
 		} else {
 			return $this->responseError(["id" => ["Le contrat n'existe pas"]], 404);
+		}
+	}
+
+	/**
+	 * Validation de l'envoi par l'admin crédit
+	 *
+	 * @urlParam	id													  int	 required	L'ID du contrat.														Example: 1
+	 *
+	 * @bodyParam   comment							 string		  Commentaire de validation							   Example: Documents conformes
+	 *
+	 * @response 200
+	 */
+	public function admin_validate(Request $request, int $id)
+	{
+		$contract = Contract::find($id);
+		if ($contract) {
+			if (($authorisation = Gate::inspect('validate', $contract))->allowed()) {
+				// Vérifier que le contrat est dans le bon statut
+				if ($contract->status !== 'pending_admin_validation') {
+					return $this->responseError(["status" => "Le contrat n'est pas en attente de validation admin"], 400);
+				}
+
+				// Vérifier que tous les fichiers sont uploadés
+				if (!$contract->signed_contract_path || !$contract->signed_promissory_note_path) {
+					return $this->responseError(["files" => "Tous les fichiers doivent être uploadés avant validation"], 400);
+				}
+
+				$requestData = $request->all();
+				$validator = Validator::make($requestData, [
+					'comment' => "nullable|string|max:1000",
+				]);
+
+				if ($validator->fails()) {
+					return $this->responseError($validator->errors(), 400);
+				}
+
+				// Mettre à jour le contrat
+				$contract->update([
+					'status' => 'pending_head_validation',
+					'admin_validated_at' => now(),
+					'admin_validator_id' => $request->user()->id,
+					'admin_validation_comment' => $requestData['comment'] ?? null,
+				]);
+
+				// Notifier les head crédit
+				$head_credit_users = User::where('profile', 'head_credit')->get();
+				$link = env("APP_URL") . "/contract";
+				$pv_commitee_id = $contract->verbal_trial->committee_id;
+
+				foreach ($head_credit_users as $head_credit) {
+					SendEmail::dispatch(
+						$head_credit->email,
+						"Validation requise pour le contrat $pv_commitee_id",
+						"
+						<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
+							Head Crédit,</h1>
+
+						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>L'admin crédit a validé l'envoi des documents pour le dossier $pv_commitee_id. 
+						Vous pouvez maintenant procéder à la validation finale.</p>
+						
+						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Connectez-vous à l'application
+							cofina credit digital pour valider ou rejeter le dossier: <a
+								href='$link'>Consulter les contrats</a></p>
+
+						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
+							n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+
+						<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+						<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+						"
+					);
+				}
+
+				return $this->responseOk(["contract" => $contract->fresh()]);
+			} else {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
+		} else {
+			return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
+		}
+	}
+
+	/**
+	 * Validation/Rejet final par le head crédit
+	 *
+	 * @urlParam	id													  int	 required	L'ID du contrat.														Example: 1
+	 *
+	 * @bodyParam   action							 string		  Action à effectuer (validate ou reject)							   Example: validate
+	 * @bodyParam   comment							 string		  Commentaire de validation/rejet							   Example: Dossier conforme
+	 *
+	 * @response 200
+	 */
+	public function head_validate(Request $request, int $id)
+	{
+		$contract = Contract::find($id);
+		if ($contract) {
+			if (($authorisation = Gate::inspect('validate', $contract))->allowed()) {
+				// Vérifier que le contrat est dans le bon statut
+				if ($contract->status !== 'pending_head_validation') {
+					return $this->responseError(["status" => "Le contrat n'est pas en attente de validation head"], 400);
+				}
+
+				$requestData = $request->all();
+				$validator = Validator::make($requestData, [
+					'action' => 'required|in:validate,reject',
+					'comment' => "nullable|string|max:1000",
+				]);
+
+				if ($validator->fails()) {
+					return $this->responseError($validator->errors(), 400);
+				}
+
+				$newStatus = $requestData['action'] === 'validate' ? 'validated' : 'rejected';
+				
+				// Mettre à jour le contrat
+				$updateData = [
+					'status' => $newStatus,
+					'head_validated_at' => now(),
+					'head_validator_id' => $request->user()->id,
+					'head_validation_comment' => $requestData['comment'] ?? null,
+				];
+
+				// Si rejeté, réinitialiser les validations admin pour permettre un nouveau cycle
+				if ($newStatus === 'rejected') {
+					$updateData['admin_validated_at'] = null;
+					$updateData['admin_validator_id'] = null;
+					$updateData['admin_validation_comment'] = null;
+				}
+
+				$contract->update($updateData);
+
+				// Notifier selon l'action
+				$pv_commitee_id = $contract->verbal_trial->committee_id;
+				$link = env("APP_URL") . "/contract";
+
+				if ($newStatus === 'validated') {
+					// Notifier l'admin crédit de la validation
+					$admin_credit = User::find($contract->creator_id);
+					if ($admin_credit) {
+						SendEmail::dispatch(
+							$admin_credit->email,
+							"Contrat $pv_commitee_id validé",
+							"
+							<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
+								Admin Crédit,</h1>
+
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Le Head Crédit a validé le contrat $pv_commitee_id. 
+							Vous pouvez maintenant procéder à la création du CAT.</p>
+							
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Connectez-vous à l'application
+								cofina credit digital: <a href='" . env("APP_URL") . "/cat/add?id=" . $contract->id . "'>Créer le CAT</a></p>
+
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
+								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+
+							<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+							<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+							"
+						);
+					}
+				} else {
+					// Notifier l'admin crédit du rejet
+					$admin_credit = User::find($contract->creator_id);
+					if ($admin_credit) {
+						SendEmail::dispatch(
+							$admin_credit->email,
+							"Contrat $pv_commitee_id rejeté",
+							"
+							<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
+								Admin Crédit,</h1>
+
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Le Head Crédit a rejeté le contrat $pv_commitee_id.</p>
+							
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'><strong>Motif:</strong> " . ($requestData['comment'] ?? 'Aucun motif spécifié') . "</p>
+							
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Vous pouvez maintenant re-uploader les documents corrigés: <a
+								href='$link'>Consulter les contrats</a></p>
+
+							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
+								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
+
+							<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
+
+							<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
+							"
+						);
+					}
+				}
+
+				return $this->responseOk(["contract" => $contract->fresh()]);
+			} else {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
+		} else {
+			return $this->responseError(["id" => "Le contrat n'existe pas"], 404);
 		}
 	}
 

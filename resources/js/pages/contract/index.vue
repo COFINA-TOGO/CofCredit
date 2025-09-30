@@ -294,6 +294,58 @@ const apiChangeStatus = async id => {
   }
 }
 
+const apiAdminValidate = async id => {
+  try {
+    const response = await $api(`contract/admin-validate/${id}`, {
+      method: "PUT",
+      body: { comment: actionComment.value },
+    })
+    
+    if (response.status == 200) {
+      isSnackbarScrollReverseVisible.value = true
+      snackbarColor.value = "success"
+      snackbarMessage.value = "Envoi validé avec succès. Le Head Crédit va maintenant procéder à la validation finale."
+    } else {
+      snackbarColor.value = "error"
+      isSnackbarScrollReverseVisible.value = true
+      snackbarMessage.value = "Erreur lors de la validation"
+    }
+  } catch (error) {
+    snackbarColor.value = "error"
+    isSnackbarScrollReverseVisible.value = true
+    snackbarMessage.value = "Erreur lors de la validation"
+  } finally {
+    actionComment.value = ""
+    await fetchItemList()
+  }
+}
+
+const apiHeadValidate = async (id, action) => {
+  try {
+    const response = await $api(`contract/head-validate/${id}`, {
+      method: "PUT",
+      body: { action: action, comment: actionComment.value },
+    })
+    
+    if (response.status == 200) {
+      isSnackbarScrollReverseVisible.value = true
+      snackbarColor.value = "success"
+      snackbarMessage.value = `Contrat ${action === 'validate' ? 'validé' : 'rejeté'} avec succès`
+    } else {
+      snackbarColor.value = "error"
+      isSnackbarScrollReverseVisible.value = true
+      snackbarMessage.value = "Erreur lors de la validation"
+    }
+  } catch (error) {
+    snackbarColor.value = "error"
+    isSnackbarScrollReverseVisible.value = true
+    snackbarMessage.value = "Erreur lors de la validation"
+  } finally {
+    actionComment.value = ""
+    await fetchItemList()
+  }
+}
+
 // Gestion améliorée du téléchargement de fichiers
 const downloadFile = async (url, fileName) => {
   try {
@@ -327,6 +379,8 @@ const statusColors = {
   validated: "success",
   rejected: "error",
   waiting: "warning",
+  pending_admin_validation: "info",
+  pending_head_validation: "primary",
 }
 
 // Fonction pour récupérer le texte du statut
@@ -335,7 +389,11 @@ const getStatusText = status => {
   case "validated":
     return "Dossier validé"
   case "waiting":
-    return "Dossier en attente de validation"
+    return "En attente d'upload"
+  case "pending_admin_validation":
+    return "En attente de validation admin"
+  case "pending_head_validation":
+    return "En attente de validation head"
   case "rejected":
     return "Dossier rejeté"
   default:
@@ -413,6 +471,33 @@ const decorateObservations = observations => {
         priority: "low",
         actionable: false,
         category: "status",
+      }
+    }
+
+    // Statuts spécifiques du nouveau workflow
+    if (normalized.includes("admin") && normalized.includes("validation")) {
+      return {
+        text,
+        color: "info",
+        icon: "tabler-user-check",
+        title: "Validation admin requise",
+        priority: "medium",
+        actionable: true,
+        actionText: "Valider l'envoi",
+        category: "validation",
+      }
+    }
+
+    if (normalized.includes("head") && normalized.includes("validation")) {
+      return {
+        text,
+        color: "primary",
+        icon: "tabler-crown",
+        title: "Validation head requise",
+        priority: "high",
+        actionable: true,
+        actionText: "Valider/Rejeter",
+        category: "validation",
       }
     }
 
@@ -798,7 +883,7 @@ watchEffect(async () => {
 
         <template #item.actions="{ item }">
           <div class="text-right">
-            <div>
+            <div class="d-flex align-center gap-2">
               <IconBtn 
                 v-if="$can('read', viewData.data.rule.name)"
                 :to="{ name: `${viewData.data.link.base}-id`, params: { id: item.id } }"
@@ -812,6 +897,95 @@ watchEffect(async () => {
                 </VTooltip>
                 <VIcon icon="tabler-eye" />
               </IconBtn>
+
+              <!-- Bouton de validation Admin Crédit au même niveau -->
+              <template
+                v-if="
+                  item.status === 'pending_admin_validation' &&
+                    userData.role === 'credit_admin' &&
+                    item.creator_id === userData.id
+                "
+              >
+                <VBtn
+                  size="small"
+                  color="primary"
+                  variant="tonal"
+                  @click="
+                    selectedItemId = item.id;
+                    actionTitle = 'Valider l\'envoi';
+                    actionText = 'Êtes-vous sûr de vouloir valider l\'envoi de ce contrat ? Le Head Crédit pourra ensuite procéder à la validation finale.';
+                    actionButtonText = 'Valider l\'envoi';
+                    actionFunction = apiAdminValidate;
+                    commentPresence = true;
+                    isActionDialogVisible = true;
+                  "
+                >
+                  <VIcon icon="tabler-send" />
+                  <VTooltip 
+                    activator="parent" 
+                    transition="scroll-x-transition" 
+                    location="top"
+                  >
+                    Valider l'envoi
+                  </VTooltip>
+                </VBtn>
+              </template>
+
+              <!-- Boutons de validation Head Crédit au même niveau -->
+              <template
+                v-if="
+                  item.status === 'pending_head_validation' &&
+                    userData.role === 'head_credit'
+                "
+              >
+                <VBtn
+                  size="small"
+                  color="success"
+                  variant="tonal"
+                  @click="
+                    selectedItemId = item.id;
+                    actionTitle = 'Valider le contrat';
+                    actionText = 'Êtes-vous sûr de vouloir valider ce contrat ?';
+                    actionButtonText = 'Valider';
+                    actionFunction = (id) => apiHeadValidate(id, 'validate');
+                    commentPresence = true;
+                    isActionDialogVisible = true;
+                  "
+                >
+                  <VIcon icon="tabler-check" />
+                  <VTooltip 
+                    activator="parent" 
+                    transition="scroll-x-transition" 
+                    location="top"
+                  >
+                    Valider le contrat
+                  </VTooltip>
+                </VBtn>
+                
+                <VBtn
+                  size="small"
+                  color="error"
+                  variant="tonal"
+                  @click="
+                    selectedItemId = item.id;
+                    actionTitle = 'Rejeter le contrat';
+                    actionText = 'Êtes-vous sûr de vouloir rejeter ce contrat ? L\'admin crédit devra re-uploader les documents.';
+                    actionButtonText = 'Rejeter';
+                    actionFunction = (id) => apiHeadValidate(id, 'reject');
+                    commentPresence = true;
+                    isActionDialogVisible = true;
+                  "
+                >
+                  <VIcon icon="tabler-x" />
+                  <VTooltip 
+                    activator="parent" 
+                    transition="scroll-x-transition" 
+                    location="top"
+                  >
+                    Rejeter le contrat
+                  </VTooltip>
+                </VBtn>
+              </template>
               <VBtn
                 icon
                 variant="text"
@@ -1014,6 +1188,8 @@ watchEffect(async () => {
                         </VListItemTitle>
                       </VListItem>
                     </div>
+
+
                   </VList>
                 </VMenu>
                 <!-- </span> -->

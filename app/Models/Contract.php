@@ -34,6 +34,12 @@ class Contract extends Model
 		'status',
 		'status_observation',
 		'deferred_amount',
+		'admin_validated_at',
+		'admin_validator_id',
+		'head_validated_at',
+		'head_validator_id',
+		'admin_validation_comment',
+		'head_validation_comment',
 	];
 
 	// protected $with = ['company', 'individual_business'];
@@ -83,6 +89,16 @@ class Contract extends Model
 		return $this->belongsTo(User::class, "creator_id", "id");
 	}
 
+	public function admin_validator(): BelongsTo
+	{
+		return $this->belongsTo(User::class, "admin_validator_id", "id");
+	}
+
+	public function head_validator(): BelongsTo
+	{
+		return $this->belongsTo(User::class, "head_validator_id", "id");
+	}
+
 	public function c_a_t(): HasOne
 	{
 		return $this->hasOne(CAT::class, "contract_id", "id");
@@ -96,15 +112,43 @@ class Contract extends Model
 	public function getObservationsAttribute()
 	{
 		$observations = [];
-		if (!$this->signed_contract_path)
-			$observations[] = "Contrat signé manquant";
-		if (!$this->signed_promissory_note_path)
-			$observations[] = "Billet à ordre signé manquant";
+		
+		// Observations basées sur le statut du nouveau workflow
+		switch ($this->status) {
+			case 'waiting':
+				if (!$this->signed_contract_path)
+					$observations[] = "Contrat signé manquant";
+				if (!$this->signed_promissory_note_path)
+					$observations[] = "Billet à ordre signé manquant";
+				break;
+				
+			case 'pending_admin_validation':
+				$observations[] = "En attente de validation admin - Tous les fichiers ont été uploadés";
+				break;
+				
+			case 'pending_head_validation':
+				$observations[] = "En attente de validation head - L'admin crédit a validé l'envoi";
+				break;
+				
+			case 'rejected':
+				$observations[] = "Dossier rejeté par le Head Crédit";
+				if ($this->head_validation_comment) {
+					$observations[] = "Motif: " . $this->head_validation_comment;
+				}
+				break;
+				
+			case 'validated':
+				// Pas d'observations pour les contrats validés
+				break;
+		}
+		
+		// Vérifier les cautions incomplètes (toujours applicable)
 		$incompleteGuarantor = $this->guarantors->filter(function ($item) {
 			return $item['signed_contract_path'] == null || $item['signed_promissory_note_path'] == null;
 		})->toArray();
 		if ($incompleteGuarantor)
 			$observations[] = "Dossier des cautions incomplet";
+			
 		return $observations;
 	}
 

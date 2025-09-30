@@ -86,6 +86,8 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::post("/", [ContractController::class, "store"])->name("store");
 		Route::put("/{id}", [ContractController::class, "update"])->name("update");
 		Route::put("/change-status/{id}", [ContractController::class, "change_status"])->name("change_status");
+		Route::put("/admin-validate/{id}", [ContractController::class, "admin_validate"])->name("admin_validate");
+		Route::put("/head-validate/{id}", [ContractController::class, "head_validate"])->name("head_validate");
 		Route::delete("/{id}", [ContractController::class, "destroy"])->name("destroy");
 	});
 	Route::prefix("guarantor")->name("guarantor.")->group(function () {

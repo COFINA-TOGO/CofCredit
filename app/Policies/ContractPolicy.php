@@ -51,6 +51,21 @@ class ContractPolicy
 		return $this->check(["change_status"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
 
+	public function validate(User $connectedUser, Contract $contract)
+	{
+		// Admin crédit peut valider ses propres contrats
+		if ($connectedUser->profile === 'credit_admin' && $contract->creator_id === $connectedUser->id) {
+			return Response::allow();
+		}
+		
+		// Head crédit peut valider tous les contrats
+		if ($connectedUser->profile === 'head_credit') {
+			return Response::allow();
+		}
+		
+		return $this->check(["validate"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+	}
+
 	public function delete(User $connectedUser, Contract $contract)
 	{
 		return $this->check(["delete"], "contract", $connectedUser) ? (($contract->status == "validated") ? Response::deny("vous n'etes plus autorisé à supprimer ce contrat") : Response::allow()) : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
