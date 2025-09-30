@@ -345,7 +345,7 @@ const lastPage = computed(() => notificationData.value.last_page)
 									<span v-if="$can('upload', 'notarized-contract')">
 										<!-- Ajouter Contrat signé -->
 										<VListItem
-											v-if="(item.signed_contract_path == null || item.status == 'rejected')"
+											v-if="(item.signed_contract_path == null || item.status == 'rejected' || (item.status != 'pending_head_validation' && item.status != 'validated'))"
 											@click="uploadState = 'signed_contract'; refInputEl?.click()">
 
 											<template #prepend>
@@ -356,7 +356,7 @@ const lastPage = computed(() => notificationData.value.last_page)
 										</VListItem>
 										<!-- Ajouter Billet à ordre -->
 										<VListItem
-											v-if="(item.signed_promissory_note_path == null || item.status == 'rejected')"
+											v-if="(item.signed_promissory_note_path == null || item.status == 'rejected' || (item.status != 'pending_head_validation' && item.status != 'validated'))"
 											@click="uploadState = 'signed_promissory_note'; refInputEl?.click()">
 
 											<template #prepend>

@@ -1145,7 +1145,8 @@ watchEffect(async () => {
                           (item.signed_contract_path == null ||
                             item.signed_promissory_note_path ==
                             null ||
-                            item.status == 'rejected')
+                            item.status == 'rejected' ||
+                            (item.status != 'pending_head_validation' && item.status != 'validated'))
                       "
                     >
                       <VDivider />
@@ -1153,7 +1154,8 @@ watchEffect(async () => {
                       <VListItem
                         v-if="
                           item.signed_contract_path == null ||
-                            item.status == 'rejected'
+                            item.status == 'rejected' ||
+                            (item.status != 'pending_head_validation' && item.status != 'validated')
                         "
                         @click="
                           uploadState = 'signed_contract';
@@ -1171,7 +1173,8 @@ watchEffect(async () => {
                       <VListItem
                         v-if="
                           item.signed_promissory_note_path ==
-                            null || item.status == 'rejected'
+                            null || item.status == 'rejected' ||
+                            (item.status != 'pending_head_validation' && item.status != 'validated')
                         "
                         @click="
                           uploadState =

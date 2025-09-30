@@ -300,7 +300,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['basic-contract'],
-					'action' => ['menu', 'read', 'read-without-cat', 'read-historical', 'historical', 'change_status', 'validate', 'reject', 'upload', 'download'],
+					'action' => ['menu', 'read', 'read-without-cat', 'read-historical', 'historical', 'change_status', 'validate', 'reject', 'download'],
 				],
 				[
 					'subject' => ['notarized-contract'],
