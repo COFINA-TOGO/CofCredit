@@ -53,7 +53,7 @@ const filterDataArray = reactive([
 		view: {
 			cols: {
 				col: 12,
-				sm: 12,
+				sm: 6,
 			},
 			name: {
 				item_title: 'title',
@@ -76,6 +76,31 @@ const filterDataArray = reactive([
 				{ value: 'particular', title: 'Particulier' },
 				{ value: 'individual_business', title: 'Entreprise Individuel' },
 			],
+		},
+	},
+	{
+		view: {
+			cols: {
+				col: 12,
+				sm: 6,
+			},
+			name: {
+				item_title: 'full_name',
+				item_value: 'id',
+			},
+		},
+		base: {
+			name: 'Admin Crédit',
+			data_source: 'api',
+			api_endpoint: 'user',
+			query: { paginate: 'false', profile: 'credit_admin' },
+		},
+		filter: {
+			key: 'creator_id',
+			value: null,
+		},
+		api: {
+			datac: [],
 		},
 	},
 ])
@@ -145,6 +170,24 @@ const isSnackbarVisible = ref(false)
 const snackbarMessage = ref('')
 const snackbarColor = ref('success')
 
+// Initialisation des filtres
+const initializeFilters = async () => {
+	for (const filter of filterDataArray) {
+		if (filter.base.data_source === 'api') {
+			try {
+				const { data } = await useApi(
+					createUrl(`/${filter.base.api_endpoint}`, {
+						query: filter.base.query,
+					}),
+				)
+				filter.api.datac = data.value.data
+			} catch (error) {
+				console.error(`Erreur lors du chargement du filtre ${filter.base.name}:`, error)
+			}
+		}
+	}
+}
+
 // Fonction de récupération des données
 const fetchItemList = async (id_list = []) => {
 	// Activer les états de chargement
@@ -157,6 +200,7 @@ const fetchItemList = async (id_list = []) => {
 			query: {
 				search: searchQuery.value,
 				type: filterDataArray[0].filter.value,
+				creator_id: filterDataArray[1].filter.value,
 				page: page.value,
 				...viewData.data.api.query,
 			},
@@ -284,6 +328,7 @@ const rejectUnblockCAT = async id => {
 watch(
 	() => [
 		filterDataArray[0].filter.value,
+		filterDataArray[1].filter.value,
 		searchQuery.value,
 		page.value,
 	],
@@ -294,6 +339,7 @@ watch(
 
 // Lifecycle
 onMounted(async () => {
+	await initializeFilters()
 	await fetchItemList([4])
 })
 </script>

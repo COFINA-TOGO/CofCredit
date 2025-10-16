@@ -214,7 +214,7 @@ onMounted(async () => {
 		<VCard title="Filtres" class="mb-6">
 			<VCardText>
 				<VRow>
-					<VCol cols="12" sm="4">
+					<VCol cols="12" sm="12">
 						<AppAutocomplete v-model="filterDataArray[0].filter.value" placeholder="Type de notification"
 							:items="[{ value: 'company', title: 'Société' }, { value: 'particular', title: 'Particulier' }, { value: 'individual_business', title: 'Entreprise Individuel' }]"
 							clearable clear-icon="tabler-x" />
