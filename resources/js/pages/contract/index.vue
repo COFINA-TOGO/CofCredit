@@ -119,7 +119,7 @@ const filterDataArray = reactive([
     view: {
       cols: {
         col: 12,
-        sm: 12,
+        sm: 6,
       },
       name: {
         item_title: 'title',
@@ -142,6 +142,31 @@ const filterDataArray = reactive([
         { value: 'particular', title: 'Particulier' },
         { value: 'individual_business', title: 'Entreprise Individuel' },
       ],
+    },
+  },
+  {
+    view: {
+      cols: {
+        col: 12,
+        sm: 6,
+      },
+      name: {
+        item_title: 'full_name',
+        item_value: 'id',
+      },
+    },
+    base: {
+      name: 'Admin Crédit',
+      data_source: 'api',
+      api_endpoint: 'user',
+      query: { paginate: 'false', profile: 'credit_admin' },
+    },
+    filter: {
+      key: 'creator_id',
+      value: null,
+    },
+    api: {
+      datac: [],
     },
   },
 ])

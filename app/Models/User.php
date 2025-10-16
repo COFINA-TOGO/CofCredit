@@ -212,7 +212,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['user'],
-					'action' => ['read_caf'],
+					'action' => ['read'],
 				],
 				[
 					'subject' => ['settings-user'],
@@ -287,6 +287,10 @@ class User extends Authenticatable
 				[
 					'subject' => ['settings-user'],
 					'action' => ['manage'],
+				],
+				[
+					'subject' => ['user'],
+					'action' => ['read'],
 				],
 			],
 			'head_credit' => [

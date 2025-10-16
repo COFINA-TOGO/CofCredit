@@ -548,7 +548,6 @@ declare module 'vue' {
     readonly useColorMode: UnwrapRef<typeof import('@vueuse/core')['useColorMode']>
     readonly useConfirmDialog: UnwrapRef<typeof import('@vueuse/core')['useConfirmDialog']>
     readonly useContractActions: UnwrapRef<typeof import('./resources/js/composables/useContractActions.js')['useContractActions']>
-    readonly useContractDownload: UnwrapRef<typeof import('./resources/js/composables/index.js')['useContractDownload']>
     readonly useContractDownload: UnwrapRef<typeof import('./resources/js/composables/useContractDownload.js')['useContractDownload']>
     readonly useContractList: UnwrapRef<typeof import('./resources/js/composables/useContractList.js')['useContractList']>
     readonly useContractObservations: UnwrapRef<typeof import('./resources/js/composables/useContractObservations.js')['useContractObservations']>
@@ -655,6 +654,7 @@ declare module 'vue' {
     readonly useScrollLock: UnwrapRef<typeof import('@vueuse/core')['useScrollLock']>
     readonly useSessionStorage: UnwrapRef<typeof import('@vueuse/core')['useSessionStorage']>
     readonly useShare: UnwrapRef<typeof import('@vueuse/core')['useShare']>
+    readonly useSkins: UnwrapRef<typeof import('./resources/js/@core/composable/useSkins.js')['useSkins']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useSorted: UnwrapRef<typeof import('@vueuse/core')['useSorted']>
     readonly useSpeechRecognition: UnwrapRef<typeof import('@vueuse/core')['useSpeechRecognition']>

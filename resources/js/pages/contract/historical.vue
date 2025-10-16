@@ -68,7 +68,7 @@ const filterDataArray = reactive([
 		view: {
 			cols: {
 				col: 12,
-				sm: 12,
+				sm: 6,
 			},
 			name: {
 				item_title: "title",
@@ -91,6 +91,31 @@ const filterDataArray = reactive([
 			],
 		},
 	},
+	{
+		view: {
+			cols: {
+				col: 12,
+				sm: 6,
+			},
+			name: {
+				item_title: "full_name",
+				item_value: "id",
+			},
+		},
+		base: {
+			name: "Admin Crédit",
+			data_source: "api",
+			api_endpoint: "user",
+			query: { paginate: "false", profile: "credit_admin" },
+		},
+		filter: {
+			key: "creator_id",
+			value: null,
+		},
+		api: {
+			datac: [],
+		},
+	},
 ]);
 
 // Fonction de récupération des données
@@ -106,6 +131,7 @@ const fetchItemList = async (id_list = []) => {
 				query: {
 					search: searchQuery.value,
 					type: filterDataArray[0].filter.value,
+					creator_id: filterDataArray[1].filter.value,
 					page: page.value,
 					with_type_of_credit: 1,
 					with_company: 1,
@@ -187,9 +213,26 @@ const contractList = computed(() => contractData.value?.data || []);
 const totalPv = computed(() => contractData.value?.total || 0);
 const lastPage = computed(() => contractData.value?.last_page || 1);
 
+// Fonction d'initialisation des filtres
+const initializeFilters = async () => {
+	for (let index = 0; index < filterDataArray.length; index++) {
+		const filterData = filterDataArray[index];
+
+		if (filterData.base.data_source === "api") {
+			const { data } = await useApi(
+				createUrl(`/${filterData.base.api_endpoint}`, {
+					query: filterData.base.query,
+				})
+			);
+
+			filterData.api.datac = data.value?.data || [];
+		}
+	}
+};
+
 // Watchers
 watch(
-	() => [filterDataArray[0].filter.value, searchQuery.value, page.value],
+	() => [filterDataArray[0].filter.value, filterDataArray[1].filter.value, searchQuery.value, page.value],
 	() => {
 		fetchItemList([4]);
 	}
@@ -197,6 +240,7 @@ watch(
 
 // Lifecycle
 onMounted(async () => {
+	await initializeFilters();
 	await fetchItemList([4]);
 });
 </script>

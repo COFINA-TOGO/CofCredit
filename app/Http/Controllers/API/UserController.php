@@ -40,9 +40,10 @@ class UserController extends Controller
 	public function index(Request $request)
 	{
 		if (($authorisation = Gate::inspect('viewAny', User::class))->allowed()) {
-			$userList = User::query();
+			$list = User::query();
+			$requestData = $request->all();
 			if ($search = $request->search) {
-				$userList->where(function ($query) use ($search) {
+				$list->where(function ($query) use ($search) {
 					$query
 						->where('name', 'LIKE', "%$search%")
 						->orWhere('full_name', 'LIKE', "%$search%")
@@ -56,28 +57,25 @@ class UserController extends Controller
 					if (in_array($request[$filter], ["true", "false"])) {
 						$request[$filter] = ($request[$filter] == "true") ? 1 : 0;
 					}
-					$userList->where($filter, $request[$filter]);
+					$list->where($filter, $request[$filter]);
 				}
 			}
-			// foreach (["with_agency" => "agency", "with_head" => "agency.head"] as $key => $value) {
-			//     if (isset($request[$key]) && $request[$key]) {
-			//         $userList->with($value);
-			//     }
-			// }
+			$list = $this->queryFilter($list, $requestData, "User");
+			$list = $this->queryRelation($list, $requestData, "User");
 
 			$connectedUser = $request->user();
 
 			if ($connectedUser->profile == "credit_analyst") {
-				$userList->where(function ($query) {
+				$list->where(function ($query) {
 					$query->where('profile', 'caf')->orWhere('profile', 'credit_admin')->orWhere('profile', 'credit_analyst');
 				});
 			}
 
 			if (isset($request["paginate"]) && ($request->paginate == false)) {
-				$userList = $userList->orderByDesc('created_at')->get();
-				$data = ["data" => $userList, "total" => count($userList)];
+				$list = $list->orderByDesc('created_at')->get();
+				$data = ["data" => $list, "total" => count($list)];
 			} else {
-				$data = $userList->orderByDesc('created_at')->paginate(8)->toArray();
+				$data = $list->orderByDesc('created_at')->paginate(8)->toArray();
 			}
 
 			return $this->responseOkPaginate($data);
