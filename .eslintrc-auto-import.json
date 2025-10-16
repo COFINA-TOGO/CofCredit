@@ -351,6 +351,17 @@
     "watchTriggerable": true,
     "watchWithFilter": true,
     "whenever": true,
-    "useClipboardItems": true
+    "useClipboardItems": true,
+    "useContractActions": true,
+    "useContractDownload": true,
+    "useContractList": true,
+    "useContractObservations": true,
+    "DirectiveBinding": true,
+    "MaybeRef": true,
+    "MaybeRefOrGetter": true,
+    "onWatcherCleanup": true,
+    "useId": true,
+    "useModel": true,
+    "useTemplateRef": true
   }
 }

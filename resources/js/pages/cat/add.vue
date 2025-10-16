@@ -98,8 +98,9 @@ const onSubmit = () => {
 		}
 	})
 }
-if (route.query.id) {
-	const id = parseInt(route.query.id);
+// Préremplir le contrat depuis les query params
+if (route.query.contract_id || route.query.id) {
+	const id = parseInt(route.query.contract_id || route.query.id);
 	if (contractList.value.find(object => object.id == id)) {
 		cat.value.contract_id = id;
 	}
