@@ -127,7 +127,6 @@ const TYPE_LIST = {
 // Refs et états
 const isDialogVisible = ref(false)
 const catSelectedId = ref(0)
-const selectedType = ref()
 const searchQuery = ref('')
 const loadings = ref([])
 const deleteLoadings = ref({})
@@ -146,18 +145,37 @@ const isSnackbarVisible = ref(false)
 const snackbarMessage = ref('')
 const snackbarColor = ref('success')
 
-// API
-const {
-	data: catData,
-	execute: fetchCAT,
-} = await useApi(createUrl('/cat', {
-	query: {
-		search: searchQuery,
-		type: selectedType,
-		page: page,
-		...viewData.data.api.query,
-	},
-}))
+// Fonction de récupération des données
+const fetchItemList = async (id_list = []) => {
+	// Activer les états de chargement
+	id_list.forEach(id => {
+		loadings.value[id] = true
+	})
+
+	try {
+		const { data } = await useApi(createUrl('/cat', {
+			query: {
+				search: searchQuery.value,
+				type: filterDataArray[0].filter.value,
+				page: page.value,
+				...viewData.data.api.query,
+			},
+		}))
+
+		catData.value = data.value
+	} catch (error) {
+		console.error('Erreur lors de la récupération des CAT:', error)
+		catData.value = { data: [], total: 0, last_page: 1 }
+	} finally {
+		// Désactiver les états de chargement
+		id_list.forEach(id => {
+			loadings.value[id] = false
+		})
+	}
+}
+
+// Données CAT
+const catData = ref({ data: [], total: 0, last_page: 1 })
 
 // Computed
 const catList = computed(() => catData.value?.data || [])
@@ -165,13 +183,6 @@ const totalCAT = computed(() => catData.value?.total || 0)
 const lastPage = computed(() => catData.value?.last_page || 1)
 
 // Méthodes
-const load = i => {
-	loadings.value[i] = true
-	setTimeout(() => {
-		loadings.value[i] = false
-	}, 1000)
-}
-
 const updateOptions = options => {
 	page.value = options.page
 }
@@ -212,7 +223,7 @@ const apiDelete = async id => {
 	try {
 		await $api(`cat/${id}`, { method: 'DELETE' })
 		showSnackbar('success', 'CAT supprimé avec succès')
-		await fetchCAT()
+		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors de la suppression:', error)
 		showSnackbar('error', 'Erreur lors de la suppression')
@@ -226,7 +237,7 @@ const validateCAT = async id => {
 		await $api(`cat/validate/${id}`, { method: 'PUT' })
 		actionComment.value = null
 		showSnackbar('success', 'CAT validé avec succès')
-		await fetchCAT()
+		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors de la validation:', error)
 		showSnackbar('error', 'Erreur lors de la validation')
@@ -238,7 +249,7 @@ const unblockCAT = async id => {
 		await $api(`cat/unblock/${id}`, { method: 'PUT' })
 		actionComment.value = null
 		showSnackbar('success', 'CAT débloqué avec succès')
-		await fetchCAT()
+		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors du déblocage:', error)
 		showSnackbar('error', 'Erreur lors du déblocage')
@@ -250,7 +261,7 @@ const rejectValidationCAT = async id => {
 		await $api(`cat/reject-validation/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
 		actionComment.value = null
 		showSnackbar('success', 'CAT rejeté avec succès')
-		await fetchCAT()
+		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors du rejet:', error)
 		showSnackbar('error', 'Erreur lors du rejet')
@@ -262,12 +273,29 @@ const rejectUnblockCAT = async id => {
 		await $api(`cat/reject-unblock/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
 		actionComment.value = null
 		showSnackbar('success', 'Déblocage rejeté avec succès')
-		await fetchCAT()
+		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors du rejet du déblocage:', error)
 		showSnackbar('error', 'Erreur lors du rejet du déblocage')
 	}
 }
+
+// Watchers
+watch(
+	() => [
+		filterDataArray[0].filter.value,
+		searchQuery.value,
+		page.value,
+	],
+	() => {
+		fetchItemList([4])
+	}
+)
+
+// Lifecycle
+onMounted(async () => {
+	await fetchItemList([4])
+})
 </script>
 
 <template>
@@ -337,19 +365,19 @@ const rejectUnblockCAT = async id => {
 						Ajouter
 					</VBtn>
 
-					<VBtn 
-						:loading="loadings[3]" 
-						:disabled="loadings[3]" 
-						prepend-icon="tabler-refresh"
-						@click="fetchCAT(); load(3)"
-					>
-						Recharger
-						<template #loader>
-							<span class="custom-loader">
-								<VIcon icon="tabler-refresh" />
-							</span>
-						</template>
-					</VBtn>
+			<VBtn 
+				:loading="loadings[3]" 
+				:disabled="loadings[3]" 
+				prepend-icon="tabler-refresh"
+				@click="fetchItemList([3, 4])"
+			>
+				Recharger
+				<template #loader>
+					<span class="custom-loader">
+						<VIcon icon="tabler-refresh" />
+					</span>
+				</template>
+			</VBtn>
 				</div>
 			</div>
 

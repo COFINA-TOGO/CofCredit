@@ -59,8 +59,6 @@ const actionFunction = ref()
 const actionComment = ref('cancel')
 const commentPresence = ref(false)
 const agencyIdFilter = ref(null)
-const profileFilter = ref(null)
-const activatedFilter = ref(null)
 
 // Snackbar
 const isSnackbarVisible = ref(false)
@@ -110,7 +108,7 @@ const filterDataArray = reactive([
 		},
 		filter: {
 			key: 'profile',
-			value: profileFilter,
+			value: null,
 		},
 		api: {
 			datac: [
@@ -144,7 +142,7 @@ const filterDataArray = reactive([
 		},
 		filter: {
 			key: 'activated',
-			value: activatedFilter,
+			value: null,
 		},
 		api: {
 			datac: [
@@ -155,18 +153,40 @@ const filterDataArray = reactive([
 	},
 ])
 
-// API
-const { data: userListData, execute: fetchUserList } = await useApi(
-	createUrl('/user', {
-		query: {
-			search: searchQuery,
-			page: page,
-			profile: profileFilter,
-			activated: activatedFilter,
-			...viewData.data.api.query,
-		},
+// Fonction de récupération des données
+const fetchItemList = async (id_list = []) => {
+	// Activer les états de chargement
+	id_list.forEach(id => {
+		loadings.value[id] = true
 	})
-)
+
+	try {
+		const { data } = await useApi(
+			createUrl('/user', {
+				query: {
+					search: searchQuery.value,
+					page: page.value,
+					profile: filterDataArray[0].filter.value,
+					activated: filterDataArray[1].filter.value,
+					...viewData.data.api.query,
+				},
+			})
+		)
+
+		userListData.value = data.value
+	} catch (error) {
+		console.error('Erreur lors de la récupération des utilisateurs:', error)
+		userListData.value = { data: [], total: 0, last_page: 1 }
+	} finally {
+		// Désactiver les états de chargement
+		id_list.forEach(id => {
+			loadings.value[id] = false
+		})
+	}
+}
+
+// Données utilisateurs
+const userListData = ref({ data: [], total: 0, last_page: 1 })
 
 const { data: agencyListData, execute: fetchAgencyList } = await useApi(
 	createUrl('/agency', {
@@ -185,12 +205,6 @@ const totalTransfer = computed(() => userListData.value?.total || 0)
 const lastPage = computed(() => userListData.value?.last_page || 1)
 
 // Méthodes
-const load = i => {
-	loadings.value[i] = true
-	setTimeout(() => {
-		loadings.value[i] = false
-	}, 1000)
-}
 
 const updateOptions = options => {
 	page.value = options.page
@@ -222,7 +236,7 @@ const apiDelete = async id => {
 			showSnackbar('error', errorMessage || 'Erreur lors de la suppression')
 		}
 		
-		await fetchUserList()
+		await fetchItemList()
 		await fetchAgencyList()
 	} catch (error) {
 		console.error('Erreur lors de la suppression:', error)
@@ -231,6 +245,24 @@ const apiDelete = async id => {
 		deleteLoadings.value[id] = false
 	}
 }
+
+// Watchers
+watch(
+	() => [
+		filterDataArray[0].filter.value,
+		filterDataArray[1].filter.value,
+		searchQuery.value,
+		page.value,
+	],
+	() => {
+		fetchItemList([4])
+	}
+)
+
+// Lifecycle
+onMounted(async () => {
+	await fetchItemList([4])
+})
 </script>
 
 <template>
@@ -257,7 +289,7 @@ const apiDelete = async id => {
 						:sm="filterData.view.cols.sm ?? 6"
 					>
 						<AppAutocomplete 
-							v-model="filterData.filter.value.value" 
+							v-model="filterData.filter.value" 
 							:placeholder="filterData.base.name"
 							:item-title="filterData.view.name.item_title ?? 'name'"
 							:item-value="filterData.view.name.item_value ?? 'id'" 
@@ -298,19 +330,19 @@ const apiDelete = async id => {
 						Nouveau
 					</VBtn>
 
-					<VBtn 
-						:loading="loadings[3]" 
-						:disabled="loadings[3]" 
-						prepend-icon="tabler-refresh"
-						@click="fetchUserList(); load(3)"
-					>
-						Recharger
-						<template #loader>
-							<span class="custom-loader">
-								<VIcon icon="tabler-refresh" />
-							</span>
-						</template>
-					</VBtn>
+				<VBtn 
+					:loading="loadings[3]" 
+					:disabled="loadings[3]" 
+					prepend-icon="tabler-refresh"
+					@click="fetchItemList([3, 4])"
+				>
+					Recharger
+					<template #loader>
+						<span class="custom-loader">
+							<VIcon icon="tabler-refresh" />
+						</span>
+					</template>
+				</VBtn>
 				</div>
 			</div>
 

@@ -53,8 +53,6 @@ const viewData = reactive({
 })
 
 // Refs et états
-const type_of_credit_id = ref()
-const status = ref()
 const searchQuery = ref('')
 const loadings = ref([])
 const deleteLoadings = ref({})
@@ -69,7 +67,6 @@ const actionFunction = ref()
 const actionComment = ref('')
 const commentPresence = ref(false)
 const actionStatus = ref('waiting')
-const validation_level = ref('ahm')
 
 // Snackbar
 const isSnackbarVisible = ref(false)
@@ -125,7 +122,7 @@ const filterDataArray = reactive([
 		},
 		filter: {
 			key: 'type_of_credit_id',
-			value: type_of_credit_id,
+			value: null,
 		},
 		api: {
 			datac: [],
@@ -148,7 +145,7 @@ const filterDataArray = reactive([
 		},
 		filter: {
 			key: 'status',
-			value: status,
+			value: null,
 		},
 		api: {
 			datac: [
@@ -175,7 +172,7 @@ const filterDataArray = reactive([
 		},
 		filter: {
 			key: 'validation_level',
-			value: validation_level,
+			value: 'ahm',
 		},
 		api: {
 			datac: [
@@ -188,20 +185,43 @@ const filterDataArray = reactive([
 	},
 ])
 
-// API
-const { data: pvData, execute: fetchPv } = await useApi(
-	createUrl('/verbal-trial', {
-		query: {
-			search: searchQuery,
-			type_of_credit_id: type_of_credit_id,
-			status: status,
-			page: page,
-			in_validation_level: validation_level,
-			...viewData.data.api.query,
-		},
+// Fonction de récupération des données
+const fetchItemList = async (id_list = []) => {
+	// Activer les états de chargement
+	id_list.forEach(id => {
+		loadings.value[id] = true
 	})
-)
 
+	try {
+		const { data } = await useApi(
+			createUrl('/verbal-trial', {
+				query: {
+					search: searchQuery.value,
+					type_of_credit_id: filterDataArray[0].filter.value,
+					status: filterDataArray[1].filter.value,
+					page: page.value,
+					in_validation_level: filterDataArray[2].filter.value,
+					...viewData.data.api.query,
+				},
+			})
+		)
+
+		pvData.value = data.value
+	} catch (error) {
+		console.error('Erreur lors de la récupération des PV:', error)
+		pvData.value = { data: [], total: 0, last_page: 1 }
+	} finally {
+		// Désactiver les états de chargement
+		id_list.forEach(id => {
+			loadings.value[id] = false
+		})
+	}
+}
+
+// Données PV
+const pvData = ref({ data: [], total: 0, last_page: 1 })
+
+// Charger les types de crédit
 const { data: type_of_credit_list_data } = await useApi(
 	createUrl('/type-of-credit', {
 		query: {
@@ -217,12 +237,6 @@ const lastPage = computed(() => pvData.value?.last_page || 1)
 const type_of_credit_list = computed(() => type_of_credit_list_data.value?.data || [])
 
 // Méthodes
-const load = i => {
-	loadings.value[i] = true
-	setTimeout(() => {
-		loadings.value[i] = false
-	}, 1000)
-}
 
 const updateOptions = options => {
 	page.value = options.page
@@ -265,7 +279,7 @@ const apiDelete = async id => {
 		await $api(`verbal-trial/analyst/${id}`, { method: 'DELETE' })
 		actionComment.value = ''
 		showSnackbar('success', 'PV supprimé avec succès')
-		await fetchPv()
+		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors de la suppression:', error)
 		showSnackbar('error', 'Erreur lors de la suppression')
@@ -283,19 +297,36 @@ const apiChangeStatus = async id => {
 		actionComment.value = ''
 		const statusMessage = actionStatus.value === 'validated' ? 'validé' : 'rejeté'
 		showSnackbar('success', `PV ${statusMessage} avec succès`)
-		await fetchPv()
+		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors du changement de statut:', error)
 		showSnackbar('error', 'Erreur lors du changement de statut')
 	}
 }
 
-// Initialisation des filtres
-onMounted(() => {
+// Watchers
+watch(
+	() => [
+		filterDataArray[0].filter.value,
+		filterDataArray[1].filter.value,
+		filterDataArray[2].filter.value,
+		searchQuery.value,
+		page.value,
+	],
+	() => {
+		fetchItemList([4])
+	}
+)
+
+// Lifecycle
+onMounted(async () => {
 	// Charger les types de crédit dans le filtre
 	if (type_of_credit_list.value.length > 0) {
 		filterDataArray[0].api.datac = type_of_credit_list.value
 	}
+	
+	// Charger les données initiales
+	await fetchItemList([4])
 })
 </script>
 
@@ -322,15 +353,15 @@ onMounted(() => {
 						:cols="filterData.view.cols.col"
 						:sm="filterData.view.cols.sm ?? 6"
 					>
-						<AppAutocomplete 
-							v-model="filterData.filter.value.value" 
-							:placeholder="filterData.base.name"
-							:item-title="filterData.view.name.item_title ?? 'name'"
-							:item-value="filterData.view.name.item_value ?? 'id'" 
-							:items="filterData.api.datac" 
-							clearable
-							clear-icon="tabler-x" 
-						/>
+					<AppAutocomplete 
+						v-model="filterData.filter.value" 
+						:placeholder="filterData.base.name"
+						:item-title="filterData.view.name.item_title ?? 'name'"
+						:item-value="filterData.view.name.item_value ?? 'id'" 
+						:items="filterData.api.datac" 
+						clearable
+						clear-icon="tabler-x" 
+					/>
 					</VCol>
 				</VRow>
 
@@ -355,19 +386,19 @@ onMounted(() => {
 						Export
 					</VBtn>
 
-					<VBtn 
-						:loading="loadings[3]" 
-						:disabled="loadings[3]" 
-						prepend-icon="tabler-refresh"
-						@click="fetchPv(); load(3)"
-					>
-						Recharger
-						<template #loader>
-							<span class="custom-loader">
-								<VIcon icon="tabler-refresh" />
-							</span>
-						</template>
-					</VBtn>
+				<VBtn 
+					:loading="loadings[3]" 
+					:disabled="loadings[3]" 
+					prepend-icon="tabler-refresh"
+					@click="fetchItemList([3, 4])"
+				>
+					Recharger
+					<template #loader>
+						<span class="custom-loader">
+							<VIcon icon="tabler-refresh" />
+						</span>
+					</template>
+				</VBtn>
 				</div>
 			</div>
 

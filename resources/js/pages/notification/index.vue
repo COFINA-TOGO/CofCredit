@@ -121,18 +121,37 @@ const isSnackbarVisible = ref(false)
 const snackbarMessage = ref('')
 const snackbarColor = ref('success')
 
-// API
-const {
-	data: notificationData,
-	execute: fetchContracts,
-} = await useApi(createUrl('/notification', {
-	query: {
-		search: searchQuery,
-		type: selectedType,
-		page: page,
-		...viewData.data.api.query,
-	},
-}))
+// Fonction de récupération des données
+const fetchItemList = async (id_list = []) => {
+	// Activer les états de chargement
+	id_list.forEach(id => {
+		loadings.value[id] = true
+	})
+
+	try {
+		const { data } = await useApi(createUrl('/notification', {
+			query: {
+				search: searchQuery.value,
+				type: selectedType.value,
+				page: page.value,
+				...viewData.data.api.query,
+			},
+		}))
+
+		notificationData.value = data.value
+	} catch (error) {
+		console.error('Erreur lors de la récupération des notifications:', error)
+		notificationData.value = { data: [], total: 0, last_page: 1 }
+	} finally {
+		// Désactiver les états de chargement
+		id_list.forEach(id => {
+			loadings.value[id] = false
+		})
+	}
+}
+
+// Données notifications
+const notificationData = ref({ data: [], total: 0, last_page: 1 })
 
 // Computed
 const notificationList = computed(() => notificationData.value?.data || [])
@@ -140,12 +159,6 @@ const totalPv = computed(() => notificationData.value?.total || 0)
 const lastPage = computed(() => notificationData.value?.last_page || 1)
 
 // Méthodes
-const load = i => {
-	loadings.value[i] = true
-	setTimeout(() => {
-		loadings.value[i] = false
-	}, 1000)
-}
 
 const updateOptions = options => {
 	page.value = options.page
@@ -174,7 +187,7 @@ const downloadFile = async (url, fileName) => {
 			},
 		})
 		showSnackbar('success', 'Téléchargement en cours...')
-		await fetchContracts()
+		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors du téléchargement:', error)
 		showSnackbar('error', 'Erreur lors du téléchargement')
@@ -201,7 +214,7 @@ const uploadFile = async (id, event) => {
 
 				if (response.ok) {
 					showSnackbar('success', 'Document envoyé avec succès')
-					await fetchContracts()
+					await fetchItemList()
 				} else {
 					showSnackbar('error', 'Échec de l\'envoi du document')
 				}
@@ -221,7 +234,7 @@ const apiDelete = async id => {
 	try {
 		await $api(`notification/${id}`, { method: 'DELETE' })
 		showSnackbar('success', 'Notification supprimée avec succès')
-		await fetchContracts()
+		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors de la suppression:', error)
 		showSnackbar('error', 'Erreur lors de la suppression')
@@ -247,12 +260,17 @@ const apiChangeStatus = async id => {
 			router.push('/notification/without-signed-contract')
 		}
 		
-		await fetchContracts()
+		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors du changement de statut:', error)
 		showSnackbar('error', 'Erreur lors du changement de statut')
 	}
 }
+
+// Lifecycle
+onMounted(async () => {
+	await fetchItemList([4])
+})
 </script>
 
 <template>
@@ -299,19 +317,19 @@ const apiChangeStatus = async id => {
 						Ajouter
 					</VBtn>
 
-					<VBtn 
-						:loading="loadings[3]" 
-						:disabled="loadings[3]" 
-						prepend-icon="tabler-refresh"
-						@click="fetchContracts(); load(3)"
-					>
-						Recharger
-						<template #loader>
-							<span class="custom-loader">
-								<VIcon icon="tabler-refresh" />
-							</span>
-						</template>
-					</VBtn>
+				<VBtn 
+					:loading="loadings[3]" 
+					:disabled="loadings[3]" 
+					prepend-icon="tabler-refresh"
+					@click="fetchItemList([3, 4])"
+				>
+					Recharger
+					<template #loader>
+						<span class="custom-loader">
+							<VIcon icon="tabler-refresh" />
+						</span>
+					</template>
+				</VBtn>
 				</div>
 			</div>
 

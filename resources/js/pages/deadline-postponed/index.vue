@@ -51,8 +51,6 @@ const viewData = reactive({
 })
 
 // Refs et états
-const type_of_credit_id = ref()
-const status = ref()
 const searchQuery = ref('')
 const loadings = ref([])
 const deleteLoadings = ref({})
@@ -132,7 +130,7 @@ const filterDataArray = reactive([
     },
     filter: {
       key: 'status',
-      value: status,
+      value: null,
     },
     api: {
       datac: [
@@ -144,17 +142,37 @@ const filterDataArray = reactive([
   },
 ])
 
-// API
-const {
-  data: deadlinePostponedData,
-  execute: fetchPv,
-} = await useApi(createUrl('/deadline-postponed', {
-  query: {
-    search: searchQuery,
-    page: page,
-    ...viewData.data.api.query,
-  },
-}))
+// Fonction de récupération des données
+const fetchItemList = async (id_list = []) => {
+  // Activer les états de chargement
+  id_list.forEach(id => {
+    loadings.value[id] = true
+  })
+
+  try {
+    const { data } = await useApi(createUrl('/deadline-postponed', {
+      query: {
+        search: searchQuery.value,
+        status: filterDataArray[0].filter.value,
+        page: page.value,
+        ...viewData.data.api.query,
+      },
+    }))
+
+    deadlinePostponedData.value = data.value
+  } catch (error) {
+    console.error('Erreur lors de la récupération des reports d\'échéance:', error)
+    deadlinePostponedData.value = { data: [], total: 0, last_page: 1 }
+  } finally {
+    // Désactiver les états de chargement
+    id_list.forEach(id => {
+      loadings.value[id] = false
+    })
+  }
+}
+
+// Données reports d'échéance
+const deadlinePostponedData = ref({ data: [], total: 0, last_page: 1 })
 
 // Computed
 const deadlinePostponedList = computed(() => deadlinePostponedData.value?.data || [])
@@ -162,12 +180,6 @@ const totalDeadlinePostponed = computed(() => deadlinePostponedData.value?.total
 const lastPage = computed(() => deadlinePostponedData.value?.last_page || 1)
 
 // Méthodes
-const load = i => {
-  loadings.value[i] = true
-  setTimeout(() => {
-    loadings.value[i] = false
-  }, 1000)
-}
 
 const updateOptions = options => {
   page.value = options.page
@@ -210,7 +222,7 @@ const apiDelete = async id => {
     await $api(`verbal-trial/${id}`, { method: 'DELETE' })
     actionComment.value = ''
     showSnackbar('success', 'Report d\'échéance supprimé avec succès')
-    await fetchPv()
+    await fetchItemList()
   } catch (error) {
     console.error('Erreur lors de la suppression:', error)
     showSnackbar('error', 'Erreur lors de la suppression')
@@ -236,12 +248,29 @@ const apiChangeStatus = async id => {
       router.push(`/contract/add?id=${id}`)
     }
     
-    await fetchPv()
+    await fetchItemList()
   } catch (error) {
     console.error('Erreur lors du changement de statut:', error)
     showSnackbar('error', 'Erreur lors du changement de statut')
   }
 }
+
+// Watchers
+watch(
+  () => [
+    filterDataArray[0].filter.value,
+    searchQuery.value,
+    page.value,
+  ],
+  () => {
+    fetchItemList([4])
+  }
+)
+
+// Lifecycle
+onMounted(async () => {
+  await fetchItemList([4])
+})
 </script>
 
 <template>
@@ -270,7 +299,7 @@ const apiChangeStatus = async id => {
             :sm="filterData.view.cols.sm ?? 6"
           >
             <AppAutocomplete 
-              v-model="filterData.filter.value.value" 
+              v-model="filterData.filter.value" 
               :placeholder="filterData.base.name"
               :item-title="filterData.view.name.item_title ?? 'name'"
               :item-value="filterData.view.name.item_value ?? 'id'" 
@@ -315,7 +344,7 @@ const apiChangeStatus = async id => {
             :loading="loadings[3]" 
             :disabled="loadings[3]" 
             prepend-icon="tabler-refresh"
-            @click="fetchPv(); load(3)"
+            @click="fetchItemList([3, 4])"
           >
             Recharger
             <template #loader>
