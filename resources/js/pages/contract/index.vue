@@ -119,7 +119,7 @@ const filterDataArray = reactive([
     view: {
       cols: {
         col: 12,
-        sm: 4,
+        sm: 12,
       },
       name: {
         item_title: 'title',

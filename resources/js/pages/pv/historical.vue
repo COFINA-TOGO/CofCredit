@@ -13,11 +13,21 @@ import { paginationMeta } from "@api-utils/paginationMeta";
 import AppAutocomplete from "@/@core/components/app-form-elements/AppAutocomplete.vue";
 import JsFileDownloader from "js-file-downloader";
 
+// Refs et états
 const isDialogVisible = ref(false);
 const idToDelete = ref(0);
-const type_of_credit_id = ref();
 const searchQuery = ref("");
+const loadings = ref([]);
+const deleteLoadings = ref({});
+const itemsPerPage = ref(8);
+const page = ref(1);
 
+// Snackbar
+const isSnackbarVisible = ref(false);
+const snackbarMessage = ref("");
+const snackbarColor = ref("success");
+
+// Headers de la table
 const headers = [
 	{
 		title: "Numéro comitée",
@@ -54,36 +64,73 @@ const headers = [
 	},
 ];
 
-const loadings = ref([]);
-
-const load = (i) => {
-	loadings.value[i] = true;
-	setTimeout(() => {
-		loadings.value[i] = false;
-	}, 1000);
-};
-
-const itemsPerPage = ref(8);
-const page = ref(1);
-
-const updateOptions = (options) => {
-	page.value = options.page;
-};
-
-const { data: pvData, execute: fetchPv } = await useApi(
-	createUrl("/verbal-trial", {
-		query: {
-			search: searchQuery,
-			type_of_credit_id: type_of_credit_id,
-			page: page,
-			has_next: 1,
-			status: "v",
-			with_caf: 1,
-			with_type_of_credit: 1,
+// Configuration des filtres
+const filterDataArray = reactive([
+	{
+		view: {
+			cols: {
+				col: 12,
+				sm: 4,
+			},
+			name: {
+				item_title: "full_name",
+				item_value: "id",
+			},
 		},
-	})
-);
+		base: {
+			name: "Type de crédit",
+			data_source: "api",
+			api_endpoint: "type-of-credit",
+			query: { paginate: 0 },
+		},
+		filter: {
+			key: "type_of_credit_id",
+			value: null,
+		},
+		api: {
+			datac: [],
+		},
+	},
+]);
 
+// Fonction de récupération des données
+const fetchItemList = async (id_list = []) => {
+	// Activer les états de chargement
+	id_list.forEach((id) => {
+		loadings.value[id] = true;
+	});
+
+	try {
+		const { data } = await useApi(
+			createUrl("/verbal-trial", {
+				query: {
+					search: searchQuery.value,
+					type_of_credit_id: filterDataArray[0].filter.value,
+					page: page.value,
+					has_next: 1,
+					status: "v",
+					with_caf: 1,
+					with_type_of_credit: 1,
+				},
+			})
+		);
+
+		pvData.value = data.value;
+	} catch (error) {
+		console.error("Erreur lors de la récupération des PV:", error);
+		pvData.value = { data: [], total: 0, last_page: 1 };
+	} finally {
+		// Désactiver les états de chargement
+		id_list.forEach((id) => {
+			loadings.value[id] = false;
+		});
+	}
+};
+
+// Données PV
+const pvData = ref({ data: [], total: 0, last_page: 1 });
+
+// Charger les types de crédit
 const { data: type_of_credit_list_data } = await useApi(
 	createUrl("/type-of-credit", {
 		query: {
@@ -91,6 +138,18 @@ const { data: type_of_credit_list_data } = await useApi(
 		},
 	})
 );
+
+// Méthodes
+
+const updateOptions = (options) => {
+	page.value = options.page;
+};
+
+const showSnackbar = (color, message) => {
+	snackbarColor.value = color;
+	snackbarMessage.value = message;
+	isSnackbarVisible.value = true;
+};
 
 const downloadFile = async (url, fileName) => {
 	const userToken = useCookie("userToken").value;
@@ -106,20 +165,52 @@ const downloadFile = async (url, fileName) => {
 				return fileName;
 			},
 		});
+		showSnackbar("success", "Téléchargement en cours...");
+		await fetchItemList();
 	} catch (error) {
 		console.error("Erreur lors du téléchargement:", error);
+		showSnackbar("error", "Erreur lors du téléchargement");
 	}
 };
 
 const apiDelete = async (id) => {
-	await $api(`verbal-trial/${id}`, { method: "DELETE" });
-	fetchPv();
+	deleteLoadings.value[id] = true;
+	try {
+		await $api(`verbal-trial/${id}`, { method: "DELETE" });
+		showSnackbar("success", "PV supprimé avec succès");
+		await fetchItemList();
+	} catch (error) {
+		console.error("Erreur lors de la suppression:", error);
+		showSnackbar("error", "Erreur lors de la suppression");
+	} finally {
+		deleteLoadings.value[id] = false;
+	}
 };
 
-const pvList = computed(() => pvData.value.data);
-const totalPv = computed(() => pvData.value.total);
-const lastPage = computed(() => pvData.value.last_page);
-const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
+// Computed
+const pvList = computed(() => pvData.value?.data || []);
+const totalPv = computed(() => pvData.value?.total || 0);
+const lastPage = computed(() => pvData.value?.last_page || 1);
+const type_of_credit_list = computed(() => type_of_credit_list_data.value?.data || []);
+
+// Watchers
+watch(
+	() => [filterDataArray[0].filter.value, searchQuery.value, page.value],
+	() => {
+		fetchItemList([4]);
+	}
+);
+
+// Lifecycle
+onMounted(async () => {
+	// Charger les types de crédit dans le filtre
+	if (type_of_credit_list.value.length > 0) {
+		filterDataArray[0].api.datac = type_of_credit_list.value;
+	}
+
+	// Charger les données initiales
+	await fetchItemList([4]);
+});
 
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
 </script>
@@ -141,55 +232,65 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 		<VCard title="Filtres" class="mb-6">
 			<VCardText>
 				<VRow>
-					<!-- 👉 Select Status -->
-					<VCol cols="12" sm="4">
-						<AppAutocomplete v-model="type_of_credit_id" placeholder="Type de crédit" item-title="full_name"
-							item-value="id" :items="type_of_credit_list" clearable clear-icon="tabler-x" />
+					<VCol v-for="filterData in filterDataArray" :key="filterData.filter.key"
+						:cols="filterData.view.cols.col" :sm="filterData.view.cols.sm ?? 6">
+						<AppAutocomplete v-model="filterData.filter.value" :placeholder="filterData.base.name"
+							:item-title="filterData.view.name.item_title ?? 'name'"
+							:item-value="filterData.view.name.item_value ?? 'id'" :items="filterData.api.datac"
+							clearable clear-icon="tabler-x" />
 					</VCol>
 				</VRow>
 			</VCardText>
 
-			<VDivider class="my-4" />
+		<VDivider class="my-4" />
 
-			<div class="d-flex flex-wrap gap-4 mx-5">
-				<div class="d-flex align-center">
-					<!-- 👉 Search  -->
-					<AppTextField v-model="searchQuery" placeholder="Rechercher un pv" density="compact"
-						style="inline-size: 200px" class="me-3" />
-				</div>
-
-				<VSpacer />
-				<div class="d-flex gap-4 flex-wrap align-center">
-					<!-- 👉 Export button -->
-					<VBtn variant="tonal" color="secondary" prepend-icon="tabler-upload">
-						Export
-					</VBtn>
-					<VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh" @click="
-						fetchPv();
-					load(3);
-					">
-						Recharger
-						<template #loader>
-							<span class="custom-loader">
-								<VIcon icon="tabler-refresh" />
-							</span>
-						</template>
-					</VBtn>
-				</div>
+		<!-- Barre d'actions -->
+		<div class="d-flex flex-wrap gap-4 mx-5">
+			<div class="flex-grow-1">
+				<AppTextField 
+					v-model="searchQuery" 
+					placeholder="Rechercher un PV" 
+				/>
 			</div>
+
+			<div class="d-flex gap-4">
+				<VBtn 
+					variant="tonal" 
+					color="secondary" 
+					prepend-icon="tabler-download"
+				>
+					Export
+				</VBtn>
+
+				<VBtn 
+					:loading="loadings[3]" 
+					:disabled="loadings[3]" 
+					prepend-icon="tabler-refresh"
+					@click="fetchItemList([3, 4])"
+				>
+					Recharger
+					<template #loader>
+						<span class="custom-loader">
+							<VIcon icon="tabler-refresh" />
+						</span>
+					</template>
+				</VBtn>
+			</div>
+		</div>
 
 			<VDivider class="mt-4" />
 
 			<!-- 👉 Datatable  -->
-			<VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
-				:items="pvList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
+			<VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :loading="loadings[4]"
+				:headers="headers" :items="pvList" :items-length="totalPv" class="text-no-wrap"
+				loading-text="En cours de chargement" @update:options="updateOptions">
 				<!-- Actions -->
 
 				<template #item.actions="{ item }">
 					<IconBtn v-if="$can('read', 'pv') || $can('historical', 'pv')"
 						:to="{ name: 'pv-id', params: { id: item.id } }">
-						<VTooltip activator="parent" transition="scroll-x-transition" location="top">Details</VTooltip>
-						<VIcon icon=" tabler-eye" />
+						<VTooltip activator="parent" transition="scroll-x-transition" location="top">Détails</VTooltip>
+						<VIcon icon="tabler-eye" />
 					</IconBtn>
 					<IconBtn v-if="$can('download', 'pv')" @click="
 						downloadFile(
@@ -207,10 +308,17 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 							`notification-${item.committee_id}.docx`
 						)
 						">
-						<VTooltip activator="parent" transition="scroll-x-transition" location="end">Télécharger
+						<VTooltip activator="parent" transition="scroll-x-transition" location="top">Télécharger
 							Notification
 						</VTooltip>
-						<VIcon icon="tabler-download" v-tooltip="'Ceci est une icône'" />
+						<VIcon icon="tabler-download" />
+					</IconBtn>
+					<IconBtn v-if="$can('delete', 'pv')" :loading="deleteLoadings[item.id]" @click="
+						idToDelete = item.id;
+						isDialogVisible = true;
+					">
+						<VTooltip activator="parent" transition="scroll-x-transition" location="top">Supprimer</VTooltip>
+						<VIcon icon="tabler-trash" />
 					</IconBtn>
 				</template>
 
@@ -263,6 +371,13 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 				</VCardText>
 			</VCard>
 		</VDialog>
+
+		<!-- Snackbar -->
+		<VSnackbar v-model="isSnackbarVisible" transition="scale-transition" location="top end"
+			:color="snackbarColor">
+			<!-- eslint-disable-next-line vue/no-v-html -->
+			<div v-html="snackbarMessage" />
+		</VSnackbar>
 	</div>
 </template>
 

@@ -12,11 +12,21 @@ import { paginationMeta } from '@api-utils/paginationMeta'
 import JsFileDownloader from 'js-file-downloader'
 import { $api } from '@/utils/api';
 
+// Refs et états
 const isDialogVisible = ref(false)
 const contractIdToDelete = ref(0)
-const selectedType = ref()
 const searchQuery = ref('')
+const loadings = ref([])
+const deleteLoadings = ref({})
+const itemsPerPage = ref(8)
+const page = ref(1)
 
+// Snackbar
+const isSnackbarVisible = ref(false)
+const snackbarMessage = ref('')
+const snackbarColor = ref('success')
+
+// Headers de la table
 const headers = [
 	{
 		title: 'Numéro comitée',
@@ -45,49 +55,92 @@ const headers = [
 	},
 ]
 
-const loadings = ref([])
-
-const load = i => {
-	loadings.value[i] = true
-	setTimeout(() => {
-		loadings.value[i] = false
-	}, 1000)
+// Constants
+const TYPE_LIST = {
+	company: 'Société',
+	individual_business: 'Entreprise Individuel',
+	particular: 'Particulier',
 }
 
-const itemsPerPage = ref(8)
-const page = ref(1)
+// Configuration des filtres
+const filterDataArray = reactive([
+	{
+		view: {
+			cols: {
+				col: 12,
+				sm: 6,
+			},
+			name: {
+				item_title: 'title',
+				item_value: 'value',
+			},
+		},
+		base: {
+			name: 'Type de notification',
+			data_source: 'array',
+		},
+		filter: {
+			key: 'type',
+			value: null,
+		},
+		api: {
+			datac: [
+				{ value: 'company', title: 'Société' },
+				{ value: 'particular', title: 'Particulier' },
+				{ value: 'individual_business', title: 'Entreprise Individuel' },
+			],
+		},
+	},
+])
+
+// Fonction de récupération des données
+const fetchItemList = async (id_list = []) => {
+	// Activer les états de chargement
+	id_list.forEach(id => {
+		loadings.value[id] = true
+	})
+
+	try {
+		const { data } = await useApi(
+			createUrl('/notification', {
+				query: {
+					search: searchQuery.value,
+					type: filterDataArray[0].filter.value,
+					page: page.value,
+					with_verbal_trial: 1,
+					has_cat: 1,
+					is_simple: 0,
+					head_credit_validation: 'v',
+					status: 'wrv',
+				},
+			})
+		)
+
+		notificationData.value = data.value
+	} catch (error) {
+		console.error('Erreur lors de la récupération des notifications:', error)
+		notificationData.value = { data: [], total: 0, last_page: 1 }
+	} finally {
+		// Désactiver les états de chargement
+		id_list.forEach(id => {
+			loadings.value[id] = false
+		})
+	}
+}
+
+// Données notifications
+const notificationData = ref({ data: [], total: 0, last_page: 1 })
+
+// Méthodes
 
 const updateOptions = options => {
 	page.value = options.page
 }
 
-const {
-	data: notificationData,
-	execute: fetchContracts,
-} = await useApi(createUrl('/notification', {
-	query: {
-		search: searchQuery,
-		type: selectedType,
-		page: page,
-		with_verbal_trial: 1,
-		// with_type_of_credit: 1,
-		// with_creator: 1,
-		// has_upload_completed: 1,
-		has_cat: 1,
-		is_simple: 0,
-		head_credit_validation: 'v',
-		status: 'wrv',
-	},
-}))
-
-const notificationList = computed(() => notificationData.value.data)
-const totalPv = computed(() => notificationData.value.total)
-const lastPage = computed(() => notificationData.value.last_page)
-
-const typeList = {
-	"company": 'Société',
-	"individual_business": 'Entreprise Individuel',
-	"particular": 'Particulier',
+const showSnackbar = (color, message) => {
+	snackbarColor.value = color
+	snackbarMessage.value = message
+	isSnackbarVisible.value = true
 }
 
 const downloadFile = async (url, fileName) => {
@@ -102,16 +155,45 @@ const downloadFile = async (url, fileName) => {
 				return fileName
 			},
 		})
-		fetchContracts()
+		showSnackbar('success', 'Téléchargement en cours...')
+		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors du téléchargement:', error)
+		showSnackbar('error', 'Erreur lors du téléchargement')
 	}
 }
 
 const apiDelete = async id => {
-	await $api(`notification/${id}`, { method: 'DELETE' })
-	fetchContracts()
+	deleteLoadings.value[id] = true
+	try {
+		await $api(`notification/${id}`, { method: 'DELETE' })
+		showSnackbar('success', 'Notification supprimée avec succès')
+		await fetchItemList()
+	} catch (error) {
+		console.error('Erreur lors de la suppression:', error)
+		showSnackbar('error', 'Erreur lors de la suppression')
+	} finally {
+		deleteLoadings.value[id] = false
+	}
 }
+
+// Computed
+const notificationList = computed(() => notificationData.value?.data || [])
+const totalPv = computed(() => notificationData.value?.total || 0)
+const lastPage = computed(() => notificationData.value?.last_page || 1)
+
+// Watchers
+watch(
+	() => [filterDataArray[0].filter.value, searchQuery.value, page.value],
+	() => {
+		fetchItemList([4])
+	}
+)
+
+// Lifecycle
+onMounted(async () => {
+	await fetchItemList([4])
+})
 
 </script>
 
@@ -133,52 +215,68 @@ const apiDelete = async id => {
 			<VCardText>
 				<VRow>
 					<VCol cols="12" sm="4">
-						<AppSelect v-model="selectedType" placeholder="Type de contrat"
+						<AppAutocomplete v-model="filterDataArray[0].filter.value" placeholder="Type de notification"
 							:items="[{ value: 'company', title: 'Société' }, { value: 'particular', title: 'Particulier' }, { value: 'individual_business', title: 'Entreprise Individuel' }]"
 							clearable clear-icon="tabler-x" />
 					</VCol>
 				</VRow>
 			</VCardText>
 
-			<VDivider class="my-4" />
+		<VDivider class="my-4" />
 
-			<div class="d-flex flex-wrap gap-4 mx-5">
-				<div class="d-flex align-center">
-					<AppTextField v-model="searchQuery" placeholder="Rechercher un contrat" density="compact"
-						style="inline-size: 200px;" class="me-3" />
-				</div>
-
-				<VSpacer />
-				<div class="d-flex gap-4 flex-wrap align-center">
-					<VBtn variant="tonal" color="secondary" prepend-icon="tabler-download">
-						Export
-					</VBtn>
-
-					<VBtn v-if="$can('create', 'notification')" color="primary" prepend-icon="tabler-plus"
-						:to="{ name: 'notification-add' }">
-						Ajouter
-					</VBtn>
-					<VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
-						@click="fetchContracts(); load(3)">
-						Recharger
-						<template #loader>
-							<span class="custom-loader">
-								<VIcon icon="tabler-refresh" />
-							</span>
-						</template>
-					</VBtn>
-				</div>
+		<!-- Barre d'actions -->
+		<div class="d-flex flex-wrap gap-4 mx-5">
+			<div class="flex-grow-1">
+				<AppTextField 
+					v-model="searchQuery" 
+					placeholder="Rechercher une notification" 
+				/>
 			</div>
+
+			<div class="d-flex gap-4">
+				<VBtn 
+					variant="tonal" 
+					color="secondary" 
+					prepend-icon="tabler-download"
+				>
+					Export
+				</VBtn>
+
+				<VBtn 
+					v-if="$can('create', 'notification')" 
+					color="primary" 
+					prepend-icon="tabler-plus"
+					:to="{ name: 'notification-add' }"
+				>
+					Ajouter
+				</VBtn>
+
+				<VBtn 
+					:loading="loadings[3]" 
+					:disabled="loadings[3]" 
+					prepend-icon="tabler-refresh"
+					@click="fetchItemList([3, 4])"
+				>
+					Recharger
+					<template #loader>
+						<span class="custom-loader">
+							<VIcon icon="tabler-refresh" />
+						</span>
+					</template>
+				</VBtn>
+			</div>
+		</div>
 
 			<VDivider class="mt-4" />
 
 
-			<VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
-				:items="notificationList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
+		<VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :loading="loadings[4]"
+			:headers="headers" :items="notificationList" :items-length="totalPv" class="text-no-wrap"
+			loading-text="En cours de chargement" @update:options="updateOptions">
 
-				<template #item.type="{ item }">
-					{{ typeList[item.type] }}
-				</template>
+			<template #item.type="{ item }">
+				{{ TYPE_LIST[item.type] }}
+			</template>
 
 				<template #item.verbal_trial.amount="{ item }">
 					{{ String(item.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
@@ -253,14 +351,28 @@ const apiDelete = async id => {
 										<template #prepend>
 											<VIcon icon="tabler-download" />
 										</template>
-										<VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
-									</VListItem>
-								</div>
+									<VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
+								</VListItem>
+							</div>
 
-							</VList>
-						</VMenu>
-					</VBtn>
-				</template>
+							<div v-if="$can('delete', 'notification')">
+								<VDivider />
+								<!-- Supprimer -->
+								<VListItem :loading="deleteLoadings[item.id]" @click="
+									contractIdToDelete = item.id;
+									isDialogVisible = true;
+								">
+									<template #prepend>
+										<VIcon icon="tabler-trash" />
+									</template>
+									<VListItemTitle>Supprimer</VListItemTitle>
+								</VListItem>
+							</div>
+
+						</VList>
+					</VMenu>
+				</VBtn>
+			</template>
 
 				<template #bottom>
 					<VDivider />
@@ -290,6 +402,13 @@ const apiDelete = async id => {
 				</template>
 			</VDataTableServer>
 		</VCard>
+
+		<!-- Snackbar -->
+		<VSnackbar v-model="isSnackbarVisible" transition="scale-transition" location="top end"
+			:color="snackbarColor">
+			<!-- eslint-disable-next-line vue/no-v-html -->
+			<div v-html="snackbarMessage" />
+		</VSnackbar>
 	</div>
 </template>
 

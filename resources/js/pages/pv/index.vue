@@ -172,11 +172,12 @@ const filterDataArray = reactive([
 		},
 		filter: {
 			key: 'validation_level',
-			value: 'ahm',
+			value: null,
 		},
 		api: {
 			datac: [
-				{ value: 'ahm', title: 'Tout' },
+				{ value: 'yahm', title: 'Tout' },
+				{ value: 'y', title: 'Analyste Crédit' },
 				{ value: 'a', title: 'Admin Crédit' },
 				{ value: 'h', title: 'Head Crédit' },
 				{ value: 'm', title: 'MD' },
