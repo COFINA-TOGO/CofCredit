@@ -31,6 +31,7 @@ export default defineConfig({
 			// },
 
 			routesFolder: 'resources/js/pages',
+			dts: './typed-router.d.ts',
 		}),
 		vue({
 			template: {
@@ -121,11 +122,25 @@ export default defineConfig({
 		],
 	},
 	server: {
-		// Configurations du serveur...
+		host: '0.0.0.0',
+		port: 5173,
+		strictPort: false,
+		hmr: {
+			protocol: 'ws',
+			host: 'localhost',
+			port: 5173,
+			clientPort: 5173,
+		},
 		watch: {
 			// Ignorer les changements dans les dossiers storage et public
-			//   ignored: ['storage/**', 'public/**']
 			ignored: ['**/storage/**', '**/document_templates/**', '**/public/**'],
+			usePolling: false,
+			// Options supplémentaires pour le watching
+			awaitWriteFinish: {
+				stabilityThreshold: 200,
+				pollInterval: 100,
+			},
 		},
+		cors: true,
 	},
 })

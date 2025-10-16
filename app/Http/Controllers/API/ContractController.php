@@ -122,8 +122,9 @@ class ContractController extends Controller
 				});
 			}
 
-		foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_creator" => "creator", "with_pledges" => "pledges", "with_verbal_trial_credit_analyst" => "verbal_trial.credit_analyst", "with_verbal_trial_credit_admin" => "verbal_trial.credit_admin", "with_c_a_t" => "c_a_t"] as $key => $value) {
-			if (isset($request[$key]) && $request[$key]) {
+		foreach ([
+			"with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_creator" => "creator", "with_pledges" => "pledges", "with_verbal_trial_credit_analyst" => "verbal_trial.credit_analyst", "with_verbal_trial_credit_admin" => "verbal_trial.credit_admin", "with_c_a_t" => "c_a_t"] as $key => $value) {
+				if (isset($request[$key]) && $request[$key]) {
 				$contractList->with($value);
 			}
 		}
@@ -197,7 +198,7 @@ class ContractController extends Controller
 		if ($contract) {
 			if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
 				$suplementList = [];
-				foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_pledges" => "pledges", "with_creator" => "creator", "with_verbal_trial_credit_analyst" => "verbal_trial.credit_analyst", "with_verbal_trial_credit_admin" => "verbal_trial.credit_admin"] as $key => $value) {
+				foreach (["with_verbal_trial" => "verbal_trial", "with_type_of_credit" => "verbal_trial.type_of_credit", "with_type_of_applicant" => "verbal_trial.type_of_credit.type_of_applicant", "with_guarantees" => "verbal_trial.guarantees", "with_caf" => "verbal_trial.caf", "with_type_of_guarantees" => "verbal_trial.guarantees.type_of_guarantee", "with_company" => "company", "with_individual_business" => "individual_business", "with_creator" => "creator", "with_pledges" => "pledges", "with_verbal_trial_credit_analyst" => "verbal_trial.credit_analyst", "with_verbal_trial_credit_admin" => "verbal_trial.credit_admin", "with_c_a_t" => "c_a_t"] as $key => $value) {
 					if (isset($request[$key]) && $request[$key]) {
 						$suplementList[] = $value;
 					}

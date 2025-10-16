@@ -10,8 +10,6 @@ definePage({
 const router = useRouter()
 const route = useRoute("contract-id")
 
-let backRoute = "/contract"
-
 const frenchMensuality = {
 	"mensual": "Mensuelle",
 	"quarterly": "Trimestrielle",
@@ -31,7 +29,7 @@ const documentTypeList = {
 	"residence_certificate": 'Certificat de résidence',
 	"driving_licence": 'Permis de conduire',
 	"consular_card": "Carte consulaire",
-	"ECOWAS_identity_card": "Carte d’identité de la CEDEAO",
+	"ECOWAS_identity_card": "Carte d'identité de la CEDEAO",
 	"residence_permit": "Carte de séjour",
 }
 
@@ -50,14 +48,20 @@ const {
 		with_pledges: 1,
 		with_verbal_trial_credit_admin: 1,
 		with_verbal_trial_credit_analyst: 1,
+		with_c_a_t: 1,
 	},
 }))
 
 if (contract.value.status == 200) {
 	contract.value = contract.value.data.contract
 } else {
-	router.push("/contract")
+	router.push({ name: 'contract' })
 }
+
+// Déterminer la route de retour selon la présence du CAT
+const backRoute = contract.value.c_a_t 
+	? { name: 'contract-historical' } 
+	: { name: 'contract' }
 
 const tableData = [
 	{ "title": "Montant", "value": String(contract.value.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
@@ -74,9 +78,6 @@ const tableData = [
 	{ "title": "Différé", "value": contract.value.verbal_trial.number_deferred + " mois(s)" },
 	{ "title": "Type de contrat", "value": contract.value.type_fr },
 ]
-
-
-const nextRoute = contract.value.cat ? {name: 'contract-historicarl'} : {name: 'contract'}
 
 </script>
 
