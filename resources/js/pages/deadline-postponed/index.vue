@@ -1,35 +1,78 @@
 <!-- eslint-disable camelcase -->
 
 <script setup>
+import { reactive, ref, computed, onMounted } from 'vue'
+import { VDataTableServer } from 'vuetify/labs/VDataTable'
+import { paginationMeta } from '@api-utils/paginationMeta'
+import AppAutocomplete from '@/@core/components/app-form-elements/AppAutocomplete.vue'
+import JsFileDownloader from 'js-file-downloader'
+import { $api } from '@/utils/api'
+import { useRouter } from 'vue-router'
+
+// Configuration de la page
 definePage({
   meta: {
     action: 'read' || 'historical',
     subject: 'deadline-postponed',
   },
 })
-import { VDataTableServer } from 'vuetify/labs/VDataTable'
-import { paginationMeta } from '@api-utils/paginationMeta'
-import AppAutocomplete from '@/@core/components/app-form-elements/AppAutocomplete.vue';
-import JsFileDownloader from 'js-file-downloader'
-import { $api } from '@/utils/api';
 
+// Router
 const router = useRouter()
 
+// Configuration de la vue
+const viewData = reactive({
+	filter: {
+		title: 'Filtres',
+	},
+	data: {
+		title: {
+			singular: "Report d'échéance",
+			plural: "Reports d'échéance",
+		},
+		actions: {
+			singular: "le report d'échéance",
+			plural: "les reports d'échéance",
+		},
+		rule: {
+			name: 'deadline-postponed',
+		},
+		link: {
+			base: 'deadline-postponed',
+		},
+		api: {
+			end_point: 'deadline-postponed',
+			data: null,
+			query: {
+				with_caf: 1,
+			},
+		},
+	},
+})
+
+// Refs et états
 const type_of_credit_id = ref()
 const status = ref()
 const searchQuery = ref('')
 const loadings = ref([])
+const deleteLoadings = ref({})
 const itemsPerPage = ref(8)
 const page = ref(1)
 const selectedItemId = ref(0)
 const isActionDialogVisible = ref(false)
-const actionTitle = ref("")
-const actionText = ref("")
-const actionButtonText = ref("")
+const actionTitle = ref('')
+const actionText = ref('')
+const actionButtonText = ref('')
 const actionFunction = ref()
-const actionComment = ref("")
+const actionComment = ref('')
 const commentPresence = ref(false)
-const actionStatus = ref("waiting")
+const actionStatus = ref('waiting')
+
+// Snackbar
+const isSnackbarVisible = ref(false)
+const snackbarMessage = ref('')
+const snackbarColor = ref('success')
+// Headers de la table
 const headers = [
   {
     title: 'Client',
@@ -48,7 +91,7 @@ const headers = [
     key: 'extension',
   },
   {
-    title: 'Echéance',
+    title: 'Échéance',
     key: 'deadline_number',
   },
   {
@@ -69,24 +112,56 @@ const headers = [
     sortable: false,
   },
 ]
+
+// Configuration des filtres
+const filterDataArray = reactive([
+  {
+    view: {
+      cols: {
+        col: 12,
+        sm: 4,
+      },
+      name: {
+        item_title: 'title',
+        item_value: 'value',
+      },
+    },
+    base: {
+      name: 'Statut',
+      data_source: 'array',
+    },
+    filter: {
+      key: 'status',
+      value: status,
+    },
+    api: {
+      datac: [
+        { value: 'v', title: 'Validé' },
+        { value: 'w', title: 'En attente' },
+        { value: 'r', title: 'Rejeté' },
+      ],
+    },
+  },
+])
+
+// API
 const {
   data: deadlinePostponedData,
   execute: fetchPv,
 } = await useApi(createUrl('/deadline-postponed', {
   query: {
     search: searchQuery,
-    // type_of_credit_id: type_of_credit_id,
-    // status: status,
     page: page,
-    // has_contract: 0,
-    // has_notification: 0,
-    // has_mortgage: 0,
-    with_caf: 1,
-    // with_type_of_credit: 1,
+    ...viewData.data.api.query,
   },
 }))
 
+// Computed
+const deadlinePostponedList = computed(() => deadlinePostponedData.value?.data || [])
+const totalDeadlinePostponed = computed(() => deadlinePostponedData.value?.total || 0)
+const lastPage = computed(() => deadlinePostponedData.value?.last_page || 1)
 
+// Méthodes
 const load = i => {
   loadings.value[i] = true
   setTimeout(() => {
@@ -96,6 +171,16 @@ const load = i => {
 
 const updateOptions = options => {
   page.value = options.page
+}
+
+const showSnackbar = (color, message) => {
+  snackbarColor.value = color
+  snackbarMessage.value = message
+  isSnackbarVisible.value = true
+}
+
+const formatAmount = amount => {
+  return String(amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' F CFA'
 }
 
 const downloadFile = async (url, fileName) => {
@@ -112,82 +197,126 @@ const downloadFile = async (url, fileName) => {
         return fileName
       },
     })
+    showSnackbar('success', 'Téléchargement en cours...')
   } catch (error) {
     console.error('Erreur lors du téléchargement:', error)
+    showSnackbar('error', 'Erreur lors du téléchargement')
   }
 }
 
 const apiDelete = async id => {
-  await $api(`verbal-trial/${id}`, { method: 'DELETE' })
-  actionComment.value = ""
-  fetchPv()
+  deleteLoadings.value[id] = true
+  try {
+    await $api(`verbal-trial/${id}`, { method: 'DELETE' })
+    actionComment.value = ''
+    showSnackbar('success', 'Report d\'échéance supprimé avec succès')
+    await fetchPv()
+  } catch (error) {
+    console.error('Erreur lors de la suppression:', error)
+    showSnackbar('error', 'Erreur lors de la suppression')
+  } finally {
+    deleteLoadings.value[id] = false
+  }
 }
 
 const apiChangeStatus = async id => {
-  await $api(`verbal-trial/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
-  actionComment.value = ""
-  if (actionStatus.value == "validated") {
-    router.push(`/contract/add?id=${id}`)
+  try {
+    await $api(`verbal-trial/change-status/${id}`, { 
+      method: 'PUT', 
+      body: { 
+        status: actionStatus.value, 
+        comment: actionComment.value 
+      } 
+    })
+    actionComment.value = ''
+    const statusMessage = actionStatus.value === 'validated' ? 'validé' : 'rejeté'
+    showSnackbar('success', `Report d'échéance ${statusMessage} avec succès`)
+    
+    if (actionStatus.value === 'validated') {
+      router.push(`/contract/add?id=${id}`)
+    }
+    
+    await fetchPv()
+  } catch (error) {
+    console.error('Erreur lors du changement de statut:', error)
+    showSnackbar('error', 'Erreur lors du changement de statut')
   }
-  fetchPv()
 }
-console.log(deadlinePostponedData.value.data)
-const deadlinePostponedList = computed(() => deadlinePostponedData.value.data)
-console.log(deadlinePostponedList)
-const totalDeadlinePostponed = computed(() => deadlinePostponedData.value.total)
-const lastPage = computed(() => deadlinePostponedData.value.last_page)
-// Math.min(Math.ceil(totalPv / itemsPerPage), 5)
 </script>
 
 <template>
   <div>
-    <!-- 👉 widgets -->
+    <!-- En-tête -->
     <VCard class="mb-6">
       <VCardText>
         <VRow>
           <VCardText>
             <h2>
-              Liste des Report d'échéance en attente
+              Liste des {{ viewData.data.title.plural }} en attente
             </h2>
           </VCardText>
         </VRow>
       </VCardText>
     </VCard>
 
-    <!-- 👉 pvs -->
-    <VCard title="Filtres" class="mb-6">
+    <!-- Filtres et table -->
+    <VCard :title="viewData.filter.title" class="mb-6">
       <VCardText>
         <VRow>
-          <VCol cols="12" sm="4">
-            <VSelect v-model="status" placeholder="Statut"
-              :items="[{ value: 'v', title: 'Validé' }, { value: 'w', title: 'En attente' }, { value: 'r', title: 'Rejeté' }]"
-              clear-icon="tabler-x" clearable="" />
+          <VCol 
+            v-for="filterData in filterDataArray" 
+            :key="filterData.filter.key"
+            :cols="filterData.view.cols.col"
+            :sm="filterData.view.cols.sm ?? 6"
+          >
+            <AppAutocomplete 
+              v-model="filterData.filter.value.value" 
+              :placeholder="filterData.base.name"
+              :item-title="filterData.view.name.item_title ?? 'name'"
+              :item-value="filterData.view.name.item_value ?? 'id'" 
+              :items="filterData.api.datac" 
+              clearable
+              clear-icon="tabler-x" 
+            />
           </VCol>
         </VRow>
+
+        <VDivider class="my-4" />
       </VCardText>
 
-      <VDivider class="my-4" />
-
+      <!-- Barre d'actions -->
       <div class="d-flex flex-wrap gap-4 mx-5">
-        <div class="d-flex align-center">
-          <!-- 👉 Search  -->
-          <AppTextField v-model="searchQuery" placeholder="Rechercher un pv" density="compact"
-            style="inline-size: 200px;" class="me-3" />
+        <div class="flex-grow-1">
+          <AppTextField 
+            v-model="searchQuery" 
+            placeholder="Rechercher un report d'échéance" 
+          />
         </div>
 
-        <VSpacer />
-        <div class="d-flex gap-4 flex-wrap align-center">
-          <!-- 👉 Export button -->
-          <VBtn variant="tonal" color="secondary" prepend-icon="tabler-upload">
+        <div class="d-flex gap-4">
+          <VBtn 
+            variant="tonal" 
+            color="secondary" 
+            prepend-icon="tabler-download"
+          >
             Export
           </VBtn>
 
-          <VBtn v-if="$can('create', 'deadline-postponed')" color="primary" prepend-icon="tabler-plus"
-            :to="{ name: 'deadline-postponed-add' }">
+          <VBtn 
+            v-if="$can('create', viewData.data.rule.name)" 
+            color="primary" 
+            prepend-icon="tabler-plus"
+            :to="{ name: `${viewData.data.link.base}-add` }"
+          >
             Ajouter
           </VBtn>
-          <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
-            @click="fetchPv(); load(3)">
+
+          <VBtn 
+            :loading="loadings[3]" 
+            :disabled="loadings[3]" 
+            prepend-icon="tabler-refresh"
+            @click="fetchPv(); load(3)"
+          >
             Recharger
             <template #loader>
               <span class="custom-loader">
@@ -202,8 +331,17 @@ const lastPage = computed(() => deadlinePostponedData.value.last_page)
 
 
       <!-- 👉 Datatable  -->
-      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
-        :items="deadlinePostponedList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
+      <VDataTableServer 
+        v-model:items-per-page="itemsPerPage" 
+        v-model:page="page" 
+        :loading="loadings[4]"
+        :headers="headers"
+        :items="deadlinePostponedList" 
+        :items-length="totalDeadlinePostponed" 
+        class="text-no-wrap" 
+        loading-text="En cours de chargement"
+        @update:options="updateOptions"
+      >
         <!-- Actions -->
 
         <template #item.status="{ item }">
@@ -291,27 +429,47 @@ const lastPage = computed(() => deadlinePostponedData.value.last_page)
           </div>
         </template>
 
+        <!-- Pagination -->
         <template #bottom>
           <VDivider />
 
           <div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
             <p class="text-sm text-medium-emphasis mb-0">
-              {{ paginationMeta({ page, itemsPerPage }, totalPv) }}
+              {{ paginationMeta({ page, itemsPerPage }, totalDeadlinePostponed) }}
             </p>
 
-            <VPagination v-model="page" :length="lastPage"
-              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)">
+            <VPagination 
+              v-model="page" 
+              :length="lastPage"
+              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
+            >
               <template #prev="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
-                  <VIcon start icon="tabler-arrow-left" />
-                  Précedent
+                <VBtn 
+                  variant="tonal" 
+                  color="default" 
+                  v-bind="slotProps" 
+                  :icon="false"
+                >
+                  <VIcon 
+                    start 
+                    icon="tabler-arrow-left" 
+                  />
+                  Précédent
                 </VBtn>
               </template>
 
               <template #next="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                <VBtn 
+                  variant="tonal" 
+                  color="default" 
+                  v-bind="slotProps" 
+                  :icon="false"
+                >
                   Suivant
-                  <VIcon end icon="tabler-arrow-right" />
+                  <VIcon 
+                    end 
+                    icon="tabler-arrow-right" 
+                  />
                 </VBtn>
               </template>
             </VPagination>
@@ -320,32 +478,51 @@ const lastPage = computed(() => deadlinePostponedData.value.last_page)
       </VDataTableServer>
     </VCard>
 
-
+    <!-- Dialog d'action -->
     <VDialog v-model="isActionDialogVisible" class="v-dialog-sm">
-      <!-- Dialog close btn -->
       <DialogCloseBtn @click="isActionDialogVisible = !isActionDialogVisible" />
 
-      <!-- Dialog De suppression -->
       <VCard :title="actionTitle">
         <VCardText>
           {{ actionText }}
 
-          <AppTextarea v-if="commentPresence" class="mt-3" v-model="actionComment" label="Commentaire"
-            placeholder="Ex: RAS" />
+          <AppTextarea 
+            v-if="commentPresence" 
+            v-model="actionComment" 
+            class="mt-3"
+            label="Commentaire"
+            placeholder="Ex: RAS" 
+          />
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn color="secondary" variant="tonal" @click="isActionDialogVisible = false">
+          <VBtn 
+            color="secondary" 
+            variant="tonal" 
+            @click="isActionDialogVisible = false"
+          >
             Annuler
           </VBtn>
-          <VBtn @click="actionFunction(selectedItemId); isActionDialogVisible = false">
+          <VBtn 
+            :loading="deleteLoadings[selectedItemId]"
+            @click="actionFunction(selectedItemId); isActionDialogVisible = false"
+          >
             {{ actionButtonText }}
           </VBtn>
         </VCardText>
       </VCard>
     </VDialog>
 
-
+    <!-- Snackbar -->
+    <VSnackbar 
+      v-model="isSnackbarVisible" 
+      transition="scale-transition" 
+      location="top end"
+      :color="snackbarColor"
+    >
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div v-html="snackbarMessage" />
+    </VSnackbar>
   </div>
 </template>
 

@@ -1,241 +1,308 @@
 <!-- eslint-disable camelcase -->
 
 <script setup>
+import { reactive, ref, computed, onMounted } from 'vue'
+import { VDataTableServer } from 'vuetify/labs/VDataTable'
+import { paginationMeta } from '@api-utils/paginationMeta'
+import { $api } from '@/utils/api'
+
+// Configuration de la page
 definePage({
 	meta: {
-		action: "read",
-		subject: "user",
+		action: 'read',
+		subject: 'user',
 	},
-});
-import { VDataTableServer } from "vuetify/labs/VDataTable";
-import { paginationMeta } from "@api-utils/paginationMeta";
-import { $api } from "@/utils/api";
+})
 
-const searchQuery = ref("");
-const loadings = ref([]);
-const itemsPerPage = ref(8);
-const page = ref(1);
-const selectedItemId = ref(0);
-const isActionDialogVisible = ref(false);
-const actionTitle = ref("");
-const actionText = ref("");
-const actionButtonText = ref("");
-const actionFunction = ref();
-const actionComment = ref("cancel");
-const commentPresence = ref(false);
-const agencyIdFilter = ref(null);
-const profileFilter = ref(null);
-const activatedFilter = ref(null);
+// Configuration de la vue
+const viewData = reactive({
+	filter: {
+		title: 'Filtres',
+	},
+	data: {
+		title: {
+			singular: 'Utilisateur',
+			plural: 'Utilisateurs',
+		},
+		actions: {
+			singular: "l'utilisateur",
+			plural: 'les utilisateurs',
+		},
+		rule: {
+			name: 'user',
+		},
+		link: {
+			base: 'user',
+		},
+		api: {
+			end_point: 'user',
+			data: null,
+			query: {
+				with_agency: 'true',
+			},
+		},
+	},
+})
+
+// Refs et états
+const searchQuery = ref('')
+const loadings = ref([])
+const deleteLoadings = ref({})
+const itemsPerPage = ref(8)
+const page = ref(1)
+const selectedItemId = ref(0)
+const isActionDialogVisible = ref(false)
+const actionTitle = ref('')
+const actionText = ref('')
+const actionButtonText = ref('')
+const actionFunction = ref()
+const actionComment = ref('cancel')
+const commentPresence = ref(false)
+const agencyIdFilter = ref(null)
+const profileFilter = ref(null)
+const activatedFilter = ref(null)
+
+// Snackbar
+const isSnackbarVisible = ref(false)
+const snackbarMessage = ref('')
+const snackbarColor = ref('success')
+// Headers de la table
 const headers = [
 	{
-		title: "Nom",
-		key: "full_name",
+		title: 'Nom',
+		key: 'full_name',
 	},
 	{
-		title: "Email",
-		key: "email",
+		title: 'Email',
+		key: 'email',
 	},
 	{
-		title: "Profil",
-		key: "profile_fr",
+		title: 'Profil',
+		key: 'profile_fr',
 	},
 	{
-		title: "Activation",
-		key: "activated",
+		title: 'Activation',
+		key: 'activated',
 	},
 	{
-		title: "Actions",
-		key: "actions",
+		title: 'Actions',
+		key: 'actions',
 		sortable: false,
 	},
-];
+]
+
+// Configuration des filtres
+const filterDataArray = reactive([
+	{
+		view: {
+			cols: {
+				col: 12,
+				sm: 6,
+			},
+			name: {
+				item_title: 'name',
+				item_value: 'id',
+			},
+		},
+		base: {
+			name: 'Profil',
+			data_source: 'array',
+		},
+		filter: {
+			key: 'profile',
+			value: profileFilter,
+		},
+		api: {
+			datac: [
+				{ name: 'Administrateur', id: 'admin' },
+				{ name: 'Analyste Crédit', id: 'credit_analyst' },
+				{ name: 'Admin Crédit', id: 'credit_admin' },
+				{ name: 'Head Crédit', id: 'head_credit' },
+				{ name: 'Opération', id: 'operation' },
+				{ name: 'Juriste', id: 'legal' },
+				{ name: 'DEX', id: 'dex' },
+				{ name: "Chargé d'affaire", id: 'caf' },
+				{ name: 'Chef ', id: 'ca' },
+				{ name: 'MD', id: 'md' },
+			],
+		},
+	},
+	{
+		view: {
+			cols: {
+				col: 12,
+				sm: 6,
+			},
+			name: {
+				item_title: 'name',
+				item_value: 'id',
+			},
+		},
+		base: {
+			name: 'Activation',
+			data_source: 'array',
+		},
+		filter: {
+			key: 'activated',
+			value: activatedFilter,
+		},
+		api: {
+			datac: [
+				{ name: 'Activé', id: 'true' },
+				{ name: 'Désactivé', id: 'false' },
+			],
+		},
+	},
+])
+
+// API
 const { data: userListData, execute: fetchUserList } = await useApi(
-	createUrl("/user", {
+	createUrl('/user', {
 		query: {
 			search: searchQuery,
 			page: page,
-			with_agency: "true",
 			profile: profileFilter,
 			activated: activatedFilter,
+			...viewData.data.api.query,
 		},
 	})
-);
+)
 
 const { data: agencyListData, execute: fetchAgencyList } = await useApi(
-	createUrl("/agency", {
+	createUrl('/agency', {
 		query: {
 			search: searchQuery,
 			page: page,
-			with_agency: "true",
+			with_agency: 'true',
 		},
 	})
-);
+)
 
-const load = (i) => {
-	loadings.value[i] = true;
+// Computed
+const userList = computed(() => userListData.value?.data || [])
+const agencyList = computed(() => agencyListData.value?.data || [])
+const totalTransfer = computed(() => userListData.value?.total || 0)
+const lastPage = computed(() => userListData.value?.last_page || 1)
+
+// Méthodes
+const load = i => {
+	loadings.value[i] = true
 	setTimeout(() => {
-		loadings.value[i] = false;
-	}, 1000);
-};
+		loadings.value[i] = false
+	}, 1000)
+}
 
-const updateOptions = (options) => {
-	page.value = options.page;
-};
+const updateOptions = options => {
+	page.value = options.page
+}
 
-const apiDelete = async (id) => {
-	const response = await $api(`user/${id}`, {
-		method: "DELETE",
-	});
-	if (response.status == 204) {
-		isSnackbarScrollReverseVisible.value = true;
-		snackbarCollor.value = "success";
-		actionComment.value = "";
-		snackbarMessage.value = "";
-		snackbarMessage.value = "Utilisateur Supprimé";
-	} else {
-		snackbarCollor.value = "error";
-		isSnackbarScrollReverseVisible.value = true;
-		snackbarMessage.value = "";
-		for (const key in response.errors) {
-			response.errors[key].forEach((message) => {
-				snackbarMessage.value += "" + message + "<br>";
-			});
+const showSnackbar = (color, message) => {
+	snackbarColor.value = color
+	snackbarMessage.value = message
+	isSnackbarVisible.value = true
+}
+
+const apiDelete = async id => {
+	deleteLoadings.value[id] = true
+	try {
+		const response = await $api(`user/${id}`, {
+			method: 'DELETE',
+		})
+		
+		if (response.status === 204) {
+			actionComment.value = ''
+			showSnackbar('success', 'Utilisateur supprimé avec succès')
+		} else {
+			let errorMessage = ''
+			for (const key in response.errors) {
+				response.errors[key].forEach(message => {
+					errorMessage += `${message}<br>`
+				})
+			}
+			showSnackbar('error', errorMessage || 'Erreur lors de la suppression')
 		}
+		
+		await fetchUserList()
+		await fetchAgencyList()
+	} catch (error) {
+		console.error('Erreur lors de la suppression:', error)
+		showSnackbar('error', 'Erreur lors de la suppression')
+	} finally {
+		deleteLoadings.value[id] = false
 	}
-	await fetchUserList();
-	await fetchAgencyList();
-	isSnackbarScrollReverseVisible.value = true;
-};
-
-const totalTransfer = computed(() => userListData.value.total);
-const lastPage = computed(() => userListData.value.last_page);
-// Math.min(Math.ceil(totalTransfer / itemsPerPage), 5)
-const isSnackbarScrollReverseVisible = ref(false);
-const snackbarMessage = ref("");
-const snackbarCollor = ref("success");
-const userList = computed(() => userListData.value.data);
-const agencyList = computed(() => agencyListData.value.data);
+}
 </script>
 
 <template>
 	<div>
-		<!-- 👉 widgets -->
+		<!-- En-tête -->
 		<VCard class="mb-6">
 			<VCardText>
 				<VRow>
 					<VCardText>
-						<h2>Liste des utilisateurs</h2>
+						<h2>Liste des {{ viewData.data.title.plural }}</h2>
 					</VCardText>
 				</VRow>
 			</VCardText>
 		</VCard>
 
-		<!-- 👉 users -->
-		<VCard title="Filtres" class="mb-6">
+		<!-- Filtres et table -->
+		<VCard :title="viewData.filter.title" class="mb-6">
 			<VCardText>
 				<VRow>
-					<VCol cols="12" sm="6">
-						<AppAutocomplete
-							v-model="profileFilter"
-							placeholder="Profil"
-							item-title="name"
-							item-value="id"
-							:items="[
-								{ name: 'Administrateur', id: 'admin' },
-								{
-									name: 'Analyste Crédit',
-									id: 'credit_analyst',
-								},
-								{
-									name: 'Admin Crédit',
-									id: 'credit_admin',
-								},
-								{
-									name: 'Head Crédit',
-									id: 'head_credit',
-								},
-								{
-									name: 'Opération',
-									id: 'operation',
-								},
-								{
-									name: 'Juriste',
-									id: 'legal',
-								},
-								{
-									name: 'DEX',
-									id: 'dex',
-								},
-								{
-									name: 'Chargé d\'affaire',
-									id: 'caf',
-								},
-								{
-									name: 'Chef ',
-									id: 'ca',
-								},
-								{
-									name: 'MD',
-									id: 'md',
-								},
-							]"
+					<VCol 
+						v-for="filterData in filterDataArray" 
+						:key="filterData.filter.key"
+						:cols="filterData.view.cols.col"
+						:sm="filterData.view.cols.sm ?? 6"
+					>
+						<AppAutocomplete 
+							v-model="filterData.filter.value.value" 
+							:placeholder="filterData.base.name"
+							:item-title="filterData.view.name.item_title ?? 'name'"
+							:item-value="filterData.view.name.item_value ?? 'id'" 
+							:items="filterData.api.datac" 
 							clearable
-							clear-icon="tabler-x"
-						/>
-					</VCol>
-					<VCol cols="12" sm="6">
-						<AppAutocomplete
-							v-model="activatedFilter"
-							placeholder="Activation"
-							item-title="name"
-							item-value="id"
-							:items="[
-								{ name: 'Activé', id: 'true' },
-								{ name: 'Désactivé', id: 'false' },
-							]"
-							clearable
-							clear-icon="tabler-x"
+							clear-icon="tabler-x" 
 						/>
 					</VCol>
 				</VRow>
 
 				<VDivider class="my-4" />
 			</VCardText>
+
+			<!-- Barre d'actions -->
 			<div class="d-flex flex-wrap gap-4 mx-5">
-				<div class="d-flex align-center">
-					<!-- 👉 Search  -->
-					<AppTextField
-						v-model="searchQuery"
-						placeholder="Rechercher un user"
-						density="compact"
-						style="inline-size: 200px"
-						class="me-3"
+				<div class="flex-grow-1">
+					<AppTextField 
+						v-model="searchQuery" 
+						placeholder="Rechercher un utilisateur" 
 					/>
 				</div>
 
-				<VSpacer />
-				<div class="d-flex gap-4 flex-wrap align-center">
-					<!-- 👉 Export button -->
-					<VBtn variant="tonal" color="secondary" prepend-icon="tabler-upload">
+				<div class="d-flex gap-4">
+					<VBtn 
+						variant="tonal" 
+						color="secondary" 
+						prepend-icon="tabler-download"
+					>
 						Export
 					</VBtn>
 
-					<VBtn
-						v-if="$can('create', 'user')"
-						color="primary"
+					<VBtn 
+						v-if="$can('create', viewData.data.rule.name)" 
+						color="primary" 
 						prepend-icon="tabler-plus"
-						:to="{ name: 'user-add' }"
+						:to="{ name: `${viewData.data.link.base}-add` }"
 					>
 						Nouveau
 					</VBtn>
-					<VBtn
-						:loading="loadings[3]"
-						:disabled="loadings[3]"
+
+					<VBtn 
+						:loading="loadings[3]" 
+						:disabled="loadings[3]" 
 						prepend-icon="tabler-refresh"
-						@click="
-							fetchUserList();
-							load(3);
-						"
+						@click="fetchUserList(); load(3)"
 					>
 						Recharger
 						<template #loader>
@@ -253,10 +320,12 @@ const agencyList = computed(() => agencyListData.value.data);
 			<VDataTableServer
 				v-model:items-per-page="itemsPerPage"
 				v-model:page="page"
+				:loading="loadings[4]"
 				:headers="headers"
 				:items="userList"
 				:items-length="totalTransfer"
 				class="text-no-wrap"
+				loading-text="En cours de chargement"
 				@update:options="updateOptions"
 			>
 				<template #item.activated="{ item }">
@@ -332,44 +401,47 @@ const agencyList = computed(() => agencyListData.value.data);
 					</div>
 				</template>
 
+				<!-- Pagination -->
 				<template #bottom>
 					<VDivider />
 
-					<div
-						class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3"
-					>
+					<div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
 						<p class="text-sm text-medium-emphasis mb-0">
 							{{ paginationMeta({ page, itemsPerPage }, totalTransfer) }}
 						</p>
 
-						<VPagination
-							v-model="page"
+						<VPagination 
+							v-model="page" 
 							:length="lastPage"
-							:total-visible="
-								$vuetify.display.xs ? 1 : Math.min(lastPage, 5)
-							"
+							:total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
 						>
 							<template #prev="slotProps">
-								<VBtn
-									variant="tonal"
-									color="default"
-									v-bind="slotProps"
+								<VBtn 
+									variant="tonal" 
+									color="default" 
+									v-bind="slotProps" 
 									:icon="false"
 								>
-									<VIcon start icon="tabler-arrow-left" />
-									Précedent
+									<VIcon 
+										start 
+										icon="tabler-arrow-left" 
+									/>
+									Précédent
 								</VBtn>
 							</template>
 
 							<template #next="slotProps">
-								<VBtn
-									variant="tonal"
-									color="default"
-									v-bind="slotProps"
+								<VBtn 
+									variant="tonal" 
+									color="default" 
+									v-bind="slotProps" 
 									:icon="false"
 								>
 									Suivant
-									<VIcon end icon="tabler-arrow-right" />
+									<VIcon 
+										end 
+										icon="tabler-arrow-right" 
+									/>
 								</VBtn>
 							</template>
 						</VPagination>
@@ -378,33 +450,33 @@ const agencyList = computed(() => agencyListData.value.data);
 			</VDataTableServer>
 		</VCard>
 
+		<!-- Dialog d'action -->
 		<VDialog v-model="isActionDialogVisible" class="v-dialog-sm">
-			<!-- Dialog close btn -->
 			<DialogCloseBtn @click="isActionDialogVisible = !isActionDialogVisible" />
 
-			<!-- Dialog De suppression -->
 			<VCard :title="actionTitle">
 				<VCardText>
 					{{ actionText }}
 
-					<AppTextarea
-						v-if="commentPresence"
+					<AppTextarea 
+						v-if="commentPresence" 
+						v-model="actionComment" 
 						class="mt-3"
-						v-model="actionComment"
 						label="Commentaire"
-						placeholder="Ex: RAS"
+						placeholder="Ex: RAS" 
 					/>
 				</VCardText>
 
 				<VCardText class="d-flex justify-end gap-3 flex-wrap">
-					<VBtn
-						color="secondary"
-						variant="tonal"
+					<VBtn 
+						color="secondary" 
+						variant="tonal" 
 						@click="isActionDialogVisible = false"
 					>
 						Retour
 					</VBtn>
-					<VBtn
+					<VBtn 
+						:loading="deleteLoadings[selectedItemId]"
 						@click="
 							actionFunction(selectedItemId);
 							isActionDialogVisible = false;
@@ -415,13 +487,16 @@ const agencyList = computed(() => agencyListData.value.data);
 				</VCardText>
 			</VCard>
 		</VDialog>
-		<VSnackbar
-			v-model="isSnackbarScrollReverseVisible"
-			transition="scale-transition"
+
+		<!-- Snackbar -->
+		<VSnackbar 
+			v-model="isSnackbarVisible" 
+			transition="scale-transition" 
 			location="top end"
-			:color="snackbarCollor"
+			:color="snackbarColor"
 		>
-			<div v-html="snackbarMessage"></div>
+			<!-- eslint-disable-next-line vue/no-v-html -->
+			<div v-html="snackbarMessage" />
 		</VSnackbar>
 	</div>
 </template>
