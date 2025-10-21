@@ -30,49 +30,57 @@ const emit = defineEmits([
 ])
 
 /**
- * Vérifie si l'upload est autorisé pour ce contrat
- */
-const canUploadDocuments = computed(() => {
-  if (!props.canUpload) return false
-  
-  const { status, signed_contract_path, signed_promissory_note_path } = props.contract
-  
-  return (
-    signed_contract_path == null ||
-    signed_promissory_note_path == null ||
-    status === 'rejected' ||
-    (status !== 'pending_head_validation' && status !== 'validated')
-  )
-})
-
-/**
  * Vérifie si l'upload du contrat est autorisé
+ * L'upload est autorisé si le contrat n'est pas validé par l'admin (pending_head_validation ou validated)
  */
 const canUploadContract = computed(() => {
-  if (!canUploadDocuments.value) return false
+  if (!props.canUpload) return false
   
   const { status, signed_contract_path } = props.contract
   
-  return (
-    signed_contract_path == null ||
-    status === 'rejected' ||
-    (status !== 'pending_head_validation' && status !== 'validated')
-  )
+  // Si le fichier n'existe pas, on peut toujours uploader (sauf si validé)
+  if (signed_contract_path == null && status !== 'pending_head_validation' && status !== 'validated') {
+    return true
+  }
+  
+  // Si le contrat est rejeté, on peut uploader à nouveau
+  if (status === 'rejected') {
+    return true
+  }
+  
+  // Si le contrat n'est pas encore validé par l'admin, on peut uploader indéfiniment
+  if (status !== 'pending_head_validation' && status !== 'validated') {
+    return true
+  }
+  
+  return false
 })
 
 /**
  * Vérifie si l'upload du billet à ordre est autorisé
+ * L'upload est autorisé si le contrat n'est pas validé par l'admin (pending_head_validation ou validated)
  */
 const canUploadPromissoryNote = computed(() => {
-  if (!canUploadDocuments.value) return false
+  if (!props.canUpload) return false
   
   const { status, signed_promissory_note_path } = props.contract
   
-  return (
-    signed_promissory_note_path == null ||
-    status === 'rejected' ||
-    (status !== 'pending_head_validation' && status !== 'validated')
-  )
+  // Si le fichier n'existe pas, on peut toujours uploader (sauf si validé)
+  if (signed_promissory_note_path == null && status !== 'pending_head_validation' && status !== 'validated') {
+    return true
+  }
+  
+  // Si le contrat est rejeté, on peut uploader à nouveau
+  if (status === 'rejected') {
+    return true
+  }
+  
+  // Si le contrat n'est pas encore validé par l'admin, on peut uploader indéfiniment
+  if (status !== 'pending_head_validation' && status !== 'validated') {
+    return true
+  }
+  
+  return false
 })
 </script>
 
@@ -164,7 +172,7 @@ const canUploadPromissoryNote = computed(() => {
       </template>
 
       <!-- Section uploads -->
-      <template v-if="canUploadDocuments">
+      <template v-if="canUpload && (canUploadContract || canUploadPromissoryNote)">
         <VDivider />
 
         <!-- Ajouter contrat signé -->
