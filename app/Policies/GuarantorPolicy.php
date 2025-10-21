@@ -43,10 +43,18 @@ class GuarantorPolicy
 			return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 		}
 
-		// Permettre l'upload des documents de caution même si le contrat parent est rejeté
+		// Appliquer les mêmes conditions que pour les contrats
 		$parent = $guarantor->contract ?? $guarantor->notification;
-		if ($parent && $parent->status === "rejected") {
-			return Response::allow();
+		if ($parent) {
+			// Si le contrat/notification est rejeté, on peut toujours uploader
+			if ($parent->status === "rejected") {
+				return Response::allow();
+			}
+			
+			// Si le contrat/notification est en attente de validation head ou validé, on ne peut plus uploader
+			if ($parent->status === "pending_head_validation" || $parent->status === "validated") {
+				return Response::deny("L'upload n'est plus autorisé car le contrat est en cours de validation ou validé");
+			}
 		}
 
 		return Response::allow();

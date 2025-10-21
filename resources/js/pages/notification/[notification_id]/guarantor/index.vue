@@ -185,10 +185,16 @@ const uploadFile = async (id, event) => {
 				})
 
 				if (response.ok) {
+					// Rafraîchir les données des garanties
 					await fetchItemList([4])
-					showSnackbar('success', 'Document ajouté avec succès')
+					// Rafraîchir aussi les données de la notification parent
+					await fetchNotificationData()
+					// Réinitialiser l'input file pour permettre de sélectionner le même fichier
+					event.target.value = ''
+					showSnackbar('success', 'Document mis à jour avec succès')
 				} else {
-					showSnackbar('error', 'Échec de l\'envoi du document')
+					const errorData = await response.json()
+					showSnackbar('error', errorData.error || 'Échec de l\'envoi du document')
 				}
 			} catch (error) {
 				console.error('Erreur lors de l\'envoi du document:', error)
@@ -214,6 +220,30 @@ const apiDelete = async id => {
 	} finally {
 		deleteLoadings.value[id] = false
 	}
+}
+
+// Fonctions de vérification des conditions d'upload (mêmes que pour les contrats)
+const canUploadGuarantorPromissoryNote = (guarantor) => {
+	if (!guarantor.notification) return false
+	
+	const { status, signed_promissory_note_path } = guarantor.notification
+	
+	// Si le fichier n'existe pas, on peut toujours uploader (sauf si validé)
+	if (signed_promissory_note_path == null && status !== 'pending_head_validation' && status !== 'validated') {
+		return true
+	}
+	
+	// Si la notification est rejetée, on peut uploader à nouveau
+	if (status === 'rejected') {
+		return true
+	}
+	
+	// Si la notification n'est pas encore validée par l'admin, on peut uploader indéfiniment
+	if (status !== 'pending_head_validation' && status !== 'validated') {
+		return true
+	}
+	
+	return false
 }
 
 // Watchers
@@ -400,7 +430,7 @@ onMounted(async () => {
 									
 									<!-- Ajouter Billet à ordre -->
 									<VListItem 
-										v-if="item.signed_promissory_note_path == null"
+										v-if="canUploadGuarantorPromissoryNote(item)"
 										@click="uploadState = 'signed_promissory_note'; refInputEl?.click()"
 									>
 										<template #prepend>
