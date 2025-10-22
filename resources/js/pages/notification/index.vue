@@ -102,6 +102,7 @@ const selectedType = ref()
 const searchQuery = ref('')
 const refInputEl = ref()
 const uploadState = ref('signed_notification')
+const currentNotificationId = ref(null)
 const loadings = ref([])
 const deleteLoadings = ref({})
 const itemsPerPage = ref(8)
@@ -194,14 +195,19 @@ const downloadFile = async (url, fileName) => {
 	}
 }
 
-const uploadFile = async (id, event) => {
+const uploadFile = async (event) => {
+	if (!currentNotificationId.value) {
+		showSnackbar('error', 'Erreur: ID de la notification non défini')
+		return
+	}
+
 	const { files } = event.target
 	if (files && files.length === 1) {
 		const reader = new FileReader()
 		reader.onload = async () => {
 			const base64Image = reader.result
 			try {
-				const response = await fetch(`/api/notification/upload/${id}`, {
+				const response = await fetch(`/api/notification/upload/${currentNotificationId.value}`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -392,7 +398,7 @@ onMounted(async () => {
 							<VMenu activator="parent">
 								<VList>
 									<input ref="refInputEl" type="file" name="signed_notification" hidden
-										@input="uploadFile(item.id, $event)" />
+										@input="uploadFile($event)" />
 
 									<VBadge v-if="$can('read', 'guarantor')" inline :content="item.guarantors_count">
 										<VListItem
@@ -441,7 +447,7 @@ onMounted(async () => {
 										<VDivider />
 										<!-- Ajouter Billet à ordre -->
 										<VListItem v-if="item.signed_promissory_note_path == null"
-											@click="uploadState = 'signed_promissory_note'; refInputEl?.click()">
+											@click="uploadState = 'signed_promissory_note'; currentNotificationId = item.id; refInputEl?.click()">
 
 											<template #prepend>
 												<VIcon icon="tabler-cloud-upload" />

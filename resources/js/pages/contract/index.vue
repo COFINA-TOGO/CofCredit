@@ -35,6 +35,7 @@ const userData = useCookie('userData')
 // Refs pour les fichiers et dialogs
 const refInputEl = ref()
 const uploadState = ref('signed_contract')
+const currentContractId = ref(null)
 const selectedItemId = ref(0)
 const isActionDialogVisible = ref(false)
 const actionTitle = ref('')
@@ -217,8 +218,13 @@ const {
 /**
  * Gère l'upload d'un fichier
  */
-const handleUploadFile = async (contractId, event) => {
-  const success = await uploadFile(contractId, event, uploadState.value)
+const handleUploadFile = async (event) => {
+  if (!currentContractId.value) {
+    showSnackbar('error', 'Erreur: ID du contrat non défini')
+    return
+  }
+  
+  const success = await uploadFile(currentContractId.value, event, uploadState.value)
   if (success) {
     await fetchItemList()
   }
@@ -320,16 +326,18 @@ const formatAmount = amount => {
 /**
  * Configure l'upload de contrat signé
  */
-const triggerContractUpload = () => {
+const triggerContractUpload = (contractId) => {
   uploadState.value = 'signed_contract'
+  currentContractId.value = contractId
   refInputEl.value?.click()
 }
 
 /**
  * Configure l'upload de billet à ordre signé
  */
-const triggerPromissoryNoteUpload = () => {
+const triggerPromissoryNoteUpload = (contractId) => {
   uploadState.value = 'signed_promissory_note'
+  currentContractId.value = contractId
   refInputEl.value?.click()
 }
 
@@ -457,8 +465,8 @@ onMounted(async () => {
             v-if="item.observations.length > 0"
             :observations="item.observations"
             :contract-id="item.id"
-            @upload-contract="triggerContractUpload"
-            @upload-promissory-note="triggerPromissoryNoteUpload"
+            @upload-contract="() => triggerContractUpload(item.id)"
+            @upload-promissory-note="() => triggerPromissoryNoteUpload(item.id)"
           />
 
           <!-- Statut sans observations -->
@@ -519,7 +527,7 @@ onMounted(async () => {
                   type="file"
                   name="signed_contract"
                   hidden
-                  @input="handleUploadFile(item.id, $event)"
+                  @input="handleUploadFile($event)"
                 >
 
                 <ContractActionsMenu
@@ -557,8 +565,8 @@ onMounted(async () => {
                       c.verbal_trial.committee_id
                     )
                   "
-                  @upload-contract="triggerContractUpload"
-                  @upload-promissory-note="triggerPromissoryNoteUpload"
+                  @upload-contract="() => triggerContractUpload(item.id)"
+                  @upload-promissory-note="() => triggerPromissoryNoteUpload(item.id)"
                 />
               </VBtn>
             </div>
