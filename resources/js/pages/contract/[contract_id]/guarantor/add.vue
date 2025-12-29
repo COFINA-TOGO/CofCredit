@@ -60,6 +60,7 @@ const documentTypeList = [
   { value: "consular_card", title: 'Carte consulaire' },
   { value: "ECOWAS_identity_card", title: 'Carte d’identité de la CEDEAO' },
   { value: "residence_permit", title: 'Carte de séjour' },
+	{ value: "and_card", title: "Carte AND" },
 ]
 
 const refForm = ref()

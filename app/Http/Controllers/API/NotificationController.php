@@ -343,6 +343,7 @@ class NotificationController extends Controller
 					"consular_card" => "Carte consulaire",
 					"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
 					"residence_permit" => "Carte de séjour",
+					"and_card" => "Carte AND",
 				][$data["representative_type_of_identity_document"]];
 				$data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
 				$data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
@@ -453,7 +454,7 @@ class NotificationController extends Controller
 				'representative_home_address' => 'required|min:2',
 				'number_of_due_dates' => 'required|numeric',
 				'total_amount_of_interest' => 'required|numeric',
-				'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence',
+				'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,and_card',
 				'representative_number_of_identity_document' => 'required|min:2',
 				'representative_date_of_issue_of_identity_document' => 'required|date',
 				'type' => 'required|in:particular,company,individual_business',
@@ -539,7 +540,7 @@ class NotificationController extends Controller
 					'representative_home_address' => 'required|min:2',
 					'number_of_due_dates' => 'required|numeric',
 					'total_amount_of_interest' => 'required|numeric',
-					'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence',
+					'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,and_card',
 					'representative_number_of_identity_document' => 'required|min:2',
 					'representative_date_of_issue_of_identity_document' => 'required|date',
 					'type' => 'required|in:particular,company,individual_business',
