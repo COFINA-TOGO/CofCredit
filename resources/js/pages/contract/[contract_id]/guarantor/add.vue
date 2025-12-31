@@ -164,7 +164,7 @@ const onSubmit = () => {
                   <AppDateTimePicker v-model="guarantorItem.date_of_issue_of_identity_document"
                     :error-messages="guarantorError.date_of_issue_of_identity_document"
                     label="Date de délivrance de la pièce d'identité" placeholder="Ex: 2022-01-01"
-                    :rules="[requiredValidator]" />
+                     />
                 </VCol>
                 <VCol cols="12" md="6" lg="4">
                   <AppTextField v-model="guarantorItem.function" :error-messages="guarantorError.function"

@@ -214,15 +214,15 @@ class GuarantorController extends Controller
 			unset($data["contract.verbal_trial.guarantees"]);
 			unset($data["contract.verbal_trial.contract"]);
 			unset($data["contract"]);
-			$data["type_of_identity_document.fr"] = [
-				"cni" => "Carte d'identité nationale",
-				"passport" => "Passeport",
-				"residence_certificate" => "Certificat de résidence",
-				"driving_licence" => "Permis de conduire",
-				"consular_card" => "Carte consulaire",
-				"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
-				"residence_permit" => "Carte de séjour",
-				"anid_card" => "Carte ANID",
+			$data["type_of_identity_document"] = [
+				"cni" => "d'une Carte d'identité nationale",
+				"passport" => "d'un Passeport",
+				"residence_certificate" => "d'un Certificat de résidence",
+				"driving_licence" => "d'un Permis de conduire",
+				"consular_card" => "d'une Carte consulaire",
+				"ECOWAS_identity_card" => "d'une Carte d’identité de la CEDEAO",
+				"residence_permit" => "d'une Carte de séjour",
+				"anid_card" => "d'une Carte ANID",
 			][$data["type_of_identity_document"]];
 
 			$data["client_name"] = $parent->type == "particular" ? $parent->verbal_trial->civility . " " . $parent->verbal_trial->applicant_full_name : $parent->verbal_trial->entity_name;
@@ -306,14 +306,14 @@ class GuarantorController extends Controller
 			$data["line_review_bonus"] = $data["contract.verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne      : 1% du capital restant dû après 12 mois" : "";
 			$data["signatory"] = (((float) $data["contract.verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 			$data["type_of_identity_document.fr"] = [
-				"cni" => "Carte d'identité nationale",
-				"passport" => "Passeport",
-				"residence_certificate" => "Certificat de résidence",
-				"driving_licence" => "Permis de conduire",
-				"consular_card" => "Carte consulaire",
-				"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
-				"residence_permit" => "Carte de séjour",
-				"anid_card" => "Carte ANID",
+				"cni" => "d'une Carte d'identité nationale",
+				"passport" => "d'un Passeport",
+				"residence_certificate" => "d'un Certificat de résidence",
+				"driving_licence" => "d'un Permis de conduire",
+				"consular_card" => "d'une Carte consulaire",
+				"ECOWAS_identity_card" => "d'une Carte d’identité de la CEDEAO",
+				"residence_permit" => "d'une Carte de séjour",
+				"anid_card" => "d'une Carte ANID",
 			][$data["type_of_identity_document"]];
 			
 			$data["contract.verbal_trial.amount"] = number_format(((float) $data["contract.verbal_trial.amount"]), 0, ',', ' ');
@@ -393,7 +393,7 @@ class GuarantorController extends Controller
 				'home_address' => 'required|min:2',
 				'type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,anid_card',
 				'number_of_identity_document' => 'required|min:2',
-				'date_of_issue_of_identity_document' => 'required|date',
+				'date_of_issue_of_identity_document' => 'sometimes',
 				'function' => 'required|min:2',
 				'phone_number' => 'required|min:2',
 			]);
@@ -457,7 +457,7 @@ class GuarantorController extends Controller
 					'home_address' => 'required|min:2',
 					'type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,anid_card',
 					'number_of_identity_document' => 'required|min:2',
-					'date_of_issue_of_identity_document' => 'required|date',
+					'date_of_issue_of_identity_document' => 'sometimes',
 					'function' => 'required|min:2',
 					'phone_number' => 'required|min:2',
 				]);

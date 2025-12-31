@@ -44,6 +44,13 @@ class Notification extends Model
 		$data["created_at_fr"] = Carbon::parse($data["created_at"])->format("d/m/Y H:i:s");
 		$data["updated_at_fr"] = Carbon::parse($data["updated_at"])->format("d/m/Y H:i:s");
 		$data["verbal_trial_id"] = (int) $data["verbal_trial_id"];
+
+		if($data["representative_date_of_issue_of_identity_document"]){
+			$data["representative_date_of_issue_of_identity_document_fr"] = " délivrée le " . Carbon::parse($data["representative_date_of_issue_of_identity_document"])->format("d/m/Y");
+		}else{
+			$data["representative_date_of_issue_of_identity_document_fr"] = "";
+		}
+		
 		$data["sent"] = (int) $data["sent"];
 		return $data;
 	}

@@ -55,7 +55,13 @@ class Contract extends Model
 		$data["has_pledges"] = (string) $data["has_pledges"];
 		$data["representative_birth_date_fr"] = Carbon::parse($data["representative_birth_date"])->format("d/m/Y");
 		$data["representative_birth_date_fr"] = Carbon::parse($data["representative_birth_date"])->format("d/m/Y");
-		$data["representative_date_of_issue_of_identity_document_fr"] = Carbon::parse($data["representative_date_of_issue_of_identity_document"])->format("d/m/Y");
+
+		if($data["representative_date_of_issue_of_identity_document"]){
+			$data["representative_date_of_issue_of_identity_document_fr"] = " délivrée le " . Carbon::parse($data["representative_date_of_issue_of_identity_document"])->format("d/m/Y");
+		}else{
+			$data["representative_date_of_issue_of_identity_document_fr"] = "";
+		}
+		
 		return $data;
 	}
 

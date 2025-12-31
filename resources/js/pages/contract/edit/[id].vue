@@ -439,7 +439,6 @@ const nextRoute = contract.value.cat ? {name: 'contract-historicarl'} : {name: '
 										"
 										label="Date de délivrance de la pièce d'identité"
 										placeholder="Ex: 2022-01-01"
-										:rules="[requiredValidator]"
 									/>
 								</VCol>
 								<VCol cols="12" md="6" lg="6">

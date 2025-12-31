@@ -438,14 +438,14 @@ class ContractController extends Controller
 			$data["line_review_bonus"] = $data["verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne	  : 1% du capital restant dû après 12 mois" : "";
 
 			$data["representative_type_of_identity_document"] = [
-				"cni" => "Carte d'identité nationale",
-				"passport" => "Passeport",
-				"residence_certificate" => "Certificat de résidence",
-				"driving_licence" => "Permis de conduire",
-				"consular_card" => "Carte consulaire",
-				"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
-				"residence_permit" => "Carte de séjour",
-				"anid_card" => "Carte ANID",
+				"cni" => "d'une Carte d'identité nationale",
+				"passport" => "d'un Passeport",
+				"residence_certificate" => "d'un Certificat de résidence",
+				"driving_licence" => "d'un Permis de conduire",
+				"consular_card" => "d'une Carte consulaire",
+				"ECOWAS_identity_card" => "d'une Carte d’identité de la CEDEAO",
+				"residence_permit" => "d'une Carte de séjour",
+				"anid_card" => "d'une Carte ANID",
 			][$data["representative_type_of_identity_document"]];
 
 			$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
@@ -554,7 +554,7 @@ class ContractController extends Controller
 				'representative_home_address' => 'required|min:2',
 				'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,anid_card',
 				'representative_number_of_identity_document' => 'required|min:2',
-				'representative_date_of_issue_of_identity_document' => 'required|date',
+				'representative_date_of_issue_of_identity_document' => 'sometimes',
 				'representative_phone_number' => 'required|min:2',
 				'total_amount_of_interest' => 'required|numeric',
 				'number_of_due_dates' => 'required|numeric',
@@ -714,7 +714,7 @@ class ContractController extends Controller
 					'representative_home_address' => 'required|min:2',
 					'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,anid_card',
 					'representative_number_of_identity_document' => 'required|min:2',
-					'representative_date_of_issue_of_identity_document' => 'required|date',
+					'representative_date_of_issue_of_identity_document' => 'sometimes',
 					'representative_phone_number' => 'required|min:2',
 					'total_amount_of_interest' => 'required|numeric',
 					'number_of_due_dates' => 'required|numeric',

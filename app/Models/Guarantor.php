@@ -42,7 +42,12 @@ class Guarantor extends Model
         $data["birth_date_fr"] = Carbon::parse($data["birth_date"])->format("d/m/Y");
         $data["contract_id"] = isset($data["contract_id"]) ? (int) $data["contract_id"] : null;
         $data["notification_id"] = isset($data["notification_id"]) ? (int) $data["notification_id"] : null;
-        $data["date_of_issue_of_identity_document_fr"] = Carbon::parse($data["date_of_issue_of_identity_document"])->format("d/m/Y");
+
+		if($data["date_of_issue_of_identity_document"]){
+			$data["date_of_issue_of_identity_document_fr"] = " délivrée le " . Carbon::parse($data["date_of_issue_of_identity_document"])->format("d/m/Y");
+		}else{
+			$data["date_of_issue_of_identity_document_fr"] = "";
+		}
         return $data;
     }
 

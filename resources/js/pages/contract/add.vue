@@ -396,7 +396,6 @@ if (route.query.id) {
 											formError.representative_date_of_issue_of_identity_document
 										"
 										label="Date de délivrance de la pièce d'identité"
-										:rules="[requiredValidator]"
 									/>
 								</VCol>
 								<VCol cols="12" md="6" lg="6">

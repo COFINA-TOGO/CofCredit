@@ -205,8 +205,7 @@ verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value
 									<AppDateTimePicker
 										v-model="notification.representative_date_of_issue_of_identity_document"
 										:error-messages="formError.representative_date_of_issue_of_identity_document"
-										label="Date de délivrance de la pièce d'identité" placeholder="Ex: 2022-01-01"
-										:rules="[requiredValidator]" />
+										label="Date de délivrance de la pièce d'identité" placeholder="Ex: 2022-01-01"/>
 								</VCol>
 							</VRow>
 						</VCardText>

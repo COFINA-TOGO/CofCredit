@@ -194,7 +194,7 @@ const documentTypeList = [
 										v-model="notificationData.representative_date_of_issue_of_identity_document"
 										:error-messages="formError.representative_date_of_issue_of_identity_document"
 										label="Date de délivrance de la pièce d'identité" placeholder="Ex: 2022-01-01"
-										:rules="[requiredValidator]" />
+										 />
 								</VCol>
 							</VRow>
 						</VCardText>

@@ -336,14 +336,14 @@ class NotificationController extends Controller
 				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
 				$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
 				$data["representative_type_of_identity_document"] = [
-					"cni" => "Carte d'identité nationale",
-					"passport" => "Passeport",
-					"residence_certificate" => "Certificat de résidence",
-					"driving_licence" => "Permis de conduire",
-					"consular_card" => "Carte consulaire",
-					"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
-					"residence_permit" => "Carte de séjour",
-					"anid_card" => "Carte ANID",
+					"cni" => "d'une Carte d'identité nationale",
+					"passport" => "d'un Passeport",
+					"residence_certificate" => "d'un Certificat de résidence",
+					"driving_licence" => "d'un Permis de conduire",
+					"consular_card" => "d'une Carte consulaire",
+					"ECOWAS_identity_card" => "d'une Carte d’identité de la CEDEAO",
+					"residence_permit" => "d'une Carte de séjour",
+					"anid_card" => "d'une Carte ANID",
 				][$data["representative_type_of_identity_document"]];
 				$data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
 				$data["total_to_pay"] = number_format(((float) $data["total_to_pay"]), 0, ',', ' ');
@@ -441,7 +441,7 @@ class NotificationController extends Controller
 	 * @bodyParam   representative_number_of_identity_document				int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   representative_date_of_issue_of_identity_document		int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
 	 * @bodyParam   type													int				La prime de risque (en pourcentage) du crédit du demandeur.								 Example: 2
-	 * @bodyParam   due_amount											 	int			  	Le montant d'une échéance.											  Example: 250000
+	 * @bodyParam   due_amount											 	int			  	Le montant d'une échéance.																 Example: 250000
 	 *
 	 * @response 200
 	 */
@@ -456,7 +456,7 @@ class NotificationController extends Controller
 				'total_amount_of_interest' => 'required|numeric',
 				'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,anid_card',
 				'representative_number_of_identity_document' => 'required|min:2',
-				'representative_date_of_issue_of_identity_document' => 'required|date',
+				'representative_date_of_issue_of_identity_document' => 'sometimes',
 				'type' => 'required|in:particular,company,individual_business',
 				'due_amount' => 'required|numeric',
 			]);
@@ -542,7 +542,7 @@ class NotificationController extends Controller
 					'total_amount_of_interest' => 'required|numeric',
 					'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,anid_card',
 					'representative_number_of_identity_document' => 'required|min:2',
-					'representative_date_of_issue_of_identity_document' => 'required|date',
+					'representative_date_of_issue_of_identity_document' => 'sometimes',
 					'type' => 'required|in:particular,company,individual_business',
 					'due_amount' => 'required|numeric',
 				]);
