@@ -23,7 +23,7 @@ const documentTypeList = {
 	"consular_card": "Carte consulaire",
 	"ECOWAS_identity_card": "Carte d’identité de la CEDEAO",
 	"residence_permit": "Carte de séjour",
-	"and_card": "Carte AND",
+	"anid_card": "Carte ANID",
 }
 const notificationTypeList = {
 	"company": "Société",

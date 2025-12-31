@@ -287,7 +287,7 @@ class ContractController extends Controller
 					"consular_card" => "Carte consulaire",
 					"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
 					"residence_permit" => "Carte de séjour",
-					"and_card" => "Carte AND",
+					"anid_card" => "Carte ANID",
 				][$data["representative_type_of_identity_document"]];
 
 				$data["day_due_amount"] = number_format(((float) $data["day_due_amount"]), 0, ',', ' ');
@@ -445,7 +445,7 @@ class ContractController extends Controller
 				"consular_card" => "Carte consulaire",
 				"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
 				"residence_permit" => "Carte de séjour",
-				"and_card" => "Carte AND",
+				"anid_card" => "Carte ANID",
 			][$data["representative_type_of_identity_document"]];
 
 			$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
@@ -552,7 +552,7 @@ class ContractController extends Controller
 				'representative_birth_place' => 'required|min:2',
 				'representative_nationality' => 'required|min:2',
 				'representative_home_address' => 'required|min:2',
-				'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,and_card',
+				'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,anid_card',
 				'representative_number_of_identity_document' => 'required|min:2',
 				'representative_date_of_issue_of_identity_document' => 'required|date',
 				'representative_phone_number' => 'required|min:2',
@@ -712,7 +712,7 @@ class ContractController extends Controller
 					'representative_birth_place' => 'required|min:2',
 					'representative_nationality' => 'required|min:2',
 					'representative_home_address' => 'required|min:2',
-					'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,and_card',
+					'representative_type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,anid_card',
 					'representative_number_of_identity_document' => 'required|min:2',
 					'representative_date_of_issue_of_identity_document' => 'required|date',
 					'representative_phone_number' => 'required|min:2',

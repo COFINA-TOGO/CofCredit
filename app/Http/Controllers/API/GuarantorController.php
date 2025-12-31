@@ -222,7 +222,7 @@ class GuarantorController extends Controller
 				"consular_card" => "Carte consulaire",
 				"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
 				"residence_permit" => "Carte de séjour",
-				"and_card" => "Carte AND",
+				"anid_card" => "Carte ANID",
 			][$data["type_of_identity_document"]];
 
 			$data["client_name"] = $parent->type == "particular" ? $parent->verbal_trial->civility . " " . $parent->verbal_trial->applicant_full_name : $parent->verbal_trial->entity_name;
@@ -313,7 +313,7 @@ class GuarantorController extends Controller
 				"consular_card" => "Carte consulaire",
 				"ECOWAS_identity_card" => "Carte d’identité de la CEDEAO",
 				"residence_permit" => "Carte de séjour",
-				"and_card" => "Carte AND",
+				"anid_card" => "Carte ANID",
 			][$data["type_of_identity_document"]];
 			
 			$data["contract.verbal_trial.amount"] = number_format(((float) $data["contract.verbal_trial.amount"]), 0, ',', ' ');
@@ -391,7 +391,7 @@ class GuarantorController extends Controller
 				'birth_place' => 'required|min:2',
 				'nationality' => 'required|min:2',
 				'home_address' => 'required|min:2',
-				'type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,and_card',
+				'type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,anid_card',
 				'number_of_identity_document' => 'required|min:2',
 				'date_of_issue_of_identity_document' => 'required|date',
 				'function' => 'required|min:2',
@@ -455,7 +455,7 @@ class GuarantorController extends Controller
 					'birth_place' => 'required|min:2',
 					'nationality' => 'required|min:2',
 					'home_address' => 'required|min:2',
-					'type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,and_card',
+					'type_of_identity_document' => 'required|in:cni,passport,residence_certificate,driving_licence,consular_card,ECOWAS_identity_card,residence_permit,anid_card',
 					'number_of_identity_document' => 'required|min:2',
 					'date_of_issue_of_identity_document' => 'required|date',
 					'function' => 'required|min:2',

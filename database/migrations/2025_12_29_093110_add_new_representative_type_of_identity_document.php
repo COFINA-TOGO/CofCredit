@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('contracts', function (Blueprint $table) {
-            $table->enum("representative_type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence", "consular_card", "ECOWAS_identity_card", "residence_permit", "and_card"])->default('cni')->change();
+            $table->enum("representative_type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence", "consular_card", "ECOWAS_identity_card", "residence_permit", "anid_card"])->default('cni')->change();
 			$table->date("representative_date_of_issue_of_identity_document")->nullable()->change();
         });
         Schema::table('notifications', function (Blueprint $table) {
-            $table->enum("representative_type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence", "consular_card", "ECOWAS_identity_card", "residence_permit", "and_card"])->default('cni')->change();
+            $table->enum("representative_type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence", "consular_card", "ECOWAS_identity_card", "residence_permit", "anid_card"])->default('cni')->change();
             $table->date("representative_date_of_issue_of_identity_document")->nullable()->change();
         });
         Schema::table('guarantors', function (Blueprint $table) {
-            $table->enum("type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence", "consular_card", "ECOWAS_identity_card", "residence_permit", "and_card"])->default('cni')->change();
+            $table->enum("type_of_identity_document", ["cni", "passport", "residence_certificate", "driving_licence", "consular_card", "ECOWAS_identity_card", "residence_permit", "anid_card"])->default('cni')->change();
             $table->date("date_of_issue_of_identity_document")->nullable()->change();
         });
     }
