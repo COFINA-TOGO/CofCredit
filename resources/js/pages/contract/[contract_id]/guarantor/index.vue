@@ -23,6 +23,7 @@ const itemsPerPage = ref(8)
 const page = ref(1)
 const loadings = ref([])
 const deleteLoadings = ref({})
+const exportLoading = ref(false)
 
 // Snackbar
 const isSnackbarVisible = ref(false)
@@ -209,6 +210,32 @@ const uploadFile = async (id, event) => {
 	}
 }
 
+// Export guarantors
+const exportGuarantors = async () => {
+	exportLoading.value = true
+	const userToken = useCookie('userToken').value
+	const currentDate = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-')
+
+	try {
+		new JsFileDownloader({
+			url: '/api/guarantor/export',
+			headers: [
+				{ name: 'Authorization', value: `Bearer ${userToken}` },
+				{ name: 'Accept', value: `application/json` },
+			],
+			nameCallback: function (name) {
+				return `garants-${currentDate}.xlsx`
+			},
+		})
+		showSnackbar('success', 'Export en cours...')
+	} catch (error) {
+		console.error('Erreur lors de l\'export:', error)
+		showSnackbar('error', 'Erreur lors de l\'export des garants')
+	} finally {
+		exportLoading.value = false
+	}
+}
+
 // Delete guarantor
 const apiDelete = async id => {
 	deleteLoadings.value[id] = true
@@ -312,12 +339,20 @@ onMounted(async () => {
 				</div>
 
 				<div class="d-flex gap-4">
-					<VBtn 
-						variant="tonal" 
-						color="secondary" 
+					<VBtn
+						variant="tonal"
+						color="secondary"
 						prepend-icon="tabler-download"
+						:loading="exportLoading"
+						:disabled="exportLoading"
+						@click="exportGuarantors"
 					>
 						Export
+						<template #loader>
+							<span class="custom-loader">
+								<VIcon icon="tabler-refresh" />
+							</span>
+						</template>
 					</VBtn>
 
 					<VBtn 
