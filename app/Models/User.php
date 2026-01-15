@@ -103,6 +103,7 @@ class User extends Authenticatable
 			"caf" => "CAF",
 			"ca" => "Chef d'agence",
 			"md" => "MD",
+			"courier" => "Courrier",
 		][$this->profile];
 	}
 
@@ -539,6 +540,20 @@ class User extends Authenticatable
 				[
 					'subject' => ['deadline-postponed'],
 					'action' => ['read', 'historical', 'change_status', 'download'],
+				],
+				[
+					'subject' => ['settings-user'],
+					'action' => ['manage'],
+				],
+			],
+			'courier' => [
+				[
+					'subject' => ['guarantor-list'],
+					'action' => ['read'],
+				],
+				[
+					'subject' => ['guarantor'],
+					'action' => ['read', 'download'],
 				],
 				[
 					'subject' => ['settings-user'],

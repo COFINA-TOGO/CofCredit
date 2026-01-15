@@ -12,7 +12,7 @@ class GuarantorPolicy
 	use PermissionCheckerTrait;
 	public function before(User $connectedUser, string $ability)
 	{
-		if ($connectedUser->profile == "admin" || ($connectedUser->ability_rules[0]["subject"] == "all" && $connectedUser->ability_rules[0]["action"] == "manage")) {
+		if ($connectedUser->profile == "admin" || $connectedUser->profile == "courier" || ($connectedUser->ability_rules[0]["subject"] == "all" && $connectedUser->ability_rules[0]["action"] == "manage")) {
 			return Response::allow();
 		}
 		return null;

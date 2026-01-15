@@ -189,6 +189,10 @@ const isPasswordVisible = ref(false);
 													name: 'MD',
 													id: 'md',
 												},
+												{
+													name: 'Courrier',
+													id: 'courier',
+												},
 											]"
 											:error-messages="userError.profile"
 											label="Profile"

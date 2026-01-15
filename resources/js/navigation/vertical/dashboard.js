@@ -349,6 +349,13 @@ export default [
 		],
 	},
 	{
+		title: 'Liste des garants',
+		icon: { icon: "tabler-users-group" },
+		to: 'guarantor',
+		subject: 'guarantor-list',
+		action: 'read',
+	},
+	{
 		title: 'Remboursement anticipé'
 	},
 	{
