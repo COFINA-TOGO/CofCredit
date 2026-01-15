@@ -40,6 +40,9 @@ export const redirects = [
       if (userRole === 'admin')
         return { name: 'pv' }
 
+      if (userRole === 'courier')
+        return { name: 'guarantor' }
+
       return { name: 'login', query: to.query }
     },
   },
