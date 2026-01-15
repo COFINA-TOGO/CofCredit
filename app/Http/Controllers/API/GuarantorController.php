@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Exports\QueryGuarantor;
 use App\Http\Controllers\Controller;
 use App\Models\Guarantor;
 use Carbon\Carbon;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Rmunate\Utilities\SpellNumber;
 
@@ -135,6 +137,17 @@ class GuarantorController extends Controller
 		}
 	}
 
+
+	/**
+	 * Exporter les garants
+	 *
+	 * @response 200
+	 */
+	public function export(Request $request){
+		$date = Carbon::now()->format('d-m-Y_H-i-s');
+		return Excel::download(new QueryGuarantor(), "garants-($date).xlsx");
+	}
+
 	/**
 	 * Télécharge la version word d'une caution
 	 *
@@ -150,7 +163,7 @@ class GuarantorController extends Controller
 			// $guarantor->load(["verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"]);
 			$data = $guarantor->toArray();
 			$parent = $guarantor->notification ? $guarantor->notification : $guarantor->contract;
-			$templatePath =  "../document_templates/Contracts/$parent->type/contract_caution_$parent->type.docx";
+			$templatePath = "../document_templates/Contracts/$parent->type/contract_caution_$parent->type.docx";
 			$templateProcessor = new TemplateProcessor($templatePath);
 
 
@@ -235,7 +248,7 @@ class GuarantorController extends Controller
 
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
-			
+
 			// $outputFilePdfFolderPath = public_path("generated/pdf");
 			// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
 			// $output = [];
@@ -265,7 +278,7 @@ class GuarantorController extends Controller
 
 			$data = $guarantor->toArray();
 			$parent = $guarantor->notification ? $guarantor->notification : $guarantor->contract;
-			$templatePath =  "../document_templates/Contracts/$parent->type/billet_a_ordre_caution_$parent->type.docx";
+			$templatePath = "../document_templates/Contracts/$parent->type/billet_a_ordre_caution_$parent->type.docx";
 			$templateProcessor = new TemplateProcessor($templatePath);
 
 			$data = array_merge($data, collect($parent)->mapWithKeys(function ($value, $key) {
@@ -315,7 +328,7 @@ class GuarantorController extends Controller
 				"residence_permit" => "d'une Carte de séjour",
 				"anid_card" => "d'une Carte ANID",
 			][$data["type_of_identity_document"]];
-			
+
 			$data["contract.verbal_trial.amount"] = number_format(((float) $data["contract.verbal_trial.amount"]), 0, ',', ' ');
 			$data["contract.total_amount_of_interest"] = number_format(((float) $data["contract.total_amount_of_interest"]), 0, ',', ' ');
 			$data["contract.due_amount"] = number_format(((float) $data["contract.due_amount"]), 0, ',', ' ');
@@ -335,7 +348,7 @@ class GuarantorController extends Controller
 			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
-			
+
 			// $outputFilePdfFolderPath = public_path("generated/pdf");
 			// $command = sprintf('/usr/bin/libreoffice --headless --convert-to pdf %s --outdir %s', escapeshellarg($wordFilePath), escapeshellarg($outputFilePdfFolderPath));
 			// $output = [];
@@ -520,7 +533,7 @@ class GuarantorController extends Controller
 					return $this->responseError(["error" => "Le document doit être un pdf ou une image"], 400);
 				}
 				$documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $base64Document));
-				
+
 				// Supprimer l'ancien fichier s'il existe
 				$oldPath = $guarantor->{"signed_{$document_category}_path"};
 				if ($oldPath) {
@@ -529,19 +542,19 @@ class GuarantorController extends Controller
 						Storage::disk("public")->delete($oldFilePath);
 					}
 				}
-				
+
 				// Créer un nouveau chemin avec timestamp pour éviter les conflits
 				$timestamp = now()->format('Y-m-d_H-i-s');
 				$path = 'upload/guarantors/signed_' . $document_category . 's/' . $guarantor->id . '-' . $timestamp . '-signed.' . $extension;
-				
+
 				// Sauvegarder le nouveau fichier
 				$saved = Storage::disk("public")->put($path, $documentData);
-				
+
 				if (!$saved) {
 					DB::rollBack();
 					return $this->responseError(["error" => "Erreur lors de la sauvegarde du fichier"], 500);
 				}
-				
+
 				// Mettre à jour la garantie
 				$guarantor->update(["signed_{$document_category}_path" => "/storage/" . $path]);
 

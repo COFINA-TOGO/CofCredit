@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\QueryGuarantor;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CATController;
 use App\Http\Controllers\API\DeadlinePostponedController;
@@ -11,7 +12,9 @@ use App\Http\Controllers\API\TypeOfApplicantController;
 use App\Http\Controllers\API\TypeOfCreditController;
 use App\Http\Controllers\API\TypeOfGuaranteeController;
 use App\Http\Controllers\API\VerbalTrialController;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +95,7 @@ Route::middleware('auth:sanctum')->group(function () {
 	});
 	Route::prefix("guarantor")->name("guarantor.")->group(function () {
 		Route::get("/", [GuarantorController::class, "index"])->name("index");
+		Route::get("/export", [GuarantorController::class, "export"])->name("export");
 		Route::get("/download/{id}", [GuarantorController::class, "download"])->name("download");
 		Route::post("/upload/{id}", [GuarantorController::class, "upload"])->name("upload");
 		Route::get("/promissory-note/download/{id}", [GuarantorController::class, "promissory_note"])->name("promissory-note.download");
