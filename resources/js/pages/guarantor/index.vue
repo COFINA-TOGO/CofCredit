@@ -168,8 +168,7 @@ onMounted(async () => {
 
 				<div class="d-flex gap-4">
 					<VBtn
-						variant="tonal"
-						color="secondary"
+						color="success"
 						prepend-icon="tabler-download"
 						:loading="exportLoading"
 						:disabled="exportLoading"
