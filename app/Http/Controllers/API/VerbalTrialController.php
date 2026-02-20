@@ -495,7 +495,7 @@ class VerbalTrialController extends Controller
 						DB::beginTransaction();
 						try {
 							$requestData["creator_id"] = $request->user()->id;
-							$requestData["validation_level"] = "credit_admin";
+							$requestData["validation_level"] = "head_credit";
 							if (!isset($requestData["entity_name"])) {
 								$requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
 							}

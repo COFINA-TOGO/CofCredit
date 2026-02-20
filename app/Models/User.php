@@ -119,7 +119,7 @@ class User extends Authenticatable
 			'caf' => [
 				[
 					'subject' => ['pv'],
-					'action' => ['menu', 'read', 'historical', 'create', 'download'],
+					'action' => ['menu', 'read', 'historical', 'download'],
 				],
 				[
 					'subject' => ['pv-notification'],
@@ -189,7 +189,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['pv'],
-					'action' => ['menu', 'read', 'historical', 'create', 'update', 'delete', 'download', 'analyst_delete'],
+					'action' => ['menu', 'read', 'historical', 'download', 'analyst_delete'],
 				],
 				[
 					'subject' => ['type-of-guarantee'],
@@ -223,7 +223,7 @@ class User extends Authenticatable
 			'credit_admin' => [
 				[
 					'subject' => ['pv'],
-					'action' => ['menu', 'read', 'historical', 'download', 'change_status', 'validate', 'reject'],
+					'action' => ['menu', 'read', 'create', 'update', 'historical', 'download', 'change_status', 'validate', 'reject'],
 				],
 				[
 					'subject' => ['contract'],
