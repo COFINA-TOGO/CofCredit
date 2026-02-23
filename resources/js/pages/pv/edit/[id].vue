@@ -86,7 +86,6 @@ const getEmptyError = () => {
 		administrative_fees_percentage: "",
 		taf: "",
 		tax_fee_interest_rate: "",
-		credit_admin_id: "",
 		credit_analyst_id: "",
 		reserve: "",
 		entity_name: "",
@@ -141,7 +140,6 @@ const onSubmit = () => {
 					taf: verbalTrial.value.taf,
 					tax_fee_interest_rate: verbalTrial.value.tax_fee_interest_rate,
 					guarantees: verbalTrial.value.guarantees,
-					credit_admin_id: verbalTrial.value.credit_admin_id,
 					credit_analyst_id: verbalTrial.value.credit_analyst_id,
 					reserve: verbalTrial.value.reserve,
 					entity_name: verbalTrial.value.entity_name,
@@ -249,6 +247,16 @@ if (
 									</VCol>
 								</VRow>
 								<VRow>
+									<VCol cols="12" md="6" lg="6">
+										<AppDateTimePicker v-model="verbalTrial.committee_date" :error-messages="verbalTrialError.committee_date
+											" label="Date du comitée" placeholder="" :rules="[requiredValidator]" />
+									</VCol>
+									<VCol cols="12" md="6" lg="6">
+										<AppAutocomplete v-model="verbalTrial.credit_analyst_id"
+											:items="creditAnalystList" :error-messages="verbalTrialError.credit_analyst_id
+												" label="Analyste Crédit" placeholder="" item-title="full_name" item-value="id"
+											:rules="[requiredValidator]" />
+									</VCol>
 									<VCol cols="12" md="6" lg="4">
 										<AppTextField v-model="verbalTrial.committee_id" :error-messages="verbalTrialError.committee_id
 											" label="Numéro du comitée" placeholder="" :rules="[requiredValidator]" />
@@ -261,22 +269,6 @@ if (
 										<AppTextField v-model="verbalTrial.representative_phone_number"
 											:error-messages="verbalTrialError.representative_phone_number"
 											label="Numéro de téléphone" placeholder="Ex: +228 96 96 96 96"
-											:rules="[requiredValidator]" />
-									</VCol>
-									<VCol cols="12" md="6" lg="4">
-										<AppDateTimePicker v-model="verbalTrial.committee_date" :error-messages="verbalTrialError.committee_date
-											" label="Date du comitée" placeholder="" :rules="[requiredValidator]" />
-									</VCol>
-									<VCol cols="12" md="6" lg="4">
-										<AppAutocomplete v-model="verbalTrial.credit_admin_id" :items="creditAdminList"
-											:error-messages="verbalTrialError.credit_admin_id
-												" label="Administrateur Crédit" placeholder="" item-title="full_name" item-value="id"
-											:rules="[requiredValidator]" />
-									</VCol>
-									<VCol cols="12" md="6" lg="4">
-										<AppAutocomplete v-model="verbalTrial.credit_analyst_id"
-											:items="creditAnalystList" :error-messages="verbalTrialError.credit_analyst_id
-												" label="Analyste Crédit" placeholder="" item-title="full_name" item-value="id"
 											:rules="[requiredValidator]" />
 									</VCol>
 									<VCol cols="12" md="6" lg="4">

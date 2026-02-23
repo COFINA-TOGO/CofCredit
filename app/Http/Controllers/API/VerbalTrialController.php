@@ -475,7 +475,7 @@ class VerbalTrialController extends Controller
 				'administrative_fees_percentage' => 'required|numeric',
 				'tax_fee_interest_rate' => 'required|numeric',
 				'caf_id' => 'required|exists:users,id',
-				'credit_admin_id' => 'required|exists:users,id',
+				// 'credit_admin_id' => 'required|exists:users,id',
 				'credit_analyst_id' => 'required|exists:users,id',
 				"guarantees" => "array",
 				"guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id",
@@ -490,11 +490,12 @@ class VerbalTrialController extends Controller
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
 			} else {
+				$requestData["creator_id"] = $request->user()->id;
+				$requestData["credit_admin_id"] = $request->user()->id;
 				if (User::where("profile", "credit_admin")->where('id', $requestData["credit_admin_id"])->exists()) {
 					if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
 						DB::beginTransaction();
 						try {
-							$requestData["creator_id"] = $request->user()->id;
 							$requestData["validation_level"] = "head_credit";
 							if (!isset($requestData["entity_name"])) {
 								$requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
@@ -612,7 +613,7 @@ class VerbalTrialController extends Controller
 					'administrative_fees_percentage' => 'required|numeric',
 					'tax_fee_interest_rate' => 'required|numeric',
 					'caf_id' => 'required|exists:users,id',
-					'credit_admin_id' => 'required|exists:users,id',
+					// 'credit_admin_id' => 'required|exists:users,id',
 					'credit_analyst_id' => 'required|exists:users,id',
 					"guarantees" => "array",
 					"guarantees.*.type_of_guarantee_id" => "required|exists:types_of_guarantee,id",
@@ -627,11 +628,12 @@ class VerbalTrialController extends Controller
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
 				} else {
+					$requestData["creator_id"] = $request->user()->id;
+					$requestData["credit_admin_id"] = $request->user()->id;
 					if (User::where("profile", "credit_admin")->where('id', $requestData["credit_admin_id"])->exists()) {
 						if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
 							DB::beginTransaction();
 							try {
-								$requestData["creator_id"] = $request->user()->id;
 								$requestData["validation_level"] = $connectedUser->profile == 'caf' ? "credit_analyst" : "credit_admin";
 								$verbalTrial->guarantees()->delete();
 								if (!isset($requestData["entity_name"])) {

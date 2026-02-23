@@ -30,7 +30,6 @@ const pvData = ref({
 	administrative_fees_percentage: null,
 	taf: 10,
 	tax_fee_interest_rate: null,
-	credit_admin_id: null,
 	credit_analyst_id: null,
 	reserve: null,
 	entity_name: null,
@@ -66,7 +65,6 @@ const getResetPvError = () => {
 		administrative_fees_percentage: "",
 		taf: "",
 		tax_fee_interest_rate: "",
-		credit_admin_id: "",
 		credit_analyst_id: "",
 		reserve: "",
 		entity_name: "",
@@ -161,7 +159,6 @@ const onSubmit = () => {
 					taf: pvData.value.taf,
 					tax_fee_interest_rate: pvData.value.tax_fee_interest_rate,
 					guarantees: pvData.value.guarantees,
-					credit_admin_id: pvData.value.credit_admin_id,
 					credit_analyst_id: pvData.value.credit_analyst_id,
 					reserve: pvData.value.reserve,
 					release_type: pvData.value.release_type,
@@ -222,6 +219,16 @@ const addGuaranteeItem = () => {
 					<VCard class="mb-6" title="Information de la notification">
 						<VCardText>
 							<VRow>
+								<VCol cols="12" md="6" lg="6">
+									<AppAutocomplete v-model="pvData.caf_id" :items="cafList"
+										:error-messages="pvError.caf_id" label="Chargé d'affaire" item-title="full_name"
+										item-value="id" :rules="[requiredValidator]" />
+								</VCol>
+								<VCol cols="12" md="6" lg="6">
+									<AppAutocomplete v-model="pvData.credit_analyst_id" :items="creditAnalystList"
+										:error-messages="pvError.credit_analyst_id" label="Analyste Crédit"
+										item-title="full_name" item-value="id" :rules="[requiredValidator]" />
+								</VCol>
 								<VCol cols="12" md="6" lg="4">
 									<AppTextField v-model="pvData.committee_id" :error-messages="pvError.committee_id"
 										label="Numéro du comitée" :rules="[requiredValidator]" />
@@ -234,21 +241,6 @@ const addGuaranteeItem = () => {
 								<VCol cols="12" md="6" lg="4">
 									<AppTextField v-model="pvData.entity_name" :error-messages="pvError.entity_name"
 										label="Nom de l'entitié" />
-								</VCol>
-								<VCol cols="12" md="6" lg="4">
-									<AppAutocomplete v-model="pvData.caf_id" :items="cafList"
-										:error-messages="pvError.caf_id" label="Chargé d'affaire" item-title="full_name"
-										item-value="id" :rules="[requiredValidator]" />
-								</VCol>
-								<VCol cols="12" md="6" lg="4">
-									<AppAutocomplete v-model="pvData.credit_admin_id" :items="creditAdminList"
-										:error-messages="pvError.credit_admin_id" label="Administrateur Crédit"
-										item-title="full_name" item-value="id" :rules="[requiredValidator]" />
-								</VCol>
-								<VCol cols="12" md="6" lg="4">
-									<AppAutocomplete v-model="pvData.credit_analyst_id" :items="creditAnalystList"
-										:error-messages="pvError.credit_analyst_id" label="Analyste Crédit"
-										item-title="full_name" item-value="id" :rules="[requiredValidator]" />
 								</VCol>
 								<VDivider />
 								<VCol cols="12" md="6" lg="1">
