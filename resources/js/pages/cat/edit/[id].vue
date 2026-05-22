@@ -27,6 +27,7 @@ const getResetCATError = () => {
 		"other_expenses": "",
 		"teg": "",
 		"guarantees_total_amount": "",
+		"security_deposit_percentage": "",
 	}
 }
 
@@ -66,6 +67,7 @@ const onSubmit = () => {
 				other_expenses: cat.value.other_expenses,
 				teg: cat.value.teg,
 				guarantees_total_amount: cat.value.guarantees_total_amount,
+				security_deposit_percentage: cat.value.security_deposit_percentage,
 			}
 
 			const res = await $api(`cat/${route.params.id}`, {
@@ -183,6 +185,12 @@ contractDataList.value.data.push(JSON.parse(JSON.stringify(cat.value.contract)))
 								<VCol cols="12" md="6" lg="6">
 									<AppTextField v-model="cat.teg" :error-messages="catError.teg" label="TEG"
 										placeholder="Ex: 15000600" :rules="[requiredValidator]" />
+								</VCol>
+								<VCol cols="12" md="6" lg="12">
+									<AppTextField type="number" v-model="cat.security_deposit_percentage"
+										:error-messages="catError.security_deposit_percentage"
+										label="Pourcentage du dépôt de garantie (%)" placeholder="Ex: 20"
+										:rules="[requiredValidator]" />
 								</VCol>
 								<VCol cols="12" md="12" lg="12">
 									<AppTextarea v-model="cat.instructions_from_the_risk_and_credit_department"

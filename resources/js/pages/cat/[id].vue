@@ -43,6 +43,7 @@ const tableData = [
 	{ "title": "Autres frais", "value": String(cat.value.other_expenses).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
 	{ "title": "TEG", "value": String(cat.value.teg).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
 	{ "title": "Montant total des garanties", "value": String(cat.value.guarantees_total_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+	{ "title": "Pourcentage du dépôt de garantie", "value": cat.value.security_deposit_percentage + " %" },
 ]
 </script>
 

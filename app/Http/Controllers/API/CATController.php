@@ -227,7 +227,7 @@ class CATController extends Controller
 			$data["$parentRelation.verbal_trial.tax_fee_interest_rate.value"] = number_format((float) ($data["$parentRelation.verbal_trial.tax_fee_interest_rate"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
 			$data["$parentRelation.verbal_trial.administrative_fees_percentage.value"] = number_format((float) ($data["$parentRelation.verbal_trial.administrative_fees_percentage"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
 			$data["$parentRelation.verbal_trial.risk_premium_percentage.value"] = number_format((float) ($data["$parentRelation.verbal_trial.risk_premium_percentage"] * $data["$parentRelation.verbal_trial.amount"] / 100), 0, ',', ' ');
-			$data["security_deposit"] = number_format($data["$parentRelation.verbal_trial.amount"] * 0.2, 0, ',', ' ');
+			$data["security_deposit"] = number_format($data["$parentRelation.verbal_trial.amount"] * ($data["security_deposit_percentage"] / 100), 0, ',', ' ');
 			$data["teg"] = number_format($data["teg"], 0, ',', ' ');
 			$data["$parentRelation.verbal_trial.amount"] = number_format($data["$parentRelation.verbal_trial.amount"], 0, ',', ' ');
 			if ($data["$parentRelation.verbal_trial.duration"] < 6) {
@@ -328,10 +328,15 @@ class CATController extends Controller
 				'other_expenses' => 'required|numeric',
 				'teg' => 'required|numeric',
 				'guarantees_total_amount' => 'required|numeric',
+				'security_deposit_percentage' => 'nullable|numeric|min:0|max:100',
 			]);
 
 			if ($validator->fails()) {
 				return $this->responseError($validator->errors(), 400);
+			}
+
+			if (!isset($requestData['security_deposit_percentage'])) {
+				$requestData['security_deposit_percentage'] = 20;
 			}
 
 			DB::beginTransaction();
@@ -419,10 +424,14 @@ class CATController extends Controller
 					'other_expenses' => 'required|numeric',
 					'teg' => 'required|numeric',
 					'guarantees_total_amount' => 'required|numeric',
+					'security_deposit_percentage' => 'nullable|numeric|min:0|max:100',
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
 				} else {
+					if (!isset($requestData['security_deposit_percentage'])) {
+						$requestData['security_deposit_percentage'] = 20;
+					}
 					$cat->update($requestData);
 					$cat->load(["contract.verbal_trial.type_of_credit.type_of_applicant", "contract.verbal_trial.guarantees"]);
 					foreach (User::where('profile', 'head_credit')->get() as $head_credit) {

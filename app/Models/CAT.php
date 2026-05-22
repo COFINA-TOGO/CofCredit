@@ -31,6 +31,7 @@ class CAT extends Model
         "unblock_status",
         "unblock_comment",
         "guarantees_total_amount",
+        "security_deposit_percentage",
     ];
 
     protected $appends = ["status", "comment"];
@@ -45,6 +46,7 @@ class CAT extends Model
         $data["other_expenses"] = (int) $data["other_expenses"];
         $data["teg"] = (float) $data["teg"];
         $data["guarantees_total_amount"] = (float) $data["guarantees_total_amount"];
+        $data["security_deposit_percentage"] = (float) $data["security_deposit_percentage"];
         return $data;
     }
 
