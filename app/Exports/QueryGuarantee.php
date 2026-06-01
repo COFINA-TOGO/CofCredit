@@ -14,8 +14,11 @@ class QueryGuarantee implements FromQuery, WithHeadings, WithChunkReading
         return DB::table('guarantees as g')
             ->leftJoin('types_of_guarantee as t', 't.id', '=', 'g.type_of_guarantee_id')
             ->leftJoin('verbals_trials as v', 'v.id', '=', 'g.verbal_trial_id')
+            ->leftJoin('contracts as ct', 'ct.verbal_trial_id', '=', 'v.id')
+            ->leftJoin('c_a_t_s as c', 'c.contract_id', '=', 'ct.id')
             ->select([
                 'g.id as ID',
+                'c.credit_number as NO_PRET',
                 't.name as TYPE_DE_GARANTIE',
                 'v.committee_id as ID_COMITE',
                 DB::raw("CONCAT(v.applicant_first_name, ' ', v.applicant_last_name) as DEMANDEUR"),
@@ -29,6 +32,7 @@ class QueryGuarantee implements FromQuery, WithHeadings, WithChunkReading
     {
         return [
             'ID',
+            'NO PRET',
             'TYPE DE GARANTIE',
             'ID COMITE',
             'DEMANDEUR',
