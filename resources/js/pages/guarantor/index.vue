@@ -174,7 +174,7 @@ onMounted(async () => {
 						:disabled="exportLoading"
 						@click="exportGuarantors"
 					>
-						Export
+						Exporter
 						<template #loader>
 							<span class="custom-loader">
 								<VIcon icon="tabler-refresh" />

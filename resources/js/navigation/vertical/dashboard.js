@@ -356,6 +356,13 @@ export default [
 		action: 'read',
 	},
 	{
+		title: 'Liste des garanties',
+		icon: { icon: "tabler-shield-check" },
+		to: 'guarantee',
+		subject: 'guarantee-list',
+		action: 'read',
+	},
+	{
 		title: 'Remboursement anticipé'
 	},
 	{

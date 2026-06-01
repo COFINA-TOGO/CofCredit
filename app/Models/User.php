@@ -552,6 +552,10 @@ class User extends Authenticatable
 					'action' => ['read'],
 				],
 				[
+					'subject' => ['guarantee-list'],
+					'action' => ['read'],
+				],
+				[
 					'subject' => ['guarantor'],
 					'action' => ['read', 'download'],
 				],

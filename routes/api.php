@@ -4,6 +4,7 @@ use App\Exports\QueryGuarantor;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CATController;
 use App\Http\Controllers\API\DeadlinePostponedController;
+use App\Http\Controllers\API\GuaranteeController;
 use App\Http\Controllers\API\GuarantorController;
 use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\UserController;
@@ -103,6 +104,11 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::post("/", [GuarantorController::class, "store"])->name("store");
 		Route::put("/{id}", [GuarantorController::class, "update"])->name("update");
 		Route::delete("/{id}", [GuarantorController::class, "destroy"])->name("destroy");
+	});
+	Route::prefix("guarantee")->name("guarantee.")->group(function () {
+		Route::get("/", [GuaranteeController::class, "index"])->name("index");
+		Route::get("/export", [GuaranteeController::class, "export"])->name("export");
+		Route::get("/{id}", [GuaranteeController::class, "show"])->name("show");
 	});
 	Route::prefix("notification")->name("notification.")->group(function () {
 		Route::get("/", [NotificationController::class, "index"])->name("index");

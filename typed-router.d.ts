@@ -66,6 +66,7 @@ declare module 'vue-router/auto/routes' {
     'deadline-postponed-add': RouteRecordInfo<'deadline-postponed-add', '/deadline-postponed/add', Record<never, never>, Record<never, never>>,
     'deadline-postponed-edit-id': RouteRecordInfo<'deadline-postponed-edit-id', '/deadline-postponed/edit/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'deadline-postponed-historical': RouteRecordInfo<'deadline-postponed-historical', '/deadline-postponed/historical', Record<never, never>, Record<never, never>>,
+    'guarantee': RouteRecordInfo<'guarantee', '/guarantee', Record<never, never>, Record<never, never>>,
     'guarantor': RouteRecordInfo<'guarantor', '/guarantor', Record<never, never>, Record<never, never>>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
     'not-authorized': RouteRecordInfo<'not-authorized', '/not-authorized', Record<never, never>, Record<never, never>>,
