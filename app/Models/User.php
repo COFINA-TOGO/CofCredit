@@ -408,8 +408,20 @@ class User extends Authenticatable
 					'action' => ['menu', 'read', 'read-without-notarized-contract', 'read-historical', 'download', 'upload'],
 				],
 				[
+					'subject' => ['guarantor-list'],
+					'action' => ['read'],
+				],
+				[
 					'subject' => ['guarantor'],
 					'action' => ['read', 'download', 'upload', 'send'],
+				],
+				[
+					'subject' => ['guarantee-list'],
+					'action' => ['read'],
+				],
+				[
+					'subject' => ['guarantee'],
+					'action' => ['read', 'download'],
 				],
 				[
 					'subject' => ['notification'],

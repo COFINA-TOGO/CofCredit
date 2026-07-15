@@ -168,6 +168,7 @@ onMounted(async () => {
 
 				<div class="d-flex gap-4">
 					<VBtn
+						v-if="$can('download', 'guarantor')"
 						color="success"
 						prepend-icon="tabler-download"
 						:loading="exportLoading"

@@ -63,6 +63,11 @@ class GuarantorPolicy
 	{
 		return $this->check(["download"], "guarantor", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
+
+	public function downloadAny(User $connectedUser)
+	{
+		return $this->check(["download"], "guarantor", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+	}
 	public function delete(User $connectedUser, Guarantor $guarantor)
 	{
 		return $this->check(["delete"], "guarantor", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");

@@ -144,8 +144,12 @@ class GuarantorController extends Controller
 	 * @response 200
 	 */
 	public function export(Request $request){
-		$date = Carbon::now()->format('d-m-Y_H-i-s');
-		return Excel::download(new QueryGuarantor(), "garants-($date).xlsx");
+		if (($authorisation = Gate::inspect('downloadAny', Guarantor::class))->allowed()) {
+			$date = Carbon::now()->format('d-m-Y_H-i-s');
+			return Excel::download(new QueryGuarantor(), "garants-($date).xlsx");
+		}
+
+		return $this->responseError(["auth" => [$authorisation->message()]], 403);
 	}
 
 	/**

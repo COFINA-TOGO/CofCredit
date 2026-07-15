@@ -43,6 +43,11 @@ class GuaranteePolicy
 		return $this->check(["download"], "guarantee", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
 
+	public function downloadAny(User $connectedUser)
+	{
+		return $this->check(["download"], "guarantee", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+	}
+
 	public function delete(User $connectedUser, Guarantee $guarantee)
 	{
 		return $this->check(["delete"], "guarantee", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");

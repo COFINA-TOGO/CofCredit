@@ -116,7 +116,11 @@ class GuaranteeController extends Controller
 	 */
 	public function export(Request $request)
 	{
-		$date = Carbon::now()->format('d-m-Y_H-i-s');
-		return Excel::download(new QueryGuarantee(), "garanties-($date).xlsx");
+		if (($authorisation = Gate::inspect('downloadAny', Guarantee::class))->allowed()) {
+			$date = Carbon::now()->format('d-m-Y_H-i-s');
+			return Excel::download(new QueryGuarantee(), "garanties-($date).xlsx");
+		}
+
+		return $this->responseError(["auth" => [$authorisation->message()]], 403);
 	}
 }
