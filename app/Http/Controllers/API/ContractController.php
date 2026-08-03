@@ -707,7 +707,7 @@ class ContractController extends Controller
 			if (($authorisation = Gate::inspect('update', $contract))->allowed()) {
 				$requestData = $request->all();
 				$validator = Validator::make($requestData, [
-					'verbal_trial_id' => "required|exists:verbals_trials,id|unique:contracts,verbal_trial_id," . $id,
+					// 'verbal_trial_id' => "required|exists:verbals_trials,id|unique:contracts,verbal_trial_id," . $id,
 					'representative_birth_date' => 'required|date',
 					'representative_birth_place' => 'required|min:2',
 					'representative_nationality' => 'required|min:2',
