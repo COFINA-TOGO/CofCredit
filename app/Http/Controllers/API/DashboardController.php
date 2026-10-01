@@ -53,7 +53,7 @@ class DashboardController extends Controller
 		$creditAdmin = [
 			["PV rejetés à corriger", VerbalTrial::where("status", "rejected")->where("credit_admin_id", $user->id), "pv", "tabler-file-alert", "error"],
 			["PV validés sans contrat ni notification", VerbalTrial::where("status", "validated")->where("credit_admin_id", $user->id)->whereDoesntHave("contract")->whereDoesntHave("notification"), "pv", "tabler-file-plus", "primary"],
-			["Contrats dont l'envoi est à valider", $contractsCreatedBy()->where("status", "pending_admin_validation"), "contract", "tabler-send", "warning"],
+			["Contrats signés à envoyer en validation", $contractsCreatedBy()->where("status", "pending_admin_validation"), "contract", "tabler-send", "warning"],
 			["Contrats rejetés par le Head Crédit", $contractsCreatedBy()->where("status", "rejected"), "contract", "tabler-file-x", "error"],
 			["Contrats validés sans CAT", $contractsCreatedBy()->where("status", "validated")->whereDoesntHave("c_a_t"), "cat-add", "tabler-cash-banknote", "primary"],
 			["CAT rejetés", CAT::where("validation_status", "rejected")->whereHas("contract", fn($query) => $query->where("creator_id", $user->id)), "cat", "tabler-cash-banknote-off", "error"],
@@ -68,10 +68,6 @@ class DashboardController extends Controller
 		return match ($user->profile) {
 			"credit_admin" => $creditAdmin,
 			"head_credit" => $headCredit,
-			"md" => [
-				["PV en attente de votre validation", $pvWaitingAt("md"), "pv", "tabler-file-description", "warning"],
-				["CAT en attente de validation", CAT::where("validation_status", "waiting"), "cat", "tabler-cash-banknote", "warning"],
-			],
 			"operation" => [
 				["CAT à débloquer", CAT::where("validation_status", "validated")->where("unblock_status", "waiting"), "cat", "tabler-lock-open", "warning"],
 			],
@@ -86,7 +82,7 @@ class DashboardController extends Controller
 			],
 			"admin" => [
 				["PV en attente de validation", VerbalTrial::where("status", "waiting"), "pv", "tabler-file-description", "warning"],
-				["Contrats dont l'envoi est à valider", Contract::where("status", "pending_admin_validation"), "contract", "tabler-send", "warning"],
+				["Contrats signés à envoyer en validation", Contract::where("status", "pending_admin_validation"), "contract", "tabler-send", "warning"],
 				...array_slice($headCredit, 1),
 				["CAT à débloquer", CAT::where("validation_status", "validated")->where("unblock_status", "waiting"), "cat", "tabler-lock-open", "warning"],
 			],

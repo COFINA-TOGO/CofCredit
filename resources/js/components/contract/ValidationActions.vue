@@ -77,7 +77,7 @@ const createCAT = () => {
       transition="scroll-x-transition" 
       location="top"
     >
-      Valider l'envoi
+      Envoyer en validation
     </VTooltip>
   </VBtn>
 

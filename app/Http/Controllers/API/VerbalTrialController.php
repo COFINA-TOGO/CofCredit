@@ -498,7 +498,8 @@ class VerbalTrialController extends Controller
 					if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
 						DB::beginTransaction();
 						try {
-							$requestData["validation_level"] = "head_credit";
+							$isCafNotification = $request->user()->profile == "caf";
+							$requestData["validation_level"] = $isCafNotification ? "credit_analyst" : "head_credit";
 							if (!isset($requestData["entity_name"])) {
 								$requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
 							}
@@ -520,14 +521,18 @@ class VerbalTrialController extends Controller
 									]);
 								}
 							}
-							$this->notifyByEmail(
-								$verbalTrial->credit_analyst,
-								"Notification de mise en place d'une notification " . $verbalTrial->committee_id,
-								"Cher(e) Analyste,",
-								["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement la notification " . $verbalTrial->committee_id . " en attente de validation."],
-								"/pv/notification/without-pv",
-								"Voir les notifications"
-							);
+							if ($isCafNotification) {
+								$this->notifyByEmail(
+									$verbalTrial->credit_analyst,
+									"Notification de mise en place d'une notification " . $verbalTrial->committee_id,
+									"Cher(e) Analyste,",
+									["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement la notification " . $verbalTrial->committee_id . " en attente de validation."],
+									"/pv/notification/without-pv",
+									"Voir les notifications"
+								);
+							} else {
+								$this->notifyHeadCredit($verbalTrial);
+							}
 						} catch (Exception $e) {
 							DB::rollback();
 							throw $e;
@@ -629,7 +634,7 @@ class VerbalTrialController extends Controller
 						if (User::where("profile", "caf")->where('id', $requestData["caf_id"])->exists()) {
 							DB::beginTransaction();
 							try {
-								$requestData["validation_level"] = $connectedUser->profile == 'caf' ? "credit_analyst" : "credit_admin";
+								$requestData["validation_level"] = $connectedUser->profile == 'caf' ? "credit_analyst" : "head_credit";
 								$verbalTrial->guarantees()->delete();
 								if (!isset($requestData["entity_name"])) {
 									$requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
@@ -660,15 +665,8 @@ class VerbalTrialController extends Controller
 										"/pv/notification/without-pv",
 										"Voir les notifications"
 									);
-								} else if ($connectedUser->profile == "credit_analyst") {
-									$this->notifyByEmail(
-										$verbalTrial->credit_admin,
-										"Notification de mise à jour du PV " . $verbalTrial->committee_id,
-										"Cher(e) Admin crédit,",
-										["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV " . $verbalTrial->committee_id . " en attente de validation."],
-										"/pv",
-										"Voir les pvs"
-									);
+								} else {
+									$this->notifyHeadCredit($verbalTrial);
 								}
 							} catch (\Exception $e) {
 								DB::rollback();
@@ -754,7 +752,8 @@ class VerbalTrialController extends Controller
 								DB::beginTransaction();
 								try {
 									$requestData["creator_id"] = $request->user()->id;
-									$requestData["validation_level"] = "credit_admin";
+									// La notification vérifiée devient un PV soumis à la validation du head crédit
+									$requestData["validation_level"] = "head_credit";
 									$verbalTrial->guarantees()->delete();
 									if (!isset($requestData["entity_name"])) {
 										$requestData["entity_name"] = $requestData["applicant_first_name"] . " " . $requestData["applicant_last_name"];
@@ -783,14 +782,7 @@ class VerbalTrialController extends Controller
 										["Votre notification " . $verbalTrial->committee_id . " a été validée par l'analyste crédit."]
 									);
 
-									$this->notifyByEmail(
-										$verbalTrial->credit_admin,
-										"Notification de création de PV " . $verbalTrial->committee_id,
-										"Cher(e) Admin crédit,",
-										["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV " . $verbalTrial->committee_id . " en attente de validation."],
-										"/pv",
-										"Voir les pvs"
-									);
+									$this->notifyHeadCredit($verbalTrial);
 								} catch (\Exception $e) {
 									DB::rollback();
 									throw $e;
@@ -841,77 +833,34 @@ class VerbalTrialController extends Controller
 					return $this->responseError($validator->errors(), 400);
 				} else {
 					$requestData = $validator->validated();
-					$connectedUser = $request->user();
-					$nextValidationLevelList = [
-						"credit_admin" => "head_credit",
-						"head_credit" => "head_credit",
-						"md" => "md",
-					];
-					if (!isset($nextValidationLevelList[$connectedUser->profile])) {
-						return $this->responseError(["auth" => ["Votre profil ne peut pas valider ou rejeter un PV"]], 403);
+					if ($verbalTrial->status != "waiting" || $verbalTrial->validation_level != "head_credit") {
+						return $this->responseError(["status" => ["Ce PV n'est pas en attente de validation du Head Crédit"]], 400);
 					}
-					if ($verbalTrial->status == "validated") {
-						return $this->responseError(["status" => ["Ce PV est déjà validé"]], 400);
-					}
-					if ($requestData["status"] == "validated") {
-						$requestData["validation_level"] = $nextValidationLevelList[$connectedUser->profile];
-						$requestData["status"] = ($connectedUser->profile == "head_credit") ? "validated" : "waiting";
-					} else if ($requestData["status"] == "rejected") {
-						$requestData["validation_level"] = $connectedUser->profile;
-					}
-					$verbalTrial->update($requestData);
-					$receiverList = [
-						"caf_list" => [User::find($verbalTrial->caf_id)],
-						"credit_admin_list" => [User::find($verbalTrial->credit_admin_id)],
-						"credit_analyst_list" => [User::find($verbalTrial->credit_analyst_id)],
-						"head_credit_list" => User::where('profile', 'head_credit')->get(),
-						"md_list" => User::where('profile', 'md')->get(),
-					];
-					$nextStep = $verbalTrial->has_mortgage ? "notification" : "contrat";
-					$nextStepName = $verbalTrial->has_mortgage ? "la notification" : "le contrat";
-					$nextStepLink = $verbalTrial->has_mortgage ? "notification" : "contract";
 					$committeeId = $verbalTrial->committee_id;
-					$rejectionMail = [
-						"receiverList" => $receiverList["credit_analyst_list"],
-						"subject" => "Notification de rejet du PV $committeeId",
-						"greeting" => "Cher(e) Analyste Crédit,",
-						"paragraphs" => ["Nous vous informons que le PV $committeeId a été rejeté lors de sa validation. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires."],
-						"link" => "/pv",
-						"linkLabel" => "Voir les PV",
-					];
-					$waitingMail = fn($receivers, $greeting) => [
-						"receiverList" => $receivers,
-						"subject" => "Notification de validation du PV $committeeId",
-						"greeting" => $greeting,
-						"paragraphs" => ["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $committeeId en attente de validation."],
-						"link" => "/pv",
-						"linkLabel" => "Voir les pvs",
-					];
-					$mailsDataList = [
-						"validated" => [
-							"head_credit" => [[
-								"receiverList" => $receiverList["credit_admin_list"],
-								"subject" => "Notification de validation du PV $committeeId",
-								"greeting" => "Cher(e) Admin crédit,",
-								"paragraphs" => ["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $committeeId en attente de $nextStep."],
-								"link" => "/$nextStepLink/add?id=" . $verbalTrial->id,
-								"linkLabel" => "Créer $nextStepName",
-							]],
-						],
-						"waiting" => [
-							"md" => [$waitingMail($receiverList["md_list"], "Cher MD,")],
-							"head_credit" => [$waitingMail($receiverList["head_credit_list"], "Cher Head Crédit,")],
-							"credit_admin" => [$waitingMail($receiverList["head_credit_list"], "Cher Head Crédit,")],
-						],
-						"rejected" => [
-							"md" => [$rejectionMail],
-							"head_credit" => [$rejectionMail],
-							"credit_admin" => [$rejectionMail],
-						],
-					];
-					$mailsData = $mailsDataList[$requestData["status"]][$requestData["validation_level"]] ?? [];
-					foreach ($mailsData as $mailData) {
-						$this->notifyByEmail($mailData["receiverList"], $mailData["subject"], $mailData["greeting"], $mailData["paragraphs"], $mailData["link"], $mailData["linkLabel"]);
+					if ($requestData["status"] == "validated") {
+						$verbalTrial->update($requestData);
+						$nextStep = $verbalTrial->has_mortgage ? "notification" : "contrat";
+						$nextStepName = $verbalTrial->has_mortgage ? "la notification" : "le contrat";
+						$nextStepLink = $verbalTrial->has_mortgage ? "notification" : "contract";
+						$this->notifyByEmail(
+							$verbalTrial->credit_admin,
+							"Notification de validation du PV $committeeId",
+							"Cher(e) Admin crédit,",
+							["Le PV $committeeId a été validé par le Head Crédit. Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $committeeId en attente de $nextStep."],
+							"/$nextStepLink/add?id=" . $verbalTrial->id,
+							"Créer $nextStepName"
+						);
+					} else {
+						// Le PV rejeté revient à l'admin crédit pour correction
+						$verbalTrial->update($requestData + ["validation_level" => "credit_admin"]);
+						$this->notifyByEmail(
+							$verbalTrial->credit_admin,
+							"Notification de rejet du PV $committeeId",
+							"Cher(e) Admin crédit,",
+							["Nous vous informons que le PV $committeeId a été rejeté par le Head Crédit. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et le corriger."],
+							"/pv",
+							"Voir les PV"
+						);
 					}
 					return $this->responseOk(["verbalTrial" => $verbalTrial]);
 				}
@@ -921,6 +870,22 @@ class VerbalTrialController extends Controller
 		} else {
 			return $this->responseError(["id" => ["Le procès verbal n'existe pas"]], 404);
 		}
+	}
+
+	/**
+	 * Prévient les head crédit qu'un PV attend leur validation
+	 * @param	VerbalTrial	$verbalTrial	Le PV
+	 */
+	private function notifyHeadCredit(VerbalTrial $verbalTrial)
+	{
+		$this->notifyByEmail(
+			User::where("profile", "head_credit")->get(),
+			"Notification de validation du PV " . $verbalTrial->committee_id,
+			"Cher(e) Head Crédit,",
+			["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV " . $verbalTrial->committee_id . " en attente de validation."],
+			"/pv",
+			"Voir les PV"
+		);
 	}
 
 	/**

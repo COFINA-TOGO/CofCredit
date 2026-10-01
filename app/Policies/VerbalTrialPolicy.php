@@ -30,28 +30,24 @@ class VerbalTrialPolicy
 
 	public function create(User $connectedUser)
 	{
-		return $this->check(["create"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		// Le PV est saisi par l'admin crédit ; le CAF saisit sa notification, vérifiée ensuite par l'analyste
+		return $this->check(["create"], "pv", $connectedUser) || $this->check(["create"], "pv-notification", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
 
 	public function update(User $connectedUser, VerbalTrial $verbalTrial)
 	{
-		$checkFunction = [
-			"waiting" => function ($connectedUser, $verbalTrial) {
-				return $verbalTrial->validation_level == "credit_admin" || $verbalTrial->validation_level == "credit_analyst";
-			},
-			"rejected" => function ($connectedUser, $verbalTrial) {
-				return true;
-			},
-			"validated" => function ($connectedUser, $verbalTrial) {
-				return false;
-			},
-		];
-		if ($this->check(["update"], "pv", $connectedUser) || $this->check(["update"], "pv-notification", $connectedUser)) {
-			return $checkFunction[$verbalTrial->status]($connectedUser, $verbalTrial) ? Response::allow() : Response::deny("vous n'etes pas autorisé à modifier ce pv");
+		if ($this->check(["update"], "pv", $connectedUser)) {
+			// L'admin crédit corrige le PV tant que le head crédit ne l'a pas validé
+			$allowed = $verbalTrial->status != "validated";
+		} else if ($this->check(["update"], "pv-notification", $connectedUser)) {
+			// Le CAF corrige sa notification tant qu'elle n'est pas devenue un PV
+			$allowed = $verbalTrial->status == "rejected" ? $verbalTrial->validation_level == "credit_analyst" : ($verbalTrial->status == "waiting" && $verbalTrial->validation_level == "credit_analyst");
 		} else {
 			return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 		}
+		return $allowed ? Response::allow() : Response::deny("vous n'etes pas autorisé à modifier ce pv");
 	}
+
 	public function change_status(User $connectedUser, VerbalTrial $verbalTrial)
 	{
 		return $this->check(["change_status"], "pv", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");

@@ -235,10 +235,10 @@ const handleDelete = async contractId => {
  */
 const openAdminValidateDialog = contractId => {
   selectedItemId.value = contractId
-  actionTitle.value = "Valider l'envoi"
+  actionTitle.value = "Envoyer en validation"
   actionText.value = 
-    "Êtes-vous sûr de vouloir valider l'envoi de ce contrat ? Le Head Crédit pourra ensuite procéder à la validation finale."
-  actionButtonText.value = "Valider l'envoi"
+    "Envoyer ce contrat au Head Crédit pour validation ?"
+  actionButtonText.value = "Envoyer"
   actionFunction.value = async id => {
     const success = await adminValidate(id, actionComment.value)
     if (success) {

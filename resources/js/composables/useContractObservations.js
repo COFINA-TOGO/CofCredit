@@ -19,7 +19,7 @@ export function useContractObservations() {
   const STATUS_TEXTS = {
     validated: 'Dossier validé',
     waiting: "En attente d'upload",
-    pending_admin_validation: 'En attente de validation admin',
+    pending_admin_validation: 'Signé, à envoyer en validation',
     pending_head_validation: 'En attente de validation head',
     rejected: 'Dossier rejeté',
   }
@@ -119,7 +119,7 @@ export function useContractObservations() {
         title: 'Validation admin requise',
         priority: 'medium',
         actionable: true,
-        actionText: "Valider l'envoi",
+        actionText: "Envoyer en validation",
         category: 'validation',
         actionType: 'admin_validate',
       }

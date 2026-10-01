@@ -902,8 +902,8 @@ class ContractController extends Controller
 							"Validation requise pour le contrat $pv_commitee_id",
 							"Cher(e) Admin Crédit,",
 							[
-								"Tous les documents ont été chargés pour le dossier $pv_commitee_id. Vous devez maintenant valider l'envoi avant que le Head Crédit puisse procéder à la validation finale.",
-								"Connectez-vous à l'application cofina credit digital pour valider l'envoi.",
+								"Tous les documents ont été chargés pour le dossier $pv_commitee_id. Vous pouvez maintenant l'envoyer en validation au Head Crédit.",
+								"Connectez-vous à l'application cofina credit digital pour envoyer le contrat en validation.",
 							],
 							"/contract",
 							"Consulter les contrats"

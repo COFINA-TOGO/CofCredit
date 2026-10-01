@@ -45,12 +45,12 @@ const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 // ─── Ce que chaque profil fait dans l'application ──────────────────────────
 const MISSIONS = {
   'administrateur': 'L\'Administrateur gère les comptes utilisateurs et dispose de tous les droits : il ouvre chacun des écrans décrits dans les manuels des autres profils et peut intervenir à toutes les étapes d\'un dossier.',
-  'admin-credit': 'L\'Admin Crédit saisit les PV de comité, prépare les contrats (ou les notifications hypothécaires quand le crédit est garanti par une hypothèque), charge les documents signés, gère les cautions et crée les CAT une fois le contrat validé.',
-  'analyste-credit': 'L\'Analyste Crédit vérifie les notifications de CAF : il les complète si besoin puis les valide, ce qui en fait un PV transmis à l\'Admin Crédit, ou les rejette vers le CAF.',
+  'admin-credit': 'L\'Admin Crédit saisit les PV de comité, prépare les contrats (ou les notifications hypothécaires quand le crédit est garanti par une hypothèque), charge les documents signés et envoie le contrat en validation au Head Crédit, gère les cautions et crée les CAT une fois le contrat validé.',
+  'analyste-credit': 'L\'Analyste Crédit vérifie les notifications de CAF : il les complète si besoin puis les valide, ce qui en fait un PV soumis à la validation du Head Crédit, ou les rejette vers le CAF.',
   'head-credit': 'Le Head Crédit valide ou rejette les PV, la version finale des contrats, les notifications hypothécaires et les CAT.',
   'caf': 'Le CAF saisit les notifications de CAF de ses clients, suit leurs contrats et saisit les demandes de report d\'échéance.',
   'chef-agence': 'Le Chef d\'agence valide ou rejette, en premier niveau, les demandes de report d\'échéance de son agence.',
-  'md': 'Le MD valide les PV qui lui sont soumis, les notifications hypothécaires, les CAT et les reports d\'échéance.',
+  'md': 'Le MD valide les reports d\'échéance et consulte les PV, les contrats, les notifications hypothécaires et les CAT.',
   'dex': 'Le DEX valide les reports d\'échéance et consulte les PV, les contrats, les notifications hypothécaires et les CAT.',
   'operations': 'Les Opérations débloquent les CAT validés, ou en rejettent le déblocage.',
   'juridique': 'Le Juridique charge les contrats notariés des notifications hypothécaires, gère les documents signés des garants et consulte les garanties.',
@@ -59,27 +59,24 @@ const MISSIONS = {
 
 // Les compteurs « À traiter » de l'accueil (voir DashboardController)
 const ACCUEIL = {
-  'admin-credit': ['les PV rejetés à corriger', 'les PV validés sans contrat ni notification', 'les contrats dont l\'envoi est à valider', 'les contrats rejetés par le Head Crédit', 'les contrats validés sans CAT', 'les CAT rejetés'],
+  'admin-credit': ['les PV rejetés à corriger', 'les PV validés sans contrat ni notification', 'les contrats signés à envoyer en validation', 'les contrats rejetés par le Head Crédit', 'les contrats validés sans CAT', 'les CAT rejetés'],
   'head-credit': ['les PV en attente de votre validation', 'les contrats en attente de validation finale', 'les CAT en attente de validation', 'les notifications en attente de validation'],
-  'md': ['les PV en attente de votre validation', 'les CAT en attente de validation'],
   'operations': ['les CAT à débloquer'],
   'caf': ['les contrats en attente de signature du client'],
   'analyste-credit': ['les notifications de CAF à vérifier'],
   'juridique': ['les notifications sans contrat notarié'],
-  'administrateur': ['les PV en attente de validation', 'les contrats dont l\'envoi est à valider', 'les contrats en attente de validation finale', 'les CAT en attente de validation', 'les notifications en attente de validation', 'les CAT à débloquer'],
+  'administrateur': ['les PV en attente de validation', 'les contrats signés à envoyer en validation', 'les contrats en attente de validation finale', 'les CAT en attente de validation', 'les notifications en attente de validation', 'les CAT à débloquer'],
 }
 
 // Le circuit d'un crédit : [profil(s) concerné(s), étape]
 const CIRCUIT = [
-  [['caf'], 'CAF', 'saisit la <b>notification de CAF</b> du client.'],
-  [['analyste-credit'], 'Analyste Crédit', 'vérifie la notification : validée, elle devient un <b>PV de comité</b> ; rejetée, elle revient au CAF.'],
-  [['admin-credit'], 'Admin Crédit', 'saisit ou complète le PV et le valide vers le Head Crédit.'],
-  [['head-credit', 'md'], 'Head Crédit', 'valide le PV (ou le rejette vers l\'Admin Crédit). Le MD valide les PV qui lui sont soumis.'],
+  [['admin-credit'], 'Admin Crédit', 'saisit le <b>PV de comité</b>. Un PV peut aussi venir d\'une notification de CAF, vérifiée par l\'Analyste Crédit.'],
+  [['head-credit'], 'Head Crédit', 'valide le PV, ou le rejette avec un motif : l\'Admin Crédit le corrige et le PV repart en validation.'],
   [['admin-credit'], 'Admin Crédit', 'crée le <b>contrat</b>, ou la <b>notification hypothécaire</b> si une hypothèque garantit le crédit, et ses cautions.'],
-  [['caf', 'admin-credit'], 'CAF, Admin Crédit', 'le client signe ; l\'Admin Crédit charge le contrat et le billet à ordre signés, puis <b>valide l\'envoi</b>.'],
-  [['head-credit', 'juridique', 'md'], 'Head Crédit', 'valide le contrat (ou le rejette avec un motif). Pour une notification hypothécaire, le Head Crédit ou le MD la valide, puis le Juridique charge le contrat notarié.'],
+  [['admin-credit'], 'Admin Crédit', 'une fois le client passé à la signature, charge le contrat et le billet à ordre signés, puis <b>envoie le contrat en validation</b>.'],
+  [['head-credit', 'juridique'], 'Head Crédit', 'valide le contrat, ou le rejette avec un motif. Pour une notification hypothécaire, le Head Crédit la valide puis le <b>Juridique</b> charge le contrat notarié.'],
   [['admin-credit'], 'Admin Crédit', 'crée le <b>CAT</b> (conditions avant tirage).'],
-  [['head-credit', 'md'], 'Head Crédit, MD', 'valide le CAT ou le rejette.'],
+  [['head-credit'], 'Head Crédit', 'valide le CAT ou le rejette.'],
   [['operations'], 'Opérations', '<b>débloque</b> le CAT validé : les fonds peuvent être décaissés.'],
 ]
 const CIRCUIT_REPORT = [
@@ -187,21 +184,21 @@ ${fig('03-manuel', 'Manuel d\'utilisation')}`)
   let pv = ''
   if (a('11-notification-caf-liste') || a('11-notification-caf-historique') || a('11-notification-caf-detail')) {
     pv += `  <h3 id="notifications-caf">Les notifications de CAF</h3>
-  <p>La notification de CAF est la demande de crédit saisie par le CAF : client, montant, durée, conditions et garanties proposées. Elle attend la vérification de l'Analyste Crédit.</p>
+  <p>La notification de CAF est la demande de crédit saisie par le CAF : client, montant, durée, conditions et garanties proposées. Elle attend la vérification de l'Analyste Crédit ; une fois validée, elle devient un PV soumis au Head Crédit.</p>
 ${liste([
   a('11-notification-caf-liste') && 'La liste <b>Sans PV</b> montre les notifications en cours de vérification ou rejetées ; l\'<b>Historique</b> les montre toutes.',
   peut('create', 'pv-notification') && 'Pour en saisir une, ouvrez le formulaire de création, remplissez chaque bloc puis <span class="btn">Enregistrer</span>. Une notification rejetée se corrige depuis son menu d\'actions (<b>Modifier</b>) puis repart en vérification.',
-  peut('check', 'pv-notification') && 'Pour vérifier une notification, choisissez <b>Vérifier</b> dans son menu d\'actions : complétez si besoin les informations (Admin Crédit, conditions…), puis validez-la, ce qui crée le PV, ou rejetez-la avec un motif.',
+  peut('check', 'pv-notification') && 'Pour vérifier une notification, choisissez <b>Vérifier</b> dans son menu d\'actions : complétez si besoin les informations (Admin Crédit, conditions…), puis validez-la, ce qui crée le PV et l\'envoie en validation au Head Crédit, ou rejetez-la avec un motif.',
 ])}${fig('11-notification-caf-liste', 'Notifications de CAF sans PV')}${fig('11-notification-caf-historique', 'Historique des notifications de CAF')}${fig('11-notification-caf-creation', 'Nouvelle notification de CAF')}${fig('11-notification-caf-detail', 'Fiche d\'une notification de CAF')}${fig('11-notification-caf-verification', 'Vérification d\'une notification de CAF')}`
   }
   if (a('10-pv-liste') || a('10-pv-historique') || a('10-pv-detail')) {
     pv += `  <h3 id="pv">Les PV de comité</h3>
-${chemin('Menu <b>Pv Comité</b>')}  <p>Le PV de comité reprend la décision d'octroi : client, montant, durée, périodicité, taux, frais, garanties à recueillir et réserves de l'analyste. Son statut (En attente, Validé, Rejeté) et son niveau de validation (Analyste Crédit, Admin Crédit, Head Crédit, MD) s'affichent dans la liste et sur la fiche.</p>
+${chemin('Menu <b>Pv Comité</b>')}  <p>Le PV de comité reprend la décision d'octroi : client, montant, durée, périodicité, taux, frais, garanties à recueillir et réserves de l'analyste. Saisi par l'Admin Crédit, il est validé ou rejeté par le Head Crédit. Son statut (En attente, Validé, Rejeté) s'affiche dans la liste et sur la fiche.</p>
 ${liste([
   a('10-pv-liste') && '<b>Sans contrat</b> : les PV en cours de validation, et les PV validés qui attendent leur contrat ou leur notification hypothécaire. Les filtres trient par type de crédit, statut et niveau de validation.',
   a('10-pv-historique') && '<b>Historique</b> : tous les PV.',
-  peut('create', 'pv') && '<b>Créer</b> : saisissez le PV bloc par bloc ; les garanties s\'ajoutent une à une. Un PV rejeté ou en attente à votre niveau se modifie depuis son menu d\'actions.',
-  (peut('validate', 'pv') || peut('reject', 'pv')) && 'Quand un PV attend votre niveau de validation, son menu d\'actions propose <b>Valider</b> et <b>Rejeter</b> ; un rejet demande un motif, transmis par e-mail.',
+  peut('create', 'pv') && '<b>Créer</b> : saisissez le PV bloc par bloc ; les garanties s\'ajoutent une à une. À l\'enregistrement, le PV part en validation chez le Head Crédit. Tant qu\'il n\'est pas validé, il se modifie depuis son menu d\'actions ; un PV rejeté se corrige de la même façon et repart en validation.',
+  (peut('validate', 'pv') || peut('reject', 'pv')) && 'Un PV en attente de validation propose <b>Valider</b> et <b>Rejeter</b> dans son menu d\'actions ; un rejet demande un motif, envoyé par e-mail à l\'Admin Crédit.',
   peut('create', 'basic-contract') && 'Un PV validé propose <b>Créer le contrat</b>, ou <b>Créer la notification</b> s\'il comporte une hypothèque.',
   peut('download', 'pv') && 'Le PV se télécharge depuis sa fiche ou son menu d\'actions.',
 ])}${fig('10-pv-liste', 'PV sans contrat')}${fig('10-pv-historique', 'Historique des PV')}${fig('10-pv-detail', 'Fiche d\'un PV')}${fig('10-pv-creation', 'Nouveau PV de comité')}`
@@ -212,12 +209,12 @@ ${liste([
   let ct = ''
   if (a('20-contrats-liste') || a('20-contrats-historique') || a('20-contrat-detail')) {
     ct += `  <h3 id="contrats">Les contrats</h3>
-${chemin('Menu <b>Contrat › Basique</b>')}  <p>Le contrat est établi à partir d'un PV validé. Son statut suit les étapes : <b>En attente des documents signés</b>, <b>En attente de validation admin</b>, <b>En attente de validation head</b>, puis <b>Validé</b> ou <b>Rejeté</b>.</p>
+${chemin('Menu <b>Contrat › Basique</b>')}  <p>Le contrat est établi à partir d'un PV validé. Son statut suit les étapes : <b>En attente des documents signés</b>, <b>Signé, à envoyer en validation</b>, <b>En attente de validation head</b>, puis <b>Validé</b> ou <b>Rejeté</b>.</p>
 ${liste([
   a('20-contrats-liste') && '<b>Sans CAT</b> : les contrats qui n\'ont pas encore de CAT. La colonne <b>Observations</b> signale ce qui manque (contrat signé, billet à ordre signé, cautions incomplètes) avec un bouton pour y remédier : <span class="btn">Charger</span>, <span class="btn">Cautions</span>, <span class="btn">Créer CAT</span>.',
   a('20-contrats-historique') && '<b>Historique</b> : tous les contrats.',
   peut('create', 'basic-contract') && '<b>Créer</b> : choisissez le PV validé, puis complétez les informations du contrat, du client et, s\'il y en a, des gages.',
-  peut('upload', 'contract') && 'Le menu d\'actions télécharge les documents à faire signer (contrat, billet à ordre, mention manuscrite) et permet d\'<b>ajouter le contrat signé</b> et le <b>billet à ordre signé</b>. Quand les deux sont chargés, <b>Valider l\'envoi</b> transmet le contrat au Head Crédit.',
+  peut('upload', 'contract') && 'Le menu d\'actions télécharge les documents à faire signer (contrat, billet à ordre, mention manuscrite) et permet d\'<b>ajouter le contrat signé</b> et le <b>billet à ordre signé</b>. Quand les deux sont chargés, <b>Envoyer en validation</b> transmet le contrat au Head Crédit.',
   peut('validate', 'basic-contract') && 'Un contrat en attente de validation head propose <b>Valider le contrat</b> et <b>Rejeter le contrat</b> ; le motif d\'un rejet est envoyé à l\'Admin Crédit et affiché sur la fiche.',
   'La fiche du contrat affiche le montant, la durée, l\'échéance, la périodicité et le différé, puis le dossier, le client, les conditions du crédit, les garanties et les gages.',
 ])}${fig('20-contrats-liste', 'Contrats sans CAT')}${fig('20-contrats-liste-actions', 'Menu d\'actions d\'un contrat', '<b>Menu d\'actions</b> d\'un contrat.')}${fig('20-contrats-historique', 'Historique des contrats')}${fig('20-contrat-detail', 'Fiche d\'un contrat')}${fig('20-contrat-creation', 'Nouveau contrat')}`
@@ -251,7 +248,7 @@ ${liste([
   // ─── 6. CAT ─────────────────────────────────────────────────────────────
   let cat = ''
   if (a('40-cat-liste') || a('41-cat-hypothecaire-liste')) {
-    cat += `${chemin('Menu <b>CAT</b>')}  <p>Le CAT (conditions avant tirage) autorise le décaissement d'un contrat validé ou d'une notification hypothécaire. Il porte deux statuts : sa <b>validation</b> (Head Crédit ou MD), puis son <b>déblocage</b> (Opérations). La liste affiche pour chaque CAT le dossier et le client, le secteur, le montant et le numéro de prêt.</p>
+    cat += `${chemin('Menu <b>CAT</b>')}  <p>Le CAT (conditions avant tirage) autorise le décaissement d'un contrat validé ou d'une notification hypothécaire. Il porte deux statuts : sa <b>validation</b> (Head Crédit), puis son <b>déblocage</b> (Opérations). La liste affiche pour chaque CAT le dossier et le client, le secteur, le montant et le numéro de prêt.</p>
 ${liste([
   peut('create', 'basic-cat') && '<b>Créer</b> : choisissez le contrat validé, puis complétez le CAT (numéro de prêt, secteur, frais, TEG, garanties, dépôt de garantie).',
   (peut('validate', 'cat') || peut('validate', 'basic-cat')) && 'Un CAT en attente de validation propose <b>Valider</b> et <b>Rejeter</b> dans son menu d\'actions.',

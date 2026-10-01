@@ -78,7 +78,7 @@ export const validationLevelLabels = {
 
 export const contractStatus = {
   waiting: { text: 'En attente des documents signés', color: 'warning' },
-  pending_admin_validation: { text: 'En attente de validation admin', color: 'info' },
+  pending_admin_validation: { text: 'Signé, à envoyer en validation', color: 'info' },
   pending_head_validation: { text: 'En attente de validation head', color: 'primary' },
   validated: { text: 'Validé', color: 'success' },
   rejected: { text: 'Rejeté', color: 'error' },

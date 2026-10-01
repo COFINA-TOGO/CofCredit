@@ -131,7 +131,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['contract'],
-					'action' => ['menu', 'read', 'download', 'send'],
+					'action' => ['menu', 'read', 'download'],
 				],
 				[
 					'subject' => ['notarized-contract'],
@@ -151,7 +151,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['guarantor'],
-					'action' => ['read', 'download', 'send'],
+					'action' => ['read', 'download'],
 				],
 				[
 					'subject' => ['type-of-guarantee'],
@@ -171,11 +171,11 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['notification'],
-					'action' => ['without-signed-contract', 'download', 'send', 'read'],
+					'action' => ['without-signed-contract', 'download', 'read'],
 				],
 				[
 					'subject' => ['simple-notification'],
-					'action' => ['simple-notification', 'without-signed-notification', 'download', 'send'],
+					'action' => ['simple-notification', 'without-signed-notification', 'download'],
 				],
 				[
 					'subject' => ['settings-user'],
@@ -223,11 +223,11 @@ class User extends Authenticatable
 			'credit_admin' => [
 				[
 					'subject' => ['pv'],
-					'action' => ['menu', 'read', 'create', 'update', 'historical', 'download', 'change_status', 'validate', 'reject'],
+					'action' => ['menu', 'read', 'create', 'update', 'historical', 'download'],
 				],
 				[
 					'subject' => ['contract'],
-					'action' => ['menu', 'read', 'read-without-cat', 'read-historical', 'historical', 'change_status', 'validate', 'reject', 'create', 'update', 'upload', 'delete'],
+					'action' => ['menu', 'read', 'read-without-cat', 'read-historical', 'historical', 'create', 'update', 'upload', 'delete'],
 				],
 				[
 					'subject' => ['basic-contract'],
@@ -483,7 +483,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['pv'],
-					'action' => ['menu', 'read', 'historical', 'download', 'reject', 'validate', 'change_status'],
+					'action' => ['menu', 'read', 'historical', 'download'],
 				],
 				[
 					'subject' => ['type-of-guarantee'],
@@ -543,7 +543,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['pv'],
-					'action' => ['menu', 'read', 'historical', 'download', 'reject', 'validate', 'change_status'],
+					'action' => ['menu', 'read', 'historical', 'download'],
 				],
 				[
 					'subject' => ['contract'],
@@ -551,11 +551,11 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['notification'],
-					'action' => ['read', 'without-signed-contract', 'historical', 'download', 'validate', 'reject', 'change_head_credit_status'],
+					'action' => ['read', 'without-signed-contract', 'historical', 'download'],
 				],
 				[
 					'subject' => ['simple-notification'],
-					'action' => ['read', 'simple-notification', 'without-signed-notification', 'historical', 'download', 'validate', 'reject', 'change_head_credit_status'],
+					'action' => ['read', 'simple-notification', 'without-signed-notification', 'historical', 'download'],
 				],
 				[
 					'subject' => ['guarantor'],
@@ -563,7 +563,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['cat'],
-					'action' => ['menu', 'read', 'download', 'validate', 'reject_validation'],
+					'action' => ['menu', 'read', 'download'],
 				],
 				[
 					'subject' => ['type-of-guarantee'],
@@ -595,7 +595,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['basic-cat'],
-					'action' => ['menu', 'read', 'download', 'validate', 'reject_validation'],
+					'action' => ['menu', 'read', 'download'],
 				],
 				[
 					'subject' => ['settings-user'],

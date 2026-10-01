@@ -51,7 +51,7 @@ class ContractPolicy
 	 */
 	public function admin_validate(User $connectedUser, Contract $contract)
 	{
-		return ($connectedUser->profile === 'credit_admin' && $contract->creator_id == $connectedUser->id) ? Response::allow() : Response::deny("Seul l'admin crédit en charge du contrat peut valider l'envoi");
+		return ($connectedUser->profile === 'credit_admin' && $contract->creator_id == $connectedUser->id) ? Response::allow() : Response::deny("Seul l'admin crédit en charge du contrat peut l'envoyer en validation");
 	}
 
 	/**

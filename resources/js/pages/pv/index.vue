@@ -494,18 +494,14 @@ onMounted(async () => {
             <div
               v-if="
                 ($can('update', 'pv') || $can('delete', 'pv')) &&
-                  (isAdmin() || item.status == 'rejected' ||
-                    (item.status == 'waiting' &&
-                      item.validation_level == 'credit_admin'))
+                  (isAdmin() || item.status != 'validated')
               "
             >
               <VDivider />
               <IconBtn
                 v-if="
                   $can('update', 'pv') &&
-                    (isAdmin() || item.status == 'rejected' ||
-                      (item.status == 'waiting' &&
-                        item.validation_level == 'credit_admin'))
+                    (isAdmin() || item.status != 'validated')
                 "
                 :to="{ name: 'pv-edit-id', params: { id: item.id } }"
               >
@@ -522,9 +518,7 @@ onMounted(async () => {
               <IconBtn
                 v-if="
                   $can('analyst_delete', 'pv') &&
-                    (isAdmin() || item.status == 'rejected' ||
-                      (item.status == 'waiting' &&
-                        item.validation_level == 'credit_admin'))
+                    (isAdmin() || item.status != 'validated')
                 "
                 @click="
                   selectedItemId = item.id;
@@ -553,7 +547,7 @@ onMounted(async () => {
             <div
               v-if="
                 ($can('reject', 'pv') || $can('validate', 'pv')) &&
-                  useCookie('userData').value['role'] == item.validation_level
+                  item.status == 'waiting' && item.validation_level == 'head_credit'
               "
             >
               <VDivider />

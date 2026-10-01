@@ -318,7 +318,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
             </IconBtn>
           </div>
 
-          <div v-if="(($can('reject', 'pv') || $can('validate', 'pv')) && useCookie('userData').value['role'] == item.validation_level)">
+          <div v-if="(($can('reject', 'pv') || $can('validate', 'pv')) && item.status == 'waiting' && item.validation_level == 'head_credit')">
             <VDivider />
             <span :class="(item.status == 'validated') ? 'full-width-icon' : ''">
               <IconBtn

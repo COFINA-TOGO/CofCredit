@@ -129,7 +129,7 @@ class Contract extends Model
 				break;
 				
 			case 'pending_admin_validation':
-				$observations[] = "En attente de validation admin - Tous les fichiers ont été uploadés";
+				$observations[] = "Documents signés chargés : à envoyer en validation au Head Crédit";
 				break;
 				
 			case 'pending_head_validation':
