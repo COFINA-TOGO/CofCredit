@@ -12,11 +12,11 @@ import { ref } from "vue"
 const router = useRouter()
 
 const userData = ref({
-  full_name: "test",
-  email: "test@gmail.com",
-  password: "P@sse123",
-  profile: "admin",
-  activated: false,
+  full_name: '',
+  email: '',
+  password: '',
+  profile: null,
+  activated: true,
   password_change_required: true,
 })
 
@@ -127,7 +127,7 @@ const isPasswordVisible = ref(false)
           <!-- 👉 PV Information -->
           <VCard
             class="mb-6"
-            title="Information du pv"
+            title="Informations du PV"
           >
             <VCardText>
               <VRow>
@@ -193,7 +193,7 @@ const isPasswordVisible = ref(false)
                       },
                     ]"
                     :error-messages="userError.profile"
-                    label="Profile"
+                    label="Profil"
                     item-title="name"
                     item-value="id"
                     required
@@ -247,7 +247,7 @@ const isPasswordVisible = ref(false)
                     v-model="userData.email"
                     :error-messages="userError.email"
                     type="email"
-                    label="Email"
+                    label="E-mail"
                   />
                 </VCol>
                 <VCol
@@ -257,7 +257,7 @@ const isPasswordVisible = ref(false)
                 >
                   <AppTextField
                     v-model="userData.password"
-                    label="Password"
+                    label="Mot de passe"
                     placeholder="············"
                     :rules="[requiredValidator]"
                     :type="isPasswordVisible ? 'text' : 'password'"

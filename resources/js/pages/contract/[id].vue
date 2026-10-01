@@ -112,7 +112,7 @@ const conditionItems = [
           v-if="$can('update', 'contract')"
           prepend-icon="tabler-edit"
           :to="{ name: 'contract-edit-id', params: { id: route.params.id } }"
-          :disabled="contract.status == 'validated'"
+          :disabled="!isAdmin() && contract.status == 'validated'"
         >
           Modifier
         </VBtn>

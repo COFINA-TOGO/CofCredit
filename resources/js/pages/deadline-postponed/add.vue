@@ -13,29 +13,29 @@ import { ref } from 'vue'
 const router = useRouter()
 
 const pvData = ref({
-  committee_id: "CFNTG-044-13-12-23-01212",
-  committee_date: "2024-02-02",
-  caf_id: 10,
-  civility: "Mr",
-  applicant_first_name: "Albert",
-  applicant_last_name: "Einstein",
-  account_number: "251012345678",
-  activity: "Homme d'affaire",
-  purpose_of_financing: "Achat de nouveau locaux",
-  type_of_credit_id: 1,
-  amount: 15000000,
-  duration: 6,
-  periodicity: "mensual",
-  due_amount: 150000,
-  insurance_premium: 15000,
-  administrative_fees_percentage: 2.5,
+  committee_id: '',
+  committee_date: '',
+  caf_id: null,
+  civility: null,
+  applicant_first_name: '',
+  applicant_last_name: '',
+  account_number: '',
+  activity: '',
+  purpose_of_financing: '',
+  type_of_credit_id: null,
+  amount: null,
+  duration: null,
+  periodicity: null,
+  due_amount: null,
+  insurance_premium: null,
+  administrative_fees_percentage: null,
   taf: 10,
-  tax_fee_interest_rate: 17,
+  tax_fee_interest_rate: null,
   guarantees: [{
-    type_of_guarantee_id: 1,
-    expiration_date: "2030-03-03",
-    value: 1500000,
-    comment: "RAS",
+    type_of_guarantee_id: null,
+    expiration_date: '',
+    value: null,
+    comment: '',
   }],
 })
 
@@ -161,7 +161,7 @@ const removeGuaranteeItem = id => {
 
 const addGuaranteeItem = () => {
   pvData.value.guarantees.push({
-    type_of_guarantee_id: 1,
+    type_of_guarantee_id: null,
     expiration_date: "",
     value: "",
     comment: "",
@@ -194,7 +194,7 @@ const addGuaranteeItem = () => {
           <!-- 👉 PV Information -->
           <VCard
             class="mb-6"
-            title="Information du pv"
+            title="Informations du PV"
           >
             <VCardText>
               <VRow>
@@ -483,7 +483,7 @@ const addGuaranteeItem = () => {
           </VCard>
           <VCard
             class="mb-6"
-            title="Information des cautions"
+            title="Cautions"
           >
             <VCardText class="add-products-form">
               <div

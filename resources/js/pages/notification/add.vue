@@ -151,7 +151,7 @@ const documentTypeList = [
         <VCol md="12">
           <VCard
             class="mb-6"
-            title="Information sur notification"
+            title="Informations de la notification"
           >
             <VCardText>
               <VRow>
@@ -287,7 +287,7 @@ const documentTypeList = [
           <VCard
             v-if="notificationData.type == 'company'"
             class="mb-6"
-            title="Information sur la société"
+            title="Société"
           >
             <VCardText>
               <VRow cols="12">
@@ -307,7 +307,7 @@ const documentTypeList = [
           <VCard
             v-if="notificationData.type == 'individual_business'"
             class="mb-6"
-            title="Information sur l'entreprise individuele"
+            title="Entreprise individuelle"
           >
             <VCardText>
               <VRow cols="12">

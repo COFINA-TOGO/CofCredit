@@ -2,7 +2,7 @@ export default [
   {
     title: 'Accueil',
     icon: { icon: 'tabler-smart-home' },
-    to: { name: 'index' },
+    to: { name: 'root' },
     action: 'manage',
     subject: 'settings-user',
   },

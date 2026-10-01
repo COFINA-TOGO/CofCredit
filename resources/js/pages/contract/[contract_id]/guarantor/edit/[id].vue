@@ -110,6 +110,13 @@ const onSubmit = () => {
     >
       <template #actions>
         <VBtn
+          variant="tonal"
+          prepend-icon="tabler-eye"
+          :to="{ name: 'contract-contract_id-guarantor-id', params: { contract_id: route.params.contract_id, id: route.params.id } }"
+        >
+          Consulter
+        </VBtn>
+        <VBtn
           prepend-icon="tabler-device-floppy"
           @click="onSubmit"
         >
@@ -122,28 +129,10 @@ const onSubmit = () => {
       @submit.prevent="onSubmit"
     >
       <VRow>
-        <VCol cols="11">
-          <VBtn
-            prepend-icon="tabler-arrow-left"
-            :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: route.params.contract_id } }"
-          >
-            Cautions
-          </VBtn>
-        </VCol>
-        <VCol cols="1">
-          <VBtn
-            prepend-icon="tabler-eye"
-            :to="{ name: 'contract-contract_id-guarantor-id', params: { contract_id: route.params.contract_id, id: route.params.id } }"
-          >
-            Voir
-          </VBtn>
-        </VCol>
-      </VRow>
-      <VRow>
         <VCol md="12">
           <VCard
             class="mb-6"
-            title="Information de la caution"
+            title="Informations de la caution"
           >
             <VCardText>
               <VRow>

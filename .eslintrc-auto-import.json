@@ -383,6 +383,7 @@
     "reimbursementSourceLabels": true,
     "releaseTypeLabels": true,
     "validationLevelLabels": true,
-    "verbalTrialStatus": true
+    "verbalTrialStatus": true,
+    "isAdmin": true
   }
 }

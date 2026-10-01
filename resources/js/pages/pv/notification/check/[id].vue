@@ -229,38 +229,27 @@ if (
         title="Vérification de la notification de CAF"
         subtitle="Complétez si besoin, puis validez ou rejetez la notification"
         :back="{ name: 'pv-notification-without-pv' }"
-      />
+      >
+        <template #actions>
+          <VBtn
+            variant="tonal"
+            prepend-icon="tabler-eye"
+            :to="{ name: 'pv-notification-id', params: { id: route.params.id } }"
+          >
+            Consulter
+          </VBtn>
+        </template>
+      </AppPageHeader>
       <VForm
         ref="refForm"
         @submit.prevent="apiCheck"
       >
         <VRow>
-          <VCol cols="11">
-            <VBtn
-              prepend-icon="tabler-arrow-narrow-left"
-              :to="nextRoute"
-            >
-              Notifications
-            </VBtn>
-          </VCol>
-          <VCol
-            cols="1"
-            class="text-right"
-          >
-            <VBtn
-              append-icon="tabler-eye"
-              :to="{ name: 'pv-notification-id', params: { id: route.params.id } }"
-            >
-              Voir
-            </VBtn>
-          </VCol>
-        </VRow>
-        <VRow>
           <VCol md="12">
             <!-- 👉 verbalTrial Information -->
             <VCard
               class="mb-6"
-              title="Validation de la notification du caf"
+              title="Informations de la notification"
             >
               <VCardText>
                 <VRow>
@@ -702,7 +691,7 @@ if (
             </VCard>
             <VCard
               class="mb-6"
-              title="Information des cautions"
+              title="Cautions"
             >
               <VCardText class="add-products-form">
                 <div

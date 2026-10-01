@@ -18,7 +18,7 @@ const loadings = ref([])
 
 const headers = [
   {
-    title: 'Numéro comité',
+    title: 'Dossier',
     key: 'notification.verbal_trial.committee_id',
   },
   {
@@ -26,19 +26,11 @@ const headers = [
     key: 'notification.creator.full_name',
   },
   {
-    title: 'Nom client',
-    key: 'notification.verbal_trial.applicant_full_name',
-  },
-  {
     title: 'Secteur',
     key: 'sector',
   },
   {
-    title: 'Numéro de prêt',
-    key: 'credit_number',
-  },
-  {
-    title: 'Montant',
+    title: 'Prêt',
     key: 'notification.verbal_trial.amount',
   },
   {
@@ -226,10 +218,20 @@ const rejectUnblockCAT = async id => {
         class="text-no-wrap"
         @update:options="updateOptions"
       >
+        <template #item.notification.verbal_trial.committee_id="{ item }">
+          <div class="py-2">
+            <div class="text-no-wrap font-weight-medium">
+              {{ item.notification?.verbal_trial?.committee_id }}
+            </div>
+            <div class="text-body-2 text-medium-emphasis">
+              {{ item.notification?.verbal_trial?.entity_name }}
+            </div>
+          </div>
+        </template>
         <template #item.sector="{ item }">
           <span
-            class="d-inline-block text-truncate"
-            style="max-inline-size: 220px;"
+            class="d-inline-block text-truncate align-middle"
+            style="max-inline-size: 180px;"
           >
             {{ item.sector }}
             <VTooltip
@@ -273,7 +275,14 @@ const rejectUnblockCAT = async id => {
         </template>
 
         <template #item.notification.verbal_trial.amount="{ item }">
-          {{ String(item.notification.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
+          <div class="py-2 text-no-wrap">
+            <div class="font-weight-medium">
+              {{ formatAmount(item.notification.verbal_trial.amount) }}
+            </div>
+            <div class="text-body-2 text-medium-emphasis">
+              {{ item.credit_number }}
+            </div>
+          </div>
         </template>
 
         <template #item.actions="{ item }">
@@ -372,13 +381,13 @@ const rejectUnblockCAT = async id => {
             <IconBtn
               v-if="$can('update', 'cat')"
               :to="{ name: 'cat-edit-id', params: { id: item.id } }"
-              :disabled="item.validation_status == 'validated'"
+              :disabled="!isAdmin() && item.validation_status == 'validated'"
             >
               <VIcon icon="tabler-edit" />
             </IconBtn>
             <IconBtn
               v-if="$can('delete', 'cat')"
-              :disabled="item.validation_status == 'validated'"
+              :disabled="!isAdmin() && item.validation_status == 'validated'"
               @click="catSelectedId = item.id; isDialogVisible = true"
             >
               <VIcon

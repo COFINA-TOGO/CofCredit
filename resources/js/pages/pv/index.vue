@@ -494,7 +494,7 @@ onMounted(async () => {
             <div
               v-if="
                 ($can('update', 'pv') || $can('delete', 'pv')) &&
-                  (item.status == 'rejected' ||
+                  (isAdmin() || item.status == 'rejected' ||
                     (item.status == 'waiting' &&
                       item.validation_level == 'credit_admin'))
               "
@@ -503,7 +503,7 @@ onMounted(async () => {
               <IconBtn
                 v-if="
                   $can('update', 'pv') &&
-                    (item.status == 'rejected' ||
+                    (isAdmin() || item.status == 'rejected' ||
                       (item.status == 'waiting' &&
                         item.validation_level == 'credit_admin'))
                 "
@@ -522,7 +522,7 @@ onMounted(async () => {
               <IconBtn
                 v-if="
                   $can('analyst_delete', 'pv') &&
-                    (item.status == 'rejected' ||
+                    (isAdmin() || item.status == 'rejected' ||
                       (item.status == 'waiting' &&
                         item.validation_level == 'credit_admin'))
                 "
@@ -553,8 +553,7 @@ onMounted(async () => {
             <div
               v-if="
                 ($can('reject', 'pv') || $can('validate', 'pv')) &&
-                  useCookie('userData').value['role'] ==
-                  item.validation_level
+                  useCookie('userData').value['role'] == item.validation_level
               "
             >
               <VDivider />

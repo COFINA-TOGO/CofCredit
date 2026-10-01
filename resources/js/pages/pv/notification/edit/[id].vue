@@ -220,6 +220,13 @@ if (
       >
         <template #actions>
           <VBtn
+            variant="tonal"
+            prepend-icon="tabler-eye"
+            :to="{ name: 'pv-notification-id', params: { id: route.params.id } }"
+          >
+            Consulter
+          </VBtn>
+          <VBtn
             prepend-icon="tabler-device-floppy"
             @click="onSubmit"
           >
@@ -232,32 +239,11 @@ if (
         @submit.prevent="onSubmit"
       >
         <VRow>
-          <VCol cols="11">
-            <VBtn
-              prepend-icon="tabler-arrow-narrow-left"
-              :to="nextRoute"
-            >
-              Notification de caf
-            </VBtn>
-          </VCol>
-          <VCol
-            cols="1"
-            class="text-right"
-          >
-            <VBtn
-              append-icon="tabler-eye"
-              :to="{ name: 'pv-notification-id', params: { id: route.params.id } }"
-            >
-              Voir
-            </VBtn>
-          </VCol>
-        </VRow>
-        <VRow>
           <VCol md="12">
             <!-- 👉 verbalTrial Information -->
             <VCard
               class="mb-6"
-              title="Modification de la notification de caf"
+              title="Informations de la notification"
             >
               <VCardText>
                 <VRow>
@@ -699,7 +685,7 @@ if (
             </VCard>
             <VCard
               class="mb-6"
-              title="Information des cautions"
+              title="Cautions"
             >
               <VCardText class="add-products-form">
                 <div

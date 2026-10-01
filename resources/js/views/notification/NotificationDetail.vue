@@ -92,7 +92,7 @@ const conditionItems = computed(() => [
           v-if="$can('update', routePrefix)"
           prepend-icon="tabler-edit"
           :to="{ name: `${routePrefix}-edit-id`, params: { id: n.id } }"
-          :disabled="n.status === 'validated'"
+          :disabled="!isAdmin() && n.status === 'validated'"
         >
           Modifier
         </VBtn>

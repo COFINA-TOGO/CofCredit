@@ -131,7 +131,7 @@ const onSubmit = () => {
         <VCol md="12">
           <VCard
             class="mb-6"
-            title="Information de la caution"
+            title="Informations de la caution"
           >
             <VCardText>
               <VRow>

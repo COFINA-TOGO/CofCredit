@@ -107,6 +107,13 @@ contractDataList.value.data.push(JSON.parse(JSON.stringify(cat.value.contract)))
     >
       <template #actions>
         <VBtn
+          variant="tonal"
+          prepend-icon="tabler-eye"
+          :to="{ name: 'cat-id', params: { id: route.params.id } }"
+        >
+          Consulter
+        </VBtn>
+        <VBtn
           prepend-icon="tabler-device-floppy"
           @click="onSubmit"
         >
@@ -119,28 +126,10 @@ contractDataList.value.data.push(JSON.parse(JSON.stringify(cat.value.contract)))
       @submit.prevent="onSubmit"
     >
       <VRow>
-        <VCol cols="11">
-          <VBtn
-            prepend-icon="tabler-arrow-left"
-            :to="{ name: 'cat' }"
-          >
-            CATs
-          </VBtn>
-        </VCol>
-        <VCol cols="1">
-          <VBtn
-            prepend-icon="tabler-eye"
-            :to="{ name: 'cat-id', params: { id: route.params.id } }"
-          >
-            Voir
-          </VBtn>
-        </VCol>
-      </VRow>
-      <VRow>
         <VCol md="12">
           <VCard
             class="mb-6"
-            title="Information sur CAT"
+            title="Informations du CAT"
           >
             <VCardText>
               <VRow>

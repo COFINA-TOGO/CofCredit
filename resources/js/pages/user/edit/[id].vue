@@ -112,6 +112,13 @@ const isPasswordVisible = ref(false)
       >
         <template #actions>
           <VBtn
+            variant="tonal"
+            prepend-icon="tabler-eye"
+            :to="{ name: 'user-id', params: { id: route.params.id } }"
+          >
+            Consulter
+          </VBtn>
+          <VBtn
             prepend-icon="tabler-device-floppy"
             @click="onSubmit"
           >
@@ -124,35 +131,11 @@ const isPasswordVisible = ref(false)
         @submit.prevent="onSubmit"
       >
         <VRow>
-          <VCol cols="11">
-            <VBtn
-              prepend-icon="tabler-arrow-narrow-left"
-              :to="nextRoute"
-            >
-              Utilisateurs
-            </VBtn>
-          </VCol>
-          <VCol
-            cols="1"
-            class="text-right"
-          >
-            <VBtn
-              append-icon="tabler-eye"
-              :to="{
-                full_name: 'user-id',
-                params: { id: route.params.id },
-              }"
-            >
-              Voir
-            </VBtn>
-          </VCol>
-        </VRow>
-        <VRow>
           <VCol md="12">
             <!-- 👉 creditCard Information -->
             <VCard
               class="mb-6"
-              title="Modification du user de comité"
+              title="Compte"
             >
               <VCardText>
                 <VRow>
@@ -219,7 +202,7 @@ const isPasswordVisible = ref(false)
                         },
                       ]"
                       :error-messages="userError.profile"
-                      label="Profile"
+                      label="Profil"
                       item-title="name"
                       item-value="id"
                       required
@@ -272,7 +255,7 @@ const isPasswordVisible = ref(false)
                       v-model="user.email"
                       :error-messages="userError.email"
                       type="email"
-                      label="Email"
+                      label="E-mail"
                     />
                   </VCol>
 
@@ -283,7 +266,7 @@ const isPasswordVisible = ref(false)
                   >
                     <AppTextField
                       v-model="user.password"
-                      label="Password"
+                      label="Mot de passe"
                       placeholder="············"
                       :type="
                         isPasswordVisible ? 'text' : 'password'

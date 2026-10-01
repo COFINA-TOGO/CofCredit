@@ -57,7 +57,7 @@ const items = computed(() => [
           v-if="$can('update', 'cat') || $can('update', 'basic-cat')"
           prepend-icon="tabler-edit"
           :to="{ name: editRoute, params: { id: cat.id } }"
-          :disabled="cat.validation_status === 'validated'"
+          :disabled="!isAdmin() && cat.validation_status === 'validated'"
         >
           Modifier
         </VBtn>

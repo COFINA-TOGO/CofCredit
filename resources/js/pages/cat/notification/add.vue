@@ -132,7 +132,7 @@ if (route.query.id) {
         <VCol md="12">
           <VCard
             class="mb-6"
-            title="Information sur CAT"
+            title="Informations du CAT"
           >
             <VCardText>
               <VRow>

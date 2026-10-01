@@ -107,7 +107,7 @@ const filterDataArray = reactive([
 // Headers de la table
 const headers = [
   {
-    title: 'Numéro comité',
+    title: 'Dossier',
     key: 'contract.verbal_trial.committee_id',
   },
   {
@@ -115,19 +115,11 @@ const headers = [
     key: 'contract.creator.full_name',
   },
   {
-    title: 'Nom client',
-    key: 'contract.verbal_trial.entity_name',
-  },
-  {
     title: 'Secteur',
     key: 'sector',
   },
   {
-    title: 'Numéro de prêt',
-    key: 'credit_number',
-  },
-  {
-    title: 'Montant',
+    title: 'Prêt',
     key: 'contract.verbal_trial.amount',
   },
   {
@@ -409,10 +401,20 @@ onMounted(async () => {
         @update:options="updateOptions"
       >
         <!-- Type de CAT -->
+        <template #item.contract.verbal_trial.committee_id="{ item }">
+          <div class="py-2">
+            <div class="text-no-wrap font-weight-medium">
+              {{ item.contract?.verbal_trial?.committee_id }}
+            </div>
+            <div class="text-body-2 text-medium-emphasis">
+              {{ item.contract?.verbal_trial?.entity_name }}
+            </div>
+          </div>
+        </template>
         <template #item.sector="{ item }">
           <span
-            class="d-inline-block text-truncate"
-            style="max-inline-size: 220px;"
+            class="d-inline-block text-truncate align-middle"
+            style="max-inline-size: 180px;"
           >
             {{ item.sector }}
             <VTooltip
@@ -454,7 +456,14 @@ onMounted(async () => {
 
         <!-- Montant -->
         <template #item.contract.verbal_trial.amount="{ item }">
-          {{ formatAmount(item.contract.verbal_trial.amount) }}
+          <div class="py-2 text-no-wrap">
+            <div class="font-weight-medium">
+              {{ formatAmount(item.contract.verbal_trial.amount) }}
+            </div>
+            <div class="text-body-2 text-medium-emphasis">
+              {{ item.credit_number }}
+            </div>
+          </div>
         </template>
 
         <template #item.actions="{ item }">
@@ -559,13 +568,13 @@ onMounted(async () => {
             <IconBtn
               v-if="$can('update', 'basic-cat')"
               :to="{ name: 'cat-edit-id', params: { id: item.id } }"
-              :disabled="item.validation_status == 'validated'"
+              :disabled="!isAdmin() && item.validation_status == 'validated'"
             >
               <VIcon icon="tabler-edit" />
             </IconBtn>
             <IconBtn
               v-if="$can('delete', 'basic-cat')"
-              :disabled="item.validation_status == 'validated'"
+              :disabled="!isAdmin() && item.validation_status == 'validated'"
               @click="catSelectedId = item.id; isDialogVisible = true"
             >
               <VIcon

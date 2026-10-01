@@ -42,8 +42,8 @@ const pvData = ref({
   representative_phone_number: null,
   guarantees: [
     {
-      type_of_guarantee_id: 1,
-      comment: "...",
+      type_of_guarantee_id: null,
+      comment: '',
     },
   ],
 })
@@ -202,7 +202,7 @@ const removeGuaranteeItem = id => {
 
 const addGuaranteeItem = () => {
   pvData.value.guarantees.push({
-    type_of_guarantee_id: 1,
+    type_of_guarantee_id: null,
     expiration_date: "",
     value: "",
     comment: "",
@@ -235,7 +235,7 @@ const addGuaranteeItem = () => {
           <!-- 👉 PV Information -->
           <VCard
             class="mb-6"
-            title="Information de la notification"
+            title="Informations de la notification"
           >
             <VCardText>
               <VRow>
@@ -639,7 +639,7 @@ const addGuaranteeItem = () => {
           </VCard>
           <VCard
             class="mb-6"
-            title="Information des cautions"
+            title="Cautions"
           >
             <VCardText class="add-products-form">
               <div

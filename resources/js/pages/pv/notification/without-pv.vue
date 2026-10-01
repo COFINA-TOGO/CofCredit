@@ -283,7 +283,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
                 <VIcon icon=" tabler-eye" />
               </IconBtn>
               <IconBtn
-                v-if="$can('update', 'pv-notification') && (item.status == 'rejected' || (item.status == 'waiting' && item.validation_level == 'credit_analyst'))"
+                v-if="$can('update', 'pv-notification') && (isAdmin() || item.status == 'rejected' || (item.status == 'waiting' && item.validation_level == 'credit_analyst'))"
                 :to="{ name: 'pv-notification-edit-id', params: { id: item.id } }"
               >
                 <VTooltip
@@ -296,7 +296,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
                 <VIcon icon="tabler-edit" />
               </IconBtn>
               <IconBtn
-                v-if="$can('delete', 'pv-notification') && (item.status == 'rejected' || (item.status == 'waiting' && item.validation_level == 'credit_analyst'))"
+                v-if="$can('delete', 'pv-notification') && (isAdmin() || item.status == 'rejected' || (item.status == 'waiting' && item.validation_level == 'credit_analyst'))"
                 @click="selectedItemId = item.id; (actionTitle = 'Supprimer la notification'), (actionText = 'Voulez vous vraiment supprimer cette notification?'), (actionFunction = apiDelete); actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;"
               >
                 <VTooltip

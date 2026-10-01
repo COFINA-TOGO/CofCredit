@@ -209,6 +209,13 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
     >
       <template #actions>
         <VBtn
+          variant="tonal"
+          prepend-icon="tabler-eye"
+          :to="{ name: 'contract-id', params: { id: route.params.id } }"
+        >
+          Consulter
+        </VBtn>
+        <VBtn
           prepend-icon="tabler-device-floppy"
           @click="onSubmit"
         >
@@ -221,27 +228,11 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
       @submit.prevent="onSubmit"
     >
       <VRow>
-        <VCol cols="11">
-          <VBtn :to="nextRoute">
-            <VIcon icon="tabler-arrow-left" />
-            Contrats
-          </VBtn>
-        </VCol>
-        <VCol cols="1">
-          <VBtn
-            append-icon="tabler-eye"
-            :to="{ name: 'contract-id', params: { id: route.params.id } }"
-          >
-            Voir
-          </VBtn>
-        </VCol>
-      </VRow>
-      <VRow>
         <VCol md="12">
           <!-- 👉 Informations sur le contrat -->
           <VCard
             class="mb-6"
-            title="Information sur contrat"
+            title="Informations du contrat"
           >
             <VCardText>
               <VRow>
@@ -364,7 +355,7 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
           <VCard
             v-if="contract.has_pledges == '1'"
             class="mb-6"
-            title="Informations sur les gages"
+            title="Gages"
           >
             <VCardText class="add-products-form">
               <div
@@ -392,7 +383,7 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
           <!-- 👉 Informations sur le client -->
           <VCard
             class="mb-6"
-            title="Information sur le client"
+            title="Client"
           >
             <VCardText>
               <VRow>
@@ -529,7 +520,7 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
           <VCard
             v-if="contract.type == 'company'"
             class="mb-6"
-            title="Information sur la société"
+            title="Société"
           >
             <VCardText>
               <VRow cols="12">
@@ -603,7 +594,7 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
           <VCard
             v-if="contract.type == 'individual_business'"
             class="mb-6"
-            title="Information sur l'entreprise individuele"
+            title="Entreprise individuelle"
           >
             <VCardText>
               <VRow cols="12">

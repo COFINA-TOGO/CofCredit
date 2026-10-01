@@ -69,6 +69,7 @@ declare global {
   const inject: typeof import('vue')['inject']
   const injectLocal: typeof import('@vueuse/core')['injectLocal']
   const integerValidator: typeof import('./resources/js/@core/utils/validators.js')['integerValidator']
+  const isAdmin: typeof import('./resources/js/utils/permissions.js')['isAdmin']
   const isDefined: typeof import('@vueuse/core')['isDefined']
   const isEmpty: typeof import('./resources/js/@core/utils/helpers.js')['isEmpty']
   const isEmptyArray: typeof import('./resources/js/@core/utils/helpers.js')['isEmptyArray']
@@ -454,6 +455,7 @@ declare module 'vue' {
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly injectLocal: UnwrapRef<typeof import('@vueuse/core')['injectLocal']>
     readonly integerValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['integerValidator']>
+    readonly isAdmin: UnwrapRef<typeof import('./resources/js/utils/permissions.js')['isAdmin']>
     readonly isDefined: UnwrapRef<typeof import('@vueuse/core')['isDefined']>
     readonly isEmpty: UnwrapRef<typeof import('./resources/js/@core/utils/helpers.js')['isEmpty']>
     readonly isEmptyArray: UnwrapRef<typeof import('./resources/js/@core/utils/helpers.js')['isEmptyArray']>

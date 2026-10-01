@@ -172,6 +172,13 @@ verbalTrial.value.guarantees.forEach(guarantee => {
       >
         <template #actions>
           <VBtn
+            variant="tonal"
+            prepend-icon="tabler-eye"
+            :to="{ name: 'deadline-postponed-id', params: { id: route.params.id } }"
+          >
+            Consulter
+          </VBtn>
+          <VBtn
             prepend-icon="tabler-device-floppy"
             @click="onSubmit"
           >
@@ -184,32 +191,11 @@ verbalTrial.value.guarantees.forEach(guarantee => {
         @submit.prevent="onSubmit"
       >
         <VRow>
-          <VCol cols="11">
-            <VBtn
-              prepend-icon="tabler-arrow-narrow-left"
-              :to="nextRoute"
-            >
-              Procès verbaux
-            </VBtn>
-          </VCol>
-          <VCol
-            cols="1"
-            class="text-right"
-          >
-            <VBtn
-              append-icon="tabler-eye"
-              :to="{ name: 'pv-id', params: { id: route.params.id } }"
-            >
-              Voir
-            </VBtn>
-          </VCol>
-        </VRow>
-        <VRow>
           <VCol md="12">
             <!-- 👉 verbalTrial Information -->
             <VCard
               class="mb-6"
-              title="Modification du pv de comité"
+              title="Informations du report"
             >
               <VCardText>
                 <VRow>
@@ -508,7 +494,7 @@ verbalTrial.value.guarantees.forEach(guarantee => {
             </VCard>
             <VCard
               class="mb-6"
-              title="Information des cautions"
+              title="Cautions"
             >
               <VCardText class="add-products-form">
                 <div

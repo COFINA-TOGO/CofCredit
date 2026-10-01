@@ -157,7 +157,7 @@ const onSubmit = () => {
               <VCol cols="12">
                 <AppTextField
                   v-model="credentials.email"
-                  label="Email"
+                  label="E-mail"
                   placeholder="johndoe@email.com"
                   type="email"
                   autofocus
@@ -170,7 +170,7 @@ const onSubmit = () => {
               <VCol cols="12">
                 <AppTextField
                   v-model="credentials.password"
-                  label="Password"
+                  label="Mot de passe"
                   placeholder="············"
                   :rules="[requiredValidator]"
                   :type="isPasswordVisible ? 'text' : 'password'"

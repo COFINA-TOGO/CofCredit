@@ -192,7 +192,7 @@ const removePledgeItem = id => {
 
 const addPledgeItem = () => {
   contractData.value.pledges.push({
-    type: "vehicule",
+    type: "vehicle",
     comment: "",
   })
 }
@@ -230,7 +230,7 @@ if (route.query.id) {
           <!-- 👉 Information sur le contrat -->
           <VCard
             class="mb-6"
-            title="Information sur contrat"
+            title="Informations du contrat"
           >
             <VCardText>
               <VRow>
@@ -339,7 +339,7 @@ if (route.query.id) {
           <VCard
             v-if="contractData.has_pledges == '1'"
             class="mb-6"
-            title="Informations sur les gages"
+            title="Gages"
           >
             <VCardText class="add-products-form">
               <div
@@ -367,7 +367,7 @@ if (route.query.id) {
           <!-- 👉 Information sur le client -->
           <VCard
             class="mb-6"
-            title="Information sur le client"
+            title="Client"
           >
             <VCardText>
               <VRow>
@@ -496,7 +496,7 @@ if (route.query.id) {
           <VCard
             v-if="contractData.type == 'company'"
             class="mb-6"
-            title="Information sur la société"
+            title="Société"
           >
             <VCardText>
               <VRow cols="12">
@@ -565,7 +565,7 @@ if (route.query.id) {
           <VCard
             v-if="contractData.type == 'individual_business'"
             class="mb-6"
-            title="Information sur l'entreprise individuele"
+            title="Entreprise individuelle"
           >
             <VCardText>
               <VRow cols="12">

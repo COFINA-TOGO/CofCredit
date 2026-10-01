@@ -412,7 +412,7 @@ onMounted(async () => {
             <IconBtn
               v-if="$can('update', 'deadline-postponed')"
               :to="{ name: 'deadline-postponed-edit-id', params: { id: item.id } }"
-              :disabled="item.status == 'validated'"
+              :disabled="!isAdmin() && item.status == 'validated'"
             >
               <VTooltip
                 activator="parent"
@@ -426,7 +426,7 @@ onMounted(async () => {
 
             <IconBtn
               v-if="$can('delete', 'deadline-postponed')"
-              :disabled="item.status == 'validated'"
+              :disabled="!isAdmin() && item.status == 'validated'"
               @click=" selectedItemId = item.id; actionTitle = 'Supprimer le PV',
                                                  actionText = 'Voulez vous vraiment supprimer ce pv?', actionFunction = apiDelete;
                        actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;"

@@ -119,6 +119,13 @@ verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value
     >
       <template #actions>
         <VBtn
+          variant="tonal"
+          prepend-icon="tabler-eye"
+          :to="{ name: 'notification-id', params: { id: route.params.id } }"
+        >
+          Consulter
+        </VBtn>
+        <VBtn
           prepend-icon="tabler-device-floppy"
           @click="onSubmit"
         >
@@ -131,24 +138,11 @@ verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value
       @submit.prevent="onSubmit"
     >
       <VRow>
-        <VCol cols="11">
-          <VBtn :to="{ name: 'notification' }">
-            <VIcon icon="tabler-arrow-left" />
-            Notifications
-          </VBtn>
-        </VCol>
-        <VCol cols="1">
-          <VBtn :to="{ name: 'notification-id', params: { id: route.params.id } }">
-            Voir
-          </VBtn>
-        </VCol>
-      </VRow>
-      <VRow>
         <VCol md="12">
           <!-- 👉 Informations sur le notification -->
           <VCard
             class="mb-6"
-            title="Information sur notification"
+            title="Informations de la notification"
           >
             <VCardText>
               <VRow>
@@ -296,7 +290,7 @@ verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value
           <VCard
             v-if="notification.type == 'company'"
             class="mb-6"
-            title="Information sur la société"
+            title="Société"
           >
             <VCardText>
               <VRow cols="12">
@@ -316,7 +310,7 @@ verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value
           <VCard
             v-if="notification.type == 'individual_business'"
             class="mb-6"
-            title="Information sur l'entreprise individuele"
+            title="Entreprise individuelle"
           >
             <VCardText>
               <VRow cols="12">

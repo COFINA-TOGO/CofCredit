@@ -9,7 +9,7 @@ const props = defineProps({
     type: Object,
     required: true,
     default: () => ({
-      type: "vehicule",
+      type: "vehicle",
       comment: "",
     }),
   },

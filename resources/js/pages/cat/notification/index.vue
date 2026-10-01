@@ -53,7 +53,7 @@ const viewData = reactive({
 // Headers de la table
 const headers = [
   {
-    title: 'Numéro comité',
+    title: 'Dossier',
     key: 'notification.verbal_trial.committee_id',
   },
   {
@@ -61,19 +61,11 @@ const headers = [
     key: 'notification.creator.full_name',
   },
   {
-    title: 'Nom client',
-    key: 'notification.verbal_trial.applicant_full_name',
-  },
-  {
     title: 'Secteur',
     key: 'sector',
   },
   {
-    title: 'Numéro de prêt',
-    key: 'credit_number',
-  },
-  {
-    title: 'Montant',
+    title: 'Prêt',
     key: 'notification.verbal_trial.amount',
   },
   {
@@ -389,10 +381,20 @@ onMounted(async () => {
         loading-text="En cours de chargement"
         @update:options="updateOptions"
       >
+        <template #item.notification.verbal_trial.committee_id="{ item }">
+          <div class="py-2">
+            <div class="text-no-wrap font-weight-medium">
+              {{ item.notification?.verbal_trial?.committee_id }}
+            </div>
+            <div class="text-body-2 text-medium-emphasis">
+              {{ item.notification?.verbal_trial?.entity_name }}
+            </div>
+          </div>
+        </template>
         <template #item.sector="{ item }">
           <span
-            class="d-inline-block text-truncate"
-            style="max-inline-size: 220px;"
+            class="d-inline-block text-truncate align-middle"
+            style="max-inline-size: 180px;"
           >
             {{ item.sector }}
             <VTooltip
@@ -436,7 +438,14 @@ onMounted(async () => {
         </template>
 
         <template #item.notification.verbal_trial.amount="{ item }">
-          {{ String(item.notification.verbal_trial.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F CFA
+          <div class="py-2 text-no-wrap">
+            <div class="font-weight-medium">
+              {{ formatAmount(item.notification.verbal_trial.amount) }}
+            </div>
+            <div class="text-body-2 text-medium-emphasis">
+              {{ item.credit_number }}
+            </div>
+          </div>
         </template>
 
         <template #item.actions="{ item }">
@@ -550,7 +559,7 @@ onMounted(async () => {
             <IconBtn 
               v-if="$can('update', viewData.data.rule.name)" 
               :to="{ name: 'cat-notification-edit-id', params: { id: item.id } }"
-              :disabled="item.validation_status == 'validated'"
+              :disabled="!isAdmin() && item.validation_status == 'validated'"
             >
               <VTooltip
                 activator="parent"
@@ -565,7 +574,7 @@ onMounted(async () => {
             <IconBtn 
               v-if="$can('delete', viewData.data.rule.name)" 
               :loading="deleteLoadings[item.id]"
-              :disabled="item.validation_status == 'validated'"
+              :disabled="!isAdmin() && item.validation_status == 'validated'"
               @click="catSelectedId = item.id; isDialogVisible = true"
             >
               <VTooltip

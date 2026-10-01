@@ -277,7 +277,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
             <IconBtn
               v-if="$can('update', 'pv')"
               :to="{ name: 'pv-edit-id', params: { id: item.id } }"
-              :disabled="item.status == 'validated'"
+              :disabled="!isAdmin() && item.status == 'validated'"
             >
               <VTooltip
                 activator="parent"
@@ -291,7 +291,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
             <IconBtn
               v-if="$can('delete', 'pv')"
-              :disabled="item.status == 'validated'"
+              :disabled="!isAdmin() && item.status == 'validated'"
               @click=" selectedItemId = item.id; actionTitle = 'Supprimer le PV',
                                                  actionText = 'Voulez vous vraiment supprimer ce pv?', actionFunction = apiDelete;
                        actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;"
