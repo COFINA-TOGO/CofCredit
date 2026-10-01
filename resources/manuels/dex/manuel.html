@@ -198,6 +198,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
     <li>Cliquez sur <span class="btn">Connexion</span>.</li>
     <li>Si votre compte a été créé avec « Changement de mot de passe : Obligatoire », l'application vous demande d'en choisir un nouveau avant d'aller plus loin.</li>
   </ol>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/00-connexion.webp" alt="Écran de connexion" loading="lazy" width="1440" height="900"></button><figcaption><b>Écran de connexion.</b> Un compte désactivé est refusé.</figcaption></figure>
 
   <h3 id="accueil">L'accueil</h3>
   <p class="chemin">Menu <b>Accueil</b>, ouvert après chaque connexion</p>
@@ -220,6 +221,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
     <div><h5>Aide</h5><ul>
       <li>Manuel d'utilisation</li></ul></div>
   </div>
+  <figure class="menu"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/01-menu.webp" alt="Menu du profil" loading="lazy" width="260" height="516"></button><figcaption><b>Le menu</b>, groupes repliés.</figcaption></figure>
   </div>
   <h3 id="listes">Les écrans</h3>
   <ul>
@@ -232,10 +234,14 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <h3 id="compte">Votre compte</h3>
   <p class="chemin">Menu de l'avatar, en haut à droite</p>
   <p>Trois onglets : <b>Compte</b> (nom et adresse e-mail), <b>Sécurité</b> (changer de mot de passe : au moins 8 caractères, avec une majuscule, une minuscule, un chiffre et un caractère spécial) et <b>Signature</b> (l'image de votre signature, reprise dans les documents générés).</p>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/02-parametres-compte.webp" alt="Paramètres du compte" loading="lazy" width="1440" height="900"></button><figcaption><b>Paramètres du compte.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/02-parametres-securite.webp" alt="Changer de mot de passe" loading="lazy" width="1440" height="900"></button><figcaption><b>Changer de mot de passe.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/02-parametres-signature.webp" alt="Signature" loading="lazy" width="1440" height="900"></button><figcaption><b>Signature.</b></figcaption></figure>
 
   <h3 id="manuel-appli">Retrouver ce manuel</h3>
   <p class="chemin">Menu <b>Aide › Manuel d'utilisation</b></p>
   <p>Le manuel de votre profil s'ouvre directement. Le champ de recherche surligne un mot dans le manuel ; <span class="btn">Exporter en PDF</span> l'imprime avec une couverture et un sommaire, et <span class="btn">Plein écran</span> l'ouvre dans un nouvel onglet.</p>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/03-manuel.webp" alt="Manuel d'utilisation" loading="lazy" width="1440" height="900"></button><figcaption><b>Manuel d'utilisation.</b></figcaption></figure>
 </section>
 
 <section class="chapitre" id="circuit">
@@ -276,9 +282,9 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
     <li>Quand un PV attend votre niveau de validation, son menu d'actions propose <b>Valider</b> et <b>Rejeter</b> ; un rejet demande un motif, transmis par e-mail.</li>
     <li>Le PV se télécharge depuis sa fiche ou son menu d'actions.</li>
   </ul>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/10-pv-liste.webp" alt="PV sans contrat" loading="lazy" width="1440" height="2000"></button><figcaption><b>PV sans contrat.</b></figcaption></figure>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/10-pv-historique.webp" alt="Historique des PV" loading="lazy" width="1440" height="2000"></button><figcaption><b>Historique des PV.</b></figcaption></figure>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/10-pv-detail.webp" alt="Fiche d'un PV" loading="lazy" width="1440" height="2000"></button><figcaption><b>Fiche d'un PV.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/10-pv-liste.webp" alt="PV sans contrat" loading="lazy" width="1440" height="900"></button><figcaption><b>PV sans contrat.</b></figcaption></figure>
+  <figure><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/10-pv-historique.webp" alt="Historique des PV" loading="lazy" width="1440" height="1192"></button><figcaption><b>Historique des PV.</b></figcaption></figure>
+  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/10-pv-detail.webp" alt="Fiche d'un PV" loading="lazy" width="1440" height="1515"></button><figcaption><b>Fiche d'un PV.</b></figcaption></figure>
 </section>
 
 <section class="chapitre" id="contrats-chapitre">
@@ -288,18 +294,21 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <p>Le contrat est établi à partir d'un PV validé. Son statut suit les étapes : <b>En attente des documents signés</b>, <b>En attente de validation admin</b>, <b>En attente de validation head</b>, puis <b>Validé</b> ou <b>Rejeté</b>.</p>
   <ul>
     <li><b>Sans CAT</b> : les contrats qui n'ont pas encore de CAT. La colonne <b>Observations</b> signale ce qui manque (contrat signé, billet à ordre signé, cautions incomplètes) avec un bouton pour y remédier : <span class="btn">Charger</span>, <span class="btn">Cautions</span>, <span class="btn">Créer CAT</span>.</li>
+    <li><b>Historique</b> : tous les contrats.</li>
     <li>La fiche du contrat affiche le montant, la durée, l'échéance, la périodicité et le différé, puis le dossier, le client, les conditions du crédit, les garanties et les gages.</li>
   </ul>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/20-contrats-liste.webp" alt="Contrats sans CAT" loading="lazy" width="1440" height="2000"></button><figcaption><b>Contrats sans CAT.</b></figcaption></figure>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/20-contrats-liste-actions.webp" alt="Menu d'actions d'un contrat" loading="lazy" width="1440" height="2000"></button><figcaption><b>Menu d'actions</b> d'un contrat.</figcaption></figure>
+  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/20-contrats-liste.webp" alt="Contrats sans CAT" loading="lazy" width="1440" height="1681"></button><figcaption><b>Contrats sans CAT.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/20-contrats-liste-actions.webp" alt="Menu d'actions d'un contrat" loading="lazy" width="1440" height="900"></button><figcaption><b>Menu d'actions</b> d'un contrat.</figcaption></figure>
+  <figure><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/20-contrats-historique.webp" alt="Historique des contrats" loading="lazy" width="1440" height="1192"></button><figcaption><b>Historique des contrats.</b></figcaption></figure>
+  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/20-contrat-detail.webp" alt="Fiche d'un contrat" loading="lazy" width="1440" height="1937"></button><figcaption><b>Fiche d'un contrat.</b></figcaption></figure>
   <h3 id="cautions">Les cautions</h3>
   <p class="chemin">Bouton <b>Cautions</b> de la fiche du contrat, ou menu d'actions <b>Voir les cautions</b></p>
   <p>Les cautions (garants) d'un contrat se gèrent depuis le contrat : identité, pièce d'identité, coordonnées, et l'acte de cautionnement à faire signer.</p>
   <ul>
     <li>L'acte, signé ou non, se télécharge depuis la fiche de la caution.</li>
   </ul>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/21-cautions-liste.webp" alt="Cautions d'un contrat" loading="lazy" width="1440" height="2000"></button><figcaption><b>Cautions d'un contrat.</b></figcaption></figure>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/21-caution-detail.webp" alt="Fiche d'une caution" loading="lazy" width="1440" height="2000"></button><figcaption><b>Fiche d'une caution.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/21-cautions-liste.webp" alt="Cautions d'un contrat" loading="lazy" width="1440" height="900"></button><figcaption><b>Cautions d'un contrat.</b></figcaption></figure>
+  <figure><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/21-caution-detail.webp" alt="Fiche d'une caution" loading="lazy" width="1440" height="921"></button><figcaption><b>Fiche d'une caution.</b></figcaption></figure>
 </section>
 
 <section class="chapitre" id="hypothecaire">
@@ -311,10 +320,10 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
     <li><b>Sans Contrat notarié</b> : les notifications validées dont le contrat notarié n'est pas encore chargé.</li>
     <li><b>Historique</b> : toutes les notifications.</li>
   </ul>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/30-notifications-sans-validation.webp" alt="Notifications sans validation head" loading="lazy" width="1440" height="2000"></button><figcaption><b>Notifications sans validation head.</b></figcaption></figure>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/30-notifications-sans-contrat-notarie.webp" alt="Notifications sans contrat notarié" loading="lazy" width="1440" height="2000"></button><figcaption><b>Notifications sans contrat notarié.</b></figcaption></figure>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/30-notifications-historique.webp" alt="Historique des notifications" loading="lazy" width="1440" height="2000"></button><figcaption><b>Historique des notifications.</b></figcaption></figure>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/30-notification-detail.webp" alt="Fiche d'une notification" loading="lazy" width="1440" height="2000"></button><figcaption><b>Fiche d'une notification.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/30-notifications-sans-validation.webp" alt="Notifications sans validation head" loading="lazy" width="1440" height="900"></button><figcaption><b>Notifications sans validation head.</b></figcaption></figure>
+  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/30-notifications-sans-contrat-notarie.webp" alt="Notifications sans contrat notarié" loading="lazy" width="1440" height="1410"></button><figcaption><b>Notifications sans contrat notarié.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/30-notifications-historique.webp" alt="Historique des notifications" loading="lazy" width="1440" height="900"></button><figcaption><b>Historique des notifications.</b></figcaption></figure>
+  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/30-notification-detail.webp" alt="Fiche d'une notification" loading="lazy" width="1440" height="1778"></button><figcaption><b>Fiche d'une notification.</b></figcaption></figure>
 </section>
 
 <section class="chapitre" id="cat">
@@ -324,8 +333,11 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <ul>
     <li>Le CAT se télécharge depuis son menu d'actions ; <b>Voir Pv</b> et <b>Voir Contrat</b> ouvrent le dossier d'origine.</li>
   </ul>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/41-cat-hypothecaire-liste.webp" alt="CAT hypothécaires" loading="lazy" width="1440" height="2000"></button><figcaption><b>CAT hypothécaires.</b></figcaption></figure>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/41-cat-hypothecaire-detail.webp" alt="Fiche d'un CAT hypothécaire" loading="lazy" width="1440" height="2000"></button><figcaption><b>Fiche d'un CAT hypothécaire.</b></figcaption></figure>
+  <figure><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/40-cat-liste.webp" alt="CAT des contrats" loading="lazy" width="1440" height="1192"></button><figcaption><b>CAT des contrats.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/40-cat-liste-actions.webp" alt="Menu d'actions d'un CAT" loading="lazy" width="1440" height="900"></button><figcaption><b>Menu d'actions</b> d'un CAT.</figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/40-cat-detail.webp" alt="Fiche d'un CAT" loading="lazy" width="1440" height="900"></button><figcaption><b>Fiche d'un CAT.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/41-cat-hypothecaire-liste.webp" alt="CAT hypothécaires" loading="lazy" width="1440" height="900"></button><figcaption><b>CAT hypothécaires.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/41-cat-hypothecaire-detail.webp" alt="Fiche d'un CAT hypothécaire" loading="lazy" width="1440" height="900"></button><figcaption><b>Fiche d'un CAT hypothécaire.</b></figcaption></figure>
 </section>
 
 <section class="chapitre" id="suivi">
@@ -336,15 +348,15 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <ul>
     <li>Quand une demande attend votre niveau, son menu d'actions propose <b>Valider</b> et <b>Rejeter</b>.</li>
   </ul>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/50-reports-liste.webp" alt="Reports d'échéance en attente" loading="lazy" width="1440" height="2000"></button><figcaption><b>Reports d'échéance en attente.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/50-reports-liste.webp" alt="Reports d'échéance en attente" loading="lazy" width="1440" height="900"></button><figcaption><b>Reports d'échéance en attente.</b></figcaption></figure>
 </section>
 
 <section class="chapitre" id="utilisateurs">
   <h2 class="titre"><span class="num">08</span>Utilisateurs</h2>
   <p class="chemin">Menu <b>Paramétrage › Utilisateurs</b></p>
   <p>La liste des comptes de l'application, avec leur profil et leur état. Votre profil la consulte sans la modifier : elle sert notamment aux filtres « Admin Crédit » des listes.</p>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/70-utilisateurs-liste.webp" alt="Utilisateurs" loading="lazy" width="1440" height="2000"></button><figcaption><b>Utilisateurs.</b></figcaption></figure>
-  <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/70-utilisateur-detail.webp" alt="Fiche d'un utilisateur" loading="lazy" width="1440" height="2000"></button><figcaption><b>Fiche d'un utilisateur.</b></figcaption></figure>
+  <figure><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/70-utilisateurs-liste.webp" alt="Utilisateurs" loading="lazy" width="1440" height="1165"></button><figcaption><b>Utilisateurs.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/70-utilisateur-detail.webp" alt="Fiche d'un utilisateur" loading="lazy" width="1440" height="900"></button><figcaption><b>Fiche d'un utilisateur.</b></figcaption></figure>
 </section>
 
 <section class="chapitre" id="droits">
