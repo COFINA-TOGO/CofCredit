@@ -167,7 +167,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['deadline-postponed'],
-					'action' => ['read', 'historical', 'create', 'update', 'download', 'delete'],
+					'action' => ['menu', 'read', 'historical', 'create', 'update', 'download', 'delete'],
 				],
 				[
 					'subject' => ['notification'],
@@ -444,6 +444,10 @@ class User extends Authenticatable
 					'action' => ['send'],
 				],
 				[
+					'subject' => ['type-of-credit'],
+					'action' => ['read'],
+				],
+				[
 					'subject' => ['settings-user'],
 					'action' => ['manage'],
 				],
@@ -451,11 +455,11 @@ class User extends Authenticatable
 			'dex' => [
 				[
 					'subject' => ['contract'],
-					'action' => ['simple-notification', 'read', 'historical', 'download'],
+					'action' => ['menu', 'simple-notification', 'read', 'historical', 'download'],
 				],
 				[
 					'subject' => ['cat'],
-					'action' => ['simple-notification', 'read', 'historical', 'download'],
+					'action' => ['menu', 'simple-notification', 'read', 'historical', 'download'],
 				],
 				[
 					'subject' => ['guarantor'],
@@ -479,7 +483,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['pv'],
-					'action' => ['read', 'historical', 'download', 'reject', 'validate', 'change_status'],
+					'action' => ['menu', 'read', 'historical', 'download', 'reject', 'validate', 'change_status'],
 				],
 				[
 					'subject' => ['type-of-guarantee'],
@@ -495,11 +499,23 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['deadline-postponed'],
-					'action' => ['read', 'historical', 'change_status', 'download'],
+					'action' => ['menu', 'read', 'historical', 'change_status', 'download'],
 				],
 				[
 					'subject' => ['user'],
 					'action' => ['read'],
+				],
+				[
+					'subject' => ['basic-contract'],
+					'action' => ['menu', 'read', 'read-without-cat', 'read-historical', 'download'],
+				],
+				[
+					'subject' => ['notarized-contract'],
+					'action' => ['menu', 'read', 'read-without-head-validation', 'read-without-notarized-contract', 'read-historical', 'download'],
+				],
+				[
+					'subject' => ['basic-cat'],
+					'action' => ['menu', 'read', 'download'],
 				],
 				[
 					'subject' => ['settings-user'],
@@ -509,7 +525,7 @@ class User extends Authenticatable
 			'ca' => [
 				[
 					'subject' => ['deadline-postponed'],
-					'action' => ['read', 'historical', 'change_status', 'download'],
+					'action' => ['menu', 'read', 'historical', 'change_status', 'download'],
 				],
 				[
 					'subject' => ['settings-user'],
@@ -527,11 +543,11 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['pv'],
-					'action' => ['read', 'historical', 'download', 'reject', 'validate', 'change_status'],
+					'action' => ['menu', 'read', 'historical', 'download', 'reject', 'validate', 'change_status'],
 				],
 				[
 					'subject' => ['contract'],
-					'action' => ['read', 'historical', 'download'],
+					'action' => ['menu', 'read', 'historical', 'download'],
 				],
 				[
 					'subject' => ['notification'],
@@ -547,7 +563,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['cat'],
-					'action' => ['read', 'download', 'validate', 'reject_validation'],
+					'action' => ['menu', 'read', 'download', 'validate', 'reject_validation'],
 				],
 				[
 					'subject' => ['type-of-guarantee'],
@@ -563,11 +579,23 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['deadline-postponed'],
-					'action' => ['read', 'historical', 'change_status', 'download'],
+					'action' => ['menu', 'read', 'historical', 'change_status', 'download'],
 				],
 				[
 					'subject' => ['user'],
 					'action' => ['read'],
+				],
+				[
+					'subject' => ['basic-contract'],
+					'action' => ['menu', 'read', 'read-without-cat', 'read-historical', 'download'],
+				],
+				[
+					'subject' => ['notarized-contract'],
+					'action' => ['menu', 'read', 'read-without-head-validation', 'read-without-notarized-contract', 'read-historical', 'download'],
+				],
+				[
+					'subject' => ['basic-cat'],
+					'action' => ['menu', 'read', 'download', 'validate', 'reject_validation'],
 				],
 				[
 					'subject' => ['settings-user'],
