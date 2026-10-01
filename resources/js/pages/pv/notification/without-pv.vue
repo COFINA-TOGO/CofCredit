@@ -95,32 +95,21 @@ const updateOptions = (options) => {
 };
 
 const downloadFile = async (url, fileName) => {
-	const userToken = useCookie("userToken").value;
-
 	try {
-		new JsFileDownloader({
-			url: url,
-			headers: [
-				{ name: "Authorization", value: `Bearer ${userToken}` },
-				{ name: "Accept", value: `application/json` },
-			],
-			nameCallback: function (name) {
-				return fileName;
-			},
-		});
+		await downloadAuthenticatedFile(url, fileName)
 	} catch (error) {
 		console.error("Erreur lors du téléchargement:", error);
 	}
 };
 
 const apiDelete = async (id) => {
-	await $api(`verbal-trial/${id}`, { method: "DELETE" });
+	await $apiOrThrow(`verbal-trial/${id}`, { method: "DELETE" });
 	actionComment.value = "";
 	fetchPv();
 };
 
 const apiChangeStatus = async (id) => {
-	await $api(`verbal-trial/change-status/${id}`, {
+	await $apiOrThrow(`verbal-trial/change-status/${id}`, {
 		method: "PUT",
 		body: { status: actionStatus.value, comment: actionComment.value },
 	});

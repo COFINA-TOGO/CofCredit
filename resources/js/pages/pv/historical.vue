@@ -152,19 +152,8 @@ const showSnackbar = (color, message) => {
 };
 
 const downloadFile = async (url, fileName) => {
-	const userToken = useCookie("userToken").value;
-
 	try {
-		new JsFileDownloader({
-			url: url,
-			headers: [
-				{ name: "Authorization", value: `Bearer ${userToken}` },
-				{ name: "Accept", value: `application/json` },
-			],
-			nameCallback: function (name) {
-				return fileName;
-			},
-		});
+		await downloadAuthenticatedFile(url, fileName)
 		showSnackbar("success", "Téléchargement en cours...");
 		await fetchItemList();
 	} catch (error) {
@@ -176,7 +165,7 @@ const downloadFile = async (url, fileName) => {
 const apiDelete = async (id) => {
 	deleteLoadings.value[id] = true;
 	try {
-		await $api(`verbal-trial/${id}`, { method: "DELETE" });
+		await $apiOrThrow(`verbal-trial/${id}`, { method: "DELETE" });
 		showSnackbar("success", "PV supprimé avec succès");
 		await fetchItemList();
 	} catch (error) {

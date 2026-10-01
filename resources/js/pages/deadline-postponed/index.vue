@@ -5,7 +5,6 @@ import { reactive, ref, computed, onMounted } from 'vue'
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 import AppAutocomplete from '@/@core/components/app-form-elements/AppAutocomplete.vue'
-import JsFileDownloader from 'js-file-downloader'
 import { $api } from '@/utils/api'
 import { useRouter } from 'vue-router'
 
@@ -196,19 +195,8 @@ const formatAmount = amount => {
 }
 
 const downloadFile = async (url, fileName) => {
-  const userToken = useCookie('userToken').value
-
   try {
-    new JsFileDownloader({
-      url: url,
-      headers: [
-        { name: 'Authorization', value: `Bearer ${userToken}` },
-        { name: 'Accept', value: `application/json` },
-      ],
-      nameCallback: function (name) {
-        return fileName
-      },
-    })
+    await downloadAuthenticatedFile(url, fileName)
     showSnackbar('success', 'Téléchargement en cours...')
   } catch (error) {
     console.error('Erreur lors du téléchargement:', error)
@@ -219,7 +207,7 @@ const downloadFile = async (url, fileName) => {
 const apiDelete = async id => {
   deleteLoadings.value[id] = true
   try {
-    await $api(`verbal-trial/${id}`, { method: 'DELETE' })
+    await $apiOrThrow(`deadline-postponed/${id}`, { method: 'DELETE' })
     actionComment.value = ''
     showSnackbar('success', 'Report d\'échéance supprimé avec succès')
     await fetchItemList()
@@ -233,7 +221,8 @@ const apiDelete = async id => {
 
 const apiChangeStatus = async id => {
   try {
-    await $api(`verbal-trial/change-status/${id}`, { 
+    // TODO : le workflow de validation des reports d'échéance n'existe pas encore côté backend
+    await $apiOrThrow(`deadline-postponed/change-status/${id}`, { 
       method: 'PUT', 
       body: { 
         status: actionStatus.value, 
@@ -243,11 +232,7 @@ const apiChangeStatus = async id => {
     actionComment.value = ''
     const statusMessage = actionStatus.value === 'validated' ? 'validé' : 'rejeté'
     showSnackbar('success', `Report d'échéance ${statusMessage} avec succès`)
-    
-    if (actionStatus.value === 'validated') {
-      router.push(`/contract/add?id=${id}`)
-    }
-    
+
     await fetchItemList()
   } catch (error) {
     console.error('Erreur lors du changement de statut:', error)

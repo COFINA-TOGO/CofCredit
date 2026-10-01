@@ -143,7 +143,7 @@ export function useNotifications() {
    */
   const markAsRead = async (id) => {
     try {
-      await $api(`notifications/${id}/read`, { method: 'PUT' })
+      await $apiOrThrow(`notifications/${id}/read`, { method: 'PUT' })
       const notif = notifications.value.find(n => n.id === id)
       if (notif) notif.read = true
     } catch (error) {

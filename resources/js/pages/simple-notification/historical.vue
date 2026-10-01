@@ -9,7 +9,6 @@ definePage({
 })
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
-import JsFileDownloader from 'js-file-downloader'
 import { $api } from '@/utils/api';
 
 const isDialogVisible = ref(false)
@@ -85,16 +84,7 @@ const updateOptions = options => {
 
 const downloadFile = async (url, fileName) => {
   try {
-    new JsFileDownloader({
-      url: url,
-      headers: [
-        { name: 'Authorization', value: `Bearer ${useCookie('userToken').value}` },
-        { name: 'Accept', value: `application/json` },
-      ],
-      nameCallback: function (name) {
-        return fileName
-      },
-    })
+    await downloadAuthenticatedFile(url, fileName)
     fetchSimpleNotifications()
   } catch (error) {
     console.error('Erreur lors du téléchargement:', error)
@@ -102,7 +92,7 @@ const downloadFile = async (url, fileName) => {
 }
 
 const apiDelete = async id => {
-  await $api(`contract/${id}`, { method: 'DELETE' })
+  await $apiOrThrow(`contract/${id}`, { method: 'DELETE' })
   fetchSimpleNotifications()
 }
 

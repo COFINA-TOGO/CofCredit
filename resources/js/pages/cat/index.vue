@@ -3,7 +3,6 @@
 import { reactive, ref, computed, onMounted } from 'vue'
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
-import JsFileDownloader from 'js-file-downloader'
 import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue'
 
 // Configuration de la page
@@ -242,19 +241,8 @@ const formatAmount = amount => {
 }
 
 const downloadFile = async (url, fileName) => {
-	const userToken = useCookie('userToken').value
-
 	try {
-		new JsFileDownloader({
-			url: url,
-			headers: [
-				{ name: 'Authorization', value: `Bearer ${userToken}` },
-				{ name: 'Accept', value: `application/json` },
-			],
-			nameCallback: function (name) {
-				return fileName
-			},
-		})
+		await downloadAuthenticatedFile(url, fileName)
 		showSnackbar('success', 'Téléchargement en cours...')
 	} catch (error) {
 		console.error('Erreur lors du téléchargement:', error)
@@ -265,7 +253,7 @@ const downloadFile = async (url, fileName) => {
 const apiDelete = async id => {
 	deleteLoadings.value[id] = true
 	try {
-		await $api(`cat/${id}`, { method: 'DELETE' })
+		await $apiOrThrow(`cat/${id}`, { method: 'DELETE' })
 		showSnackbar('success', 'CAT supprimé avec succès')
 		await fetchItemList()
 	} catch (error) {
@@ -278,7 +266,7 @@ const apiDelete = async id => {
 
 const validateCAT = async id => {
 	try {
-		await $api(`cat/validate/${id}`, { method: 'PUT' })
+		await $apiOrThrow(`cat/validate/${id}`, { method: 'PUT' })
 		actionComment.value = null
 		showSnackbar('success', 'CAT validé avec succès')
 		await fetchItemList()
@@ -290,7 +278,7 @@ const validateCAT = async id => {
 
 const unblockCAT = async id => {
 	try {
-		await $api(`cat/unblock/${id}`, { method: 'PUT' })
+		await $apiOrThrow(`cat/unblock/${id}`, { method: 'PUT' })
 		actionComment.value = null
 		showSnackbar('success', 'CAT débloqué avec succès')
 		await fetchItemList()
@@ -302,7 +290,7 @@ const unblockCAT = async id => {
 
 const rejectValidationCAT = async id => {
 	try {
-		await $api(`cat/reject-validation/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+		await $apiOrThrow(`cat/reject-validation/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
 		actionComment.value = null
 		showSnackbar('success', 'CAT rejeté avec succès')
 		await fetchItemList()
@@ -314,7 +302,7 @@ const rejectValidationCAT = async id => {
 
 const rejectUnblockCAT = async id => {
 	try {
-		await $api(`cat/reject-unblock/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+		await $apiOrThrow(`cat/reject-unblock/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
 		actionComment.value = null
 		showSnackbar('success', 'Déblocage rejeté avec succès')
 		await fetchItemList()

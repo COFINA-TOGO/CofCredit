@@ -9,7 +9,6 @@ definePage({
 })
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
-import JsFileDownloader from 'js-file-downloader'
 import { $api } from '@/utils/api';
 import { useRouter } from 'vue-router';
 
@@ -101,16 +100,7 @@ const typeList = {
 
 const downloadFile = async (url, fileName) => {
 	try {
-		new JsFileDownloader({
-			url: url,
-			headers: [
-				{ name: 'Authorization', value: `Bearer ${useCookie('userToken').value}` },
-				{ name: 'Accept', value: `application/json` },
-			],
-			nameCallback: function (name) {
-				return fileName
-			},
-		})
+		await downloadAuthenticatedFile(url, fileName)
 		fetchNotifications()
 	} catch (error) {
 		console.error('Erreur lors du téléchargement:', error)
@@ -118,7 +108,7 @@ const downloadFile = async (url, fileName) => {
 }
 
 const apiChangeStatus = async id => {
-	await $api(`notification/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
+	await $apiOrThrow(`notification/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
 	actionComment.value = ""
 	if (actionStatus.value == "validated") {
 		router.push(`/cat/simple-notification/add?id=${id}`)
@@ -127,7 +117,7 @@ const apiChangeStatus = async id => {
 }
 
 const apiSendNotification = async id => {
-	await $api(`notification/send/${id}`, { method: 'PUT' })
+	await $apiOrThrow(`notification/send/${id}`, { method: 'PUT' })
 	fetchNotifications()
 }
 

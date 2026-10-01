@@ -4,7 +4,6 @@
 import { reactive, ref, computed, onMounted, watch } from 'vue'
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
-import JsFileDownloader from 'js-file-downloader'
 import { $api } from '@/utils/api'
 import { useRouter } from 'vue-router'
 
@@ -188,16 +187,7 @@ const updateOptions = options => {
 // Download file
 const downloadFile = async (url, fileName) => {
   try {
-    new JsFileDownloader({
-      url: url,
-      headers: [
-        { name: 'Authorization', value: `Bearer ${useCookie('userToken').value}` },
-        { name: 'Accept', value: `application/json` },
-      ],
-      nameCallback: function (name) {
-        return fileName
-      },
-    })
+    await downloadAuthenticatedFile(url, fileName)
     showSnackbar('success', 'Téléchargement en cours...')
     await fetchItemList([4])
   } catch (error) {
@@ -209,7 +199,7 @@ const downloadFile = async (url, fileName) => {
 // Change status
 const apiChangeStatus = async id => {
   try {
-    await $api(`notification/change-status/${id}`, { 
+    await $apiOrThrow(`notification/change-status/${id}`, { 
       method: 'PUT', 
       body: { status: actionStatus.value, comment: actionComment.value } 
     })
@@ -230,7 +220,7 @@ const apiChangeStatus = async id => {
 // Send notification
 const apiSendNotification = async id => {
   try {
-    await $api(`notification/send/${id}`, { method: 'PUT' })
+    await $apiOrThrow(`notification/send/${id}`, { method: 'PUT' })
     await fetchItemList([4])
     showSnackbar('success', 'Notification envoyée avec succès')
   } catch (error) {

@@ -1,7 +1,6 @@
 /**
  * Composable pour gérer le téléchargement de fichiers de contrats
  */
-import JsFileDownloader from 'js-file-downloader'
 
 export function useContractDownload() {
   /**
@@ -13,22 +12,7 @@ export function useContractDownload() {
    */
   const downloadFile = async (url, fileName, onSuccess, onError) => {
     try {
-      new JsFileDownloader({
-        url,
-        headers: [
-          {
-            name: 'Authorization',
-            value: `Bearer ${useCookie('userToken').value}`,
-          },
-          { 
-            name: 'Accept', 
-            value: 'application/json',
-          },
-        ],
-        nameCallback() {
-          return fileName
-        },
-      })
+      await downloadAuthenticatedFile(url, fileName)
       
       if (onSuccess) onSuccess()
     } catch (error) {

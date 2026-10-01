@@ -1,5 +1,17 @@
 import { createFetch } from '@vueuse/core'
 import { destr } from 'destr'
+import { handleAuthErrors } from '@/utils/authErrors'
+
+const parseData = data => {
+	try {
+		return destr(data)
+	}
+	catch (error) {
+		console.error(error)
+
+		return null
+	}
+}
 
 const useApi = createFetch({
 	baseUrl: '/api',
@@ -10,6 +22,9 @@ const useApi = createFetch({
 	},
 	options: {
 		refetch: true,
+
+		// En cas d'erreur (4xx/5xx), data contient quand même le corps { status, errors }
+		updateDataOnError: true,
 		async beforeFetch({ options }) {
 			const userToken = useCookie('userToken').value
 			if (userToken) {
@@ -23,44 +38,20 @@ const useApi = createFetch({
 		},
 		async afterFetch(ctx) {
 			const { data, response } = ctx
-			let parsedData = null
-			try {
-				parsedData = destr(data)
-				if (parsedData?.status === 403) {
-					if (parsedData.errors?.sub_code?.[0] == "001") {
-						useCookie('userToken').value = null
-						useCookie('userData').value = null
-						useCookie('userAbilityRules').value = null
-						window.location.href = '/not-authorized';
-					} else if (parsedData.errors?.sub_code?.[0] == "002") {
-						if (window.location.pathname !== '/settings/user/security') {
-							window.location.href = '/settings/user/security';
-						}
-					}
-				}
-			}
-			catch (error) {
-				console.error(error)
-			}
+			const parsedData = parseData(data)
+
+			handleAuthErrors(response.status, parsedData)
+
 			return { data: parsedData, response }
 		},
 		async onFetchError(ctx) {
-			const { data, response } = ctx
-			let parsedData = null
-			try {
-				parsedData = destr(data)
-			}
-			catch (error) {
-				console.error(error)
-			}
+			const { data, error, response } = ctx
+			const parsedData = parseData(data)
 
-			if (response.status == 401) {
-				useCookie('userToken').value = null
-				useCookie('userData').value = null
-				useCookie('userAbilityRules').value = null
-				window.location.href = '/login';
-			}
-		}
+			handleAuthErrors(response?.status, parsedData)
+
+			return { data: parsedData, error }
+		},
 	},
 })
 

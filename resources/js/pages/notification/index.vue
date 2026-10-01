@@ -4,7 +4,6 @@
 import { reactive, ref, computed, onMounted } from 'vue'
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
-import JsFileDownloader from 'js-file-downloader'
 import { $api } from '@/utils/api'
 import { useRouter } from 'vue-router'
 
@@ -177,16 +176,7 @@ const formatAmount = amount => {
 
 const downloadFile = async (url, fileName) => {
   try {
-    new JsFileDownloader({
-      url: url,
-      headers: [
-        { name: 'Authorization', value: `Bearer ${useCookie('userToken').value}` },
-        { name: 'Accept', value: `application/json` },
-      ],
-      nameCallback: function (name) {
-        return fileName
-      },
-    })
+    await downloadAuthenticatedFile(url, fileName)
     showSnackbar('success', 'Téléchargement en cours...')
     await fetchItemList()
   } catch (error) {
@@ -240,7 +230,7 @@ const uploadFile = async event => {
 const apiDelete = async id => {
   deleteLoadings.value[id] = true
   try {
-    await $api(`notification/${id}`, { method: 'DELETE' })
+    await $apiOrThrow(`notification/${id}`, { method: 'DELETE' })
     showSnackbar('success', 'Notification supprimée avec succès')
     await fetchItemList()
   } catch (error) {
@@ -253,7 +243,7 @@ const apiDelete = async id => {
 
 const apiChangeStatus = async id => {
   try {
-    await $api(`notification/change-head-credit-status/${id}`, { 
+    await $apiOrThrow(`notification/change-head-credit-status/${id}`, { 
       method: 'PUT', 
       body: { 
         head_credit_validation: actionStatus.value, 

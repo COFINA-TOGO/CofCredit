@@ -83,7 +83,7 @@ trait CustomResponseTrait
                 "status" => $status,
                 "errors" => $errors,
             ],
-            200,
+            ($status >= 400 && $status < 600) ? $status : 400,
         );
     }
 }

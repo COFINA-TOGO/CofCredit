@@ -8,7 +8,6 @@ definePage({
 })
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
-import JsFileDownloader from 'js-file-downloader'
 import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue';
 
 const isDialogVisible = ref(false)
@@ -94,26 +93,15 @@ const typeList = {
 }
 
 const downloadFile = async (url, fileName) => {
-  const userToken = useCookie('userToken').value
-
   try {
-    new JsFileDownloader({
-      url: url,
-      headers: [
-        { name: 'Authorization', value: `Bearer ${userToken}` },
-        { name: 'Accept', value: `application/json` },
-      ],
-      nameCallback: function (name) {
-        return fileName
-      },
-    })
+    await downloadAuthenticatedFile(url, fileName)
   } catch (error) {
     console.error('Erreur lors du téléchargement:', error)
   }
 }
 
 const apiDelete = async id => {
-  await $api(`cat/${id}`, { method: 'DELETE' })
+  await $apiOrThrow(`cat/${id}`, { method: 'DELETE' })
   fetchCAT()
 }
 
@@ -129,25 +117,25 @@ const actionComment = ref(null)
 
 
 const validateCAT = async id => {
-  await $api(`cat/validate/${id}`, { method: 'PUT' })
+  await $apiOrThrow(`cat/validate/${id}`, { method: 'PUT' })
   actionComment.value = null
   fetchCAT()
 }
 
 const unblockCAT = async id => {
-  await $api(`cat/unblock/${id}`, { method: 'PUT' })
+  await $apiOrThrow(`cat/unblock/${id}`, { method: 'PUT' })
   actionComment.value = null
   fetchCAT()
 }
 
 const rejectValidationCAT = async id => {
-  await $api(`cat/reject-validation/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+  await $apiOrThrow(`cat/reject-validation/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
   actionComment.value = null
   fetchCAT()
 }
 
 const rejectUnblockCAT = async id => {
-  await $api(`cat/reject-unblock/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+  await $apiOrThrow(`cat/reject-unblock/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
   actionComment.value = null
   fetchCAT()
 }

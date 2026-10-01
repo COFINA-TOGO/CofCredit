@@ -362,6 +362,10 @@
     "onWatcherCleanup": true,
     "useId": true,
     "useModel": true,
-    "useTemplateRef": true
+    "useTemplateRef": true,
+    "$apiOrThrow": true,
+    "ApiError": true,
+    "downloadAuthenticatedFile": true,
+    "handleAuthErrors": true
   }
 }

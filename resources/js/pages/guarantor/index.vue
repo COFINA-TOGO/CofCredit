@@ -3,7 +3,6 @@
 import { reactive, ref, computed, onMounted, watch } from 'vue'
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
-import JsFileDownloader from 'js-file-downloader'
 
 definePage({
 	meta: {
@@ -110,20 +109,10 @@ const updateOptions = options => {
 // Export guarantors
 const exportGuarantors = async () => {
 	exportLoading.value = true
-	const userToken = useCookie('userToken').value
 	const currentDate = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-')
 
 	try {
-		new JsFileDownloader({
-			url: '/api/guarantor/export',
-			headers: [
-				{ name: 'Authorization', value: `Bearer ${userToken}` },
-				{ name: 'Accept', value: `application/json` },
-			],
-			nameCallback: function (name) {
-				return `garants-${currentDate}.xlsx`
-			},
-		})
+		await downloadAuthenticatedFile('/api/guarantor/export', `garants-${currentDate}.xlsx`)
 		showSnackbar('success', 'Export en cours...')
 	} catch (error) {
 		console.error('Erreur lors de l\'export:', error)

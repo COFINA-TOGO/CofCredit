@@ -10,7 +10,6 @@ definePage({
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 import AppAutocomplete from '@/@core/components/app-form-elements/AppAutocomplete.vue';
-import JsFileDownloader from 'js-file-downloader'
 import { $api } from '@/utils/api';
 
 const router = useRouter()
@@ -99,36 +98,22 @@ const updateOptions = options => {
 }
 
 const downloadFile = async (url, fileName) => {
-  const userToken = useCookie('userToken').value
-
   try {
-    new JsFileDownloader({
-      url: url,
-      headers: [
-        { name: 'Authorization', value: `Bearer ${userToken}` },
-        { name: 'Accept', value: `application/json` },
-      ],
-      nameCallback: function (name) {
-        return fileName
-      },
-    })
+    await downloadAuthenticatedFile(url, fileName)
   } catch (error) {
     console.error('Erreur lors du téléchargement:', error)
   }
 }
 
 const apiDelete = async id => {
-  await $api(`verbal-trial/${id}`, { method: 'DELETE' })
+  await $apiOrThrow(`deadline-postponed/${id}`, { method: 'DELETE' })
   actionComment.value = ""
   fetchPv()
 }
 
 const apiChangeStatus = async id => {
-  await $api(`verbal-trial/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
+  await $apiOrThrow(`deadline-postponed/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
   actionComment.value = ""
-  if (actionStatus.value == "validated") {
-    router.push(`/contract/add?id=${id}`)
-  }
   fetchPv()
 }
 
@@ -229,11 +214,6 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
               :to="{ name: 'pv-id', params: { id: item.id } }">
               <VTooltip activator="parent" transition="scroll-x-transition" location="start">Details</VTooltip>
               <VIcon icon=" tabler-eye" />
-            </IconBtn>
-            <IconBtn v-if="$can('download', 'pv')"
-              @click="downloadFile(`/api/verbal-trial/download/${item.id}`, `PV-${item.committee_id}.docx`)">
-              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Télécharger</VTooltip>
-              <VIcon icon="tabler-download" v-tooltip="'Ceci est une icône'" />
             </IconBtn>
           </div>
 
