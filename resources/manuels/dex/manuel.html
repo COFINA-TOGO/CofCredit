@@ -249,15 +249,13 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <p class="intro">De la demande au décaissement, chaque dossier passe de profil en profil. Vos étapes sont surlignées. Chaque passage d'étape prévient par e-mail le profil suivant.</p>
   <h3 id="circuit-credit">Crédit</h3>
   <ol class="circuit">
-    <li><b>CAF</b><span>saisit la <b>notification de CAF</b> du client.</span></li>
-    <li><b>Analyste Crédit</b><span>vérifie la notification : validée, elle devient un <b>PV de comité</b> ; rejetée, elle revient au CAF.</span></li>
-    <li><b>Admin Crédit</b><span>saisit ou complète le PV et le valide vers le Head Crédit.</span></li>
-    <li><b>Head Crédit</b><span>valide le PV (ou le rejette vers l'Admin Crédit). Le MD valide les PV qui lui sont soumis.</span></li>
+    <li><b>Admin Crédit</b><span>saisit le <b>PV de comité</b>. Un PV peut aussi venir d'une notification de CAF, vérifiée par l'Analyste Crédit.</span></li>
+    <li><b>Head Crédit</b><span>valide le PV, ou le rejette avec un motif : l'Admin Crédit le corrige et le PV repart en validation.</span></li>
     <li><b>Admin Crédit</b><span>crée le <b>contrat</b>, ou la <b>notification hypothécaire</b> si une hypothèque garantit le crédit, et ses cautions.</span></li>
-    <li><b>CAF, Admin Crédit</b><span>le client signe ; l'Admin Crédit charge le contrat et le billet à ordre signés, puis <b>valide l'envoi</b>.</span></li>
-    <li><b>Head Crédit</b><span>valide le contrat (ou le rejette avec un motif). Pour une notification hypothécaire, le Head Crédit ou le MD la valide, puis le Juridique charge le contrat notarié.</span></li>
+    <li><b>Admin Crédit</b><span>une fois le client passé à la signature, charge le contrat et le billet à ordre signés, puis <b>envoie le contrat en validation</b>.</span></li>
+    <li><b>Head Crédit</b><span>valide le contrat, ou le rejette avec un motif. Pour une notification hypothécaire, le Head Crédit la valide puis le <b>Juridique</b> charge le contrat notarié.</span></li>
     <li><b>Admin Crédit</b><span>crée le <b>CAT</b> (conditions avant tirage).</span></li>
-    <li><b>Head Crédit, MD</b><span>valide le CAT ou le rejette.</span></li>
+    <li><b>Head Crédit</b><span>valide le CAT ou le rejette.</span></li>
     <li><b>Opérations</b><span><b>débloque</b> le CAT validé : les fonds peuvent être décaissés.</span></li>
   </ol>
   <h3 id="circuit-report">Report d'échéance</h3>
@@ -275,11 +273,10 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <h2 class="titre"><span class="num">03</span>PV de comité</h2>
   <h3 id="pv">Les PV de comité</h3>
   <p class="chemin">Menu <b>Pv Comité</b></p>
-  <p>Le PV de comité reprend la décision d'octroi : client, montant, durée, périodicité, taux, frais, garanties à recueillir et réserves de l'analyste. Son statut (En attente, Validé, Rejeté) et son niveau de validation (Analyste Crédit, Admin Crédit, Head Crédit, MD) s'affichent dans la liste et sur la fiche.</p>
+  <p>Le PV de comité reprend la décision d'octroi : client, montant, durée, périodicité, taux, frais, garanties à recueillir et réserves de l'analyste. Saisi par l'Admin Crédit, il est validé ou rejeté par le Head Crédit. Son statut (En attente, Validé, Rejeté) s'affiche dans la liste et sur la fiche.</p>
   <ul>
     <li><b>Sans contrat</b> : les PV en cours de validation, et les PV validés qui attendent leur contrat ou leur notification hypothécaire. Les filtres trient par type de crédit, statut et niveau de validation.</li>
     <li><b>Historique</b> : tous les PV.</li>
-    <li>Quand un PV attend votre niveau de validation, son menu d'actions propose <b>Valider</b> et <b>Rejeter</b> ; un rejet demande un motif, transmis par e-mail.</li>
     <li>Le PV se télécharge depuis sa fiche ou son menu d'actions.</li>
   </ul>
   <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/10-pv-liste.webp" alt="PV sans contrat" loading="lazy" width="1440" height="900"></button><figcaption><b>PV sans contrat.</b></figcaption></figure>
@@ -291,7 +288,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <h2 class="titre"><span class="num">04</span>Contrats et cautions</h2>
   <h3 id="contrats">Les contrats</h3>
   <p class="chemin">Menu <b>Contrat › Basique</b></p>
-  <p>Le contrat est établi à partir d'un PV validé. Son statut suit les étapes : <b>En attente des documents signés</b>, <b>En attente de validation admin</b>, <b>En attente de validation head</b>, puis <b>Validé</b> ou <b>Rejeté</b>.</p>
+  <p>Le contrat est établi à partir d'un PV validé. Son statut suit les étapes : <b>En attente des documents signés</b>, <b>Signé, à envoyer en validation</b>, <b>En attente de validation head</b>, puis <b>Validé</b> ou <b>Rejeté</b>.</p>
   <ul>
     <li><b>Sans CAT</b> : les contrats qui n'ont pas encore de CAT. La colonne <b>Observations</b> signale ce qui manque (contrat signé, billet à ordre signé, cautions incomplètes) avec un bouton pour y remédier : <span class="btn">Charger</span>, <span class="btn">Cautions</span>, <span class="btn">Créer CAT</span>.</li>
     <li><b>Historique</b> : tous les contrats.</li>
@@ -329,7 +326,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 <section class="chapitre" id="cat">
   <h2 class="titre"><span class="num">06</span>CAT</h2>
   <p class="chemin">Menu <b>CAT</b></p>
-  <p>Le CAT (conditions avant tirage) autorise le décaissement d'un contrat validé ou d'une notification hypothécaire. Il porte deux statuts : sa <b>validation</b> (Head Crédit ou MD), puis son <b>déblocage</b> (Opérations). La liste affiche pour chaque CAT le dossier et le client, le secteur, le montant et le numéro de prêt.</p>
+  <p>Le CAT (conditions avant tirage) autorise le décaissement d'un contrat validé ou d'une notification hypothécaire. Il porte deux statuts : sa <b>validation</b> (Head Crédit), puis son <b>déblocage</b> (Opérations). La liste affiche pour chaque CAT le dossier et le client, le secteur, le montant et le numéro de prêt.</p>
   <ul>
     <li>Le CAT se télécharge depuis son menu d'actions ; <b>Voir Pv</b> et <b>Voir Contrat</b> ouvrent le dossier d'origine.</li>
   </ul>
@@ -365,7 +362,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <div class="tableau"><table>
     <thead><tr><th>Domaine</th><th>Droits</th></tr></thead>
     <tbody>
-      <tr><td>PV de comité</td><td>menu, consulter, historique, télécharger, rejeter, valider, changer le statut</td></tr>
+      <tr><td>PV de comité</td><td>menu, consulter, historique, télécharger</td></tr>
       <tr><td>Contrats</td><td>menu, notifications simplifiées, consulter, historique, télécharger</td></tr>
       <tr><td>Contrats basiques</td><td>menu, consulter, sans CAT, historique, télécharger</td></tr>
       <tr><td>Notifications hypothécaires</td><td>notifications simplifiées, consulter, historique, télécharger, sans contrat notarié</td></tr>

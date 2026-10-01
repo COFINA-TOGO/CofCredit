@@ -162,7 +162,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 <header class="entete">
   <div class="surtitre">Cofina Crédit Digital</div>
   <h1>Manuel d'utilisation du profil MD</h1>
-  <p class="chapeau">Le MD valide les PV qui lui sont soumis, les notifications hypothécaires, les CAT et les reports d'échéance. Chaque écran est illustré par une capture réelle de l'application, faite avec un compte de ce profil.</p>
+  <p class="chapeau">Le MD valide les reports d'échéance et consulte les PV, les contrats, les notifications hypothécaires et les CAT. Chaque écran est illustré par une capture réelle de l'application, faite avec un compte de ce profil.</p>
   <div class="meta">
     <span>Version du <b>01/10/2026</b></span>
   </div>
@@ -202,11 +202,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 
   <h3 id="accueil">L'accueil</h3>
   <p class="chemin">Menu <b>Accueil</b>, ouvert après chaque connexion</p>
-  <p>L'accueil rappelle la date et votre profil, puis rassemble dans <b>À traiter</b> les dossiers qui attendent une action de votre part :</p>
-  <ul>
-    <li>Les PV en attente de votre validation.</li>
-    <li>Les CAT en attente de validation.</li>
-  </ul>
+  <p>L'accueil rappelle la date et votre profil, puis rassemble dans <b>À traiter</b> les dossiers qui attendent une action de votre part.</p>
   <p>Chaque compteur ouvre la liste où traiter ces dossiers ; seuls les compteurs non nuls s'affichent, et « Rien n'attend votre action » s'affiche quand tout est à jour. Le bouton <span class="btn">Actualiser</span> recompte. Les <b>Raccourcis</b> mènent aux écrans de création que votre profil peut ouvrir.</p>
   <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/01-accueil.webp" alt="Page d'accueil" loading="lazy" width="1440" height="900"></button><figcaption><b>Page d'accueil</b> du profil MD.</figcaption></figure>
 
@@ -253,15 +249,13 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <p class="intro">De la demande au décaissement, chaque dossier passe de profil en profil. Vos étapes sont surlignées. Chaque passage d'étape prévient par e-mail le profil suivant.</p>
   <h3 id="circuit-credit">Crédit</h3>
   <ol class="circuit">
-    <li><b>CAF</b><span>saisit la <b>notification de CAF</b> du client.</span></li>
-    <li><b>Analyste Crédit</b><span>vérifie la notification : validée, elle devient un <b>PV de comité</b> ; rejetée, elle revient au CAF.</span></li>
-    <li><b>Admin Crédit</b><span>saisit ou complète le PV et le valide vers le Head Crédit.</span></li>
-    <li class="vous"><b>Head Crédit</b><span>valide le PV (ou le rejette vers l'Admin Crédit). Le MD valide les PV qui lui sont soumis.</span></li>
+    <li><b>Admin Crédit</b><span>saisit le <b>PV de comité</b>. Un PV peut aussi venir d'une notification de CAF, vérifiée par l'Analyste Crédit.</span></li>
+    <li><b>Head Crédit</b><span>valide le PV, ou le rejette avec un motif : l'Admin Crédit le corrige et le PV repart en validation.</span></li>
     <li><b>Admin Crédit</b><span>crée le <b>contrat</b>, ou la <b>notification hypothécaire</b> si une hypothèque garantit le crédit, et ses cautions.</span></li>
-    <li><b>CAF, Admin Crédit</b><span>le client signe ; l'Admin Crédit charge le contrat et le billet à ordre signés, puis <b>valide l'envoi</b>.</span></li>
-    <li class="vous"><b>Head Crédit</b><span>valide le contrat (ou le rejette avec un motif). Pour une notification hypothécaire, le Head Crédit ou le MD la valide, puis le Juridique charge le contrat notarié.</span></li>
+    <li><b>Admin Crédit</b><span>une fois le client passé à la signature, charge le contrat et le billet à ordre signés, puis <b>envoie le contrat en validation</b>.</span></li>
+    <li><b>Head Crédit</b><span>valide le contrat, ou le rejette avec un motif. Pour une notification hypothécaire, le Head Crédit la valide puis le <b>Juridique</b> charge le contrat notarié.</span></li>
     <li><b>Admin Crédit</b><span>crée le <b>CAT</b> (conditions avant tirage).</span></li>
-    <li class="vous"><b>Head Crédit, MD</b><span>valide le CAT ou le rejette.</span></li>
+    <li><b>Head Crédit</b><span>valide le CAT ou le rejette.</span></li>
     <li><b>Opérations</b><span><b>débloque</b> le CAT validé : les fonds peuvent être décaissés.</span></li>
   </ol>
   <h3 id="circuit-report">Report d'échéance</h3>
@@ -279,11 +273,10 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <h2 class="titre"><span class="num">03</span>PV de comité</h2>
   <h3 id="pv">Les PV de comité</h3>
   <p class="chemin">Menu <b>Pv Comité</b></p>
-  <p>Le PV de comité reprend la décision d'octroi : client, montant, durée, périodicité, taux, frais, garanties à recueillir et réserves de l'analyste. Son statut (En attente, Validé, Rejeté) et son niveau de validation (Analyste Crédit, Admin Crédit, Head Crédit, MD) s'affichent dans la liste et sur la fiche.</p>
+  <p>Le PV de comité reprend la décision d'octroi : client, montant, durée, périodicité, taux, frais, garanties à recueillir et réserves de l'analyste. Saisi par l'Admin Crédit, il est validé ou rejeté par le Head Crédit. Son statut (En attente, Validé, Rejeté) s'affiche dans la liste et sur la fiche.</p>
   <ul>
     <li><b>Sans contrat</b> : les PV en cours de validation, et les PV validés qui attendent leur contrat ou leur notification hypothécaire. Les filtres trient par type de crédit, statut et niveau de validation.</li>
     <li><b>Historique</b> : tous les PV.</li>
-    <li>Quand un PV attend votre niveau de validation, son menu d'actions propose <b>Valider</b> et <b>Rejeter</b> ; un rejet demande un motif, transmis par e-mail.</li>
     <li>Le PV se télécharge depuis sa fiche ou son menu d'actions.</li>
   </ul>
   <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/10-pv-liste.webp" alt="PV sans contrat" loading="lazy" width="1440" height="900"></button><figcaption><b>PV sans contrat.</b></figcaption></figure>
@@ -295,7 +288,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <h2 class="titre"><span class="num">04</span>Contrats et cautions</h2>
   <h3 id="contrats">Les contrats</h3>
   <p class="chemin">Menu <b>Contrat › Basique</b></p>
-  <p>Le contrat est établi à partir d'un PV validé. Son statut suit les étapes : <b>En attente des documents signés</b>, <b>En attente de validation admin</b>, <b>En attente de validation head</b>, puis <b>Validé</b> ou <b>Rejeté</b>.</p>
+  <p>Le contrat est établi à partir d'un PV validé. Son statut suit les étapes : <b>En attente des documents signés</b>, <b>Signé, à envoyer en validation</b>, <b>En attente de validation head</b>, puis <b>Validé</b> ou <b>Rejeté</b>.</p>
   <ul>
     <li><b>Sans CAT</b> : les contrats qui n'ont pas encore de CAT. La colonne <b>Observations</b> signale ce qui manque (contrat signé, billet à ordre signé, cautions incomplètes) avec un bouton pour y remédier : <span class="btn">Charger</span>, <span class="btn">Cautions</span>, <span class="btn">Créer CAT</span>.</li>
     <li><b>Historique</b> : tous les contrats.</li>
@@ -323,7 +316,6 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
     <li><b>Sans Validation Head</b> : les notifications qui attendent la validation du Head Crédit.</li>
     <li><b>Sans Contrat notarié</b> : les notifications validées dont le contrat notarié n'est pas encore chargé.</li>
     <li><b>Historique</b> : toutes les notifications.</li>
-    <li>Une notification en attente propose <b>Valider</b> et <b>Rejeter</b> dans son menu d'actions.</li>
   </ul>
   <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/30-notifications-sans-validation.webp" alt="Notifications sans validation head" loading="lazy" width="1440" height="900"></button><figcaption><b>Notifications sans validation head.</b></figcaption></figure>
   <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/30-notifications-sans-contrat-notarie.webp" alt="Notifications sans contrat notarié" loading="lazy" width="1440" height="1410"></button><figcaption><b>Notifications sans contrat notarié.</b></figcaption></figure>
@@ -334,9 +326,8 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 <section class="chapitre" id="cat">
   <h2 class="titre"><span class="num">06</span>CAT</h2>
   <p class="chemin">Menu <b>CAT</b></p>
-  <p>Le CAT (conditions avant tirage) autorise le décaissement d'un contrat validé ou d'une notification hypothécaire. Il porte deux statuts : sa <b>validation</b> (Head Crédit ou MD), puis son <b>déblocage</b> (Opérations). La liste affiche pour chaque CAT le dossier et le client, le secteur, le montant et le numéro de prêt.</p>
+  <p>Le CAT (conditions avant tirage) autorise le décaissement d'un contrat validé ou d'une notification hypothécaire. Il porte deux statuts : sa <b>validation</b> (Head Crédit), puis son <b>déblocage</b> (Opérations). La liste affiche pour chaque CAT le dossier et le client, le secteur, le montant et le numéro de prêt.</p>
   <ul>
-    <li>Un CAT en attente de validation propose <b>Valider</b> et <b>Rejeter</b> dans son menu d'actions.</li>
     <li>Le CAT se télécharge depuis son menu d'actions ; <b>Voir Pv</b> et <b>Voir Contrat</b> ouvrent le dossier d'origine.</li>
   </ul>
   <figure><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/40-cat-liste.webp" alt="CAT des contrats" loading="lazy" width="1440" height="1192"></button><figcaption><b>CAT des contrats.</b></figcaption></figure>
@@ -371,13 +362,13 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <div class="tableau"><table>
     <thead><tr><th>Domaine</th><th>Droits</th></tr></thead>
     <tbody>
-      <tr><td>PV de comité</td><td>menu, consulter, historique, télécharger, rejeter, valider, changer le statut</td></tr>
+      <tr><td>PV de comité</td><td>menu, consulter, historique, télécharger</td></tr>
       <tr><td>Contrats</td><td>menu, consulter, historique, télécharger</td></tr>
       <tr><td>Contrats basiques</td><td>menu, consulter, sans CAT, historique, télécharger</td></tr>
-      <tr><td>Notifications hypothécaires</td><td>consulter, sans contrat notarié, historique, télécharger, valider, rejeter, validation head</td></tr>
+      <tr><td>Notifications hypothécaires</td><td>consulter, sans contrat notarié, historique, télécharger</td></tr>
       <tr><td>Contrats notariés</td><td>menu, consulter, sans validation head, sans contrat notarié, historique, télécharger</td></tr>
-      <tr><td>CAT</td><td>menu, consulter, télécharger, valider, rejeter la validation</td></tr>
-      <tr><td>CAT basiques</td><td>menu, consulter, télécharger, valider, rejeter la validation</td></tr>
+      <tr><td>CAT</td><td>menu, consulter, télécharger</td></tr>
+      <tr><td>CAT basiques</td><td>menu, consulter, télécharger</td></tr>
       <tr><td>Cautions</td><td>consulter, télécharger</td></tr>
       <tr><td>Reports d'échéance</td><td>menu, consulter, historique, changer le statut, télécharger</td></tr>
       <tr><td>Utilisateurs</td><td>consulter</td></tr>

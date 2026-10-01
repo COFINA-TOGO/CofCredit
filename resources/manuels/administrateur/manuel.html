@@ -207,7 +207,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <p>L'accueil rappelle la date et votre profil, puis rassemble dans <b>À traiter</b> les dossiers qui attendent une action de votre part :</p>
   <ul>
     <li>Les PV en attente de validation.</li>
-    <li>Les contrats dont l'envoi est à valider.</li>
+    <li>Les contrats signés à envoyer en validation.</li>
     <li>Les contrats en attente de validation finale.</li>
     <li>Les CAT en attente de validation.</li>
     <li>Les notifications en attente de validation.</li>
@@ -263,15 +263,13 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <p class="intro">De la demande au décaissement, chaque dossier passe de profil en profil. L'administrateur peut intervenir à chacune de ces étapes. Chaque passage d'étape prévient par e-mail le profil suivant.</p>
   <h3 id="circuit-credit">Crédit</h3>
   <ol class="circuit">
-    <li><b>CAF</b><span>saisit la <b>notification de CAF</b> du client.</span></li>
-    <li><b>Analyste Crédit</b><span>vérifie la notification : validée, elle devient un <b>PV de comité</b> ; rejetée, elle revient au CAF.</span></li>
-    <li><b>Admin Crédit</b><span>saisit ou complète le PV et le valide vers le Head Crédit.</span></li>
-    <li><b>Head Crédit</b><span>valide le PV (ou le rejette vers l'Admin Crédit). Le MD valide les PV qui lui sont soumis.</span></li>
+    <li><b>Admin Crédit</b><span>saisit le <b>PV de comité</b>. Un PV peut aussi venir d'une notification de CAF, vérifiée par l'Analyste Crédit.</span></li>
+    <li><b>Head Crédit</b><span>valide le PV, ou le rejette avec un motif : l'Admin Crédit le corrige et le PV repart en validation.</span></li>
     <li><b>Admin Crédit</b><span>crée le <b>contrat</b>, ou la <b>notification hypothécaire</b> si une hypothèque garantit le crédit, et ses cautions.</span></li>
-    <li><b>CAF, Admin Crédit</b><span>le client signe ; l'Admin Crédit charge le contrat et le billet à ordre signés, puis <b>valide l'envoi</b>.</span></li>
-    <li><b>Head Crédit</b><span>valide le contrat (ou le rejette avec un motif). Pour une notification hypothécaire, le Head Crédit ou le MD la valide, puis le Juridique charge le contrat notarié.</span></li>
+    <li><b>Admin Crédit</b><span>une fois le client passé à la signature, charge le contrat et le billet à ordre signés, puis <b>envoie le contrat en validation</b>.</span></li>
+    <li><b>Head Crédit</b><span>valide le contrat, ou le rejette avec un motif. Pour une notification hypothécaire, le Head Crédit la valide puis le <b>Juridique</b> charge le contrat notarié.</span></li>
     <li><b>Admin Crédit</b><span>crée le <b>CAT</b> (conditions avant tirage).</span></li>
-    <li><b>Head Crédit, MD</b><span>valide le CAT ou le rejette.</span></li>
+    <li><b>Head Crédit</b><span>valide le CAT ou le rejette.</span></li>
     <li><b>Opérations</b><span><b>débloque</b> le CAT validé : les fonds peuvent être décaissés.</span></li>
   </ol>
   <h3 id="circuit-report">Report d'échéance</h3>
@@ -288,11 +286,11 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 <section class="chapitre" id="pv-chapitre">
   <h2 class="titre"><span class="num">03</span>PV de comité</h2>
   <h3 id="notifications-caf">Les notifications de CAF</h3>
-  <p>La notification de CAF est la demande de crédit saisie par le CAF : client, montant, durée, conditions et garanties proposées. Elle attend la vérification de l'Analyste Crédit.</p>
+  <p>La notification de CAF est la demande de crédit saisie par le CAF : client, montant, durée, conditions et garanties proposées. Elle attend la vérification de l'Analyste Crédit ; une fois validée, elle devient un PV soumis au Head Crédit.</p>
   <ul>
     <li>La liste <b>Sans PV</b> montre les notifications en cours de vérification ou rejetées ; l'<b>Historique</b> les montre toutes.</li>
     <li>Pour en saisir une, ouvrez le formulaire de création, remplissez chaque bloc puis <span class="btn">Enregistrer</span>. Une notification rejetée se corrige depuis son menu d'actions (<b>Modifier</b>) puis repart en vérification.</li>
-    <li>Pour vérifier une notification, choisissez <b>Vérifier</b> dans son menu d'actions : complétez si besoin les informations (Admin Crédit, conditions…), puis validez-la, ce qui crée le PV, ou rejetez-la avec un motif.</li>
+    <li>Pour vérifier une notification, choisissez <b>Vérifier</b> dans son menu d'actions : complétez si besoin les informations (Admin Crédit, conditions…), puis validez-la, ce qui crée le PV et l'envoie en validation au Head Crédit, ou rejetez-la avec un motif.</li>
   </ul>
   <figure><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/11-notification-caf-liste.webp" alt="Notifications de CAF sans PV" loading="lazy" width="1440" height="1165"></button><figcaption><b>Notifications de CAF sans PV.</b></figcaption></figure>
   <figure><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/11-notification-caf-historique.webp" alt="Historique des notifications de CAF" loading="lazy" width="1440" height="1139"></button><figcaption><b>Historique des notifications de CAF.</b></figcaption></figure>
@@ -301,12 +299,12 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/11-notification-caf-verification.webp" alt="Vérification d'une notification de CAF" loading="lazy" width="1440" height="2700"></button><figcaption><b>Vérification d'une notification de CAF.</b></figcaption></figure>
   <h3 id="pv">Les PV de comité</h3>
   <p class="chemin">Menu <b>Pv Comité</b></p>
-  <p>Le PV de comité reprend la décision d'octroi : client, montant, durée, périodicité, taux, frais, garanties à recueillir et réserves de l'analyste. Son statut (En attente, Validé, Rejeté) et son niveau de validation (Analyste Crédit, Admin Crédit, Head Crédit, MD) s'affichent dans la liste et sur la fiche.</p>
+  <p>Le PV de comité reprend la décision d'octroi : client, montant, durée, périodicité, taux, frais, garanties à recueillir et réserves de l'analyste. Saisi par l'Admin Crédit, il est validé ou rejeté par le Head Crédit. Son statut (En attente, Validé, Rejeté) s'affiche dans la liste et sur la fiche.</p>
   <ul>
     <li><b>Sans contrat</b> : les PV en cours de validation, et les PV validés qui attendent leur contrat ou leur notification hypothécaire. Les filtres trient par type de crédit, statut et niveau de validation.</li>
     <li><b>Historique</b> : tous les PV.</li>
-    <li><b>Créer</b> : saisissez le PV bloc par bloc ; les garanties s'ajoutent une à une. Un PV rejeté ou en attente à votre niveau se modifie depuis son menu d'actions.</li>
-    <li>Quand un PV attend votre niveau de validation, son menu d'actions propose <b>Valider</b> et <b>Rejeter</b> ; un rejet demande un motif, transmis par e-mail.</li>
+    <li><b>Créer</b> : saisissez le PV bloc par bloc ; les garanties s'ajoutent une à une. À l'enregistrement, le PV part en validation chez le Head Crédit. Tant qu'il n'est pas validé, il se modifie depuis son menu d'actions ; un PV rejeté se corrige de la même façon et repart en validation.</li>
+    <li>Un PV en attente de validation propose <b>Valider</b> et <b>Rejeter</b> dans son menu d'actions ; un rejet demande un motif, envoyé par e-mail à l'Admin Crédit.</li>
     <li>Un PV validé propose <b>Créer le contrat</b>, ou <b>Créer la notification</b> s'il comporte une hypothèque.</li>
     <li>Le PV se télécharge depuis sa fiche ou son menu d'actions.</li>
   </ul>
@@ -320,12 +318,12 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <h2 class="titre"><span class="num">04</span>Contrats et cautions</h2>
   <h3 id="contrats">Les contrats</h3>
   <p class="chemin">Menu <b>Contrat › Basique</b></p>
-  <p>Le contrat est établi à partir d'un PV validé. Son statut suit les étapes : <b>En attente des documents signés</b>, <b>En attente de validation admin</b>, <b>En attente de validation head</b>, puis <b>Validé</b> ou <b>Rejeté</b>.</p>
+  <p>Le contrat est établi à partir d'un PV validé. Son statut suit les étapes : <b>En attente des documents signés</b>, <b>Signé, à envoyer en validation</b>, <b>En attente de validation head</b>, puis <b>Validé</b> ou <b>Rejeté</b>.</p>
   <ul>
     <li><b>Sans CAT</b> : les contrats qui n'ont pas encore de CAT. La colonne <b>Observations</b> signale ce qui manque (contrat signé, billet à ordre signé, cautions incomplètes) avec un bouton pour y remédier : <span class="btn">Charger</span>, <span class="btn">Cautions</span>, <span class="btn">Créer CAT</span>.</li>
     <li><b>Historique</b> : tous les contrats.</li>
     <li><b>Créer</b> : choisissez le PV validé, puis complétez les informations du contrat, du client et, s'il y en a, des gages.</li>
-    <li>Le menu d'actions télécharge les documents à faire signer (contrat, billet à ordre, mention manuscrite) et permet d'<b>ajouter le contrat signé</b> et le <b>billet à ordre signé</b>. Quand les deux sont chargés, <b>Valider l'envoi</b> transmet le contrat au Head Crédit.</li>
+    <li>Le menu d'actions télécharge les documents à faire signer (contrat, billet à ordre, mention manuscrite) et permet d'<b>ajouter le contrat signé</b> et le <b>billet à ordre signé</b>. Quand les deux sont chargés, <b>Envoyer en validation</b> transmet le contrat au Head Crédit.</li>
     <li>Un contrat en attente de validation head propose <b>Valider le contrat</b> et <b>Rejeter le contrat</b> ; le motif d'un rejet est envoyé à l'Admin Crédit et affiché sur la fiche.</li>
     <li>La fiche du contrat affiche le montant, la durée, l'échéance, la périodicité et le différé, puis le dossier, le client, les conditions du crédit, les garanties et les gages.</li>
   </ul>
@@ -369,7 +367,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 <section class="chapitre" id="cat">
   <h2 class="titre"><span class="num">06</span>CAT</h2>
   <p class="chemin">Menu <b>CAT</b></p>
-  <p>Le CAT (conditions avant tirage) autorise le décaissement d'un contrat validé ou d'une notification hypothécaire. Il porte deux statuts : sa <b>validation</b> (Head Crédit ou MD), puis son <b>déblocage</b> (Opérations). La liste affiche pour chaque CAT le dossier et le client, le secteur, le montant et le numéro de prêt.</p>
+  <p>Le CAT (conditions avant tirage) autorise le décaissement d'un contrat validé ou d'une notification hypothécaire. Il porte deux statuts : sa <b>validation</b> (Head Crédit), puis son <b>déblocage</b> (Opérations). La liste affiche pour chaque CAT le dossier et le client, le secteur, le montant et le numéro de prêt.</p>
   <ul>
     <li><b>Créer</b> : choisissez le contrat validé, puis complétez le CAT (numéro de prêt, secteur, frais, TEG, garanties, dépôt de garantie).</li>
     <li>Un CAT en attente de validation propose <b>Valider</b> et <b>Rejeter</b> dans son menu d'actions.</li>

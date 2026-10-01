@@ -162,7 +162,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 <header class="entete">
   <div class="surtitre">Cofina Crédit Digital</div>
   <h1>Manuel d'utilisation du profil Analyste Crédit</h1>
-  <p class="chapeau">L'Analyste Crédit vérifie les notifications de CAF : il les complète si besoin puis les valide, ce qui en fait un PV transmis à l'Admin Crédit, ou les rejette vers le CAF. Chaque écran est illustré par une capture réelle de l'application, faite avec un compte de ce profil.</p>
+  <p class="chapeau">L'Analyste Crédit vérifie les notifications de CAF : il les complète si besoin puis les valide, ce qui en fait un PV soumis à la validation du Head Crédit, ou les rejette vers le CAF. Chaque écran est illustré par une capture réelle de l'application, faite avec un compte de ce profil.</p>
   <div class="meta">
     <span>Version du <b>01/10/2026</b></span>
   </div>
@@ -240,18 +240,16 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 
 <section class="chapitre" id="circuit">
   <h2 class="titre"><span class="num">02</span>Le circuit d'un dossier</h2>
-  <p class="intro">De la demande au décaissement, chaque dossier passe de profil en profil. Vos étapes sont surlignées. Chaque passage d'étape prévient par e-mail le profil suivant.</p>
+  <p class="intro">De la demande au décaissement, chaque dossier passe de profil en profil. Votre profil consulte les dossiers sans intervenir dans ce circuit. Chaque passage d'étape prévient par e-mail le profil suivant.</p>
   <h3 id="circuit-credit">Crédit</h3>
   <ol class="circuit">
-    <li><b>CAF</b><span>saisit la <b>notification de CAF</b> du client.</span></li>
-    <li class="vous"><b>Analyste Crédit</b><span>vérifie la notification : validée, elle devient un <b>PV de comité</b> ; rejetée, elle revient au CAF.</span></li>
-    <li><b>Admin Crédit</b><span>saisit ou complète le PV et le valide vers le Head Crédit.</span></li>
-    <li><b>Head Crédit</b><span>valide le PV (ou le rejette vers l'Admin Crédit). Le MD valide les PV qui lui sont soumis.</span></li>
+    <li><b>Admin Crédit</b><span>saisit le <b>PV de comité</b>. Un PV peut aussi venir d'une notification de CAF, vérifiée par l'Analyste Crédit.</span></li>
+    <li><b>Head Crédit</b><span>valide le PV, ou le rejette avec un motif : l'Admin Crédit le corrige et le PV repart en validation.</span></li>
     <li><b>Admin Crédit</b><span>crée le <b>contrat</b>, ou la <b>notification hypothécaire</b> si une hypothèque garantit le crédit, et ses cautions.</span></li>
-    <li><b>CAF, Admin Crédit</b><span>le client signe ; l'Admin Crédit charge le contrat et le billet à ordre signés, puis <b>valide l'envoi</b>.</span></li>
-    <li><b>Head Crédit</b><span>valide le contrat (ou le rejette avec un motif). Pour une notification hypothécaire, le Head Crédit ou le MD la valide, puis le Juridique charge le contrat notarié.</span></li>
+    <li><b>Admin Crédit</b><span>une fois le client passé à la signature, charge le contrat et le billet à ordre signés, puis <b>envoie le contrat en validation</b>.</span></li>
+    <li><b>Head Crédit</b><span>valide le contrat, ou le rejette avec un motif. Pour une notification hypothécaire, le Head Crédit la valide puis le <b>Juridique</b> charge le contrat notarié.</span></li>
     <li><b>Admin Crédit</b><span>crée le <b>CAT</b> (conditions avant tirage).</span></li>
-    <li><b>Head Crédit, MD</b><span>valide le CAT ou le rejette.</span></li>
+    <li><b>Head Crédit</b><span>valide le CAT ou le rejette.</span></li>
     <li><b>Opérations</b><span><b>débloque</b> le CAT validé : les fonds peuvent être décaissés.</span></li>
   </ol>
 </section>
@@ -259,10 +257,10 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 <section class="chapitre" id="pv-chapitre">
   <h2 class="titre"><span class="num">03</span>PV de comité</h2>
   <h3 id="notifications-caf">Les notifications de CAF</h3>
-  <p>La notification de CAF est la demande de crédit saisie par le CAF : client, montant, durée, conditions et garanties proposées. Elle attend la vérification de l'Analyste Crédit.</p>
+  <p>La notification de CAF est la demande de crédit saisie par le CAF : client, montant, durée, conditions et garanties proposées. Elle attend la vérification de l'Analyste Crédit ; une fois validée, elle devient un PV soumis au Head Crédit.</p>
   <ul>
     <li>La liste <b>Sans PV</b> montre les notifications en cours de vérification ou rejetées ; l'<b>Historique</b> les montre toutes.</li>
-    <li>Pour vérifier une notification, choisissez <b>Vérifier</b> dans son menu d'actions : complétez si besoin les informations (Admin Crédit, conditions…), puis validez-la, ce qui crée le PV, ou rejetez-la avec un motif.</li>
+    <li>Pour vérifier une notification, choisissez <b>Vérifier</b> dans son menu d'actions : complétez si besoin les informations (Admin Crédit, conditions…), puis validez-la, ce qui crée le PV et l'envoie en validation au Head Crédit, ou rejetez-la avec un motif.</li>
   </ul>
   <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/11-notification-caf-liste.webp" alt="Notifications de CAF sans PV" loading="lazy" width="1440" height="900"></button><figcaption><b>Notifications de CAF sans PV.</b></figcaption></figure>
   <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/11-notification-caf-historique.webp" alt="Historique des notifications de CAF" loading="lazy" width="1440" height="900"></button><figcaption><b>Historique des notifications de CAF.</b></figcaption></figure>
@@ -270,7 +268,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <figure class="haute"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/11-notification-caf-verification.webp" alt="Vérification d'une notification de CAF" loading="lazy" width="1440" height="2700"></button><figcaption><b>Vérification d'une notification de CAF.</b></figcaption></figure>
   <h3 id="pv">Les PV de comité</h3>
   <p class="chemin">Menu <b>Pv Comité</b></p>
-  <p>Le PV de comité reprend la décision d'octroi : client, montant, durée, périodicité, taux, frais, garanties à recueillir et réserves de l'analyste. Son statut (En attente, Validé, Rejeté) et son niveau de validation (Analyste Crédit, Admin Crédit, Head Crédit, MD) s'affichent dans la liste et sur la fiche.</p>
+  <p>Le PV de comité reprend la décision d'octroi : client, montant, durée, périodicité, taux, frais, garanties à recueillir et réserves de l'analyste. Saisi par l'Admin Crédit, il est validé ou rejeté par le Head Crédit. Son statut (En attente, Validé, Rejeté) s'affiche dans la liste et sur la fiche.</p>
   <ul>
     <li><b>Sans contrat</b> : les PV en cours de validation, et les PV validés qui attendent leur contrat ou leur notification hypothécaire. Les filtres trient par type de crédit, statut et niveau de validation.</li>
     <li><b>Historique</b> : tous les PV.</li>

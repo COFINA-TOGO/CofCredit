@@ -242,15 +242,13 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <p class="intro">De la demande au décaissement, chaque dossier passe de profil en profil. Vos étapes sont surlignées. Chaque passage d'étape prévient par e-mail le profil suivant.</p>
   <h3 id="circuit-credit">Crédit</h3>
   <ol class="circuit">
-    <li><b>CAF</b><span>saisit la <b>notification de CAF</b> du client.</span></li>
-    <li><b>Analyste Crédit</b><span>vérifie la notification : validée, elle devient un <b>PV de comité</b> ; rejetée, elle revient au CAF.</span></li>
-    <li><b>Admin Crédit</b><span>saisit ou complète le PV et le valide vers le Head Crédit.</span></li>
-    <li><b>Head Crédit</b><span>valide le PV (ou le rejette vers l'Admin Crédit). Le MD valide les PV qui lui sont soumis.</span></li>
+    <li><b>Admin Crédit</b><span>saisit le <b>PV de comité</b>. Un PV peut aussi venir d'une notification de CAF, vérifiée par l'Analyste Crédit.</span></li>
+    <li><b>Head Crédit</b><span>valide le PV, ou le rejette avec un motif : l'Admin Crédit le corrige et le PV repart en validation.</span></li>
     <li><b>Admin Crédit</b><span>crée le <b>contrat</b>, ou la <b>notification hypothécaire</b> si une hypothèque garantit le crédit, et ses cautions.</span></li>
-    <li><b>CAF, Admin Crédit</b><span>le client signe ; l'Admin Crédit charge le contrat et le billet à ordre signés, puis <b>valide l'envoi</b>.</span></li>
-    <li><b>Head Crédit</b><span>valide le contrat (ou le rejette avec un motif). Pour une notification hypothécaire, le Head Crédit ou le MD la valide, puis le Juridique charge le contrat notarié.</span></li>
+    <li><b>Admin Crédit</b><span>une fois le client passé à la signature, charge le contrat et le billet à ordre signés, puis <b>envoie le contrat en validation</b>.</span></li>
+    <li><b>Head Crédit</b><span>valide le contrat, ou le rejette avec un motif. Pour une notification hypothécaire, le Head Crédit la valide puis le <b>Juridique</b> charge le contrat notarié.</span></li>
     <li><b>Admin Crédit</b><span>crée le <b>CAT</b> (conditions avant tirage).</span></li>
-    <li><b>Head Crédit, MD</b><span>valide le CAT ou le rejette.</span></li>
+    <li><b>Head Crédit</b><span>valide le CAT ou le rejette.</span></li>
     <li class="vous"><b>Opérations</b><span><b>débloque</b> le CAT validé : les fonds peuvent être décaissés.</span></li>
   </ol>
 </section>
@@ -258,7 +256,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 <section class="chapitre" id="cat">
   <h2 class="titre"><span class="num">03</span>CAT</h2>
   <p class="chemin">Menu <b>CAT</b></p>
-  <p>Le CAT (conditions avant tirage) autorise le décaissement d'un contrat validé ou d'une notification hypothécaire. Il porte deux statuts : sa <b>validation</b> (Head Crédit ou MD), puis son <b>déblocage</b> (Opérations). La liste affiche pour chaque CAT le dossier et le client, le secteur, le montant et le numéro de prêt.</p>
+  <p>Le CAT (conditions avant tirage) autorise le décaissement d'un contrat validé ou d'une notification hypothécaire. Il porte deux statuts : sa <b>validation</b> (Head Crédit), puis son <b>déblocage</b> (Opérations). La liste affiche pour chaque CAT le dossier et le client, le secteur, le montant et le numéro de prêt.</p>
   <ul>
     <li>Un CAT validé et en attente de déblocage propose <b>Débloquer</b> et <b>Rejeter le déblocage</b>.</li>
     <li>Le CAT se télécharge depuis son menu d'actions ; <b>Voir Pv</b> et <b>Voir Contrat</b> ouvrent le dossier d'origine.</li>
