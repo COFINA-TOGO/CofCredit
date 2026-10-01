@@ -63,3 +63,8 @@ dist-ssr
 credit.zip
 notes.txt
 ssl
+
+# Dumps de base de données (données clients, hash de mots de passe) : jamais dans le dépôt
+/mysql-saves/
+/database/users.sql
+/cofina_credit*.sql
