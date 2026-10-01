@@ -237,8 +237,7 @@ module.exports = {
           "@styles": "./resources/styles/",
           "@configured-variables": "./resources/styles/variables/_template.scss",
           "apexcharts": "node_modules/apexcharts-clevision",
-          "@db": "./resources/js/plugins/fake-api/handlers/",
-          "@api-utils": "./resources/js/plugins/fake-api/utils/",
+          "@api-utils": "./resources/js/utils/",
         },
         'extensions': [
           '.ts',

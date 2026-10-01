@@ -23,8 +23,9 @@ trait ControllerHelperTrait
     public function queryFilter($query, $requestData, $modelName)
     {
         $modelPath = "\App\Models\\$modelName";
+        $columns = Schema::getColumnListing((new $modelPath)->getTable());
         foreach ($requestData as $filter => $value) {
-            if (in_array($filter, Schema::getColumnListing((new $modelPath)->getTable())) && $requestData[$filter]) {
+            if (in_array($filter, $columns) && $requestData[$filter]) {
                 $query->where($filter, $requestData[$filter]);
             }
         }
@@ -71,7 +72,7 @@ trait ControllerHelperTrait
         $query
             ->where(function ($query) use ($columns, $search) {
                 foreach ($columns as $column) {
-                    $query->where($column, 'LIKE', "%$search%");
+                    $query->orWhere($column, 'LIKE', "%$search%");
                 }
             });
         return $query;
@@ -221,27 +222,4 @@ trait ControllerHelperTrait
 
 
 
-    /**
-     * Permet d'ajouter des filtres avec des valeurs multiples sur un objet Eloquent
-     * @param 	mixed 	$query				L'objet Eloquent
-     * @param 	mixed 	$filters			Les filtres
-     * @param 	mixed 	$requestData		Les données de la requete
-     * @param 	mixed 	$correlationData	Les valeurs à utiliser pour appliquer les filtres
-     * @return 	mixed
-     */
-    public function queryMultipeValvueFilter($query, $associationFilters, $requestData, $correlationData)
-    {
-        foreach ($associationFilters as $filter => $chain) {
-            if (isset($requestData[$filter]) && $requestData[$filter]) {
-                $query->where(function ($query) use ($filter, $requestData, $correlationData) {
-                    foreach (explode("-", $requestData[$filter]) as $char) {
-                        if (array_key_exists($char, $correlationData)) {
-                            $query->where($filter, $correlationData[$char]);
-                        }
-                    }
-                });
-            }
-        }
-        return $query;
-    }
 }

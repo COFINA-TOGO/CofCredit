@@ -73,7 +73,8 @@ class ContractController extends Controller
 	public function index(Request $request)
 	{
 		if (($authorisation = Gate::inspect('viewAny', Contract::class))->allowed()) {
-			$contractList = Contract::query();
+			// Relation utilisée par les attributs calculés guarantors_count et observations (évite une requête par ligne)
+			$contractList = Contract::query()->with("guarantors");
 			if ($search = $request->search) {
 				$contractList
 					->where(function ($query) use ($search) {

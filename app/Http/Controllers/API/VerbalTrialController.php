@@ -79,7 +79,8 @@ class VerbalTrialController extends Controller
 	public function index(Request $request)
 	{
 		if (($authorisation = Gate::inspect('viewAny', VerbalTrial::class))->allowed()) {
-			$verbalTrialList = VerbalTrial::query();
+			// Relations utilisées par les attributs calculés has_mortgage et next (évite une requête par ligne)
+			$verbalTrialList = VerbalTrial::query()->with(["guarantees", "contract", "notification"]);
 			$currentUser = $request->user();
 			if ($search = $request->search) {
 				$verbalTrialList

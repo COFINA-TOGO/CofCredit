@@ -70,7 +70,8 @@ class NotificationController extends Controller
 	public function index(Request $request)
 	{
 		if (($authorisation = Gate::inspect('viewAny', Notification::class))->allowed()) {
-			$notificationList = Notification::query();
+			// Relation utilisée par les attributs calculés guarantors_count et observations (évite une requête par ligne)
+			$notificationList = Notification::query()->with("guarantors");
 			if ($search = $request->search) {
 				$notificationList->where(function ($query) use ($search) {
 					$query

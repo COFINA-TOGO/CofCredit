@@ -54,9 +54,21 @@ class DeadlinePostponedController extends Controller
 			$deadlinePostponedList = DeadlinePostponed::query();
 
 			($search = $request->search) ? $deadlinePostponedList = $this->querySearch($deadlinePostponedList, ["credit_number"], $search) : null;
-			$deadlinePostponedList = $this->queryFilter($deadlinePostponedList, ["caf_id", "credit_number", "deadline_number", "new_date", "request_path", "memo_path", "comment", "extension", "beneficiary_label", "loan_amount", "old_date", "representative_civility", "representative_last_name", "representative_first_name"], $requestData);
-			$deadlinePostponedList = $this->queryMultipeValvueFilter($deadlinePostponedList, ["status"], $requestData, ["wc" => "waiting_ca", "rc" => "rejected_by_ca", "wd" => "waiting_dex", "rd" => "rejected_by_dex", "wh" => "waiting_head", "rh" => "rejected_by_head", "wm" => "waiting_md", "rm" => "rejected_by_md", "wca" => "waiting_credit_admin", "rca" => "rejected_by_credit_admin", "wr" => "waiting_report", "r" => "reported"]);
-			$deadlinePostponedList = $this->queryRelation($deadlinePostponedList, ["with_caf" => "caf"], $requestData);
+			$deadlinePostponedList = $this->queryFilter($deadlinePostponedList, $requestData, "DeadlinePostponed");
+			if (!empty($requestData["status"])) {
+				// Un groupe (w : en attente, r : rejeté, v : reporté) ou un code précis, séparés par "-"
+				$statusList = [
+					"w" => ["waiting_ca", "waiting_dex", "waiting_head", "waiting_md", "waiting_credit_admin", "waiting_report"],
+					"r" => ["rejected_by_ca", "rejected_by_dex", "rejected_by_head", "rejected_by_md", "rejected_by_credit_admin"],
+					"v" => ["reported"],
+					"wc" => ["waiting_ca"], "rc" => ["rejected_by_ca"], "wd" => ["waiting_dex"], "rd" => ["rejected_by_dex"],
+					"wh" => ["waiting_head"], "rh" => ["rejected_by_head"], "wm" => ["waiting_md"], "rm" => ["rejected_by_md"],
+					"wca" => ["waiting_credit_admin"], "rca" => ["rejected_by_credit_admin"], "wr" => ["waiting_report"],
+				];
+				$statuses = collect(explode("-", $requestData["status"]))->flatMap(fn($code) => $statusList[$code] ?? [])->all();
+				$deadlinePostponedList->whereIn("status", $statuses);
+			}
+			$deadlinePostponedList = $this->queryRelation($deadlinePostponedList, $requestData, "DeadlinePostponed");
 
 			$currentUser->profile == "caf" ? $deadlinePostponedList->where('caf_id', $currentUser->id) : null;
 
@@ -82,7 +94,7 @@ class DeadlinePostponedController extends Controller
 		$requestData = $request->all();
 		if ($deadlinePostponed) {
 			if (($authorisation = Gate::inspect('view', $deadlinePostponed))->allowed()) {
-				$deadlinePostponed = $this->modelRelationLoad($deadlinePostponed, ["with_caf" => "caf"], $requestData);
+				$deadlinePostponed = $this->modelRelationLoad($deadlinePostponed, $requestData, "DeadlinePostponed");
 				return $this->responseOk(["deadlinePostponed" => $deadlinePostponed]);
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
