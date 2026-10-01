@@ -5,10 +5,10 @@ import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 
 definePage({
-	meta: {
-		action: 'read',
-		subject: 'guarantor',
-	},
+  meta: {
+    action: 'read',
+    subject: 'guarantor',
+  },
 })
 
 // Router & State
@@ -28,51 +28,51 @@ const exportLoading = ref(false)
 
 // Configuration de la vue
 const viewData = reactive({
-	data: {
-		title: {
-			singular: 'Caution',
-			plural: 'Cautions',
-		},
-		actions: {
-			singular: 'la caution',
-			plural: 'les cautions',
-		},
-		rule: {
-			name: 'guarantor',
-		},
-		api: {
-			end_point: 'guarantor',
-		},
-	},
+  data: {
+    title: {
+      singular: 'Caution',
+      plural: 'Cautions',
+    },
+    actions: {
+      singular: 'la caution',
+      plural: 'les cautions',
+    },
+    rule: {
+      name: 'guarantor',
+    },
+    api: {
+      end_point: 'guarantor',
+    },
+  },
 })
 
 // Headers de la table
 const headers = [
-	{
-		title: 'Nom',
-		key: 'full_name',
-	},
-	{
-		title: 'Fonction',
-		key: 'function',
-	},
-	{
-		title: 'Pièce d\'identité',
-		key: 'number_of_identity_document',
-	},
-	{
-		title: 'Numéro de téléphone',
-		key: 'phone_number',
-	},
-	{
-		title: 'Observations',
-		key: 'observations',
-	},
-	{
-		title: 'Actions',
-		key: 'actions',
-		sortable: false,
-	},
+  {
+    title: 'Nom',
+    key: 'full_name',
+  },
+  {
+    title: 'Fonction',
+    key: 'function',
+  },
+  {
+    title: 'Pièce d\'identité',
+    key: 'number_of_identity_document',
+  },
+  {
+    title: 'Numéro de téléphone',
+    key: 'phone_number',
+  },
+  {
+    title: 'Observations',
+    key: 'observations',
+  },
+  {
+    title: 'Actions',
+    key: 'actions',
+    sortable: false,
+  },
 ]
 
 // Data refs
@@ -86,495 +86,520 @@ const lastPage = computed(() => guarantorData.value.last_page)
 
 // Fetch guarantors
 const fetchItemList = async (id_list = []) => {
-	id_list.forEach(id => {
-		loadings.value[id] = true
-	})
+  id_list.forEach(id => {
+    loadings.value[id] = true
+  })
 	
-	try {
-		const { data } = await useApi(createUrl('/guarantor', {
-			query: {
-				search: searchQuery.value,
-				with_verbal_trial: 1,
-				contract_id: route.params.contract_id,
-				page: page.value,
-			},
-		}))
-		guarantorData.value = data.value
-	} catch (error) {
-		console.error('Erreur lors de la récupération des cautions:', error)
-		guarantorData.value = { data: [], total: 0, last_page: 1 }
-		showSnackbar('error', 'Erreur lors de la récupération des cautions')
-	} finally {
-		id_list.forEach(id => {
-			loadings.value[id] = false
-		})
-	}
+  try {
+    const { data } = await useApi(createUrl('/guarantor', {
+      query: {
+        search: searchQuery.value,
+        with_verbal_trial: 1,
+        contract_id: route.params.contract_id,
+        page: page.value,
+      },
+    }))
+
+    guarantorData.value = data.value
+  } catch (error) {
+    console.error('Erreur lors de la récupération des cautions:', error)
+    guarantorData.value = { data: [], total: 0, last_page: 1 }
+    showSnackbar('error', 'Erreur lors de la récupération des cautions')
+  } finally {
+    id_list.forEach(id => {
+      loadings.value[id] = false
+    })
+  }
 }
 
 // Fetch contract data
 const fetchContractData = async () => {
-	try {
+  try {
     const { data } = await useApi(createUrl(`/contract/${route.params.contract_id}`, {
       query: {
         with_c_a_t: 1,
-			},
-		}))
-		contractData.value = data.value
-		// Si le contrat a un CAT, rediriger vers historical, sinon vers index
-		if (contractData.value.data.contract.c_a_t) {
-			backRoute.value = { name: 'contract-historical' }
-		} else {
-			backRoute.value = { name: 'contract' }
-		}
-	} catch (error) {
-		console.error('Erreur lors de la récupération du contrat:', error)
-	}
+      },
+    }))
+
+    contractData.value = data.value
+
+    // Si le contrat a un CAT, rediriger vers historical, sinon vers index
+    if (contractData.value.data.contract.c_a_t) {
+      backRoute.value = { name: 'contract-historical' }
+    } else {
+      backRoute.value = { name: 'contract' }
+    }
+  } catch (error) {
+    console.error('Erreur lors de la récupération du contrat:', error)
+  }
 }
 
 // Update options
 const updateOptions = options => {
-	page.value = options.page
+  page.value = options.page
 }
 
 // Download file
 const downloadFile = async (url, fileName) => {
-	try {
-		await downloadAuthenticatedFile(url, fileName)
-		showSnackbar('success', 'Téléchargement en cours...')
-	} catch (error) {
-		console.error('Erreur lors du téléchargement:', error)
-		showSnackbar('error', errorMessage(error, 'Erreur lors du téléchargement'))
-	}
+  try {
+    await downloadAuthenticatedFile(url, fileName)
+    showSnackbar('success', 'Téléchargement en cours...')
+  } catch (error) {
+    console.error('Erreur lors du téléchargement:', error)
+    showSnackbar('error', errorMessage(error, 'Erreur lors du téléchargement'))
+  }
 }
 
 // Upload file
 const uploadFile = async (id, event) => {
-	const { files } = event.target
-	if (files && files.length === 1) {
-		const reader = new FileReader()
-		reader.onload = async () => {
-			const base64Image = reader.result
-			try {
-				const response = await $api(`guarantor/upload/${id}`, {
-					method: 'POST',
-					body: { [uploadState.value]: base64Image },
-				})
+  const { files } = event.target
+  if (files && files.length === 1) {
+    const reader = new FileReader()
 
-				if (response.status === 200) {
-					// Rafraîchir les données des garanties
-					await fetchItemList([4])
-					// Rafraîchir aussi les données du contrat parent
-					await fetchContractData()
-					// Réinitialiser l'input file pour permettre de sélectionner le même fichier
-					event.target.value = ''
-					showSnackbar('success', 'Document mis à jour avec succès')
-				} else {
+    reader.onload = async () => {
+      const base64Image = reader.result
+      try {
+        const response = await $api(`guarantor/upload/${id}`, {
+          method: 'POST',
+          body: { [uploadState.value]: base64Image },
+        })
 
-					showApiErrors(response.errors)
+        if (response.status === 200) {
+          // Rafraîchir les données des garanties
+          await fetchItemList([4])
 
-				}
-			} catch (error) {
-				console.error('Erreur lors de l\'envoi du document:', error)
-				showSnackbar('error', errorMessage(error, 'Erreur lors de l\'envoi du document'))
-			}
-		}
-		reader.readAsDataURL(files[0])
-	} else {
-		showSnackbar('error', 'Veuillez sélectionner un seul fichier')
-	}
+          // Rafraîchir aussi les données du contrat parent
+          await fetchContractData()
+
+          // Réinitialiser l'input file pour permettre de sélectionner le même fichier
+          event.target.value = ''
+          showSnackbar('success', 'Document mis à jour avec succès')
+        } else {
+
+          showApiErrors(response.errors)
+
+        }
+      } catch (error) {
+        console.error('Erreur lors de l\'envoi du document:', error)
+        showSnackbar('error', errorMessage(error, 'Erreur lors de l\'envoi du document'))
+      }
+    }
+    reader.readAsDataURL(files[0])
+  } else {
+    showSnackbar('error', 'Veuillez sélectionner un seul fichier')
+  }
 }
 
 // Export guarantors
 const exportGuarantors = async () => {
-	exportLoading.value = true
-	const currentDate = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-')
+  exportLoading.value = true
 
-	try {
-		await downloadAuthenticatedFile('/api/guarantor/export', `garants-${currentDate}.xlsx`)
-		showSnackbar('success', 'Export en cours...')
-	} catch (error) {
-		console.error('Erreur lors de l\'export:', error)
-		showSnackbar('error', errorMessage(error, 'Erreur lors de l\'export des garants'))
-	} finally {
-		exportLoading.value = false
-	}
+  const currentDate = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-')
+
+  try {
+    await downloadAuthenticatedFile('/api/guarantor/export', `garants-${currentDate}.xlsx`)
+    showSnackbar('success', 'Export en cours...')
+  } catch (error) {
+    console.error('Erreur lors de l\'export:', error)
+    showSnackbar('error', errorMessage(error, 'Erreur lors de l\'export des garants'))
+  } finally {
+    exportLoading.value = false
+  }
 }
 
 // Delete guarantor
 const apiDelete = async id => {
-	deleteLoadings.value[id] = true
-	try {
-		await $apiOrThrow(`guarantor/${id}`, { method: 'DELETE' })
-		await fetchItemList([4])
-		showSnackbar('success', 'Caution supprimée avec succès')
-	} catch (error) {
-		console.error('Erreur lors de la suppression:', error)
-		showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression de la caution'))
-	} finally {
-		deleteLoadings.value[id] = false
-	}
+  deleteLoadings.value[id] = true
+  try {
+    await $apiOrThrow(`guarantor/${id}`, { method: 'DELETE' })
+    await fetchItemList([4])
+    showSnackbar('success', 'Caution supprimée avec succès')
+  } catch (error) {
+    console.error('Erreur lors de la suppression:', error)
+    showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression de la caution'))
+  } finally {
+    deleteLoadings.value[id] = false
+  }
 }
 
 // Fonctions de vérification des conditions d'upload (mêmes que pour les contrats)
-const canUploadGuarantorContract = (guarantor) => {
-	if (!guarantor.contract) return false
+const canUploadGuarantorContract = guarantor => {
+  if (!guarantor.contract) return false
 	
-	const { status, signed_contract_path } = guarantor.contract
+  const { status, signed_contract_path } = guarantor.contract
 	
-	// Si le fichier n'existe pas, on peut toujours uploader (sauf si validé)
-	if (signed_contract_path == null && status !== 'pending_head_validation' && status !== 'validated') {
-		return true
-	}
+  // Si le fichier n'existe pas, on peut toujours uploader (sauf si validé)
+  if (signed_contract_path == null && status !== 'pending_head_validation' && status !== 'validated') {
+    return true
+  }
 	
-	// Si le contrat est rejeté, on peut uploader à nouveau
-	if (status === 'rejected') {
-		return true
-	}
+  // Si le contrat est rejeté, on peut uploader à nouveau
+  if (status === 'rejected') {
+    return true
+  }
 	
-	// Si le contrat n'est pas encore validé par l'admin, on peut uploader indéfiniment
-	if (status !== 'pending_head_validation' && status !== 'validated') {
-		return true
-	}
+  // Si le contrat n'est pas encore validé par l'admin, on peut uploader indéfiniment
+  if (status !== 'pending_head_validation' && status !== 'validated') {
+    return true
+  }
 	
-	return false
+  return false
 }
 
-const canUploadGuarantorPromissoryNote = (guarantor) => {
-	if (!guarantor.contract) return false
+const canUploadGuarantorPromissoryNote = guarantor => {
+  if (!guarantor.contract) return false
 	
-	const { status, signed_promissory_note_path } = guarantor.contract
+  const { status, signed_promissory_note_path } = guarantor.contract
 	
-	// Si le fichier n'existe pas, on peut toujours uploader (sauf si validé)
-	if (signed_promissory_note_path == null && status !== 'pending_head_validation' && status !== 'validated') {
-		return true
-	}
+  // Si le fichier n'existe pas, on peut toujours uploader (sauf si validé)
+  if (signed_promissory_note_path == null && status !== 'pending_head_validation' && status !== 'validated') {
+    return true
+  }
 	
-	// Si le contrat est rejeté, on peut uploader à nouveau
-	if (status === 'rejected') {
-		return true
-	}
+  // Si le contrat est rejeté, on peut uploader à nouveau
+  if (status === 'rejected') {
+    return true
+  }
 	
-	// Si le contrat n'est pas encore validé par l'admin, on peut uploader indéfiniment
-	if (status !== 'pending_head_validation' && status !== 'validated') {
-		return true
-	}
+  // Si le contrat n'est pas encore validé par l'admin, on peut uploader indéfiniment
+  if (status !== 'pending_head_validation' && status !== 'validated') {
+    return true
+  }
 	
-	return false
+  return false
 }
 
 // Watchers
 watch([searchQuery, page], () => {
-	fetchItemList([4])
+  fetchItemList([4])
 })
 
 // Lifecycle
 onMounted(async () => {
-	await fetchContractData()
-	await fetchItemList([4])
+  await fetchContractData()
+  await fetchItemList([4])
 })
 </script>
 
 <template>
-	<div>
-		<VCard class="mb-6">
-			<VCardText>
-				<div class="d-flex align-center gap-4 mb-4">
-					<VBtn 
-						prepend-icon="tabler-arrow-left" 
-						:to="backRoute"
-					>
-						Contrats
-					</VBtn>
-					<h2 class="mb-0">
-						Liste des {{ viewData.data.title.plural }}
-					</h2>
-				</div>
-			</VCardText>
+  <div>
+    <VCard class="mb-6">
+      <VCardText>
+        <div class="d-flex align-center gap-4 mb-4">
+          <VBtn 
+            prepend-icon="tabler-arrow-left" 
+            :to="backRoute"
+          >
+            Contrats
+          </VBtn>
+          <h2 class="mb-0">
+            Liste des {{ viewData.data.title.plural }}
+          </h2>
+        </div>
+      </VCardText>
 
-			<VDivider />
+      <VDivider />
 
-			<!-- Barre d'actions -->
-			<div class="d-flex flex-wrap gap-4 mx-5 mt-4">
-				<div class="flex-grow-1">
-					<AppTextField 
-						v-model="searchQuery" 
-						placeholder="Rechercher une caution" 
-					/>
-				</div>
+      <!-- Barre d'actions -->
+      <div class="d-flex flex-wrap gap-4 mx-5 mt-4">
+        <div class="flex-grow-1">
+          <AppTextField 
+            v-model="searchQuery" 
+            placeholder="Rechercher une caution" 
+          />
+        </div>
 
-				<div class="d-flex gap-4">
-					<VBtn
-						color="success"
-						prepend-icon="tabler-download"
-						:loading="exportLoading"
-						:disabled="exportLoading"
-						@click="exportGuarantors"
-					>
-						Exporter
-						<template #loader>
-							<span class="custom-loader">
-								<VIcon icon="tabler-refresh" />
-							</span>
-						</template>
-					</VBtn>
+        <div class="d-flex gap-4">
+          <VBtn
+            color="success"
+            prepend-icon="tabler-download"
+            :loading="exportLoading"
+            :disabled="exportLoading"
+            @click="exportGuarantors"
+          >
+            Exporter
+            <template #loader>
+              <span class="custom-loader">
+                <VIcon icon="tabler-refresh" />
+              </span>
+            </template>
+          </VBtn>
 
-					<VBtn 
-						v-if="$can('create', viewData.data.rule.name)" 
-						color="primary" 
-						prepend-icon="tabler-plus"
-						:to="{ name: 'contract-contract_id-guarantor-add', params: { contract_id: route.params.contract_id } }"
-					>
-						Ajouter
-					</VBtn>
+          <VBtn 
+            v-if="$can('create', viewData.data.rule.name)" 
+            color="primary" 
+            prepend-icon="tabler-plus"
+            :to="{ name: 'contract-contract_id-guarantor-add', params: { contract_id: route.params.contract_id } }"
+          >
+            Ajouter
+          </VBtn>
 
-					<VBtn 
-						:loading="loadings[3]" 
-						:disabled="loadings[3]" 
-						prepend-icon="tabler-refresh"
-						@click="fetchItemList([3, 4])"
-					>
-						Recharger
-						<template #loader>
-							<span class="custom-loader">
-								<VIcon icon="tabler-refresh" />
-							</span>
-						</template>
-					</VBtn>
-				</div>
-			</div>
+          <VBtn 
+            :loading="loadings[3]" 
+            :disabled="loadings[3]" 
+            prepend-icon="tabler-refresh"
+            @click="fetchItemList([3, 4])"
+          >
+            Recharger
+            <template #loader>
+              <span class="custom-loader">
+                <VIcon icon="tabler-refresh" />
+              </span>
+            </template>
+          </VBtn>
+        </div>
+      </div>
 
-			<VDivider class="mt-4" />
-
-
-			<!-- Table -->
-			<VDataTableServer 
-				v-model:items-per-page="itemsPerPage" 
-				v-model:page="page" 
-				:loading="loadings[4]"
-				:headers="headers"
-				:items="guarantorList" 
-				:items-length="totalGuarantor" 
-				class="text-no-wrap"
-				loading-text="En cours de chargement"
-				@update:options="updateOptions"
-			>
+      <VDivider class="mt-4" />
 
 
-				<template #item.observations="{ item }">
-					<VList density="compact">
-						<VListItem v-for="observation in item.observations">
-							<VListItemTitle>
-								<VChip label>
-									{{ observation }}
-								</VChip>
-							</VListItemTitle>
-						</VListItem>
-						<VListItem v-if="item.observations.length == 0" v-for="observation in ['Dossier complet']">
-							<VListItemTitle>
-								<VChip color="success" label>
-									{{ observation }}
-								</VChip>
-							</VListItemTitle>
-						</VListItem>
-					</VList>
-				</template>
+      <!-- Table -->
+      <VDataTableServer 
+        v-model:items-per-page="itemsPerPage" 
+        v-model:page="page" 
+        :loading="loadings[4]"
+        :headers="headers"
+        :items="guarantorList" 
+        :items-length="totalGuarantor" 
+        class="text-no-wrap"
+        loading-text="En cours de chargement"
+        @update:options="updateOptions"
+      >
+        <template #item.observations="{ item }">
+          <VList density="compact">
+            <VListItem v-for="observation in item.observations">
+              <VListItemTitle>
+                <VChip label>
+                  {{ observation }}
+                </VChip>
+              </VListItemTitle>
+            </VListItem>
+            <VListItem
+              v-for="observation in ['Dossier complet']"
+              v-if="item.observations.length == 0"
+            >
+              <VListItemTitle>
+                <VChip
+                  color="success"
+                  label
+                >
+                  {{ observation }}
+                </VChip>
+              </VListItemTitle>
+            </VListItem>
+          </VList>
+        </template>
 
-				<template #item.actions="{ item }">
-					<IconBtn 
-						v-if="$can('read', viewData.data.rule.name)"
-						:to="{ name: 'contract-contract_id-guarantor-id', params: { contract_id: route.params.contract_id, id: item.id } }"
-					>
-						<VTooltip activator="parent" transition="scroll-x-transition" location="top">
-							Détails
-						</VTooltip>
-						<VIcon icon="tabler-eye" />
-					</IconBtn>
+        <template #item.actions="{ item }">
+          <IconBtn 
+            v-if="$can('read', viewData.data.rule.name)"
+            :to="{ name: 'contract-contract_id-guarantor-id', params: { contract_id: route.params.contract_id, id: item.id } }"
+          >
+            <VTooltip
+              activator="parent"
+              transition="scroll-x-transition"
+              location="top"
+            >
+              Détails
+            </VTooltip>
+            <VIcon icon="tabler-eye" />
+          </IconBtn>
 
-					<IconBtn 
-						v-if="$can('update', viewData.data.rule.name)"
-						:to="{ name: 'contract-contract_id-guarantor-edit-id', params: { contract_id: route.params.contract_id, id: item.id } }"
-					>
-						<VTooltip activator="parent" transition="scroll-x-transition" location="top">
-							Modifier
-						</VTooltip>
-						<VIcon icon="tabler-edit" />
-					</IconBtn>
+          <IconBtn 
+            v-if="$can('update', viewData.data.rule.name)"
+            :to="{ name: 'contract-contract_id-guarantor-edit-id', params: { contract_id: route.params.contract_id, id: item.id } }"
+          >
+            <VTooltip
+              activator="parent"
+              transition="scroll-x-transition"
+              location="top"
+            >
+              Modifier
+            </VTooltip>
+            <VIcon icon="tabler-edit" />
+          </IconBtn>
 
-					<IconBtn 
-						v-if="$can('delete', viewData.data.rule.name)"
-						:loading="deleteLoadings[item.id]"
-						@click="guarantorIdToDelete = item.id; isDialogVisible = true"
-					>
-						<VTooltip activator="parent" transition="scroll-x-transition" location="top">
-							Supprimer
-						</VTooltip>
-						<VIcon icon="tabler-trash" />
-					</IconBtn>
+          <IconBtn 
+            v-if="$can('delete', viewData.data.rule.name)"
+            :loading="deleteLoadings[item.id]"
+            @click="guarantorIdToDelete = item.id; isDialogVisible = true"
+          >
+            <VTooltip
+              activator="parent"
+              transition="scroll-x-transition"
+              location="top"
+            >
+              Supprimer
+            </VTooltip>
+            <VIcon icon="tabler-trash" />
+          </IconBtn>
 
-					<VBtn 
-						icon 
-						variant="text" 
-						size="small" 
-						color="medium-emphasis"
-					>
-						<VIcon size="24" icon="tabler-dots-vertical" />
-						<VMenu activator="parent">
-							<VList>
-								<input 
-									ref="refInputEl" 
-									type="file" 
-									name="signed_contract" 
-									hidden
-									@input="uploadFile(item.id, $event)" 
-								/>
+          <VBtn 
+            icon 
+            variant="text" 
+            size="small" 
+            color="medium-emphasis"
+          >
+            <VIcon
+              size="24"
+              icon="tabler-dots-vertical"
+            />
+            <VMenu activator="parent">
+              <VList>
+                <input 
+                  ref="refInputEl" 
+                  type="file" 
+                  name="signed_contract" 
+                  hidden
+                  @input="uploadFile(item.id, $event)" 
+                >
 
-								<div v-if="$can('download', viewData.data.rule.name)">
-									<!-- Télécharger contrat non-signé -->
-									<VListItem
-										@click="downloadFile(`/api/guarantor/download/${item.id}`, `Contrat-Caution-${item.contract.verbal_trial.committee_id}.docx`)"
-									>
-										<template #prepend>
-											<VIcon icon="tabler-download" />
-										</template>
-										<VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
-									</VListItem>
+                <div v-if="$can('download', viewData.data.rule.name)">
+                  <!-- Télécharger contrat non-signé -->
+                  <VListItem @click="downloadFile(`/api/guarantor/download/${item.id}`, `Contrat-Caution-${item.contract.verbal_trial.committee_id}.docx`)">
+                    <template #prepend>
+                      <VIcon icon="tabler-download" />
+                    </template>
+                    <VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
+                  </VListItem>
 
-									<!-- Télécharger contrat signé -->
-									<VListItem 
-										v-if="item.signed_contract_path"
-										@click="downloadFile(item.signed_contract_path, `Contrat-Caution-${item.signed_contract_path.split('/').slice(-1)[0]}`)"
-									>
-										<template #prepend>
-											<VIcon icon="tabler-download" />
-										</template>
-										<VListItemTitle>Télécharger Contrat signé</VListItemTitle>
-									</VListItem>
+                  <!-- Télécharger contrat signé -->
+                  <VListItem 
+                    v-if="item.signed_contract_path"
+                    @click="downloadFile(item.signed_contract_path, `Contrat-Caution-${item.signed_contract_path.split('/').slice(-1)[0]}`)"
+                  >
+                    <template #prepend>
+                      <VIcon icon="tabler-download" />
+                    </template>
+                    <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
+                  </VListItem>
 
-									<!-- Télécharger billet à ordre non-signé -->
-									<VListItem
-										@click="downloadFile(`/api/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.contract.verbal_trial.committee_id}.docx`)"
-									>
-										<template #prepend>
-											<VIcon icon="tabler-download" />
-										</template>
-										<VListItemTitle>Télécharger Billet à ordre non signé</VListItemTitle>
-									</VListItem>
+                  <!-- Télécharger billet à ordre non-signé -->
+                  <VListItem @click="downloadFile(`/api/guarantor/promissory-note/download/${item.id}`, `Billet-à-ordre-Caution-${item.contract.verbal_trial.committee_id}.docx`)">
+                    <template #prepend>
+                      <VIcon icon="tabler-download" />
+                    </template>
+                    <VListItemTitle>Télécharger Billet à ordre non signé</VListItemTitle>
+                  </VListItem>
 
-									<!-- Télécharger billet à ordre signé -->
-									<VListItem 
-										v-if="item.signed_promissory_note_path"
-										@click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-Caution-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)"
-									>
-										<template #prepend>
-											<VIcon icon="tabler-download" />
-										</template>
-										<VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
-									</VListItem>
-								</div>
+                  <!-- Télécharger billet à ordre signé -->
+                  <VListItem 
+                    v-if="item.signed_promissory_note_path"
+                    @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-Caution-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)"
+                  >
+                    <template #prepend>
+                      <VIcon icon="tabler-download" />
+                    </template>
+                    <VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
+                  </VListItem>
+                </div>
 
-								<div v-if="$can('upload', viewData.data.rule.name)">
-									<VDivider />
+                <div v-if="$can('upload', viewData.data.rule.name)">
+                  <VDivider />
 									
-									<!-- Ajouter Contrat signé -->
-									<VListItem 
-										v-if="canUploadGuarantorContract(item)"
-										@click="uploadState = 'signed_contract'; refInputEl?.click()"
-									>
-										<template #prepend>
-											<VIcon icon="tabler-cloud-upload" />
-										</template>
-										<VListItemTitle>Ajouter contrat signé</VListItemTitle>
-									</VListItem>
+                  <!-- Ajouter Contrat signé -->
+                  <VListItem 
+                    v-if="canUploadGuarantorContract(item)"
+                    @click="uploadState = 'signed_contract'; refInputEl?.click()"
+                  >
+                    <template #prepend>
+                      <VIcon icon="tabler-cloud-upload" />
+                    </template>
+                    <VListItemTitle>Ajouter contrat signé</VListItemTitle>
+                  </VListItem>
 
-									<!-- Ajouter Billet à ordre -->
-									<VListItem 
-										v-if="canUploadGuarantorPromissoryNote(item)"
-										@click="uploadState = 'signed_promissory_note'; refInputEl?.click()"
-									>
-										<template #prepend>
-											<VIcon icon="tabler-cloud-upload" />
-										</template>
-										<VListItemTitle>Ajouter billet à ordre signé</VListItemTitle>
-									</VListItem>
-								</div>
-							</VList>
-						</VMenu>
-					</VBtn>
-				</template>
+                  <!-- Ajouter Billet à ordre -->
+                  <VListItem 
+                    v-if="canUploadGuarantorPromissoryNote(item)"
+                    @click="uploadState = 'signed_promissory_note'; refInputEl?.click()"
+                  >
+                    <template #prepend>
+                      <VIcon icon="tabler-cloud-upload" />
+                    </template>
+                    <VListItemTitle>Ajouter billet à ordre signé</VListItemTitle>
+                  </VListItem>
+                </div>
+              </VList>
+            </VMenu>
+          </VBtn>
+        </template>
 
-				<!-- Pagination -->
-				<template #bottom>
-					<VDivider />
+        <!-- Pagination -->
+        <template #bottom>
+          <VDivider />
 
-					<div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
-						<p class="text-sm text-medium-emphasis mb-0">
-							{{ paginationMeta({ page, itemsPerPage }, totalGuarantor) }}
-						</p>
+          <div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
+            <p class="text-sm text-medium-emphasis mb-0">
+              {{ paginationMeta({ page, itemsPerPage }, totalGuarantor) }}
+            </p>
 
-						<VPagination 
-							v-model="page" 
-							:length="lastPage"
-							:total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
-						>
-							<template #prev="slotProps">
-								<VBtn 
-									variant="tonal" 
-									color="default" 
-									v-bind="slotProps" 
-									:icon="false"
-								>
-									<VIcon start icon="tabler-arrow-left" />
-									Précédent
-								</VBtn>
-							</template>
+            <VPagination 
+              v-model="page" 
+              :length="lastPage"
+              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
+            >
+              <template #prev="slotProps">
+                <VBtn 
+                  variant="tonal" 
+                  color="default" 
+                  v-bind="slotProps" 
+                  :icon="false"
+                >
+                  <VIcon
+                    start
+                    icon="tabler-arrow-left"
+                  />
+                  Précédent
+                </VBtn>
+              </template>
 
-							<template #next="slotProps">
-								<VBtn 
-									variant="tonal" 
-									color="default" 
-									v-bind="slotProps" 
-									:icon="false"
-								>
-									Suivant
-									<VIcon end icon="tabler-arrow-right" />
-								</VBtn>
-							</template>
-						</VPagination>
-					</div>
-				</template>
-			</VDataTableServer>
-		</VCard>
+              <template #next="slotProps">
+                <VBtn 
+                  variant="tonal" 
+                  color="default" 
+                  v-bind="slotProps" 
+                  :icon="false"
+                >
+                  Suivant
+                  <VIcon
+                    end
+                    icon="tabler-arrow-right"
+                  />
+                </VBtn>
+              </template>
+            </VPagination>
+          </div>
+        </template>
+      </VDataTableServer>
+    </VCard>
 
-		<!-- Dialog de suppression -->
-		<VDialog 
-			v-model="isDialogVisible" 
-			class="v-dialog-sm"
-		>
-			<DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
+    <!-- Dialog de suppression -->
+    <VDialog 
+      v-model="isDialogVisible" 
+      class="v-dialog-sm"
+    >
+      <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 
-			<VCard title="Suppression">
-				<VCardText>
-					Êtes-vous sûr de vouloir supprimer {{ viewData.data.actions.singular }} ?
-				</VCardText>
+      <VCard title="Suppression">
+        <VCardText>
+          Êtes-vous sûr de vouloir supprimer {{ viewData.data.actions.singular }} ?
+        </VCardText>
 
-				<VCardText class="d-flex justify-end gap-3 flex-wrap">
-					<VBtn 
-						color="secondary" 
-						variant="tonal" 
-						@click="isDialogVisible = false"
-					>
-						Annuler
-					</VBtn>
-					<VBtn 
-						@click="apiDelete(guarantorIdToDelete); isDialogVisible = false"
-					>
-						Supprimer
-					</VBtn>
-				</VCardText>
-			</VCard>
-		</VDialog>
-
-	</div>
+        <VCardText class="d-flex justify-end gap-3 flex-wrap">
+          <VBtn 
+            color="secondary" 
+            variant="tonal" 
+            @click="isDialogVisible = false"
+          >
+            Annuler
+          </VBtn>
+          <VBtn @click="apiDelete(guarantorIdToDelete); isDialogVisible = false">
+            Supprimer
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
+  </div>
 </template>
 
 <style lang="scss" scoped>

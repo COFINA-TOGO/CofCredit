@@ -32,19 +32,34 @@ const removePledge = () => {
 </script>
 
 <template>
-  <VCard flat border class="d-flex flex-row">
+  <VCard
+    flat
+    border
+    class="d-flex flex-row"
+  >
     <!-- 👉 Left Form -->
     <div class="pa-5 flex-grow-1">
       <VRow>
         <VCol cols="12">
-          <AppSelect v-model="localPledgeData.type" :items="typeOfPledgeList" item-title="name" item-value="value"
-            label="Type de Gage" placeholder="Choisir le type de gage" :rules="[requiredValidator]" />
+          <AppSelect
+            v-model="localPledgeData.type"
+            :items="typeOfPledgeList"
+            item-title="name"
+            item-value="value"
+            label="Type de Gage"
+            placeholder="Choisir le type de gage"
+            :rules="[requiredValidator]"
+          />
         </VCol>
       </VRow>
       <VRow>
         <VCol cols="12">
-          <AppTextarea v-model="localPledgeData.comment" rows="2" label="Commentaire"
-            placeholder="Entrer un commentaire du gage" />
+          <AppTextarea
+            v-model="localPledgeData.comment"
+            rows="2"
+            label="Commentaire"
+            placeholder="Entrer un commentaire du gage"
+          />
         </VCol>
       </VRow>
     </div>
@@ -52,7 +67,10 @@ const removePledge = () => {
     <!-- 👉 Item Actions -->
     <div class="d-flex flex-column justify-space-between border-s pa-1">
       <IconBtn @click="removePledge">
-        <VIcon size="20" icon="tabler-x" />
+        <VIcon
+          size="20"
+          icon="tabler-x"
+        />
       </IconBtn>
     </div>
   </VCard>

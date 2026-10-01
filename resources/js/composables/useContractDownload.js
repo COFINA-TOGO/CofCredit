@@ -33,7 +33,7 @@ export function useContractDownload() {
       `/api/contract/download/${contractId}`,
       `Contrat-${committeeId}.docx`,
       onSuccess,
-      onError
+      onError,
     )
   }
 
@@ -45,6 +45,7 @@ export function useContractDownload() {
    */
   const downloadSignedContract = (path, onSuccess, onError) => {
     const fileName = `Contrat-${path.split('/').slice(-1)[0]}`
+    
     return downloadFile(path, fileName, onSuccess, onError)
   }
 
@@ -60,7 +61,7 @@ export function useContractDownload() {
       `/api/contract/promissory-note/download/${contractId}`,
       `Billet-à-ordre-${committeeId}.docx`,
       onSuccess,
-      onError
+      onError,
     )
   }
 
@@ -72,6 +73,7 @@ export function useContractDownload() {
    */
   const downloadSignedPromissoryNote = (path, onSuccess, onError) => {
     const fileName = `Billet-à-ordre-${path.split('/').slice(-1)[0]}`
+    
     return downloadFile(path, fileName, onSuccess, onError)
   }
 
@@ -87,7 +89,7 @@ export function useContractDownload() {
       `/api/contract/handwritten-mention/download/${contractId}`,
       `Mention-manuscrite-${committeeId}.docx`,
       onSuccess,
-      onError
+      onError,
     )
   }
 

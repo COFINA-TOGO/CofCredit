@@ -6,6 +6,7 @@ definePage({
     subject: 'cat',
   },
 })
+
 const router = useRouter()
 const route = useRoute('cat-id')
 
@@ -60,9 +61,15 @@ const tableData = [
                 CATs
               </VBtn>
             </VCol>
-            <VCol cols="2" class="text-right">
-              <VBtn append-icon="tabler-edit" :to="{ name: 'cat-notification-edit-id', params: { id: cat.id } }"
-                :disable="cat.validation_status == 'validated'">
+            <VCol
+              cols="2"
+              class="text-right"
+            >
+              <VBtn
+                append-icon="tabler-edit"
+                :to="{ name: 'cat-notification-edit-id', params: { id: cat.id } }"
+                :disable="cat.validation_status == 'validated'"
+              >
                 Modifier
               </VBtn>
             </VCol>
@@ -77,7 +84,10 @@ const tableData = [
             <VCol cols="12">
               <VTable class="text-no-wrap">
                 <tbody>
-                  <tr v-for="item in tableData" :key="item.key">
+                  <tr
+                    v-for="item in tableData"
+                    :key="item.key"
+                  >
                     <td colspan="5">
                       {{ item.title }}
                     </td>

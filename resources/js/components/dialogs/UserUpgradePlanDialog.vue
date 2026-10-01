@@ -106,7 +106,7 @@ const dialogModelValueUpdate = val => {
 
       <!-- 👉 Confirm Dialog -->
       <ConfirmDialog
-        v-model:isDialogVisible="isConfirmDialogVisible"
+        v-model:is-dialog-visible="isConfirmDialogVisible"
         cancel-title="Cancelled"
         confirm-title="Unsubscribed!"
         confirm-msg="Your subscription cancelled successfully."

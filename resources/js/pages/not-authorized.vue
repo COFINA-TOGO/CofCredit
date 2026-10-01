@@ -17,19 +17,34 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
 
 <template>
   <div class="misc-wrapper">
-    <ErrorHeader status-code="401" title="Vous n'etes pas autorisé 🔐" description="Vous n'êtes pas autorisé à afficher cette page en utilisant les informations d'identification que vous avez fournies lors de la connexion.
-        Merci de contacter l'administrateur de votre site." />
+    <ErrorHeader
+      status-code="401"
+      title="Vous n'etes pas autorisé 🔐"
+      description="Vous n'êtes pas autorisé à afficher cette page en utilisant les informations d'identification que vous avez fournies lors de la connexion.
+        Merci de contacter l'administrateur de votre site."
+    />
 
-    <VBtn class="mt-2 mb-10" to="/">
+    <VBtn
+      class="mt-2 mb-10"
+      to="/"
+    >
       Retour à l'entrée
     </VBtn>
 
     <!-- 👉 Image -->
     <div class="misc-avatar w-100 text-center">
-      <VImg :src="pages401" alt="Coming Soon" :max-width="170" class="mx-auto" />
+      <VImg
+        :src="pages401"
+        alt="Coming Soon"
+        :max-width="170"
+        class="mx-auto"
+      />
     </div>
 
-    <VImg :src="authThemeMask" class="misc-footer-img d-none d-md-block" />
+    <VImg
+      :src="authThemeMask"
+      class="misc-footer-img d-none d-md-block"
+    />
   </div>
 </template>
 

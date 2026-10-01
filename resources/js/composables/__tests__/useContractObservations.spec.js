@@ -111,6 +111,7 @@ describe('useContractObservations', () => {
 
     it('should handle empty array', () => {
       const result = decorateObservations([])
+
       expect(result).toHaveLength(0)
     })
   })
@@ -137,6 +138,7 @@ describe('useContractObservations', () => {
       ]
       
       const original = [...observations]
+
       sortObservationsByPriority(observations)
       
       expect(observations).toEqual(original)

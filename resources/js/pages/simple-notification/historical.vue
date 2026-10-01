@@ -9,7 +9,7 @@ definePage({
 })
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
-import { $api } from '@/utils/api';
+import { $api } from '@/utils/api'
 
 const isDialogVisible = ref(false)
 const contractIdToDelete = ref(0)
@@ -18,6 +18,7 @@ const searchQuery = ref('')
 const loadings = ref([])
 const itemsPerPage = ref(8)
 const page = ref(1)
+
 const headers = [
   {
     title: 'Numéro comitée',
@@ -45,11 +46,13 @@ const headers = [
     sortable: false,
   },
 ]
+
 const typeList = {
   "company": 'Société',
   "individual_business": 'Entreprise Individuel',
   "particular": 'Particulier',
 }
+
 const {
   data: notificationData,
   execute: fetchSimpleNotifications,
@@ -120,13 +123,23 @@ const lastPage = computed(() => notificationData.value.last_page)
       </VCardText>
     </VCard>
 
-    <VCard title="Filtres" class="mb-6">
+    <VCard
+      title="Filtres"
+      class="mb-6"
+    >
       <VCardText>
         <VRow>
-          <VCol cols="12" sm="4">
-            <AppSelect v-model="selectedType" placeholder="Type de contrat"
+          <VCol
+            cols="12"
+            sm="4"
+          >
+            <AppSelect
+              v-model="selectedType"
+              placeholder="Type de contrat"
               :items="[{ value: 'company', title: 'Société' }, { value: 'particular', title: 'Particulier' }, { value: 'individual_business', title: 'Entreprise Individuel' }]"
-              clearable clear-icon="tabler-x" />
+              clearable
+              clear-icon="tabler-x"
+            />
           </VCol>
         </VRow>
       </VCardText>
@@ -135,19 +148,31 @@ const lastPage = computed(() => notificationData.value.last_page)
 
       <div class="d-flex flex-wrap gap-4 mx-5">
         <div class="d-flex align-center">
-          <AppTextField v-model="searchQuery" placeholder="Rechercher un contrat" density="compact"
-            style="inline-size: 200px;" class="me-3" />
+          <AppTextField
+            v-model="searchQuery"
+            placeholder="Rechercher un contrat"
+            density="compact"
+            style="inline-size: 200px;"
+            class="me-3"
+          />
         </div>
 
         <VSpacer />
         <div class="d-flex gap-4 flex-wrap align-center">
-
-          <VBtn v-if="$can('create', 'simple-notification')" color="primary" prepend-icon="tabler-plus"
-            :to="{ name: 'simple-notification-add' }">
+          <VBtn
+            v-if="$can('create', 'simple-notification')"
+            color="primary"
+            prepend-icon="tabler-plus"
+            :to="{ name: 'simple-notification-add' }"
+          >
             Ajouter
           </VBtn>
-          <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
-            @click="fetchSimpleNotifications(); load(3)">
+          <VBtn
+            :loading="loadings[3]"
+            :disabled="loadings[3]"
+            prepend-icon="tabler-refresh"
+            @click="fetchSimpleNotifications(); load(3)"
+          >
             Recharger
             <template #loader>
               <span class="custom-loader">
@@ -161,9 +186,15 @@ const lastPage = computed(() => notificationData.value.last_page)
       <VDivider class="mt-4" />
 
 
-      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers"
-        :items="notificationList" :items-length="totalPv" class="text-no-wrap" @update:options="updateOptions">
-
+      <VDataTableServer
+        v-model:items-per-page="itemsPerPage"
+        v-model:page="page"
+        :headers="headers"
+        :items="notificationList"
+        :items-length="totalPv"
+        class="text-no-wrap"
+        @update:options="updateOptions"
+      >
         <template #item.type="{ item }">
           {{ typeList[item.type] }}
         </template>
@@ -176,18 +207,38 @@ const lastPage = computed(() => notificationData.value.last_page)
           <IconBtn :to="{ name: 'contract-id', params: { id: item.id } }">
             <VIcon icon="tabler-eye" />
           </IconBtn>
-          <IconBtn v-if="$can('update', 'contract')" :to="{ name: 'contract-edit-id', params: { id: item.id } }">
+          <IconBtn
+            v-if="$can('update', 'contract')"
+            :to="{ name: 'contract-edit-id', params: { id: item.id } }"
+          >
             <VIcon icon="tabler-edit" />
           </IconBtn>
-          <IconBtn v-if="$can('delete', 'contract')" @click="contractIdToDelete = item.id; isDialogVisible = true">
-            <VIcon icon="tabler-trash" color='error' />
+          <IconBtn
+            v-if="$can('delete', 'contract')"
+            @click="contractIdToDelete = item.id; isDialogVisible = true"
+          >
+            <VIcon
+              icon="tabler-trash"
+              color="error"
+            />
           </IconBtn>
-          <VBtn icon variant="text" size="small" color="medium-emphasis">
-            <VIcon size="24" icon="tabler-dots-vertical" />
+          <VBtn
+            icon
+            variant="text"
+            size="small"
+            color="medium-emphasis"
+          >
+            <VIcon
+              size="24"
+              icon="tabler-dots-vertical"
+            />
             <VMenu activator="parent">
               <VList>
-
-                <VBadge v-if="$can('read', 'guarantor')" inline :content="item.guarantors_count">
+                <VBadge
+                  v-if="$can('read', 'guarantor')"
+                  inline
+                  :content="item.guarantors_count"
+                >
                   <VListItem :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: item.id } }">
                     <template #prepend>
                       <VIcon icon="tabler-users" />
@@ -198,8 +249,10 @@ const lastPage = computed(() => notificationData.value.last_page)
                     </VListItemTitle>
                   </VListItem>
                 </VBadge>
-                <VListItem v-if="$can('read', 'pv')" :to="{ name: 'pv-id', params: { id: item.verbal_trial.id } }">
-
+                <VListItem
+                  v-if="$can('read', 'pv')"
+                  :to="{ name: 'pv-id', params: { id: item.verbal_trial.id } }"
+                >
                   <template #prepend>
                     <VIcon icon="tabler-eye" />
                   </template>
@@ -211,43 +264,40 @@ const lastPage = computed(() => notificationData.value.last_page)
                 <div v-if="$can('download', 'contract')">
                   <VDivider />
                   <!-- Télécharger contrat non-signé -->
-                  <VListItem
-                    @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
-
+                  <VListItem @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
                     <VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
                   </VListItem>
                   <!-- Télécharger contrat signé -->
-                  <VListItem v-if="item.signed_contract_path"
-                    @click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)">
-
+                  <VListItem
+                    v-if="item.signed_contract_path"
+                    @click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)"
+                  >
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
                     <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
                   </VListItem>
                   <!-- Télécharger billet à ordre non-signé -->
-                  <VListItem
-                    @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
-
+                  <VListItem @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
                     <VListItemTitle>Télécharger Billet à ordre non signé</VListItemTitle>
                   </VListItem>
                   <!-- Télécharger billet à ordre signé -->
-                  <VListItem v-if="item.signed_promissory_note_path"
-                    @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)">
-
+                  <VListItem
+                    v-if="item.signed_promissory_note_path"
+                    @click="downloadFile(item.signed_promissory_note_path, `Billet-à-ordre-${item.signed_promissory_note_path.split('/').slice(-1)[0]}`)"
+                  >
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
                     <VListItemTitle>Télécharger Billet à ordre signé</VListItemTitle>
                   </VListItem>
                 </div>
-
               </VList>
             </VMenu>
           </VBtn>
@@ -261,19 +311,38 @@ const lastPage = computed(() => notificationData.value.last_page)
               {{ paginationMeta({ page, itemsPerPage }, totalPv) }}
             </p>
 
-            <VPagination v-model="page" :length="lastPage"
-              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)">
+            <VPagination
+              v-model="page"
+              :length="lastPage"
+              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
+            >
               <template #prev="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
-                  <VIcon start icon="tabler-arrow-left" />
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
+                  <VIcon
+                    start
+                    icon="tabler-arrow-left"
+                  />
                   Précedent
                 </VBtn>
               </template>
 
               <template #next="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
                   Suivant
-                  <VIcon end icon="tabler-arrow-right" />
+                  <VIcon
+                    end
+                    icon="tabler-arrow-right"
+                  />
                 </VBtn>
               </template>
             </VPagination>
@@ -282,7 +351,10 @@ const lastPage = computed(() => notificationData.value.last_page)
       </VDataTableServer>
     </VCard>
 
-    <VDialog v-model="isDialogVisible" class="v-dialog-sm">
+    <VDialog
+      v-model="isDialogVisible"
+      class="v-dialog-sm"
+    >
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 
@@ -293,7 +365,11 @@ const lastPage = computed(() => notificationData.value.last_page)
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isDialogVisible = false"
+          >
             Annuler
           </VBtn>
           <VBtn @click="apiDelete(contractIdToDelete); isDialogVisible = false">

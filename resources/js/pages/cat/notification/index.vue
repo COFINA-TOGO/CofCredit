@@ -166,6 +166,7 @@ const initializeFilters = async () => {
             query: filter.base.query,
           }),
         )
+
         filter.api.datac = data.value.data
       } catch (error) {
         console.error(`Erreur lors du chargement du filtre ${filter.base.name}:`, error)
@@ -196,6 +197,7 @@ const fetchItemList = async (id_list = []) => {
         },
       }),
     )
+
     catData.value = data.value
   } catch (error) {
     console.error('Erreur lors de la récupération des CAT:', error)
@@ -354,7 +356,6 @@ onMounted(async () => {
         </div>
 
         <div class="d-flex gap-4">
-
           <VBtn 
             v-if="$can('create', viewData.data.rule.name)" 
             color="primary" 
@@ -399,7 +400,10 @@ onMounted(async () => {
         </template>
 
         <template #item.status="{ item }">
-          <VChip label :color="item.status.color">
+          <VChip
+            label
+            :color="item.status.color"
+          >
             <VTooltip 
               v-if="item.validation_comment && !unblock_comment" 
               activator="parent"
@@ -434,14 +438,26 @@ onMounted(async () => {
               v-if="$can('read', viewData.data.rule.name)" 
               :to="{ name: 'cat-notification-id', params: { id: item.id } }"
             >
-              <VTooltip activator="parent" transition="scroll-x-transition" location="top">
+              <VTooltip
+                activator="parent"
+                transition="scroll-x-transition"
+                location="top"
+              >
                 Détails
               </VTooltip>
               <VIcon icon="tabler-eye" />
             </IconBtn>
             
-            <VBtn icon variant="text" size="small" color="medium-emphasis">
-              <VIcon size="24" icon="tabler-dots-vertical" />
+            <VBtn
+              icon
+              variant="text"
+              size="small"
+              color="medium-emphasis"
+            >
+              <VIcon
+                size="24"
+                icon="tabler-dots-vertical"
+              />
               <VMenu activator="parent">
                 <VList>
                   <VListItem 
@@ -496,9 +512,7 @@ onMounted(async () => {
                     <VListItemTitle>Rejeter CAT</VListItemTitle>
                   </VListItem>
                   
-                  <VDivider
-                    v-if="$can('unblock', viewData.data.rule.name) && item.unblock_status == 'waiting' && item.validation_status == 'validated'" 
-                  />
+                  <VDivider v-if="$can('unblock', viewData.data.rule.name) && item.unblock_status == 'waiting' && item.validation_status == 'validated'" />
                   
                   <VListItem
                     v-if="$can('unblock', viewData.data.rule.name) && item.unblock_status == 'waiting' && item.validation_status == 'validated'"
@@ -531,7 +545,11 @@ onMounted(async () => {
               :to="{ name: 'cat-notification-edit-id', params: { id: item.id } }"
               :disabled="item.validation_status == 'validated'"
             >
-              <VTooltip activator="parent" transition="scroll-x-transition" location="top">
+              <VTooltip
+                activator="parent"
+                transition="scroll-x-transition"
+                location="top"
+              >
                 Modifier
               </VTooltip>
               <VIcon icon="tabler-edit" />
@@ -543,7 +561,11 @@ onMounted(async () => {
               :disabled="item.validation_status == 'validated'"
               @click="catSelectedId = item.id; isDialogVisible = true"
             >
-              <VTooltip activator="parent" transition="scroll-x-transition" location="top">
+              <VTooltip
+                activator="parent"
+                transition="scroll-x-transition"
+                location="top"
+              >
                 Supprimer
               </VTooltip>
               <VIcon icon="tabler-trash" />
@@ -566,16 +588,32 @@ onMounted(async () => {
               :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
             >
               <template #prev="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
-                  <VIcon start icon="tabler-arrow-left" />
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
+                  <VIcon
+                    start
+                    icon="tabler-arrow-left"
+                  />
                   Précédent
                 </VBtn>
               </template>
 
               <template #next="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
                   Suivant
-                  <VIcon end icon="tabler-arrow-right" />
+                  <VIcon
+                    end
+                    icon="tabler-arrow-right"
+                  />
                 </VBtn>
               </template>
             </VPagination>
@@ -585,7 +623,10 @@ onMounted(async () => {
     </VCard>
 
     <!-- Dialog d'action -->
-    <VDialog v-model="isActionDialogVisible" class="v-dialog-sm">
+    <VDialog
+      v-model="isActionDialogVisible"
+      class="v-dialog-sm"
+    >
       <DialogCloseBtn @click="isActionDialogVisible = !isActionDialogVisible" />
 
       <VCard :title="actionTitle">
@@ -602,7 +643,11 @@ onMounted(async () => {
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn color="secondary" variant="tonal" @click="isActionDialogVisible = false">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isActionDialogVisible = false"
+          >
             Annuler
           </VBtn>
           <VBtn @click="actionFunction(catSelectedId); isActionDialogVisible = false">
@@ -613,7 +658,10 @@ onMounted(async () => {
     </VDialog>
 
     <!-- Dialog de suppression -->
-    <VDialog v-model="isDialogVisible" class="v-dialog-sm">
+    <VDialog
+      v-model="isDialogVisible"
+      class="v-dialog-sm"
+    >
       <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 
       <VCard title="Suppression">
@@ -622,7 +670,11 @@ onMounted(async () => {
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isDialogVisible = false"
+          >
             Annuler
           </VBtn>
           <VBtn @click="apiDelete(catSelectedId); isDialogVisible = false">
@@ -631,7 +683,6 @@ onMounted(async () => {
         </VCardText>
       </VCard>
     </VDialog>
-
   </div>
 </template>
 

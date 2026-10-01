@@ -5,9 +5,10 @@ definePage({
     subject: 'pv',
   },
 })
+
 const router = useRouter()
 const route = useRoute("pv-id")
-let nextRoute = "/pv";
+let nextRoute = "/pv"
 
 const frenchMensuality = {
   "mensual": "Mensuelle",
@@ -55,14 +56,23 @@ verbalTrial.value.guarantees.forEach(guarantee => {
           <!-- SECTION Header -->
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="10">
-              <VBtn prepend-icon="tabler-arrow-narrow-left" :to="nextRoute"
-                :disabled="verbalTrial.status == 'vaidated'">
+              <VBtn
+                prepend-icon="tabler-arrow-narrow-left"
+                :to="nextRoute"
+                :disabled="verbalTrial.status == 'vaidated'"
+              >
                 Procès verbaux
               </VBtn>
             </VCol>
-            <VCol cols="2" class="text-right">
-              <VBtn append-icon="tabler-edit" :to="{ name: 'pv-edit-id', params: { id: verbalTrial.id } }"
-                :disabled="verbalTrial.status == 'validated'">
+            <VCol
+              cols="2"
+              class="text-right"
+            >
+              <VBtn
+                append-icon="tabler-edit"
+                :to="{ name: 'pv-edit-id', params: { id: verbalTrial.id } }"
+                :disabled="verbalTrial.status == 'validated'"
+              >
                 Modifier
               </VBtn>
             </VCol>
@@ -106,7 +116,7 @@ verbalTrial.value.guarantees.forEach(guarantee => {
               </p>
               <p style="font-size: 20px">
                 : <strong> {{ verbalTrial.applicant_last_name + " " + verbalTrial.applicant_first_name
-                  }}</strong>
+                }}</strong>
               </p>
               <p style="font-size: 20px">
                 : {{ verbalTrial.account_number }}
@@ -130,7 +140,10 @@ verbalTrial.value.guarantees.forEach(guarantee => {
             <VCol cols="12">
               <VTable class="text-no-wrap">
                 <tbody>
-                  <tr v-for="item in tableData" :key="item.key">
+                  <tr
+                    v-for="item in tableData"
+                    :key="item.key"
+                  >
                     <td colspan="5">
                       {{ item.title }}
                     </td>
@@ -149,12 +162,16 @@ verbalTrial.value.guarantees.forEach(guarantee => {
             </VCol>
             <VCol cols="12">
               <p>
-              <ul>
-                <li v-for="(item, index) in verbalTrial.guarantees" :key="index" style="font-size: 20px">
-                  {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
-                  CFA : {{ item.comment }}
-                </li>
-              </ul>
+                <ul>
+                  <li
+                    v-for="(item, index) in verbalTrial.guarantees"
+                    :key="index"
+                    style="font-size: 20px"
+                  >
+                    {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
+                    CFA : {{ item.comment }}
+                  </li>
+                </ul>
               </p>
             </VCol>
           </VCardText>

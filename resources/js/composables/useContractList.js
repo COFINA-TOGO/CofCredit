@@ -76,7 +76,7 @@ export function useContractList(viewData, filterDataArray) {
    * Met à jour les options de pagination
    * @param {Object} options - Options de la table
    */
-  const updateOptions = (options) => {
+  const updateOptions = options => {
     page.value = options.page
   }
 

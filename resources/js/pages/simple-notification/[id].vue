@@ -5,6 +5,7 @@ definePage({
     subject: 'simple-notification',
   },
 })
+
 const router = useRouter()
 const route = useRoute("notification-id")
 
@@ -21,16 +22,16 @@ const documentTypeList = {
   "passport": 'Passeport',
   "residence_certificate": 'Certificat de résidence',
   "driving_licence": 'Permis de conduire',
-  "consular_card" : "Carte consulaire",
-  "ECOWAS_identity_card" : "Carte d’identité de la CEDEAO",
-  "residence_permit" : "Carte de séjour",
-	"anid_card": "Carte ANID",
+  "consular_card": "Carte consulaire",
+  "ECOWAS_identity_card": "Carte d’identité de la CEDEAO",
+  "residence_permit": "Carte de séjour",
+  "anid_card": "Carte ANID",
 }
 
 const notificationTypeList = {
   "company": "Société",
   "individual_business": "Entreprise individuelle",
-  "particular": "Particulier"
+  "particular": "Particulier",
 }
 
 const {
@@ -96,13 +97,18 @@ if (notification.value.head_credit_validation == 'validated') {
           <!-- SECTION Header -->
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="11">
-              <VBtn prepend-icon="tabler-arrow-narrow-left" :to="{ name: backRouteName }">
+              <VBtn
+                prepend-icon="tabler-arrow-narrow-left"
+                :to="{ name: backRouteName }"
+              >
                 Notifications
               </VBtn>
             </VCol>
             <VCol cols="1">
-              <VBtn :to="{ name: 'notification-edit-id', params: { id: notification.id } }"
-                :disabled="notification.status == 'validated'">
+              <VBtn
+                :to="{ name: 'notification-edit-id', params: { id: notification.id } }"
+                :disabled="notification.status == 'validated'"
+              >
                 Modifier
               </VBtn>
             </VCol>
@@ -151,8 +157,8 @@ if (notification.value.head_credit_validation == 'validated') {
               </p>
               <p style="font-size: 20px">
                 : <strong> {{ notification.verbal_trial.applicant_last_name + " " +
-    notification.verbal_trial.applicant_first_name
-                  }}</strong>
+                  notification.verbal_trial.applicant_first_name
+                }}</strong>
               </p>
               <p style="font-size: 20px">
                 : {{ notification.verbal_trial.account_number }}
@@ -176,7 +182,10 @@ if (notification.value.head_credit_validation == 'validated') {
             <VCol cols="12">
               <VTable class="text-no-wrap">
                 <tbody>
-                  <tr v-for="item in tableData" :key="item.key">
+                  <tr
+                    v-for="item in tableData"
+                    :key="item.key"
+                  >
                     <td colspan="5">
                       {{ item.title }}
                     </td>
@@ -196,7 +205,10 @@ if (notification.value.head_credit_validation == 'validated') {
             <VCol cols="12">
               <VTable class="text-no-wrap">
                 <tbody>
-                  <tr v-for="item in notificationData" :key="item.key">
+                  <tr
+                    v-for="item in notificationData"
+                    :key="item.key"
+                  >
                     <td colspan="5">
                       {{ item.title }}
                     </td>
@@ -215,12 +227,16 @@ if (notification.value.head_credit_validation == 'validated') {
             </VCol>
             <VCol cols="12">
               <p>
-              <ul>
-                <li v-for="(item, index) in notification.guarantees" :key="index" style="font-size: 20px">
-                  {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
-                  CFA : {{ item.comment }}
-                </li>
-              </ul>
+                <ul>
+                  <li
+                    v-for="(item, index) in notification.guarantees"
+                    :key="index"
+                    style="font-size: 20px"
+                  >
+                    {{ item.type_of_guarantee.name }} de {{ String(item.value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') }} F
+                    CFA : {{ item.comment }}
+                  </li>
+                </ul>
               </p>
             </VCol>
           </VCardText>

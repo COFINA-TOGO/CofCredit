@@ -8,13 +8,14 @@ definePage({
 })
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
-import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue';
+import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue'
 
 const isDialogVisible = ref(false)
 const catSelectedId = ref(0)
 const selectedType = ref()
 const searchQuery = ref('')
 const loadings = ref([])
+
 const headers = [
   {
     title: 'Numéro comitée',
@@ -187,18 +188,31 @@ const rejectUnblockCAT = async id => {
         <div class="d-flex flex-wrap gap-4 mx-5">
           <div class="d-flex align-center">
             <!-- 👉 Search  -->
-            <AppTextField v-model="searchQuery" placeholder="Rechercher un cat" density="compact"
-              style="inline-size: 200px;" class="me-3" />
+            <AppTextField
+              v-model="searchQuery"
+              placeholder="Rechercher un cat"
+              density="compact"
+              style="inline-size: 200px;"
+              class="me-3"
+            />
           </div>
 
           <VSpacer />
           <div class="d-flex gap-4 flex-wrap align-center">
-
-            <VBtn v-if="$can('create', 'cat')" color="primary" prepend-icon="tabler-plus" :to="{ name: 'cat-add' }">
+            <VBtn
+              v-if="$can('create', 'cat')"
+              color="primary"
+              prepend-icon="tabler-plus"
+              :to="{ name: 'cat-add' }"
+            >
               Ajouter
             </VBtn>
-            <VBtn :loading="loadings[3]" :disabled="loadings[3]" prepend-icon="tabler-refresh"
-              @click="fetchCAT(); load(3)">
+            <VBtn
+              :loading="loadings[3]"
+              :disabled="loadings[3]"
+              prepend-icon="tabler-refresh"
+              @click="fetchCAT(); load(3)"
+            >
               Recharger
               <template #loader>
                 <span class="custom-loader">
@@ -211,18 +225,40 @@ const rejectUnblockCAT = async id => {
       </VCardText>
 
       <!-- 👉 Datatable  -->
-      <VDataTableServer v-model:items-per-page="itemsPerPage" v-model:page="page" :headers="headers" :items="catList"
-        :items-length="totalCAT" class="text-no-wrap" @update:options="updateOptions">
+      <VDataTableServer
+        v-model:items-per-page="itemsPerPage"
+        v-model:page="page"
+        :headers="headers"
+        :items="catList"
+        :items-length="totalCAT"
+        class="text-no-wrap"
+        @update:options="updateOptions"
+      >
         <template #item.type="{ item }">
           {{ typeList[item.type] }}
         </template>
 
         <template #item.status="{ item }">
-          <VChip label :color="item.status.color">
-            <VTooltip v-if="item.validation_comment && !unblock_comment" activator="parent"
-              transition="scroll-x-transition" location="start">Raison: {{ item.validation_comment }}</VTooltip>
-            <VTooltip v-if="item.unblock_comment" activator="parent" transition="scroll-x-transition" location="start">
-              Raison: {{ item.unblock_comment }}</VTooltip>
+          <VChip
+            label
+            :color="item.status.color"
+          >
+            <VTooltip
+              v-if="item.validation_comment && !unblock_comment"
+              activator="parent"
+              transition="scroll-x-transition"
+              location="start"
+            >
+              Raison: {{ item.validation_comment }}
+            </VTooltip>
+            <VTooltip
+              v-if="item.unblock_comment"
+              activator="parent"
+              transition="scroll-x-transition"
+              location="start"
+            >
+              Raison: {{ item.unblock_comment }}
+            </VTooltip>
             {{ item.status.message }}
           </VChip>
         </template>
@@ -237,56 +273,77 @@ const rejectUnblockCAT = async id => {
 
         <template #item.actions="{ item }">
           <span>
-            <IconBtn v-if="$can('read', 'cat')" :to="{ name: 'cat-notification-id', params: { id: item.id } }">
+            <IconBtn
+              v-if="$can('read', 'cat')"
+              :to="{ name: 'cat-notification-id', params: { id: item.id } }"
+            >
               <VIcon icon="tabler-eye" />
             </IconBtn>
-            <VBtn icon variant="text" size="small" color="medium-emphasis">
-              <VIcon size="24" icon="tabler-dots-vertical" />
+            <VBtn
+              icon
+              variant="text"
+              size="small"
+              color="medium-emphasis"
+            >
+              <VIcon
+                size="24"
+                icon="tabler-dots-vertical"
+              />
               <VMenu activator="parent">
                 <VList>
-                  <VListItem v-if="$can('historical', 'pv') || $can('read', 'pv')"
-                    :to="{ name: 'pv-id', params: { id: item.notification.verbal_trial.id } }">
+                  <VListItem
+                    v-if="$can('historical', 'pv') || $can('read', 'pv')"
+                    :to="{ name: 'pv-id', params: { id: item.notification.verbal_trial.id } }"
+                  >
                     <template #prepend>
                       <VIcon icon="tabler-eye" />
                     </template>
 
                     <VListItemTitle>Voir Pv</VListItemTitle>
                   </VListItem>
-                  <VListItem v-if="$can('read', 'notification') || $can('historical', 'notification')"
-                    :to="{ name: 'notification-id', params: { id: item.notification.id } }">
+                  <VListItem
+                    v-if="$can('read', 'notification') || $can('historical', 'notification')"
+                    :to="{ name: 'notification-id', params: { id: item.notification.id } }"
+                  >
                     <template #prepend>
                       <VIcon icon="tabler-eye" />
                     </template>
 
                     <VListItemTitle>Voir la notification</VListItemTitle>
                   </VListItem>
-                  <VListItem v-if="$can('download', 'cat')"
-                    @click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.notification.verbal_trial.committee_id}.docx`)">
+                  <VListItem
+                    v-if="$can('download', 'cat')"
+                    @click="downloadFile(`/api/cat/download/${item.id}`, `CAT-${item.notification.verbal_trial.committee_id}.docx`)"
+                  >
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
                     <VListItemTitle>Télécharger CAT</VListItemTitle>
                   </VListItem>
                   <VDivider v-if="$can('validate', 'cat') && item.validation_status == 'waiting'" />
-                  <VListItem v-if="$can('validate', 'cat') && item.validation_status == 'waiting'"
-                    @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Valider CAT', actionText = 'Voulez vous vraiment valider ce CAT?', actionFunction = validateCAT; actionButtonText = 'Valider'; needComment = false">
+                  <VListItem
+                    v-if="$can('validate', 'cat') && item.validation_status == 'waiting'"
+                    @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Valider CAT', actionText = 'Voulez vous vraiment valider ce CAT?', actionFunction = validateCAT; actionButtonText = 'Valider'; needComment = false"
+                  >
                     <template #prepend>
                       <VIcon icon="tabler-check" />
                     </template>
                     <VListItemTitle>Valider CAT</VListItemTitle>
                   </VListItem>
-                  <VListItem v-if="$can('reject_validation', 'cat') && item.validation_status == 'waiting'"
-                    @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Rejeter CAT', actionText = 'Voulez vous vraiment rejeter ce CAT?', actionFunction = rejectValidationCAT; actionButtonText = 'Rejeter'; needComment = true">
+                  <VListItem
+                    v-if="$can('reject_validation', 'cat') && item.validation_status == 'waiting'"
+                    @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Rejeter CAT', actionText = 'Voulez vous vraiment rejeter ce CAT?', actionFunction = rejectValidationCAT; actionButtonText = 'Rejeter'; needComment = true"
+                  >
                     <template #prepend>
                       <VIcon icon="tabler-x" />
                     </template>
                     <VListItemTitle>Rejeter CAT</VListItemTitle>
                   </VListItem>
-                  <VDivider
-                    v-if="$can('unblock', 'cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'" />
+                  <VDivider v-if="$can('unblock', 'cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'" />
                   <VListItem
                     v-if="$can('unblock', 'cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'"
-                    @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Débloquer CAT', actionText = 'Voulez vous vraiment débloquer ce CAT?', actionFunction = unblockCAT; actionButtonText = 'Débloquer'; needComment = false">
+                    @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Débloquer CAT', actionText = 'Voulez vous vraiment débloquer ce CAT?', actionFunction = unblockCAT; actionButtonText = 'Débloquer'; needComment = false"
+                  >
                     <template #prepend>
                       <VIcon icon="tabler-lock-open" />
                     </template>
@@ -294,7 +351,8 @@ const rejectUnblockCAT = async id => {
                   </VListItem>
                   <VListItem
                     v-if="$can('reject_unblock', 'cat') && item.unblock_status == 'waiting' && item.validation_status == 'validated'"
-                    @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Rejeter deblocage CAT', actionText = 'Voulez vous vraiment rejeter le déblocage de ce CAT?', actionFunction = rejectUnblockCAT; actionButtonText = 'Rejeter'; needComment = true">
+                    @click="catSelectedId = item.id; isActionDialogVisible = true; actionTitle = 'Rejeter deblocage CAT', actionText = 'Voulez vous vraiment rejeter le déblocage de ce CAT?', actionFunction = rejectUnblockCAT; actionButtonText = 'Rejeter'; needComment = true"
+                  >
                     <template #prepend>
                       <VIcon icon="tabler-x" />
                     </template>
@@ -306,16 +364,24 @@ const rejectUnblockCAT = async id => {
           </span>
           <span>
             <VDivider />
-            <IconBtn v-if="$can('update', 'cat')" :to="{ name: 'cat-edit-id', params: { id: item.id } }"
-              :disabled="item.validation_status == 'validated'">
+            <IconBtn
+              v-if="$can('update', 'cat')"
+              :to="{ name: 'cat-edit-id', params: { id: item.id } }"
+              :disabled="item.validation_status == 'validated'"
+            >
               <VIcon icon="tabler-edit" />
             </IconBtn>
-            <IconBtn v-if="$can('delete', 'cat')" @click="catSelectedId = item.id; isDialogVisible = true"
-              :disabled="item.validation_status == 'validated'">
-              <VIcon icon="tabler-trash" color='error' />
+            <IconBtn
+              v-if="$can('delete', 'cat')"
+              :disabled="item.validation_status == 'validated'"
+              @click="catSelectedId = item.id; isDialogVisible = true"
+            >
+              <VIcon
+                icon="tabler-trash"
+                color="error"
+              />
             </IconBtn>
           </span>
-
         </template>
 
         <template #bottom>
@@ -326,19 +392,38 @@ const rejectUnblockCAT = async id => {
               {{ paginationMeta({ page, itemsPerPage }, totalCAT) }}
             </p>
 
-            <VPagination v-model="page" :length="lastPage"
-              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)">
+            <VPagination
+              v-model="page"
+              :length="lastPage"
+              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
+            >
               <template #prev="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
-                  <VIcon start icon="tabler-arrow-left" />
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
+                  <VIcon
+                    start
+                    icon="tabler-arrow-left"
+                  />
                   Précedent
                 </VBtn>
               </template>
 
               <template #next="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
                   Suivant
-                  <VIcon end icon="tabler-arrow-right" />
+                  <VIcon
+                    end
+                    icon="tabler-arrow-right"
+                  />
                 </VBtn>
               </template>
             </VPagination>
@@ -347,7 +432,10 @@ const rejectUnblockCAT = async id => {
       </VDataTableServer>
     </VCard>
 
-    <VDialog v-model="isActionDialogVisible" class="v-dialog-sm">
+    <VDialog
+      v-model="isActionDialogVisible"
+      class="v-dialog-sm"
+    >
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isActionDialogVisible = !isActionDialogVisible" />
 
@@ -356,12 +444,21 @@ const rejectUnblockCAT = async id => {
         <VCardText>
           {{ actionText }}
 
-          <AppTextarea v-if="needComment" class="mt-3" v-model="actionComment" label="Commentaire"
-            placeholder="Ex: RAS" />
+          <AppTextarea
+            v-if="needComment"
+            v-model="actionComment"
+            class="mt-3"
+            label="Commentaire"
+            placeholder="Ex: RAS"
+          />
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn color="secondary" variant="tonal" @click="isActionDialogVisible = false">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isActionDialogVisible = false"
+          >
             Annuler
           </VBtn>
           <VBtn @click="actionFunction(catSelectedId); isActionDialogVisible = false">
@@ -372,7 +469,10 @@ const rejectUnblockCAT = async id => {
     </VDialog>
 
 
-    <VDialog v-model="isDialogVisible" class="v-dialog-sm">
+    <VDialog
+      v-model="isDialogVisible"
+      class="v-dialog-sm"
+    >
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 
@@ -383,7 +483,11 @@ const rejectUnblockCAT = async id => {
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isDialogVisible = false"
+          >
             Annuler
           </VBtn>
           <VBtn @click="apiDelete(catSelectedId); isDialogVisible = false">

@@ -21,32 +21,32 @@ const router = useRouter()
 
 // Configuration de la vue
 const viewData = reactive({
-	filter: {
-		title: 'Filtres',
-	},
-	data: {
-		title: {
-			singular: "Report d'échéance",
-			plural: "Reports d'échéance",
-		},
-		actions: {
-			singular: "le report d'échéance",
-			plural: "les reports d'échéance",
-		},
-		rule: {
-			name: 'deadline-postponed',
-		},
-		link: {
-			base: 'deadline-postponed',
-		},
-		api: {
-			end_point: 'deadline-postponed',
-			data: null,
-			query: {
-				with_caf: 1,
-			},
-		},
-	},
+  filter: {
+    title: 'Filtres',
+  },
+  data: {
+    title: {
+      singular: "Report d'échéance",
+      plural: "Reports d'échéance",
+    },
+    actions: {
+      singular: "le report d'échéance",
+      plural: "les reports d'échéance",
+    },
+    rule: {
+      name: 'deadline-postponed',
+    },
+    link: {
+      base: 'deadline-postponed',
+    },
+    api: {
+      end_point: 'deadline-postponed',
+      data: null,
+      query: {
+        with_caf: 1,
+      },
+    },
+  },
 })
 
 // Refs et états
@@ -217,11 +217,13 @@ const apiChangeStatus = async id => {
       method: 'PUT', 
       body: { 
         status: actionStatus.value, 
-        comment: actionComment.value 
-      } 
+        comment: actionComment.value, 
+      }, 
     })
     actionComment.value = ''
+
     const statusMessage = actionStatus.value === 'validated' ? 'validé' : 'rejeté'
+
     showSnackbar('success', `Report d'échéance ${statusMessage} avec succès`)
 
     await fetchItemList()
@@ -240,7 +242,7 @@ watch(
   ],
   () => {
     fetchItemList([4])
-  }
+  },
 )
 
 // Lifecycle
@@ -265,7 +267,10 @@ onMounted(async () => {
     </VCard>
 
     <!-- Filtres et table -->
-    <VCard :title="viewData.filter.title" class="mb-6">
+    <VCard
+      :title="viewData.filter.title"
+      class="mb-6"
+    >
       <VCardText>
         <VRow>
           <VCol 
@@ -299,7 +304,6 @@ onMounted(async () => {
         </div>
 
         <div class="d-flex gap-4">
-
           <VBtn 
             v-if="$can('create', viewData.data.rule.name)" 
             color="primary" 
@@ -343,37 +347,63 @@ onMounted(async () => {
         <!-- Actions -->
 
         <template #item.status="{ item }">
-          <VChip label :color="item.status_fr.color">
-            <VTooltip v-if="item.comment" activator="parent" transition="scroll-x-transition" location="start">Raison:
-              {{ item.comment }}</VTooltip>
+          <VChip
+            label
+            :color="item.status_fr.color"
+          >
+            <VTooltip
+              v-if="item.comment"
+              activator="parent"
+              transition="scroll-x-transition"
+              location="start"
+            >
+              Raison:
+              {{ item.comment }}
+            </VTooltip>
             {{ item.status_fr.value }}
           </VChip>
         </template>
 
         <template #item.actions="{ item }">
           <div>
-            <IconBtn v-if="$can('read', 'deadline-postponed') || $can('historical', 'deadline-postponed')"
-              :to="{ name: 'deadline-postponed-id', params: { id: item.id } }">
-              <VTooltip activator="parent" transition="scroll-x-transition" location="start">Details</VTooltip>
+            <IconBtn
+              v-if="$can('read', 'deadline-postponed') || $can('historical', 'deadline-postponed')"
+              :to="{ name: 'deadline-postponed-id', params: { id: item.id } }"
+            >
+              <VTooltip
+                activator="parent"
+                transition="scroll-x-transition"
+                location="start"
+              >
+                Details
+              </VTooltip>
               <VIcon icon=" tabler-eye" />
             </IconBtn>
-            <VBtn icon variant="text" size="small" color="medium-emphasis">
-              <VIcon size="24" icon="tabler-dots-vertical" />
+            <VBtn
+              icon
+              variant="text"
+              size="small"
+              color="medium-emphasis"
+            >
+              <VIcon
+                size="24"
+                icon="tabler-dots-vertical"
+              />
               <VMenu activator="parent">
                 <VList>
                   <div v-if="$can('download', 'deadline-postponed')">
                     <!-- Télécharger document report d'éc -->
-                    <VListItem
-                      @click="downloadFile(item.request_path, `${item.id}-Demande-${item.beneficiary_label.split('/').slice(-1)[0]}}`)">
+                    <VListItem @click="downloadFile(item.request_path, `${item.id}-Demande-${item.beneficiary_label.split('/').slice(-1)[0]}}`)">
                       <template #prepend>
                         <VIcon icon="tabler-download" />
                       </template>
                       <VListItemTitle>Télécharger Demande</VListItemTitle>
                     </VListItem>
                     <!-- Télécharger contrat signé -->
-                    <VListItem v-if="item.signed_contract_path"
-                    @click="downloadFile(item.memo_path, `${item.id}-Memo-${item.beneficiary_label.split('/').slice(-1)[0]}}`)">
-
+                    <VListItem
+                      v-if="item.signed_contract_path"
+                      @click="downloadFile(item.memo_path, `${item.id}-Memo-${item.beneficiary_label.split('/').slice(-1)[0]}}`)"
+                    >
                       <template #prepend>
                         <VIcon icon="tabler-download" />
                       </template>
@@ -387,41 +417,90 @@ onMounted(async () => {
 
           <div v-if="$can('update', 'deadline-postponed') || $can('delete', 'deadline-postponed')">
             <VDivider />
-            <IconBtn v-if="$can('update', 'deadline-postponed')"
+            <IconBtn
+              v-if="$can('update', 'deadline-postponed')"
               :to="{ name: 'deadline-postponed-edit-id', params: { id: item.id } }"
-              :disabled="item.status == 'validated'">
-              <VTooltip activator="parent" transition="scroll-x-transition" location="start">Modifier</VTooltip>
+              :disabled="item.status == 'validated'"
+            >
+              <VTooltip
+                activator="parent"
+                transition="scroll-x-transition"
+                location="start"
+              >
+                Modifier
+              </VTooltip>
               <VIcon icon="tabler-edit" />
             </IconBtn>
 
-            <IconBtn v-if="$can('delete', 'deadline-postponed')" :disabled="item.status == 'validated'" @click=" selectedItemId = item.id; actionTitle = 'Supprimer le PV',
-              actionText = 'Voulez vous vraiment supprimer ce pv?', actionFunction = apiDelete;
-            actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;">
-              <VTooltip activator="parent" transition="scroll-x-transition" location="end">Supprimer</VTooltip>
-              <VIcon icon="tabler-trash" color='error' />
+            <IconBtn
+              v-if="$can('delete', 'deadline-postponed')"
+              :disabled="item.status == 'validated'"
+              @click=" selectedItemId = item.id; actionTitle = 'Supprimer le PV',
+                                                 actionText = 'Voulez vous vraiment supprimer ce pv?', actionFunction = apiDelete;
+                       actionButtonText = 'Supprimer'; commentPresence = false; isActionDialogVisible = true;"
+            >
+              <VTooltip
+                activator="parent"
+                transition="scroll-x-transition"
+                location="end"
+              >
+                Supprimer
+              </VTooltip>
+              <VIcon
+                icon="tabler-trash"
+                color="error"
+              />
             </IconBtn>
           </div>
 
-          <div
-            v-if="$can('reject', 'deadline-postponed') || $can('validate', 'deadline-postponed') || $can('create', 'deadline-postponed')">
+          <div v-if="$can('reject', 'deadline-postponed') || $can('validate', 'deadline-postponed') || $can('create', 'deadline-postponed')">
             <VDivider />
-            <IconBtn v-if="$can('reject', 'deadline-postponed') && item.status != 'rejected'"
-              @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;">
-              <VTooltip activator="parent" transition="scroll-x-transition" location="start">Rejeter</VTooltip>
-              <VIcon icon="tabler-x" color="error" />
+            <IconBtn
+              v-if="$can('reject', 'deadline-postponed') && item.status != 'rejected'"
+              @click="selectedItemId = item.id; actionTitle = 'Rejeter le PV', actionText = 'Voulez vous vraiment rejeter ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true;"
+            >
+              <VTooltip
+                activator="parent"
+                transition="scroll-x-transition"
+                location="start"
+              >
+                Rejeter
+              </VTooltip>
+              <VIcon
+                icon="tabler-x"
+                color="error"
+              />
             </IconBtn>
             <span v-if="item.status == 'waiting'">
-              <IconBtn v-if="$can('validate', 'deadline-postponed')"
-                @click="selectedItemId = item.id; actionTitle = 'Valider le PV', actionText = 'Voulez vous vraiment valider ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = false; actionStatus = 'validated'; isActionDialogVisible = true;">
-                <VTooltip activator="parent" transition="scroll-x-transition" location="end">Valider</VTooltip>
-                <VIcon icon="tabler-check" color="success" />
+              <IconBtn
+                v-if="$can('validate', 'deadline-postponed')"
+                @click="selectedItemId = item.id; actionTitle = 'Valider le PV', actionText = 'Voulez vous vraiment valider ce PV?', actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = false; actionStatus = 'validated'; isActionDialogVisible = true;"
+              >
+                <VTooltip
+                  activator="parent"
+                  transition="scroll-x-transition"
+                  location="end"
+                >Valider</VTooltip>
+                <VIcon
+                  icon="tabler-check"
+                  color="success"
+                />
               </IconBtn>
             </span>
             <span v-if="item.status == 'validated'">
-              <IconBtn v-if="$can('create', 'deadline-postponed')"
-                :to="{ name: 'contract-add', query: { id: item.id } }">
-                <VTooltip activator="parent" transition="scroll-x-transition" location="end">Créer le contrat</VTooltip>
-                <VIcon icon="tabler-file-plus" color="success" />
+              <IconBtn
+                v-if="$can('create', 'deadline-postponed')"
+                :to="{ name: 'contract-add', query: { id: item.id } }"
+              >
+                <VTooltip
+                  activator="parent"
+                  transition="scroll-x-transition"
+                  location="end"
+                >Créer le contrat</VTooltip>
+                <VIcon
+                  icon="tabler-file-plus"
+                  color="success"
+                />
               </IconBtn>
             </span>
           </div>
@@ -477,7 +556,10 @@ onMounted(async () => {
     </VCard>
 
     <!-- Dialog d'action -->
-    <VDialog v-model="isActionDialogVisible" class="v-dialog-sm">
+    <VDialog
+      v-model="isActionDialogVisible"
+      class="v-dialog-sm"
+    >
       <DialogCloseBtn @click="isActionDialogVisible = !isActionDialogVisible" />
 
       <VCard :title="actionTitle">
@@ -510,7 +592,6 @@ onMounted(async () => {
         </VCardText>
       </VCard>
     </VDialog>
-
   </div>
 </template>
 

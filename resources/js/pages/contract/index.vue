@@ -215,9 +215,10 @@ const {
 /**
  * Gère l'upload d'un fichier
  */
-const handleUploadFile = async (event) => {
+const handleUploadFile = async event => {
   if (!currentContractId.value) {
     showSnackbar('error', 'Erreur: ID du contrat non défini')
+    
     return
   }
   
@@ -323,7 +324,7 @@ const formatAmount = amount => {
 /**
  * Configure l'upload de contrat signé
  */
-const triggerContractUpload = (contractId) => {
+const triggerContractUpload = contractId => {
   uploadState.value = 'signed_contract'
   currentContractId.value = contractId
   refInputEl.value?.click()
@@ -332,7 +333,7 @@ const triggerContractUpload = (contractId) => {
 /**
  * Configure l'upload de billet à ordre signé
  */
-const triggerPromissoryNoteUpload = (contractId) => {
+const triggerPromissoryNoteUpload = contractId => {
   uploadState.value = 'signed_promissory_note'
   currentContractId.value = contractId
   refInputEl.value?.click()
@@ -398,7 +399,6 @@ onMounted(async () => {
         </div>
 
         <div class="d-flex gap-4">
-
           <VBtn 
             v-if="$can('create', viewData.data.rule.name)" 
             color="primary" 
@@ -651,7 +651,6 @@ onMounted(async () => {
         </VCardText>
       </VCard>
     </VDialog>
-    
   </div>
 </template>
 

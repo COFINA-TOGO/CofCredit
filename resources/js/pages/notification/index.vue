@@ -287,7 +287,6 @@ onMounted(async () => {
         </div>
 
         <div class="d-flex gap-4">
-
           <VBtn 
             v-if="$can('create', viewData.data.rule.name)" 
             color="primary" 
@@ -630,7 +629,6 @@ onMounted(async () => {
         </VCardText>
       </VCard>
     </VDialog>
-
   </div>
 </template>
 

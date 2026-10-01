@@ -5,10 +5,10 @@ import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import { paginationMeta } from '@api-utils/paginationMeta'
 
 definePage({
-	meta: {
-		action: 'read',
-		subject: 'guarantor-list',
-	},
+  meta: {
+    action: 'read',
+    subject: 'guarantor-list',
+  },
 })
 
 // State
@@ -22,40 +22,40 @@ const exportLoading = ref(false)
 
 // Configuration de la vue
 const viewData = reactive({
-	data: {
-		title: {
-			singular: 'Garant',
-			plural: 'Garants',
-		},
-	},
+  data: {
+    title: {
+      singular: 'Garant',
+      plural: 'Garants',
+    },
+  },
 })
 
 // Headers de la table
 const headers = [
-	{
-		title: 'Nom',
-		key: 'full_name',
-	},
-	{
-		title: 'Fonction',
-		key: 'function',
-	},
-	{
-		title: 'Pièce d\'identité',
-		key: 'number_of_identity_document',
-	},
-	{
-		title: 'Numéro de téléphone',
-		key: 'phone_number',
-	},
-	{
-		title: 'Type',
-		key: 'type',
-	},
-	{
-		title: 'ID Contrat/Notification',
-		key: 'parent_id',
-	},
+  {
+    title: 'Nom',
+    key: 'full_name',
+  },
+  {
+    title: 'Fonction',
+    key: 'function',
+  },
+  {
+    title: 'Pièce d\'identité',
+    key: 'number_of_identity_document',
+  },
+  {
+    title: 'Numéro de téléphone',
+    key: 'phone_number',
+  },
+  {
+    title: 'Type',
+    key: 'type',
+  },
+  {
+    title: 'ID Contrat/Notification',
+    key: 'parent_id',
+  },
 ]
 
 // Data refs
@@ -67,189 +67,196 @@ const lastPage = computed(() => guarantorData.value.last_page)
 
 // Fetch guarantors
 const fetchItemList = async (id_list = []) => {
-	id_list.forEach(id => {
-		loadings.value[id] = true
-	})
+  id_list.forEach(id => {
+    loadings.value[id] = true
+  })
 
-	try {
-		const { data } = await useApi(createUrl('/guarantor', {
-			query: {
-				search: searchQuery.value,
-				with_contract: 1,
-				with_notification: 1,
-				page: page.value,
-			},
-		}))
-		guarantorData.value = data.value
-	} catch (error) {
-		console.error('Erreur lors de la récupération des garants:', error)
-		guarantorData.value = { data: [], total: 0, last_page: 1 }
-		showSnackbar('error', 'Erreur lors de la récupération des garants')
-	} finally {
-		id_list.forEach(id => {
-			loadings.value[id] = false
-		})
-	}
+  try {
+    const { data } = await useApi(createUrl('/guarantor', {
+      query: {
+        search: searchQuery.value,
+        with_contract: 1,
+        with_notification: 1,
+        page: page.value,
+      },
+    }))
+
+    guarantorData.value = data.value
+  } catch (error) {
+    console.error('Erreur lors de la récupération des garants:', error)
+    guarantorData.value = { data: [], total: 0, last_page: 1 }
+    showSnackbar('error', 'Erreur lors de la récupération des garants')
+  } finally {
+    id_list.forEach(id => {
+      loadings.value[id] = false
+    })
+  }
 }
 
 // Update options
 const updateOptions = options => {
-	page.value = options.page
+  page.value = options.page
 }
 
 // Export guarantors
 const exportGuarantors = async () => {
-	exportLoading.value = true
-	const currentDate = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-')
+  exportLoading.value = true
 
-	try {
-		await downloadAuthenticatedFile('/api/guarantor/export', `garants-${currentDate}.xlsx`)
-		showSnackbar('success', 'Export en cours...')
-	} catch (error) {
-		console.error('Erreur lors de l\'export:', error)
-		showSnackbar('error', errorMessage(error, 'Erreur lors de l\'export des garants'))
-	} finally {
-		exportLoading.value = false
-	}
+  const currentDate = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-')
+
+  try {
+    await downloadAuthenticatedFile('/api/guarantor/export', `garants-${currentDate}.xlsx`)
+    showSnackbar('success', 'Export en cours...')
+  } catch (error) {
+    console.error('Erreur lors de l\'export:', error)
+    showSnackbar('error', errorMessage(error, 'Erreur lors de l\'export des garants'))
+  } finally {
+    exportLoading.value = false
+  }
 }
 
 // Watchers
 watch([searchQuery, page], () => {
-	fetchItemList([4])
+  fetchItemList([4])
 })
 
 // Lifecycle
 onMounted(async () => {
-	await fetchItemList([4])
+  await fetchItemList([4])
 })
 </script>
 
 <template>
-	<div>
-		<VCard class="mb-6">
-			<VCardText>
-				<div class="d-flex align-center gap-4 mb-4">
-					<h2 class="mb-0">
-						Liste des {{ viewData.data.title.plural }}
-					</h2>
-				</div>
-			</VCardText>
+  <div>
+    <VCard class="mb-6">
+      <VCardText>
+        <div class="d-flex align-center gap-4 mb-4">
+          <h2 class="mb-0">
+            Liste des {{ viewData.data.title.plural }}
+          </h2>
+        </div>
+      </VCardText>
 
-			<VDivider />
+      <VDivider />
 
-			<!-- Barre d'actions -->
-			<div class="d-flex flex-wrap gap-4 mx-5 mt-4">
-				<div class="flex-grow-1">
-					<AppTextField
-						v-model="searchQuery"
-						placeholder="Rechercher un garant"
-					/>
-				</div>
+      <!-- Barre d'actions -->
+      <div class="d-flex flex-wrap gap-4 mx-5 mt-4">
+        <div class="flex-grow-1">
+          <AppTextField
+            v-model="searchQuery"
+            placeholder="Rechercher un garant"
+          />
+        </div>
 
-				<div class="d-flex gap-4">
-					<VBtn
-						v-if="$can('download', 'guarantor')"
-						color="success"
-						prepend-icon="tabler-download"
-						:loading="exportLoading"
-						:disabled="exportLoading"
-						@click="exportGuarantors"
-					>
-						Exporter
-						<template #loader>
-							<span class="custom-loader">
-								<VIcon icon="tabler-refresh" />
-							</span>
-						</template>
-					</VBtn>
+        <div class="d-flex gap-4">
+          <VBtn
+            v-if="$can('download', 'guarantor')"
+            color="success"
+            prepend-icon="tabler-download"
+            :loading="exportLoading"
+            :disabled="exportLoading"
+            @click="exportGuarantors"
+          >
+            Exporter
+            <template #loader>
+              <span class="custom-loader">
+                <VIcon icon="tabler-refresh" />
+              </span>
+            </template>
+          </VBtn>
 
-					<VBtn
-						:loading="loadings[3]"
-						:disabled="loadings[3]"
-						prepend-icon="tabler-refresh"
-						@click="fetchItemList([3, 4])"
-					>
-						Recharger
-						<template #loader>
-							<span class="custom-loader">
-								<VIcon icon="tabler-refresh" />
-							</span>
-						</template>
-					</VBtn>
-				</div>
-			</div>
+          <VBtn
+            :loading="loadings[3]"
+            :disabled="loadings[3]"
+            prepend-icon="tabler-refresh"
+            @click="fetchItemList([3, 4])"
+          >
+            Recharger
+            <template #loader>
+              <span class="custom-loader">
+                <VIcon icon="tabler-refresh" />
+              </span>
+            </template>
+          </VBtn>
+        </div>
+      </div>
 
-			<VDivider class="mt-4" />
+      <VDivider class="mt-4" />
 
-			<!-- Table -->
-			<VDataTableServer
-				v-model:items-per-page="itemsPerPage"
-				v-model:page="page"
-				:loading="loadings[4]"
-				:headers="headers"
-				:items="guarantorList"
-				:items-length="totalGuarantor"
-				class="text-no-wrap"
-				loading-text="En cours de chargement"
-				@update:options="updateOptions"
-			>
-				<template #item.type="{ item }">
-					<VChip
-						:color="item.contract ? 'primary' : 'info'"
-						label
-					>
-						{{ item.contract ? 'Contrat' : 'Notification' }}
-					</VChip>
-				</template>
+      <!-- Table -->
+      <VDataTableServer
+        v-model:items-per-page="itemsPerPage"
+        v-model:page="page"
+        :loading="loadings[4]"
+        :headers="headers"
+        :items="guarantorList"
+        :items-length="totalGuarantor"
+        class="text-no-wrap"
+        loading-text="En cours de chargement"
+        @update:options="updateOptions"
+      >
+        <template #item.type="{ item }">
+          <VChip
+            :color="item.contract ? 'primary' : 'info'"
+            label
+          >
+            {{ item.contract ? 'Contrat' : 'Notification' }}
+          </VChip>
+        </template>
 
-				<template #item.parent_id="{ item }">
-					{{ item.contract ? item.contract.id : item.notification ? item.notification.id : '-' }}
-				</template>
+        <template #item.parent_id="{ item }">
+          {{ item.contract ? item.contract.id : item.notification ? item.notification.id : '-' }}
+        </template>
 
-				<!-- Pagination -->
-				<template #bottom>
-					<VDivider />
+        <!-- Pagination -->
+        <template #bottom>
+          <VDivider />
 
-					<div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
-						<p class="text-sm text-medium-emphasis mb-0">
-							{{ paginationMeta({ page, itemsPerPage }, totalGuarantor) }}
-						</p>
+          <div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
+            <p class="text-sm text-medium-emphasis mb-0">
+              {{ paginationMeta({ page, itemsPerPage }, totalGuarantor) }}
+            </p>
 
-						<VPagination
-							v-model="page"
-							:length="lastPage"
-							:total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
-						>
-							<template #prev="slotProps">
-								<VBtn
-									variant="tonal"
-									color="default"
-									v-bind="slotProps"
-									:icon="false"
-								>
-									<VIcon start icon="tabler-arrow-left" />
-									Précédent
-								</VBtn>
-							</template>
+            <VPagination
+              v-model="page"
+              :length="lastPage"
+              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
+            >
+              <template #prev="slotProps">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
+                  <VIcon
+                    start
+                    icon="tabler-arrow-left"
+                  />
+                  Précédent
+                </VBtn>
+              </template>
 
-							<template #next="slotProps">
-								<VBtn
-									variant="tonal"
-									color="default"
-									v-bind="slotProps"
-									:icon="false"
-								>
-									Suivant
-									<VIcon end icon="tabler-arrow-right" />
-								</VBtn>
-							</template>
-						</VPagination>
-					</div>
-				</template>
-			</VDataTableServer>
-		</VCard>
-
-	</div>
+              <template #next="slotProps">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
+                  Suivant
+                  <VIcon
+                    end
+                    icon="tabler-arrow-right"
+                  />
+                </VBtn>
+              </template>
+            </VPagination>
+          </div>
+        </template>
+      </VDataTableServer>
+    </VCard>
+  </div>
 </template>
 
 <style lang="scss" scoped>

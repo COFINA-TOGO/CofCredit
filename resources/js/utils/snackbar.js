@@ -5,9 +5,9 @@ import { ApiError } from '@/utils/api'
  * Snackbar global de l'application (affiché par AppSnackbar dans App.vue)
  */
 export const snackbarState = reactive({
-	visible: false,
-	color: 'success',
-	message: '',
+  visible: false,
+  color: 'success',
+  message: '',
 })
 
 /**
@@ -16,9 +16,9 @@ export const snackbarState = reactive({
  * @param {string} message - Le message (les retours à la ligne sont conservés)
  */
 export const showSnackbar = (color, message) => {
-	snackbarState.color = color
-	snackbarState.message = message
-	snackbarState.visible = true
+  snackbarState.color = color
+  snackbarState.message = message
+  snackbarState.visible = true
 }
 
 /**
@@ -27,12 +27,12 @@ export const showSnackbar = (color, message) => {
  * @param {object} fieldErrors - Les erreurs déjà affichées sous les champs du formulaire
  */
 export const showApiErrors = (errors, fieldErrors = {}) => {
-	const messages = Object.entries(errors ?? {})
-		.filter(([key]) => key !== 'sub_code' && !(key in fieldErrors))
-		.flatMap(([, value]) => (Array.isArray(value) ? value : [value]))
+  const messages = Object.entries(errors ?? {})
+    .filter(([key]) => key !== 'sub_code' && !(key in fieldErrors))
+    .flatMap(([, value]) => (Array.isArray(value) ? value : [value]))
 
-	if (messages.length)
-		showSnackbar('error', messages.join('\n'))
+  if (messages.length)
+    showSnackbar('error', messages.join('\n'))
 }
 
 /**

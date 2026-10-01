@@ -158,6 +158,7 @@ const fetchItemList = async (id_list = []) => {
         },
       }),
     )
+
     notificationData.value = data.value
   } catch (error) {
     console.error('Erreur lors de la récupération des notifications:', error)
@@ -192,7 +193,7 @@ const apiChangeStatus = async id => {
   try {
     await $apiOrThrow(`notification/change-status/${id}`, { 
       method: 'PUT', 
-      body: { status: actionStatus.value, comment: actionComment.value } 
+      body: { status: actionStatus.value, comment: actionComment.value }, 
     })
     actionComment.value = ''
     
@@ -225,6 +226,7 @@ const uploadFile = async (id, event) => {
   const { files } = event.target
   if (files && files.length === 1) {
     const reader = new FileReader()
+
     reader.onload = async () => {
       const base64Image = reader.result
       try {
@@ -314,7 +316,6 @@ onMounted(async () => {
         </div>
 
         <div class="d-flex gap-4">
-
           <VBtn 
             v-if="$can('create', viewData.data.rule.name)" 
             color="primary" 
@@ -364,7 +365,10 @@ onMounted(async () => {
 
         <template #item.observations="{ item }">
           <VList density="compact">
-            <VListItem v-if="item.observations.length > 0" v-for="observation in item.observations">
+            <VListItem
+              v-for="observation in item.observations"
+              v-if="item.observations.length > 0"
+            >
               <VListItemTitle>
                 <VChip label>
                   {{ observation }}
@@ -393,7 +397,10 @@ onMounted(async () => {
             
             <VListItem v-if="!item.signed_promissory_note_path">
               <VListItemTitle>
-                <VChip label color="warning">
+                <VChip
+                  label
+                  color="warning"
+                >
                   Billet à ordre manquant
                 </VChip>
               </VListItemTitle>
@@ -404,14 +411,26 @@ onMounted(async () => {
         <template #item.actions="{ item }">
           <span>
             <IconBtn :to="{ name: 'notification-id', params: { id: item.id } }">
-              <VTooltip activator="parent" transition="scroll-x-transition" location="start">
+              <VTooltip
+                activator="parent"
+                transition="scroll-x-transition"
+                location="start"
+              >
                 Détails
               </VTooltip>
               <VIcon icon="tabler-eye" />
             </IconBtn>
             
-            <VBtn icon variant="text" size="small" color="medium-emphasis">
-              <VIcon size="24" icon="tabler-dots-vertical" />
+            <VBtn
+              icon
+              variant="text"
+              size="small"
+              color="medium-emphasis"
+            >
+              <VIcon
+                size="24"
+                icon="tabler-dots-vertical"
+              />
               <VMenu activator="parent">
                 <VList>
                   <input 
@@ -420,12 +439,14 @@ onMounted(async () => {
                     name="signed_notification" 
                     hidden
                     @input="uploadFile(item.id, $event)" 
-                  />
+                  >
 
-                  <VBadge v-if="$can('read', 'guarantor')" inline :content="item.guarantors_count">
-                    <VListItem
-                      :to="{ name: 'notification-notification_id-guarantor', params: { notification_id: item.id } }"
-                    >
+                  <VBadge
+                    v-if="$can('read', 'guarantor')"
+                    inline
+                    :content="item.guarantors_count"
+                  >
+                    <VListItem :to="{ name: 'notification-notification_id-guarantor', params: { notification_id: item.id } }">
                       <template #prepend>
                         <VIcon icon="tabler-users" />
                       </template>
@@ -446,9 +467,7 @@ onMounted(async () => {
                   <span v-if="$can('download', viewData.data.rule.name)">
                     <VDivider />
                     
-                    <VListItem
-                      @click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`)"
-                    >
+                    <VListItem @click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`)">
                       <template #prepend>
                         <VIcon icon="tabler-download" />
                       </template>
@@ -509,53 +528,82 @@ onMounted(async () => {
           <span v-if="item.observations.length == 0 && $can('send', viewData.data.rule.name)">
             <VDivider />
             <VRow>
-              <VCol col="12" class="text-center">
+              <VCol
+                col="12"
+                class="text-center"
+              >
                 <IconBtn 
                   v-if="!item.sent"
                   @click="selectedItemId = item.id; actionTitle = 'Envoyer le dossier de la notification'; actionText = 'Voulez vous vraiment envoyer le dossier de cette notification?'; actionFunction = apiSendNotification; actionButtonText = 'Envoyer'; commentPresence = false; isActionDialogVisible = true"
                 >
-                  <VTooltip activator="parent" transition="scroll-x-transition" location="start">
+                  <VTooltip
+                    activator="parent"
+                    transition="scroll-x-transition"
+                    location="start"
+                  >
                     Envoyer
                   </VTooltip>
-                  <VIcon icon="tabler-send" color="success" />
+                  <VIcon
+                    icon="tabler-send"
+                    color="success"
+                  />
                 </IconBtn>
               </VCol>
             </VRow>
           </span>
           
-          <span
-            v-if="item.sent && (($can('reject', 'pv') && item.status != 'rejected' && item.observations.length == 0) || ($can('validate', 'pv') && item.status == 'waiting' && item.observations.length == 0) || ($can('create', 'cat') && item.status == 'validated'))"
-          >
+          <span v-if="item.sent && (($can('reject', 'pv') && item.status != 'rejected' && item.observations.length == 0) || ($can('validate', 'pv') && item.status == 'waiting' && item.observations.length == 0) || ($can('create', 'cat') && item.status == 'validated'))">
             <VDivider />
             
             <IconBtn
               v-if="$can('reject', 'pv') && item.status != 'rejected' && item.observations.length == 0"
               @click="selectedItemId = item.id; actionTitle = 'Rejeter la notification'; actionText = 'Voulez vous vraiment rejeter cette notification?'; actionFunction = apiChangeStatus; actionButtonText = 'Rejeter'; commentPresence = true; actionStatus = 'rejected'; isActionDialogVisible = true"
             >
-              <VTooltip activator="parent" transition="scroll-x-transition" location="start">
+              <VTooltip
+                activator="parent"
+                transition="scroll-x-transition"
+                location="start"
+              >
                 Rejeter
               </VTooltip>
-              <VIcon icon="tabler-x" color="error" />
+              <VIcon
+                icon="tabler-x"
+                color="error"
+              />
             </IconBtn>
             
             <IconBtn
               v-if="$can('validate', 'pv') && item.status == 'waiting' && item.observations.length == 0"
               @click="selectedItemId = item.id; actionTitle = 'Valider la notification'; actionText = 'Voulez vous vraiment valider cette notification?'; actionFunction = apiChangeStatus; actionButtonText = 'Valider'; commentPresence = false; actionStatus = 'validated'; isActionDialogVisible = true"
             >
-              <VTooltip activator="parent" transition="scroll-x-transition" location="end">
+              <VTooltip
+                activator="parent"
+                transition="scroll-x-transition"
+                location="end"
+              >
                 Valider
               </VTooltip>
-              <VIcon icon="tabler-check" color="success" />
+              <VIcon
+                icon="tabler-check"
+                color="success"
+              />
             </IconBtn>
             
             <IconBtn 
               v-if="$can('create', 'cat') && item.status == 'validated'"
               :to="{ name: 'cat-notification-add', query: { id: item.id } }"
             >
-              <VTooltip activator="parent" transition="scroll-x-transition" location="end">
+              <VTooltip
+                activator="parent"
+                transition="scroll-x-transition"
+                location="end"
+              >
                 Créer le CAT
               </VTooltip>
-              <VIcon icon="tabler-file-plus" color="success" />
+              <VIcon
+                icon="tabler-file-plus"
+                color="success"
+              />
             </IconBtn>
           </span>
         </template>
@@ -575,16 +623,32 @@ onMounted(async () => {
               :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
             >
               <template #prev="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
-                  <VIcon start icon="tabler-arrow-left" />
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
+                  <VIcon
+                    start
+                    icon="tabler-arrow-left"
+                  />
                   Précédent
                 </VBtn>
               </template>
 
               <template #next="slotProps">
-                <VBtn variant="tonal" color="default" v-bind="slotProps" :icon="false">
+                <VBtn
+                  variant="tonal"
+                  color="default"
+                  v-bind="slotProps"
+                  :icon="false"
+                >
                   Suivant
-                  <VIcon end icon="tabler-arrow-right" />
+                  <VIcon
+                    end
+                    icon="tabler-arrow-right"
+                  />
                 </VBtn>
               </template>
             </VPagination>
@@ -594,7 +658,10 @@ onMounted(async () => {
     </VCard>
 
     <!-- Dialog d'action -->
-    <VDialog v-model="isActionDialogVisible" class="v-dialog-sm">
+    <VDialog
+      v-model="isActionDialogVisible"
+      class="v-dialog-sm"
+    >
       <DialogCloseBtn @click="isActionDialogVisible = !isActionDialogVisible" />
 
       <VCard :title="actionTitle">
@@ -611,7 +678,11 @@ onMounted(async () => {
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn color="secondary" variant="tonal" @click="isActionDialogVisible = false">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isActionDialogVisible = false"
+          >
             Annuler
           </VBtn>
           <VBtn @click="actionFunction(selectedItemId); isActionDialogVisible = false">
@@ -620,7 +691,6 @@ onMounted(async () => {
         </VCardText>
       </VCard>
     </VDialog>
-
   </div>
 </template>
 

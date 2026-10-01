@@ -1,140 +1,141 @@
 export default [
-	{
-		title: 'Pv Comité',
-		subject: 'pv',
-		action: 'menu',
-		children: [
-			{
-				title: 'Créer',
-				to: { name: 'pv-add' },
-				action: 'create',
-				subject: 'pv',
-			},
-			{
-				title: 'Sans contrat',
-				to: { name: 'pv' },
-				action: 'read',
-				subject: 'pv',
-			},
-			{
-				title: 'Historique',
-				to: { name: 'pv-historical' },
-				action: 'historical',
-				subject: 'pv',
-				// badgeContent: historicalVpCount.value,
-				// badgeClass: 'bg-global-primary',
-			},
-		],
-	},
-	{
-		title: 'Contrat',
-		subject: 'contract',
-		action: 'menu',
-		children: [
-			{
-				title: 'Basique',
-				action: 'menu',
-				subject: 'basic-contract',
-				children: [
-					{
-						title: 'Créer',
-						to: { name: 'contract-add' },
-						action: 'create',
-						subject: 'basic-contract',
-					},
-					{
-						title: 'Sans CAT',
-						to: { name: 'contract' },
-						action: 'read-without-cat',
-						subject: 'basic-contract',
-					},
-					{
-						title: 'Historique',
-						to: { name: 'contract-historical' },
-						action: 'read-historical',
-						subject: 'basic-contract',
-					},
-				],
-			}, {
-				title: 'Hypothécaire',
-				action: 'menu',
-				subject: 'notarized-contract',
-				children: [
-					{
-						title: 'Créer',
-						to: { name: 'notification-add' },
-						action: 'create',
-						subject: 'notarized-contract',
-					},
-					{
-						title: 'Sans Validation Head',
-						to: { name: 'notification' },
-						action: 'read-without-head-validation',
-						subject: 'notarized-contract',
-					},
-					{
-						title: 'Sans Contrat notarié',
-						to: { name: 'notification-without-signed-contract' },
-						action: 'read-without-notarized-contract',
-						subject: 'notarized-contract',
-					},
-					{
-						title: 'Historique',
-						to: { name: 'notification-historical' },
-						action: 'read-historical',
-						subject: 'notarized-contract',
-					},
-				]
-			},
-		],
-	},
-	{
-		title: 'CAT',
-		subject: 'cat',
-		action: 'menu',
-		children: [
-			{
-				title: 'Basique',
-				action: 'menu',
-				subject: 'basic-cat',
-				children: [
-					{
-						title: 'Créer',
-						to: { name: 'cat-add' },
-						action: 'create',
-						subject: 'basic-cat',
-					},
-					{
-						title: 'Historique',
-						to: { name: 'cat' },
-						action: 'read',
-						subject: 'basic-cat',
-					},
-				],
-			},
-			{
-				title: 'Hypothécaire',
-				subject: 'cat',
-				action: 'read',
-				children: [
-					{
-						title: 'Ajouter',
-						to: 'cat-notification-add',
-						action: 'create',
-						subject: 'cat',
-					}, {
-						title: 'Historique',
-						to: 'cat-notification',
-						action: 'read',
-						subject: 'cat',
-					}
-				],
-			},
-		],
-	},
+  {
+    title: 'Pv Comité',
+    subject: 'pv',
+    action: 'menu',
+    children: [
+      {
+        title: 'Créer',
+        to: { name: 'pv-add' },
+        action: 'create',
+        subject: 'pv',
+      },
+      {
+        title: 'Sans contrat',
+        to: { name: 'pv' },
+        action: 'read',
+        subject: 'pv',
+      },
+      {
+        title: 'Historique',
+        to: { name: 'pv-historical' },
+        action: 'historical',
+        subject: 'pv',
+
+        // badgeContent: historicalVpCount.value,
+        // badgeClass: 'bg-global-primary',
+      },
+    ],
+  },
+  {
+    title: 'Contrat',
+    subject: 'contract',
+    action: 'menu',
+    children: [
+      {
+        title: 'Basique',
+        action: 'menu',
+        subject: 'basic-contract',
+        children: [
+          {
+            title: 'Créer',
+            to: { name: 'contract-add' },
+            action: 'create',
+            subject: 'basic-contract',
+          },
+          {
+            title: 'Sans CAT',
+            to: { name: 'contract' },
+            action: 'read-without-cat',
+            subject: 'basic-contract',
+          },
+          {
+            title: 'Historique',
+            to: { name: 'contract-historical' },
+            action: 'read-historical',
+            subject: 'basic-contract',
+          },
+        ],
+      }, {
+        title: 'Hypothécaire',
+        action: 'menu',
+        subject: 'notarized-contract',
+        children: [
+          {
+            title: 'Créer',
+            to: { name: 'notification-add' },
+            action: 'create',
+            subject: 'notarized-contract',
+          },
+          {
+            title: 'Sans Validation Head',
+            to: { name: 'notification' },
+            action: 'read-without-head-validation',
+            subject: 'notarized-contract',
+          },
+          {
+            title: 'Sans Contrat notarié',
+            to: { name: 'notification-without-signed-contract' },
+            action: 'read-without-notarized-contract',
+            subject: 'notarized-contract',
+          },
+          {
+            title: 'Historique',
+            to: { name: 'notification-historical' },
+            action: 'read-historical',
+            subject: 'notarized-contract',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'CAT',
+    subject: 'cat',
+    action: 'menu',
+    children: [
+      {
+        title: 'Basique',
+        action: 'menu',
+        subject: 'basic-cat',
+        children: [
+          {
+            title: 'Créer',
+            to: { name: 'cat-add' },
+            action: 'create',
+            subject: 'basic-cat',
+          },
+          {
+            title: 'Historique',
+            to: { name: 'cat' },
+            action: 'read',
+            subject: 'basic-cat',
+          },
+        ],
+      },
+      {
+        title: 'Hypothécaire',
+        subject: 'cat',
+        action: 'read',
+        children: [
+          {
+            title: 'Ajouter',
+            to: 'cat-notification-add',
+            action: 'create',
+            subject: 'cat',
+          }, {
+            title: 'Historique',
+            to: 'cat-notification',
+            action: 'read',
+            subject: 'cat',
+          },
+        ],
+      },
+    ],
+  },
 
 
-	/*
+  /*
 		// -----------------------------------
 		{
 			title: 'Contrat',
@@ -324,72 +325,74 @@ export default [
 			]
 		},
 	*/
-	{
-		title: 'Report d\'échéance',
-		icon: { icon: "tabler-calendar-repeat" },
-		subject: 'deadline-postponed',
-		action: 'menu',
-		children: [
-			{
-				title: 'Ajouter',
-				// to: 'deadline-postponed',
-				action: 'create',
-				subject: 'deadline-postponed',
-			}, {
-				title: 'En attente',
-				to: 'deadline-postponed',
-				action: 'read',
-				subject: 'deadline-postponed',
-			}, {
-				title: 'Historique',
-				// to: 'deadline-postponed-historical',
-				action: 'historical',
-				subject: 'deadline-postponed',
-			}
-		],
-	},
-	{
-		title: 'Liste des garants',
-		icon: { icon: "tabler-users-group" },
-		to: 'guarantor',
-		subject: 'guarantor-list',
-		action: 'read',
-	},
-	{
-		title: 'Liste des garanties',
-		icon: { icon: "tabler-shield-check" },
-		to: 'guarantee',
-		subject: 'guarantee-list',
-		action: 'read',
-	},
-	{
-		title: 'Remboursement anticipé'
-	},
-	{
-		title: 'Lettre de mise en demeure'
-	},
-	{
-		title: 'Checking post-deblocage'
-	},
+  {
+    title: 'Report d\'échéance',
+    icon: { icon: "tabler-calendar-repeat" },
+    subject: 'deadline-postponed',
+    action: 'menu',
+    children: [
+      {
+        title: 'Ajouter',
 
-	{ heading: 'Paramétrage' },
-	{
-		icon: { icon: 'tabler-user' },
-		title: 'Utilisateurs',
-		subject: 'user',
-		action: 'menu',
-		children: [
-			{
-				title: 'Nouveau',
-				to: 'user-add',
-				action: 'create',
-				subject: 'user',
-			}, {
-				title: 'Historique',
-				to: 'user',
-				action: 'read',
-				subject: 'user',
-			}
-		],
-	},
+        // to: 'deadline-postponed',
+        action: 'create',
+        subject: 'deadline-postponed',
+      }, {
+        title: 'En attente',
+        to: 'deadline-postponed',
+        action: 'read',
+        subject: 'deadline-postponed',
+      }, {
+        title: 'Historique',
+
+        // to: 'deadline-postponed-historical',
+        action: 'historical',
+        subject: 'deadline-postponed',
+      },
+    ],
+  },
+  {
+    title: 'Liste des garants',
+    icon: { icon: "tabler-users-group" },
+    to: 'guarantor',
+    subject: 'guarantor-list',
+    action: 'read',
+  },
+  {
+    title: 'Liste des garanties',
+    icon: { icon: "tabler-shield-check" },
+    to: 'guarantee',
+    subject: 'guarantee-list',
+    action: 'read',
+  },
+  {
+    title: 'Remboursement anticipé',
+  },
+  {
+    title: 'Lettre de mise en demeure',
+  },
+  {
+    title: 'Checking post-deblocage',
+  },
+
+  { heading: 'Paramétrage' },
+  {
+    icon: { icon: 'tabler-user' },
+    title: 'Utilisateurs',
+    subject: 'user',
+    action: 'menu',
+    children: [
+      {
+        title: 'Nouveau',
+        to: 'user-add',
+        action: 'create',
+        subject: 'user',
+      }, {
+        title: 'Historique',
+        to: 'user',
+        action: 'read',
+        subject: 'user',
+      },
+    ],
+  },
 ]

@@ -8,10 +8,10 @@ import JsFileDownloader from 'js-file-downloader'
  * @returns {Promise}
  */
 export const downloadAuthenticatedFile = (url, fileName) => new JsFileDownloader({
-	url,
-	headers: [
-		{ name: 'Authorization', value: `Bearer ${useCookie('userToken').value}` },
-		{ name: 'Accept', value: 'application/json' },
-	],
-	nameCallback: () => fileName,
+  url,
+  headers: [
+    { name: 'Authorization', value: `Bearer ${useCookie('userToken').value}` },
+    { name: 'Accept', value: 'application/json' },
+  ],
+  nameCallback: () => fileName,
 })

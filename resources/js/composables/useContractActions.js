@@ -24,14 +24,17 @@ export function useContractActions() {
       
       if (response.status === 200) {
         showSnackbar('success', `${viewData.data.title.singular} supprimé avec succès`)
+        
         return true
       } else {
         showSnackbar('error', formatErrorMessages(response.errors))
+        
         return false
       }
     } catch (error) {
       console.error('Erreur lors de la suppression:', error)
       showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression'))
+      
       return false
     } finally {
       deleteLoadings.value[id] = false
@@ -54,16 +57,19 @@ export function useContractActions() {
       if (response.status === 200) {
         showSnackbar(
           'success',
-          'Envoi validé avec succès. Le Head Crédit va maintenant procéder à la validation finale.'
+          'Envoi validé avec succès. Le Head Crédit va maintenant procéder à la validation finale.',
         )
+        
         return true
       } else {
         showSnackbar('error', formatErrorMessages(response.errors))
+        
         return false
       }
     } catch (error) {
       console.error('Erreur lors de la validation:', error)
       showSnackbar('error', errorMessage(error, 'Erreur lors de la validation'))
+      
       return false
     }
   }
@@ -84,15 +90,19 @@ export function useContractActions() {
       
       if (response.status === 200) {
         const actionText = action === 'validate' ? 'validé' : 'rejeté'
+
         showSnackbar('success', `Contrat ${actionText} avec succès`)
+        
         return true
       } else {
         showSnackbar('error', formatErrorMessages(response.errors))
+        
         return false
       }
     } catch (error) {
       console.error('Erreur lors de la validation:', error)
       showSnackbar('error', errorMessage(error, 'Erreur lors de la validation'))
+      
       return false
     }
   }
@@ -109,6 +119,7 @@ export function useContractActions() {
     
     if (!files || files.length !== 1) {
       showSnackbar('warning', 'Veuillez sélectionner un seul fichier')
+      
       return false
     }
 
@@ -124,14 +135,17 @@ export function useContractActions() {
 
       if (response.status === 200) {
         showSnackbar('success', 'Document envoyé avec succès')
+        
         return true
       } else {
         showSnackbar('error', formatErrorMessages(response.errors))
+        
         return false
       }
     } catch (error) {
       console.error("Erreur lors de l'envoi du document:", error)
       showSnackbar('error', errorMessage(error, "Erreur lors de l'envoi du document"))
+      
       return false
     }
   }
@@ -141,9 +155,10 @@ export function useContractActions() {
    * @param {File} file - Le fichier à convertir
    * @returns {Promise<string>}
    */
-  const fileToBase64 = (file) => {
+  const fileToBase64 = file => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader()
+
       reader.onload = () => resolve(reader.result)
       reader.onerror = reject
       reader.readAsDataURL(file)
@@ -155,7 +170,7 @@ export function useContractActions() {
    * @param {Object} errors - Les erreurs de l'API
    * @returns {string}
    */
-  const formatErrorMessages = (errors) => {
+  const formatErrorMessages = errors => {
     if (!errors) return 'Une erreur est survenue'
     
     return Object.values(errors)

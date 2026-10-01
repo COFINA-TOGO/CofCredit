@@ -29,7 +29,7 @@ export function useContractObservations() {
    * @param {string} status - Le statut
    * @returns {string}
    */
-  const getStatusText = (status) => {
+  const getStatusText = status => {
     return STATUS_TEXTS[status] || ''
   }
 
@@ -38,7 +38,7 @@ export function useContractObservations() {
    * @param {string} status - Le statut
    * @returns {string}
    */
-  const getStatusColor = (status) => {
+  const getStatusColor = status => {
     return STATUS_COLORS[status] || 'default'
   }
 
@@ -47,7 +47,7 @@ export function useContractObservations() {
    * @param {string} text - Le texte de l'observation
    * @returns {Object}
    */
-  const decorateObservation = (text) => {
+  const decorateObservation = text => {
     const normalized = text.toLowerCase()
 
     // Contrat signé manquant
@@ -184,7 +184,7 @@ export function useContractObservations() {
    * @param {string[]} observations - Les observations à décorer
    * @returns {Object[]}
    */
-  const decorateObservations = (observations) => {
+  const decorateObservations = observations => {
     return observations.map(decorateObservation)
   }
 
@@ -193,7 +193,7 @@ export function useContractObservations() {
    * @param {Object[]} observations - Les observations décorées
    * @returns {Object[]}
    */
-  const sortObservationsByPriority = (observations) => {
+  const sortObservationsByPriority = observations => {
     const priorityOrder = { high: 3, medium: 2, low: 1 }
     
     return [...observations].sort((a, b) => {
@@ -206,8 +206,8 @@ export function useContractObservations() {
    * @param {Object[]} observations - Les observations décorées
    * @returns {boolean}
    */
-  const hasHighPriority = (observations) => {
-    return observations.some((obs) => obs.priority === 'high')
+  const hasHighPriority = observations => {
+    return observations.some(obs => obs.priority === 'high')
   }
 
   return {

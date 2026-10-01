@@ -1,7 +1,5 @@
 <!-- Composant pour les actions de validation d'un contrat -->
 <script setup>
-const router = useRouter()
-
 const props = defineProps({
   contract: {
     type: Object,
@@ -18,6 +16,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['adminValidate', 'headValidate', 'headReject'])
+
+const router = useRouter()
 
 /**
  * Vérifie si l'admin peut valider
@@ -57,7 +57,7 @@ const canCreateCAT = computed(() => {
 const createCAT = () => {
   router.push({ 
     name: 'cat-add',
-    query: { contract_id: props.contract.id }
+    query: { contract_id: props.contract.id },
   })
 }
 </script>

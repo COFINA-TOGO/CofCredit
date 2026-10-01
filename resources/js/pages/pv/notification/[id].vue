@@ -1,65 +1,66 @@
 <script setup>
 definePage({
-	meta: {
-		action: 'read',
-		subject: 'pv-notification',
-	},
+  meta: {
+    action: 'read',
+    subject: 'pv-notification',
+  },
 })
+
 const router = useRouter()
 const route = useRoute("pv-id")
 
 const frenchMensuality = {
-	"mensual": "Mensuelle",
-	"quarterly": "Trimestrielle",
-	"semi-annual": "Semestrielle",
-	"annual": "Annuel",
-	"in-fine": "À la fin",
+  "mensual": "Mensuelle",
+  "quarterly": "Trimestrielle",
+  "semi-annual": "Semestrielle",
+  "annual": "Annuel",
+  "in-fine": "À la fin",
 }
 
 const frenchReleaseType = {
-	"non-progressive": "Non Progressif",
-	"progressive": "Progressif",
+  "non-progressive": "Non Progressif",
+  "progressive": "Progressif",
 }
 
 const { data: verbalTrial } = await useApi(
-	createUrl(`/verbal-trial/${Number(route.params.id)}`, {
-		query: {
-			with_caf: 1,
-			with_credit_admin: 1,
-			with_credit_analyst: 1,
-			with_type_of_credit: 1,
-			with_type_of_guarantees: 1,
-		},
-	})
+  createUrl(`/verbal-trial/${Number(route.params.id)}`, {
+    query: {
+      with_caf: 1,
+      with_credit_admin: 1,
+      with_credit_analyst: 1,
+      with_type_of_credit: 1,
+      with_type_of_guarantees: 1,
+    },
+  }),
 )
 
 if (verbalTrial.value.status == 200) {
-	verbalTrial.value = verbalTrial.value.data.verbalTrial
+  verbalTrial.value = verbalTrial.value.data.verbalTrial
 } else {
-	router.push({ name: "pv-notification-without-pv" })
+  router.push({ name: "pv-notification-without-pv" })
 }
 
 
 const tableData = [
-	{ "title": "Nom de l'entié", "value": verbalTrial.value.entity_name ? verbalTrial.value.entity_name : "-" },
-	{ "title": "Montant", "value": String(verbalTrial.value.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
-	{ "title": "Durée", "value": verbalTrial.value.duration + " mois" },
-	{ "title": "Périodicité", "value": frenchMensuality[verbalTrial.value.periodicity] },
-	{ "title": "Taux d'intérêt HT", "value": verbalTrial.value.tax_fee_interest_rate + "%" },
-	{ "title": "TAF", "value": verbalTrial.value.taf + "%" },
-	{ "title": "Frais de dossier (" + verbalTrial.value.administrative_fees_percentage + " %)", "value": String((verbalTrial.value.amount * verbalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + " F CFA" },
-	{ "title": "Reserve", "value": verbalTrial.value.reserve ? verbalTrial.value.reserve : "-" },
-	{ "title": "Type de déblocage", "value": frenchReleaseType[verbalTrial.value.release_type] },
-	{ "title": "Admin Crédit", "value": verbalTrial.value.credit_admin.full_name },
-	{ "title": "Prime de risque", "value": verbalTrial.value.risk_premium_percentage + " %" },
-	{ "title": "Nombre de différés", "value": verbalTrial.value.number_deferred + " mois" },
+  { "title": "Nom de l'entié", "value": verbalTrial.value.entity_name ? verbalTrial.value.entity_name : "-" },
+  { "title": "Montant", "value": String(verbalTrial.value.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + "F CFA" },
+  { "title": "Durée", "value": verbalTrial.value.duration + " mois" },
+  { "title": "Périodicité", "value": frenchMensuality[verbalTrial.value.periodicity] },
+  { "title": "Taux d'intérêt HT", "value": verbalTrial.value.tax_fee_interest_rate + "%" },
+  { "title": "TAF", "value": verbalTrial.value.taf + "%" },
+  { "title": "Frais de dossier (" + verbalTrial.value.administrative_fees_percentage + " %)", "value": String((verbalTrial.value.amount * verbalTrial.value.administrative_fees_percentage) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + " F CFA" },
+  { "title": "Reserve", "value": verbalTrial.value.reserve ? verbalTrial.value.reserve : "-" },
+  { "title": "Type de déblocage", "value": frenchReleaseType[verbalTrial.value.release_type] },
+  { "title": "Admin Crédit", "value": verbalTrial.value.credit_admin.full_name },
+  { "title": "Prime de risque", "value": verbalTrial.value.risk_premium_percentage + " %" },
+  { "title": "Nombre de différés", "value": verbalTrial.value.number_deferred + " mois" },
 ]
 
 if (verbalTrial.value.has_line_review_bonus) {
-	tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 12 mois" })
+  tableData.push({ "title": "Prime de révision de ligne", "value": "1% du capital restant dû après 12 mois" })
 }
 if (verbalTrial.value. has_insurance ) {
-	tableData.push({ "title": "Prime d'assurance", "value": "Selon la grille de l'assureur" })
+  tableData.push({ "title": "Prime d'assurance", "value": "Selon la grille de l'assureur" })
 }
 
 // verbalTrial.value.guarantees.forEach(guarantee => {
@@ -67,137 +68,151 @@ if (verbalTrial.value. has_insurance ) {
 // 		nextRoute = '/pv/without-notification'
 // 	}
 // })
-let nextRoute = verbalTrial.value.validation_level == "credit_analyst" ? {name: 'pv-notification-without-pv'}: {name: 'pv-notification-historical'};
-
+let nextRoute = verbalTrial.value.validation_level == "credit_analyst" ? { name: 'pv-notification-without-pv' }: { name: 'pv-notification-historical' }
 </script>
 
 <template>
-	<section v-if="verbalTrial">
-		<VRow>
-			<VCol cols="12">
-				<VCard>
-					<!-- SECTION Header -->
-					<VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
-						<VCol cols="10">
-							<VBtn prepend-icon="tabler-arrow-narrow-left" :to="nextRoute"
-								:disabled="verbalTrial.status == 'vaidated'">
-								Notification de caf
-							</VBtn>
-						</VCol>
-						<VCol v-if="
-							$can('update', 'pv') &&
-							(verbalTrial.status == 'rejected' ||
-								(verbalTrial.status == 'waiting' &&
-									verbalTrial.validation_level == 'credit_admin'))
-						" cols="2" class="text-right">
-							<VBtn append-icon="tabler-edit"
-								:to="{ name: 'pv-edit-id', params: { id: verbalTrial.id } }">
-								Modifier
-							</VBtn>
-						</VCol>
-						<VCol v-if="verbalTrial.status == 'rejected' && verbalTrial.comment">
-							<VAlert color="warning">
-								Motif du refus: {{ verbalTrial.comment }}
-							</VAlert>
-						</VCol>
-						<VCol cols="12">
-							<h2 class="text-center">
-								Notification de caf N°{{ verbalTrial.committee_id }}
-							</h2>
-						</VCol>
-						<VCol cols="6">
-							<p style="font-size: 20px">
-								CAF
-							</p>
-							<p style="font-size: 20px">
-								Analyste
-							</p>
-							<p style="font-size: 20px">
-								Emprunteur
-							</p>
-							<p style="font-size: 20px">
-								N° de compte
-							</p>
-							<p style="font-size: 20px">
-								Activité
-							</p>
-							<p style="font-size: 20px">
-								Objet du financement
-							</p>
-							<p style="font-size: 20px">
-								Type de concours solicité
-							</p>
-							<br>
-							<p style="font-size: 20px">
-								Date de validation: {{ verbalTrial.created_at_fr }}
-							</p>
-						</VCol>
-						<VCol cols="6">
-							<p style="font-size: 20px">
-								: {{ verbalTrial.caf.full_name }}
-							</p>
-							<p style="font-size: 20px">
-								: {{ verbalTrial.credit_analyst.full_name }}
-							</p>
-							<p style="font-size: 20px">
-								: <strong> {{ verbalTrial.entity_name }}</strong>
-							</p>
-							<p style="font-size: 20px">
-								: {{ verbalTrial.account_number }}
-							</p>
-							<p style="font-size: 20px">
-								: {{ verbalTrial.activity }}
-							</p>
-							<p style="font-size: 20px">
-								: {{ verbalTrial.purpose_of_financing }}
-							</p>
-							<p style="font-size: 20px">
-								: {{ verbalTrial.type_of_credit.name }}
-							</p>
-						</VCol>
-					</VCardText>
+  <section v-if="verbalTrial">
+    <VRow>
+      <VCol cols="12">
+        <VCard>
+          <!-- SECTION Header -->
+          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
+            <VCol cols="10">
+              <VBtn
+                prepend-icon="tabler-arrow-narrow-left"
+                :to="nextRoute"
+                :disabled="verbalTrial.status == 'vaidated'"
+              >
+                Notification de caf
+              </VBtn>
+            </VCol>
+            <VCol
+              v-if="
+                $can('update', 'pv') &&
+                  (verbalTrial.status == 'rejected' ||
+                    (verbalTrial.status == 'waiting' &&
+                      verbalTrial.validation_level == 'credit_admin'))
+              "
+              cols="2"
+              class="text-right"
+            >
+              <VBtn
+                append-icon="tabler-edit"
+                :to="{ name: 'pv-edit-id', params: { id: verbalTrial.id } }"
+              >
+                Modifier
+              </VBtn>
+            </VCol>
+            <VCol v-if="verbalTrial.status == 'rejected' && verbalTrial.comment">
+              <VAlert color="warning">
+                Motif du refus: {{ verbalTrial.comment }}
+              </VAlert>
+            </VCol>
+            <VCol cols="12">
+              <h2 class="text-center">
+                Notification de caf N°{{ verbalTrial.committee_id }}
+              </h2>
+            </VCol>
+            <VCol cols="6">
+              <p style="font-size: 20px">
+                CAF
+              </p>
+              <p style="font-size: 20px">
+                Analyste
+              </p>
+              <p style="font-size: 20px">
+                Emprunteur
+              </p>
+              <p style="font-size: 20px">
+                N° de compte
+              </p>
+              <p style="font-size: 20px">
+                Activité
+              </p>
+              <p style="font-size: 20px">
+                Objet du financement
+              </p>
+              <p style="font-size: 20px">
+                Type de concours solicité
+              </p>
+              <br>
+              <p style="font-size: 20px">
+                Date de validation: {{ verbalTrial.created_at_fr }}
+              </p>
+            </VCol>
+            <VCol cols="6">
+              <p style="font-size: 20px">
+                : {{ verbalTrial.caf.full_name }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ verbalTrial.credit_analyst.full_name }}
+              </p>
+              <p style="font-size: 20px">
+                : <strong> {{ verbalTrial.entity_name }}</strong>
+              </p>
+              <p style="font-size: 20px">
+                : {{ verbalTrial.account_number }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ verbalTrial.activity }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ verbalTrial.purpose_of_financing }}
+              </p>
+              <p style="font-size: 20px">
+                : {{ verbalTrial.type_of_credit.name }}
+              </p>
+            </VCol>
+          </VCardText>
 
-					<VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
-						<VCol cols="12">
-							<h2>CARACTERISTIQUES</h2>
-						</VCol>
-						<VCol cols="12">
-							<VTable class="text-no-wrap">
-								<tbody>
-									<tr v-for="item in tableData" :key="item.key">
-										<td colspan="5">
-											{{ item.title }}
-										</td>
-										<td colspan="1">
-											{{ item.value }}
-										</td>
-									</tr>
-								</tbody>
-							</VTable>
-						</VCol>
-					</VCardText>
+          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
+            <VCol cols="12">
+              <h2>CARACTERISTIQUES</h2>
+            </VCol>
+            <VCol cols="12">
+              <VTable class="text-no-wrap">
+                <tbody>
+                  <tr
+                    v-for="item in tableData"
+                    :key="item.key"
+                  >
+                    <td colspan="5">
+                      {{ item.title }}
+                    </td>
+                    <td colspan="1">
+                      {{ item.value }}
+                    </td>
+                  </tr>
+                </tbody>
+              </VTable>
+            </VCol>
+          </VCardText>
 
-					<VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
-						<VCol cols="12">
-							<h2>GARANTIES A RECUEILLIR</h2>
-						</VCol>
-						<VCol cols="12">
-							<p>
-							<ul>
-								<li v-for="(item, index) in verbalTrial.guarantees" :key="index"
-									style="font-size: 20px">
-									{{ item.type_of_guarantee.name }} : {{ item.comment }}
-								</li>
-							</ul>
-							</p>
-						</VCol>
-					</VCardText>
+          <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
+            <VCol cols="12">
+              <h2>GARANTIES A RECUEILLIR</h2>
+            </VCol>
+            <VCol cols="12">
+              <p>
+                <ul>
+                  <li
+                    v-for="(item, index) in verbalTrial.guarantees"
+                    :key="index"
+                    style="font-size: 20px"
+                  >
+                    {{ item.type_of_guarantee.name }} : {{ item.comment }}
+                  </li>
+                </ul>
+              </p>
+            </VCol>
+          </VCardText>
 
-					<VDivider />
-				</VCard>
-			</VCol>
-		</VRow>
-	</section>
+          <VDivider />
+        </VCard>
+      </VCol>
+    </VRow>
+  </section>
 </template>
 
 <style lang="scss">

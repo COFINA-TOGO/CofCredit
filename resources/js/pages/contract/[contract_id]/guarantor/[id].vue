@@ -6,6 +6,7 @@ definePage({
     subject: 'guarantor',
   },
 })
+
 const router = useRouter()
 const route = useRoute('contract-contract_id-guarantor-id')
 
@@ -22,10 +23,10 @@ const documentTypeList = {
   "passport": 'Passeport',
   "residence_certificate": 'Certificat de résidence',
   "driving_licence": 'Permis de conduire',
-  "consular_card" : "Carte consulaire",
-  "ECOWAS_identity_card" : "Carte d’identité de la CEDEAO",
-  "residence_permit" : "Carte de séjour",
-	"anid_card": "Carte ANID",
+  "consular_card": "Carte consulaire",
+  "ECOWAS_identity_card": "Carte d’identité de la CEDEAO",
+  "residence_permit": "Carte de séjour",
+  "anid_card": "Carte ANID",
 }
 
 const {
@@ -69,8 +70,7 @@ const tableData = [
               </VBtn>
             </VCol>
             <VCol cols="1">
-              <VBtn
-                :to="{ name: 'contract-contract_id-guarantor-edit-id', params: { contract_id: route.params.contract_id, id: guarantor.id } }">
+              <VBtn :to="{ name: 'contract-contract_id-guarantor-edit-id', params: { contract_id: route.params.contract_id, id: guarantor.id } }">
                 Modifier
               </VBtn>
             </VCol>
@@ -85,7 +85,10 @@ const tableData = [
             <VCol cols="12">
               <VTable class="text-no-wrap">
                 <tbody>
-                  <tr v-for="item in tableData" :key="item.key">
+                  <tr
+                    v-for="item in tableData"
+                    :key="item.key"
+                  >
                     <td colspan="5">
                       {{ item.title }}
                     </td>

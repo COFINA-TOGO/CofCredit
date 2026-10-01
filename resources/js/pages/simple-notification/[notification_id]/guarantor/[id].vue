@@ -6,6 +6,7 @@ definePage({
     subject: 'guarantor',
   },
 })
+
 const router = useRouter()
 const route = useRoute('notification-notification_id-guarantor-id')
 
@@ -22,10 +23,10 @@ const documentTypeList = {
   "passport": 'Passeport',
   "residence_certificate": 'Certificat de résidence',
   "driving_licence": 'Permis de conduire',
-  "consular_card" : "Carte consulaire",
-  "ECOWAS_identity_card" : "Carte d’identité de la CEDEAO",
-  "residence_permit" : "Carte de séjour",
-	"anid_card": "Carte ANID",
+  "consular_card": "Carte consulaire",
+  "ECOWAS_identity_card": "Carte d’identité de la CEDEAO",
+  "residence_permit": "Carte de séjour",
+  "anid_card": "Carte ANID",
 }
 
 const {
@@ -63,15 +64,13 @@ const tableData = [
         <VCard>
           <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row print-row text-lg">
             <VCol cols="11">
-              <VBtn
-                :to="{ name: 'notification-notification_id-guarantor', params: { notification_id: route.params.notification_id } }">
+              <VBtn :to="{ name: 'notification-notification_id-guarantor', params: { notification_id: route.params.notification_id } }">
                 <VIcon icon="tabler-arrow-left" />
                 Cautions
               </VBtn>
             </VCol>
             <VCol cols="1">
-              <VBtn
-                :to="{ name: 'notification-notification_id-guarantor-edit-id', params: { notification_id: route.params.notification_id, id: guarantor.id } }">
+              <VBtn :to="{ name: 'notification-notification_id-guarantor-edit-id', params: { notification_id: route.params.notification_id, id: guarantor.id } }">
                 Modifier
               </VBtn>
             </VCol>
@@ -86,7 +85,10 @@ const tableData = [
             <VCol cols="12">
               <VTable class="text-no-wrap">
                 <tbody>
-                  <tr v-for="item in tableData" :key="item.key">
+                  <tr
+                    v-for="item in tableData"
+                    :key="item.key"
+                  >
                     <td colspan="5">
                       {{ item.title }}
                     </td>
