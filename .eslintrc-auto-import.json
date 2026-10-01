@@ -366,6 +366,7 @@
     "$apiOrThrow": true,
     "ApiError": true,
     "downloadAuthenticatedFile": true,
-    "handleAuthErrors": true
+    "handleAuthErrors": true,
+    "paginationMeta": true
   }
 }
