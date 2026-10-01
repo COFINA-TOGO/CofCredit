@@ -25,16 +25,12 @@ const page = ref(1)
 // Headers de la table
 const headers = [
   {
-    title: "Numéro comité",
+    title: "Dossier",
     key: "verbal_trial.committee_id",
   },
   {
     title: "Admin Crédit",
     key: "creator.full_name",
-  },
-  {
-    title: "Nom client",
-    key: "verbal_trial.applicant_full_name",
   },
   {
     title: "Type de contrat",
@@ -306,6 +302,16 @@ onMounted(async () => {
         loading-text="En cours de chargement"
         @update:options="updateOptions"
       >
+        <template #item.verbal_trial.committee_id="{ item }">
+          <div class="py-2">
+            <div class="text-no-wrap font-weight-medium">
+              {{ item.verbal_trial?.committee_id }}
+            </div>
+            <div class="text-body-2 text-medium-emphasis">
+              {{ item.verbal_trial?.entity_name || item.verbal_trial?.applicant_full_name }}
+            </div>
+          </div>
+        </template>
         <template #item.type="{ item }">
           {{ TYPE_LIST[item.type] }}
         </template>

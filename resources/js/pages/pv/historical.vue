@@ -26,16 +26,8 @@ const page = ref(1)
 // Headers de la table
 const headers = [
   {
-    title: "Numéro comité",
+    title: "Dossier",
     key: "committee_id",
-  },
-  {
-    title: "Prénom client",
-    key: "applicant_first_name",
-  },
-  {
-    title: "Nom client",
-    key: "applicant_last_name",
   },
   {
     title: "Type Credit",
@@ -271,6 +263,18 @@ onMounted(async () => {
         @update:options="updateOptions"
       >
         <!-- Actions -->
+
+        <template #item.committee_id="{ item }">
+          <div class="py-2">
+            <div class="text-no-wrap font-weight-medium">
+              {{ item?.committee_id }}
+            </div>
+
+            <div class="text-body-2 text-medium-emphasis">
+              {{ item?.entity_name || item?.applicant_full_name }}
+            </div>
+          </div>
+        </template>
 
         <template #item.actions="{ item }">
           <IconBtn
