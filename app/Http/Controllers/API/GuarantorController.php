@@ -537,29 +537,19 @@ class GuarantorController extends Controller
 				$extension = $document["extension"];
 				$documentData = $document["data"];
 
-				// Supprimer l'ancien fichier s'il existe
-				$oldPath = $guarantor->{"signed_{$document_category}_path"};
-				if ($oldPath) {
-					$oldFilePath = str_replace('/storage/', '', $oldPath);
-					if (Storage::disk("public")->exists($oldFilePath)) {
-						Storage::disk("public")->delete($oldFilePath);
-					}
-				}
-
 				// Créer un nouveau chemin avec timestamp pour éviter les conflits
 				$timestamp = now()->format('Y-m-d_H-i-s');
 				$path = 'upload/guarantors/signed_' . $document_category . 's/' . $guarantor->id . '-' . $timestamp . '-signed.' . $extension;
 
-				// Sauvegarder le nouveau fichier
-				$saved = Storage::disk("public")->put($path, $documentData);
-
-				if (!$saved) {
+				$oldDocumentUrl = $guarantor->{"signed_{$document_category}_path"};
+				if (!($documentUrl = $this->storeDocument($path, $documentData))) {
 					DB::rollBack();
 					return $this->responseError(["error" => "Erreur lors de la sauvegarde du fichier"], 500);
 				}
+				$this->deleteDocument($oldDocumentUrl);
 
 				// Mettre à jour la garantie
-				$guarantor->update(["signed_{$document_category}_path" => "/storage/" . $path]);
+				$guarantor->update(["signed_{$document_category}_path" => $documentUrl]);
 
 				DB::commit();
 				return $this->responseOk(["guarantor" => $guarantor]);

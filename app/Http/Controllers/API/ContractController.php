@@ -861,19 +861,26 @@ class ContractController extends Controller
 				$extension = $document["extension"];
 				$documentData = $document["data"];
 				$path = 'upload/Contracts/signed_' . $document_category . 's/' . Str::slug($contract->verbal_trial->committee_id) . '-signed.' . $extension;
-				Storage::disk("public")->put($path, $documentData);
+				$oldDocumentUrl = $contract->{"signed_{$document_category}_path"};
+				if (!($documentUrl = $this->storeDocument($path, $documentData))) {
+					DB::rollBack();
+					return $this->responseError(["error" => "Erreur lors de la sauvegarde du fichier"], 500);
+				}
+				if ($oldDocumentUrl && $oldDocumentUrl !== $documentUrl) {
+					$this->deleteDocument($oldDocumentUrl);
+				}
 				
 				// Nouveau workflow : après upload, le statut devient pending_admin_validation
-				$updateData = ["signed_{$document_category}_path" => "/storage/" . $path];
+				$updateData = ["signed_{$document_category}_path" => $documentUrl];
 				
 				// Si tous les fichiers sont uploadés, passer en pending_admin_validation
 				if ($document_category === 'contract') {
-					$updateData['signed_contract_path'] = "/storage/" . $path;
+					$updateData['signed_contract_path'] = $documentUrl;
 					if ($contract->signed_promissory_note_path) {
 						$updateData['status'] = 'pending_admin_validation';
 					}
 				} else {
-					$updateData['signed_promissory_note_path'] = "/storage/" . $path;
+					$updateData['signed_promissory_note_path'] = $documentUrl;
 					if ($contract->signed_contract_path) {
 						$updateData['status'] = 'pending_admin_validation';
 					}

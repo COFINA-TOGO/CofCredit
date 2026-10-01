@@ -44,6 +44,13 @@ return [
             'throw' => false,
         ],
 
+        // Documents signés et pièces jointes : jamais servis directement, uniquement via la route authentifiée document.show
+        'documents' => [
+            'driver' => 'local',
+            'root' => storage_path('app/documents'),
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

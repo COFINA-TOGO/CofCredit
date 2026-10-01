@@ -223,11 +223,10 @@ class DeadlinePostponedController extends Controller
 	private function storeDeadlinePostponedDocuments(array $requestData, array $documents, $model = null)
 	{
 		foreach ($documents as $document => $decoded) {
-			$requestData[$document . "_path"] = 'upload/deadlinePostponed/' . $document . 's/' . Str::random(15) . "." . $decoded["extension"];
-			if ($model && $model[$document . "_path"]) {
-				Storage::disk("public")->delete($model[$document . "_path"]);
+			$requestData[$document . "_path"] = $this->storeDocument('upload/deadlinePostponed/' . $document . 's/' . Str::random(15) . "." . $decoded["extension"], $decoded["data"]);
+			if ($model) {
+				$this->deleteDocument($model[$document . "_path"]);
 			}
-			Storage::disk("public")->put($requestData[$document . "_path"], $decoded["data"]);
 		}
 		return $requestData;
 	}
@@ -245,8 +244,8 @@ class DeadlinePostponedController extends Controller
 			modelId: $id,
 			modelClass: "App\Models\DeadlinePostponed",
 			afterDelete: function ($model) {
-				Storage::disk("public")->delete($model["request_path"]);
-				Storage::disk("public")->delete($model["memo_path"]);
+				$this->deleteDocument($model["request_path"]);
+				$this->deleteDocument($model["memo_path"]);
 			}
 		);
 	}

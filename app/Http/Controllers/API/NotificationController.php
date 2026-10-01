@@ -724,8 +724,15 @@ class NotificationController extends Controller
 				$extension = $document["extension"];
 				$documentData = $document["data"];
 				$path = 'upload/Notifications/signed_' . $document_category . 's/' . Str::slug($notification->verbal_trial->committee_id) . '-signed.' . $extension;
-				Storage::disk("public")->put($path, $documentData);
-				$notification->update(["signed_{$document_category}_path" => "/storage/" . $path]);
+				$oldDocumentUrl = $notification->{"signed_{$document_category}_path"};
+				if (!($documentUrl = $this->storeDocument($path, $documentData))) {
+					DB::rollBack();
+					return $this->responseError(["error" => "Erreur lors de la sauvegarde du fichier"], 500);
+				}
+				if ($oldDocumentUrl && $oldDocumentUrl !== $documentUrl) {
+					$this->deleteDocument($oldDocumentUrl);
+				}
+				$notification->update(["signed_{$document_category}_path" => $documentUrl]);
 
 				DB::commit();
 

@@ -4,6 +4,7 @@ use App\Exports\QueryGuarantor;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CATController;
 use App\Http\Controllers\API\DeadlinePostponedController;
+use App\Http\Controllers\API\DocumentController;
 use App\Http\Controllers\API\GuaranteeController;
 use App\Http\Controllers\API\GuarantorController;
 use App\Http\Controllers\API\NotificationController;
@@ -135,6 +136,7 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::put("reject-unblock/{id}", [CATController::class, "reject_unblock"])->name("reject_unblock");
 		Route::delete("/{id}", [CATController::class, "destroy"])->name("destroy");
 	});
+	Route::get("document/{path}", [DocumentController::class, "show"])->where("path", ".*")->name("document.show");
 	Route::prefix("deadline-postponed")->name("deadline-postponed.")->group(function () {
 		Route::get("/", [DeadlinePostponedController::class, "index"])->name("index");
 		Route::get("/{id}", [DeadlinePostponedController::class, "show"])->name("show");

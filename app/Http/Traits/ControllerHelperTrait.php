@@ -5,6 +5,7 @@ namespace App\Http\Traits;
 use Exception;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\RelationNotFoundException;
+use App\Support\Documents;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -121,6 +122,34 @@ trait ControllerHelperTrait
     public function documentMimeTypes()
     {
         return ["application/pdf" => "pdf"] + $this->imageMimeTypes();
+    }
+
+    /**
+     * Enregistre un document sur le disque privé et retourne son URL (servie par la route document.show)
+     * @param 	string	$key		Le chemin relatif du document (ex: upload/Contracts/signed_contracts/xxx.pdf)
+     * @param 	string	$data		Le contenu du document
+     * @return	string|false
+     */
+    public function storeDocument(string $key, string $data)
+    {
+        return Storage::disk("documents")->put($key, $data) ? Documents::URL_PREFIX . $key : false;
+    }
+
+    /**
+     * Supprime un document à partir de son URL (disque privé, ou ancien emplacement public)
+     * @param 	string|null	$url		L'URL ou le chemin enregistré en base
+     * @return	void
+     */
+    public function deleteDocument(?string $url)
+    {
+        if (!$url) {
+            return;
+        }
+        if (str_starts_with($url, Documents::URL_PREFIX)) {
+            Storage::disk("documents")->delete(substr($url, strlen(Documents::URL_PREFIX)));
+        } else {
+            Storage::disk("public")->delete(preg_replace('#^/?(storage/)?#', '', $url));
+        }
     }
 
     /**
