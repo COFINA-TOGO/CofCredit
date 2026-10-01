@@ -197,7 +197,7 @@ class CATController extends Controller
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
 			$parentRelation = ($cat->notification) ? "notification" : "contract";
-			$templateProcessor = new TemplateProcessor("../document_templates/CATs/CAT-$parentRelation.docx");
+			$templateProcessor = new TemplateProcessor(base_path() . "/document_templates/CATs/CAT-$parentRelation.docx");
 			$data = $cat->toArray();
 			$data = array_merge($data, collect($cat->$parentRelation)->mapWithKeys(function ($value, $key) use ($parentRelation) {
 				return ["$parentRelation." . $key => $value];
@@ -221,7 +221,7 @@ class CATController extends Controller
 			];
 			$data["client_name"] = $data[$parentRelation . ".type"] == "particular" ? $data[$parentRelation . ".verbal_trial.civility"] . " " . $data[$parentRelation . ".verbal_trial.applicant_full_name"] : $data[$parentRelation . ".verbal_trial.entity_name"];
 
-			$data["ht_rate"] = "17";
+			$data["ht_rate"] = config("credit.ht_rate");
 			$data["source_of_reimbursement.fr"] = $source_of_reimbursementTranslate[$data["source_of_reimbursement"]];
 			$data["date_of_approval"] = Carbon::parse($cat->$parentRelation->verbal_trial->created_at)->format("d/m/Y");
 			$data["first_deadline"] = Carbon::parse($cat->first_deadline)->format("d/m/Y");
@@ -268,7 +268,7 @@ class CATController extends Controller
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "CAT-" . $cat->$parentRelation->verbal_trial->committee_id;
-			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
+			$wordFilePath = $this->temporaryDocumentPath($bsaseName . ".docx");
 
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);

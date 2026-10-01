@@ -230,7 +230,7 @@ class ContractController extends Controller
 		if ($contract) {
 			if (($authorisation = Gate::inspect('view', $contract))->allowed()) {
 				$contract_dir = $contract->verbal_trial->number_deferred == 0 ? "Contracts" : "Contracts-deferral";
-				$templatePath = ($contract->has_pledges) ? "../document_templates/$contract_dir/$contract->type/with_pledge/contract_$contract->type" . "_with_pledge.docx" : "../document_templates/$contract_dir/$contract->type/contract_$contract->type.docx";
+				$templatePath = ($contract->has_pledges) ? base_path() . "/document_templates/$contract_dir/$contract->type/with_pledge/contract_$contract->type" . "_with_pledge.docx" : base_path() . "/document_templates/$contract_dir/$contract->type/contract_$contract->type.docx";
 				$templateProcessor = new TemplateProcessor($templatePath);
 
 				$data = $contract->toArray();
@@ -256,7 +256,7 @@ class ContractController extends Controller
 						return ['individual_business.' . $key => $value];
 					})->all());
 				}
-				$data["ht_rate"] = "17";
+				$data["ht_rate"] = config("credit.ht_rate");
 				$data["day_due_amount"] = ((float) $data["due_amount"]) / 20;
 				$data["day_due_amount.fr"] = SpellNumber::value((float) $data["day_due_amount"])->locale('fr')->toLetters();
 				$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
@@ -266,7 +266,7 @@ class ContractController extends Controller
 				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
 				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
 				$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-				$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
+				$data["signatory"] = $this->signatoryFor($data["verbal_trial.amount"]);
 				$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 				$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance"][$data["verbal_trial.periodicity"]];
@@ -363,9 +363,8 @@ class ContractController extends Controller
 				$templateProcessor->setValues($data);
 
 				// Enregistrez les modifications dans un nouveau fichier
-				$wordFilePath = Str::slug(public_path("generated/docx/Contrat-" . $contract->verbal_trial->committee_id . ".docx"), "-");
+				$wordFilePath = $this->temporaryDocumentPath("generated/docx/Contrat-" . $contract->verbal_trial->committee_id . ".docx");
 				$templateProcessor->saveAs($wordFilePath);
-				$outputFilePdfFolderPath = public_path("generated/pdf");
 
 				return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 				// $outputFilePdfPath = public_path("generated/pdf/Contrat-" . $contract->verbal_trial->committee_id . ".pdf");
@@ -402,7 +401,7 @@ class ContractController extends Controller
 			if (!($authorisation = Gate::inspect('downloadDocument', $contract))->allowed()) {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
-			$templateProcessor = new TemplateProcessor("../document_templates/Contracts/$contract->type/billet_a_ordre_$contract->type.docx");
+			$templateProcessor = new TemplateProcessor(base_path() . "/document_templates/Contracts/$contract->type/billet_a_ordre_$contract->type.docx");
 			$data = $contract->toArray();
 			$data = array_merge($data, collect($contract->verbal_trial)->mapWithKeys(function ($value, $key) {
 				return ['verbal_trial.' . $key => $value];
@@ -424,7 +423,7 @@ class ContractController extends Controller
 				})->all());
 			}
 
-			$data["ht_rate"] = "17";
+			$data["ht_rate"] = config("credit.ht_rate");
 			$data["current_date"] = Carbon::now()->format("d/m/Y");
 			$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
 			$data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
@@ -433,7 +432,7 @@ class ContractController extends Controller
 			$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
 			$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
 			$data["verbal_trial.duration.fr"] = SpellNumber::value((float) $data["verbal_trial.duration"])->locale('fr')->toLetters();
-			$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
+			$data["signatory"] = $this->signatoryFor($data["verbal_trial.amount"]);
 			$data["verbal_trial.periodicity.fr"] = ["mensual" => "Mensuel", "quarterly" => "Trimestrielle", "semi-annual" => "Semestrielle", "annual" => "Annuel", "in-fine" => "A la fin"][$data["verbal_trial.periodicity"]];
 			$data["verbal_trial.periodicity.fr2"] = ["mensual" => "chaque mois", "quarterly" => "chaque trimestre", "semi-annual" => "chaque semestre", "annual" => "chaque année", "in-fine" => "A la fin."][$data["verbal_trial.periodicity"]];
 			$data["verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance"][$data["verbal_trial.periodicity"]];
@@ -465,7 +464,7 @@ class ContractController extends Controller
 			$templateProcessor->setValues($data);
 
 			// Enregistrez les modifications dans un nouveau fichier
-			$wordFilePath = Str::slug(public_path("generated/docx/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx"), "-");
+			$wordFilePath = $this->temporaryDocumentPath("generated/docx/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 
@@ -500,7 +499,7 @@ class ContractController extends Controller
 			if (!($authorisation = Gate::inspect('downloadDocument', $contract))->allowed()) {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
-			$templateProcessor = new TemplateProcessor("../document_templates/Mention-manuscrite/mention_manuscrite.docx");
+			$templateProcessor = new TemplateProcessor(base_path() . "/document_templates/Mention-manuscrite/mention_manuscrite.docx");
 			$data = $contract->toArray();
 			$data["amount_float"] = ((float) $data["total_amount_of_interest"]) + $contract->verbal_trial->amount;
 			$data["amount"] = number_format($data["amount_float"], 0, ',', ' ');
@@ -508,7 +507,7 @@ class ContractController extends Controller
 			$templateProcessor->setValues(["amount" => $data["amount"], "amount.fr" => $data["amount.fr"],]);
 
 			// Enregistrez les modifications dans un nouveau fichier
-			$wordFilePath = Str::slug(public_path("generated/docx/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".docx"));
+			$wordFilePath = $this->temporaryDocumentPath("generated/docx/HandwrittenMention-" . $contract->verbal_trial->committee_id . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 

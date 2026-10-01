@@ -5,7 +5,9 @@ namespace App\Http\Traits;
 use Exception;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\RelationNotFoundException;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 trait ControllerHelperTrait
 {
@@ -119,6 +121,28 @@ trait ControllerHelperTrait
     public function documentMimeTypes()
     {
         return ["application/pdf" => "pdf"] + $this->imageMimeTypes();
+    }
+
+    /**
+     * Retourne le signataire d'un document selon le montant du crédit
+     * @param 	mixed	$amount		Le montant du crédit
+     * @return	string
+     */
+    public function signatoryFor($amount)
+    {
+        return ((float) $amount <= (float) config("credit.signatory_threshold")) ? config("credit.signatories.legal") : config("credit.signatories.head_credit");
+    }
+
+    /**
+     * Retourne un chemin unique (hors du dossier public) pour un document généré, supprimé après envoi
+     * @param 	string	$name		Le nom lisible du document (ex: Contrat-XXX.docx)
+     * @return	string
+     */
+    public function temporaryDocumentPath(string $name)
+    {
+        $directory = storage_path("app/tmp");
+        File::ensureDirectoryExists($directory);
+        return $directory . "/" . Str::random(12) . "-" . Str::slug(pathinfo($name, PATHINFO_FILENAME)) . ".docx";
     }
 
     /**

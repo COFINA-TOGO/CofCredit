@@ -164,11 +164,11 @@ class VerbalTrialController extends Controller
 				$has_mortgage = (int) $request["has_mortgage"];
 				if ($has_mortgage == 1) {
 					$verbalTrialList->whereHas('guarantees', function ($query) {
-						$query->where('type_of_guarantee_id', 9);
+						$query->where('type_of_guarantee_id', config('credit.mortgage_type_of_guarantee_id'));
 					});
 				} else if ($has_mortgage == 0) {
 					$verbalTrialList->whereDoesntHave('guarantees', function ($query) {
-						$query->where('type_of_guarantee_id', 9);
+						$query->where('type_of_guarantee_id', config('credit.mortgage_type_of_guarantee_id'));
 					});
 				}
 			}
@@ -252,7 +252,7 @@ class VerbalTrialController extends Controller
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
 			$pv_dir = $verbal_trial->number_deferred == 0 ? "PVs" : "PVs-deferral";
-			$template_path  = "../document_templates/$pv_dir/PV-$verbal_trial->status-$verbal_trial->validation_level.docx";
+			$template_path  = base_path() . "/document_templates/$pv_dir/PV-$verbal_trial->status-$verbal_trial->validation_level.docx";
 			$templateProcessor = new TemplateProcessor($template_path);
 			$data = $verbal_trial->toArray();
 			$data = array_merge($data, collect($verbal_trial->caf)->mapWithKeys(function ($value, $key) {
@@ -314,7 +314,7 @@ class VerbalTrialController extends Controller
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "PV-" . $verbal_trial->committee_id;
-			$wordFilePath = Str::slug(public_path("generated/docx/" . $bsaseName . ".docx"), "-");
+			$wordFilePath = $this->temporaryDocumentPath("generated/docx/" . $bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 
@@ -341,8 +341,8 @@ class VerbalTrialController extends Controller
 			if (!($authorisation = Gate::inspect('downloadDocument', $verbal_trial))->allowed()) {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
-			// $template_path = (($verbal_trial->validation_level == "head_credit") && ($verbal_trial->status == "validated")) ? "../document_templates/Notifications/PV-Notification-validated.docx" : "../document_templates/Notifications/PV-Notification.docx";
-			$template_path = "../document_templates/Notifications/PV-Notification.docx";
+			// $template_path = (($verbal_trial->validation_level == "head_credit") && ($verbal_trial->status == "validated")) ? base_path() . "/document_templates/Notifications/PV-Notification-validated.docx" : base_path() . "/document_templates/Notifications/PV-Notification.docx";
+			$template_path = base_path() . "/document_templates/Notifications/PV-Notification.docx";
 			$templateProcessor = new TemplateProcessor($template_path);
 			$data = $verbal_trial->toArray();
 			$data = array_merge($data, collect($verbal_trial->type_of_credit)->mapWithKeys(function ($value, $key) {
@@ -387,7 +387,7 @@ class VerbalTrialController extends Controller
 			$reviewBonusList = $data["has_line_review_bonus"] ? [["key" => "Prime de révision de ligne", "value" => "1% du capital restant dû après 12 mois"]] : [];
 			$templateProcessor->cloneBlock('reviewBonus', 0, true, false, $reviewBonusList);
 
-			$data["ht_rate"] = "17";
+			$data["ht_rate"] = config("credit.ht_rate");
 			$data["civility.2"] = ["Mr" => "Monsieur", "Mme" => "Madame", "Mlle" => "Madame"][$data["civility"]];
 			$data["current_date"] = Carbon::now()->translatedFormat('d F Y');
 			$data["administrative_fees_percentage.value"] = number_format((float) $data["administrative_fees_percentage"] * $data["amount"] / 100, 0, ',', ' ');
@@ -410,7 +410,7 @@ class VerbalTrialController extends Controller
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Contrat-" . $verbal_trial->committee_id;
-			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
+			$wordFilePath = $this->temporaryDocumentPath($bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 
@@ -511,7 +511,7 @@ class VerbalTrialController extends Controller
 								$guaranteesCollection = new Collection($requestData["guarantees"]);
 								if (
 									$guaranteesCollection->contains(function ($objet) {
-										return $objet["type_of_guarantee_id"] === 9;
+										return $objet["type_of_guarantee_id"] == config("credit.mortgage_type_of_guarantee_id");
 									})
 								) {
 									$verbalTrial->update(["has_mortgage" => true]);
@@ -642,7 +642,7 @@ class VerbalTrialController extends Controller
 								if (isset($requestData["guarantees"])) {
 									$guaranteesCollection = new Collection($requestData["guarantees"]);
 									$requestData["has_mortgage"] = $guaranteesCollection->contains(function ($objet) {
-										return $objet["type_of_guarantee_id"] === 9;
+										return $objet["type_of_guarantee_id"] == config("credit.mortgage_type_of_guarantee_id");
 									});
 									foreach ($requestData["guarantees"] as $guarantee) {
 										Guarantee::create([
@@ -767,7 +767,7 @@ class VerbalTrialController extends Controller
 									if (isset($requestData["guarantees"])) {
 										$guaranteesCollection = new Collection($requestData["guarantees"]);
 										$requestData["has_mortgage"] = $guaranteesCollection->contains(function ($objet) {
-											return $objet["type_of_guarantee_id"] === 9;
+											return $objet["type_of_guarantee_id"] == config("credit.mortgage_type_of_guarantee_id");
 										});
 										foreach ($requestData["guarantees"] as $guarantee) {
 											Guarantee::create([

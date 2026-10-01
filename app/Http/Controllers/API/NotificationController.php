@@ -227,7 +227,7 @@ class NotificationController extends Controller
 			if (!($authorisation = Gate::inspect('downloadDocument', $notification))->allowed()) {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
-			$templateProcessor = new TemplateProcessor(($notification->head_credit_validation == "validated") ? "../document_templates/Notifications/Notification-validated.docx" : "../document_templates/Notifications/Notification.docx");
+			$templateProcessor = new TemplateProcessor(base_path() . "/document_templates/Notifications/Notification.docx");
 
 			$data = $notification->toArray();
 			$data = array_merge($data, collect($notification->verbal_trial)->mapWithKeys(function ($value, $key) {
@@ -248,7 +248,7 @@ class NotificationController extends Controller
 					return ['individual_business.' . $key => $value];
 				})->all());
 			}
-			$data["ht_rate"] = "17";
+			$data["ht_rate"] = config("credit.ht_rate");
 			$data["verbal_trial.civility.2"] = ["Mr" => "Monsieur", "Mme" => "Madame", "Mlle" => "Madame"][$data["verbal_trial.civility"]];
 			$data["current_date"] = Carbon::now()->translatedFormat('d F Y');
 			$data["verbal_trial.administrative_fees_percentage.value"] = number_format((float) $data["verbal_trial.administrative_fees_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', ' ');
@@ -287,7 +287,7 @@ class NotificationController extends Controller
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Contrat-" . $notification->verbal_trial->committee_id;
-			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
+			$wordFilePath = $this->temporaryDocumentPath($bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 
@@ -318,7 +318,7 @@ class NotificationController extends Controller
 		$notification = Notification::find($id);
 		if ($notification) {
 			if (($authorisation = Gate::inspect('download', $notification))->allowed()) {
-				$templateProcessor = new TemplateProcessor("../document_templates/Notifications/$notification->type/billet_a_ordre_$notification->type.docx");
+				$templateProcessor = new TemplateProcessor(base_path() . "/document_templates/Notifications/$notification->type/billet_a_ordre_$notification->type.docx");
 				$data = $notification->toArray();
 				$data = array_merge($data, collect($notification->verbal_trial)->mapWithKeys(function ($value, $key) {
 					return ['verbal_trial.' . $key => $value];
@@ -331,12 +331,12 @@ class NotificationController extends Controller
 					return ['verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
 				})->all());
 
-				// $data["ht_rate"] = "17";
+				// $data["ht_rate"] = config("credit.ht_rate");
 				$data["current_date"] = Carbon::now()->format("d/m/Y");
 				$data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
 				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];
 				$data["total_to_pay.fr"] = SpellNumber::value((float) $data["total_to_pay"])->locale('fr')->toLetters();
-				$data["signatory"] = (((float) $data["verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
+				$data["signatory"] = $this->signatoryFor($data["verbal_trial.amount"]);
 				$data["representative_type_of_identity_document"] = [
 					"cni" => "d'une Carte d'identité nationale",
 					"passport" => "d'un Passeport",
@@ -368,7 +368,7 @@ class NotificationController extends Controller
 
 				// Enregistrez les modifications dans un nouveau fichier
 				$bsaseName = "Billet-a-ordre-" . $notification->verbal_trial->committee_id;
-				$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
+				$wordFilePath = $this->temporaryDocumentPath($bsaseName . ".docx");
 				$templateProcessor->saveAs($wordFilePath);
 				return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 
@@ -401,7 +401,7 @@ class NotificationController extends Controller
 		$notification = Notification::find($id);
 		if ($notification) {
 			if (($authorisation = Gate::inspect('download', $notification))->allowed()) {
-				$templateProcessor = new TemplateProcessor("../document_templates/Notifications/$notification->type/billet_a_ordre_$notification->type.docx");
+				$templateProcessor = new TemplateProcessor(base_path() . "/document_templates/Notifications/$notification->type/billet_a_ordre_$notification->type.docx");
 				$data = $notification->toArray();
 				$data["amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
 				SpellNumber::value((float) $data["due_amount"])->locale('fr')->toLetters();
@@ -409,7 +409,7 @@ class NotificationController extends Controller
 
 				// Enregistrez les modifications dans un nouveau fichier
 				$bsaseName = "HandwrittenMention-" . $notification->verbal_trial->committee_id;
-				$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
+				$wordFilePath = $this->temporaryDocumentPath($bsaseName . ".docx");
 				$templateProcessor->saveAs($wordFilePath);
 				return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 

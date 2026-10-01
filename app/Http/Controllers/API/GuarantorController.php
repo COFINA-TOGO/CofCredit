@@ -170,7 +170,7 @@ class GuarantorController extends Controller
 			// $guarantor->load(["verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"]);
 			$data = $guarantor->toArray();
 			$parent = $guarantor->notification ? $guarantor->notification : $guarantor->contract;
-			$templatePath = "../document_templates/Contracts/$parent->type/contract_caution_$parent->type.docx";
+			$templatePath = base_path() . "/document_templates/Contracts/$parent->type/contract_caution_$parent->type.docx";
 			$templateProcessor = new TemplateProcessor($templatePath);
 
 
@@ -196,7 +196,7 @@ class GuarantorController extends Controller
 				return ['company.' . $key => $value];
 			})->all());
 
-			$data["ht_rate"] = "17";
+			$data["ht_rate"] = config("credit.ht_rate");
 			$data["current_date"] = Carbon::now()->format("d/m/Y");
 			$data["contract.verbal_trial.amount.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.amount"])->locale('fr')->toLetters();
 			$data["contract.total_amount_of_interest.fr"] = SpellNumber::value((float) $data["contract.total_amount_of_interest"])->locale('fr')->toLetters();
@@ -212,7 +212,7 @@ class GuarantorController extends Controller
 			$data["line_review_bonus"] = $data["contract.verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne" : "";
 			$data["line_review_bonus_value"] = $data["contract.verbal_trial.has_line_review_bonus"] ? ": 1% du capital restant dû après 12 mois" : "";
 
-			$data["signatory"] = (((float) $data["contract.verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
+			$data["signatory"] = $this->signatoryFor($data["contract.verbal_trial.amount"]);
 
 			$data["contract.verbal_trial.amount"] = number_format(((float) $data["contract.verbal_trial.amount"]), 0, ',', ' ');
 			$data["contract.total_amount_of_interest"] = number_format(((float) $data["contract.total_amount_of_interest"]), 0, ',', ' ');
@@ -251,7 +251,7 @@ class GuarantorController extends Controller
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "Contrat-caution-" . $parent->verbal_trial->committee_id;
-			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
+			$wordFilePath = $this->temporaryDocumentPath($bsaseName . ".docx");
 
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
@@ -287,7 +287,7 @@ class GuarantorController extends Controller
 
 			$data = $guarantor->toArray();
 			$parent = $guarantor->notification ? $guarantor->notification : $guarantor->contract;
-			$templatePath = "../document_templates/Contracts/$parent->type/billet_a_ordre_caution_$parent->type.docx";
+			$templatePath = base_path() . "/document_templates/Contracts/$parent->type/billet_a_ordre_caution_$parent->type.docx";
 			$templateProcessor = new TemplateProcessor($templatePath);
 
 			$data = array_merge($data, collect($parent)->mapWithKeys(function ($value, $key) {
@@ -311,7 +311,7 @@ class GuarantorController extends Controller
 				return ['company.' . $key => $value];
 			})->all());
 
-			$data["ht_rate"] = "17";
+			$data["ht_rate"] = config("credit.ht_rate");
 			$data["current_date"] = Carbon::now()->format("d/m/Y");
 			$data["contract.verbal_trial.amount.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.amount"])->locale('fr')->toLetters();
 			$data["contract.total_amount_of_interest.fr"] = SpellNumber::value((float) $data["contract.total_amount_of_interest"])->locale('fr')->toLetters();
@@ -326,7 +326,7 @@ class GuarantorController extends Controller
 			$data["contract.verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["contract.verbal_trial.periodicity"]];
 			$data["contract.verbal_trial.periodicity.fr3"] = ["mensual" => "mensualité", "quarterly" => "trimestre", "semi-annual" => "semestre", "annual" => "année", "in-fine" => "echéance."][$data["contract.verbal_trial.periodicity"]];
 			$data["line_review_bonus"] = $data["contract.verbal_trial.has_line_review_bonus"] ? "Prime de révision de ligne      : 1% du capital restant dû après 12 mois" : "";
-			$data["signatory"] = (((float) $data["contract.verbal_trial.amount"]) <= 10000000) ? "Madame Ameh Délali MESSANGAN épouse AMEDEMEGNAH, Responsable juridique" : "Mr. Koffi Djramedo GAMADO, Head Crédit";
+			$data["signatory"] = $this->signatoryFor($data["contract.verbal_trial.amount"]);
 			$data["type_of_identity_document.fr"] = [
 				"cni" => "d'une Carte d'identité nationale",
 				"passport" => "d'un Passeport",
@@ -354,7 +354,7 @@ class GuarantorController extends Controller
 			$templateProcessor->setValues($data);
 
 			$bsaseName = "Billet-a-ordre-caution-" . $parent->verbal_trial->committee_id;
-			$wordFilePath = Str::slug(public_path($bsaseName . ".docx"), "-");
+			$wordFilePath = $this->temporaryDocumentPath($bsaseName . ".docx");
 			$templateProcessor->saveAs($wordFilePath);
 			return Response::file($wordFilePath, ["Content-Type" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"])->deleteFileAfterSend(true);
 
