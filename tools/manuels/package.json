@@ -1,0 +1,9 @@
+{
+  "name": "credit-manuels",
+  "private": true,
+  "type": "module",
+  "description": "Captures d'écran et génération des manuels d'utilisation par profil",
+  "dependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}
