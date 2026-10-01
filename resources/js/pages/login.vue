@@ -46,9 +46,6 @@ const login = async () => {
 				email: credentials.value.email,
 				password: credentials.value.password,
 			},
-			onResponseError({ response }) {
-				errors.value = response._data.errors
-			},
 		})
 
 		errors.value.email = undefined;
@@ -76,6 +73,9 @@ const login = async () => {
 			})
 		} else {
 			if (res.status != 200) {
+				// Ex : trop de tentatives (429), la réponse ne contient qu'un message
+				res.errors ??= { server: [res.message ?? 'Erreur du serveur'] }
+				snackbarMessage.value = ''
 				if (res.errors.email) {
 					errors.value.email = res.errors.email[0]
 				} else if (res.errors.password) {

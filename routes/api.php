@@ -29,7 +29,7 @@ use Maatwebsite\Excel\Facades\Excel;
 |
 */
 
-Route::post('auth/login', [AuthController::class, "login"])->name("auth.login");
+Route::post('auth/login', [AuthController::class, "login"])->middleware("throttle:login")->name("auth.login");
 // Route::get("/test/contract/promissory-note/{id}", [ContractController::class, "promissory_note"])->name("free.contract.promissory-note");
 // Route::get("/test/guarantor/word/{id}", [GuarantorController::class, "download"])->name("free.guarantor.word");
 // Route::get("/test/guarantor/promissory-note/{id}", [GuarantorController::class, "promissory_note"])->name("free.guarantor.promissory-note");

@@ -27,26 +27,24 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:users',
+            'email' => 'required|email',
             "password" => 'required'
         ]);
         if ($validator->fails()) {
             return $this->responseError($validator->errors(), 400);
-        } else {
-            $user = User::where('email', $request->email)->first();
-            if (Hash::check($request->password, $user->password)) {
-                if ($user->activated) {
-                    return $this->responseOk([
-                        "userToken" => $user->createToken($request->email)->plainTextToken,
-                        "user" => $user
-                    ]);
-                } else {
-                    return $this->responseError(["activated" => ["Votre compte est désactivé"], "sub_code" => ["001"]], 403);
-                }
-            } else {
-                return $this->responseError(["password" => ["Mot de passe incorrect"]], 400);
-            }
         }
+        $user = User::where('email', $request->email)->first();
+        // Même message que l'email existe ou non, pour ne pas révéler les comptes existants
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return $this->responseError(["password" => ["Email ou mot de passe incorrect"]], 400);
+        }
+        if (!$user->activated) {
+            return $this->responseError(["activated" => ["Votre compte est désactivé"], "sub_code" => ["001"]], 403);
+        }
+        return $this->responseOk([
+            "userToken" => $user->createToken($request->email)->plainTextToken,
+            "user" => $user
+        ]);
     }
 
     /**

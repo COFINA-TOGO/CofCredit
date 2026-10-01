@@ -3,11 +3,14 @@
 namespace Tests\Unit;
 
 use App\Models\CAT;
+use App\Models\Guarantor;
 use App\Models\Contract;
 use App\Models\Notification;
 use App\Models\User;
 use App\Models\VerbalTrial;
 use App\Policies\CATPolicy;
+use App\Policies\GuaranteePolicy;
+use App\Policies\GuarantorPolicy;
 use App\Policies\ContractPolicy;
 use App\Policies\NotificationPolicy;
 use App\Policies\VerbalTrialPolicy;
@@ -65,6 +68,23 @@ class WorkflowPoliciesTest extends TestCase
 		$this->assertTrue((new NotificationPolicy)->downloadDocument($this->user('caf'), new Notification())->allowed());
 		$this->assertTrue((new ContractPolicy)->downloadDocument($this->user('credit_admin'), new Contract())->allowed());
 		$this->assertTrue((new CATPolicy)->downloadDocument($this->user('operation'), new CAT())->allowed());
+	}
+
+	public function test_courier_can_only_read_and_export_guarantors_and_guarantees(): void
+	{
+		$courier = $this->user('courier');
+		$guarantor = new Guarantor();
+
+		$this->assertTrue((new GuarantorPolicy)->viewAny($courier)->allowed());
+		$this->assertTrue((new GuarantorPolicy)->downloadAny($courier)->allowed());
+		$this->assertTrue((new GuaranteePolicy)->viewAny($courier)->allowed());
+		$this->assertTrue((new GuaranteePolicy)->downloadAny($courier)->allowed());
+
+		$this->assertNull((new GuarantorPolicy)->before($courier, 'delete'));
+		$this->assertFalse((new GuarantorPolicy)->create($courier)->allowed());
+		$this->assertFalse((new GuarantorPolicy)->update($courier, $guarantor)->allowed());
+		$this->assertFalse((new GuarantorPolicy)->delete($courier, $guarantor)->allowed());
+		$this->assertFalse((new GuarantorPolicy)->upload($courier, $guarantor)->allowed());
 	}
 
 	private function user(string $profile, int $id = 1): User

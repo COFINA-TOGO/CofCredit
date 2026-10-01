@@ -28,6 +28,13 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(600)->by($request->user()?->id ?: $request->ip());
         });
 
+        // Connexion : 5 tentatives par minute pour un même email et une même IP
+        RateLimiter::for('login', function (Request $request) {
+            return Limit::perMinute(5)->by(strtolower((string) $request->input('email')) . '|' . $request->ip())->response(function () {
+                return response()->json(["status" => 429, "errors" => ["login" => ["Trop de tentatives de connexion, réessayez dans une minute"]]], 429);
+            });
+        });
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')
