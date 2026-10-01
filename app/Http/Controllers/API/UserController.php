@@ -72,7 +72,7 @@ class UserController extends Controller
 				});
 			}
 
-			if (isset($request["paginate"]) && ($request->paginate == false)) {
+			if ($this->isPaginationDisabled($request)) {
 				$list = $list->orderByDesc('created_at')->get();
 				$data = ["data" => $list, "total" => count($list)];
 			} else {

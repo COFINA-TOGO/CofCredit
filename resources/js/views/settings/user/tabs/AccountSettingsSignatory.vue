@@ -37,7 +37,7 @@ const updateAvatar = async () => {
 
 	error.value = ""
 	if (res.status == 200) {
-		useCookie('userData').value.signatory = "http://credit.cofina.localhost" + res.data.user.signatory_path;
+		useCookie('userData').value.signatory = res.data.user.signatory_path;
 		snackbarColor.value = "success"
 		snackbarMessage.value = "Signature uploadé avec succès"
 		isSnackbarScrollReverseVisible.value = true

@@ -52,7 +52,7 @@ class TypeOfApplicantController extends Controller
 				}
 			}
 
-			if (isset($request["paginate"]) && ($request->paginate == false)) {
+			if ($this->isPaginationDisabled($request)) {
 				$typeOfApplicantList = $typeOfApplicantList->orderByDesc('created_at')->get();
 				$data = ["data" => $typeOfApplicantList, "total" => count($typeOfApplicantList)];
 			} else {

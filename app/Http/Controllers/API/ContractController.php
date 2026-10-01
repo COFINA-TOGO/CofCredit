@@ -115,9 +115,10 @@ class ContractController extends Controller
 
 			if (isset($request["status"])) {
 				$contractList->where(function ($query) use ($request) {
+					$statusList = ["w" => "waiting", "a" => "pending_admin_validation", "h" => "pending_head_validation", "v" => "validated", "r" => "rejected"];
 					foreach (str_split($request["status"]) as $char) {
-						if (in_array($char, ['w', 'v', 'r', 'c'])) {
-							$query->orWhere("status", ["w" => "waiting", "v" => "validated", "r" => "rejected"][$char]);
+						if (isset($statusList[$char])) {
+							$query->orWhere("status", $statusList[$char]);
 						}
 					}
 				});
@@ -159,7 +160,7 @@ class ContractController extends Controller
 				}
 			}
 
-			if (isset($request["paginate"]) && ($request->paginate == false)) {
+			if ($this->isPaginationDisabled($request)) {
 				$contractList = $contractList->orderByDesc('updated_at')->get();
 				$data = ["data" => $contractList, "total" => count($contractList)];
 			} else {
@@ -575,69 +576,68 @@ class ContractController extends Controller
 				return $this->responseError($validator->errors(), 400);
 			}
 
+			// Validations dépendantes du type de contrat et des gages, faites avant toute écriture
+			$rules = [];
+			if ($requestData["type"] == "company") {
+				$rules = [
+					'company_denomination' => "required|min:2",
+					'company_legal_status' => "required|min:2",
+					'company_head_office_address' => "required|min:2",
+					'company_rccm_number' => "required|min:2",
+					'company_phone_number' => "required|min:2",
+				];
+			} elseif ($requestData["type"] == "individual_business") {
+				$rules = [
+					'individual_business_denomination' => "required|min:2",
+					'individual_business_corporate_purpose' => "required|min:2",
+					'individual_business_head_office_address' => "required|min:2",
+					'individual_business_rccm_number' => "required|min:2",
+					'individual_business_phone_number' => "required|min:2",
+				];
+			}
+			if ($requestData["has_pledges"] == "1") {
+				$rules += [
+					"pledges" => "required|array|min:1",
+					"pledges.*.type" => "required|in:vehicle,stock",
+					"pledges.*.comment" => "required|min:2"
+				];
+			}
+			$validator = Validator::make($requestData, $rules);
+			if ($validator->fails()) {
+				return $this->responseError($validator->errors(), 400);
+			}
+
 			DB::beginTransaction();
 			try {
 				$relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
 				$requestData["creator_id"] = $request->user()->id;
 				$contract = Contract::create($requestData);
 				if ($requestData["type"] == "company") {
-					$validator = Validator::make($requestData, [
-						'company_denomination' => "required|min:2",
-						'company_legal_status' => "required|min:2",
-						'company_head_office_address' => "required|min:2",
-						'company_rccm_number' => "required|min:2",
-						'company_phone_number' => "required|min:2",
+					Company::create([
+						"contract_id" => $contract->id,
+						"denomination" => $requestData["company_denomination"],
+						"legal_status" => $requestData["company_legal_status"],
+						"head_office_address" => $requestData["company_head_office_address"],
+						"rccm_number" => $requestData["company_rccm_number"],
+						"phone_number" => $requestData["company_phone_number"],
 					]);
-
-					if ($validator->fails()) {
-						return $this->responseError($validator->errors(), 400);
-					} else {
-						Company::create([
-							"contract_id" => $contract->id,
-							"denomination" => $requestData["company_denomination"],
-							"legal_status" => $requestData["company_legal_status"],
-							"head_office_address" => $requestData["company_head_office_address"],
-							"rccm_number" => $requestData["company_rccm_number"],
-							"phone_number" => $requestData["company_phone_number"],
-						]);
-					}
 
 					$relationList[] = "company";
 				} elseif ($requestData["type"] == "individual_business") {
-					$validator = Validator::make($requestData, [
-						'individual_business_denomination' => "required|min:2",
-						'individual_business_corporate_purpose' => "required|min:2",
-						'individual_business_head_office_address' => "required|min:2",
-						'individual_business_rccm_number' => "required|min:2",
-						'individual_business_phone_number' => "required|min:2",
+					IndividualBusiness::create([
+						"contract_id" => $contract->id,
+						"denomination" => $requestData["individual_business_denomination"],
+						"corporate_purpose" => $requestData["individual_business_corporate_purpose"],
+						"head_office_address" => $requestData["individual_business_head_office_address"],
+						"rccm_number" => $requestData["individual_business_rccm_number"],
+						"phone_number" => $requestData["individual_business_phone_number"],
 					]);
-
-					if ($validator->fails()) {
-						return $this->responseError($validator->errors(), 400);
-					} else {
-						IndividualBusiness::create([
-							"contract_id" => $contract->id,
-							"denomination" => $requestData["individual_business_denomination"],
-							"corporate_purpose" => $requestData["individual_business_corporate_purpose"],
-							"head_office_address" => $requestData["individual_business_head_office_address"],
-							"rccm_number" => $requestData["individual_business_rccm_number"],
-							"phone_number" => $requestData["individual_business_phone_number"],
-						]);
-					}
 
 					$relationList[] = "individual_business";
 				}
 
 				if (isset($requestData["has_pledges"])) {
 					if ($requestData["has_pledges"] == "1") {
-						$validator = Validator::make($requestData, [
-							"pledges" => "required|array|min:1",
-							"pledges.*.type" => "required|in:vehicle,stock",
-							"pledges.*.comment" => "required|min:2"
-						]);
-						if ($validator->fails()) {
-							return $this->responseError($validator->errors(), 400);
-						}
 						foreach ($requestData["pledges"] as $pledge) {
 							Pledge::create([
 								"contract_id" => $contract->id,
@@ -657,7 +657,7 @@ class ContractController extends Controller
 			}
 			DB::commit(); // Valider les opérations
 			$receiver = $contract->verbal_trial->caf;
-			$link = env("APP_URL") . "/contract";
+			$link = config("app.url") . "/contract";
 			SendEmail::dispatch(
 				$receiver->email,
 				"Notification de mise en place d'un contrat",
@@ -736,73 +736,72 @@ class ContractController extends Controller
 					return $this->responseError($validator->errors(), 400);
 				}
 
+				// Validations dépendantes du type de contrat et des gages, faites avant toute écriture
+				$rules = [];
+				if ($requestData["type"] == "company") {
+					$rules = [
+						'company_denomination' => "required|min:2",
+						'company_legal_status' => "required|min:2",
+						'company_head_office_address' => "required|min:2",
+						'company_rccm_number' => "required|min:2",
+						'company_phone_number' => "required|min:2",
+					];
+				} elseif ($requestData["type"] == "individual_business") {
+					$rules = [
+						'individual_business_denomination' => "required|min:2",
+						'individual_business_corporate_purpose' => "required|min:2",
+						'individual_business_head_office_address' => "required|min:2",
+						'individual_business_rccm_number' => "required|min:2",
+						'individual_business_phone_number' => "required|min:2",
+					];
+				}
+				if ($requestData["has_pledges"] == "1") {
+					$rules += [
+						"pledges" => "required|array|min:1",
+						"pledges.*.type" => "required|in:vehicle,stock",
+						"pledges.*.comment" => "required|min:2"
+					];
+				}
+				$validator = Validator::make($requestData, $rules);
+				if ($validator->fails()) {
+					return $this->responseError($validator->errors(), 400);
+				}
+
 				DB::beginTransaction();
 				try {
 					$relationList = ["verbal_trial", "verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"];
-					$requestData["creator_id"] = $request->user()->id;
+					// Le créateur (admin crédit en charge de la validation de l'envoi) reste inchangé
 					$requestData["status"] = "waiting";
 					$contract->update($requestData);
 					$contract->company?->delete();
 					$contract->individual_business?->delete();
 					if ($requestData["type"] == "company") {
-						$validator = Validator::make($requestData, [
-							'company_denomination' => "required|min:2",
-							'company_legal_status' => "required|min:2",
-							'company_head_office_address' => "required|min:2",
-							'company_rccm_number' => "required|min:2",
-							'company_phone_number' => "required|min:2",
+						Company::create([
+							"contract_id" => $contract->id,
+							"denomination" => $requestData["company_denomination"],
+							"legal_status" => $requestData["company_legal_status"],
+							"head_office_address" => $requestData["company_head_office_address"],
+							"rccm_number" => $requestData["company_rccm_number"],
+							"phone_number" => $requestData["company_phone_number"],
 						]);
-
-						if ($validator->fails()) {
-							return $this->responseError($validator->errors(), 400);
-						} else {
-							Company::create([
-								"contract_id" => $contract->id,
-								"denomination" => $requestData["company_denomination"],
-								"legal_status" => $requestData["company_legal_status"],
-								"head_office_address" => $requestData["company_head_office_address"],
-								"rccm_number" => $requestData["company_rccm_number"],
-								"phone_number" => $requestData["company_phone_number"],
-							]);
-						}
 
 						$relationList[] = "company";
 					} elseif ($requestData["type"] == "individual_business") {
-						$validator = Validator::make($requestData, [
-							'individual_business_denomination' => "required|min:2",
-							'individual_business_corporate_purpose' => "required|min:2",
-							'individual_business_head_office_address' => "required|min:2",
-							'individual_business_rccm_number' => "required|min:2",
-							'individual_business_phone_number' => "required|min:2",
+						IndividualBusiness::create([
+							"contract_id" => $contract->id,
+							"denomination" => $requestData["individual_business_denomination"],
+							"corporate_purpose" => $requestData["individual_business_corporate_purpose"],
+							"head_office_address" => $requestData["individual_business_head_office_address"],
+							"rccm_number" => $requestData["individual_business_rccm_number"],
+							"phone_number" => $requestData["individual_business_phone_number"],
 						]);
-
-						if ($validator->fails()) {
-							return $this->responseError($validator->errors(), 400);
-						} else {
-							IndividualBusiness::create([
-								"contract_id" => $contract->id,
-								"denomination" => $requestData["individual_business_denomination"],
-								"corporate_purpose" => $requestData["individual_business_corporate_purpose"],
-								"head_office_address" => $requestData["individual_business_head_office_address"],
-								"rccm_number" => $requestData["individual_business_rccm_number"],
-								"phone_number" => $requestData["individual_business_phone_number"],
-							]);
-						}
 
 						$relationList[] = "individual_business";
 					}
 
+					$contract->pledges()->delete();
 					if (isset($requestData["has_pledges"])) {
 						if ($requestData["has_pledges"] == "1") {
-							$validator = Validator::make($requestData, [
-								"pledges" => "required|array|min:1",
-								"pledges.*.type" => "required|in:vehicle,stock",
-								"pledges.*.comment" => "required|min:2"
-							]);
-							if ($validator->fails()) {
-								return $this->responseError($validator->errors(), 400);
-							}
-							$contract->pledges()->delete();
 							foreach ($requestData["pledges"] as $pledge) {
 								Pledge::create([
 									"contract_id" => $contract->id,
@@ -817,7 +816,7 @@ class ContractController extends Controller
 					$contract->update($requestData);
 
 					$receiver = $contract->verbal_trial->caf;
-					$link = env("APP_URL") . "/contract";
+					$link = config("app.url") . "/contract";
 					SendEmail::dispatch(
 						$receiver->email,
 						"Notification de modification d'un contrat",
@@ -911,7 +910,7 @@ class ContractController extends Controller
 
 				// Notifier l'admin crédit que tous les fichiers sont uploadés et qu'il peut valider
 				$pv_commitee_id = $contract->verbal_trial->committee_id;
-				$link = env("APP_URL") . "/contract";
+				$link = config("app.url") . "/contract";
 
 				// Rafraîchir le contrat pour avoir les dernières données
 				$contract->refresh();
@@ -996,7 +995,7 @@ class ContractController extends Controller
 
 				// Notifier les head crédit
 				$head_credit_users = User::where('profile', 'head_credit')->get();
-				$link = env("APP_URL") . "/contract";
+				$link = config("app.url") . "/contract";
 				$pv_commitee_id = $contract->verbal_trial->committee_id;
 
 				foreach ($head_credit_users as $head_credit) {
@@ -1084,7 +1083,7 @@ class ContractController extends Controller
 
 				// Notifier selon l'action
 				$pv_commitee_id = $contract->verbal_trial->committee_id;
-				$link = env("APP_URL") . "/contract";
+				$link = config("app.url") . "/contract";
 
 				if ($newStatus === 'validated') {
 					// Notifier l'admin crédit de la validation
@@ -1101,7 +1100,7 @@ class ContractController extends Controller
 							Vous pouvez maintenant procéder à la création du CAT.</p>
 							
 							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Connectez-vous à l'application
-								cofina credit digital: <a href='" . env("APP_URL") . "/cat/add?id=" . $contract->id . "'>Créer le CAT</a></p>
+								cofina credit digital: <a href='" . config("app.url") . "/cat/add?id=" . $contract->id . "'>Créer le CAT</a></p>
 
 							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
 								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>

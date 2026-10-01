@@ -26,14 +26,14 @@ const useApi = createFetch({
 			let parsedData = null
 			try {
 				parsedData = destr(data)
-				if (parsedData.status === 403) {
-					if (parsedData.errors.sub_code[0] == "001") {
+				if (parsedData?.status === 403) {
+					if (parsedData.errors?.sub_code?.[0] == "001") {
 						useCookie('userToken').value = null
 						useCookie('userData').value = null
 						useCookie('userAbilityRules').value = null
 						window.location.href = '/not-authorized';
-					} else if (parsedData.errors.sub_code[0] == "002") {
-						if (window.location.href != '/settings/user/security') {
+					} else if (parsedData.errors?.sub_code?.[0] == "002") {
+						if (window.location.pathname !== '/settings/user/security') {
 							window.location.href = '/settings/user/security';
 						}
 					}

@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Mail\EmailSkeleton;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -25,31 +24,31 @@ class SendEmail implements ShouldQueue
     public function __construct(string $receiverEmail, string $subject, string $content)
     {
         $this->receiverEmail = $receiverEmail;
-        // $this->receiverEmail = "charles.gamligo@cofinacorp.com";
         $this->subject = $subject;
         $this->content = $content;
     }
+
+    /**
+     * Le nombre de tentatives avant de marquer le job en échec (table failed_jobs)
+     */
+    public $tries = 3;
+
+    /**
+     * Le délai (en secondes) entre deux tentatives
+     */
+    public $backoff = 60;
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        try {
-            Mail::to($this->receiverEmail)->send(
-                new EmailSkeleton(
-                    $this->subject,
-                    $this->content
-                )
-            );
-            // Mail::to($this->receiverEmail)->send(
-            //     new EmailSkeleton(
-            //         $this->subject,
-            //         $this->content
-            //     )
-            // );
-        } catch (Exception $ex) {
-            dd($ex);
-        }
+        // Une exception remonte au worker : le job est relancé puis enregistré dans failed_jobs
+        Mail::to($this->receiverEmail)->send(
+            new EmailSkeleton(
+                $this->subject,
+                $this->content
+            )
+        );
     }
 }

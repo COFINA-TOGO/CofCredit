@@ -65,7 +65,7 @@ class GuaranteeController extends Controller
 				}
 			}
 
-			if (isset($request["paginate"]) && ($request->paginate == false)) {
+			if ($this->isPaginationDisabled($request)) {
 				$guaranteeList = $guaranteeList->orderByDesc('created_at')->get();
 				$data = ["data" => $guaranteeList, "total" => count($guaranteeList)];
 			} else {

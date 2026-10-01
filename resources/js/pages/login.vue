@@ -65,7 +65,7 @@ const login = async () => {
 				"fullName": user.full_name,
 				"username": user.name,
 				"avatar": "/images/avatars/avatar-1.png",
-				"signatory": user.signatory_path ? "http://credit.cofina.localhost" + user.signatory_path : "/images/avatars/avatar-14.png",
+				"signatory": user.signatory_path ? user.signatory_path : "/images/avatars/avatar-14.png",
 				"email": user.email,
 				"role": user.profile,
 				"role_fr": user.profile_fr,

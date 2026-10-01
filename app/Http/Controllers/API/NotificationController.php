@@ -164,7 +164,7 @@ class NotificationController extends Controller
 			// return $notificationList->toSql();
 
 
-			if (isset($request["paginate"]) && ($request->paginate == false)) {
+			if ($this->isPaginationDisabled($request)) {
 				$notificationList = $notificationList->orderByDesc('updated_at')->get();
 				$data = ["data" => $notificationList, "total" => count($notificationList)];
 			} else {
@@ -485,7 +485,7 @@ class NotificationController extends Controller
 			$receiverList = User::where('profile', 'head_credit')->get();
 			foreach ($receiverList as $receiver) {
 				$receiver->full_name = "Head Crédit";
-				$link = env("APP_URL") . "/notification";
+				$link = config("app.url") . "/notification";
 				SendEmail::dispatch(
 					$receiver->email,
 					"Notification de mise en place d'une notification",
@@ -574,7 +574,7 @@ class NotificationController extends Controller
 				$receiverList = User::where('profile', 'head_credit')->get();
 				foreach ($receiverList as $receiver) {
 					$receiver->full_name = "Head Crédit";
-					$link = env("APP_URL") . "/notification";
+					$link = config("app.url") . "/notification";
 					SendEmail::dispatch(
 						$receiver->email,
 						"Notification de modification d'une notification",
@@ -633,8 +633,9 @@ class NotificationController extends Controller
 				} else {
 					$notification->update([
 						"head_credit_validation" => $requestData["head_credit_validation"],
-						"head_credit_observation" => $requestData["head_credit_observation"],
+						"head_credit_observation" => $requestData["head_credit_observation"] ?? null,
 					]);
+					return $this->responseOk(["notification" => $notification]);
 				}
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
@@ -659,8 +660,9 @@ class NotificationController extends Controller
 			if (($authorisation = Gate::inspect("send", $notification))->allowed()) {
 				if ($notification->observations == []) {
 					$notification->update(["sent" => true, "status" => "waiting"]);
+					return $this->responseOk(["notification" => $notification]);
 				} else {
-					return $this->responseError(["observations" => ["Le dossier de la notification est incomplet"]]);
+					return $this->responseError(["observations" => ["Le dossier de la notification est incomplet"]], 400);
 				}
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
@@ -696,13 +698,13 @@ class NotificationController extends Controller
 				} else {
 					$data = [
 						"status" => $requestData["status"],
-						"status_observation" => $requestData["comment"],
+						"status_observation" => $requestData["comment"] ?? null,
 					];
 					if ($requestData["status"] == "rejected") {
 						$data["sent"] = false;
 					}
 					$notification->update($data);
-					return $notification;
+					return $this->responseOk(["notification" => $notification]);
 				}
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
@@ -758,7 +760,7 @@ class NotificationController extends Controller
 				$notification->refresh();
 				if ($notification->signed_notification_path && $notification->signed_contract_path && $notification->signed_promissory_note_path) {
 					$head_credit_users = User::where('profile', 'head_credit')->get();
-					$link = env("APP_URL") . "/notification";
+					$link = config("app.url") . "/notification";
 					$pv_commitee_id = $notification->verbal_trial->committee_id;
 
 					foreach ($head_credit_users as $head_credit) {

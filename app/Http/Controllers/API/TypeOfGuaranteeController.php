@@ -51,7 +51,7 @@ class TypeOfGuaranteeController extends Controller
             //     }
             // }
 
-            if (isset($request["paginate"]) && ($request->paginate == false)) {
+            if ($this->isPaginationDisabled($request)) {
                 $typeOfGuaranteeList = $typeOfGuaranteeList->orderByDesc('created_at')->get();
                 $data = ["data" => $typeOfGuaranteeList, "total" => count($typeOfGuaranteeList)];
             } else {

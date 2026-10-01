@@ -91,7 +91,7 @@ class GuarantorController extends Controller
 				}
 			}
 
-			if (isset($request["paginate"]) && ($request->paginate == false)) {
+			if ($this->isPaginationDisabled($request)) {
 				$guarantorList = $guarantorList->orderByDesc('created_at')->get();
 				$data = ["data" => $guarantorList, "total" => count($guarantorList)];
 			} else {

@@ -19,13 +19,23 @@ trait CustomResponseTrait
      */
     public function responseIndexOk($query, array $requestData, string $orderColumn = "updated_at", int $paginateCount = 8, $status = 200, array $messages = [])
     {
-        if (isset($requestData["paginate"]) && $requestData["paginate"] == "false") {
+        if ($this->isPaginationDisabled($requestData)) {
             $data = $query->orderByDesc($orderColumn)->get();
             $data = ["data" => $data, "total" => count($data)];
         } else {
             $data = $query->orderByDesc($orderColumn)->paginate($paginateCount)->toArray();
         }
         return $this->responseOkPaginate(data: $data, status: $status, messages: $messages);
+    }
+
+    /**
+     * Indique si le client a demandé la liste complète (paginate=false|0)
+     * @param	mixed	$requestData	Les données de la requête
+     * @return	bool
+     */
+    public function isPaginationDisabled($requestData)
+    {
+        return isset($requestData["paginate"]) && filter_var($requestData["paginate"], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false;
     }
 
     /**

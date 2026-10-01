@@ -18,7 +18,7 @@ class Authenticate extends Middleware
 			$user = $request->user();
 			if ($user->activated) {
 				if ($user->password_change_required) {
-					if ($request->route()->getName() !== 'user.update-password' && $request->route()->getName() !== 'logout') {
+					if (!in_array($request->route()->getName(), ['user.update-password', 'auth.logout', 'auth.show'])) {
 						return $this->responseError(["activated" => ["Vous devez changer votre mot de passe"], "sub_code" => ["002"]], 403);
 					}
 				}

@@ -105,7 +105,7 @@ class VerbalTrialController extends Controller
 					});;
 			}
 
-			foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "due_amount", "administrative_fees_percentage", "caf_id", "credit_admin_id", "credit_analyst_di", "creator_id", "risk_premium_percentage"] as $filter) {
+			foreach (["committee_id", "committee_date", "civility", "applicant_first_name", "applicant_last_name", "account_number", "activity", "purpose_of_financing", "type_of_credit_id", "amount", "duration", "periodicity", "taf", "administrative_fees_percentage", "caf_id", "credit_admin_id", "credit_analyst_id", "creator_id", "risk_premium_percentage"] as $filter) {
 				if (isset($request[$filter]) && $request[$filter] != "") {
 					$verbalTrialList->where($filter, $request[$filter]);
 				}
@@ -113,9 +113,10 @@ class VerbalTrialController extends Controller
 
 			if (isset($request["status"])) {
 				$verbalTrialList->where(function ($query) use ($request) {
+					$statusList = ["w" => "waiting", "v" => "validated", "r" => "rejected"];
 					foreach (str_split($request["status"]) as $char) {
-						if (in_array($char, ['w', 'v', 'r', 'c'])) {
-							$query->orWhere("status", ["w" => "waiting", "v" => "validated", "r" => "rejected"][$char]);
+						if (isset($statusList[$char])) {
+							$query->orWhere("status", $statusList[$char]);
 						}
 					}
 				});
@@ -189,7 +190,7 @@ class VerbalTrialController extends Controller
 				$verbalTrialList->where('caf_id', $currentUser->id);
 			}
 
-			if (isset($request["paginate"]) && ($request->paginate == false)) {
+			if ($this->isPaginationDisabled($request)) {
 				$verbalTrialList = $verbalTrialList->orderByDesc('created_at')->get();
 				$data = ["data" => $verbalTrialList, "total" => count($verbalTrialList)];
 			} else {
@@ -524,7 +525,7 @@ class VerbalTrialController extends Controller
 									]);
 								}
 							}
-							$link = env("APP_URL") . "/pv/notification/without-pv";
+							$link = config("app.url") . "/pv/notification/without-pv";
 							SendEmail::dispatch(
 								$verbalTrial->credit_analyst->email,
 								"Notification de mise en place d'une notification " . $verbalTrial->committee_id,
@@ -663,7 +664,7 @@ class VerbalTrialController extends Controller
 								$requestData["status"] = "waiting";
 								$requestData["has_line_review_bonus"] = (bool) $requestData["has_line_review_bonus"];
 								$verbalTrial->update($requestData);
-								$link = env("APP_URL") . "/pv";
+								$link = config("app.url") . "/pv";
 								if ($connectedUser->profile == "caf") {
 									SendEmail::dispatch(
 										$verbalTrial->credit_analyst->email,
@@ -671,7 +672,7 @@ class VerbalTrialController extends Controller
 										"
 												<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Analyste,</U></h1>
 	
-												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement la notification $verbalTrial->committee_id en attente de vérification: <a href='" . env("APP_URL") . "/pv/notification/without-pv" . "'>Voir les notifications</a></p>
+												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement la notification $verbalTrial->committee_id en attente de vérification: <a href='" . config("app.url") . "/pv/notification/without-pv" . "'>Voir les notifications</a></p>
 	
 												<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 	
@@ -763,7 +764,7 @@ class VerbalTrialController extends Controller
 					return $this->responseError($validator->errors(), 400);
 				} else {
 					if ($requestData["action"] == "reject") {
-						$verbalTrial->update(["status" => "rejected", "comment" => $requestData["comment"]]);
+						$verbalTrial->update(["status" => "rejected", "comment" => $requestData["comment"] ?? null]);
 						SendEmail::dispatch($verbalTrial->caf->email, "Rejet de la notification " . $verbalTrial->committee_id, "
 							<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) CAF,</h1>
 
@@ -772,7 +773,7 @@ class VerbalTrialController extends Controller
 							</p>
 
 							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-							Pour accéder directement aux notifications, cliquez sur le lien suivant : <a href='" . env("APP_URL") . "/pv/notification/without-pv" . "'>Voir les notifications</a>.
+							Pour accéder directement aux notifications, cliquez sur le lien suivant : <a href='" . config("app.url") . "/pv/notification/without-pv" . "'>Voir les notifications</a>.
 							</p>
 
 							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
@@ -831,7 +832,7 @@ class VerbalTrialController extends Controller
 												<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
 											"
 									);
-									$link = env("APP_URL") . "/pv";
+									$link = config("app.url") . "/pv";
 
 									SendEmail::dispatch(
 										$verbalTrial->credit_admin->email,
@@ -898,13 +899,20 @@ class VerbalTrialController extends Controller
 					return $this->responseError($validator->errors(), 400);
 				} else {
 					$requestData = $validator->validated();
-					$connectedUser = User::find($request->user()->id);
+					$connectedUser = $request->user();
+					$nextValidationLevelList = [
+						"credit_admin" => "head_credit",
+						"head_credit" => "head_credit",
+						"md" => "md",
+					];
+					if (!isset($nextValidationLevelList[$connectedUser->profile])) {
+						return $this->responseError(["auth" => ["Votre profil ne peut pas valider ou rejeter un PV"]], 403);
+					}
+					if ($verbalTrial->status == "validated") {
+						return $this->responseError(["status" => ["Ce PV est déjà validé"]], 400);
+					}
 					if ($requestData["status"] == "validated") {
-						$requestData["validation_level"] = [
-							"credit_admin" => "head_credit",
-							"head_credit" => "head_credit",
-							"md" => "md",
-						][$connectedUser->profile];
+						$requestData["validation_level"] = $nextValidationLevelList[$connectedUser->profile];
 						$requestData["status"] = ($connectedUser->profile == "head_credit") ? "validated" : "waiting";
 					} else if ($requestData["status"] == "rejected") {
 						$requestData["validation_level"] = $connectedUser->profile;
@@ -929,7 +937,7 @@ class VerbalTrialController extends Controller
 									"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
 
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de $nextStep: <a href='" . env("APP_URL") . "/$nextStepLink/add?id=" . $verbalTrial->id . "'>Créer $nextStepName</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de $nextStep: <a href='" . config("app.url") . "/$nextStepLink/add?id=" . $verbalTrial->id . "'>Créer $nextStepName</a></p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
@@ -948,7 +956,7 @@ class VerbalTrialController extends Controller
 									"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher MD,</U></h1>
 
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de validation: <a href='" . env("APP_URL") . "/pv" . "'>Voir les pvs</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de validation: <a href='" . config("app.url") . "/pv" . "'>Voir les pvs</a></p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
@@ -965,7 +973,7 @@ class VerbalTrialController extends Controller
 									"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher Head Credit,</U></h1>
 
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de validation: <a href='" . env("APP_URL") . "/pv" . "'>Voir les pvs</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le PV $verbalTrial->committee_id en attente de validation: <a href='" . config("app.url") . "/pv" . "'>Voir les pvs</a></p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 
@@ -982,7 +990,7 @@ class VerbalTrialController extends Controller
 									"message" => "
 										<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
 			
-										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='" . env("APP_URL") . "/pv" . "'>Voir les pvs</a></p>
+										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le PV $verbalTrial->committee_id en attente de validation: <a href='" . config("app.url") . "/pv" . "'>Voir les pvs</a></p>
 			
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
 			
@@ -1006,7 +1014,7 @@ class VerbalTrialController extends Controller
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='" . env("APP_URL") . "/pv" . "'>Voir les PV</a>.
+										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='" . config("app.url") . "/pv" . "'>Voir les PV</a>.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
@@ -1033,7 +1041,7 @@ class VerbalTrialController extends Controller
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='" . env("APP_URL") . "/pv" . "'>Voir les PV</a>.
+										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='" . config("app.url") . "/pv" . "'>Voir les PV</a>.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
@@ -1060,7 +1068,7 @@ class VerbalTrialController extends Controller
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='" . env("APP_URL") . "/pv" . "'>Voir les PV</a>.
+										Pour accéder directement aux PVs, cliquez sur le lien suivant : <a href='" . config("app.url") . "/pv" . "'>Voir les PV</a>.
 										</p>
 
 										<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
@@ -1077,19 +1085,19 @@ class VerbalTrialController extends Controller
 							],
 						],
 					];
-					$mailsData = $mailsDataList[$requestData["status"]][$requestData["validation_level"]];
+					$mailsData = $mailsDataList[$requestData["status"]][$requestData["validation_level"]] ?? [];
 					foreach ($mailsData as $mailData) {
 						foreach ($mailData["receiverList"] as $receiver) {
 							SendEmail::dispatch($receiver->email, $mailData["subject"], $mailData["message"]);
 						}
 					}
-					return $verbalTrial;
+					return $this->responseOk(["verbalTrial" => $verbalTrial]);
 				}
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
 		} else {
-			return $this->responseError(["id" => ["Le CAT n'existe pas"]], 404);
+			return $this->responseError(["id" => ["Le procès verbal n'existe pas"]], 404);
 		}
 	}
 

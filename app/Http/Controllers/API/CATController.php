@@ -133,7 +133,7 @@ class CATController extends Controller
 				}
 			}
 
-			if (isset($request["paginate"]) && ($request->paginate == false)) {
+			if ($this->isPaginationDisabled($request)) {
 				$catList = $catList->orderByDesc('created_at')->get();
 				$data = ["data" => $catList, "total" => count($catList)];
 			} else {
@@ -374,7 +374,7 @@ class CATController extends Controller
 	
 					<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
 						cofina credit digital et de prendre en charge le cat du dossier " . $cat->back_step->verbal_trial->committee_id . " en attente de validation: <a
-							href='" . env("APP_URL") . "/cat" . "'>Consulter les cats</a></p>
+							href='" . config("app.url") . "/cat" . "'>Consulter les cats</a></p>
 	
 					<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
 						n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
@@ -461,7 +461,7 @@ class CATController extends Controller
 			
 							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
 								cofina credit digital et de prendre en charge le cat du dossier " . $cat->back_step->verbal_trial->committee_id . " en attente de validation: <a
-									href='" . env("APP_URL") . "/cat" . "'>Consulter les cats</a></p>
+									href='" . config("app.url") . "/cat" . "'>Consulter les cats</a></p>
 			
 							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
 								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
@@ -510,7 +510,7 @@ class CATController extends Controller
 		
 						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
 							cofina credit digital et de prendre en charge le cat du dossier " . $cat->back_step->verbal_trial->committee_id . " en attente de deblockage: <a
-								href='" . env("APP_URL") . "/cat" . "'>Consulter les cats</a></p>
+								href='" . config("app.url") . "/cat" . "'>Consulter les cats</a></p>
 		
 						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
 							n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
@@ -521,7 +521,7 @@ class CATController extends Controller
 						"
 					);
 				}
-				return $cat;
+				return $this->responseOk(["c_a_t" => $cat]);
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
@@ -549,7 +549,7 @@ class CATController extends Controller
 					"unblock_status" => "validated",
 					"unblocker_user_id" => $request->user()->id,
 				]);
-				return $cat;
+				return $this->responseOk(["c_a_t" => $cat]);
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
 			}
@@ -582,7 +582,7 @@ class CATController extends Controller
 				} else {
 					$cat->update([
 						"validation_status" => "rejected",
-						"validation_comment" => $requestData["comment"],
+						"validation_comment" => $requestData["comment"] ?? null,
 						"validator_user_id" => $request->user()->id,
 					]);
 					$credit_admin = $cat->back_step->verbal_trial->credit_admin;
@@ -597,7 +597,7 @@ class CATController extends Controller
 								</p>
 
 							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-								Pour accéder directement aux cat, cliquez sur le lien suivant : <a href='" . env("APP_URL") . "/cat" . "'>Voir les cat</a>.
+								Pour accéder directement aux cat, cliquez sur le lien suivant : <a href='" . config("app.url") . "/cat" . "'>Voir les cat</a>.
 							</p>
 			
 							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
@@ -607,7 +607,7 @@ class CATController extends Controller
 							<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
 							"
 					);
-					return $cat;
+					return $this->responseOk(["c_a_t" => $cat]);
 				}
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);
@@ -641,10 +641,10 @@ class CATController extends Controller
 				} else {
 					$cat->update([
 						"unblock_status" => "rejected",
-						"unblock_comment" => $requestData["comment"],
+						"unblock_comment" => $requestData["comment"] ?? null,
 						"unblocker_user_id" => $request->user()->id,
 					]);
-					return $cat;
+					return $this->responseOk(["c_a_t" => $cat]);
 				}
 			} else {
 				return $this->responseError(["auth" => [$authorisation->message()]], 403);

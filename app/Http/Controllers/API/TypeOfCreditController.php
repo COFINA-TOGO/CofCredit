@@ -55,7 +55,7 @@ class TypeOfCreditController extends Controller
                 }
             }
 
-            if (isset($request["paginate"]) && ($request->paginate == false)) {
+            if ($this->isPaginationDisabled($request)) {
                 $typeOfCreditList = $typeOfCreditList->orderByDesc('created_at')->get();
                 $data = ["data" => $typeOfCreditList, "total" => count($typeOfCreditList)];
             } else {
