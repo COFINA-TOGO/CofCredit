@@ -128,10 +128,11 @@ async function capturerProfil(session) {
     await page.setViewport({ width: 1440, height: 2000 })
     await pause(1000)
     const nav = await page.$('.layout-vertical-nav')
-    if (nav) {
-      const cadre = await nav.boundingBox()
-      const bas = await page.evaluate(() => Math.max(...[...document.querySelectorAll('.layout-vertical-nav .nav-link, .layout-vertical-nav .nav-group, .layout-vertical-nav .nav-section-title')]
-        .map(e => e.getBoundingClientRect().bottom)))
+    const cadre = await nav?.boundingBox()
+    const bas = await page.evaluate(() => Math.max(0, ...[...document.querySelectorAll('.layout-vertical-nav .nav-link, .layout-vertical-nav .nav-group, .layout-vertical-nav .nav-section-title')]
+      .map(e => e.getBoundingClientRect().bottom)))
+    // Un menu vide n'est pas capturé (et n'interrompt pas le scénario)
+    if (cadre && bas > cadre.y) {
       await page.screenshot({ path: path.join(OUTR, '01-menu.png'), clip: { x: cadre.x, y: cadre.y, width: cadre.width, height: Math.min(cadre.height, Math.ceil(bas - cadre.y) + 16) } })
       log('✓ 01-menu')
     }
@@ -139,6 +140,7 @@ async function capturerProfil(session) {
     await ouvrir('/settings/user/account', '02-parametres-compte', { pleinePage: false })
     await ouvrir('/settings/user/security', '02-parametres-securite', { pleinePage: false })
     await ouvrir('/settings/user/signatory', '02-parametres-signature', { pleinePage: false })
+    await ouvrir('/user-guide', '03-manuel', { pleinePage: false })
   })
 
   // ─── PV de comité ───────────────────────────────────────────────────────
@@ -254,6 +256,19 @@ async function capturerProfil(session) {
   journal.end()
   await contexte.close()
   log('terminé')
+}
+
+// La page de connexion, commune à tous les profils
+{
+  const contexte = await browser.createBrowserContext()
+  const page = await contexte.newPage()
+  await page.setViewport({ width: 1440, height: 900 })
+  await page.goto(`${BASE}/login`, { waitUntil: 'networkidle2' })
+  await pause(1500)
+  fs.mkdirSync(path.join(OUT, '_commun'), { recursive: true })
+  await page.screenshot({ path: path.join(OUT, '_commun', '00-connexion.png') })
+  await contexte.close()
+  console.log('[commun] ✓ 00-connexion')
 }
 
 // Les profils sont capturés PARALLELE par PARALLELE

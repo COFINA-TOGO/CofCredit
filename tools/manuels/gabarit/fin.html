@@ -1,0 +1,29 @@
+<dialog id="loupe" aria-label="Capture agrandie">
+  <form method="dialog"><button type="submit">Fermer</button></form>
+  <img alt="">
+</dialog>
+
+<script>
+(() => {
+  const loupe = document.getElementById('loupe')
+  const img = loupe.querySelector('img')
+  document.querySelectorAll('figure button.zoom').forEach(b => b.addEventListener('click', () => {
+    const src = b.querySelector('img')
+    img.src = src.src
+    img.alt = src.alt
+    loupe.showModal()
+  }))
+  loupe.addEventListener('click', e => { if (e.target === loupe) loupe.close() })
+
+  // Affiché dans l'application, le manuel est chargé en srcdoc : un lien
+  // « #ancre » y rechargerait la page au lieu de défiler jusqu'à la section.
+  document.addEventListener('click', e => {
+    const lien = e.target.closest('a[href^="#"]')
+    const cible = lien && document.getElementById(lien.getAttribute('href').slice(1))
+    if (cible) {
+      e.preventDefault()
+      cible.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+    }
+  })
+})()
+</script>

@@ -1,0 +1,308 @@
+<title>Manuel Courrier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --fond:#f6f6fa; --papier:#ffffff; --encre:#2b2a3d; --doux:#5f5d74; --pale:#8e8ca3;
+  --trait:#e3e1ee; --accent:#6c5ce7; --accent-fond:#efedfd; --accent-encre:#4a3fc4;
+  --ok:#1f9d63; --ok-fond:#e6f6ee; --alerte:#b86a00; --alerte-fond:#fff3e0; --danger:#c62f45; --danger-fond:#fdecee;
+  --ombre:0 1px 2px rgba(43,42,61,.06),0 6px 24px rgba(43,42,61,.06);
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --fond:#15141f; --papier:#1d1c2a; --encre:#e9e8f3; --doux:#b3b1c7; --pale:#8a88a1;
+  --trait:#2f2d42; --accent:#9d93ff; --accent-fond:#2a2650; --accent-encre:#c4beff;
+  --ok:#4fd495; --ok-fond:#163427; --alerte:#ffb85c; --alerte-fond:#3a2a12; --danger:#ff7d8f; --danger-fond:#3d1a21;
+  --ombre:0 1px 2px rgba(0,0,0,.3),0 6px 24px rgba(0,0,0,.25);
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --fond:#15141f; --papier:#1d1c2a; --encre:#e9e8f3; --doux:#b3b1c7; --pale:#8a88a1;
+  --trait:#2f2d42; --accent:#9d93ff; --accent-fond:#2a2650; --accent-encre:#c4beff;
+  --ok:#4fd495; --ok-fond:#163427; --alerte:#ffb85c; --alerte-fond:#3a2a12; --danger:#ff7d8f; --danger-fond:#3d1a21;
+  --ombre:0 1px 2px rgba(0,0,0,.3),0 6px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--fond);color:var(--encre);font-family:var(--sans);font-size:15.5px;line-height:1.65;padding-inline:16px;padding-block:0 64px}
+.cadre{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:40px}
+@media (min-width:1080px){.cadre{grid-template-columns:250px minmax(0,1fr)}}
+
+/* En-tête */
+.entete{padding-block:48px 28px;border-bottom:1px solid var(--trait);max-width:1180px;margin:0 auto 32px}
+.surtitre{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:clamp(30px,4.2vw,44px);line-height:1.1;margin:10px 0 14px;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+.chapeau{max-width:68ch;color:var(--doux);font-size:17px;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;font-size:13px;color:var(--doux)}
+.meta b{color:var(--encre);font-weight:600}
+
+/* Sommaire */
+nav.sommaire{font-size:13.5px}
+@media (min-width:1080px){nav.sommaire{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow:auto;padding-right:6px}}
+nav.sommaire h2{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pale);margin:0 0 10px;font-weight:700}
+nav.sommaire ol{list-style:none;margin:0;padding:0;counter-reset:s}
+nav.sommaire>ol>li{counter-increment:s;margin-bottom:6px}
+nav.sommaire>ol>li>a{font-weight:600}
+nav.sommaire>ol>li>a::before{content:counter(s) ". ";color:var(--pale);font-variant-numeric:tabular-nums}
+nav.sommaire ol ol{margin:4px 0 8px 14px;border-left:1px solid var(--trait);padding-left:10px}
+nav.sommaire ol ol li{margin:2px 0}
+nav.sommaire a{color:var(--doux);text-decoration:none;display:block;padding:2px 0}
+nav.sommaire a:hover,nav.sommaire a:focus-visible{color:var(--accent-encre)}
+
+/* Contenu */
+main{min-width:0}
+section.chapitre{margin-bottom:64px}
+h2.titre{font-size:28px;line-height:1.2;margin:0 0 6px;font-weight:800;letter-spacing:-.015em;display:flex;gap:12px;align-items:baseline;text-wrap:balance}
+h2.titre .num{font-family:var(--mono);font-size:15px;color:var(--accent);font-weight:500}
+.intro{color:var(--doux);max-width:70ch;margin:0 0 24px}
+h3{font-size:20px;margin:40px 0 8px;font-weight:700;text-wrap:balance}
+h4{font-size:16px;margin:26px 0 6px;font-weight:700}
+p,li{max-width:72ch}
+a{color:var(--accent-encre)}
+ul,ol{padding-left:22px}
+li{margin:3px 0}
+code,.code{font-family:var(--mono);font-size:.88em;background:var(--accent-fond);color:var(--accent-encre);padding:1px 6px;border-radius:5px;white-space:nowrap}
+.btn{display:inline-block;font-size:.85em;font-weight:600;border:1px solid var(--trait);background:var(--papier);border-radius:6px;padding:0 7px;white-space:nowrap;color:var(--encre)}
+.chemin{font-size:13.5px;color:var(--doux);margin:0 0 14px}
+.chemin b{color:var(--encre);font-weight:600}
+
+figure{margin:18px 0 26px;background:var(--papier);border:1px solid var(--trait);border-radius:12px;box-shadow:var(--ombre);overflow:hidden}
+figure button.zoom{all:unset;display:block;cursor:zoom-in;width:100%}
+figure button.zoom:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+figure img{display:block;width:100%;height:auto;max-width:100%}
+figure.haute img{max-height:720px;object-fit:cover;object-position:top}
+figure.moyenne{max-width:720px}
+figcaption{font-size:13px;color:var(--doux);padding:10px 14px;border-top:1px solid var(--trait)}
+figcaption b{color:var(--encre)}
+
+.note{border-radius:10px;padding:12px 16px;margin:18px 0;font-size:14.5px;max-width:78ch;border:1px solid transparent}
+.note b:first-child{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.note.info{background:var(--accent-fond);border-color:color-mix(in srgb,var(--accent) 25%,transparent)}
+.note.info b:first-child{color:var(--accent-encre)}
+.note.attention{background:var(--alerte-fond);border-color:color-mix(in srgb,var(--alerte) 30%,transparent)}
+.note.attention b:first-child{color:var(--alerte)}
+.note.export{background:var(--ok-fond);border-color:color-mix(in srgb,var(--ok) 30%,transparent)}
+.note.export b:first-child{color:var(--ok)}
+
+.tableau{overflow-x:auto;margin:14px 0 22px;border:1px solid var(--trait);border-radius:10px;background:var(--papier)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 14px;border-bottom:1px solid var(--trait);vertical-align:top}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--pale);font-weight:700;background:color-mix(in srgb,var(--accent-fond) 40%,var(--papier))}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;white-space:nowrap}
+
+.pastille{display:inline-block;font-size:12px;font-weight:600;border-radius:999px;padding:1px 9px}
+.p-ok{background:var(--ok-fond);color:var(--ok)}
+.p-en-cours{background:var(--accent-fond);color:var(--accent-encre)}
+.p-echec{background:var(--danger-fond);color:var(--danger)}
+.p-neutre{background:var(--trait);color:var(--doux)}
+.p-alerte{background:var(--alerte-fond);color:var(--alerte)}
+
+.menu-arbre{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:16px 0 24px}
+.menu-arbre div{background:var(--papier);border:1px solid var(--trait);border-radius:10px;padding:12px 16px}
+.menu-arbre h5{margin:0 0 6px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pale)}
+.menu-arbre ul{margin:0;padding-left:16px;font-size:14px}
+.menu-arbre li{margin:2px 0}
+.menu-arbre a{text-decoration:none}
+
+.onglets-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:14px 0 20px}
+.onglets-grille div{border:1px solid var(--trait);border-radius:10px;padding:10px 14px;background:var(--papier);font-size:14px}
+.onglets-grille b{display:block;margin-bottom:2px}
+
+dialog#loupe{border:0;padding:0;background:transparent;max-width:min(1500px,96vw);max-height:94vh;overflow:auto}
+dialog#loupe::backdrop{background:rgba(15,14,24,.82)}
+dialog#loupe img{display:block;max-width:100%;height:auto;border-radius:8px}
+dialog#loupe form{position:sticky;top:0;display:flex;justify-content:flex-end}
+dialog#loupe button{font:600 13px var(--sans);background:var(--papier);color:var(--encre);border:1px solid var(--trait);border-radius:8px;padding:6px 12px;margin:8px;cursor:pointer}
+footer{max-width:1180px;margin:32px auto 0;padding-top:20px;border-top:1px solid var(--trait);font-size:13px;color:var(--pale)}
+
+/* Export PDF (impression) : palette claire, une colonne, captures entières. */
+@page{size:A4;margin:14mm 12mm}
+@media print{
+  :root:not(#_){
+    color-scheme:light;
+    --fond:#ffffff; --papier:#ffffff; --encre:#1f1e2c; --doux:#4b4960; --pale:#77758c;
+    --trait:#dcdae8; --accent:#5a4bd8; --accent-fond:#f0eefc; --accent-encre:#3f33b8;
+    --ok:#157a4b; --ok-fond:#e8f5ee; --alerte:#8a5200; --alerte-fond:#fdf3e3; --danger:#a8263a; --danger-fond:#fbeaec;
+    --ombre:none;
+  }
+  body{padding:0;font-size:11pt;line-height:1.5}
+  .cadre{display:block}
+  nav.sommaire,dialog#loupe{display:none}
+  .entete{padding-block:0 12pt;margin-bottom:16pt}
+  section.chapitre{break-before:page;margin-bottom:0}
+  h2,h3,h4{break-after:avoid}
+  figure{break-inside:avoid;box-shadow:none}
+  figure.haute img{max-height:none;object-fit:fill}
+  figure button.zoom{cursor:default}
+  .note,.tableau,.onglets-grille div,.menu-arbre div{break-inside:avoid}
+  a{color:inherit;text-decoration:none}
+  p,li{max-width:none}
+}
+.menu-cote{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:24px;align-items:start;margin:16px 0 24px}
+.menu-cote .menu-arbre{margin:0;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+figure.menu{margin:0;max-width:240px}
+figure.menu img{width:100%;height:auto}
+@media (max-width:760px){.menu-cote{grid-template-columns:1fr}figure.menu{max-width:220px;margin:0 auto}}
+@media print{.menu-cote{grid-template-columns:minmax(0,1fr) 200px}figure.menu{max-width:200px}}
+ol.circuit{list-style:none;padding:0;margin:16px 0 24px;counter-reset:e;display:grid;gap:8px}
+ol.circuit li{counter-increment:e;display:grid;grid-template-columns:28px 150px minmax(0,1fr);gap:12px;align-items:baseline;padding:10px 14px;border:1px solid var(--trait);border-radius:10px;background:var(--papier)}
+ol.circuit li::before{content:counter(e);font-family:var(--mono);color:var(--pale)}
+ol.circuit li b{font-weight:600}
+ol.circuit li.vous{border-color:var(--accent);background:var(--accent-fond)}
+ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
+@media (max-width:640px){ol.circuit li{grid-template-columns:24px minmax(0,1fr)}ol.circuit li span{grid-column:2}}
+</style>
+
+
+<header class="entete">
+  <div class="surtitre">Cofina Crédit Digital</div>
+  <h1>Manuel d'utilisation du profil Courrier</h1>
+  <p class="chapeau">Le Courrier consulte et télécharge les garants et les garanties. Chaque écran est illustré par une capture réelle de l'application, faite avec un compte de ce profil.</p>
+  <div class="meta">
+    <span>Version du <b>01/10/2026</b></span>
+  </div>
+</header>
+
+<div class="cadre">
+<nav class="sommaire" aria-label="Sommaire">
+  <h2>Sommaire</h2>
+  <ol>
+    <li><a href="#prise-en-main">Prise en main</a>
+      <ol><li><a href="#connexion">Connexion</a></li><li><a href="#accueil">L'accueil</a></li><li><a href="#menu">Votre menu</a></li><li><a href="#listes">Les écrans</a></li><li><a href="#compte">Votre compte</a></li><li><a href="#manuel-appli">Retrouver ce manuel</a></li></ol></li>
+    <li><a href="#circuit">Le circuit d'un dossier</a></li>
+    <li><a href="#suivi">Suivi</a></li>
+    <li><a href="#droits">Droits du profil</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section class="chapitre" id="prise-en-main">
+  <h2 class="titre"><span class="num">01</span>Prise en main</h2>
+  <p class="intro">Cofina Crédit Digital s'ouvre dans un navigateur. Chaque profil ne voit que les écrans et les boutons que ses droits lui ouvrent.</p>
+  <h3 id="connexion">Connexion</h3>
+  <ol>
+    <li>Saisissez votre adresse e-mail et votre mot de passe.</li>
+    <li>Cliquez sur <span class="btn">Connexion</span>.</li>
+    <li>Si votre compte a été créé avec « Changement de mot de passe : Obligatoire », l'application vous demande d'en choisir un nouveau avant d'aller plus loin.</li>
+  </ol>
+
+  <h3 id="accueil">L'accueil</h3>
+  <p class="chemin">Menu <b>Accueil</b>, ouvert après chaque connexion</p>
+  <p>L'accueil rappelle la date et votre profil, puis rassemble dans <b>À traiter</b> les dossiers qui attendent une action de votre part.</p>
+  <p>Chaque compteur ouvre la liste où traiter ces dossiers ; seuls les compteurs non nuls s'affichent, et « Rien n'attend votre action » s'affiche quand tout est à jour. Le bouton <span class="btn">Actualiser</span> recompte. Les <b>Raccourcis</b> mènent aux écrans de création que votre profil peut ouvrir.</p>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/01-accueil.webp" alt="Page d'accueil" loading="lazy" width="1440" height="900"></button><figcaption><b>Page d'accueil</b> du profil Courrier.</figcaption></figure>
+
+  <h3 id="menu">Votre menu</h3>
+  <p>Le menu de gauche ne montre que les écrans autorisés pour votre profil ; les groupes se déplient d'un clic. Voici l'arborescence vue par le profil Courrier :</p>
+  <div class="menu-cote">
+  <div class="menu-arbre">
+    <div><h5>Menu</h5><ul>
+      <li>Accueil</li></ul></div>
+    <div><h5>Suivi</h5><ul>
+      <li>Liste des garants</li>
+      <li>Liste des garanties</li></ul></div>
+    <div><h5>Aide</h5><ul>
+      <li>Manuel d'utilisation</li></ul></div>
+  </div>
+  <figure class="menu"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/01-menu.webp" alt="Menu du profil" loading="lazy" width="260" height="198"></button><figcaption><b>Le menu</b>, groupes repliés.</figcaption></figure>
+  </div>
+  <h3 id="listes">Les écrans</h3>
+  <ul>
+    <li>Sous la barre du haut, le <b>fil d'Ariane</b> rappelle où vous êtes (par exemple <b>Contrat › Basique › Sans CAT</b>) ; un clic sur une étape y revient.</li>
+    <li>Chaque page commence par un <b>en-tête</b> : son titre, une phrase qui dit à quoi elle sert, la flèche de retour à la liste et, à droite, les actions principales (<span class="btn">Enregistrer</span>, <span class="btn">Consulter</span>…).</li>
+    <li>Les <b>listes</b> se filtrent par les champs du bloc Filtres et par la recherche ; <span class="btn">Recharger</span> relit les données. Le pied de liste indique le nombre de résultats et permet de changer de page.</li>
+    <li>Dans une liste, l'icône en forme d'œil ouvre la fiche ; les trois points verticaux ouvrent le <b>menu d'actions</b> de la ligne (consulter les pièces, télécharger un document, valider…). Les actions absentes du menu sont celles que votre profil ou l'état du dossier ne permettent pas.</li>
+    <li>Les <b>fiches</b> présentent les chiffres clés en tête, puis les informations par bloc. Un dossier rejeté affiche le motif du rejet en rouge.</li>
+  </ul>
+  <h3 id="compte">Votre compte</h3>
+  <p class="chemin">Menu de l'avatar, en haut à droite</p>
+  <p>Trois onglets : <b>Compte</b> (nom et adresse e-mail), <b>Sécurité</b> (changer de mot de passe : au moins 8 caractères, avec une majuscule, une minuscule, un chiffre et un caractère spécial) et <b>Signature</b> (l'image de votre signature, reprise dans les documents générés).</p>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/02-parametres-compte.webp" alt="Paramètres du compte" loading="lazy" width="1440" height="900"></button><figcaption><b>Paramètres du compte.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/02-parametres-securite.webp" alt="Changer de mot de passe" loading="lazy" width="1440" height="900"></button><figcaption><b>Changer de mot de passe.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/02-parametres-signature.webp" alt="Signature" loading="lazy" width="1440" height="900"></button><figcaption><b>Signature.</b></figcaption></figure>
+
+  <h3 id="manuel-appli">Retrouver ce manuel</h3>
+  <p class="chemin">Menu <b>Aide › Manuel d'utilisation</b></p>
+  <p>Le manuel de votre profil s'ouvre directement. Le champ de recherche surligne un mot dans le manuel ; <span class="btn">Exporter en PDF</span> l'imprime avec une couverture et un sommaire, et <span class="btn">Plein écran</span> l'ouvre dans un nouvel onglet.</p>
+</section>
+
+<section class="chapitre" id="circuit">
+  <h2 class="titre"><span class="num">02</span>Le circuit d'un dossier</h2>
+  <p class="intro">De la demande au décaissement, chaque dossier passe de profil en profil. Votre profil consulte les dossiers sans intervenir dans ce circuit. Chaque passage d'étape prévient par e-mail le profil suivant.</p>
+  <h3 id="circuit-credit">Crédit</h3>
+  <ol class="circuit">
+    <li><b>CAF</b><span>saisit la <b>notification de CAF</b> du client.</span></li>
+    <li><b>Analyste Crédit</b><span>vérifie la notification : validée, elle devient un <b>PV de comité</b> ; rejetée, elle revient au CAF.</span></li>
+    <li><b>Admin Crédit</b><span>saisit ou complète le PV et le valide vers le Head Crédit.</span></li>
+    <li><b>Head Crédit</b><span>valide le PV (ou le rejette vers l'Admin Crédit). Le MD valide les PV qui lui sont soumis.</span></li>
+    <li><b>Admin Crédit</b><span>crée le <b>contrat</b>, ou la <b>notification hypothécaire</b> si une hypothèque garantit le crédit, et ses cautions.</span></li>
+    <li><b>CAF, Admin Crédit</b><span>le client signe ; l'Admin Crédit charge le contrat et le billet à ordre signés, puis <b>valide l'envoi</b>.</span></li>
+    <li><b>Head Crédit</b><span>valide le contrat (ou le rejette avec un motif). Pour une notification hypothécaire, le Head Crédit ou le MD la valide, puis le Juridique charge le contrat notarié.</span></li>
+    <li><b>Admin Crédit</b><span>crée le <b>CAT</b> (conditions avant tirage).</span></li>
+    <li><b>Head Crédit, MD</b><span>valide le CAT ou le rejette.</span></li>
+    <li><b>Opérations</b><span><b>débloque</b> le CAT validé : les fonds peuvent être décaissés.</span></li>
+  </ol>
+</section>
+
+<section class="chapitre" id="suivi">
+  <h2 class="titre"><span class="num">03</span>Suivi</h2>
+  <h3 id="garants">Garants et garanties</h3>
+  <p class="chemin">Menus <b>Liste des garants</b> et <b>Liste des garanties</b></p>
+  <p>Ces deux listes rassemblent, tous dossiers confondus, les garants (cautions) et les garanties recueillies. Chaque ligne mène au dossier ; les documents signés se téléchargent depuis le menu d'actions et chaque liste s'exporte.</p>
+  <figure><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/60-garants-liste.webp" alt="Liste des garants" loading="lazy" width="1440" height="978"></button><figcaption><b>Liste des garants.</b></figcaption></figure>
+  <figure><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/61-garanties-liste.webp" alt="Liste des garanties" loading="lazy" width="1440" height="978"></button><figcaption><b>Liste des garanties.</b></figcaption></figure>
+</section>
+
+<section class="chapitre" id="droits">
+  <h2 class="titre"><span class="num">04</span>Droits du profil</h2>
+  <p class="intro">Un bouton ou un menu absent de votre écran correspond presque toujours à un droit que votre profil n'a pas, ou à une étape où le dossier n'est pas encore. Pour un droit supplémentaire, adressez-vous à l'administrateur de l'application.</p>
+  <div class="tableau"><table>
+    <thead><tr><th>Domaine</th><th>Droits</th></tr></thead>
+    <tbody>
+      <tr><td>Cautions</td><td>consulter, télécharger</td></tr>
+      <tr><td>Liste des garants</td><td>consulter</td></tr>
+      <tr><td>Garanties</td><td>consulter, télécharger</td></tr>
+      <tr><td>Liste des garanties</td><td>consulter</td></tr>
+    </tbody></table></div>
+</section>
+
+</main>
+</div>
+
+<footer>Manuel établi à partir de l'application Cofina Crédit Digital au 01/10/2026. Les captures montrent des données réelles : ce document est à usage interne.</footer>
+
+<dialog id="loupe" aria-label="Capture agrandie">
+  <form method="dialog"><button type="submit">Fermer</button></form>
+  <img alt="">
+</dialog>
+
+<script>
+(() => {
+  const loupe = document.getElementById('loupe')
+  const img = loupe.querySelector('img')
+  document.querySelectorAll('figure button.zoom').forEach(b => b.addEventListener('click', () => {
+    const src = b.querySelector('img')
+    img.src = src.src
+    img.alt = src.alt
+    loupe.showModal()
+  }))
+  loupe.addEventListener('click', e => { if (e.target === loupe) loupe.close() })
+
+  // Affiché dans l'application, le manuel est chargé en srcdoc : un lien
+  // « #ancre » y rechargerait la page au lieu de défiler jusqu'à la section.
+  document.addEventListener('click', e => {
+    const lien = e.target.closest('a[href^="#"]')
+    const cible = lien && document.getElementById(lien.getAttribute('href').slice(1))
+    if (cible) {
+      e.preventDefault()
+      cible.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+    }
+  })
+})()
+</script>

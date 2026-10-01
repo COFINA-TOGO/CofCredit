@@ -398,4 +398,12 @@ export default [
       },
     ],
   },
+  { heading: 'Aide' },
+  {
+    title: 'Manuel d\'utilisation',
+    icon: { icon: 'tabler-book' },
+    to: { name: 'user-guide' },
+    action: 'manage',
+    subject: 'settings-user',
+  },
 ]

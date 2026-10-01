@@ -40,3 +40,21 @@ JavaScript et les appels d'API en erreur rencontrés pendant les captures.
 Les comptes de démonstration ne sont rattachés à aucun dossier : les listes
 filtrées sur l'utilisateur connecté (PV d'un admin crédit, contrats d'un CAF...)
 peuvent donc être vides, les fiches s'ouvrent sur les dossiers les plus récents.
+
+## Générer les manuels
+
+Une fois les captures faites, depuis la racine du projet :
+
+```sh
+node tools/manuels/generer-manuels.mjs            # tous les profils
+node tools/manuels/generer-manuels.mjs md,caf     # seulement ces profils
+```
+
+Chaque manuel est écrit dans `resources/manuels/<profil>/` (`manuel.html` et
+ses captures en webp dans `img/`, via ImageMagick `convert`). Le texte suit les
+droits de chaque profil (`droits.php`) et le menu de l'application ; la mise
+en forme vient de `gabarit/` et l'impression PDF de `resources/manuels/_impression/`.
+
+Les manuels déclarés dans `config/manuels.php` s'affichent dans l'application,
+menu **Aide › Manuel d'utilisation** : chaque compte voit celui de son profil,
+l'administrateur les voit tous.

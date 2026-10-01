@@ -1,0 +1,302 @@
+/*
+ * Mise en page d'impression commune à tous les manuels (export PDF).
+ *
+ * Injectée par ManualController après le manuel : elle remplace la version
+ * web imprimée telle quelle par une vraie mise en page A4 — couverture,
+ * sommaire, un chapitre par page, en-têtes et pieds de page numérotés,
+ * figures numérotées et à taille maîtrisée.
+ * « {{TITRE}} » est remplacé par le titre du manuel.
+ */
+
+.impression-seule { display: none; }
+
+@media print {
+  @page {
+    size: A4;
+    margin: 20mm 16mm 18mm;
+
+    @top-left {
+      content: "Cofina Crédit Digital";
+      color: #8a909c;
+      font: 600 7.5pt "Public Sans", system-ui, sans-serif;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    @top-right {
+      content: "{{TITRE}}";
+      color: #8a909c;
+      font: 7.5pt "Public Sans", system-ui, sans-serif;
+    }
+    @bottom-left {
+      content: "Document interne · ne pas diffuser hors de Cofina";
+      color: #8a909c;
+      font: 7.5pt "Public Sans", system-ui, sans-serif;
+    }
+    @bottom-right {
+      content: "Page " counter(page) " / " counter(pages);
+      color: #5b6270;
+      font: 600 8pt "Public Sans", system-ui, sans-serif;
+    }
+  }
+
+  /* La couverture occupe toute la feuille, sans en-tête ni pied. */
+  @page couverture {
+    margin: 0;
+    @top-left { content: none; }
+    @top-right { content: none; }
+    @bottom-left { content: none; }
+    @bottom-right { content: none; }
+  }
+
+  :root:not(#_) {
+    --encre: #1d2129;
+    --doux: #5b6270;
+    --filet: #e3e5ea;
+    --marque: #8c0a24;
+    --accent: #6b5cf6;
+  }
+
+  html, body {
+    background: #fff !important;
+    color: var(--encre) !important;
+  }
+  body {
+    padding: 0 !important;
+    font-size: 9.8pt !important;
+    line-height: 1.5 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Version web masquée : en-tête, sommaire latéral, loupe, pied. */
+  header.entete, nav.sommaire, dialog#loupe, body > footer { display: none !important; }
+  .impression-seule { display: block; }
+  .cadre { display: block !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
+  main { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+
+  /* ─── Couverture ─────────────────────────────────────────────────────── */
+  .couverture {
+    page: couverture;
+    position: relative;
+    display: flex !important;
+    flex-direction: column;
+    block-size: 297mm;
+    inline-size: 210mm;
+    break-after: page;
+    overflow: hidden;
+  }
+  .couverture .bandeau {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18mm 18mm 16mm;
+    background: #25282e;
+    border-block-end: 3mm solid var(--marque);
+  }
+  .couverture .bandeau img { block-size: 16mm; inline-size: auto; }
+  .couverture .bandeau span {
+    color: #c9ccd3;
+    font-size: 8.5pt;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .couverture .titre-bloc { flex: 1; padding: 42mm 18mm 0; }
+  .couverture .sur {
+    margin: 0 0 5mm;
+    color: var(--marque);
+    font-size: 10pt;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .couverture h1 {
+    margin: 0 0 3mm;
+    color: var(--encre);
+    font-size: 34pt;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    line-height: 1.08;
+  }
+  .couverture .role {
+    margin: 0 0 12mm;
+    color: var(--doux);
+    font-size: 15pt;
+    font-weight: 500;
+  }
+  .couverture .filet { inline-size: 24mm; block-size: 1.2mm; margin: 0 0 10mm; background: var(--marque); }
+  .couverture .resume { max-inline-size: 140mm; margin: 0; color: #3b404a; font-size: 11pt; line-height: 1.6; }
+  .couverture dl {
+    display: grid;
+    grid-template-columns: 42mm 1fr;
+    gap: 2.5mm 6mm;
+    margin: 0 18mm 22mm;
+    padding: 7mm 0 0;
+    border-block-start: .3mm solid var(--filet);
+    font-size: 9pt;
+  }
+  .couverture dt { color: var(--doux); }
+  .couverture dd { margin: 0; color: var(--encre); font-weight: 600; }
+
+  /* ─── Sommaire ───────────────────────────────────────────────────────── */
+  .sommaire-impression { break-after: page; }
+  .sommaire-impression h2 {
+    margin: 0 0 8mm;
+    padding-block-end: 3mm;
+    border-block-end: .6mm solid var(--encre);
+    font-size: 20pt;
+    font-weight: 800;
+  }
+  .sommaire-impression ol { margin: 0; padding: 0; list-style: none; }
+  .sommaire-impression > ol > li { margin: 0 0 4.5mm; break-inside: avoid; }
+  .sommaire-impression .chap {
+    display: flex;
+    gap: 4mm;
+    align-items: baseline;
+    font-size: 11.5pt;
+    font-weight: 700;
+  }
+  .sommaire-impression .chap b {
+    min-inline-size: 9mm;
+    color: var(--marque);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10pt;
+  }
+  .sommaire-impression ol ol {
+    columns: 2;
+    column-gap: 8mm;
+    margin: 1.5mm 0 0 13mm;
+    color: var(--doux);
+    font-size: 9pt;
+  }
+  .sommaire-impression ol ol li { margin: 0 0 1mm; break-inside: avoid; }
+
+  /* ─── Chapitres ──────────────────────────────────────────────────────── */
+  section.chapitre { break-before: page; margin: 0 !important; padding: 0 !important; }
+  h2.titre {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1mm;
+    margin: 0 0 6mm !important;
+    padding: 0 0 4mm !important;
+    border-block-end: .6mm solid var(--encre);
+    color: var(--encre) !important;
+    font-size: 22pt !important;
+    font-weight: 800 !important;
+    line-height: 1.15 !important;
+  }
+  h2.titre .num {
+    color: var(--marque) !important;
+    font-size: 10pt !important;
+    font-weight: 700;
+    letter-spacing: .12em;
+  }
+  h2.titre .num::before { content: "Chapitre "; }
+  p.intro {
+    margin: 0 0 7mm !important;
+    color: #3b404a !important;
+    font-size: 11pt !important;
+    line-height: 1.55 !important;
+  }
+  h3 {
+    margin: 8mm 0 2.5mm !important;
+    color: var(--encre) !important;
+    font-size: 13pt !important;
+    break-after: avoid;
+  }
+  h4 { margin: 5mm 0 2mm !important; font-size: 10.5pt !important; break-after: avoid; }
+  h3 + p, h3 + p.chemin, h4 + p { break-before: avoid; }
+  p, li { max-width: none !important; orphans: 3; widows: 3; }
+  p.chemin {
+    display: inline-block;
+    margin: 0 0 2.5mm !important;
+    padding: .8mm 2.5mm;
+    border-radius: 1mm;
+    background: #f1f2f5 !important;
+    color: var(--doux) !important;
+    font-size: 8.5pt !important;
+  }
+  a { color: inherit !important; text-decoration: none !important; }
+  code { font-size: 8.5pt; }
+
+  /* ─── Figures numérotées ─────────────────────────────────────────────── */
+  main { counter-reset: figure; }
+  figure {
+    counter-increment: figure;
+    margin: 3mm 0 6mm !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+  figure button.zoom {
+    display: block;
+    inline-size: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  figure img {
+    display: block;
+    inline-size: auto !important;
+    max-inline-size: 100% !important;
+    block-size: auto !important;
+    max-block-size: 118mm !important;
+    margin: 0 auto;
+    border: .3mm solid var(--filet);
+    border-radius: 1.2mm;
+    object-fit: contain !important;
+  }
+  /* Captures pleine page : plus hautes, mais toujours sur une seule feuille. */
+  figure.haute img { max-block-size: 200mm !important; }
+  figure.moyenne img { max-inline-size: 78% !important; }
+  figcaption {
+    margin: 2mm auto 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: none !important;
+    color: var(--doux) !important;
+    font-size: 8.3pt !important;
+    text-align: center;
+  }
+  figcaption::before {
+    content: "Figure " counter(figure) " — ";
+    color: var(--encre);
+    font-weight: 700;
+  }
+
+  /* ─── Encadrés et tableaux ───────────────────────────────────────────── */
+  .note {
+    margin: 4mm 0 !important;
+    padding: 3mm 4mm !important;
+    border: 0 !important;
+    border-inline-start: 1mm solid var(--accent) !important;
+    border-radius: 0 1.2mm 1.2mm 0 !important;
+    background: #f6f5ff !important;
+    break-inside: avoid;
+    font-size: 9pt;
+  }
+  .note.attention { border-inline-start-color: #c77700 !important; background: #fff7eb !important; }
+  .note.export { border-inline-start-color: #1c8a55 !important; background: #eef8f2 !important; }
+  .tableau { margin: 3mm 0 5mm !important; border: .3mm solid var(--filet) !important; border-radius: 1.2mm; overflow: visible !important; box-shadow: none !important; }
+  .tableau table { inline-size: 100%; border-collapse: collapse; font-size: 8.6pt !important; }
+  .tableau thead { display: table-header-group; }
+  .tableau th { background: #f1f2f5 !important; color: var(--doux) !important; font-size: 7.5pt !important; }
+  .tableau th, .tableau td { padding: 1.8mm 2.5mm !important; border-block-end: .2mm solid var(--filet) !important; vertical-align: top; }
+  .tableau tr { break-inside: avoid; }
+  .onglets-grille { grid-template-columns: repeat(3, 1fr) !important; gap: 2mm !important; margin: 3mm 0 5mm !important; }
+  .onglets-grille div { padding: 2.5mm !important; border: .3mm solid var(--filet) !important; box-shadow: none !important; font-size: 8.3pt !important; }
+  .menu-arbre { grid-template-columns: repeat(2, 1fr) !important; gap: 2.5mm !important; }
+  .menu-arbre div { border: .3mm solid var(--filet) !important; box-shadow: none !important; font-size: 8.5pt !important; }
+
+  .fin-impression {
+    display: block;
+    margin: 12mm 0 0;
+    padding: 4mm 0 0;
+    border-block-start: .3mm solid var(--filet);
+    color: var(--doux);
+    font-size: 8pt;
+  }
+}
