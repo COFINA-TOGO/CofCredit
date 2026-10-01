@@ -114,14 +114,9 @@ class ContractController extends Controller
 			}
 
 			if (isset($request["status"])) {
-				$contractList->where(function ($query) use ($request) {
-					$statusList = ["w" => "waiting", "a" => "pending_admin_validation", "h" => "pending_head_validation", "v" => "validated", "r" => "rejected"];
-					foreach (str_split($request["status"]) as $char) {
-						if (isset($statusList[$char])) {
-							$query->orWhere("status", $statusList[$char]);
-						}
-					}
-				});
+				$statusList = ["w" => "waiting", "a" => "pending_admin_validation", "h" => "pending_head_validation", "v" => "validated", "r" => "rejected"];
+				// Une lettre inconnue ne doit pas annuler le filtre : aucun statut valide => aucun résultat
+				$contractList->whereIn("status", collect(str_split($request["status"]))->map(fn($char) => $statusList[$char] ?? null)->filter()->all());
 			}
 
 		foreach ([
