@@ -25,6 +25,10 @@ class NotificationPolicy
 
 	public function view(User $connectedUser, Notification $notification)
 	{
+		// Un CAF ne consulte que les notifications de ses propres dossiers, comme dans la liste
+		if ($connectedUser->profile == "caf" && $notification->verbal_trial?->caf_id != $connectedUser->id) {
+			return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		}
 		return $this->check(["read", "historical"], "notification", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
 

@@ -171,7 +171,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['notification'],
-					'action' => ['without-signed-contract', 'download', 'send'],
+					'action' => ['without-signed-contract', 'download', 'send', 'read'],
 				],
 				[
 					'subject' => ['simple-notification'],
@@ -309,7 +309,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['notarized-contract'],
-					'action' => ['menu', 'read-without-notarized-contract', 'read-without-head-validation'],
+					'action' => ['menu', 'read-without-notarized-contract', 'read-without-head-validation', 'read', 'read-historical'],
 				],
 				[
 					'subject' => ['cat'],
@@ -437,7 +437,7 @@ class User extends Authenticatable
 				],
 				[
 					'subject' => ['pv'],
-					'action' => ['historical'],
+					'action' => ['historical', 'read', 'download'],
 				],
 				[
 					'subject' => ['simple-notification'],

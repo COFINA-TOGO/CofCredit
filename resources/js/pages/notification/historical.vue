@@ -3,8 +3,8 @@
 <script setup>
 definePage({
   meta: {
-    action: 'read',
-    subject: 'contract',
+    action: 'read-historical',
+    subject: 'notarized-contract',
   },
 })
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
