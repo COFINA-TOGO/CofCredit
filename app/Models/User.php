@@ -356,6 +356,10 @@ class User extends Authenticatable
 					'action' => ['read'],
 				],
 				[
+					'subject' => ['user'],
+					'action' => ['read'],
+				],
+				[
 					'subject' => ['settings-user'],
 					'action' => ['manage'],
 				],
@@ -392,6 +396,10 @@ class User extends Authenticatable
 				[
 					'subject' => ['simple-notification'],
 					'action' => ['read', 'simple-notification'],
+				],
+				[
+					'subject' => ['user'],
+					'action' => ['read'],
 				],
 				[
 					'subject' => ['settings-user'],
@@ -490,6 +498,10 @@ class User extends Authenticatable
 					'action' => ['read', 'historical', 'change_status', 'download'],
 				],
 				[
+					'subject' => ['user'],
+					'action' => ['read'],
+				],
+				[
 					'subject' => ['settings-user'],
 					'action' => ['manage'],
 				],
@@ -552,6 +564,10 @@ class User extends Authenticatable
 				[
 					'subject' => ['deadline-postponed'],
 					'action' => ['read', 'historical', 'change_status', 'download'],
+				],
+				[
+					'subject' => ['user'],
+					'action' => ['read'],
 				],
 				[
 					'subject' => ['settings-user'],
