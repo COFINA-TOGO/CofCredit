@@ -291,6 +291,8 @@ class ContractController extends Controller
 					"residence_permit" => "Carte de séjour",
 					"anid_card" => "Carte ANID",
 				][$data["representative_type_of_identity_document"]];
+				// Clé utilisée par le modèle des contrats particuliers avec différé
+				$data["representative_type_of_identity_document.fr"] = $data["representative_type_of_identity_document"];
 
 				$data["day_due_amount"] = number_format(((float) $data["day_due_amount"]), 0, ',', ' ');
 				$data["total_amount_of_interest"] = number_format(((float) $data["total_amount_of_interest"]), 0, ',', ' ');
