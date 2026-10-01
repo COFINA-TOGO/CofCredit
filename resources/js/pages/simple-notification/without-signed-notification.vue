@@ -32,7 +32,7 @@ const actionStatus = ref("waiting")
 
 const headers = [
   {
-    title: 'Numéro comitée',
+    title: 'Numéro comité',
     key: 'verbal_trial.committee_id',
   },
   {
@@ -170,17 +170,10 @@ const lastPage = computed(() => notificationData.value.last_page)
 
 <template>
   <div>
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>
-              Liste des contrats
-            </h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="Notifications simplifiées sans notification signée"
+      subtitle="Notifications validées dont la version signée n'est pas encore chargée"
+    />
 
     <VCard class="mb-6">
       <div class="d-flex flex-wrap gap-4 mt-4 mx-5">

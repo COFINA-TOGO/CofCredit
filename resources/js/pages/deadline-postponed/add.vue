@@ -171,14 +171,20 @@ const addGuaranteeItem = () => {
 
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
-      <div class="d-flex flex-column justify-center">
-        <h4 class="text-h4 font-weight-medium">
-          Ajouter un nouveau PV
-        </h4>
-        <span>Procès verbal pour un nouveau crédit</span>
-      </div>
-    </div>
+    <AppPageHeader
+      title="Nouveau report d'échéance"
+      subtitle="Demande de report d'une échéance de crédit"
+      :back="{ name: 'deadline-postponed' }"
+    >
+      <template #actions>
+        <VBtn
+          prepend-icon="tabler-device-floppy"
+          @click="onSubmit"
+        >
+          Enregistrer
+        </VBtn>
+      </template>
+    </AppPageHeader>
     <VForm
       ref="refForm"
       @submit.prevent="onSubmit"
@@ -200,7 +206,7 @@ const addGuaranteeItem = () => {
                   <AppTextField
                     v-model="pvData.committee_id"
                     :error-messages="pvError.committee_id"
-                    label="Numéro du comitée"
+                    label="Numéro du comité"
                     placeholder="Ex: CFNTG-044-13-12-23-01212"
                     :rules="[requiredValidator]"
                   />
@@ -213,7 +219,7 @@ const addGuaranteeItem = () => {
                   <AppDateTimePicker
                     v-model="pvData.committee_date"
                     :error-messages="pvError.committee_date"
-                    label="Date du comitée"
+                    label="Date du comité"
                     placeholder="Ex: 2024-12-12"
                     :rules="[requiredValidator]"
                   />
@@ -295,7 +301,7 @@ const addGuaranteeItem = () => {
                   <AppTextField
                     v-model="pvData.activity"
                     :error-messages="pvError.activity"
-                    label="Activé"
+                    label="Activité"
                     placeholder="Ex: Homme d'affaire"
                     :rules="[requiredValidator]"
                   />
@@ -352,7 +358,7 @@ const addGuaranteeItem = () => {
                     v-model="pvData.duration"
                     type="number"
                     :error-messages="pvError.duration"
-                    label="Durée du crédit en mois"
+                    label="Durée du crédit (mois)"
                     placeholder="Ex: 18"
                     append-inner-icon="tabler-calendar"
                     :rules="[requiredValidator]"
@@ -367,7 +373,7 @@ const addGuaranteeItem = () => {
                     v-model="pvData.periodicity"
                     :items="periodicityItemList"
                     :error-messages="pvError.periodicity"
-                    label="Periodicité"
+                    label="Périodicité"
                     placeholder="Ex: Mensuelle"
                     :rules="[requiredValidator]"
                   />

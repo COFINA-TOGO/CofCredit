@@ -212,14 +212,20 @@ const addGuaranteeItem = () => {
 
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
-      <div class="d-flex flex-column justify-center">
-        <h4 class="text-h4 font-weight-medium">
-          Ajouter une nouvelle notification
-        </h4>
-        <span>Notification pour un nouveau crédit</span>
-      </div>
-    </div>
+    <AppPageHeader
+      title="Nouveau procès verbal"
+      subtitle="PV du comité de crédit"
+      :back="{ name: 'pv' }"
+    >
+      <template #actions>
+        <VBtn
+          prepend-icon="tabler-device-floppy"
+          @click="onSubmit"
+        >
+          Enregistrer
+        </VBtn>
+      </template>
+    </AppPageHeader>
     <VForm
       ref="refForm"
       @submit.prevent="onSubmit"
@@ -271,7 +277,7 @@ const addGuaranteeItem = () => {
                   <AppTextField
                     v-model="pvData.committee_id"
                     :error-messages="pvError.committee_id"
-                    label="Numéro du comitée"
+                    label="Numéro du comité"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
@@ -283,7 +289,7 @@ const addGuaranteeItem = () => {
                   <AppDateTimePicker
                     v-model="pvData.committee_date"
                     :error-messages="pvError.committee_date"
-                    label="Date du comitée"
+                    label="Date du comité"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
@@ -295,7 +301,7 @@ const addGuaranteeItem = () => {
                   <AppTextField
                     v-model="pvData.entity_name"
                     :error-messages="pvError.entity_name"
-                    label="Nom de l'entitié"
+                    label="Nom de l'entité"
                   />
                 </VCol>
                 <VDivider />
@@ -373,7 +379,7 @@ const addGuaranteeItem = () => {
                   <AppTextField
                     v-model="pvData.activity"
                     :error-messages="pvError.activity"
-                    label="Activé"
+                    label="Activité"
                     placeholder="Ex: Homme d'affaire"
                     :rules="[requiredValidator]"
                   />
@@ -463,7 +469,7 @@ const addGuaranteeItem = () => {
                     v-model="pvData.duration"
                     type="number"
                     :error-messages="pvError.duration"
-                    label="Durée du crédit en mois"
+                    label="Durée du crédit (mois)"
                     placeholder="Ex: 18"
                     append-inner-icon="tabler-calendar"
                     :rules="[requiredValidator]"
@@ -493,7 +499,7 @@ const addGuaranteeItem = () => {
                     v-model="pvData.periodicity"
                     :items="periodicityItemList"
                     :error-messages="pvError.periodicity"
-                    label="Periodicité"
+                    label="Périodicité"
                     placeholder="Ex: Mensuelle"
                     :rules="[requiredValidator]"
                   />
@@ -513,7 +519,7 @@ const addGuaranteeItem = () => {
                       { value: 'progressive', title: 'Progressif' },
                     ]"
                     :error-messages="pvError.release_type"
-                    label="Type de deblocage"
+                    label="Type de déblocage"
                     placeholder=""
                     :rules="[requiredValidator]"
                   />

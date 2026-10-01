@@ -115,7 +115,7 @@ const fetchItemList = async (id_list = []) => {
 // Fetch notification data
 const fetchNotificationData = async () => {
   try {
-    const { data } = await useApi(createUrl(`/notification/${route.params.notification_id}`))
+    const { data } = await useApi(createUrl(`/notification/${route.params.notification_id}`, { query: { with_verbal_trial: 1 } }))
 
     notificationData.value = data.value
 		
@@ -257,25 +257,14 @@ onMounted(async () => {
 
 <template>
   <div>
+    <AppPageHeader
+      title="Cautions de la notification"
+      :subtitle="notificationData?.data?.notification?.verbal_trial ? `Dossier ${notificationData.data.notification.verbal_trial.committee_id}` : ''"
+      :back="backRouteName"
+    />
     <VCard class="mb-6">
-      <VCardText>
-        <div class="d-flex align-center gap-4 mb-4">
-          <VBtn 
-            prepend-icon="tabler-arrow-left" 
-            :to="backRouteName"
-          >
-            Notifications
-          </VBtn>
-          <h2 class="mb-0">
-            Liste des {{ viewData.data.title.plural }}
-          </h2>
-        </div>
-      </VCardText>
-
-      <VDivider />
-
       <!-- Barre d'actions -->
-      <div class="d-flex flex-wrap gap-4 mx-5 mt-4">
+      <div class="d-flex flex-wrap gap-4 mx-5 mt-5">
         <div class="flex-grow-1">
           <AppTextField 
             v-model="searchQuery" 

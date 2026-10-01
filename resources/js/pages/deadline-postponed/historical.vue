@@ -32,7 +32,7 @@ const actionStatus = ref("waiting")
 
 const headers = [
   {
-    title: 'Numéro comitée',
+    title: 'Numéro comité',
     key: 'committee_id',
   },
   {
@@ -139,18 +139,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
 <template>
   <div>
-    <!-- 👉 widgets -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>
-              Liste des Procès verbaux sans contrat
-            </h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader title="Historique des reports d'échéance" />
 
     <!-- 👉 pvs -->
     <VCard

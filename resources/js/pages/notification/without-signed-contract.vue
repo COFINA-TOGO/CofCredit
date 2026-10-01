@@ -60,7 +60,7 @@ const viewData = reactive({
 // Headers de la table
 const headers = [
   {
-    title: 'Numéro comitée',
+    title: 'Numéro comité',
     key: 'verbal_trial.committee_id',
   },
   {
@@ -270,16 +270,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <!-- En-tête -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>Liste des {{ viewData.data.title.plural }} sans CAT</h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="Notifications sans contrat notarié"
+      subtitle="Notifications validées dont le contrat notarié n'est pas encore chargé"
+    />
 
     <!-- Filtres et table -->
     <VCard class="mb-6">

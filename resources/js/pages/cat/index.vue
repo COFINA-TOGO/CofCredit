@@ -107,7 +107,7 @@ const filterDataArray = reactive([
 // Headers de la table
 const headers = [
   {
-    title: 'Numéro comitée',
+    title: 'Numéro comité',
     key: 'contract.verbal_trial.committee_id',
   },
   {
@@ -131,7 +131,7 @@ const headers = [
     key: 'contract.verbal_trial.amount',
   },
   {
-    title: 'Status',
+    title: 'Statut',
     key: 'status',
   },
   {
@@ -326,18 +326,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <!-- En-tête -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>
-              Liste des {{ viewData.data.title.plural }}
-            </h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="CAT des contrats"
+      subtitle="Conditions avant tirage : validation par le Head Crédit puis déblocage par les Opérations"
+    />
 
     <!-- Filtres et table -->
     <VCard
@@ -417,6 +409,19 @@ onMounted(async () => {
         @update:options="updateOptions"
       >
         <!-- Type de CAT -->
+        <template #item.sector="{ item }">
+          <span
+            class="d-inline-block text-truncate"
+            style="max-inline-size: 220px;"
+          >
+            {{ item.sector }}
+            <VTooltip
+              activator="parent"
+              location="top"
+              max-width="360"
+            >{{ item.sector }}</VTooltip>
+          </span>
+        </template>
         <template #item.type="{ item }">
           {{ TYPE_LIST[item.type] }}
         </template>

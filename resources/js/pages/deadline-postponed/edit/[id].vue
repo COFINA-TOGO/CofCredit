@@ -166,6 +166,19 @@ verbalTrial.value.guarantees.forEach(guarantee => {
       cols="12"
       md="12"
     >
+      <AppPageHeader
+        title="Modification du report d'échéance"
+        :back="{ name: 'deadline-postponed' }"
+      >
+        <template #actions>
+          <VBtn
+            prepend-icon="tabler-device-floppy"
+            @click="onSubmit"
+          >
+            Enregistrer
+          </VBtn>
+        </template>
+      </AppPageHeader>
       <VForm
         ref="refForm"
         @submit.prevent="onSubmit"
@@ -218,7 +231,7 @@ verbalTrial.value.guarantees.forEach(guarantee => {
                     <AppTextField
                       v-model="verbalTrial.committee_id"
                       :error-messages="verbalTrialError.committee_id"
-                      label="Numéro du comitée"
+                      label="Numéro du comité"
                       placeholder="Ex: CFNTG-044-13-12-23-01212"
                       :rules="[requiredValidator]"
                     />
@@ -231,7 +244,7 @@ verbalTrial.value.guarantees.forEach(guarantee => {
                     <AppDateTimePicker
                       v-model="verbalTrial.committee_date"
                       :error-messages="verbalTrialError.committee_date"
-                      label="Date du comitée"
+                      label="Date du comité"
                       placeholder="Ex: 2024-12-12"
                       :rules="[requiredValidator]"
                     />
@@ -313,7 +326,7 @@ verbalTrial.value.guarantees.forEach(guarantee => {
                     <AppTextField
                       v-model="verbalTrial.activity"
                       :error-messages="verbalTrialError.activity"
-                      label="Activé"
+                      label="Activité"
                       placeholder="Ex: Homme d'affaire"
                       :rules="[requiredValidator]"
                     />
@@ -370,7 +383,7 @@ verbalTrial.value.guarantees.forEach(guarantee => {
                       v-model="verbalTrial.duration"
                       type="number"
                       :error-messages="verbalTrialError.duration"
-                      label="Durée du crédit en mois"
+                      label="Durée du crédit (mois)"
                       placeholder="Ex: 18"
                       append-inner-icon="tabler-calendar"
                       :rules="[requiredValidator]"
@@ -385,7 +398,7 @@ verbalTrial.value.guarantees.forEach(guarantee => {
                       v-model="verbalTrial.periodicity"
                       :items="periodicityItemList"
                       :error-messages="verbalTrialError.periodicity"
-                      label="Periodicité"
+                      label="Périodicité"
                       placeholder="Ex: Mensuelle"
                       :rules="[requiredValidator]"
                     />

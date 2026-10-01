@@ -109,13 +109,20 @@ const onSubmit = () => {
 
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
-      <div class="d-flex flex-column justify-center">
-        <h4 class="text-h4 font-weight-medium">
-          Ajouter une caution
-        </h4>
-      </div>
-    </div>
+    <AppPageHeader
+      title="Nouvelle caution"
+      subtitle="Caution personnelle et solidaire du contrat"
+      :back="{ name: 'contract-contract_id-guarantor', params: { contract_id: $route.params.contract_id } }"
+    >
+      <template #actions>
+        <VBtn
+          prepend-icon="tabler-device-floppy"
+          @click="onSubmit"
+        >
+          Enregistrer
+        </VBtn>
+      </template>
+    </AppPageHeader>
     <VForm
       ref="refForm"
       @submit.prevent="onSubmit"
@@ -215,7 +222,7 @@ const onSubmit = () => {
                   <AppTextField
                     v-model="guarantorItem.home_address"
                     :error-messages="guarantorError.home_address"
-                    label="Addresse du domicile"
+                    label="Adresse du domicile"
                     placeholder="Ex: Adewi, Lomé"
                     :rules="[requiredValidator]"
                   />

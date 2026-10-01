@@ -371,6 +371,18 @@
     "errorMessage": true,
     "showApiErrors": true,
     "showSnackbar": true,
-    "snackbarState": true
+    "snackbarState": true,
+    "breadcrumbsFor": true,
+    "catUnblockStatus": true,
+    "catValidationStatus": true,
+    "contractStatus": true,
+    "formatAmount": true,
+    "identityDocumentLabels": true,
+    "periodicityLabels": true,
+    "pledgeTypeLabels": true,
+    "reimbursementSourceLabels": true,
+    "releaseTypeLabels": true,
+    "validationLevelLabels": true,
+    "verbalTrialStatus": true
   }
 }

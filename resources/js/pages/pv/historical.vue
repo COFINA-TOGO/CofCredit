@@ -26,7 +26,7 @@ const page = ref(1)
 // Headers de la table
 const headers = [
   {
-    title: "Numéro comitée",
+    title: "Numéro comité",
     key: "committee_id",
   },
   {
@@ -197,16 +197,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <!-- 👉 widgets -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>Historique des procès verbaux</h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="Historique des procès verbaux"
+      subtitle="Tous les PV de comité"
+    />
 
     <!-- 👉 pvs -->
     <VCard

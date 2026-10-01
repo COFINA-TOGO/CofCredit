@@ -70,7 +70,7 @@ const actionStatus = ref('waiting')
 // Headers de la table
 const headers = [
   {
-    title: 'Numéro comitée',
+    title: 'Numéro comité',
     key: 'committee_id',
   },
   {
@@ -314,16 +314,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <!-- En-tête -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>Liste des {{ viewData.data.title.plural }} sans contrat</h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="Procès verbaux sans contrat"
+      subtitle="PV de comité en cours de validation ou en attente de contrat"
+    />
 
     <!-- Filtres et table -->
     <VCard

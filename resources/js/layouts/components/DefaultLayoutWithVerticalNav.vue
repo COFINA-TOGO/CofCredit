@@ -8,6 +8,7 @@ import NavBarNotifications from '@/layouts/components/NavBarNotifications.vue'
 import NavbarShortcuts from '@/layouts/components/NavbarShortcuts.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
+import AppBreadcrumbs from '@/components/AppBreadcrumbs.vue'
 import NavBarI18n from '@core/components/I18n.vue'
 
 // @layouts plugin
@@ -62,6 +63,9 @@ watch([
     </template>
 
     <AppLoadingIndicator ref="refLoadingIndicator" />
+
+    <!-- 👉 Fil d'Ariane -->
+    <AppBreadcrumbs />
 
     <!-- 👉 Pages -->
     <RouterView v-slot="{ Component }">

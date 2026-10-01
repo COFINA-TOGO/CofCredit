@@ -202,14 +202,20 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
 
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
-      <div class="d-flex flex-column justify-center">
-        <h4 class="text-h4 font-weight-medium">
-          Modification de contrat
-        </h4>
-        <span>Dashboard/Contrats/Modification</span>
-      </div>
-    </div>
+    <AppPageHeader
+      title="Modification du contrat"
+      subtitle="Le contrat repassera en attente des documents signés"
+      :back="{ name: 'contract' }"
+    >
+      <template #actions>
+        <VBtn
+          prepend-icon="tabler-device-floppy"
+          @click="onSubmit"
+        >
+          Enregistrer
+        </VBtn>
+      </template>
+    </AppPageHeader>
     <VForm
       ref="refForm"
       @submit.prevent="onSubmit"
@@ -445,7 +451,7 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
                     :error-messages="
                       errorData.representative_home_address
                     "
-                    label="Addresse du domicile"
+                    label="Adresse du domicile"
                     placeholder="Ex: Adewi, Lomé"
                     :rules="[requiredValidator]"
                   />
@@ -585,7 +591,7 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
                     :error-messages="
                       errorData.company_head_office_address
                     "
-                    label="Addresse du siège social"
+                    label="Adresse du siège social"
                     placeholder="Ex: Lomé, Adewi"
                     :rules="[requiredValidator]"
                   />
@@ -631,7 +637,7 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
                     :error-messages="
                       errorData.individual_business_head_office_address
                     "
-                    label="Addresse du siège social"
+                    label="Adresse du siège social"
                     placeholder="Ex: Lomé, Adewi"
                     :rules="[requiredValidator]"
                   />

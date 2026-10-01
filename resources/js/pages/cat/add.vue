@@ -115,13 +115,20 @@ if (route.query.contract_id || route.query.id) {
 
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
-      <div class="d-flex flex-column justify-center">
-        <h4 class="text-h4 font-weight-medium">
-          Ajouter un nouveau CAT
-        </h4>
-      </div>
-    </div>
+    <AppPageHeader
+      title="Nouveau CAT"
+      subtitle="Conditions avant tirage d'un contrat validé"
+      :back="{ name: 'cat' }"
+    >
+      <template #actions>
+        <VBtn
+          prepend-icon="tabler-device-floppy"
+          @click="onSubmit"
+        >
+          Enregistrer
+        </VBtn>
+      </template>
+    </AppPageHeader>
     <VForm
       ref="refForm"
       @submit.prevent="onSubmit"

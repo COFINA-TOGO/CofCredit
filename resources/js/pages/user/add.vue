@@ -104,14 +104,20 @@ const isPasswordVisible = ref(false)
 
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
-      <div class="d-flex flex-column justify-center">
-        <h4 class="text-h4 font-weight-medium">
-          Ajouter un utilisateur
-        </h4>
-        <span>Informations sur l'utilisateur</span>
-      </div>
-    </div>
+    <AppPageHeader
+      title="Nouvel utilisateur"
+      subtitle="Compte, profil et mot de passe initial"
+      :back="{ name: 'user' }"
+    >
+      <template #actions>
+        <VBtn
+          prepend-icon="tabler-device-floppy"
+          @click="onSubmit"
+        >
+          Enregistrer
+        </VBtn>
+      </template>
+    </AppPageHeader>
     <VForm
       ref="refForm"
       @submit.prevent="onSubmit"

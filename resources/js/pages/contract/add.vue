@@ -207,14 +207,20 @@ if (route.query.id) {
 
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
-      <div class="d-flex flex-column justify-center">
-        <h4 class="text-h4 font-weight-medium">
-          Ajouter un nouveau contrat
-        </h4>
-        <span>Contrat pour un Procès verbal</span>
-      </div>
-    </div>
+    <AppPageHeader
+      title="Nouveau contrat"
+      subtitle="Contrat d'un PV de comité validé"
+      :back="{ name: 'contract' }"
+    >
+      <template #actions>
+        <VBtn
+          prepend-icon="tabler-device-floppy"
+          @click="onSubmit"
+        >
+          Enregistrer
+        </VBtn>
+      </template>
+    </AppPageHeader>
     <VForm
       ref="refForm"
       @submit.prevent="onSubmit"
@@ -417,7 +423,7 @@ if (route.query.id) {
                     :error-messages="
                       formError.representative_home_address
                     "
-                    label="Addresse du domicile"
+                    label="Adresse du domicile"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
@@ -548,7 +554,7 @@ if (route.query.id) {
                     :error-messages="
                       formError.company_head_office_address
                     "
-                    label="Addresse du siège social"
+                    label="Adresse du siège social"
                     :rules="[requiredValidator]"
                   />
                 </VCol>
@@ -591,7 +597,7 @@ if (route.query.id) {
                     :error-messages="
                       formError.individual_business_head_office_address
                     "
-                    label="Addresse du siège social"
+                    label="Adresse du siège social"
                     :rules="[requiredValidator]"
                   />
                 </VCol>

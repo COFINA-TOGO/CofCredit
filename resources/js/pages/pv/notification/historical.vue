@@ -35,7 +35,7 @@ const actionStatus = ref("waiting")
 
 const headers = [
   {
-    title: "Numéro comitée",
+    title: "Numéro comité",
     key: "committee_id",
   },
   {
@@ -136,16 +136,7 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
 <template>
   <div>
-    <!-- 👉 widgets -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>Liste des notifications de caf sans PV</h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader title="Historique des notifications CAF" />
 
     <!-- 👉 pvs -->
     <VCard

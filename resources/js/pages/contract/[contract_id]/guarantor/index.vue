@@ -118,6 +118,7 @@ const fetchContractData = async () => {
     const { data } = await useApi(createUrl(`/contract/${route.params.contract_id}`, {
       query: {
         with_c_a_t: 1,
+        with_verbal_trial: 1,
       },
     }))
 
@@ -283,25 +284,14 @@ onMounted(async () => {
 
 <template>
   <div>
+    <AppPageHeader
+      title="Cautions du contrat"
+      :subtitle="contractData?.data?.contract?.verbal_trial ? `Dossier ${contractData.data.contract.verbal_trial.committee_id}` : ''"
+      :back="backRoute"
+    />
     <VCard class="mb-6">
-      <VCardText>
-        <div class="d-flex align-center gap-4 mb-4">
-          <VBtn 
-            prepend-icon="tabler-arrow-left" 
-            :to="backRoute"
-          >
-            Contrats
-          </VBtn>
-          <h2 class="mb-0">
-            Liste des {{ viewData.data.title.plural }}
-          </h2>
-        </div>
-      </VCardText>
-
-      <VDivider />
-
       <!-- Barre d'actions -->
-      <div class="d-flex flex-wrap gap-4 mx-5 mt-4">
+      <div class="d-flex flex-wrap gap-4 mx-5 mt-5">
         <div class="flex-grow-1">
           <AppTextField 
             v-model="searchQuery" 

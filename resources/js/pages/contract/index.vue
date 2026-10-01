@@ -48,7 +48,7 @@ const commentPresence = ref(false)
 // Headers de la table
 const headers = [
   {
-    title: 'Numéro comitée',
+    title: 'Numéro comité',
     key: 'verbal_trial.committee_id',
   },
   {
@@ -348,18 +348,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <!-- En-tête -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>
-              Liste des {{ viewData.data.title.plural }}
-            </h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="Contrats sans CAT"
+      subtitle="Contrats en cours de signature et de validation, en attente de leur CAT"
+    />
 
     <!-- Filtres -->
     <VCard 

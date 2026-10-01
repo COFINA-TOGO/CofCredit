@@ -62,7 +62,7 @@ const TYPE_DATA = {
 // Headers de la table
 const headers = [
   {
-    title: 'Numéro comitée',
+    title: 'Numéro comité',
     key: 'verbal_trial.committee_id',
   },
   {
@@ -262,18 +262,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <!-- En-tête -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>
-              Liste des {{ viewData.data.title.plural }}
-            </h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="Notifications sans validation Head"
+      subtitle="Notifications hypothécaires en attente de validation du Head Crédit"
+    />
 
     <!-- Filtres et table -->
     <VCard class="mb-6">

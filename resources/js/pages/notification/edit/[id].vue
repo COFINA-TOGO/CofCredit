@@ -113,14 +113,19 @@ verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value
 
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
-      <div class="d-flex flex-column justify-center">
-        <h4 class="text-h4 font-weight-medium">
-          Modification de notification
-        </h4>
-        <span>Dashboard/Notifications/Modification</span>
-      </div>
-    </div>
+    <AppPageHeader
+      title="Modification de la notification"
+      :back="{ name: 'notification' }"
+    >
+      <template #actions>
+        <VBtn
+          prepend-icon="tabler-device-floppy"
+          @click="onSubmit"
+        >
+          Enregistrer
+        </VBtn>
+      </template>
+    </AppPageHeader>
     <VForm
       ref="refForm"
       @submit.prevent="onSubmit"
@@ -184,7 +189,7 @@ verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value
                   <AppTextField
                     v-model="notification.representative_home_address"
                     :error-messages="formError.representative_home_address"
-                    label="Addresse"
+                    label="Adresse"
                     placeholder="Ex: Adewi"
                     :rules="[requiredValidator]"
                   />

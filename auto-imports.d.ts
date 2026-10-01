@@ -17,12 +17,16 @@ declare global {
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const avatarText: typeof import('./resources/js/@core/utils/formatters.js')['avatarText']
   const betweenValidator: typeof import('./resources/js/@core/utils/validators.js')['betweenValidator']
+  const breadcrumbsFor: typeof import('./resources/js/utils/breadcrumbs.js')['breadcrumbsFor']
+  const catUnblockStatus: typeof import('./resources/js/utils/labels.js')['catUnblockStatus']
+  const catValidationStatus: typeof import('./resources/js/utils/labels.js')['catValidationStatus']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
   const computedEager: typeof import('@vueuse/core')['computedEager']
   const computedInject: typeof import('@vueuse/core')['computedInject']
   const computedWithControl: typeof import('@vueuse/core')['computedWithControl']
   const confirmedValidator: typeof import('./resources/js/@core/utils/validators.js')['confirmedValidator']
+  const contractStatus: typeof import('./resources/js/utils/labels.js')['contractStatus']
   const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
   const controlledRef: typeof import('@vueuse/core')['controlledRef']
   const createApp: typeof import('vue')['createApp']
@@ -52,13 +56,15 @@ declare global {
   const emailValidator: typeof import('./resources/js/@core/utils/validators.js')['emailValidator']
   const errorMessage: typeof import('./resources/js/utils/snackbar.js')['errorMessage']
   const extendRef: typeof import('@vueuse/core')['extendRef']
-  const formatDate: typeof import('./resources/js/@core/utils/formatters.js')['formatDate']
+  const formatAmount: typeof import('./resources/js/utils/labels.js')['formatAmount']
+  const formatDate: typeof import('./resources/js/utils/labels.js')['formatDate']
   const formatDateToMonthShort: typeof import('./resources/js/@core/utils/formatters.js')['formatDateToMonthShort']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const h: typeof import('vue')['h']
   const handleAuthErrors: typeof import('./resources/js/utils/authErrors.js')['handleAuthErrors']
+  const identityDocumentLabels: typeof import('./resources/js/utils/labels.js')['identityDocumentLabels']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']
   const injectLocal: typeof import('@vueuse/core')['injectLocal']
@@ -109,6 +115,8 @@ declare global {
   const paginationMeta: typeof import('./resources/js/utils/paginationMeta.js')['paginationMeta']
   const passwordValidator: typeof import('./resources/js/@core/utils/validators.js')['passwordValidator']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
+  const periodicityLabels: typeof import('./resources/js/utils/labels.js')['periodicityLabels']
+  const pledgeTypeLabels: typeof import('./resources/js/utils/labels.js')['pledgeTypeLabels']
   const prefixWithPlus: typeof import('./resources/js/@core/utils/formatters.js')['prefixWithPlus']
   const provide: typeof import('vue')['provide']
   const provideLocal: typeof import('@vueuse/core')['provideLocal']
@@ -127,6 +135,8 @@ declare global {
   const refWithControl: typeof import('@vueuse/core')['refWithControl']
   const regexValidator: typeof import('./resources/js/@core/utils/validators.js')['regexValidator']
   const registerPlugins: typeof import('./resources/js/@core/utils/plugins.js')['registerPlugins']
+  const reimbursementSourceLabels: typeof import('./resources/js/utils/labels.js')['reimbursementSourceLabels']
+  const releaseTypeLabels: typeof import('./resources/js/utils/labels.js')['releaseTypeLabels']
   const requiredValidator: typeof import('./resources/js/@core/utils/validators.js')['requiredValidator']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
@@ -347,6 +357,8 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
   const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
   const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
+  const validationLevelLabels: typeof import('./resources/js/utils/labels.js')['validationLevelLabels']
+  const verbalTrialStatus: typeof import('./resources/js/utils/labels.js')['verbalTrialStatus']
   const watch: typeof import('vue')['watch']
   const watchArray: typeof import('@vueuse/core')['watchArray']
   const watchAtMost: typeof import('@vueuse/core')['watchAtMost']
@@ -389,12 +401,16 @@ declare module 'vue' {
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly avatarText: UnwrapRef<typeof import('./resources/js/@core/utils/formatters.js')['avatarText']>
     readonly betweenValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['betweenValidator']>
+    readonly breadcrumbsFor: UnwrapRef<typeof import('./resources/js/utils/breadcrumbs.js')['breadcrumbsFor']>
+    readonly catUnblockStatus: UnwrapRef<typeof import('./resources/js/utils/labels.js')['catUnblockStatus']>
+    readonly catValidationStatus: UnwrapRef<typeof import('./resources/js/utils/labels.js')['catValidationStatus']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
     readonly computedInject: UnwrapRef<typeof import('@vueuse/core')['computedInject']>
     readonly computedWithControl: UnwrapRef<typeof import('@vueuse/core')['computedWithControl']>
     readonly confirmedValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['confirmedValidator']>
+    readonly contractStatus: UnwrapRef<typeof import('./resources/js/utils/labels.js')['contractStatus']>
     readonly controlledComputed: UnwrapRef<typeof import('@vueuse/core')['controlledComputed']>
     readonly controlledRef: UnwrapRef<typeof import('@vueuse/core')['controlledRef']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
@@ -424,13 +440,16 @@ declare module 'vue' {
     readonly emailValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['emailValidator']>
     readonly errorMessage: UnwrapRef<typeof import('./resources/js/utils/snackbar.js')['errorMessage']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
+    readonly formatAmount: UnwrapRef<typeof import('./resources/js/utils/labels.js')['formatAmount']>
     readonly formatDate: UnwrapRef<typeof import('./resources/js/@core/utils/formatters.js')['formatDate']>
+    readonly formatDate: UnwrapRef<typeof import('./resources/js/utils/labels.js')['formatDate']>
     readonly formatDateToMonthShort: UnwrapRef<typeof import('./resources/js/@core/utils/formatters.js')['formatDateToMonthShort']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly handleAuthErrors: UnwrapRef<typeof import('./resources/js/utils/authErrors.js')['handleAuthErrors']>
+    readonly identityDocumentLabels: UnwrapRef<typeof import('./resources/js/utils/labels.js')['identityDocumentLabels']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly injectLocal: UnwrapRef<typeof import('@vueuse/core')['injectLocal']>
@@ -445,7 +464,6 @@ declare module 'vue' {
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
     readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
     readonly isToday: UnwrapRef<typeof import('./resources/js/@core/utils/helpers.js')['isToday']>
-    readonly kFormatter: UnwrapRef<typeof import('./resources/js/@core/utils/formatters.js')['kFormatter']>
     readonly lengthValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['lengthValidator']>
     readonly logicAnd: UnwrapRef<typeof import('@vueuse/math')['logicAnd']>
     readonly logicNot: UnwrapRef<typeof import('@vueuse/math')['logicNot']>
@@ -481,6 +499,8 @@ declare module 'vue' {
     readonly paginationMeta: UnwrapRef<typeof import('./resources/js/utils/paginationMeta.js')['paginationMeta']>
     readonly passwordValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['passwordValidator']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
+    readonly periodicityLabels: UnwrapRef<typeof import('./resources/js/utils/labels.js')['periodicityLabels']>
+    readonly pledgeTypeLabels: UnwrapRef<typeof import('./resources/js/utils/labels.js')['pledgeTypeLabels']>
     readonly prefixWithPlus: UnwrapRef<typeof import('./resources/js/@core/utils/formatters.js')['prefixWithPlus']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
     readonly provideLocal: UnwrapRef<typeof import('@vueuse/core')['provideLocal']>
@@ -499,6 +519,8 @@ declare module 'vue' {
     readonly refWithControl: UnwrapRef<typeof import('@vueuse/core')['refWithControl']>
     readonly regexValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['regexValidator']>
     readonly registerPlugins: UnwrapRef<typeof import('./resources/js/@core/utils/plugins.js')['registerPlugins']>
+    readonly reimbursementSourceLabels: UnwrapRef<typeof import('./resources/js/utils/labels.js')['reimbursementSourceLabels']>
+    readonly releaseTypeLabels: UnwrapRef<typeof import('./resources/js/utils/labels.js')['releaseTypeLabels']>
     readonly requiredValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['requiredValidator']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
@@ -719,6 +741,8 @@ declare module 'vue' {
     readonly useWindowFocus: UnwrapRef<typeof import('@vueuse/core')['useWindowFocus']>
     readonly useWindowScroll: UnwrapRef<typeof import('@vueuse/core')['useWindowScroll']>
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
+    readonly validationLevelLabels: UnwrapRef<typeof import('./resources/js/utils/labels.js')['validationLevelLabels']>
+    readonly verbalTrialStatus: UnwrapRef<typeof import('./resources/js/utils/labels.js')['verbalTrialStatus']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchArray: UnwrapRef<typeof import('@vueuse/core')['watchArray']>
     readonly watchAtMost: UnwrapRef<typeof import('@vueuse/core')['watchAtMost']>

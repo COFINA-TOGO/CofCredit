@@ -18,7 +18,7 @@ const loadings = ref([])
 
 const headers = [
   {
-    title: 'Numéro comitée',
+    title: 'Numéro comité',
     key: 'notification.verbal_trial.committee_id',
   },
   {
@@ -42,7 +42,7 @@ const headers = [
     key: 'notification.verbal_trial.amount',
   },
   {
-    title: 'Status',
+    title: 'Statut',
     key: 'status',
   },
   {
@@ -169,18 +169,10 @@ const rejectUnblockCAT = async id => {
 
 <template>
   <div>
-    <!-- 👉 widgets -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>
-              Liste des CAT
-            </h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="CAT des notifications simplifiées"
+      subtitle="Conditions avant tirage des notifications simplifiées"
+    />
 
     <!-- 👉 cats -->
     <VCard class="mb-6">
@@ -234,6 +226,19 @@ const rejectUnblockCAT = async id => {
         class="text-no-wrap"
         @update:options="updateOptions"
       >
+        <template #item.sector="{ item }">
+          <span
+            class="d-inline-block text-truncate"
+            style="max-inline-size: 220px;"
+          >
+            {{ item.sector }}
+            <VTooltip
+              activator="parent"
+              location="top"
+              max-width="360"
+            >{{ item.sector }}</VTooltip>
+          </span>
+        </template>
         <template #item.type="{ item }">
           {{ typeList[item.type] }}
         </template>

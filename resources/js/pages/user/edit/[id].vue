@@ -106,6 +106,19 @@ const isPasswordVisible = ref(false)
       cols="12"
       md="12"
     >
+      <AppPageHeader
+        title="Modification de l'utilisateur"
+        :back="{ name: 'user' }"
+      >
+        <template #actions>
+          <VBtn
+            prepend-icon="tabler-device-floppy"
+            @click="onSubmit"
+          >
+            Enregistrer
+          </VBtn>
+        </template>
+      </AppPageHeader>
       <VForm
         ref="refForm"
         @submit.prevent="onSubmit"

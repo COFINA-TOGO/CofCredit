@@ -25,7 +25,7 @@ const page = ref(1)
 // Headers de la table
 const headers = [
   {
-    title: "Numéro comitée",
+    title: "Numéro comité",
     key: "verbal_trial.committee_id",
   },
   {
@@ -226,15 +226,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>Liste des contrats en attente de CAT</h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="Historique des contrats"
+      subtitle="Tous les contrats, y compris ceux dont le CAT est créé"
+    />
 
     <VCard
       title="Filtres"

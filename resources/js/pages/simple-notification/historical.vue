@@ -21,7 +21,7 @@ const page = ref(1)
 
 const headers = [
   {
-    title: 'Numéro comitée',
+    title: 'Numéro comité',
     key: 'verbal_trial.committee_id',
   },
   {
@@ -111,17 +111,7 @@ const lastPage = computed(() => notificationData.value.last_page)
 
 <template>
   <div>
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>
-              Liste des notifications en attente de CAT
-            </h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader title="Historique des notifications simplifiées" />
 
     <VCard
       title="Filtres"

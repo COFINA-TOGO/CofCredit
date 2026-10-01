@@ -252,16 +252,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <!-- En-tête -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>Liste des {{ viewData.data.title.plural }}</h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="Utilisateurs"
+      subtitle="Comptes, profils et activation"
+    />
 
     <!-- Filtres et table -->
     <VCard

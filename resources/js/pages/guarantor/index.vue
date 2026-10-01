@@ -128,19 +128,13 @@ onMounted(async () => {
 
 <template>
   <div>
+    <AppPageHeader
+      title="Garants"
+      subtitle="Toutes les cautions personnelles des dossiers"
+    />
     <VCard class="mb-6">
-      <VCardText>
-        <div class="d-flex align-center gap-4 mb-4">
-          <h2 class="mb-0">
-            Liste des {{ viewData.data.title.plural }}
-          </h2>
-        </div>
-      </VCardText>
-
-      <VDivider />
-
       <!-- Barre d'actions -->
-      <div class="d-flex flex-wrap gap-4 mx-5 mt-4">
+      <div class="d-flex flex-wrap gap-4 mx-5 mt-5">
         <div class="flex-grow-1">
           <AppTextField
             v-model="searchQuery"

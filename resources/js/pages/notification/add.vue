@@ -129,14 +129,20 @@ const documentTypeList = [
 
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-start justify-sm-space-between gap-y-4 gap-x-6 mb-6">
-      <div class="d-flex flex-column justify-center">
-        <h4 class="text-h4 font-weight-medium">
-          Ajouter une nouvelle notification
-        </h4>
-        <span>Notification pour un Procès verbal</span>
-      </div>
-    </div>
+    <AppPageHeader
+      title="Nouvelle notification hypothécaire"
+      subtitle="Notification d'un PV de comité avec hypothèque"
+      :back="{ name: 'notification' }"
+    >
+      <template #actions>
+        <VBtn
+          prepend-icon="tabler-device-floppy"
+          @click="onSubmit"
+        >
+          Enregistrer
+        </VBtn>
+      </template>
+    </AppPageHeader>
     <VForm
       ref="refForm"
       @submit.prevent="onSubmit"
@@ -173,7 +179,7 @@ const documentTypeList = [
                   <AppTextField
                     v-model="notificationData.representative_home_address"
                     :error-messages="formError.representative_home_address"
-                    label="Addresse"
+                    label="Adresse"
                     placeholder="Ex: Adewi"
                     :rules="[requiredValidator]"
                   />

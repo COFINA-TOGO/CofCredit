@@ -53,7 +53,7 @@ const viewData = reactive({
 // Headers de la table
 const headers = [
   {
-    title: 'Numéro comitée',
+    title: 'Numéro comité',
     key: 'notification.verbal_trial.committee_id',
   },
   {
@@ -77,7 +77,7 @@ const headers = [
     key: 'notification.verbal_trial.amount',
   },
   {
-    title: 'Status',
+    title: 'Statut',
     key: 'status',
   },
   {
@@ -310,16 +310,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <!-- En-tête -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>Liste des {{ viewData.data.title.plural }}</h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="CAT des contrats hypothécaires"
+      subtitle="Conditions avant tirage des notifications hypothécaires"
+    />
 
     <!-- Filtres et table -->
     <VCard class="mb-6">
@@ -395,6 +389,19 @@ onMounted(async () => {
         loading-text="En cours de chargement"
         @update:options="updateOptions"
       >
+        <template #item.sector="{ item }">
+          <span
+            class="d-inline-block text-truncate"
+            style="max-inline-size: 220px;"
+          >
+            {{ item.sector }}
+            <VTooltip
+              activator="parent"
+              location="top"
+              max-width="360"
+            >{{ item.sector }}</VTooltip>
+          </span>
+        </template>
         <template #item.type="{ item }">
           {{ typeList[item.type] }}
         </template>

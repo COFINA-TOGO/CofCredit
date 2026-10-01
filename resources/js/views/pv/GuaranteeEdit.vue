@@ -56,8 +56,8 @@ const removeGuarantee = () => {
             :items="typeOfGuaranteeList"
             item-title="name"
             item-value="id"
-            label="Type de cautionie"
-            placeholder="Choisir le type de cautionie"
+            label="Type de caution"
+            placeholder="Choisir le type de caution"
             class="mb-3"
             :rules="[requiredValidator]"
           />

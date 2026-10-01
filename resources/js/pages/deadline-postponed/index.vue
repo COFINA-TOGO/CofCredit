@@ -253,18 +253,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <!-- En-tête -->
-    <VCard class="mb-6">
-      <VCardText>
-        <VRow>
-          <VCardText>
-            <h2>
-              Liste des {{ viewData.data.title.plural }} en attente
-            </h2>
-          </VCardText>
-        </VRow>
-      </VCardText>
-    </VCard>
+    <AppPageHeader
+      title="Reports d'échéance en attente"
+      subtitle="Demandes de report d'échéance en cours de validation"
+    />
 
     <!-- Filtres et table -->
     <VCard

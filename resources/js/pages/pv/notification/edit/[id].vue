@@ -214,6 +214,19 @@ if (
       cols="12"
       md="12"
     >
+      <AppPageHeader
+        title="Modification de la notification de CAF"
+        :back="{ name: 'pv-notification-without-pv' }"
+      >
+        <template #actions>
+          <VBtn
+            prepend-icon="tabler-device-floppy"
+            @click="onSubmit"
+          >
+            Enregistrer
+          </VBtn>
+        </template>
+      </AppPageHeader>
       <VForm
         ref="refForm"
         @submit.prevent="onSubmit"
@@ -270,7 +283,7 @@ if (
                       v-model="verbalTrial.committee_id"
                       :error-messages="verbalTrialError.committee_id
                       "
-                      label="Numéro du comitée"
+                      label="Numéro du comité"
                       placeholder=""
                       :rules="[requiredValidator]"
                     />
@@ -283,7 +296,7 @@ if (
                     <AppTextField
                       v-model="verbalTrial.entity_name"
                       :error-messages="verbalTrialError.entity_name"
-                      label="Nom de l'entitié"
+                      label="Nom de l'entité"
                     />
                   </VCol>
                   <VCol
@@ -308,7 +321,7 @@ if (
                       v-model="verbalTrial.committee_date"
                       :error-messages="verbalTrialError.committee_date
                       "
-                      label="Date du comitée"
+                      label="Date du comité"
                       placeholder=""
                       :rules="[requiredValidator]"
                     />
@@ -411,7 +424,7 @@ if (
                     <AppTextField
                       v-model="verbalTrial.activity"
                       :error-messages="verbalTrialError.activity"
-                      label="Activé"
+                      label="Activité"
                       placeholder=""
                       :rules="[requiredValidator]"
                     />
@@ -506,7 +519,7 @@ if (
                       v-model="verbalTrial.duration"
                       type="number"
                       :error-messages="verbalTrialError.duration"
-                      label="Durée du crédit en mois"
+                      label="Durée du crédit (mois)"
                       placeholder=""
                       min="0"
                       append-inner-icon="tabler-calendar"
@@ -539,7 +552,7 @@ if (
                       v-model="verbalTrial.periodicity"
                       :items="periodicityItemList"
                       :error-messages="verbalTrialError.periodicity"
-                      label="Periodicité"
+                      label="Périodicité"
                       placeholder=""
                       :rules="[requiredValidator]"
                     />
@@ -563,7 +576,7 @@ if (
                       ]"
                       :error-messages="verbalTrialError.release_type
                       "
-                      label="Type de deblocage"
+                      label="Type de déblocage"
                       placeholder=""
                       :rules="[requiredValidator]"
                     />

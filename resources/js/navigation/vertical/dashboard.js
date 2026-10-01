@@ -1,6 +1,15 @@
 export default [
   {
+    title: 'Accueil',
+    icon: { icon: 'tabler-smart-home' },
+    to: { name: 'index' },
+    action: 'manage',
+    subject: 'settings-user',
+  },
+  { heading: 'Crédit' },
+  {
     title: 'Pv Comité',
+    icon: { icon: 'tabler-file-description' },
     subject: 'pv',
     action: 'menu',
     children: [
@@ -29,6 +38,7 @@ export default [
   },
   {
     title: 'Contrat',
+    icon: { icon: 'tabler-writing-sign' },
     subject: 'contract',
     action: 'menu',
     children: [
@@ -91,6 +101,7 @@ export default [
   },
   {
     title: 'CAT',
+    icon: { icon: 'tabler-cash-banknote' },
     subject: 'cat',
     action: 'menu',
     children: [
@@ -325,6 +336,7 @@ export default [
 			]
 		},
 	*/
+  { heading: 'Suivi' },
   {
     title: 'Report d\'échéance',
     icon: { icon: "tabler-calendar-repeat" },
@@ -364,15 +376,6 @@ export default [
     to: 'guarantee',
     subject: 'guarantee-list',
     action: 'read',
-  },
-  {
-    title: 'Remboursement anticipé',
-  },
-  {
-    title: 'Lettre de mise en demeure',
-  },
-  {
-    title: 'Checking post-deblocage',
   },
 
   { heading: 'Paramétrage' },
