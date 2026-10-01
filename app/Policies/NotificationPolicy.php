@@ -61,4 +61,12 @@ class NotificationPolicy
 	{
 		return $this->check(["delete"], "notification", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
+
+	/**
+	 * Télécharger les documents générés (contrat, billet à ordre, mention manuscrite...)
+	 */
+	public function downloadDocument(User $connectedUser, Notification $notification)
+	{
+		return $this->checkAny(["read", "historical", "download", "without-signed-contract", "without-signed-notification", "simple-notification"], ["notification", "simple-notification"], $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+	}
 }

@@ -74,4 +74,12 @@ class VerbalTrialPolicy
 	{
 		return $this->check(["delete"], "pv", $connectedUser) || $this->check(["delete"], "pv-notification", $connectedUser) ? (($verbalTrial->status == "validated") ? Response::deny("vous n'etes plus autorisé à supprimer ce pv") : Response::allow()) : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
+
+	/**
+	 * Télécharger les documents générés (contrat, billet à ordre, mention manuscrite...)
+	 */
+	public function downloadDocument(User $connectedUser, VerbalTrial $verbalTrial)
+	{
+		return $this->checkAny(["read", "historical", "download"], ["pv", "pv-notification"], $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+	}
 }

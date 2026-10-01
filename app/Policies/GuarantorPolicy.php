@@ -72,4 +72,12 @@ class GuarantorPolicy
 	{
 		return $this->check(["delete"], "guarantor", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
+
+	/**
+	 * Télécharger les documents générés (contrat, billet à ordre, mention manuscrite...)
+	 */
+	public function downloadDocument(User $connectedUser, Guarantor $guarantor)
+	{
+		return $this->checkAny(["read", "download"], ["guarantor"], $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+	}
 }

@@ -43,35 +43,6 @@ export function useContractActions() {
   }
 
   /**
-   * Change le statut d'un contrat
-   * @param {number} id - L'ID du contrat
-   * @param {string} status - Le nouveau statut
-   * @param {string} comment - Le commentaire associé
-   * @returns {Promise<boolean>}
-   */
-  const changeStatus = async (id, status, comment = '') => {
-    try {
-      const response = await $api(`contract/change-status/${id}`, {
-        method: 'PUT',
-        body: { status, comment },
-      })
-      
-      if (response.status === 200) {
-        const statusText = status === 'validated' ? 'validé' : 'rejeté'
-        showSnackbar('success', `Contrat ${statusText} avec succès`)
-        return true
-      } else {
-        showSnackbar('error', 'Erreur lors du changement de statut')
-        return false
-      }
-    } catch (error) {
-      console.error('Erreur lors du changement de statut:', error)
-      showSnackbar('error', 'Erreur lors du changement de statut')
-      return false
-    }
-  }
-
-  /**
    * Validation par l'admin crédit
    * @param {number} id - L'ID du contrat
    * @param {string} comment - Le commentaire
@@ -220,7 +191,6 @@ export function useContractActions() {
     
     // Actions
     deleteContract,
-    changeStatus,
     adminValidate,
     headValidate,
     uploadFile,

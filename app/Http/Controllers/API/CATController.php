@@ -5,9 +5,12 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmail;
 use App\Models\CAT;
+use App\Models\Notification;
+use App\Models\Contract;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
@@ -191,7 +194,9 @@ class CATController extends Controller
 	{
 		$cat = CAT::find($id);
 		if ($cat) {
-			// if (($authorisation = Gate::inspect('view', $cat))->allowed()) {
+			if (!($authorisation = Gate::inspect('downloadDocument', $cat))->allowed()) {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
 			$parentRelation = ($cat->notification) ? "notification" : "contract";
 			$templateProcessor = new TemplateProcessor("../document_templates/CATs/CAT-$parentRelation.docx");
 			$data = $cat->toArray();
@@ -304,7 +309,8 @@ class CATController extends Controller
 	public function store(Request $request)
 	{
 		if (($authorisation = Gate::inspect('create', CAT::class))->allowed()) {
-			$requestData = $request->all();
+			// Les champs de workflow ne sont jamais acceptés depuis le client
+			$requestData = Arr::except($request->all(), ["validation_status", "validator_user_id", "validation_comment", "unblock_status", "unblocker_user_id", "unblock_comment"]);
 			$validator = Validator::make($requestData, [
 				'contract_id' => "required|exists:contracts,id|unique:c_a_t_s",
 			]);
@@ -315,6 +321,14 @@ class CATController extends Controller
 				if ($validator->fails()) {
 					return $this->responseError(["id" => ["Le contrat ou la notification est manquante"]], 403);
 				}
+				$parent = Notification::find($requestData["notification_id"]);
+				unset($requestData["contract_id"]);
+			} else {
+				$parent = Contract::find($requestData["contract_id"]);
+				unset($requestData["notification_id"]);
+			}
+			if ($parent->status !== "validated") {
+				return $this->responseError(["status" => ["Le contrat ou la notification doit être validé avant la création du CAT"]], 400);
 			}
 
 			$validator = Validator::make($requestData, [
@@ -401,7 +415,8 @@ class CATController extends Controller
 		$cat = CAT::find($id);
 		if ($cat) {
 			if (($authorisation = Gate::inspect('update', $cat))->allowed()) {
-				$requestData = $request->all();
+				// Les champs de workflow ne sont jamais acceptés depuis le client
+				$requestData = Arr::except($request->all(), ["validation_status", "validator_user_id", "validation_comment", "unblock_status", "unblocker_user_id", "unblock_comment"]);
 				$validator = Validator::make($requestData, [
 					'contract_id' => "required|exists:contracts,id|unique:c_a_t_s,contract_id," . $id,
 				]);
@@ -432,6 +447,8 @@ class CATController extends Controller
 					if (!isset($requestData['security_deposit_percentage'])) {
 						$requestData['security_deposit_percentage'] = 20;
 					}
+					// Un CAT modifié (notamment après rejet) repart en attente de validation
+					$requestData["validation_status"] = "waiting";
 					$cat->update($requestData);
 					$cat->load(["contract.verbal_trial.type_of_credit.type_of_applicant", "contract.verbal_trial.guarantees"]);
 					foreach (User::where('profile', 'head_credit')->get() as $head_credit) {
@@ -482,7 +499,7 @@ class CATController extends Controller
 			if (($authorisation = Gate::inspect('validate', $cat))->allowed()) {
 				$cat->update([
 					"validation_status" => "validated",
-					"validation_user_id" => $request->user()->id,
+					"validator_user_id" => $request->user()->id,
 				]);
 				foreach (User::where('profile', 'operation')->get() as $head_credit) {
 					SendEmail::dispatch(
@@ -530,7 +547,7 @@ class CATController extends Controller
 			if (($authorisation = Gate::inspect('unblock', $cat))->allowed()) {
 				$cat->update([
 					"unblock_status" => "validated",
-					"unblock_user_id" => $request->user()->id,
+					"unblocker_user_id" => $request->user()->id,
 				]);
 				return $cat;
 			} else {
@@ -566,7 +583,7 @@ class CATController extends Controller
 					$cat->update([
 						"validation_status" => "rejected",
 						"validation_comment" => $requestData["comment"],
-						"validation_user_id" => $request->user()->id,
+						"validator_user_id" => $request->user()->id,
 					]);
 					$credit_admin = $cat->back_step->verbal_trial->credit_admin;
 					SendEmail::dispatch(
@@ -625,7 +642,7 @@ class CATController extends Controller
 					$cat->update([
 						"unblock_status" => "rejected",
 						"unblock_comment" => $requestData["comment"],
-						"unblock_user_id" => $request->user()->id,
+						"unblocker_user_id" => $request->user()->id,
 					]);
 					return $cat;
 				}

@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\VerbalTrial;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -247,7 +248,9 @@ class VerbalTrialController extends Controller
 	{
 		$verbal_trial = VerbalTrial::find($id);
 		if ($verbal_trial) {
-			// if (($authorisation = Gate::inspect('view', $verbalTrial))->allowed()) {
+			if (!($authorisation = Gate::inspect('downloadDocument', $verbal_trial))->allowed()) {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
 			$pv_dir = $verbal_trial->number_deferred == 0 ? "PVs" : "PVs-deferral";
 			$template_path  = "../document_templates/$pv_dir/PV-$verbal_trial->status-$verbal_trial->validation_level.docx";
 			$templateProcessor = new TemplateProcessor($template_path);
@@ -335,7 +338,9 @@ class VerbalTrialController extends Controller
 	{
 		$verbal_trial = VerbalTrial::find($id);
 		if ($verbal_trial) {
-			// if (($authorisation = Gate::inspect('view', $notification))->allowed()) {
+			if (!($authorisation = Gate::inspect('downloadDocument', $verbal_trial))->allowed()) {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
 			// $template_path = (($verbal_trial->validation_level == "head_credit") && ($verbal_trial->status == "validated")) ? "../document_templates/Notifications/PV-Notification-validated.docx" : "../document_templates/Notifications/PV-Notification.docx";
 			$template_path = "../document_templates/Notifications/PV-Notification.docx";
 			$templateProcessor = new TemplateProcessor($template_path);
@@ -457,7 +462,8 @@ class VerbalTrialController extends Controller
 	public function store(Request $request)
 	{
 		if (($authorisation = Gate::inspect('create', VerbalTrial::class))->allowed()) {
-			$requestData = $request->all();
+			// Les champs de workflow ne sont jamais acceptés depuis le client
+			$requestData = Arr::except($request->all(), ["creator_id", "status", "validation_level"]);
 			$validator = Validator::make($requestData, [
 				"committee_id" => "required|unique:verbals_trials",
 				"committee_date" => "required|date",
@@ -595,7 +601,8 @@ class VerbalTrialController extends Controller
 		$verbalTrial = VerbalTrial::find($id);
 		if ($verbalTrial) {
 			if (($authorisation = Gate::inspect('update', $verbalTrial))->allowed()) {
-				$requestData = $request->all();
+				// Les champs de workflow ne sont jamais acceptés depuis le client
+				$requestData = Arr::except($request->all(), ["creator_id", "status", "validation_level"]);
 				$validator = Validator::make($requestData, [
 					"committee_id" => "required|unique:verbals_trials,committee_id," . $id,
 					"committee_date" => "required|date",
@@ -719,7 +726,8 @@ class VerbalTrialController extends Controller
 		$verbalTrial = VerbalTrial::find($id);
 		if ($verbalTrial) {
 			if (($authorisation = Gate::inspect('check_notification', $verbalTrial))->allowed()) {
-				$requestData = $request->all();
+				// Les champs de workflow ne sont jamais acceptés depuis le client
+				$requestData = Arr::except($request->all(), ["creator_id", "status", "validation_level"]);
 				$validator = Validator::make($requestData, [
 					"committee_id" => "required|unique:verbals_trials,committee_id," . $id,
 					"committee_date" => "required|date",

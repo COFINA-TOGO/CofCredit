@@ -43,22 +43,42 @@ class CATPolicy
 	}
 	public function validate(User $connectedUser, Cat $cat)
 	{
-		return $this->check(["validate"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		if (!$this->check(["validate"], "cat", $connectedUser)) {
+			return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		}
+		return ($cat->validation_status == "waiting") ? Response::allow() : Response::deny("Ce CAT n'est pas en attente de validation");
 	}
 	public function unblock(User $connectedUser, Cat $cat)
 	{
-		return $this->check(["unblock"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		if (!$this->check(["unblock"], "cat", $connectedUser)) {
+			return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		}
+		return ($cat->validation_status == "validated" && $cat->unblock_status == "waiting") ? Response::allow() : Response::deny("Ce CAT doit être validé et en attente de déblocage");
 	}
 	public function reject_validation(User $connectedUser, Cat $cat)
 	{
-		return $this->check(["reject_validation"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		if (!$this->check(["reject_validation"], "cat", $connectedUser)) {
+			return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		}
+		return ($cat->validation_status == "waiting") ? Response::allow() : Response::deny("Ce CAT n'est pas en attente de validation");
 	}
 	public function reject_unblock(User $connectedUser, Cat $cat)
 	{
-		return $this->check(["reject_unblock"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		if (!$this->check(["reject_unblock"], "cat", $connectedUser)) {
+			return Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		}
+		return ($cat->validation_status == "validated" && $cat->unblock_status == "waiting") ? Response::allow() : Response::deny("Ce CAT doit être validé et en attente de déblocage");
 	}
 	public function delete(User $connectedUser, Cat $cat)
 	{
 		return $this->check(["delete"], "cat", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+	}
+
+	/**
+	 * Télécharger les documents générés (contrat, billet à ordre, mention manuscrite...)
+	 */
+	public function downloadDocument(User $connectedUser, Cat $cat)
+	{
+		return $this->checkAny(["read", "historical", "download"], ["cat", "basic-cat", "cat-simple-notification"], $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
 }

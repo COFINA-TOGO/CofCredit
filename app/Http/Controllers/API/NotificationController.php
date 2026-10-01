@@ -9,6 +9,7 @@ use App\Models\Notification;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
@@ -224,7 +225,9 @@ class NotificationController extends Controller
 	{
 		$notification = Notification::find($id);
 		if ($notification) {
-			// if (($authorisation = Gate::inspect('view', $notification))->allowed()) {
+			if (!($authorisation = Gate::inspect('downloadDocument', $notification))->allowed()) {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
 			$templateProcessor = new TemplateProcessor(($notification->head_credit_validation == "validated") ? "../document_templates/Notifications/Notification-validated.docx" : "../document_templates/Notifications/Notification.docx");
 
 			$data = $notification->toArray();
@@ -448,7 +451,8 @@ class NotificationController extends Controller
 	public function store(Request $request)
 	{
 		if (($authorisation = Gate::inspect('create', Notification::class))->allowed()) {
-			$requestData = $request->all();
+			// Les champs de workflow ne sont jamais acceptés depuis le client
+			$requestData = Arr::except($request->all(), ["creator_id", "status", "status_observation", "head_credit_validation", "head_credit_observation", "sent", "signed_notification_path", "signed_contract_path", "signed_promissory_note_path"]);
 			$validator = Validator::make($requestData, [
 				'verbal_trial_id' => "required|exists:verbals_trials,id|unique:notifications",
 				'representative_home_address' => 'required|min:2',
@@ -534,7 +538,8 @@ class NotificationController extends Controller
 		$notification = Notification::find($id);
 		if ($notification) {
 			if (($authorisation = Gate::inspect('update', $notification))->allowed()) {
-				$requestData = $request->all();
+				// Les champs de workflow ne sont jamais acceptés depuis le client
+				$requestData = Arr::except($request->all(), ["creator_id", "status", "status_observation", "head_credit_validation", "head_credit_observation", "sent", "signed_notification_path", "signed_contract_path", "signed_promissory_note_path"]);
 				$validator = Validator::make($requestData, [
 					'verbal_trial_id' => "required|exists:verbals_trials,id|unique:notifications,verbal_trial_id," . $id,
 					'representative_home_address' => 'required|min:2',
@@ -735,24 +740,15 @@ class NotificationController extends Controller
 					return $this->responseError(["error" => "Vous devez uploader une notification signée, un contrat signé ou un billet à ordre signé"], 400);
 				}
 
-				// Vérifier si le document est un PDF
-				if (strpos($base64Document, 'data:application/pdf;base64,') === 0) {
-					// Le document est un PDF
-					$extension = 'pdf';
-				} elseif (strpos($base64Document, 'data:image/') === 0) {
-					// Le document est une image
-					// Extraire l'extension de l'image
-					$start = strpos($base64Document, '/') + 1;
-					$end = strpos($base64Document, ';');
-					$extension = substr($base64Document, $start, $end - $start);
-				} else {
-					// Type de document non pris en charge
+				// Le type est déterminé à partir du contenu réel du fichier, pas du préfixe envoyé par le client
+				$document = $this->decodeBase64Document($base64Document);
+				if (!$document) {
 					DB::rollBack();
-					return $this->responseError(["error" => "Le document doit être un pdf ou une image"], 400);
+					return $this->responseError(["error" => "Le document doit être un pdf ou une image (10 Mo maximum)"], 400);
 				}
-
-				$documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $base64Document));
-				$path = 'upload/Notifications/signed_' . $document_category . 's/' . $notification->verbal_trial->committee_id . '-signed.' . $extension;
+				$extension = $document["extension"];
+				$documentData = $document["data"];
+				$path = 'upload/Notifications/signed_' . $document_category . 's/' . Str::slug($notification->verbal_trial->committee_id) . '-signed.' . $extension;
 				Storage::disk("public")->put($path, $documentData);
 				$notification->update(["signed_{$document_category}_path" => "/storage/" . $path]);
 

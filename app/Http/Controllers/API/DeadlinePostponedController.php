@@ -7,6 +7,7 @@ use App\Models\DeadlinePostponed;
 use App\Models\DeadlinePostponedFile;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -115,7 +116,7 @@ class DeadlinePostponedController extends Controller
 	{
 		return $this->modelStore(
 			"App\Models\DeadlinePostponed",
-			$request->all(),
+			Arr::except($request->all(), ["caf_id", "status", "request_path", "memo_path"]),
 			[
 				"credit_number" => "required",
 				"deadline_number" => "required|numeric",
@@ -130,34 +131,11 @@ class DeadlinePostponedController extends Controller
 				"representative_last_name" => "required",
 				"representative_first_name" => "required",
 			],
-			manualValidations: function ($requestData) {
-				$errors = [];
-				foreach (["request" => "document", "memo" => "memo"] as $document => $documentFr) {
-					if (!$this->checkIsBase64Validated($requestData[$document]))
-						$errors[$document] = ["Le $documentFr de la demande doit être une base64 pdf ou image"];
-				}
-				if ($errors) {
-					return $this->responseError($errors, 400);
-				}
-			},
-			beforeCreate: function ($requestData) use ($request) {
+			manualValidations: fn($requestData) => $this->decodeDeadlinePostponedDocuments($requestData, true),
+			beforeCreate: function ($requestData, $documents) use ($request) {
 				$requestData["caf_id"] = $request->user()->id;
 				$requestData["status"] = "waiting_ca";
-
-				foreach (["request", "memo"] as $document) {
-					if ($this->checkIsBase64Validated($requestData[$document], ["pdf"])) {
-						$extension = 'pdf';
-					} else {
-						$start = strpos($requestData[$document], '/') + 1;
-						$end = strpos($requestData[$document], ';');
-						$extension = substr($requestData[$document], $start, $end - $start);
-					}
-					$documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $requestData[$document]));
-					$requestData[$document . "_path"] = 'upload/deadlinePostponed/' . $document . 's/' . Str::random(15) . "." . $extension;
-					Storage::disk("public")->put($requestData[$document . "_path"], $documentData);
-				}
-
-				return $requestData;
+				return $this->storeDeadlinePostponedDocuments($requestData, $documents);
 			}
 		);
 	}
@@ -189,7 +167,7 @@ class DeadlinePostponedController extends Controller
 		return $this->modelUpdate(
 			modelId: $id,
 			modelClass: "App\Models\DeadlinePostponed",
-			requestData: $request->all(),
+			requestData: Arr::except($request->all(), ["caf_id", "status", "request_path", "memo_path"]),
 			validations: [
 				"credit_number" => "required",
 				"deadline_number" => "required|numeric",
@@ -202,41 +180,57 @@ class DeadlinePostponedController extends Controller
 				"representative_last_name" => "required",
 				"representative_first_name" => "required",
 			],
-			manualValidations: function ($requestData) {
-				$errors = [];
-				foreach (["request" => "document", "memo" => "memo"] as $document => $documentFr) {
-					if (isset ($requestData[$document]) && !$this->checkIsBase64Validated($requestData[$document]))
-						$errors[$document] = ["Le $documentFr de la demande doit être une base64 pdf ou image"];
-				}
-				if ($errors) {
-					return $this->responseError($errors, 400);
-				}
-			},
-			beforeUpdate: function ($requestData, $model) {
+			manualValidations: fn($requestData) => $this->decodeDeadlinePostponedDocuments($requestData, false),
+			beforeUpdate: function ($requestData, $model, $documents) {
 				$requestData["caf_id"] = $model->caf_id;
 				$requestData["status"] = "waiting_ca";
-
-				foreach (["request", "memo"] as $document) {
-					if (isset ($requestData[$document])) {
-						if ($this->checkIsBase64Validated($requestData[$document], ["pdf"])) {
-							$extension = 'pdf';
-						} else {
-							$start = strpos($requestData[$document], '/') + 1;
-							$end = strpos($requestData[$document], ';');
-							$extension = substr($requestData[$document], $start, $end - $start);
-						}
-						$documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $requestData[$document]));
-						$requestData[$document . "_path"] = 'upload/deadlinePostponed/' . $document . 's/' . Str::random(15) . "." . $extension;
-						Storage::disk("public")->delete($model[$document . "_path"]);
-						Storage::disk("public")->put($requestData[$document . "_path"], $documentData);
-					}
-				}
-
-				return $requestData;
+				return $this->storeDeadlinePostponedDocuments($requestData, $documents, $model);
 			}
 		);
 	}
 
+
+	/**
+	 * Décode les documents (demande et mémo) d'un report d'échéance
+	 * @param	array	$requestData	Les données de la requête
+	 * @param	bool	$required		Les documents sont-ils obligatoires
+	 * @return	array					["data" => [document => décodé]] ou ["errors" => réponse d'erreur]
+	 */
+	private function decodeDeadlinePostponedDocuments(array $requestData, bool $required)
+	{
+		$errors = [];
+		$documents = [];
+		foreach (["request" => "document", "memo" => "memo"] as $document => $documentFr) {
+			if (!$required && !isset($requestData[$document])) {
+				continue;
+			}
+			if ($decoded = $this->decodeBase64Document($requestData[$document] ?? null)) {
+				$documents[$document] = $decoded;
+			} else {
+				$errors[$document] = ["Le $documentFr de la demande doit être une base64 pdf ou image (10 Mo maximum)"];
+			}
+		}
+		return $errors ? ["errors" => $this->responseError($errors, 400)] : ["data" => $documents];
+	}
+
+	/**
+	 * Enregistre les documents décodés d'un report d'échéance et renseigne leurs chemins
+	 * @param	array	$requestData	Les données de la requête
+	 * @param	array	$documents		Les documents décodés
+	 * @param	mixed	$model			Le report d'échéance existant (mise à jour)
+	 * @return	array
+	 */
+	private function storeDeadlinePostponedDocuments(array $requestData, array $documents, $model = null)
+	{
+		foreach ($documents as $document => $decoded) {
+			$requestData[$document . "_path"] = 'upload/deadlinePostponed/' . $document . 's/' . Str::random(15) . "." . $decoded["extension"];
+			if ($model && $model[$document . "_path"]) {
+				Storage::disk("public")->delete($model[$document . "_path"]);
+			}
+			Storage::disk("public")->put($requestData[$document . "_path"], $decoded["data"]);
+		}
+		return $requestData;
+	}
 
 	/**
 	 * Supprime un report d'échéance

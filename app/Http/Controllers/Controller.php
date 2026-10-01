@@ -39,6 +39,7 @@ class Controller extends BaseController
 			$manualValidationsReturn = ($manualValidations) ? $manualValidations($requestData) : null;
 			if (isset($manualValidationsReturn["errors"])) {
 				if ($manualValidationsReturn["errors"]) {
+					DB::rollBack();
 					return $manualValidationsReturn["errors"];
 				}
 			}
@@ -85,6 +86,7 @@ class Controller extends BaseController
 				$manualValidationsReturn = ($manualValidations) ? $manualValidations($requestData, $model) : null;
 				if (isset($manualValidationsReturn["errors"])) {
 					if ($manualValidationsReturn["errors"]) {
+						DB::rollBack();
 						return $manualValidationsReturn["errors"];
 					}
 				}

@@ -10,6 +10,7 @@ use App\Jobs\SendEmail;
 use App\Models\Company;
 use App\Models\Contract;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use App\Models\IndividualBusiness;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -398,6 +399,9 @@ class ContractController extends Controller
 	{
 		$contract = Contract::find($id);
 		if ($contract) {
+			if (!($authorisation = Gate::inspect('downloadDocument', $contract))->allowed()) {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
 			$templateProcessor = new TemplateProcessor("../document_templates/Contracts/$contract->type/billet_a_ordre_$contract->type.docx");
 			$data = $contract->toArray();
 			$data = array_merge($data, collect($contract->verbal_trial)->mapWithKeys(function ($value, $key) {
@@ -493,6 +497,9 @@ class ContractController extends Controller
 	{
 		$contract = Contract::find($id);
 		if ($contract) {
+			if (!($authorisation = Gate::inspect('downloadDocument', $contract))->allowed()) {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
 			$templateProcessor = new TemplateProcessor("../document_templates/Mention-manuscrite/mention_manuscrite.docx");
 			$data = $contract->toArray();
 			$data["amount_float"] = ((float) $data["total_amount_of_interest"]) + $contract->verbal_trial->amount;
@@ -545,7 +552,8 @@ class ContractController extends Controller
 	public function store(Request $request)
 	{
 		if (($authorisation = Gate::inspect('create', Contract::class))->allowed()) {
-			$requestData = $request->all();
+			// Les champs de workflow ne sont jamais acceptés depuis le client
+			$requestData = Arr::except($request->all(), ["creator_id", "signed_contract_path", "signed_promissory_note_path", "status", "status_observation", "admin_validated_at", "admin_validator_id", "head_validated_at", "head_validator_id", "admin_validation_comment", "head_validation_comment"]);
 			$validator = Validator::make($requestData, [
 				'verbal_trial_id' => "required|exists:verbals_trials,id|unique:contracts",
 				'representative_birth_date' => 'required|date',
@@ -705,7 +713,8 @@ class ContractController extends Controller
 		$contract = Contract::find($id);
 		if ($contract) {
 			if (($authorisation = Gate::inspect('update', $contract))->allowed()) {
-				$requestData = $request->all();
+				// Les champs de workflow ne sont jamais acceptés depuis le client
+				$requestData = Arr::except($request->all(), ["creator_id", "signed_contract_path", "signed_promissory_note_path", "status", "status_observation", "admin_validated_at", "admin_validator_id", "head_validated_at", "head_validator_id", "admin_validation_comment", "head_validation_comment"]);
 				$validator = Validator::make($requestData, [
 					// 'verbal_trial_id' => "required|exists:verbals_trials,id|unique:contracts,verbal_trial_id," . $id,
 					'representative_birth_date' => 'required|date',
@@ -870,24 +879,15 @@ class ContractController extends Controller
 					return $this->responseError(["error" => "Vous devez uploader un contrat signé ou un billet à ordre signé"], 400);
 				}
 
-				// Vérifier si le document est un PDF
-				if (strpos($base64Document, 'data:application/pdf;base64,') === 0) {
-					// Le document est un PDF
-					$extension = 'pdf';
-				} elseif (strpos($base64Document, 'data:image/') === 0) {
-					// Le document est une image
-					// Extraire l'extension de l'image
-					$start = strpos($base64Document, '/') + 1;
-					$end = strpos($base64Document, ';');
-					$extension = substr($base64Document, $start, $end - $start);
-				} else {
-					// Type de document non pris en charge
+				// Le type est déterminé à partir du contenu réel du fichier, pas du préfixe envoyé par le client
+				$document = $this->decodeBase64Document($base64Document);
+				if (!$document) {
 					DB::rollBack();
-					return $this->responseError(["error" => "Le document doit être un pdf ou une image"], 400);
+					return $this->responseError(["error" => "Le document doit être un pdf ou une image (10 Mo maximum)"], 400);
 				}
-
-				$documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $base64Document));
-				$path = 'upload/Contracts/signed_' . $document_category . 's/' . $contract->verbal_trial->committee_id . '-signed.' . $extension;
+				$extension = $document["extension"];
+				$documentData = $document["data"];
+				$path = 'upload/Contracts/signed_' . $document_category . 's/' . Str::slug($contract->verbal_trial->committee_id) . '-signed.' . $extension;
 				Storage::disk("public")->put($path, $documentData);
 				
 				// Nouveau workflow : après upload, le statut devient pending_admin_validation
@@ -954,104 +954,6 @@ class ContractController extends Controller
 	}
 
 	/**
-	 * Mettre à jour le statut d'un contrat
-	 *
-	 * @urlParam	id	  required					int			 L'ID du contrat.										Example: 1
-	 *
-	 * @bodyParam   status							  string		  Le nouveau statut									   Example: rejected
-	 * @bodyParam   comment							 string		  Commentaire du changement							   Example: Trop bas
-	 *
-	 * @response 200
-	 *
-	 */
-	public function change_status(Request $request, $id)
-	{
-		$contract = Contract::find($id);
-		if ($contract) {
-			if (($authorisation = Gate::inspect("change_status", $contract))->allowed()) {
-				$requestData = $request->all();
-				$validator = Validator::make($requestData, [
-					'status' => 'required|in:rejected,validated',
-					'comment' => "min:0",
-				]);
-				if ($validator->fails()) {
-					return $this->responseError($validator->errors(), 400);
-				} else {
-					$receiverList = [
-						"caf_list" => [User::find($contract->verbal_trial->caf_id)],
-						"credit_admin_list" => [User::find($contract->verbal_trial->credit_admin_id)],
-						"credit_analyst_list" => [User::find($contract->verbal_trial->credit_analyst_id)],
-						"head_credit_list" => User::where('profile', 'head_credit')->get(),
-						"md_list" => User::where('profile', 'md')->get(),
-					];
-					$mailsDataList = [
-						"validated" =>
-							[
-								[
-									"receiverList" => $receiverList["credit_admin_list"],
-									"subject" => "Notification de validation du contrat " . $contract->verbal_trial->committee_id,
-									"message" => "
-											<h1 style='color: #333333;font-size: 24px; margin-bottom: 20px;'>Cher(e) Admin crédit,</U></h1>
-	
-											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat" . $contract->verbal_trial->committee_id . "en attente de cat: <a href='" . env("APP_URL") . "/cat/add?id=" . $contract->id . "'>Créer le cat</a></p>
-	
-											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-	
-											<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-	
-											<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-										",
-								]
-							],
-						"rejected" =>
-							[
-								[
-									"receiverList" => $receiverList["caf_list"],
-									"subject" => "Notifcation de rejet du PV " . $contract->verbal_trial->committee_id,
-									"message" => "
-											<h1 style='color: #333333; font-size: 24px; margin-bottom: 20px;'>Cher(e) CAF,</h1>
-	
-											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-											Nous vous informons que les documents chargés pour le dossier <strong>" . $contract->verbal_trial->committee_id . "</strong> ont été rejetés. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
-											</p>
-	
-											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-											Pour accéder directement aux contrats, cliquez sur le lien suivant : <a href='#'>Voir les contrats</a>.
-											</p>
-	
-											<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-											Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter. Nous restons à votre disposition pour toute assistance !
-											</p>
-	
-											<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-	
-											<p style='color: #999999; font-size: 12px;'>
-											Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.
-											</p>
-										",
-								]
-							],
-					];
-					$mailsData = $mailsDataList[$requestData["status"]];
-					foreach ($mailsData as $mailData) {
-						foreach ($mailData["receiverList"] as $receiver) {
-							SendEmail::dispatch($receiver->email, $mailData["subject"], $mailData["message"]);
-						}
-					}
-					$contract->update([
-						"status" => $requestData["status"],
-						"status_observation" => $requestData["comment"],
-					]);
-				}
-			} else {
-				return $this->responseError(["auth" => [$authorisation->message()]], 403);
-			}
-		} else {
-			return $this->responseError(["id" => ["Le contrat n'existe pas"]], 404);
-		}
-	}
-
-	/**
 	 * Validation de l'envoi par l'admin crédit
 	 *
 	 * @urlParam	id													  int	 required	L'ID du contrat.														Example: 1
@@ -1064,7 +966,7 @@ class ContractController extends Controller
 	{
 		$contract = Contract::find($id);
 		if ($contract) {
-			if (($authorisation = Gate::inspect('validate', $contract))->allowed()) {
+			if (($authorisation = Gate::inspect('admin_validate', $contract))->allowed()) {
 				// Vérifier que le contrat est dans le bon statut
 				if ($contract->status !== 'pending_admin_validation') {
 					return $this->responseError(["status" => "Le contrat n'est pas en attente de validation admin"], 400);
@@ -1145,7 +1047,7 @@ class ContractController extends Controller
 	{
 		$contract = Contract::find($id);
 		if ($contract) {
-			if (($authorisation = Gate::inspect('validate', $contract))->allowed()) {
+			if (($authorisation = Gate::inspect('head_validate', $contract))->allowed()) {
 				// Vérifier que le contrat est dans le bon statut
 				if ($contract->status !== 'pending_head_validation') {
 					return $this->responseError(["status" => "Le contrat n'est pas en attente de validation head"], 400);

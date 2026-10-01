@@ -46,28 +46,32 @@ class ContractPolicy
 		return $this->check(["upload"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
 
-	public function change_status(User $connectedUser, Contract $contract)
+	/**
+	 * Validation de l'envoi : réservée à l'admin crédit qui a créé le contrat
+	 */
+	public function admin_validate(User $connectedUser, Contract $contract)
 	{
-		return $this->check(["change_status"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		return ($connectedUser->profile === 'credit_admin' && $contract->creator_id == $connectedUser->id) ? Response::allow() : Response::deny("Seul l'admin crédit en charge du contrat peut valider l'envoi");
 	}
 
-	public function validate(User $connectedUser, Contract $contract)
+	/**
+	 * Validation/rejet final : réservé au head crédit
+	 */
+	public function head_validate(User $connectedUser, Contract $contract)
 	{
-		// Admin crédit peut valider ses propres contrats
-		if ($connectedUser->profile === 'credit_admin' && $contract->creator_id === $connectedUser->id) {
-			return Response::allow();
-		}
-		
-		// Head crédit peut valider tous les contrats
-		if ($connectedUser->profile === 'head_credit') {
-			return Response::allow();
-		}
-		
-		return $this->check(["validate"], "contract", $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+		return $connectedUser->profile === 'head_credit' ? Response::allow() : Response::deny("Seul le head crédit peut effectuer la validation finale");
 	}
 
 	public function delete(User $connectedUser, Contract $contract)
 	{
 		return $this->check(["delete"], "contract", $connectedUser) ? (($contract->status == "validated") ? Response::deny("vous n'etes plus autorisé à supprimer ce contrat") : Response::allow()) : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
+	}
+
+	/**
+	 * Télécharger les documents générés (contrat, billet à ordre, mention manuscrite...)
+	 */
+	public function downloadDocument(User $connectedUser, Contract $contract)
+	{
+		return $this->checkAny(["read", "historical", "download"], ["contract", "basic-contract", "notarized-contract"], $connectedUser) ? Response::allow() : Response::deny("Vous n'êtes pas autorisé à effectuer cette action");
 	}
 }

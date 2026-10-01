@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Guarantor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
@@ -163,7 +164,9 @@ class GuarantorController extends Controller
 	{
 		$guarantor = Guarantor::find($id);
 		if ($guarantor) {
-			// if (($authorisation = Gate::inspect('view', $guarantor))->allowed()) {
+			if (!($authorisation = Gate::inspect('downloadDocument', $guarantor))->allowed()) {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
 			// $guarantor->load(["verbal_trial.type_of_credit.type_of_applicant", "verbal_trial.guarantees"]);
 			$data = $guarantor->toArray();
 			$parent = $guarantor->notification ? $guarantor->notification : $guarantor->contract;
@@ -278,7 +281,9 @@ class GuarantorController extends Controller
 	{
 		$guarantor = Guarantor::find($id);
 		if ($guarantor) {
-			// if (($authorisation = Gate::inspect('view', $guarantor))->allowed()) {
+			if (!($authorisation = Gate::inspect('downloadDocument', $guarantor))->allowed()) {
+				return $this->responseError(["auth" => [$authorisation->message()]], 403);
+			}
 
 			$data = $guarantor->toArray();
 			$parent = $guarantor->notification ? $guarantor->notification : $guarantor->contract;
@@ -391,7 +396,8 @@ class GuarantorController extends Controller
 	public function store(Request $request)
 	{
 		if (($authorisation = Gate::inspect('create', Guarantor::class))->allowed()) {
-			$requestData = $request->all();
+			// Les champs de workflow ne sont jamais acceptés depuis le client
+			$requestData = Arr::except($request->all(), ["signed_contract_path", "signed_promissory_note_path"]);
 			$validator = Validator::make($requestData, ["contract_id" => "required|exists:contracts,id"]);
 			if ($validator->fails()) {
 				$validator = Validator::make($requestData, ["notification_id" => "required|exists:notifications,id"]);
@@ -456,7 +462,8 @@ class GuarantorController extends Controller
 		$guarantor = Guarantor::find($id);
 		if ($guarantor) {
 			if (($authorisation = Gate::inspect('update', $guarantor))->allowed()) {
-				$requestData = $request->all();
+				// Les champs de workflow ne sont jamais acceptés depuis le client
+				$requestData = Arr::except($request->all(), ["signed_contract_path", "signed_promissory_note_path"]);
 				$validator = Validator::make($requestData, ["contract_id" => "required|exists:contracts,id"]);
 				if ($validator->fails()) {
 					$validator = Validator::make($requestData, ["notification_id" => "required|exists:notifications,id"]);
@@ -521,22 +528,14 @@ class GuarantorController extends Controller
 					return $this->responseError(["error" => "Vous devez uploader un contrat signé ou un billet à ordre signé"], 400);
 				}
 
-				// Vérifier si le document est un PDF
-				if (strpos($base64Document, 'data:application/pdf;base64,') === 0) {
-					// Le document est un PDF
-					$extension = 'pdf';
-				} elseif (strpos($base64Document, 'data:image/') === 0) {
-					// Le document est une image
-					// Extraire l'extension de l'image
-					$start = strpos($base64Document, '/') + 1;
-					$end = strpos($base64Document, ';');
-					$extension = substr($base64Document, $start, $end - $start);
-				} else {
-					// Type de document non pris en charge
+				// Le type est déterminé à partir du contenu réel du fichier, pas du préfixe envoyé par le client
+				$document = $this->decodeBase64Document($base64Document);
+				if (!$document) {
 					DB::rollBack();
-					return $this->responseError(["error" => "Le document doit être un pdf ou une image"], 400);
+					return $this->responseError(["error" => "Le document doit être un pdf ou une image (10 Mo maximum)"], 400);
 				}
-				$documentData = base64_decode(preg_replace('/^data:\w+\/\w+;base64,/', '', $base64Document));
+				$extension = $document["extension"];
+				$documentData = $document["data"];
 
 				// Supprimer l'ancien fichier s'il existe
 				$oldPath = $guarantor->{"signed_{$document_category}_path"};

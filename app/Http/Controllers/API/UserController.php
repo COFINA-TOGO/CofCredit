@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -134,7 +135,8 @@ class UserController extends Controller
 	public function store(Request $request)
 	{
 		if (($authorisation = Gate::inspect('create', User::class))->allowed()) {
-			$requestData = $request->all();
+			// Les champs de workflow ne sont jamais acceptés depuis le client
+			$requestData = Arr::except($request->all(), ["signatory_path"]);
 			$validator = Validator::make($requestData, [
 				'full_name' => 'required|unique:users',
 				"profile" => 'required|in:admin,credit_analyst,credit_admin,head_credit,operation,legal,dex,caf,ca,md,courier',
@@ -180,7 +182,8 @@ class UserController extends Controller
 		$user = User::find($id);
 		if ($user) {
 			if (($authorisation = Gate::inspect('update', $user))->allowed()) {
-				$requestData = $request->all();
+				// Les champs de workflow ne sont jamais acceptés depuis le client
+				$requestData = Arr::except($request->all(), ["signatory_path"]);
 				$validator = Validator::make($requestData, [
 					'full_name' => 'required|unique:users,full_name,' . $id,
 					'email' => 'required|unique:users,email,' . $id,
@@ -258,7 +261,6 @@ class UserController extends Controller
 
 	public function update_signatory(Request $request, int $id)
 	{
-		$validatedExtentions = ["png", "jpg", "gif", "jpeg"];
 		return $this->modelUpdate(
 			modelId: $id,
 			modelClass: "App\Models\User",
@@ -266,17 +268,13 @@ class UserController extends Controller
 			validations: [
 				"signatory" => "required|min:5"
 			],
-			manualValidations: function ($requestData, $model) use ($validatedExtentions) {
-				if (!$this->checkIsBase64Validated($requestData["signatory"], $validatedExtentions)) {
-					return ["errors" => $this->responseError(["signatory" => ["le fichier n'est pas une image valide"]], 400)];
-				}
-				if ($signatory_path = $this->saveImageFromBase64($requestData["signatory"], "/upload/signatory/$model->id/" . Str::random(10) . ".png", $validatedExtentions)) {
+			manualValidations: function ($requestData, $model) {
+				if ($signatory_path = $this->saveImageFromBase64($requestData["signatory"], "/upload/signatory/$model->id/" . Str::random(10))) {
 					return ["data" => ["signatory_path" => $signatory_path]];
-				} else {
-					return ["errors" => $this->responseError(["signatory" => ["Une erreur est survenu durant l'insertion de l'image"]])];
 				}
+				return ["errors" => $this->responseError(["signatory" => ["le fichier n'est pas une image valide"]], 400)];
 			},
-			beforeUpdate: function ($requestData, $model, $data) use ($validatedExtentions) {
+			beforeUpdate: function ($requestData, $model, $data) {
 				$requestData["signatory_path"] = $data["signatory_path"];
 				return $requestData;
 			},

@@ -104,43 +104,62 @@ trait ControllerHelperTrait
     }
 
     /**
-     * Vérifie si on a à faire à un base64 valide
-     * @param 	mixed	$base64				Le base64
-     * @param 	mixed	$validateType		Les types de base64 valides
-     * @return	boolean
+     * Les types MIME d'image acceptés et leur extension
+     * @return	array
      */
-    public function checkIsBase64Validated($base64, $validatedTypes = ["jpg", "png", "jpeg", "gif"])
+    public function imageMimeTypes()
     {
-        $validators = [
-            "jpg" => fn($base64) => strpos($base64, 'data:image/jpg;base64') === 0,
-            "jpeg" => fn($base64) => strpos($base64, 'data:image/jpeg;base64') === 0,
-            "png" => fn($base64) => strpos($base64, 'data:image/png;base64') === 0,
-            "gif" => fn($base64) => strpos($base64, 'data:image/gif;base64') === 0,
-        ];
-        foreach ($validatedTypes as $validatedType) {
-            if ($validators[$validatedType]($base64)) {
-                return true;
-            }
+        return ["image/png" => "png", "image/jpeg" => "jpg", "image/gif" => "gif"];
+    }
+
+    /**
+     * Les types MIME de document acceptés (pdf ou image) et leur extension
+     * @return	array
+     */
+    public function documentMimeTypes()
+    {
+        return ["application/pdf" => "pdf"] + $this->imageMimeTypes();
+    }
+
+    /**
+     * Décode un document base64 (data URI) et détermine son extension à partir de son contenu réel
+     * @param 	mixed	$base64				Le base64 (data:<mime>;base64,<données>)
+     * @param 	array	$allowedMimeTypes	Les types MIME acceptés et l'extension associée
+     * @param 	int		$maxSize			La taille maximale en octets
+     * @return	array|null					["extension" => string, "data" => string] ou null si le document est invalide
+     */
+    public function decodeBase64Document($base64, ?array $allowedMimeTypes = null, int $maxSize = 10 * 1024 * 1024)
+    {
+        $allowedMimeTypes ??= $this->documentMimeTypes();
+        if (!is_string($base64) || !preg_match('/^data:[\w.+-]+\/[\w.+-]+;base64,/', $base64, $matches)) {
+            return null;
         }
-        return false;
+        $data = base64_decode(str_replace(' ', '+', substr($base64, strlen($matches[0]))), true);
+        if ($data === false || $data === '' || strlen($data) > $maxSize) {
+            return null;
+        }
+        $mimeType = (new \finfo(FILEINFO_MIME_TYPE))->buffer($data);
+        if (!isset($allowedMimeTypes[$mimeType])) {
+            return null;
+        }
+        return ["extension" => $allowedMimeTypes[$mimeType], "data" => $data];
     }
 
     /**
      * Enregistre une image
      * @param 	string	$base64				Le base64
-     * @param 	string	$savePath			Le chemin d'enregistrement
-     * @param 	array	$validatedTypes		Les types du fichier validés
-     *
+     * @param 	string	$savePath			Le chemin d'enregistrement (sans extension)
+     * @return	string|false				Le chemin du fichier enregistré
      */
-    public function saveImageFromBase64($base64, $savePath, $validatedTypes = ["jpg", "png", "jpeg", "gif"])
+    public function saveImageFromBase64($base64, $savePath)
     {
         try {
-            foreach ($validatedTypes as $extention) {
-                $imageData = str_replace("data:image/$extention;base64,", '', $base64);
+            $document = $this->decodeBase64Document($base64, $this->imageMimeTypes());
+            if (!$document) {
+                return false;
             }
-            $imageData = str_replace(' ', '+', $imageData);
-            $imageData = base64_decode($imageData);
-            Storage::disk("public")->put($savePath, $imageData);
+            $savePath .= "." . $document["extension"];
+            Storage::disk("public")->put($savePath, $document["data"]);
             return $savePath;
         } catch (Exception $ex) {
             return false;

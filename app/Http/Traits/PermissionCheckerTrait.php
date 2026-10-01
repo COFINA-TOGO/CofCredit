@@ -18,4 +18,14 @@ trait PermissionCheckerTrait
         }
         return false;
     }
+
+    public function checkAny($actions, array $subjects, $connectedUser)
+    {
+        foreach ($subjects as $subject) {
+            if ($this->check($actions, $subject, $connectedUser)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
