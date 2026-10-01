@@ -157,7 +157,7 @@ async function capturerProfil(session) {
 
   // ─── Notifications de CAF (avant PV) ────────────────────────────────────
   scenario('notification-caf', peut('read', 'pv-notification'), async () => {
-    if (await ouvrir('/pv/notification/without-pv', '11-notification-caf-liste'))
+    if (peut('read-without-pv', 'pv-notification') && await ouvrir('/pv/notification/without-pv', '11-notification-caf-liste'))
       await capturerMenuActions('11-notification-caf-liste-actions')
     if (peut('read-historical', 'pv-notification'))
       await ouvrir('/pv/notification/historical', '11-notification-caf-historique')
