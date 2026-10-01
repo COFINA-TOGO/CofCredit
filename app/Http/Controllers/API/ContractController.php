@@ -6,7 +6,6 @@ use App\Models\User;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Pledge;
-use App\Jobs\SendEmail;
 use App\Models\Company;
 use App\Models\Contract;
 use Illuminate\Http\Request;
@@ -657,25 +656,13 @@ class ContractController extends Controller
 			}
 			DB::commit(); // Valider les opérations
 			$receiver = $contract->verbal_trial->caf;
-			$link = config("app.url") . "/contract";
-			SendEmail::dispatch(
-				$receiver->email,
+			$this->notifyByEmail(
+				$receiver,
 				"Notification de mise en place d'un contrat",
-				"
-				<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-					$receiver->full_name,</U></h1>
-
-				<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
-					cofina credit digital et de prendre en charge immédiatement le contrat en attente de signature par le client: <a
-						href='$link'>Consulter les contrats</a></p>
-
-				<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-					n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-
-				<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-
-				<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-				"
+				"Cher(e) " . $receiver->full_name . ",",
+				["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat en attente de signature par le client."],
+				"/contract",
+				"Consulter les contrats"
 			);
 			return $this->responseOk([
 				"contract" => $contract
@@ -816,25 +803,13 @@ class ContractController extends Controller
 					$contract->update($requestData);
 
 					$receiver = $contract->verbal_trial->caf;
-					$link = config("app.url") . "/contract";
-					SendEmail::dispatch(
-						$receiver->email,
+					$this->notifyByEmail(
+						$receiver,
 						"Notification de modification d'un contrat",
-						"
-						<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-							$receiver->full_name,</U></h1>
-		
-						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
-							cofina credit digital et de prendre en charge immédiatement le contrat en attente de signature par le client: <a
-								href='$link'>Consulter les contrats</a></p>
-		
-						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-							n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-		
-						<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-		
-						<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-						"
+						"Cher(e) " . $receiver->full_name . ",",
+						["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge immédiatement le contrat en attente de signature par le client."],
+						"/contract",
+						"Consulter les contrats"
 					);
 					$contract->load($relationList);
 				} catch (Exception $e) {
@@ -910,7 +885,6 @@ class ContractController extends Controller
 
 				// Notifier l'admin crédit que tous les fichiers sont uploadés et qu'il peut valider
 				$pv_commitee_id = $contract->verbal_trial->committee_id;
-				$link = config("app.url") . "/contract";
 
 				// Rafraîchir le contrat pour avoir les dernières données
 				$contract->refresh();
@@ -919,27 +893,16 @@ class ContractController extends Controller
 					// Notifier l'admin crédit qu'il peut maintenant valider l'envoi
 					$admin_credit = User::find($contract->creator_id);
 					if ($admin_credit) {
-						SendEmail::dispatch(
-							$admin_credit->email,
+						$this->notifyByEmail(
+							$admin_credit,
 							"Validation requise pour le contrat $pv_commitee_id",
-							"
-							<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-								Admin Crédit,</h1>
-			
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Tous les documents ont été chargés pour le dossier $pv_commitee_id. 
-							Vous devez maintenant valider l'envoi avant que le Head Crédit puisse procéder à la validation finale.</p>
-							
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Connectez-vous à l'application
-								cofina credit digital pour valider l'envoi: <a
-									href='$link'>Consulter les contrats</a></p>
-			
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-			
-							<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-			
-							<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-							"
+							"Cher(e) Admin Crédit,",
+							[
+								"Tous les documents ont été chargés pour le dossier $pv_commitee_id. Vous devez maintenant valider l'envoi avant que le Head Crédit puisse procéder à la validation finale.",
+								"Connectez-vous à l'application cofina credit digital pour valider l'envoi.",
+							],
+							"/contract",
+							"Consulter les contrats"
 						);
 					}
 				}
@@ -995,31 +958,19 @@ class ContractController extends Controller
 
 				// Notifier les head crédit
 				$head_credit_users = User::where('profile', 'head_credit')->get();
-				$link = config("app.url") . "/contract";
 				$pv_commitee_id = $contract->verbal_trial->committee_id;
 
 				foreach ($head_credit_users as $head_credit) {
-					SendEmail::dispatch(
-						$head_credit->email,
+					$this->notifyByEmail(
+						$head_credit,
 						"Validation requise pour le contrat $pv_commitee_id",
-						"
-						<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-							Head Crédit,</h1>
-
-						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>L'admin crédit a validé l'envoi des documents pour le dossier $pv_commitee_id. 
-						Vous pouvez maintenant procéder à la validation finale.</p>
-						
-						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Connectez-vous à l'application
-							cofina credit digital pour valider ou rejeter le dossier: <a
-								href='$link'>Consulter les contrats</a></p>
-
-						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-							n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-
-						<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-
-						<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-						"
+						"Cher(e) Head Crédit,",
+						[
+							"L'admin crédit a validé l'envoi des documents pour le dossier $pv_commitee_id. Vous pouvez maintenant procéder à la validation finale.",
+							"Connectez-vous à l'application cofina credit digital pour valider ou rejeter le dossier.",
+						],
+						"/contract",
+						"Consulter les contrats"
 					);
 				}
 
@@ -1083,59 +1034,35 @@ class ContractController extends Controller
 
 				// Notifier selon l'action
 				$pv_commitee_id = $contract->verbal_trial->committee_id;
-				$link = config("app.url") . "/contract";
 
 				if ($newStatus === 'validated') {
 					// Notifier l'admin crédit de la validation
 					$admin_credit = User::find($contract->creator_id);
 					if ($admin_credit) {
-						SendEmail::dispatch(
-							$admin_credit->email,
+						$this->notifyByEmail(
+							$admin_credit,
 							"Contrat $pv_commitee_id validé",
-							"
-							<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-								Admin Crédit,</h1>
-
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Le Head Crédit a validé le contrat $pv_commitee_id. 
-							Vous pouvez maintenant procéder à la création du CAT.</p>
-							
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Connectez-vous à l'application
-								cofina credit digital: <a href='" . config("app.url") . "/cat/add?id=" . $contract->id . "'>Créer le CAT</a></p>
-
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-
-							<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-
-							<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-							"
+							"Cher(e) Admin Crédit,",
+							["Le Head Crédit a validé le contrat $pv_commitee_id. Vous pouvez maintenant procéder à la création du CAT."],
+							"/cat/add?id=" . $contract->id,
+							"Créer le CAT"
 						);
 					}
 				} else {
 					// Notifier l'admin crédit du rejet
 					$admin_credit = User::find($contract->creator_id);
 					if ($admin_credit) {
-						SendEmail::dispatch(
-							$admin_credit->email,
+						$this->notifyByEmail(
+							$admin_credit,
 							"Contrat $pv_commitee_id rejeté",
-							"
-							<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-								Admin Crédit,</h1>
-
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Le Head Crédit a rejeté le contrat $pv_commitee_id.</p>
-							
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'><strong>Motif:</strong> " . ($requestData['comment'] ?? 'Aucun motif spécifié') . "</p>
-							
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Vous pouvez maintenant re-uploader les documents corrigés: <a
-								href='$link'>Consulter les contrats</a></p>
-
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-
-							<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-
-							<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-							"
+							"Cher(e) Admin Crédit,",
+							[
+								"Le Head Crédit a rejeté le contrat $pv_commitee_id.",
+								"Motif : " . ($requestData['comment'] ?? 'Aucun motif spécifié'),
+								"Vous pouvez maintenant re-uploader les documents corrigés.",
+							],
+							"/contract",
+							"Consulter les contrats"
 						);
 					}
 				}

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\ControllerHelperTrait;
+use App\Jobs\SendEmail;
+use App\Models\User;
+use Illuminate\Support\Arr;
 use App\Http\Traits\CustomResponseTrait;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -137,6 +140,33 @@ class Controller extends BaseController
 			}
 		} else {
 			return $this->responseError(["id" => "L'élément n'existe pas"], 404);
+		}
+	}
+
+	/**
+	 * Envoie un email de notification avec la mise en page standard (toutes les valeurs sont échappées)
+	 * @param 	mixed 		$receivers		Un utilisateur, un email ou une liste (tableau / collection) d'utilisateurs ou d'emails
+	 * @param 	string 		$subject		L'objet du mail
+	 * @param 	string 		$greeting		La formule d'appel (ex: "Cher(e) Admin crédit,")
+	 * @param 	array 		$paragraphs		Les paragraphes du message (texte brut)
+	 * @param 	string		$linkPath		Le chemin du lien dans l'application (ex: "/contract")
+	 * @param 	string		$linkLabel		Le libellé du lien
+	 * @return 	void
+	 */
+	public function notifyByEmail($receivers, string $subject, string $greeting, array $paragraphs, ?string $linkPath = null, ?string $linkLabel = null)
+	{
+		$content = view('emails.notification', [
+			"greeting" => $greeting,
+			"paragraphs" => $paragraphs,
+			"linkUrl" => $linkPath ? rtrim(config("app.url"), "/") . $linkPath : null,
+			"linkLabel" => $linkLabel ?? "Accéder à l'application",
+		])->render();
+
+		foreach (Arr::flatten([$receivers]) as $receiver) {
+			$email = $receiver instanceof User ? $receiver->email : $receiver;
+			if ($email) {
+				SendEmail::dispatch($email, $subject, $content);
+			}
 		}
 	}
 }

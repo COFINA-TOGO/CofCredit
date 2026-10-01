@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SendEmail;
 use App\Models\CAT;
 use App\Models\Notification;
 use App\Models\Contract;
@@ -365,24 +364,13 @@ class CATController extends Controller
 			}
 			DB::commit(); // Valider les opérations
 			foreach (User::where('profile', 'head_credit')->get() as $head_credit) {
-				SendEmail::dispatch(
-					$head_credit->email,
+				$this->notifyByEmail(
+					$head_credit,
 					"Notification de mise en place du cat du dossier " . $cat->back_step->verbal_trial->committee_id,
-					"
-					<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-						Head,</U></h1>
-	
-					<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
-						cofina credit digital et de prendre en charge le cat du dossier " . $cat->back_step->verbal_trial->committee_id . " en attente de validation: <a
-							href='" . config("app.url") . "/cat" . "'>Consulter les cats</a></p>
-	
-					<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-						n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-	
-					<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-	
-					<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-					"
+					"Cher(e) Head,",
+					["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le cat du dossier " . $cat->back_step->verbal_trial->committee_id . " en attente de validation."],
+					"/cat",
+					"Consulter les cats"
 				);
 			}
 			return $this->responseOk(["c_a_t" => $cat], status: 201);
@@ -452,24 +440,13 @@ class CATController extends Controller
 					$cat->update($requestData);
 					$cat->load(["contract.verbal_trial.type_of_credit.type_of_applicant", "contract.verbal_trial.guarantees"]);
 					foreach (User::where('profile', 'head_credit')->get() as $head_credit) {
-						SendEmail::dispatch(
-							$head_credit->email,
+						$this->notifyByEmail(
+							$head_credit,
 							"Notification de modification du cat du dossier " . $cat->back_step->verbal_trial->committee_id,
-							"
-							<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-								Head,</U></h1>
-			
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
-								cofina credit digital et de prendre en charge le cat du dossier " . $cat->back_step->verbal_trial->committee_id . " en attente de validation: <a
-									href='" . config("app.url") . "/cat" . "'>Consulter les cats</a></p>
-			
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-			
-							<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-			
-							<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-							"
+							"Cher(e) Head,",
+							["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le cat du dossier " . $cat->back_step->verbal_trial->committee_id . " en attente de validation."],
+							"/cat",
+							"Consulter les cats"
 						);
 					}
 					return $this->responseOk(["c_a_t" => $cat]);
@@ -501,24 +478,14 @@ class CATController extends Controller
 					"validation_status" => "validated",
 					"validator_user_id" => $request->user()->id,
 				]);
-				foreach (User::where('profile', 'operation')->get() as $head_credit) {
-					SendEmail::dispatch(
-						$head_credit->email,
+				foreach (User::where('profile', 'operation')->get() as $operation) {
+					$this->notifyByEmail(
+						$operation,
 						"Notification de validation du cat du dossier " . $cat->back_step->verbal_trial->committee_id,
-						"
-						<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)s opérations,</U></h1>
-		
-						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
-							cofina credit digital et de prendre en charge le cat du dossier " . $cat->back_step->verbal_trial->committee_id . " en attente de deblockage: <a
-								href='" . config("app.url") . "/cat" . "'>Consulter les cats</a></p>
-		
-						<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-							n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-		
-						<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-		
-						<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-						"
+						"Cher(e)s opérations,",
+						["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge le cat du dossier " . $cat->back_step->verbal_trial->committee_id . " en attente de déblocage."],
+						"/cat",
+						"Consulter les cats"
 					);
 				}
 				return $this->responseOk(["c_a_t" => $cat]);
@@ -586,26 +553,13 @@ class CATController extends Controller
 						"validator_user_id" => $request->user()->id,
 					]);
 					$credit_admin = $cat->back_step->verbal_trial->credit_admin;
-					SendEmail::dispatch(
-						$credit_admin->email,
+					$this->notifyByEmail(
+						$credit_admin,
 						"Notification de rejet du cat du dossier " . $cat->back_step->verbal_trial->committee_id,
-						"
-							<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)s Admin,</U></h1>
-			
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-								Nous vous informons que le cat <strong>" . $cat->back_step->verbal_trial->committee_id . "</strong> a été rejeté. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires.
-								</p>
-
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>
-								Pour accéder directement aux cat, cliquez sur le lien suivant : <a href='" . config("app.url") . "/cat" . "'>Voir les cat</a>.
-							</p>
-			
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-							<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-			
-							<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-							"
+						"Cher(e) Admin,",
+						["Nous vous informons que le cat " . $cat->back_step->verbal_trial->committee_id . " a été rejeté. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et effectuer les actions nécessaires."],
+						"/cat",
+						"Voir les cat"
 					);
 					return $this->responseOk(["c_a_t" => $cat]);
 				}

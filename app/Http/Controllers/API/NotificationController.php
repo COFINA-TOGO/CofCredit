@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\CustomResponseTrait;
-use App\Jobs\SendEmail;
 use App\Models\Notification;
 use App\Models\User;
 use Carbon\Carbon;
@@ -484,26 +483,13 @@ class NotificationController extends Controller
 
 			$receiverList = User::where('profile', 'head_credit')->get();
 			foreach ($receiverList as $receiver) {
-				$receiver->full_name = "Head Crédit";
-				$link = config("app.url") . "/notification";
-				SendEmail::dispatch(
-					$receiver->email,
+				$this->notifyByEmail(
+					$receiver,
 					"Notification de mise en place d'une notification",
-					"
-					<h1 style='color:rgb(22, 4, 4);text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-						$receiver->full_name,</U></h1>
-	
-					<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
-						cofina credit digital et de prendre en charge la notification en attente de validation : <a
-							href='$link'>Consulter les notifications</a></p>
-	
-					<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-						n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-	
-					<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-	
-					<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-					"
+					"Cher(e) Head Crédit,",
+					["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge la notification en attente de validation."],
+					"/notification",
+					"Consulter les notifications"
 				);
 			}
 			return $this->responseOk([
@@ -573,26 +559,13 @@ class NotificationController extends Controller
 				$notification->load($relationList);
 				$receiverList = User::where('profile', 'head_credit')->get();
 				foreach ($receiverList as $receiver) {
-					$receiver->full_name = "Head Crédit";
-					$link = config("app.url") . "/notification";
-					SendEmail::dispatch(
-						$receiver->email,
+					$this->notifyByEmail(
+						$receiver,
 						"Notification de modification d'une notification",
-						"
-					<h1 style='color:rgb(22, 4, 4);text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-						$receiver->full_name,</U></h1>
-	
-					<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
-						cofina credit digital et de prendre en charge la notification en attente de validation : <a
-							href='$link'>Consulter les notifications</a></p>
-	
-					<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-						n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-	
-					<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-	
-					<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-					"
+						"Cher(e) Head Crédit,",
+						["Nous vous prions de vous connecter à l'application cofina credit digital et de prendre en charge la notification en attente de validation."],
+						"/notification",
+						"Consulter les notifications"
 					);
 				}
 				return $this->responseOk([
@@ -760,28 +733,16 @@ class NotificationController extends Controller
 				$notification->refresh();
 				if ($notification->signed_notification_path && $notification->signed_contract_path && $notification->signed_promissory_note_path) {
 					$head_credit_users = User::where('profile', 'head_credit')->get();
-					$link = config("app.url") . "/notification";
 					$pv_commitee_id = $notification->verbal_trial->committee_id;
 
 					foreach ($head_credit_users as $head_credit) {
-						SendEmail::dispatch(
-							$head_credit->email,
+						$this->notifyByEmail(
+							$head_credit,
 							"Notification de chargement de documents signés de la notification $pv_commitee_id",
-							"
-							<h1 style='color: #333333;text-align: center; font-size: 24px; margin-bottom: 20px;'>Cher(e)
-								Head Crédit,</h1>
-			
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Nous vous prions de vous connecter à l'application
-								cofina credit digital et de valider les documents chargés pour le dossier $pv_commitee_id: <a
-									href='$link'>Consulter les notifications</a></p>
-			
-							<p style='color: #666666; font-size: 16px; line-height: 1.5;'>Si vous avez des questions ou des préoccupations,
-								n'hésitez pas à nous contacter. Nous sommes là pour vous aider !</p>
-			
-							<hr style='border: none; border-top: 1px solid #dddddd; margin: 20px 0;'>
-			
-							<p style='color: #999999; font-size: 12px;'>Cet e-mail est généré automatiquement. Veuillez ne pas y répondre.</p>
-							"
+							"Cher(e) Head Crédit,",
+							["Nous vous prions de vous connecter à l'application cofina credit digital et de valider les documents chargés pour le dossier $pv_commitee_id."],
+							"/notification",
+							"Consulter les notifications"
 						);
 					}
 				}
