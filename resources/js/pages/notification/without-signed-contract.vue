@@ -35,16 +35,7 @@ const actionComment = ref('')
 const commentPresence = ref(false)
 const actionStatus = ref('waiting')
 
-// Snackbar
-const isSnackbarVisible = ref(false)
-const snackbarMessage = ref('')
-const snackbarColor = ref('success')
 
-const showSnackbar = (color, message) => {
-  snackbarColor.value = color
-  snackbarMessage.value = message
-  isSnackbarVisible.value = true
-}
 
 // Configuration de la vue
 const viewData = reactive({
@@ -192,7 +183,7 @@ const downloadFile = async (url, fileName) => {
     await fetchItemList([4])
   } catch (error) {
     console.error('Erreur lors du téléchargement:', error)
-    showSnackbar('error', 'Erreur lors du téléchargement')
+    showSnackbar('error', errorMessage(error, 'Erreur lors du téléchargement'))
   }
 }
 
@@ -213,7 +204,7 @@ const apiChangeStatus = async id => {
     }
   } catch (error) {
     console.error('Erreur lors du changement de statut:', error)
-    showSnackbar('error', 'Erreur lors du changement de statut')
+    showSnackbar('error', errorMessage(error, 'Erreur lors du changement de statut'))
   }
 }
 
@@ -225,7 +216,7 @@ const apiSendNotification = async id => {
     showSnackbar('success', 'Notification envoyée avec succès')
   } catch (error) {
     console.error('Erreur lors de l\'envoi:', error)
-    showSnackbar('error', 'Erreur lors de l\'envoi de la notification')
+    showSnackbar('error', errorMessage(error, 'Erreur lors de l\'envoi de la notification'))
   }
 }
 
@@ -237,26 +228,22 @@ const uploadFile = async (id, event) => {
     reader.onload = async () => {
       const base64Image = reader.result
       try {
-        const response = await fetch(`/api/notification/upload/${id}`, {
+        const response = await $api(`notification/upload/${id}`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${useCookie('userToken').value}`,
-          },
-          body: JSON.stringify({
-            [uploadState.value]: base64Image,
-          }),
+          body: { [uploadState.value]: base64Image },
         })
         
-        if (response.ok) {
+        if (response.status === 200) {
           await fetchItemList([4])
           showSnackbar('success', 'Document ajouté avec succès')
         } else {
-          showSnackbar('error', 'Échec de l\'envoi du document')
+        
+        	showApiErrors(response.errors)
+        
         }
       } catch (error) {
         console.error('Erreur lors de l\'envoi du document:', error)
-        showSnackbar('error', 'Erreur lors de l\'envoi du document')
+        showSnackbar('error', errorMessage(error, 'Erreur lors de l\'envoi du document'))
       }
     }
     reader.readAsDataURL(files[0])
@@ -327,13 +314,6 @@ onMounted(async () => {
         </div>
 
         <div class="d-flex gap-4">
-          <VBtn 
-            variant="tonal" 
-            color="secondary" 
-            prepend-icon="tabler-download"
-          >
-            Export
-          </VBtn>
 
           <VBtn 
             v-if="$can('create', viewData.data.rule.name)" 
@@ -641,15 +621,6 @@ onMounted(async () => {
       </VCard>
     </VDialog>
 
-    <!-- Snackbar -->
-    <VSnackbar 
-      v-model="isSnackbarVisible" 
-      transition="scale-transition" 
-      location="top end"
-      :color="snackbarColor"
-    >
-      <div v-html="snackbarMessage" />
-    </VSnackbar>
   </div>
 </template>
 

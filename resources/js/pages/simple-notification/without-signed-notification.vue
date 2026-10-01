@@ -108,17 +108,27 @@ const downloadFile = async (url, fileName) => {
 }
 
 const apiChangeStatus = async id => {
-	await $apiOrThrow(`notification/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
-	actionComment.value = ""
-	if (actionStatus.value == "validated") {
-		router.push(`/cat/simple-notification/add?id=${id}`)
+	try {
+		await $apiOrThrow(`notification/change-status/${id}`, { method: 'PUT', body: { status: actionStatus.value, comment: actionComment.value } })
+		actionComment.value = ""
+		if (actionStatus.value == "validated") {
+			router.push(`/cat/simple-notification/add?id=${id}`)
+		}
+		fetchNotifications()
+		showSnackbar('success', actionStatus.value === 'validated' ? 'Validation effectuée avec succès' : 'Rejet effectué avec succès')
+	} catch (error) {
+		showSnackbar('error', errorMessage(error, 'Erreur lors du changement de statut'))
 	}
-	fetchNotifications()
 }
 
 const apiSendNotification = async id => {
-	await $apiOrThrow(`notification/send/${id}`, { method: 'PUT' })
-	fetchNotifications()
+	try {
+		await $apiOrThrow(`notification/send/${id}`, { method: 'PUT' })
+		fetchNotifications()
+		showSnackbar('success', 'Notification envoyée avec succès')
+	} catch (error) {
+		showSnackbar('error', errorMessage(error, 'Erreur lors de l\'envoi de la notification'))
+	}
 }
 
 
@@ -129,29 +139,24 @@ const uploadFile = async (id, event) => {
 		reader.onload = async () => {
 			const base64Image = reader.result;
 			try {
-				const response = await fetch(`/api/notification/upload/${id}`, {
+				const response = await $api(`notification/upload/${id}`, {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': `Bearer ${useCookie('userToken').value}`,
-					},
-					body: JSON.stringify({
-						[uploadState.value]: base64Image,
-					}),
-				});
-				if (response.ok) {
-					console.log('Document envoyé avec succès.');
+					body: { [uploadState.value]: base64Image },
+				})
+				if (response.status === 200) {
+					showSnackbar('success', 'Document envoyé avec succès')
 					fetchNotifications();
 				} else {
-					console.error('Échec de l\'envoi du document.');
+					showApiErrors(response.errors)
 				}
 			} catch (error) {
 				console.error('Erreur lors de l\'envoi du document:', error);
+				showSnackbar('error', errorMessage(error, 'Erreur lors de l\'envoi du document'))
 			}
 		};
 		reader.readAsDataURL(files[0]);
 	} else {
-		console.error('Veuillez sélectionner un seul fichier.');
+		showSnackbar('warning', 'Veuillez sélectionner un seul fichier')
 	}
 }
 
@@ -183,9 +188,6 @@ const lastPage = computed(() => notificationData.value.last_page)
 
 				<VSpacer />
 				<div class="d-flex gap-4 flex-wrap align-center">
-					<VBtn variant="tonal" color="secondary" prepend-icon="tabler-download">
-						Export
-					</VBtn>
 
 					<VBtn v-if="$can('create', 'notification')" color="primary" prepend-icon="tabler-plus"
 						:to="{ name: 'simple-notification-add' }">

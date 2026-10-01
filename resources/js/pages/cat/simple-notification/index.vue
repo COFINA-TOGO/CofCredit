@@ -101,8 +101,13 @@ const downloadFile = async (url, fileName) => {
 }
 
 const apiDelete = async id => {
-  await $apiOrThrow(`cat/${id}`, { method: 'DELETE' })
-  fetchCAT()
+  try {
+    await $apiOrThrow(`cat/${id}`, { method: 'DELETE' })
+    fetchCAT()
+    showSnackbar('success', 'Suppression effectuée avec succès')
+  } catch (error) {
+    showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression'))
+  }
 }
 
 
@@ -117,27 +122,47 @@ const actionComment = ref(null)
 
 
 const validateCAT = async id => {
-  await $apiOrThrow(`cat/validate/${id}`, { method: 'PUT' })
-  actionComment.value = null
-  fetchCAT()
+  try {
+    await $apiOrThrow(`cat/validate/${id}`, { method: 'PUT' })
+    actionComment.value = null
+    fetchCAT()
+    showSnackbar('success', 'CAT validé avec succès')
+  } catch (error) {
+    showSnackbar('error', errorMessage(error, 'Erreur lors de la validation du CAT'))
+  }
 }
 
 const unblockCAT = async id => {
-  await $apiOrThrow(`cat/unblock/${id}`, { method: 'PUT' })
-  actionComment.value = null
-  fetchCAT()
+  try {
+    await $apiOrThrow(`cat/unblock/${id}`, { method: 'PUT' })
+    actionComment.value = null
+    fetchCAT()
+    showSnackbar('success', 'CAT débloqué avec succès')
+  } catch (error) {
+    showSnackbar('error', errorMessage(error, 'Erreur lors du déblocage du CAT'))
+  }
 }
 
 const rejectValidationCAT = async id => {
-  await $apiOrThrow(`cat/reject-validation/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
-  actionComment.value = null
-  fetchCAT()
+  try {
+    await $apiOrThrow(`cat/reject-validation/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+    actionComment.value = null
+    fetchCAT()
+    showSnackbar('success', 'Validation du CAT rejetée')
+  } catch (error) {
+    showSnackbar('error', errorMessage(error, 'Erreur lors du rejet de la validation'))
+  }
 }
 
 const rejectUnblockCAT = async id => {
-  await $apiOrThrow(`cat/reject-unblock/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
-  actionComment.value = null
-  fetchCAT()
+  try {
+    await $apiOrThrow(`cat/reject-unblock/${id}`, { method: 'PUT', body: { comment: actionComment.value } })
+    actionComment.value = null
+    fetchCAT()
+    showSnackbar('success', 'Déblocage du CAT rejeté')
+  } catch (error) {
+    showSnackbar('error', errorMessage(error, 'Erreur lors du rejet du déblocage'))
+  }
 }
 </script>
 
@@ -168,10 +193,6 @@ const rejectUnblockCAT = async id => {
 
           <VSpacer />
           <div class="d-flex gap-4 flex-wrap align-center">
-            <!-- 👉 Export button -->
-            <VBtn variant="tonal" color="secondary" prepend-icon="tabler-download">
-              Exporter
-            </VBtn>
 
             <VBtn v-if="$can('create', 'cat')" color="primary" prepend-icon="tabler-plus" :to="{ name: 'cat-add' }">
               Ajouter

@@ -20,10 +20,6 @@ const deleteLoadings = ref({})
 const itemsPerPage = ref(8)
 const page = ref(1)
 
-// Snackbar
-const isSnackbarVisible = ref(false)
-const snackbarMessage = ref('')
-const snackbarColor = ref('success')
 
 // Headers de la table
 const headers = [
@@ -136,11 +132,6 @@ const updateOptions = options => {
 	page.value = options.page
 }
 
-const showSnackbar = (color, message) => {
-	snackbarColor.value = color
-	snackbarMessage.value = message
-	isSnackbarVisible.value = true
-}
 
 const downloadFile = async (url, fileName) => {
 	try {
@@ -149,7 +140,7 @@ const downloadFile = async (url, fileName) => {
 		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors du téléchargement:', error)
-		showSnackbar('error', 'Erreur lors du téléchargement')
+		showSnackbar('error', errorMessage(error, 'Erreur lors du téléchargement'))
 	}
 }
 
@@ -161,7 +152,7 @@ const apiDelete = async id => {
 		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors de la suppression:', error)
-		showSnackbar('error', 'Erreur lors de la suppression')
+		showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression'))
 	} finally {
 		deleteLoadings.value[id] = false
 	}
@@ -224,13 +215,6 @@ onMounted(async () => {
 			</div>
 
 			<div class="d-flex gap-4">
-				<VBtn 
-					variant="tonal" 
-					color="secondary" 
-					prepend-icon="tabler-download"
-				>
-					Export
-				</VBtn>
 
 				<VBtn 
 					v-if="$can('create', 'notification')" 
@@ -393,12 +377,6 @@ onMounted(async () => {
 			</VDataTableServer>
 		</VCard>
 
-		<!-- Snackbar -->
-		<VSnackbar v-model="isSnackbarVisible" transition="scale-transition" location="top end"
-			:color="snackbarColor">
-			<!-- eslint-disable-next-line vue/no-v-html -->
-			<div v-html="snackbarMessage" />
-		</VSnackbar>
 	</div>
 </template>
 

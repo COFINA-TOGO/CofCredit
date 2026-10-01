@@ -24,16 +24,7 @@ const loadings = ref([])
 const deleteLoadings = ref({})
 const exportLoading = ref(false)
 
-// Snackbar
-const isSnackbarVisible = ref(false)
-const snackbarMessage = ref('')
-const snackbarColor = ref('success')
 
-const showSnackbar = (color, message) => {
-	snackbarColor.value = color
-	snackbarMessage.value = message
-	isSnackbarVisible.value = true
-}
 
 // Configuration de la vue
 const viewData = reactive({
@@ -150,7 +141,7 @@ const downloadFile = async (url, fileName) => {
 		showSnackbar('success', 'Téléchargement en cours...')
 	} catch (error) {
 		console.error('Erreur lors du téléchargement:', error)
-		showSnackbar('error', 'Erreur lors du téléchargement')
+		showSnackbar('error', errorMessage(error, 'Erreur lors du téléchargement'))
 	}
 }
 
@@ -162,18 +153,12 @@ const uploadFile = async (id, event) => {
 		reader.onload = async () => {
 			const base64Image = reader.result
 			try {
-				const response = await fetch(`/api/guarantor/upload/${id}`, {
+				const response = await $api(`guarantor/upload/${id}`, {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': `Bearer ${useCookie('userToken').value}`,
-					},
-					body: JSON.stringify({
-						[uploadState.value]: base64Image,
-					}),
+					body: { [uploadState.value]: base64Image },
 				})
 
-				if (response.ok) {
+				if (response.status === 200) {
 					// Rafraîchir les données des garanties
 					await fetchItemList([4])
 					// Rafraîchir aussi les données de la notification parent
@@ -182,12 +167,13 @@ const uploadFile = async (id, event) => {
 					event.target.value = ''
 					showSnackbar('success', 'Document mis à jour avec succès')
 				} else {
-					const errorData = await response.json()
-					showSnackbar('error', errorData.error || 'Échec de l\'envoi du document')
+
+					showApiErrors(response.errors)
+
 				}
 			} catch (error) {
 				console.error('Erreur lors de l\'envoi du document:', error)
-				showSnackbar('error', 'Erreur lors de l\'envoi du document')
+				showSnackbar('error', errorMessage(error, 'Erreur lors de l\'envoi du document'))
 			}
 		}
 		reader.readAsDataURL(files[0])
@@ -206,7 +192,7 @@ const exportGuarantors = async () => {
 		showSnackbar('success', 'Export en cours...')
 	} catch (error) {
 		console.error('Erreur lors de l\'export:', error)
-		showSnackbar('error', 'Erreur lors de l\'export des garants')
+		showSnackbar('error', errorMessage(error, 'Erreur lors de l\'export des garants'))
 	} finally {
 		exportLoading.value = false
 	}
@@ -221,7 +207,7 @@ const apiDelete = async id => {
 		showSnackbar('success', 'Caution supprimée avec succès')
 	} catch (error) {
 		console.error('Erreur lors de la suppression:', error)
-		showSnackbar('error', 'Erreur lors de la suppression de la caution')
+		showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression de la caution'))
 	} finally {
 		deleteLoadings.value[id] = false
 	}
@@ -300,7 +286,7 @@ onMounted(async () => {
 						:disabled="exportLoading"
 						@click="exportGuarantors"
 					>
-						Export
+						Exporter
 						<template #loader>
 							<span class="custom-loader">
 								<VIcon icon="tabler-refresh" />
@@ -529,15 +515,6 @@ onMounted(async () => {
 			</VCard>
 		</VDialog>
 
-		<!-- Snackbar -->
-		<VSnackbar 
-			v-model="isSnackbarVisible" 
-			transition="scale-transition" 
-			location="top end"
-			:color="snackbarColor"
-		>
-			<div v-html="snackbarMessage" />
-		</VSnackbar>
 	</div>
 </template>
 

@@ -5,9 +5,6 @@ import { ref } from 'vue'
 import { $api } from '@/utils/api'
 
 export function useContractActions() {
-  const isSnackbarVisible = ref(false)
-  const snackbarMessage = ref('')
-  const snackbarColor = ref('success')
   
   const deleteLoadings = ref({})
 
@@ -29,13 +26,12 @@ export function useContractActions() {
         showSnackbar('success', `${viewData.data.title.singular} supprimé avec succès`)
         return true
       } else {
-        const errorMessage = formatErrorMessages(response.errors)
-        showSnackbar('error', errorMessage)
+        showSnackbar('error', formatErrorMessages(response.errors))
         return false
       }
     } catch (error) {
       console.error('Erreur lors de la suppression:', error)
-      showSnackbar('error', 'Erreur lors de la suppression')
+      showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression'))
       return false
     } finally {
       deleteLoadings.value[id] = false
@@ -62,12 +58,12 @@ export function useContractActions() {
         )
         return true
       } else {
-        showSnackbar('error', 'Erreur lors de la validation')
+        showSnackbar('error', formatErrorMessages(response.errors))
         return false
       }
     } catch (error) {
       console.error('Erreur lors de la validation:', error)
-      showSnackbar('error', 'Erreur lors de la validation')
+      showSnackbar('error', errorMessage(error, 'Erreur lors de la validation'))
       return false
     }
   }
@@ -91,12 +87,12 @@ export function useContractActions() {
         showSnackbar('success', `Contrat ${actionText} avec succès`)
         return true
       } else {
-        showSnackbar('error', 'Erreur lors de la validation')
+        showSnackbar('error', formatErrorMessages(response.errors))
         return false
       }
     } catch (error) {
       console.error('Erreur lors de la validation:', error)
-      showSnackbar('error', 'Erreur lors de la validation')
+      showSnackbar('error', errorMessage(error, 'Erreur lors de la validation'))
       return false
     }
   }
@@ -119,27 +115,23 @@ export function useContractActions() {
     try {
       const base64Image = await fileToBase64(files[0])
       
-      const response = await fetch(`/api/contract/upload/${id}`, {
+      const response = await $api(`contract/upload/${id}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${useCookie('userToken').value}`,
-        },
-        body: JSON.stringify({
+        body: {
           [uploadType]: base64Image,
-        }),
+        },
       })
 
-      if (response.ok) {
+      if (response.status === 200) {
         showSnackbar('success', 'Document envoyé avec succès')
         return true
       } else {
-        showSnackbar('error', "Échec de l'envoi du document")
+        showSnackbar('error', formatErrorMessages(response.errors))
         return false
       }
     } catch (error) {
       console.error("Erreur lors de l'envoi du document:", error)
-      showSnackbar('error', "Erreur lors de l'envoi du document")
+      showSnackbar('error', errorMessage(error, "Erreur lors de l'envoi du document"))
       return false
     }
   }
@@ -159,17 +151,6 @@ export function useContractActions() {
   }
 
   /**
-   * Affiche un snackbar
-   * @param {string} color - La couleur du snackbar
-   * @param {string} message - Le message à afficher
-   */
-  const showSnackbar = (color, message) => {
-    snackbarColor.value = color
-    snackbarMessage.value = message
-    isSnackbarVisible.value = true
-  }
-
-  /**
    * Formate les messages d'erreur
    * @param {Object} errors - Les erreurs de l'API
    * @returns {string}
@@ -179,14 +160,11 @@ export function useContractActions() {
     
     return Object.values(errors)
       .flat()
-      .join('<br>')
+      .join('\n')
   }
 
   return {
     // State
-    isSnackbarVisible,
-    snackbarMessage,
-    snackbarColor,
     deleteLoadings,
     
     // Actions

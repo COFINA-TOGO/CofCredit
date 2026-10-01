@@ -194,9 +194,6 @@ const {
 } = useContractList(viewData, filterDataArray)
 
 const {
-  isSnackbarVisible,
-  snackbarMessage,
-  snackbarColor,
   deleteLoadings,
   deleteContract,
   adminValidate,
@@ -401,13 +398,6 @@ onMounted(async () => {
         </div>
 
         <div class="d-flex gap-4">
-          <VBtn
-            variant="tonal"
-            color="secondary"
-            prepend-icon="tabler-download"
-          >
-            Export
-          </VBtn>
 
           <VBtn 
             v-if="$can('create', viewData.data.rule.name)" 
@@ -662,16 +652,6 @@ onMounted(async () => {
       </VCard>
     </VDialog>
     
-    <!-- Snackbar -->
-    <VSnackbar 
-      v-model="isSnackbarVisible" 
-      transition="scale-transition" 
-      location="top end"
-      :color="snackbarColor"
-    >
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-html="snackbarMessage" />
-    </VSnackbar>
   </div>
 </template>
 

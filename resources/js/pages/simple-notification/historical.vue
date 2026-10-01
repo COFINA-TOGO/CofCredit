@@ -92,8 +92,13 @@ const downloadFile = async (url, fileName) => {
 }
 
 const apiDelete = async id => {
-  await $apiOrThrow(`contract/${id}`, { method: 'DELETE' })
-  fetchSimpleNotifications()
+  try {
+    await $apiOrThrow(`contract/${id}`, { method: 'DELETE' })
+    fetchSimpleNotifications()
+    showSnackbar('success', 'Suppression effectuée avec succès')
+  } catch (error) {
+    showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression'))
+  }
 }
 
 const notificationList = computed(() => notificationData.value.data)
@@ -136,9 +141,6 @@ const lastPage = computed(() => notificationData.value.last_page)
 
         <VSpacer />
         <div class="d-flex gap-4 flex-wrap align-center">
-          <VBtn variant="tonal" color="secondary" prepend-icon="tabler-download">
-            Export
-          </VBtn>
 
           <VBtn v-if="$can('create', 'simple-notification')" color="primary" prepend-icon="tabler-plus"
             :to="{ name: 'simple-notification-add' }">

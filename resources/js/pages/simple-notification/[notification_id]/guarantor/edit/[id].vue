@@ -86,6 +86,7 @@ const onSubmit = () => {
       if (res.status == 200) {
         router.push({ name: "notification-notification_id-guarantor", params: { notification_id: route.params.notification_id } })
       } else {
+        showApiErrors(res.errors, guarantorError.value)
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
             guarantorError.value[key] += message + "\n"

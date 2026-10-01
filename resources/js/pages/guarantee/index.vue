@@ -18,16 +18,7 @@ const page = ref(1)
 const loadings = ref([])
 const exportLoading = ref(false)
 
-// Snackbar
-const isSnackbarVisible = ref(false)
-const snackbarMessage = ref('')
-const snackbarColor = ref('success')
 
-const showSnackbar = (color, message) => {
-	snackbarColor.value = color
-	snackbarMessage.value = message
-	isSnackbarVisible.value = true
-}
 
 // Configuration de la vue
 const viewData = reactive({
@@ -112,7 +103,7 @@ const exportGuarantees = async () => {
 		showSnackbar('success', 'Export en cours...')
 	} catch (error) {
 		console.error('Erreur lors de l\'export:', error)
-		showSnackbar('error', 'Erreur lors de l\'export des garanties')
+		showSnackbar('error', errorMessage(error, 'Erreur lors de l\'export des garanties'))
 	} finally {
 		exportLoading.value = false
 	}
@@ -262,15 +253,6 @@ onMounted(async () => {
 			</VDataTableServer>
 		</VCard>
 
-		<!-- Snackbar -->
-		<VSnackbar
-			v-model="isSnackbarVisible"
-			transition="scale-transition"
-			location="top end"
-			:color="snackbarColor"
-		>
-			<div v-html="snackbarMessage" />
-		</VSnackbar>
 	</div>
 </template>
 

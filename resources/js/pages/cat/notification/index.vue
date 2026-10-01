@@ -28,16 +28,7 @@ const actionButtonText = ref('')
 const actionFunction = ref()
 const actionComment = ref(null)
 
-// Snackbar
-const isSnackbarVisible = ref(false)
-const snackbarMessage = ref('')
-const snackbarColor = ref('success')
 
-const showSnackbar = (color, message) => {
-  snackbarColor.value = color
-  snackbarMessage.value = message
-  isSnackbarVisible.value = true
-}
 
 // Configuration de la vue
 const viewData = reactive({
@@ -229,7 +220,7 @@ const downloadFile = async (url, fileName) => {
     showSnackbar('success', 'Téléchargement en cours...')
   } catch (error) {
     console.error('Erreur lors du téléchargement:', error)
-    showSnackbar('error', 'Erreur lors du téléchargement')
+    showSnackbar('error', errorMessage(error, 'Erreur lors du téléchargement'))
   }
 }
 
@@ -242,7 +233,7 @@ const apiDelete = async id => {
     showSnackbar('success', 'CAT supprimé avec succès')
   } catch (error) {
     console.error('Erreur lors de la suppression:', error)
-    showSnackbar('error', 'Erreur lors de la suppression du CAT')
+    showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression du CAT'))
   } finally {
     deleteLoadings.value[id] = false
   }
@@ -257,7 +248,7 @@ const validateCAT = async id => {
     showSnackbar('success', 'CAT validé avec succès')
   } catch (error) {
     console.error('Erreur lors de la validation:', error)
-    showSnackbar('error', 'Erreur lors de la validation du CAT')
+    showSnackbar('error', errorMessage(error, 'Erreur lors de la validation du CAT'))
   }
 }
 
@@ -270,7 +261,7 @@ const unblockCAT = async id => {
     showSnackbar('success', 'CAT débloqué avec succès')
   } catch (error) {
     console.error('Erreur lors du déblocage:', error)
-    showSnackbar('error', 'Erreur lors du déblocage du CAT')
+    showSnackbar('error', errorMessage(error, 'Erreur lors du déblocage du CAT'))
   }
 }
 
@@ -283,7 +274,7 @@ const rejectValidationCAT = async id => {
     showSnackbar('success', 'Validation du CAT rejetée')
   } catch (error) {
     console.error('Erreur lors du rejet:', error)
-    showSnackbar('error', 'Erreur lors du rejet de la validation')
+    showSnackbar('error', errorMessage(error, 'Erreur lors du rejet de la validation'))
   }
 }
 
@@ -296,7 +287,7 @@ const rejectUnblockCAT = async id => {
     showSnackbar('success', 'Déblocage du CAT refusé')
   } catch (error) {
     console.error('Erreur lors du refus:', error)
-    showSnackbar('error', 'Erreur lors du refus du déblocage')
+    showSnackbar('error', errorMessage(error, 'Erreur lors du refus du déblocage'))
   }
 }
 
@@ -363,13 +354,6 @@ onMounted(async () => {
         </div>
 
         <div class="d-flex gap-4">
-          <VBtn 
-            variant="tonal" 
-            color="secondary" 
-            prepend-icon="tabler-download"
-          >
-            Exporter
-          </VBtn>
 
           <VBtn 
             v-if="$can('create', viewData.data.rule.name)" 
@@ -648,15 +632,6 @@ onMounted(async () => {
       </VCard>
     </VDialog>
 
-    <!-- Snackbar -->
-    <VSnackbar 
-      v-model="isSnackbarVisible" 
-      transition="scale-transition" 
-      location="top end"
-      :color="snackbarColor"
-    >
-      <div v-html="snackbarMessage" />
-    </VSnackbar>
   </div>
 </template>
 

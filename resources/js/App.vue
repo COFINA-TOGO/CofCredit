@@ -1,6 +1,7 @@
 <script setup>
 import { useTheme } from 'vuetify'
 import ScrollToTop from '@core/components/ScrollToTop.vue'
+import AppSnackbar from '@/components/AppSnackbar.vue'
 import initCore from '@core/initCore'
 import {
   initConfigStore,
@@ -23,6 +24,7 @@ const configStore = useConfigStore()
     <VApp :style="`--v-global-theme-primary: ${hexToRgb(global.current.value.colors.primary)}`">
       <RouterView />
       <ScrollToTop />
+      <AppSnackbar />
     </VApp>
   </VLocaleProvider>
 </template>

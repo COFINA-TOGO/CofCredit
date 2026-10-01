@@ -86,6 +86,7 @@ const onSubmit = () => {
 			if (res.status == 201) {
 				router.push("/notification")
 			} else {
+				showApiErrors(res.errors, formError.value)
 				for (const key in res.errors) {
 					res.errors[key].forEach(message => {
 						formError.value[key] += message + "\n"

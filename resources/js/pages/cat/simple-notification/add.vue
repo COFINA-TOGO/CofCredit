@@ -88,6 +88,7 @@ const onSubmit = () => {
 			if (res.status == 201) {
 				router.push("/cat/simple-notification")
 			} else {
+				showApiErrors(res.errors, catError.value)
 				for (const key in res.errors) {
 					res.errors[key].forEach(message => {
 						catError.value[key] += message + "\n"

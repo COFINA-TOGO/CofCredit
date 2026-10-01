@@ -60,10 +60,6 @@ const actionComment = ref('cancel')
 const commentPresence = ref(false)
 const agencyIdFilter = ref(null)
 
-// Snackbar
-const isSnackbarVisible = ref(false)
-const snackbarMessage = ref('')
-const snackbarColor = ref('success')
 // Headers de la table
 const headers = [
 	{
@@ -210,11 +206,6 @@ const updateOptions = options => {
 	page.value = options.page
 }
 
-const showSnackbar = (color, message) => {
-	snackbarColor.value = color
-	snackbarMessage.value = message
-	isSnackbarVisible.value = true
-}
 
 const apiDelete = async id => {
 	deleteLoadings.value[id] = true
@@ -227,20 +218,14 @@ const apiDelete = async id => {
 			actionComment.value = ''
 			showSnackbar('success', 'Utilisateur supprimé avec succès')
 		} else {
-			let errorMessage = ''
-			for (const key in response.errors) {
-				response.errors[key].forEach(message => {
-					errorMessage += `${message}<br>`
-				})
-			}
-			showSnackbar('error', errorMessage || 'Erreur lors de la suppression')
+			showApiErrors(response.errors)
 		}
 		
 		await fetchItemList()
 		await fetchAgencyList()
 	} catch (error) {
 		console.error('Erreur lors de la suppression:', error)
-		showSnackbar('error', 'Erreur lors de la suppression')
+		showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression'))
 	} finally {
 		deleteLoadings.value[id] = false
 	}
@@ -313,13 +298,6 @@ onMounted(async () => {
 				</div>
 
 				<div class="d-flex gap-4">
-					<VBtn 
-						variant="tonal" 
-						color="secondary" 
-						prepend-icon="tabler-download"
-					>
-						Export
-					</VBtn>
 
 					<VBtn 
 						v-if="$can('create', viewData.data.rule.name)" 
@@ -520,16 +498,6 @@ onMounted(async () => {
 			</VCard>
 		</VDialog>
 
-		<!-- Snackbar -->
-		<VSnackbar 
-			v-model="isSnackbarVisible" 
-			transition="scale-transition" 
-			location="top end"
-			:color="snackbarColor"
-		>
-			<!-- eslint-disable-next-line vue/no-v-html -->
-			<div v-html="snackbarMessage" />
-		</VSnackbar>
 	</div>
 </template>
 

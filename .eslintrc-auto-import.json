@@ -367,6 +367,10 @@
     "ApiError": true,
     "downloadAuthenticatedFile": true,
     "handleAuthErrors": true,
-    "paginationMeta": true
+    "paginationMeta": true,
+    "errorMessage": true,
+    "showApiErrors": true,
+    "showSnackbar": true,
+    "snackbarState": true
   }
 }

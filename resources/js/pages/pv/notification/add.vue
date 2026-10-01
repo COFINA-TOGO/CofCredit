@@ -184,6 +184,7 @@ const onSubmit = () => {
 				});
 				router.push(nextRoute);
 			} else {
+				showApiErrors(res.errors, pvError.value);
 				for (const key in res.errors) {
 					res.errors[key].forEach((message) => {
 						pvError.value[key] += message + "\n";

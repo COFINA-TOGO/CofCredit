@@ -43,6 +43,7 @@ const onSubmit = () => {
 				useCookie('userData').value = null
 				await router.push('/login')
 			} else {
+				showApiErrors(res.errors, passwordErrors.value)
 				for (const key in res.errors) {
 					res.errors[key].forEach(message => {
 						passwordErrors.value[key] += message + "\n"

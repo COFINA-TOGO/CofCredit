@@ -67,10 +67,6 @@ const actionComment = ref('')
 const commentPresence = ref(false)
 const actionStatus = ref('waiting')
 
-// Snackbar
-const isSnackbarVisible = ref(false)
-const snackbarMessage = ref('')
-const snackbarColor = ref('success')
 // Headers de la table
 const headers = [
 	{
@@ -242,11 +238,6 @@ const updateOptions = options => {
 	page.value = options.page
 }
 
-const showSnackbar = (color, message) => {
-	snackbarColor.value = color
-	snackbarMessage.value = message
-	isSnackbarVisible.value = true
-}
 
 const formatAmount = amount => {
 	return String(amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' F CFA'
@@ -258,7 +249,7 @@ const downloadFile = async (url, fileName) => {
 		showSnackbar('success', 'Téléchargement en cours...')
 	} catch (error) {
 		console.error('Erreur lors du téléchargement:', error)
-		showSnackbar('error', 'Erreur lors du téléchargement')
+		showSnackbar('error', errorMessage(error, 'Erreur lors du téléchargement'))
 	}
 }
 
@@ -271,7 +262,7 @@ const apiDelete = async id => {
 		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors de la suppression:', error)
-		showSnackbar('error', 'Erreur lors de la suppression')
+		showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression'))
 	} finally {
 		deleteLoadings.value[id] = false
 	}
@@ -289,7 +280,7 @@ const apiChangeStatus = async id => {
 		await fetchItemList()
 	} catch (error) {
 		console.error('Erreur lors du changement de statut:', error)
-		showSnackbar('error', 'Erreur lors du changement de statut')
+		showSnackbar('error', errorMessage(error, 'Erreur lors du changement de statut'))
 	}
 }
 
@@ -367,12 +358,6 @@ onMounted(async () => {
 				</div>
 
 				<div class="d-flex gap-4">
-					<VBtn 
-						color="success" 
-						prepend-icon="tabler-download"
-					>
-						Exporter
-					</VBtn>
 
 				<VBtn 
 					:loading="loadings[3]" 
@@ -658,16 +643,6 @@ onMounted(async () => {
 			</VCard>
 		</VDialog>
 
-		<!-- Snackbar -->
-		<VSnackbar 
-			v-model="isSnackbarVisible" 
-			transition="scale-transition" 
-			location="top end"
-			:color="snackbarColor"
-		>
-			<!-- eslint-disable-next-line vue/no-v-html -->
-			<div v-html="snackbarMessage" />
-		</VSnackbar>
 	</div>
 </template>
 

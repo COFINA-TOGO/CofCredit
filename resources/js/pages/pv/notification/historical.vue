@@ -100,18 +100,28 @@ const downloadFile = async (url, fileName) => {
 };
 
 const apiDelete = async (id) => {
-	await $apiOrThrow(`verbal-trial/${id}`, { method: "DELETE" });
-	actionComment.value = "";
-	fetchPv();
+	try {
+		await $apiOrThrow(`verbal-trial/${id}`, { method: "DELETE" });
+		actionComment.value = "";
+		fetchPv();
+		showSnackbar('success', 'Suppression effectuée avec succès');
+	} catch (error) {
+		showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression'));
+	}
 };
 
 const apiChangeStatus = async (id) => {
-	await $apiOrThrow(`verbal-trial/change-status/${id}`, {
-		method: "PUT",
-		body: { status: actionStatus.value, comment: actionComment.value },
-	});
-	actionComment.value = "";
-	fetchPv();
+	try {
+		await $apiOrThrow(`verbal-trial/change-status/${id}`, {
+			method: "PUT",
+			body: { status: actionStatus.value, comment: actionComment.value },
+		});
+		actionComment.value = "";
+		fetchPv();
+		showSnackbar('success', actionStatus.value === 'validated' ? 'Validation effectuée avec succès' : 'Rejet effectué avec succès');
+	} catch (error) {
+		showSnackbar('error', errorMessage(error, 'Erreur lors du changement de statut'));
+	}
 };
 
 const pvList = computed(() => pvData.value.data);
@@ -156,10 +166,6 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data);
 
 				<VSpacer />
 				<div class="d-flex gap-4 flex-wrap align-center">
-					<!-- 👉 Export button -->
-					<VBtn variant="tonal" color="secondary" prepend-icon="tabler-upload">
-						Export
-					</VBtn>
 
 					<VBtn v-if="$can('create', 'pv-notification')" color="primary" prepend-icon="tabler-plus"
 						:to="{ name: 'pv-notification-add' }">
