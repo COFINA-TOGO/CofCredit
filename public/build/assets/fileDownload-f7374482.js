@@ -1,0 +1,1 @@
+import{J as o}from"./js-file-downloader-d894c64e.js";import{a3 as n}from"./main-7d9feff5.js";const i=(e,a)=>new o({url:e,headers:[{name:"Authorization",value:`Bearer ${n("userToken").value}`},{name:"Accept",value:"application/json"}],nameCallback:()=>a});export{i as d};
