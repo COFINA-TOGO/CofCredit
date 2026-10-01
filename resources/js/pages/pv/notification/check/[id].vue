@@ -173,15 +173,8 @@ const apiCheck = () => {
           nextRoute = { name: 'pv' }
         }
         router.push(nextRoute)
-      } else if (res.status == 403) {
-        isSnackbarScrollReverseVisible.value = true
-        snackbarMessage.value = ""
-        for (const key in res.errors) {
-          res.errors[key].forEach(message => {
-            snackbarMessage.value += message + "\n"
-          })
-        }
       } else {
+        showApiErrors(res.errors, verbalTrialError.value)
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
             verbalTrialError.value[key] += message + "\n"
@@ -216,9 +209,6 @@ verbalTrial.value.guarantees.forEach(guarantee => {
     nextRoute = "/pv/without-notification"
   }
 })
-
-const isSnackbarScrollReverseVisible = ref(false)
-const snackbarMessage = ref("")
 if (
   verbalTrial.value.applicant_first_name +
 	" " +
@@ -599,10 +589,7 @@ if (
                       :rules="[requiredValidator]"
                       step="0.01"
                     >
-                      <template
-                        #append
-                        readonly
-                      >
+                      <template #append>
                         <VTextField
                           v-model="verbalTrial.taf"
                           :error-messages="verbalTrialError.taf"
@@ -715,6 +702,7 @@ if (
               <VCardText class="add-products-form">
                 <div
                   v-for="(guarantee, index) in verbalTrial.guarantees"
+                  :key="index"
                   class="my-4 ma-sm-4"
                 >
                   <GuaranteeEdit
@@ -780,15 +768,6 @@ if (
       </VForm>
     </VCol>
   </VRow>
-
-  <VSnackbar
-    v-model="isSnackbarScrollReverseVisible"
-    transition="scroll-y-reverse-transition"
-    location="bottom end"
-    color="error"
-  >
-    {{ snackbarMessage }}
-  </VSnackbar>
 
   <VDialog
     v-model="isActionDialogVisible"

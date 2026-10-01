@@ -338,6 +338,7 @@ if (route.query.id) {
             <VCardText class="add-products-form">
               <div
                 v-for="(pledge, index) in contractData.pledges"
+                :key="index"
                 class="my-4 ma-sm-4"
               >
                 <PledgeEdit

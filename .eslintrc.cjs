@@ -49,7 +49,8 @@ module.exports = {
     'object-curly-spacing': ['error', 'always'],
 
     // Enforce camelCase naming convention
-    'camelcase': 'error',
+    // Les champs de l'API sont en snake_case (committee_id, verbal_trial...) : seuls les identifiants locaux sont vérifiés
+    'camelcase': ['error', { properties: 'never', ignoreDestructuring: true }],
 
     // Disable max-len
     'max-len': 'off',

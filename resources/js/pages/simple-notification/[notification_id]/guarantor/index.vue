@@ -316,23 +316,23 @@ onMounted(async () => {
       >
         <template #item.observations="{ item }">
           <VList density="compact">
-            <VListItem v-for="observation in item.observations">
+            <VListItem
+              v-for="observation in item.observations"
+              :key="observation"
+            >
               <VListItemTitle>
                 <VChip label>
                   {{ observation }}
                 </VChip>
               </VListItemTitle>
             </VListItem>
-            <VListItem
-              v-for="observation in ['Dossier complet']"
-              v-if="item.observations.length == 0"
-            >
+            <VListItem v-if="item.observations.length == 0">
               <VListItemTitle>
                 <VChip
                   color="success"
                   label
                 >
-                  {{ observation }}
+                  Dossier complet
                 </VChip>
               </VListItemTitle>
             </VListItem>

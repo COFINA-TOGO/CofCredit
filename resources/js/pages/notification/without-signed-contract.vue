@@ -367,7 +367,7 @@ onMounted(async () => {
           <VList density="compact">
             <VListItem
               v-for="observation in item.observations"
-              v-if="item.observations.length > 0"
+              :key="observation"
             >
               <VListItemTitle>
                 <VChip label>

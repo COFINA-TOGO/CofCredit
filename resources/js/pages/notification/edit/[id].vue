@@ -11,8 +11,6 @@ import { ref } from 'vue'
 
 const router = useRouter()
 const route = useRoute("notification-edit-id")
-const isSnackbarScrollReverseVisible = ref(false)
-const snackbarMessage = ref("")
 const refForm = ref()
 
 const typeList = [
@@ -91,15 +89,8 @@ const onSubmit = () => {
       formError.value = getResetFormError()
       if (res.status == 200) {
         router.push("/notification")
-      } else if (res.status == 403) {
-        isSnackbarScrollReverseVisible.value = true
-        snackbarMessage.value = ""
-        for (const key in res.errors) {
-          res.errors[key].forEach(message => {
-            snackbarMessage.value += message + "\n"
-          })
-        }
       } else {
+        showApiErrors(res.errors, formError.value)
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
             formError.value[key] += message + "\n"
@@ -368,15 +359,6 @@ verbalTrialListData.value.data.push(JSON.parse(JSON.stringify(notification.value
         </VCol>
       </VRow>
     </VForm>
-
-    <VSnackbar
-      v-model="isSnackbarScrollReverseVisible"
-      transition="scroll-y-reverse-transition"
-      location="bottom end"
-      color="error"
-    >
-      {{ snackbarMessage }}
-    </VSnackbar>
   </div>
 </template>
 

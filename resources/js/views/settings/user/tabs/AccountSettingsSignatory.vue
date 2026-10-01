@@ -39,24 +39,11 @@ const updateAvatar = async () => {
   error.value = ""
   if (res.status == 200) {
     useCookie('userData').value.signatory = res.data.user.signatory_path
-    snackbarColor.value = "success"
-    snackbarMessage.value = "Signature uploadé avec succès"
-    isSnackbarScrollReverseVisible.value = true
+    showSnackbar('success', 'Signature enregistrée avec succès')
   } else {
-    snackbarMessage.value = ""
-    snackbarColor.value = "error"
-    for (const key in res.errors) {
-      res.errors[key].forEach(message => {
-        snackbarMessage.value += message + "\n"
-      })
-    }
-    isSnackbarScrollReverseVisible.value = true
+    showApiErrors(res.errors)
   }
 }
-
-const isSnackbarScrollReverseVisible = ref(false)
-const snackbarMessage = ref("")
-const snackbarColor = ref("error")
 </script>
 
 <template>
@@ -122,13 +109,5 @@ const snackbarColor = ref("error")
         </VCardText>
       </VCard>
     </VCol>
-    <VSnackbar
-      v-model="isSnackbarScrollReverseVisible"
-      transition="scroll-y-reverse-transition"
-      location="bottom end"
-      :color="snackbarColor"
-    >
-      {{ snackbarMessage }}
-    </VSnackbar>
   </VRow>
 </template>

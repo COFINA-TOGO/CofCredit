@@ -482,6 +482,7 @@ const addGuaranteeItem = () => {
             <VCardText class="add-products-form">
               <div
                 v-for="(guarantee, index) in pvData.guarantees"
+                :key="index"
                 class="my-4 ma-sm-4"
               >
                 <GuaranteeEdit

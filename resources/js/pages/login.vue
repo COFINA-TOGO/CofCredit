@@ -75,20 +75,12 @@ const login = async () => {
       if (res.status != 200) {
         // Ex : trop de tentatives (429), la réponse ne contient qu'un message
         res.errors ??= { server: [res.message ?? 'Erreur du serveur'] }
-        snackbarMessage.value = ''
         if (res.errors.email) {
           errors.value.email = res.errors.email[0]
         } else if (res.errors.password) {
           errors.value.password = res.errors.password[0]
         } else {
-          isSnackbarScrollReverseVisible.value = true
-          for (const key in res.errors) {
-            if(key !="sub_code"){
-              res.errors[key].forEach(message => {
-                snackbarMessage.value += message + "\n"
-              })
-            }
-          }
+          showApiErrors(res.errors)
         }
       }
     }
@@ -105,9 +97,6 @@ const onSubmit = () => {
       login()
   })
 }
-
-const isSnackbarScrollReverseVisible = ref(false)
-const snackbarMessage = ref("")
 </script>
 
 <template>
@@ -204,14 +193,6 @@ const snackbarMessage = ref("")
       </VCard>
     </VCol>
   </VRow>
-  <VSnackbar
-    v-model="isSnackbarScrollReverseVisible"
-    transition="scroll-y-reverse-transition"
-    location="bottom end"
-    color="error"
-  >
-    {{ snackbarMessage }}
-  </VSnackbar>
 </template>
 
 <style lang="scss">

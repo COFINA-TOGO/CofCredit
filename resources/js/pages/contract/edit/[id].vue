@@ -13,8 +13,6 @@ import { ref } from "vue"
 
 const router = useRouter()
 const route = useRoute("contract-edit-id")
-const isSnackbarScrollReverseVisible = ref(false)
-const snackbarMessage = ref("")
 const refForm = ref()
 
 const typeList = [
@@ -144,15 +142,8 @@ const onSubmit = () => {
       errorData.value = getEmptyError()
       if (res.status == 200) {
         router.push(nextRoute)
-      } else if (res.status == 403) {
-        isSnackbarScrollReverseVisible.value = true
-        snackbarMessage.value = ""
-        for (const key in res.errors) {
-          res.errors[key].forEach(message => {
-            snackbarMessage.value += message + "\n"
-          })
-        }
       } else {
+        showApiErrors(res.errors, errorData.value)
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
             errorData.value[key] += message + "\n"
@@ -372,6 +363,7 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
             <VCardText class="add-products-form">
               <div
                 v-for="(pledge, index) in contract.pledges"
+                :key="index"
                 class="my-4 ma-sm-4"
               >
                 <PledgeEdit
@@ -724,14 +716,6 @@ const nextRoute = contract.value.cat ? { name: 'contract-historicarl' } : { name
         </VCol>
       </VRow>
     </VForm>
-    <VSnackbar
-      v-model="isSnackbarScrollReverseVisible"
-      transition="scroll-y-reverse-transition"
-      location="bottom end"
-      color="error"
-    >
-      {{ snackbarMessage }}
-    </VSnackbar>
   </div>
 </template>
 

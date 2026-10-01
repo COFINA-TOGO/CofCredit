@@ -84,7 +84,7 @@ const handleAction = () => {
         <!-- Actions rapides -->
         <div
           v-if="observation.actionable"
-          class="d-flex align-center gap-1 ml-2"
+          class="d-flex align-center gap-1 ms-2"
         >
           <!-- Action upload contrat -->
           <VBtn

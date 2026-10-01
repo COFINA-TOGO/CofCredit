@@ -28,7 +28,7 @@ export const showSnackbar = (color, message) => {
  */
 export const showApiErrors = (errors, fieldErrors = {}) => {
   const messages = Object.entries(errors ?? {})
-    .filter(([key]) => key !== 'sub_code' && !(key in fieldErrors))
+    .filter(([key, value]) => value != null && key !== 'sub_code' && !(key in fieldErrors))
     .flatMap(([, value]) => (Array.isArray(value) ? value : [value]))
 
   if (messages.length)

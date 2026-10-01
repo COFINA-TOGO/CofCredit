@@ -10,8 +10,6 @@ import { ref } from 'vue'
 
 const router = useRouter()
 const route = useRoute("cat-edit-id")
-const isSnackbarScrollReverseVisible = ref(false)
-const snackbarMessage = ref("")
 const refForm = ref()
 
 const getResetCATError = () => {
@@ -79,15 +77,8 @@ const onSubmit = () => {
       catError.value = getResetCATError()
       if (res.status == 200) {
         router.push("/cat")
-      } else if (res.status == 403) {
-        isSnackbarScrollReverseVisible.value = true
-        snackbarMessage.value = ""
-        for (const key in res.errors) {
-          res.errors[key].forEach(message => {
-            snackbarMessage.value += message + "\n"
-          })
-        }
       } else {
+        showApiErrors(res.errors, catError.value)
         for (const key in res.errors) {
           res.errors[key].forEach(message => {
             catError.value[key] += message + "\n"
@@ -363,14 +354,6 @@ notificationDataList.value.data.push(JSON.parse(JSON.stringify(cat.value.notific
         </VCol>
       </VRow>
     </VForm>
-    <VSnackbar
-      v-model="isSnackbarScrollReverseVisible"
-      transition="scroll-y-reverse-transition"
-      location="bottom end"
-      color="error"
-    >
-      {{ snackbarMessage }}
-    </VSnackbar>
   </div>
 </template>
 

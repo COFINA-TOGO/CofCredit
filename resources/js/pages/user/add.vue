@@ -52,9 +52,7 @@ const onSubmit = () => {
 
       userError.value = getResetTransferError()
       if (res.status == 201) {
-        snackbarMessage.value = "Utilisateur crée"
-        snackbarCollor.value = "success"
-        isSnackbarScrollReverseVisible.value = true
+        showSnackbar('success', 'Utilisateur créé')
         router.push("/user")
       } else {
         if (res.errors.full_name) {
@@ -82,18 +80,7 @@ const onSubmit = () => {
 						res.errors.password_change_required[0]
           res.errors.password_change_required = null
         }
-        snackbarMessage.value = ""
-        let show = false
-        for (const key in res.errors) {
-          if (res.errors[key] != null) {
-            snackbarCollor.value = "error"
-            res.errors[key].forEach(message => {
-              show = true
-              snackbarMessage.value += key + ": " + message + "<br>"
-            })
-          }
-        }
-        isSnackbarScrollReverseVisible.value = show
+        showApiErrors(res.errors)
       }
       nextTick(() => {
         // refForm.value?.reset()
@@ -111,9 +98,6 @@ const { data: agencyListData } = await useApi(
   }),
 )
 
-const isSnackbarScrollReverseVisible = ref(false)
-const snackbarMessage = ref("")
-const snackbarCollor = ref("success")
 const agencyList = computed(() => agencyListData.value.data)
 const isPasswordVisible = ref(false)
 </script>
@@ -317,15 +301,6 @@ const isPasswordVisible = ref(false)
         </VCol>
       </VRow>
     </VForm>
-
-    <VSnackbar
-      v-model="isSnackbarScrollReverseVisible"
-      transition="scale-transition"
-      location="top end"
-      :color="snackbarCollor"
-    >
-      <div v-html="snackbarMessage" />
-    </VSnackbar>
   </div>
 </template>
 
