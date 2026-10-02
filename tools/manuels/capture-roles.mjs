@@ -88,6 +88,9 @@ async function capturerProfil(session) {
     // Une page refusée (droits) n'est pas capturée
     const refusee = await page.evaluate(() => location.pathname.startsWith('/not-authorized'))
     if (refusee) { log(`  (${chemin} non autorisé)`); return false }
+    // Une fiche refusée par l'API renvoie vers sa liste : la capture montrerait un autre écran
+    const arrivee = await page.evaluate(() => location.pathname)
+    if (arrivee !== chemin.split('?')[0]) { log(`  (${chemin} redirigé vers ${arrivee})`); return false }
     if (nom) await capturer(nom, options)
     return true
   }
