@@ -165,7 +165,8 @@ class Controller extends BaseController
 		foreach (Arr::flatten([$receivers]) as $receiver) {
 			$email = $receiver instanceof User ? $receiver->email : $receiver;
 			if ($email) {
-				SendEmail::dispatch($email, $subject, $content);
+				// Envoyé par ce même processus une fois la réponse partie : ni attente pour l'utilisateur, ni worker à lancer
+				SendEmail::dispatchAfterResponse($email, $subject, $content);
 			}
 		}
 	}

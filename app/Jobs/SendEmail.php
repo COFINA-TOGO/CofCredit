@@ -8,7 +8,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class SendEmail implements ShouldQueue
 {
@@ -29,26 +31,39 @@ class SendEmail implements ShouldQueue
     }
 
     /**
-     * Le nombre de tentatives avant de marquer le job en échec (table failed_jobs)
+     * Le nombre de tentatives d'envoi
      */
     public $tries = 3;
 
     /**
      * Le délai (en secondes) entre deux tentatives
      */
-    public $backoff = 60;
+    public $backoff = 5;
 
     /**
      * Execute the job.
+     *
+     * Le job est lancé après la réponse HTTP (dispatchAfterResponse), sans worker :
+     * les tentatives se font donc ici, et un échec définitif est journalisé.
      */
     public function handle(): void
     {
-        // Une exception remonte au worker : le job est relancé puis enregistré dans failed_jobs
-        Mail::to($this->receiverEmail)->send(
-            new EmailSkeleton(
-                $this->subject,
-                $this->content
-            )
-        );
+        for ($attempt = 1; ; $attempt++) {
+            try {
+                Mail::to($this->receiverEmail)->send(
+                    new EmailSkeleton(
+                        $this->subject,
+                        $this->content
+                    )
+                );
+                return;
+            } catch (Throwable $exception) {
+                if ($attempt >= $this->tries) {
+                    Log::error("Échec de l'envoi du mail « {$this->subject} » à {$this->receiverEmail}", ["exception" => $exception]);
+                    return;
+                }
+                sleep($this->backoff);
+            }
+        }
     }
 }
