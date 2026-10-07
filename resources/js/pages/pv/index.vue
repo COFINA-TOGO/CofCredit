@@ -54,18 +54,20 @@ const viewData = reactive({
 // Refs et états
 const searchQuery = ref('')
 const loadings = ref([])
-const deleteLoadings = ref({})
 const itemsPerPage = ref(8)
 const page = ref(1)
-const selectedItemId = ref(0)
-const isActionDialogVisible = ref(false)
-const actionTitle = ref('')
-const actionText = ref('')
-const actionButtonText = ref('')
-const actionFunction = ref()
-const actionComment = ref('')
-const commentPresence = ref(false)
-const actionStatus = ref('waiting')
+const downloadLoadings = ref({})
+const ability = useAbility()
+const can = (action, subject) => ability.can(action, subject)
+
+// Dialogue de confirmation des actions sur un PV
+const dialog = reactive({
+  visible: false,
+  action: null,
+  item: null,
+  comment: '',
+  loading: false,
+})
 
 // Headers de la table
 const headers = [
@@ -253,38 +255,114 @@ const downloadFile = async (url, fileName) => {
   }
 }
 
-const apiDelete = async id => {
-  deleteLoadings.value[id] = true
+const changeStatus = (id, status, comment) => $apiOrThrow(`verbal-trial/change-status/${id}`, {
+  method: 'PUT',
+  body: { status, comment },
+})
+
+// Actions confirmées par le dialogue
+const ACTIONS = {
+  delete: {
+    title: 'Supprimer le PV',
+    text: 'Le PV sera retiré de la liste.',
+    button: 'Supprimer',
+    icon: 'tabler-trash',
+    color: 'error',
+    success: 'PV supprimé',
+    run: id => $apiOrThrow(`verbal-trial/analyst/${id}`, { method: 'DELETE' }),
+  },
+  sendBack: {
+    title: 'Renvoyer le PV à l\'admin crédit',
+    text: 'Ce PV validé n\'a pas encore de contrat. Il repassera chez l\'admin crédit pour correction, puis reviendra à votre validation.',
+    button: 'Renvoyer',
+    icon: 'tabler-arrow-back-up',
+    color: 'warning',
+    comment: 'Motif du renvoi',
+    success: 'PV renvoyé à l\'admin crédit',
+    run: (id, comment) => changeStatus(id, 'rejected', comment),
+  },
+  validate: {
+    title: 'Valider le PV',
+    text: 'L\'admin crédit sera prévenu pour créer la suite du dossier.',
+    button: 'Valider',
+    icon: 'tabler-check',
+    color: 'success',
+    success: 'PV validé',
+    run: id => changeStatus(id, 'validated'),
+  },
+  reject: {
+    title: 'Rejeter le PV',
+    text: 'Le PV repassera chez l\'admin crédit pour correction.',
+    button: 'Rejeter',
+    icon: 'tabler-x',
+    color: 'error',
+    comment: 'Motif du rejet',
+    success: 'PV rejeté',
+    run: (id, comment) => changeStatus(id, 'rejected', comment),
+  },
+}
+
+const currentAction = computed(() => ACTIONS[dialog.action] ?? {})
+
+const openAction = (action, item) => {
+  Object.assign(dialog, { visible: true, action, item, comment: '', loading: false })
+}
+
+const confirmAction = async () => {
+  const action = currentAction.value
+  if (action.comment && !dialog.comment.trim())
+    return
+  dialog.loading = true
   try {
-    await $apiOrThrow(`verbal-trial/analyst/${id}`, { method: 'DELETE' })
-    actionComment.value = ''
-    showSnackbar('success', 'PV supprimé avec succès')
-    await fetchItemList()
+    await action.run(dialog.item.id, dialog.comment.trim())
+    dialog.visible = false
+    showSnackbar('success', action.success)
+    await fetchItemList([4])
   } catch (error) {
-    console.error('Erreur lors de la suppression:', error)
-    showSnackbar('error', errorMessage(error, 'Erreur lors de la suppression'))
+    console.error(`Erreur (${dialog.action}):`, error)
+    showSnackbar('error', errorMessage(error, 'L\'action n\'a pas abouti'))
   } finally {
-    deleteLoadings.value[id] = false
+    dialog.loading = false
   }
 }
 
-const apiChangeStatus = async id => {
+const download = async (item, file) => {
+  downloadLoadings.value[item.id] = true
   try {
-    await $apiOrThrow(`verbal-trial/change-status/${id}`, {
-      method: 'PUT',
-      body: { status: actionStatus.value, comment: actionComment.value },
-    })
-    actionComment.value = ''
+    await downloadFile(file.url, file.name)
+  } finally {
+    downloadLoadings.value[item.id] = false
+  }
+}
 
-    const statusMessage = actionStatus.value === 'validated'
-      ? 'validé'
-      : (actionButtonText.value === 'Renvoyer' ? 'renvoyé à l\'admin crédit' : 'rejeté')
+// Actions d'une ligne en trois sections : le PV lui-même, son circuit de validation, ses documents
+const rowActions = item => {
+  const editable = isAdmin() || item.status != 'validated'
+  const waitingHeadCredit = item.status == 'waiting' && item.validation_level == 'head_credit'
+  const validated = item.status == 'validated'
 
-    showSnackbar('success', `PV ${statusMessage} avec succès`)
-    await fetchItemList()
-  } catch (error) {
-    console.error('Erreur lors du changement de statut:', error)
-    showSnackbar('error', errorMessage(error, 'Erreur lors du changement de statut'))
+  const manage = [
+    (can('read', 'pv') || can('historical', 'pv')) && { label: 'Détails', icon: 'tabler-eye', to: { name: 'pv-id', params: { id: item.id } } },
+    can('update', 'pv') && editable && { label: 'Modifier', icon: 'tabler-edit', to: { name: 'pv-edit-id', params: { id: item.id } } },
+    can('analyst_delete', 'pv') && editable && { label: 'Supprimer', icon: 'tabler-trash', color: 'error', action: 'delete' },
+  ]
+
+  const workflow = [
+    can('reject', 'pv') && validated && !item.next && { label: 'Renvoyer à l\'admin crédit', icon: 'tabler-arrow-back-up', color: 'warning', action: 'sendBack' },
+    can('validate', 'pv') && waitingHeadCredit && { label: 'Valider', icon: 'tabler-check', color: 'success', action: 'validate' },
+    can('reject', 'pv') && waitingHeadCredit && { label: 'Rejeter', icon: 'tabler-x', color: 'error', action: 'reject' },
+    can('create', 'basic-contract') && validated && !item.has_mortgage && !item.next && { label: 'Créer le contrat', icon: 'tabler-file-plus', color: 'primary', to: { name: 'contract-add', query: { id: item.id } } },
+    can('create', 'notarized-contract') && validated && item.has_mortgage && !item.next && { label: 'Créer la notification notariée', icon: 'tabler-file-plus', color: 'primary', to: { name: 'notification-add', query: { id: item.id } } },
+  ]
+
+  const downloads = [
+    can('download', 'pv') && { label: 'Procès verbal', url: `/api/verbal-trial/download/${item.id}`, name: `PV-${item.committee_id}.docx` },
+    can('download', 'pv-notification') && validated && { label: 'Notification', url: `/api/verbal-trial/notification/download/${item.id}`, name: `notification-${item.committee_id}.docx` },
+  ]
+
+  return {
+    buttons: [manage, workflow].map(group => group.filter(Boolean)).filter(group => group.length),
+    downloads: downloads.filter(Boolean),
   }
 }
 
@@ -433,248 +511,84 @@ onMounted(async () => {
         </template>
 
         <template #item.actions="{ item }">
-          <div class="text-center">
-            <div>
-              <IconBtn
-                v-if="$can('read', 'pv') || $can('historical', 'pv')"
-                :to="{ name: 'pv-id', params: { id: item.id } }"
-              >
-                <VTooltip
-                  activator="parent"
-                  transition="scroll-x-transition"
-                  location="start"
-                >
-                  Details
-                </VTooltip>
-                <VIcon icon=" tabler-eye" />
-              </IconBtn>
-              <IconBtn
-                v-if="$can('download', 'pv')"
-                @click="
-                  downloadFile(
-                    `/api/verbal-trial/download/${item.id}`,
-                    `PV-${item.committee_id}.docx`
-                  )
-                "
-              >
-                <VTooltip
-                  activator="parent"
-                  transition="scroll-x-transition"
-                  location="end"
-                >
-                  Télécharger
-                  PV
-                </VTooltip>
-                <VIcon
-                  v-tooltip="'Ceci est une icône'"
-                  icon="tabler-download"
-                />
-              </IconBtn>
-              <IconBtn
-                v-if="$can('download', 'pv-notification') && item.status == 'validated'"
-                @click="
-                  downloadFile(
-                    `/api/verbal-trial/notification/download/${item.id}`,
-                    `notification-${item.committee_id}.docx`
-                  )
-                "
-              >
-                <VTooltip
-                  activator="parent"
-                  transition="scroll-x-transition"
-                  location="end"
-                >
-                  Télécharger
-                  Notification
-                </VTooltip>
-                <VIcon
-                  v-tooltip="'Ceci est une icône'"
-                  icon="tabler-download"
-                />
-              </IconBtn>
-            </div>
-            <div
-              v-if="
-                ($can('update', 'pv') || $can('delete', 'pv')) &&
-                  (isAdmin() || item.status != 'validated')
-              "
+          <div class="pv-actions">
+            <template
+              v-for="(group, index) in rowActions(item).buttons"
+              :key="index"
             >
-              <VDivider />
+              <VDivider
+                v-if="index > 0"
+                vertical
+                class="pv-actions__divider"
+              />
               <IconBtn
-                v-if="
-                  $can('update', 'pv') &&
-                    (isAdmin() || item.status != 'validated')
-                "
-                :to="{ name: 'pv-edit-id', params: { id: item.id } }"
+                v-for="button in group"
+                :key="button.label"
+                :to="button.to"
+                :color="button.color"
+                :aria-label="button.label"
+                @click="button.action && openAction(button.action, item)"
               >
                 <VTooltip
                   activator="parent"
-                  transition="scroll-x-transition"
-                  location="start"
+                  location="top"
                 >
-                  Modifier
+                  {{ button.label }}
                 </VTooltip>
-                <VIcon icon="tabler-edit" />
+                <VIcon :icon="button.icon" />
               </IconBtn>
+            </template>
 
+            <template v-if="rowActions(item).downloads.length">
+              <VDivider
+                v-if="rowActions(item).buttons.length"
+                vertical
+                class="pv-actions__divider"
+              />
+              <!-- Un seul document : téléchargement direct ; plusieurs : menu -->
               <IconBtn
-                v-if="
-                  $can('analyst_delete', 'pv') &&
-                    (isAdmin() || item.status != 'validated')
-                "
-                @click="
-                  selectedItemId = item.id;
-                  (actionTitle = 'Supprimer le PV'),
-                  (actionText =
-                    'Voulez vous vraiment supprimer ce pv?'),
-                  (actionFunction = apiDelete);
-                  actionButtonText = 'Supprimer';
-                  commentPresence = false;
-                  isActionDialogVisible = true;
-                "
+                v-if="rowActions(item).downloads.length == 1"
+                :loading="downloadLoadings[item.id]"
+                :aria-label="`Télécharger : ${rowActions(item).downloads[0].label}`"
+                @click="download(item, rowActions(item).downloads[0])"
               >
                 <VTooltip
                   activator="parent"
-                  transition="scroll-x-transition"
-                  location="end"
+                  location="top"
                 >
-                  Supprimer
+                  Télécharger : {{ rowActions(item).downloads[0].label }}
                 </VTooltip>
-                <VIcon
-                  icon="tabler-trash"
-                  color="error"
-                />
+                <VIcon icon="tabler-download" />
               </IconBtn>
-            </div>
-            <div
-              v-if="
-                ($can('reject', 'pv') || $can('validate', 'pv')) &&
-                  item.status == 'waiting' && item.validation_level == 'head_credit'
-              "
-            >
-              <VDivider />
-              <span
-                :class="item.status == 'validated' ? 'full-width-icon' : ''
-                "
-              >
-                <IconBtn
-                  v-if="
-                    $can('reject', 'pv') && item.status != 'rejected'
-                  "
-                  @click="
-                    selectedItemId = item.id;
-                    (actionTitle = 'Rejeter le PV'),
-                    (actionText =
-                      'Voulez vous vraiment rejeter ce PV?'),
-                    (actionFunction = apiChangeStatus);
-                    actionButtonText = 'Rejeter';
-                    commentPresence = true;
-                    actionStatus = 'rejected';
-                    isActionDialogVisible = true;
-                  "
-                >
-                  <VTooltip
-                    activator="parent"
-                    transition="scroll-x-transition"
-                    location="start"
-                  >
-                    Rejeter</VTooltip>
-                  <VIcon
-                    icon="tabler-x"
-                    color="error"
-                  />
-                </IconBtn>
-              </span>
-              <span v-if="item.status == 'waiting'">
-                <IconBtn
-                  v-if="$can('validate', 'pv')"
-                  @click="
-                    selectedItemId = item.id;
-                    (actionTitle = 'Valider le PV'),
-                    (actionText =
-                      'Voulez vous vraiment valider ce PV?'),
-                    (actionFunction = apiChangeStatus);
-                    actionButtonText = 'Valider';
-                    commentPresence = false;
-                    actionStatus = 'validated';
-                    isActionDialogVisible = true;
-                  "
-                >
-                  <VTooltip
-                    activator="parent"
-                    transition="scroll-x-transition"
-                    location="end"
-                  >Valider
-                  </VTooltip>
-                  <VIcon
-                    icon="tabler-check"
-                    color="success"
-                  />
-                </IconBtn>
-              </span>
-            </div>
-            <div v-if="$can('reject', 'pv') && item.status == 'validated' && !item.next">
-              <VDivider />
               <IconBtn
-                @click="
-                  selectedItemId = item.id;
-                  (actionTitle = 'Renvoyer le PV à l\'admin crédit'),
-                  (actionText =
-                    'Ce PV validé n\'a pas encore de contrat. Voulez vous vraiment le renvoyer à l\'admin crédit pour correction?'),
-                  (actionFunction = apiChangeStatus);
-                  actionButtonText = 'Renvoyer';
-                  commentPresence = true;
-                  actionStatus = 'rejected';
-                  isActionDialogVisible = true;
-                "
+                v-else
+                :loading="downloadLoadings[item.id]"
+                aria-label="Télécharger"
               >
                 <VTooltip
                   activator="parent"
-                  transition="scroll-x-transition"
-                  location="end"
+                  location="top"
                 >
-                  Renvoyer à l'admin crédit
+                  Télécharger
                 </VTooltip>
-                <VIcon
-                  icon="tabler-arrow-back-up"
-                  color="warning"
-                />
-              </IconBtn>
-            </div>
-            <div v-if="$can('create', 'basic-contract') && item.status == 'validated' && !item.has_mortgage">
-              <VDivider />
-              <IconBtn :to="{ name: 'contract-add', query: { id: item.id } }">
-                <VTooltip
+                <VIcon icon="tabler-download" />
+                <VMenu
                   activator="parent"
-                  transition="scroll-x-transition"
-                  location="end"
+                  location="bottom end"
                 >
-                  Créer le
-                  contrat
-                </VTooltip>
-                <VIcon
-                  icon="tabler-file-plus"
-                  color="success"
-                />
+                  <VList density="compact">
+                    <VListSubheader>Télécharger</VListSubheader>
+                    <VListItem
+                      v-for="file in rowActions(item).downloads"
+                      :key="file.url"
+                      prepend-icon="tabler-file-type-docx"
+                      :title="file.label"
+                      @click="download(item, file)"
+                    />
+                  </VList>
+                </VMenu>
               </IconBtn>
-            </div>
-            <div v-if="$can('create', 'notarized-contract') && item.status == 'validated' && item.has_mortgage">
-              <VDivider />
-              <IconBtn :to="{ name: 'notification-add', query: { id: item.id } }">
-                <VTooltip
-                  activator="parent"
-                  transition="scroll-x-transition"
-                  location="end"
-                >
-                  Créer la
-                  notification notarié
-                </VTooltip>
-                <VIcon
-                  icon="tabler-file-plus"
-                  color="success"
-                />
-              </IconBtn>
-            </div>
+            </template>
           </div>
         </template>
 
@@ -727,41 +641,68 @@ onMounted(async () => {
       </VDataTableServer>
     </VCard>
 
-    <!-- Dialog d'action -->
+    <!-- Dialogue de confirmation -->
     <VDialog
-      v-model="isActionDialogVisible"
+      v-model="dialog.visible"
       class="v-dialog-sm"
+      :persistent="dialog.loading"
     >
-      <DialogCloseBtn @click="isActionDialogVisible = !isActionDialogVisible" />
+      <DialogCloseBtn
+        :disabled="dialog.loading"
+        @click="dialog.visible = false"
+      />
 
-      <VCard :title="actionTitle">
+      <VCard v-if="dialog.item">
+        <VCardItem>
+          <template #prepend>
+            <VAvatar
+              :color="currentAction.color"
+              variant="tonal"
+              rounded
+            >
+              <VIcon :icon="currentAction.icon" />
+            </VAvatar>
+          </template>
+          <VCardTitle>{{ currentAction.title }}</VCardTitle>
+          <VCardSubtitle>
+            {{ dialog.item.committee_id }} · {{ dialog.item.entity_name }} · {{ dialog.item.amount_fr }}
+          </VCardSubtitle>
+        </VCardItem>
+
         <VCardText>
-          {{ actionText }}
+          <p class="mb-0">
+            {{ currentAction.text }}
+          </p>
 
-          <AppTextarea 
-            v-if="commentPresence" 
-            v-model="actionComment" 
-            class="mt-3"
-            label="Commentaire"
-            placeholder="Ex: RAS" 
+          <AppTextarea
+            v-if="currentAction.comment"
+            v-model="dialog.comment"
+            class="mt-4"
+            :label="`${currentAction.comment} *`"
+            placeholder="Ce que l'admin crédit doit corriger"
+            rows="3"
+            autofocus
+            :disabled="dialog.loading"
           />
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn 
-            color="secondary" 
-            variant="tonal" 
-            @click="isActionDialogVisible = false"
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            :disabled="dialog.loading"
+            @click="dialog.visible = false"
           >
             Annuler
           </VBtn>
-          <VBtn 
-            @click="
-              actionFunction(selectedItemId);
-              isActionDialogVisible = false;
-            "
+          <VBtn
+            :color="currentAction.color"
+            :prepend-icon="currentAction.icon"
+            :loading="dialog.loading"
+            :disabled="!!currentAction.comment && !dialog.comment.trim()"
+            @click="confirmAction"
           >
-            {{ actionButtonText }}
+            {{ currentAction.button }}
           </VBtn>
         </VCardText>
       </VCard>
@@ -785,11 +726,28 @@ onMounted(async () => {
 	}
 }
 
-.full-width-icon {
+.pv-actions {
 	display: flex;
-	justify-content: center;
 	align-items: center;
-	width: 100%;
-	height: 100%;
+	justify-content: flex-end;
+	gap: 2px;
+}
+
+.pv-actions__divider {
+	align-self: center;
+	height: 24px;
+	margin-inline: 6px;
+}
+
+// La colonne Actions reste visible quand le tableau défile horizontalement
+:deep(.v-table__wrapper > table) {
+	> thead > tr > th:last-child,
+	> tbody > tr > td:last-child {
+		position: sticky;
+		right: 0;
+		z-index: 1;
+		background: rgb(var(--v-theme-surface));
+		box-shadow: -6px 0 6px -6px rgba(var(--v-shadow-key-umbra-color), 0.3);
+	}
 }
 </style>
