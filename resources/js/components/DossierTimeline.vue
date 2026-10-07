@@ -6,7 +6,7 @@
 const props = defineProps({
   // verbal-trial, contract, notification ou cat
   subject: { type: String, required: true },
-  id: { type: [Number, String], required: true },
+  id: { type: [Number, String], default: null },
 })
 
 const ACTIONS = {
@@ -36,6 +36,13 @@ const activities = ref([])
 const loading = ref(true)
 
 const fetchActivities = async () => {
+  // Fiche pas encore (ou pas du tout) chargée : rien à demander
+  if (!props.id) {
+    activities.value = []
+    loading.value = false
+
+    return
+  }
   loading.value = true
 
   const res = await $api(createUrl('/activity', { query: { subject: props.subject, id: props.id } }).value).catch(() => null)
