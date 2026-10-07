@@ -3,6 +3,8 @@
   pour une période ; l'administrateur gère celles de tous.
 -->
 <script setup>
+import { VDataTableServer } from 'vuetify/labs/VDataTable'
+
 definePage({
   meta: {
     action: 'manage',
@@ -98,6 +100,9 @@ const stop = async () => {
 }
 
 const canStop = delegation => delegation.status != 'ended' && (isAdmin() || delegation.delegator_id == userData.value.id)
+
+// Nombre de lignes et filtres mémorisés pour la prochaine visite
+useListPreferences({ itemsPerPage, refs: { status } })
 </script>
 
 <template>

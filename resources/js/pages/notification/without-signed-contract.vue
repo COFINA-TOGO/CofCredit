@@ -264,6 +264,10 @@ onMounted(async () => {
   await fetchItemList([4])
 })
 
+
+// Nombre de lignes et filtres mémorisés pour la prochaine visite
+useListPreferences({ itemsPerPage, filterDataArray })
+
 // Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
 const selected = ref([])
 const ability = useAbility()

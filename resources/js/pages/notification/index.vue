@@ -261,6 +261,10 @@ onMounted(async () => {
   await fetchItemList([4])
 })
 
+
+// Nombre de lignes et filtres mémorisés pour la prochaine visite
+useListPreferences({ itemsPerPage, refs: { selectedType } })
+
 // Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
 const selected = ref([])
 const ability = useAbility()
@@ -287,6 +291,14 @@ const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Notification $
     <VCard class="mb-6">
       <!-- Barre d'actions -->
       <div class="d-flex flex-wrap gap-4 mt-5 mx-5">
+        <AppSelect
+          v-model="selectedType"
+          placeholder="Type de client"
+          :items="[{ value: 'particular', title: 'Particulier' }, { value: 'company', title: 'Société' }, { value: 'individual_business', title: 'Entreprise individuelle' }]"
+          clearable
+          clear-icon="tabler-x"
+          class="type-filter"
+        />
         <div class="flex-grow-1">
           <AppTextField 
             v-model="searchQuery" 
@@ -630,6 +642,11 @@ const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Notification $
 </template>
 
 <style lang="scss" scoped>
+.type-filter {
+	max-inline-size: 240px;
+	min-inline-size: 200px;
+}
+
 .custom-loader {
 	display: flex;
 	animation: loader 1s infinite;

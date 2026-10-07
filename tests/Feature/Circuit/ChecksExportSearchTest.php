@@ -85,4 +85,15 @@ class ChecksExportSearchTest extends CircuitTestCase
 		Sanctum::actingAs($head);
 		$this->getJson("/api/alert")->assertJsonPath("data.alerts", []);
 	}
+
+	public function test_notifications_can_be_filtered_by_client_type(): void
+	{
+		$pv = $this->verbalTrial(["status" => "validated"]);
+		Notification::factory()->create(["verbal_trial_id" => $pv->id, "type" => "company"]);
+		Notification::factory()->create(["verbal_trial_id" => $this->verbalTrial()->id, "type" => "particular"]);
+		Sanctum::actingAs($this->user("admin"));
+
+		$this->getJson("/api/notification?type=company")->assertJsonPath("total", 1);
+		$this->getJson("/api/notification?type=")->assertJsonPath("total", 2);
+	}
 }

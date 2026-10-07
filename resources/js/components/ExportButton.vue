@@ -26,7 +26,7 @@ const exportList = async () => {
 <template>
   <VBtn
     variant="tonal"
-    color="secondary"
+    color="primary"
     prepend-icon="tabler-file-spreadsheet"
     :loading="loading"
     @click="exportList"

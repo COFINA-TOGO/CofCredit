@@ -125,6 +125,9 @@ watch([searchQuery, page, itemsPerPage], () => {
 onMounted(async () => {
   await fetchItemList([4])
 })
+
+// Nombre de lignes et filtres mémorisés pour la prochaine visite
+useListPreferences({ itemsPerPage })
 </script>
 
 <template>

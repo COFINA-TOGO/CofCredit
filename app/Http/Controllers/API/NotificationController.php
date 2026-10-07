@@ -92,7 +92,7 @@ class NotificationController extends Controller
 				}
 			}
 
-			foreach (["verbal_trial_id", "phone_number", "representative_home_address", "number_of_due_dates", "risk_premium_percentage", "sent", "is_simple"] as $filter) {
+			foreach (["verbal_trial_id", "phone_number", "representative_home_address", "number_of_due_dates", "risk_premium_percentage", "sent", "is_simple", "type"] as $filter) {
 				if (isset($request[$filter]) && $request[$filter] != "") {
 					$notificationList->where($filter, $request[$filter]);
 				}

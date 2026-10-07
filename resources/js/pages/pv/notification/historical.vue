@@ -134,6 +134,10 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
 
+
+// Nombre de lignes et filtres mémorisés pour la prochaine visite
+useListPreferences({ itemsPerPage, refs: { type_of_credit_id } })
+
 // Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
 const selected = ref([])
 const ability = useAbility()

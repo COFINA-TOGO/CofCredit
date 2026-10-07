@@ -397,6 +397,7 @@
     "hasRole": true,
     "rememberListUrl": true,
     "sessionUserData": true,
-    "useSessionRefresh": true
+    "useSessionRefresh": true,
+    "useListPreferences": true
   }
 }
