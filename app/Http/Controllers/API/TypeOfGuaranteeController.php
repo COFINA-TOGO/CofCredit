@@ -55,7 +55,7 @@ class TypeOfGuaranteeController extends Controller
                 $typeOfGuaranteeList = $typeOfGuaranteeList->orderByDesc('created_at')->get();
                 $data = ["data" => $typeOfGuaranteeList, "total" => count($typeOfGuaranteeList)];
             } else {
-                $data = $typeOfGuaranteeList->orderByDesc('created_at')->paginate(8)->toArray();
+                $data = $typeOfGuaranteeList->orderByDesc('created_at')->paginate($this->perPage($request))->toArray();
             }
 
             return $this->responseOkPaginate($data);

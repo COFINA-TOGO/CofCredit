@@ -198,6 +198,7 @@ const fetchItemList = async (id_list = []) => {
           type_of_credit_id: filterDataArray[0].filter.value,
           status: filterDataArray[1].filter.value,
           page: page.value,
+          per_page: itemsPerPage.value,
           in_validation_level: filterDataArray[2].filter.value,
           ...viewData.data.api.query,
         },
@@ -374,6 +375,7 @@ watch(
     filterDataArray[2].filter.value,
     searchQuery.value,
     page.value,
+    itemsPerPage.value,
   ],
   () => {
     fetchItemList([4])
@@ -594,49 +596,12 @@ onMounted(async () => {
 
         <!-- Pagination -->
         <template #bottom>
-          <VDivider />
-
-          <div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
-            <p class="text-sm text-medium-emphasis mb-0">
-              {{ paginationMeta({ page, itemsPerPage }, totalPv) }}
-            </p>
-
-            <VPagination 
-              v-model="page" 
-              :length="lastPage"
-              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
-            >
-              <template #prev="slotProps">
-                <VBtn 
-                  variant="tonal" 
-                  color="default" 
-                  v-bind="slotProps" 
-                  :icon="false"
-                >
-                  <VIcon 
-                    start 
-                    icon="tabler-arrow-left" 
-                  />
-                  Précédent
-                </VBtn>
-              </template>
-
-              <template #next="slotProps">
-                <VBtn 
-                  variant="tonal" 
-                  color="default" 
-                  v-bind="slotProps" 
-                  :icon="false"
-                >
-                  Suivant
-                  <VIcon 
-                    end 
-                    icon="tabler-arrow-right" 
-                  />
-                </VBtn>
-              </template>
-            </VPagination>
-          </div>
+          <TablePagination
+            v-model:page="page"
+            v-model:items-per-page="itemsPerPage"
+            :total-items="totalPv"
+            :last-page="lastPage"
+          />
         </template>
       </VDataTableServer>
     </VCard>

@@ -95,7 +95,7 @@ class GuarantorController extends Controller
 				$guarantorList = $guarantorList->orderByDesc('created_at')->get();
 				$data = ["data" => $guarantorList, "total" => count($guarantorList)];
 			} else {
-				$data = $guarantorList->orderByDesc('created_at')->paginate(8)->toArray();
+				$data = $guarantorList->orderByDesc('created_at')->paginate($this->perPage($request))->toArray();
 			}
 
 			return $this->responseOkPaginate($data);

@@ -23,9 +23,21 @@ trait CustomResponseTrait
             $data = $query->orderByDesc($orderColumn)->get();
             $data = ["data" => $data, "total" => count($data)];
         } else {
-            $data = $query->orderByDesc($orderColumn)->paginate($paginateCount)->toArray();
+            $data = $query->orderByDesc($orderColumn)->paginate($this->perPage($requestData, $paginateCount))->toArray();
         }
         return $this->responseOkPaginate(data: $data, status: $status, messages: $messages);
+    }
+
+    /**
+     * Nombre d'éléments par page demandé par le client (per_page), borné entre 1 et 100
+     * @param	mixed	$requestData	Les données de la requête
+     * @param	int		$default		Le nombre par défaut
+     * @return	int
+     */
+    public function perPage($requestData, int $default = 8)
+    {
+        $perPage = (int) ($requestData["per_page"] ?? $default);
+        return $perPage > 0 ? min($perPage, 100) : $default;
     }
 
     /**

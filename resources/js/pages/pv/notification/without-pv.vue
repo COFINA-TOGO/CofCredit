@@ -69,6 +69,7 @@ const { data: pvData, execute: fetchPv } = await useApi(
       status: "wr",
       in_validation_level: 'y',
       page: page,
+      per_page: itemsPerPage,
       has_contract: 0,
       has_notification: 0,
       with_caf: 1,
@@ -421,50 +422,12 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
         </template>
 
         <template #bottom>
-          <VDivider />
-
-          <div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
-            <p class="text-sm text-medium-emphasis mb-0">
-              {{ paginationMeta({ page, itemsPerPage }, totalPv) }}
-            </p>
-
-            <VPagination
-              v-model="page"
-              :length="lastPage"
-              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)
-              "
-            >
-              <template #prev="slotProps">
-                <VBtn
-                  variant="tonal"
-                  color="default"
-                  v-bind="slotProps"
-                  :icon="false"
-                >
-                  <VIcon
-                    start
-                    icon="tabler-arrow-left"
-                  />
-                  Précedent
-                </VBtn>
-              </template>
-
-              <template #next="slotProps">
-                <VBtn
-                  variant="tonal"
-                  color="default"
-                  v-bind="slotProps"
-                  :icon="false"
-                >
-                  Suivant
-                  <VIcon
-                    end
-                    icon="tabler-arrow-right"
-                  />
-                </VBtn>
-              </template>
-            </VPagination>
-          </div>
+          <TablePagination
+            v-model:page="page"
+            v-model:items-per-page="itemsPerPage"
+            :total-items="totalPv"
+            :last-page="lastPage"
+          />
         </template>
       </VDataTableServer>
     </VCard>

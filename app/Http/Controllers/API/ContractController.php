@@ -159,7 +159,7 @@ class ContractController extends Controller
 				$contractList = $contractList->orderByDesc('updated_at')->get();
 				$data = ["data" => $contractList, "total" => count($contractList)];
 			} else {
-				$data = $contractList->orderByDesc('updated_at')->paginate(8)->toArray();
+				$data = $contractList->orderByDesc('updated_at')->paginate($this->perPage($request))->toArray();
 			}
 
 

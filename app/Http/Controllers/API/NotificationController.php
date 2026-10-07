@@ -168,7 +168,7 @@ class NotificationController extends Controller
 				$notificationList = $notificationList->orderByDesc('updated_at')->get();
 				$data = ["data" => $notificationList, "total" => count($notificationList)];
 			} else {
-				$data = $notificationList->orderByDesc('updated_at')->paginate(8)->toArray();
+				$data = $notificationList->orderByDesc('updated_at')->paginate($this->perPage($request))->toArray();
 			}
 
 

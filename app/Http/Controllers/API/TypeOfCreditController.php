@@ -59,7 +59,7 @@ class TypeOfCreditController extends Controller
                 $typeOfCreditList = $typeOfCreditList->orderByDesc('created_at')->get();
                 $data = ["data" => $typeOfCreditList, "total" => count($typeOfCreditList)];
             } else {
-                $data = $typeOfCreditList->orderByDesc('created_at')->paginate(8)->toArray();
+                $data = $typeOfCreditList->orderByDesc('created_at')->paginate($this->perPage($request))->toArray();
             }
 
             return $this->responseOkPaginate($data);

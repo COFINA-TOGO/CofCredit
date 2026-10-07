@@ -34,6 +34,7 @@ export function useContractList(viewData, filterDataArray) {
         query: {
           search: searchQuery.value,
           page: page.value,
+          per_page: itemsPerPage.value,
           ...viewData.data.api.query,
           ...more_query.value,
         },
@@ -86,7 +87,7 @@ export function useContractList(viewData, filterDataArray) {
   const lastPage = computed(() => itemListData.value.last_page)
 
   // Watchers pour la recherche et la pagination
-  watch([searchQuery, page], async () => {
+  watch([searchQuery, page, itemsPerPage], async () => {
     await fetchItemList([4])
   })
 

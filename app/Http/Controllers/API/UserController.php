@@ -76,7 +76,7 @@ class UserController extends Controller
 				$list = $list->orderByDesc('created_at')->get();
 				$data = ["data" => $list, "total" => count($list)];
 			} else {
-				$data = $list->orderByDesc('created_at')->paginate(8)->toArray();
+				$data = $list->orderByDesc('created_at')->paginate($this->perPage($request))->toArray();
 			}
 
 			return $this->responseOkPaginate($data);

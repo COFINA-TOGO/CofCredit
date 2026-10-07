@@ -69,7 +69,7 @@ class GuaranteeController extends Controller
 				$guaranteeList = $guaranteeList->orderByDesc('created_at')->get();
 				$data = ["data" => $guaranteeList, "total" => count($guaranteeList)];
 			} else {
-				$data = $guaranteeList->orderByDesc('created_at')->paginate(8)->toArray();
+				$data = $guaranteeList->orderByDesc('created_at')->paginate($this->perPage($request))->toArray();
 			}
 
 			return $this->responseOkPaginate($data);

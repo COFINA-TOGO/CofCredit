@@ -74,6 +74,7 @@ const fetchItemList = async (id_list = []) => {
         with_verbal_trial: 1,
         with_type_of_guarantee: 1,
         page: page.value,
+        per_page: itemsPerPage.value,
       },
     }))
 
@@ -112,7 +113,7 @@ const exportGuarantees = async () => {
 }
 
 // Watchers
-watch([searchQuery, page], () => {
+watch([searchQuery, page, itemsPerPage], () => {
   fetchItemList([4])
 })
 
@@ -208,49 +209,12 @@ onMounted(async () => {
 
         <!-- Pagination -->
         <template #bottom>
-          <VDivider />
-
-          <div class="d-flex align-center justify-space-between flex-wrap gap-3 pa-5 pt-3">
-            <p class="text-sm text-medium-emphasis mb-0">
-              {{ paginationMeta({ page, itemsPerPage }, totalGuarantee) }}
-            </p>
-
-            <VPagination
-              v-model="page"
-              :length="lastPage"
-              :total-visible="$vuetify.display.xs ? 1 : Math.min(lastPage, 5)"
-            >
-              <template #prev="slotProps">
-                <VBtn
-                  variant="tonal"
-                  color="default"
-                  v-bind="slotProps"
-                  :icon="false"
-                >
-                  <VIcon
-                    start
-                    icon="tabler-arrow-left"
-                  />
-                  Précédent
-                </VBtn>
-              </template>
-
-              <template #next="slotProps">
-                <VBtn
-                  variant="tonal"
-                  color="default"
-                  v-bind="slotProps"
-                  :icon="false"
-                >
-                  Suivant
-                  <VIcon
-                    end
-                    icon="tabler-arrow-right"
-                  />
-                </VBtn>
-              </template>
-            </VPagination>
-          </div>
+          <TablePagination
+            v-model:page="page"
+            v-model:items-per-page="itemsPerPage"
+            :total-items="totalGuarantee"
+            :last-page="lastPage"
+          />
         </template>
       </VDataTableServer>
     </VCard>

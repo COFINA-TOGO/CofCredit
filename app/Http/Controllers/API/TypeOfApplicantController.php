@@ -56,7 +56,7 @@ class TypeOfApplicantController extends Controller
 				$typeOfApplicantList = $typeOfApplicantList->orderByDesc('created_at')->get();
 				$data = ["data" => $typeOfApplicantList, "total" => count($typeOfApplicantList)];
 			} else {
-				$data = $typeOfApplicantList->orderByDesc('created_at')->paginate(8)->toArray();
+				$data = $typeOfApplicantList->orderByDesc('created_at')->paginate($this->perPage($request))->toArray();
 			}
 
 			return $this->responseOkPaginate($data);

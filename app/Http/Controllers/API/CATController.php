@@ -136,7 +136,7 @@ class CATController extends Controller
 				$catList = $catList->orderByDesc('created_at')->get();
 				$data = ["data" => $catList, "total" => count($catList)];
 			} else {
-				$data = $catList->orderByDesc('created_at')->paginate(8)->toArray();
+				$data = $catList->orderByDesc('created_at')->paginate($this->perPage($request))->toArray();
 			}
 
 			return $this->responseOkPaginate($data);
