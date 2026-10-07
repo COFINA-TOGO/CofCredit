@@ -1,0 +1,1 @@
+import{n as m,bo as e,bp as f}from"./main-629bfa88.js";const j=(c,r)=>m(()=>{if(!(r!=null&&r.query))return e(c);const a=e(c),t=e(r==null?void 0:r.query),u=Object.fromEntries(Object.entries(t).map(([y,b])=>[y,e(b)]));return`${a}${u?`?${f(u)}`:""}`});export{j as c};
