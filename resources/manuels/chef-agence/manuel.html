@@ -164,7 +164,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <h1>Manuel d'utilisation du profil Chef d'agence</h1>
   <p class="chapeau">Le Chef d'agence valide ou rejette, en premier niveau, les demandes de report d'échéance de son agence. Chaque écran est illustré par une capture réelle de l'application, faite avec un compte de ce profil.</p>
   <div class="meta">
-    <span>Version du <b>02/10/2026</b></span>
+    <span>Version du <b>07/10/2026</b></span>
   </div>
 </header>
 
@@ -173,7 +173,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
   <h2>Sommaire</h2>
   <ol>
     <li><a href="#prise-en-main">Prise en main</a>
-      <ol><li><a href="#connexion">Connexion</a></li><li><a href="#accueil">L'accueil</a></li><li><a href="#menu">Votre menu</a></li><li><a href="#listes">Les écrans</a></li><li><a href="#compte">Votre compte</a></li><li><a href="#manuel-appli">Retrouver ce manuel</a></li></ol></li>
+      <ol><li><a href="#connexion">Connexion</a></li><li><a href="#accueil">L'accueil</a></li><li><a href="#menu">Votre menu</a></li><li><a href="#listes">Les écrans</a></li><li><a href="#alertes">Les alertes</a></li><li><a href="#delegations">Les délégations pendant une absence</a></li><li><a href="#historique">L'historique d'un dossier</a></li><li><a href="#compte">Votre compte</a></li><li><a href="#manuel-appli">Retrouver ce manuel</a></li></ol></li>
     <li><a href="#circuit">Le circuit d'un dossier</a>
       <ol><li><a href="#circuit-credit">Crédit</a></li><li><a href="#circuit-report">Report d'échéance</a></li></ol></li>
     <li><a href="#suivi">Suivi</a></li>
@@ -208,19 +208,41 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
       <li>Accueil</li></ul></div>
     <div><h5>Suivi</h5><ul>
       <li>Report d'échéance › En attente, Historique</li></ul></div>
+    <div><h5>Mon compte</h5><ul>
+      <li>Délégations</li></ul></div>
     <div><h5>Aide</h5><ul>
       <li>Manuel d'utilisation</li></ul></div>
   </div>
-  <figure class="menu"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/01-menu.webp" alt="Menu du profil" loading="lazy" width="260" height="340"></button><figcaption><b>Le menu</b>, groupes repliés.</figcaption></figure>
+  <figure class="menu"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/01-menu.webp" alt="Menu du profil" loading="lazy" width="260" height="432"></button><figcaption><b>Le menu</b>, groupes repliés.</figcaption></figure>
   </div>
   <h3 id="listes">Les écrans</h3>
   <ul>
     <li>Sous la barre du haut, le <b>fil d'Ariane</b> rappelle où vous êtes (par exemple <b>Contrat › Basique › Sans CAT</b>) ; un clic sur une étape y revient.</li>
     <li>Chaque page commence par un <b>en-tête</b> : son titre, une phrase qui dit à quoi elle sert, la flèche de retour à la liste et, à droite, les actions principales (<span class="btn">Enregistrer</span>, <span class="btn">Consulter</span>…).</li>
-    <li>Les <b>listes</b> se filtrent par les champs du bloc Filtres et par la recherche ; <span class="btn">Recharger</span> relit les données. Le pied de liste indique le nombre de résultats et permet de changer de page.</li>
-    <li>Dans une liste, l'icône en forme d'œil ouvre la fiche ; les trois points verticaux ouvrent le <b>menu d'actions</b> de la ligne (consulter les pièces, télécharger un document, valider…). Les actions absentes du menu sont celles que votre profil ou l'état du dossier ne permettent pas.</li>
-    <li>Les <b>fiches</b> présentent les chiffres clés en tête, puis les informations par bloc. Un dossier rejeté affiche le motif du rejet en rouge.</li>
+    <li>Les <b>listes</b> se filtrent par les champs du bloc Filtres et par la recherche ; <span class="btn">Recharger</span> relit les données et <span class="btn">Exporter</span> télécharge la liste filtrée au format Excel (toutes les pages). Le pied de liste indique le nombre de résultats, permet de changer de page et de choisir le nombre de <b>lignes par page</b> (jusqu'à 100).</li>
+    <li>Chaque liste retient ses filtres et son nombre de lignes pour votre prochaine visite, sur ce navigateur. La recherche texte, elle, repart à vide.</li>
+    <li>Dans une liste, l'icône en forme d'œil ouvre la fiche. Les autres actions de la ligne sont des icônes (modifier, valider, télécharger…), ou se trouvent dans le <b>menu d'actions</b> ouvert par les trois points verticaux. Une action absente est une action que votre profil ou l'état du dossier ne permettent pas ; une info-bulle nomme chaque icône au survol.</li>
+    <li>Les <b>fiches</b> présentent les chiffres clés en tête, puis les informations par bloc. Un dossier rejeté affiche le motif du rejet en rouge. En bas de la fiche, l'<b>historique du dossier</b> retrace chaque décision (voir plus bas).</li>
   </ul>
+  <h3 id="alertes">Les alertes</h3>
+  <p class="chemin">Cloche en haut à droite</p>
+  <p>Chaque e-mail que l'application vous envoie (dossier à valider, rejet, renvoi…) s'affiche aussi sous la cloche, avec le nombre d'alertes non lues. Un clic sur une alerte la marque comme lue et ouvre l'écran concerné ; <span class="btn">Tout marquer comme lu</span> vide le compteur. La cloche se met à jour toutes les minutes.</p>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/04-alertes.webp" alt="Alertes" loading="lazy" width="1440" height="900"></button><figcaption><b>Alertes.</b></figcaption></figure>
+
+  <h3 id="delegations">Les délégations pendant une absence</h3>
+  <p class="chemin">Menu <b>Mon compte › Délégations</b>, ou <b>Mes délégations</b> dans le menu de l'avatar</p>
+  <p>Avant une absence, confiez vos dossiers à un collègue : <span class="btn">Nouvelle délégation</span>, choisissez le délégataire, la période (premier et dernier jour inclus) et, si vous le souhaitez, un motif. Le délégataire est prévenu par e-mail.</p>
+  <ul>
+    <li>Pendant la période, le délégataire exerce vos droits, voit vos dossiers et reçoit vos e-mails et vos alertes, en plus des siens. Le menu de son avatar indique « Intérim de … ».</li>
+    <li>Ses décisions sont signées « en intérim de … » dans l'historique des dossiers.</li>
+    <li>La liste montre les délégations à venir, en cours et terminées, données ou reçues. Une délégation à venir s'annule et une délégation en cours s'arrête aussitôt avec le bouton d'arrêt de sa ligne.</li>
+    <li>Vous ne pouvez déléguer que vos propres droits ; l'administrateur peut le faire pour vous.</li>
+  </ul>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/05-delegations.webp" alt="Délégations" loading="lazy" width="1440" height="900"></button><figcaption><b>Délégations.</b></figcaption></figure>
+  <figure class="moyenne"><button class="zoom" type="button" aria-label="Agrandir la capture"><img src="img/05-delegation-creation.webp" alt="Nouvelle délégation" loading="lazy" width="1440" height="900"></button><figcaption><b>Nouvelle délégation.</b></figcaption></figure>
+
+  <h3 id="historique">L'historique d'un dossier</h3>
+  <p>En bas de chaque fiche (PV, contrat, notification, CAT), le bloc <b>Historique du dossier</b> retrace, du plus récent au plus ancien, chaque décision prise sur le PV et sur le contrat, la notification et le CAT qui en découlent : création, envoi en validation, validation, rejet, renvoi, document signé chargé, déblocage. Chaque entrée indique son auteur, sa date et, pour un rejet ou un renvoi, le motif saisi : les motifs successifs restent tous visibles.</p>
   <h3 id="compte">Votre compte</h3>
   <p class="chemin">Menu de l'avatar, en haut à droite</p>
   <p>Trois onglets : <b>Compte</b> (nom et adresse e-mail), <b>Sécurité</b> (changer de mot de passe : au moins 8 caractères, avec une majuscule, une minuscule, un chiffre et un caractère spécial) et <b>Signature</b> (l'image de votre signature, reprise dans les documents générés).</p>
@@ -236,7 +258,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 
 <section class="chapitre" id="circuit">
   <h2 class="titre"><span class="num">02</span>Le circuit d'un dossier</h2>
-  <p class="intro">De la demande au décaissement, chaque dossier passe de profil en profil. Vos étapes sont surlignées. Chaque passage d'étape prévient par e-mail le profil suivant.</p>
+  <p class="intro">De la demande au décaissement, chaque dossier passe de profil en profil. Vos étapes sont surlignées. Chaque passage d'étape prévient le profil suivant par e-mail et par une alerte dans l'application.</p>
   <h3 id="circuit-credit">Crédit</h3>
   <ol class="circuit">
     <li><b>Admin Crédit</b><span>saisit le <b>PV de comité</b>. Un PV peut aussi venir d'une notification de CAF, vérifiée par l'Analyste Crédit.</span></li>
@@ -283,7 +305,7 @@ ol.circuit li.vous::before{color:var(--accent-encre);font-weight:700}
 </main>
 </div>
 
-<footer>Manuel établi à partir de l'application Cofina Crédit Digital au 02/10/2026. Les captures montrent des données réelles : ce document est à usage interne.</footer>
+<footer>Manuel établi à partir de l'application Cofina Crédit Digital au 07/10/2026. Les captures montrent des données réelles : ce document est à usage interne.</footer>
 
 <dialog id="loupe" aria-label="Capture agrandie">
   <form method="dialog"><button type="submit">Fermer</button></form>
