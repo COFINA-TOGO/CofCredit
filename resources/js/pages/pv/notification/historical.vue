@@ -197,6 +197,10 @@ const bulkItemTitle = item => item.committee_id
           >
             Ajouter
           </VBtn>
+          <ExportButton
+            endpoint="/verbal-trial"
+            name="notifications-caf"
+          />
           <VBtn
             :loading="loadings[3]"
             :disabled="loadings[3]"
@@ -224,6 +228,8 @@ const bulkItemTitle = item => item.committee_id
         :items="pvList"
         :actions="bulkActions"
         :item-title="bulkItemTitle"
+        export-endpoint="/verbal-trial"
+        export-name="notifications-caf"
         @done="fetchPv"
       />
 

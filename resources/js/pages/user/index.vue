@@ -329,6 +329,10 @@ const bulkItemTitle = item => item.full_name
             Nouveau
           </VBtn>
 
+          <ExportButton
+            endpoint="/user"
+            name="utilisateurs"
+          />
           <VBtn 
             :loading="loadings[3]" 
             :disabled="loadings[3]" 
@@ -353,6 +357,8 @@ const bulkItemTitle = item => item.full_name
         :items="userList"
         :actions="bulkActions"
         :item-title="bulkItemTitle"
+        export-endpoint="/user"
+        export-name="utilisateurs"
         @done="fetchItemList([4])"
       />
 

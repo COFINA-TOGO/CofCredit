@@ -142,8 +142,8 @@ const selected = ref([])
 const ability = useAbility()
 
 const bulkActions = computed(() => bulkActionList(
-  ability.can('validate', 'pv-notification') && bulkValidate({ eligible: item => useCookie('userData').value?.role == item.validation_level && item.status == 'waiting', url: item => `verbal-trial/change-status/${item.id}`, body: () => ({ status: 'validated' }) }),
-  ability.can('reject', 'pv-notification') && bulkReject({ eligible: item => useCookie('userData').value?.role == item.validation_level && item.status != 'rejected', url: item => `verbal-trial/change-status/${item.id}`, body: (item, comment) => ({ status: 'rejected', comment }) }),
+  ability.can('validate', 'pv-notification') && bulkValidate({ eligible: item => hasRole(item.validation_level) && item.status == 'waiting', url: item => `verbal-trial/change-status/${item.id}`, body: () => ({ status: 'validated' }) }),
+  ability.can('reject', 'pv-notification') && bulkReject({ eligible: item => hasRole(item.validation_level) && item.status != 'rejected', url: item => `verbal-trial/change-status/${item.id}`, body: (item, comment) => ({ status: 'rejected', comment }) }),
   ability.can('delete', 'pv-notification') && bulkDelete('verbal-trial', item => isAdmin() || item.status == 'rejected' || (item.status == 'waiting' && item.validation_level == 'credit_analyst')),
 ))
 
@@ -205,6 +205,10 @@ const bulkItemTitle = item => item.committee_id
           >
             Ajouter
           </VBtn>
+          <ExportButton
+            endpoint="/verbal-trial"
+            name="notifications-caf"
+          />
           <VBtn
             :loading="loadings[3]"
             :disabled="loadings[3]"
@@ -232,6 +236,8 @@ const bulkItemTitle = item => item.committee_id
         :items="pvList"
         :actions="bulkActions"
         :item-title="bulkItemTitle"
+        export-endpoint="/verbal-trial"
+        export-name="notifications-caf"
         @done="fetchPv"
       />
 
@@ -351,7 +357,7 @@ const bulkItemTitle = item => item.committee_id
                 />
               </IconBtn>
             </div>
-            <div v-if="($can('reject', 'pv-notification') || $can('validate', 'pv-notification')) && useCookie('userData').value['role'] == item.validation_level">
+            <div v-if="($can('reject', 'pv-notification') || $can('validate', 'pv-notification')) && hasRole(item.validation_level)">
               <VDivider />
               <span
                 :class="item.status == 'validated' ? 'full-width-icon' : ''

@@ -51,7 +51,8 @@ class ContractPolicy
 	 */
 	public function admin_validate(User $connectedUser, Contract $contract)
 	{
-		return ($connectedUser->profile === 'credit_admin' && $contract->creator_id == $connectedUser->id) ? Response::allow() : Response::deny("Seul l'admin crédit en charge du contrat peut l'envoyer en validation");
+		// En propre ou en intérim de l'admin crédit qui a créé le contrat
+		return ($connectedUser->hasProfile('credit_admin') && in_array($contract->creator_id, $connectedUser->actingIds())) ? Response::allow() : Response::deny("Seul l'admin crédit en charge du contrat peut l'envoyer en validation");
 	}
 
 	/**
@@ -59,7 +60,7 @@ class ContractPolicy
 	 */
 	public function head_validate(User $connectedUser, Contract $contract)
 	{
-		return $connectedUser->profile === 'head_credit' ? Response::allow() : Response::deny("Seul le head crédit peut effectuer la validation finale");
+		return $connectedUser->hasProfile('head_credit') ? Response::allow() : Response::deny("Seul le head crédit peut effectuer la validation finale");
 	}
 
 	public function delete(User $connectedUser, Contract $contract)

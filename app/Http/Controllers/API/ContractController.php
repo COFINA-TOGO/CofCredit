@@ -125,10 +125,10 @@ class ContractController extends Controller
 				$contractList->with($value);
 			}
 		}
-			if (($currentUser = $request->user())->profile == "caf") {
-				$contractList->whereHas('verbal_trial', function ($query) use ($currentUser) {
-					$query->where('caf_id', $currentUser->id);
-				});
+			// Le CAF voit ses dossiers, et ceux des collègues dont il assure l'intérim
+			$currentUser = $request->user();
+			if ($currentUser->hasProfile("caf")) {
+				$contractList->whereHas('verbal_trial', fn($query) => $currentUser->restrictToActingFiles($query, ["caf" => "caf_id"]));
 			}
 
 			if (isset($request["has_upload_completed"])) {
@@ -153,6 +153,24 @@ class ContractController extends Controller
 						});
 					});
 				}
+			}
+
+			// Export Excel de la liste filtrée (ou des lignes cochées)
+			if ($request->boolean("export")) {
+				$status = ["waiting" => "Documents à charger", "pending_admin_validation" => "À envoyer en validation", "pending_head_validation" => "En attente du head crédit", "validated" => "Validé", "rejected" => "Rejeté"];
+				return $this->exportList($request, $contractList->with(["verbal_trial", "creator", "guarantors"])->orderByDesc('updated_at'), [
+					"N° comité" => fn($contract) => $contract->verbal_trial?->committee_id,
+					"Client" => fn($contract) => $contract->verbal_trial?->entity_name,
+					"Type" => fn($contract) => $contract->type_fr,
+					"Montant" => fn($contract) => (float) $contract->verbal_trial?->amount,
+					"Statut" => fn($contract) => $status[$contract->status] ?? $contract->status,
+					"Contrat signé" => fn($contract) => $this->yesNo($contract->signed_contract_path),
+					"Billet à ordre signé" => fn($contract) => $this->yesNo($contract->signed_promissory_note_path),
+					"Cautions" => fn($contract) => $contract->guarantors->count(),
+					"Pièces manquantes" => fn($contract) => implode(" ; ", $contract->blockers),
+					"Admin crédit" => fn($contract) => $contract->creator?->full_name,
+					"Créé le" => fn($contract) => $contract->created_at?->format("d/m/Y H:i"),
+				], "contrats");
 			}
 
 			if ($this->isPaginationDisabled($request)) {
@@ -938,9 +956,9 @@ class ContractController extends Controller
 					return $this->responseError(["status" => "Le contrat n'est pas en attente de validation admin"], 400);
 				}
 
-				// Vérifier que tous les fichiers sont uploadés
-				if (!$contract->signed_contract_path || !$contract->signed_promissory_note_path) {
-					return $this->responseError(["files" => "Tous les fichiers doivent être uploadés avant validation"], 400);
+				// Documents signés du contrat et des cautions
+				if ($contract->blockers) {
+					return $this->responseError(["files" => ["Dossier incomplet : " . implode(" ; ", $contract->blockers)]], 400);
 				}
 
 				$requestData = $request->all();
@@ -1015,6 +1033,11 @@ class ContractController extends Controller
 
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
+				}
+
+				// Un document retiré depuis l'envoi bloque la validation
+				if ($requestData['action'] === 'validate' && $contract->blockers) {
+					return $this->responseError(["files" => ["Dossier incomplet : " . implode(" ; ", $contract->blockers)]], 400);
 				}
 
 				$newStatus = $requestData['action'] === 'validate' ? 'validated' : 'rejected';

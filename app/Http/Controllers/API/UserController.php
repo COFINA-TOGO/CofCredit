@@ -72,6 +72,17 @@ class UserController extends Controller
 				});
 			}
 
+			// Export Excel de la liste filtrée (ou des lignes cochées)
+			if ($request->boolean("export")) {
+				return $this->exportList($request, $list->orderBy('full_name'), [
+					"Nom" => fn($user) => $user->full_name,
+					"E-mail" => fn($user) => $user->email,
+					"Profil" => fn($user) => $user->profile_fr,
+					"Compte" => fn($user) => $user->activated ? "Activé" : "Désactivé",
+					"Créé le" => fn($user) => $user->created_at?->format("d/m/Y H:i"),
+				], "utilisateurs");
+			}
+
 			if ($this->isPaginationDisabled($request)) {
 				$list = $list->orderByDesc('created_at')->get();
 				$data = ["data" => $list, "total" => count($list)];

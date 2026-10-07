@@ -398,6 +398,14 @@ export default [
       },
     ],
   },
+  { heading: 'Mon compte' },
+  {
+    title: 'Délégations',
+    icon: { icon: 'tabler-user-share' },
+    to: { name: 'delegation' },
+    action: 'manage',
+    subject: 'settings-user',
+  },
   { heading: 'Aide' },
   {
     title: 'Manuel d\'utilisation',

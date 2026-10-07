@@ -43,7 +43,7 @@ class AuthController extends Controller
         }
         return $this->responseOk([
             "userToken" => $user->createToken($request->email)->plainTextToken,
-            "user" => $user
+            "user" => $this->sessionUser($user)
         ]);
     }
 
@@ -54,7 +54,21 @@ class AuthController extends Controller
      */
     public function show(Request $request)
     {
-        return $this->responseOk($request->user());
+        return $this->responseOk($this->sessionUser($request->user()));
+    }
+
+    /**
+     * L'utilisateur connecté tel que l'application l'utilise : droits effectifs (intérims compris),
+     * profils exercés, dossiers dont il répond et collègues remplacés
+     */
+    private function sessionUser(User $user): array
+    {
+        return array_merge($user->toArray(), [
+            "ability_rules" => $user->effective_ability_rules,
+            "acting_profiles" => $user->actingProfiles(),
+            "acting_ids" => $user->actingIds(),
+            "delegators" => $user->activeDelegators()->map(fn($delegator) => ["id" => $delegator->id, "full_name" => $delegator->full_name, "profile_fr" => $delegator->profile_fr])->values(),
+        ]);
     }
 
     /**

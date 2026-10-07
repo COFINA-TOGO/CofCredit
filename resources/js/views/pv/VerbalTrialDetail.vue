@@ -120,5 +120,10 @@ const conditionItems = computed(() => [
         </VListItem>
       </VList>
     </VCard>
+
+    <DossierTimeline
+      :id="pv.id"
+      subject="verbal-trial"
+    />
   </section>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 
 // Actions groupées sur les lignes cochées d'une liste.
 //
@@ -19,6 +19,10 @@ const props = defineProps({
   // Lignes de la page courante
   items: { type: Array, default: () => [] },
   actions: { type: Array, default: () => [] },
+
+  // Export Excel des lignes cochées : point d'entrée de la liste et début du nom du fichier
+  exportEndpoint: { type: String, default: null },
+  exportName: { type: String, default: 'export' },
 
   // Nom d'une ligne dans le récapitulatif
   itemTitle: { type: Function, default: item => item.label ?? item.full_name ?? item.name ?? `#${item.id}` },
@@ -86,6 +90,19 @@ const execute = async (action, comment = '') => {
     emit('done')
 }
 
+const exporting = ref(false)
+
+const exportSelection = async () => {
+  exporting.value = true
+  try {
+    await downloadListExport(props.exportEndpoint, props.exportName, props.modelValue)
+  } catch (error) {
+    showSnackbar('error', errorMessage(error, 'Export impossible'))
+  } finally {
+    exporting.value = false
+  }
+}
+
 const actionName = action => action.menu ? `${action.menu} ${action.label}` : action.label
 
 const confirm = () => {
@@ -142,6 +159,19 @@ const confirm = () => {
             />
           </VList>
         </VMenu>
+      </VBtn>
+
+      <VBtn
+        v-if="exportEndpoint"
+        size="small"
+        variant="tonal"
+        color="secondary"
+        prepend-icon="tabler-file-spreadsheet"
+        :loading="exporting"
+        :disabled="progress.running"
+        @click="exportSelection"
+      >
+        Exporter ({{ modelValue.length }})
       </VBtn>
 
       <VSpacer />

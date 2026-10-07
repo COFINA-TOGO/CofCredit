@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\Concerns\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Notification extends Model
 {
-	use HasFactory;
+	use HasFactory, RecordsActivity;
 
 	protected $fillable = [
 		'verbal_trial_id',
@@ -105,5 +106,26 @@ class Notification extends Model
 	public function getGuarantorsCountAttribute()
 	{
 		return count($this->guarantors);
+	}
+
+	/**
+	 * Changements notables de la notification pour son historique
+	 */
+	protected function activityEvents(): array
+	{
+		$events = [];
+		if ($this->wasChanged("head_credit_validation")) {
+			$events[] = [$this->head_credit_validation == "rejected" ? "rejected" : "validated", $this->head_credit_observation];
+		}
+		if ($this->wasChanged("sent") && $this->sent) {
+			$events[] = ["sent", null];
+		} else if ($this->wasChanged("status") && in_array($this->status, ["validated", "rejected"])) {
+			$events[] = [$this->status, $this->status_observation];
+		}
+		$events[] = $this->documentEvent("signed_notification_path", "Notification signée");
+		$events[] = $this->documentEvent("signed_contract_path", "Contrat signé");
+		$events[] = $this->documentEvent("signed_promissory_note_path", "Billet à ordre signé");
+
+		return array_values(array_filter($events));
 	}
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\Concerns\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Contract extends Model
 {
-	use HasFactory;
+	use HasFactory, RecordsActivity;
 
 	protected $fillable = [
 		"verbal_trial_id",
@@ -43,7 +44,7 @@ class Contract extends Model
 	];
 
 	// protected $with = ['company', 'individual_business'];
-	protected $appends = ['guarantors_count', 'observations', 'upload_completed', "type_fr"];
+	protected $appends = ['guarantors_count', 'observations', 'upload_completed', "type_fr", "blockers"];
 
 
 	public function toArray()
@@ -158,6 +159,26 @@ class Contract extends Model
 		return $observations;
 	}
 
+	/**
+	 * Ce qui empêche d'envoyer ou de valider le contrat : documents signés du contrat et de chaque caution
+	 * @return	string[]
+	 */
+	public function getBlockersAttribute()
+	{
+		$blockers = [];
+		if (!$this->signed_contract_path)
+			$blockers[] = "Contrat signé manquant";
+		if (!$this->signed_promissory_note_path)
+			$blockers[] = "Billet à ordre signé manquant";
+		foreach ($this->guarantors as $guarantor) {
+			if (!$guarantor->signed_contract_path)
+				$blockers[] = "Caution {$guarantor->full_name} : contrat signé manquant";
+			if (!$guarantor->signed_promissory_note_path)
+				$blockers[] = "Caution {$guarantor->full_name} : billet à ordre signé manquant";
+		}
+		return $blockers;
+	}
+
 	public function getUploadCompletedAttribute()
 	{
 		return empty($this->observations);
@@ -170,5 +191,25 @@ class Contract extends Model
 			"company" => "Société",
 			"individual_business" => "Entreprise individuelle",
 		][$this->type];
+	}
+
+	/**
+	 * Changements notables du contrat pour son historique
+	 */
+	protected function activityEvents(): array
+	{
+		$events = [];
+		if ($this->wasChanged("status")) {
+			$events[] = match ($this->status) {
+				"pending_head_validation" => ["submitted", $this->admin_validation_comment],
+				"validated" => ["validated", $this->head_validation_comment],
+				"rejected" => ["rejected", $this->head_validation_comment ?? $this->status_observation],
+				default => ["status_changed", $this->status_observation],
+			};
+		}
+		$events[] = $this->documentEvent("signed_contract_path", "Contrat signé");
+		$events[] = $this->documentEvent("signed_promissory_note_path", "Billet à ordre signé");
+
+		return array_values(array_filter($events));
 	}
 }

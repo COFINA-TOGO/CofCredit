@@ -391,6 +391,12 @@
     "bulkPut": true,
     "bulkReject": true,
     "bulkValidate": true,
-    "storedFileName": true
+    "storedFileName": true,
+    "actingIds": true,
+    "downloadListExport": true,
+    "hasRole": true,
+    "rememberListUrl": true,
+    "sessionUserData": true,
+    "useSessionRefresh": true
   }
 }

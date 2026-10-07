@@ -245,6 +245,10 @@ const bulkItemTitle = item => item.committee_id
         </div>
 
         <div class="d-flex gap-4">
+          <ExportButton
+            endpoint="/verbal-trial"
+            name="pv"
+          />
           <VBtn 
             :loading="loadings[3]" 
             :disabled="loadings[3]" 
@@ -269,6 +273,8 @@ const bulkItemTitle = item => item.committee_id
         :items="pvList"
         :actions="bulkActions"
         :item-title="bulkItemTitle"
+        export-endpoint="/verbal-trial"
+        export-name="pv"
         @done="fetchItemList([4])"
       />
 

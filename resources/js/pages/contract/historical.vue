@@ -289,6 +289,10 @@ const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Contrat ${item
             Ajouter
           </VBtn>
 
+          <ExportButton
+            endpoint="/contract"
+            name="contrats"
+          />
           <VBtn 
             :loading="loadings[3]" 
             :disabled="loadings[3]" 
@@ -312,6 +316,8 @@ const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Contrat ${item
         :items="contractList"
         :actions="bulkActions"
         :item-title="bulkItemTitle"
+        export-endpoint="/contract"
+        export-name="contrats"
         @done="fetchItemList([4])"
       />
 

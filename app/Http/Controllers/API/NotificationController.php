@@ -124,10 +124,10 @@ class NotificationController extends Controller
 				}
 			}
 
-			if (($currentUser = $request->user())->profile == "caf") {
-				$notificationList->whereHas('verbal_trial', function ($query) use ($currentUser) {
-					$query->where('caf_id', $currentUser->id);
-				});
+			// Le CAF voit ses dossiers, et ceux des collègues dont il assure l'intérim
+			$currentUser = $request->user();
+			if ($currentUser->hasProfile("caf")) {
+				$notificationList->whereHas('verbal_trial', fn($query) => $currentUser->restrictToActingFiles($query, ["caf" => "caf_id"]));
 			}
 
 			if (isset($request["signed_notification"])) {
@@ -163,6 +163,22 @@ class NotificationController extends Controller
 			}
 			// return $notificationList->toSql();
 
+
+			// Export Excel de la liste filtrée (ou des lignes cochées)
+			if ($request->boolean("export")) {
+				$validation = ["waiting" => "En attente", "validated" => "Validée", "rejected" => "Rejetée"];
+				return $this->exportList($request, $notificationList->with(["verbal_trial", "guarantors"])->orderByDesc('updated_at'), [
+					"N° comité" => fn($notification) => $notification->verbal_trial?->committee_id,
+					"Client" => fn($notification) => $notification->verbal_trial?->entity_name,
+					"Type" => fn($notification) => $notification->is_simple ? "Simplifiée" : "Notariée",
+					"Montant" => fn($notification) => (float) $notification->verbal_trial?->amount,
+					"Validation head crédit" => fn($notification) => $validation[$notification->head_credit_validation] ?? $notification->head_credit_validation,
+					"Dossier envoyé" => fn($notification) => $this->yesNo($notification->sent),
+					"Statut" => fn($notification) => $validation[$notification->status] ?? $notification->status,
+					"Pièces manquantes" => fn($notification) => implode(" ; ", $notification->observations),
+					"Créée le" => fn($notification) => $notification->created_at?->format("d/m/Y H:i"),
+				], "notifications");
+			}
 
 			if ($this->isPaginationDisabled($request)) {
 				$notificationList = $notificationList->orderByDesc('updated_at')->get();
@@ -669,6 +685,9 @@ class NotificationController extends Controller
 				]);
 				if ($validator->fails()) {
 					return $this->responseError($validator->errors(), 400);
+				} else if ($requestData["status"] == "validated" && (!$notification->sent || $notification->observations)) {
+					// Seul un dossier envoyé et complet se valide
+					return $this->responseError(["status" => [$notification->sent ? "Dossier incomplet : " . implode(" ; ", $notification->observations) : "Le dossier de la notification n'a pas encore été envoyé"]], 400);
 				} else {
 					$data = [
 						"status" => $requestData["status"],

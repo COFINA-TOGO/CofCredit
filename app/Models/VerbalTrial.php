@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\Concerns\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class VerbalTrial extends Model
 {
-	use HasFactory;
+	use HasFactory, RecordsActivity;
 
 	protected $table = "verbals_trials";
 
@@ -131,5 +132,26 @@ class VerbalTrial extends Model
 
 	public function getNextAttribute(){
 		return $this->contract??$this->notification;
+	}
+
+	/**
+	 * Changements notables du PV pour son historique
+	 */
+	protected function activityEvents(): array
+	{
+		if (!$this->wasChanged(["status", "validation_level"])) {
+			return [];
+		}
+		$from = $this->getOriginal("status");
+		$fromLevel = $this->getOriginal("validation_level");
+
+		return [match (true) {
+			$this->status == "validated" => ["validated", null],
+			$this->status == "rejected" => [$from == "validated" ? "sent_back" : "rejected", $this->comment],
+			// La notification vérifiée par l'analyste devient un PV soumis au head crédit
+			$fromLevel == "credit_analyst" && $this->validation_level == "head_credit" && $from == "waiting" => ["checked", null],
+			$from == "rejected" => ["resubmitted", null],
+			default => ["submitted", null],
+		}];
 	}
 }

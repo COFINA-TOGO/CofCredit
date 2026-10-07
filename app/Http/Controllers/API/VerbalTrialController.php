@@ -176,14 +176,28 @@ class VerbalTrialController extends Controller
 				}
 			}
 
-			if ($currentUser->profile == "credit_admin") {
-				$verbalTrialList->where('credit_admin_id', $currentUser->id);
-			}
-			if ($currentUser->profile == "credit_analyst") {
-				$verbalTrialList->where('credit_analyst_id', $currentUser->id);
-			}
-			if ($currentUser->profile == "caf") {
-				$verbalTrialList->where('caf_id', $currentUser->id);
+			// Chacun voit ses dossiers, et ceux des collègues dont il assure l'intérim
+			$currentUser->restrictToActingFiles($verbalTrialList, ["credit_admin" => "credit_admin_id", "credit_analyst" => "credit_analyst_id", "caf" => "caf_id"]);
+
+			// Export Excel de la liste filtrée (ou des lignes cochées)
+			if ($request->boolean("export")) {
+				$status = ["waiting" => "En attente", "validated" => "Validé", "rejected" => "Rejeté"];
+				$level = ["credit_analyst" => "Analyste crédit", "credit_admin" => "Admin crédit", "head_credit" => "Head crédit", "md" => "MD"];
+				return $this->exportList($request, $verbalTrialList->with(["type_of_credit", "caf", "credit_admin"])->orderByDesc('updated_at'), [
+					"N° comité" => fn($pv) => $pv->committee_id,
+					"Date du comité" => fn($pv) => $pv->committee_date,
+					"Client" => fn($pv) => $pv->entity_name,
+					"N° de compte" => fn($pv) => $pv->account_number,
+					"Type de crédit" => fn($pv) => $pv->type_of_credit?->full_name,
+					"Montant" => fn($pv) => (float) $pv->amount,
+					"Durée (mois)" => fn($pv) => $pv->duration,
+					"Statut" => fn($pv) => $status[$pv->status] ?? $pv->status,
+					"Niveau" => fn($pv) => $level[$pv->validation_level] ?? $pv->validation_level,
+					"Motif" => fn($pv) => $pv->comment,
+					"CAF" => fn($pv) => $pv->caf?->full_name,
+					"Admin crédit" => fn($pv) => $pv->credit_admin?->full_name,
+					"Créé le" => fn($pv) => $pv->created_at?->format("d/m/Y H:i"),
+				], "pv");
 			}
 
 			if ($this->isPaginationDisabled($request)) {

@@ -304,6 +304,10 @@ const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Notification $
             Ajouter
           </VBtn>
 
+          <ExportButton
+            endpoint="/notification"
+            name="notifications-simplifiees"
+          />
           <VBtn 
             :loading="loadings[3]" 
             :disabled="loadings[3]" 
@@ -327,6 +331,8 @@ const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Notification $
         :items="notificationList"
         :actions="bulkActions"
         :item-title="bulkItemTitle"
+        export-endpoint="/notification"
+        export-name="notifications-simplifiees"
         @done="fetchItemList([4])"
       />
 

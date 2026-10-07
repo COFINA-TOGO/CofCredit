@@ -16,6 +16,11 @@ class User extends Authenticatable
 	use HasApiTokens, HasFactory, Notifiable;
 
 	/**
+	 * Délégants actifs, mémorisés le temps de la requête
+	 */
+	protected $activeDelegatorsCache = null;
+
+	/**
 	 * The attributes that are mass assignable.
 	 *
 	 * @var array<int, string>
@@ -108,6 +113,32 @@ class User extends Authenticatable
 	}
 
 	public function getAbilityRulesAttribute()
+	{
+		return static::rulesFor($this->profile);
+	}
+
+	/**
+	 * Droits effectifs : ceux du profil, plus ceux des profils dont l'utilisateur assure l'intérim aujourd'hui
+	 */
+	public function getEffectiveAbilityRulesAttribute()
+	{
+		$rules = [];
+		foreach ($this->actingProfiles() as $profile) {
+			foreach (static::rulesFor($profile) as $rule) {
+				if (!in_array($rule, $rules)) {
+					$rules[] = $rule;
+				}
+			}
+		}
+		return $rules;
+	}
+
+	/**
+	 * Les droits d'un profil
+	 * @param	string	$profile	Le profil
+	 * @return	array
+	 */
+	public static function rulesFor(string $profile): array
 	{
 		return [
 			'admin' => [
@@ -624,6 +655,76 @@ class User extends Authenticatable
 					'action' => ['manage'],
 				],
 			],
-		][$this->profile];
+		][$profile] ?? [];
+	}
+
+	public function delegations_received(): HasMany
+	{
+		return $this->hasMany(Delegation::class, "delegate_id");
+	}
+
+	public function delegations_given(): HasMany
+	{
+		return $this->hasMany(Delegation::class, "delegator_id");
+	}
+
+	/**
+	 * Les utilisateurs dont l'utilisateur assure l'intérim aujourd'hui (mémorisé pour la requête)
+	 * @return	\Illuminate\Support\Collection<User>
+	 */
+	public function activeDelegators()
+	{
+		// Un compte non enregistré n'a pas de délégation
+		if (!$this->exists) {
+			return collect();
+		}
+		return $this->activeDelegatorsCache ??= static::query()
+			->whereIn("id", Delegation::active()->where("delegate_id", $this->id)->select("delegator_id"))
+			->where("activated", 1)
+			->get();
+	}
+
+	/**
+	 * Profils exercés aujourd'hui : le sien et ceux des délégants
+	 * @return	string[]
+	 */
+	public function actingProfiles(): array
+	{
+		return collect([$this->profile])->merge($this->activeDelegators()->pluck("profile"))->unique()->values()->all();
+	}
+
+	/**
+	 * Identités exercées aujourd'hui : la sienne et celles des délégants (dossiers dont l'utilisateur répond)
+	 * @return	int[]
+	 */
+	public function actingIds(): array
+	{
+		return collect([$this->id])->merge($this->activeDelegators()->pluck("id"))->unique()->values()->all();
+	}
+
+	/**
+	 * Vrai si l'utilisateur exerce ce profil, en propre ou par délégation
+	 */
+	public function hasProfile(string $profile): bool
+	{
+		return in_array($profile, $this->actingProfiles());
+	}
+
+	/**
+	 * Restreint une requête aux dossiers dont l'utilisateur répond, selon ses profils exercés :
+	 * $columns associe un profil à la colonne qui désigne son titulaire (ex. credit_admin => credit_admin_id).
+	 * Un profil exercé sans colonne voit tous les dossiers.
+	 */
+	public function restrictToActingFiles($query, array $columns)
+	{
+		$identities = collect([$this])->merge($this->activeDelegators());
+		if ($identities->contains(fn($user) => !isset($columns[$user->profile]))) {
+			return $query;
+		}
+		return $query->where(function ($query) use ($identities, $columns) {
+			foreach ($identities as $user) {
+				$query->orWhere($columns[$user->profile], $user->id);
+			}
+		});
 	}
 }

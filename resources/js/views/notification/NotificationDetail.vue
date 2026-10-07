@@ -161,5 +161,10 @@ const conditionItems = computed(() => [
         </VListItem>
       </VList>
     </VCard>
+
+    <DossierTimeline
+      :id="n.id"
+      subject="notification"
+    />
   </section>
 </template>

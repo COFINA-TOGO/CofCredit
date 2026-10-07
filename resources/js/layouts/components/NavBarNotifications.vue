@@ -1,90 +1,146 @@
+<!-- Alertes de l'utilisateur connecté (les mêmes messages que les e-mails), relevées chaque minute -->
 <script setup>
-import avatar3 from '@images/avatars/avatar-3.png'
-import avatar4 from '@images/avatars/avatar-4.png'
-import avatar5 from '@images/avatars/avatar-5.png'
-import paypal from '@images/svg/paypal.svg'
+const router = useRouter()
+const alerts = ref([])
+const unread = ref(0)
+let timer = null
 
-const notifications = ref([
-  {
-    id: 1,
-    img: avatar4,
-    title: 'Congratulation Flora! 🎉',
-    subtitle: 'Won the monthly best seller badge',
-    time: 'Today',
-    isSeen: true,
-  },
-  {
-    id: 2,
-    text: 'Tom Holland',
-    title: 'New user registered.',
-    subtitle: '5 hours ago',
-    time: 'Yesterday',
-    isSeen: false,
-  },
-  {
-    id: 3,
-    img: avatar5,
-    title: 'New message received 👋🏻',
-    subtitle: 'You have 10 unread messages',
-    time: '11 Aug',
-    isSeen: true,
-  },
-  {
-    id: 4,
-    img: paypal,
-    title: 'PayPal',
-    subtitle: 'Received Payment',
-    time: '25 May',
-    isSeen: false,
-    color: 'error',
-  },
-  {
-    id: 5,
-    img: avatar3,
-    title: 'Received Order 📦',
-    subtitle: 'New order received from john',
-    time: '19 Mar',
-    isSeen: true,
-  },
-])
-
-const removeNotification = notificationId => {
-  notifications.value.forEach((item, index) => {
-    if (notificationId === item.id)
-      notifications.value.splice(index, 1)
-  })
+const fetchAlerts = async () => {
+  const res = await $api('/alert').catch(() => null)
+  if (res?.status == 200) {
+    alerts.value = res.data.alerts
+    unread.value = res.data.unread
+  }
 }
 
-const markRead = notificationId => {
-  notifications.value.forEach(item => {
-    notificationId.forEach(id => {
-      if (id === item.id)
-        item.isSeen = true
-    })
-  })
+const open = async alert => {
+  if (!alert.read_at) {
+    alert.read_at = new Date().toISOString()
+    unread.value = Math.max(0, unread.value - 1)
+    $api(`/alert/read/${alert.id}`, { method: 'PUT' })
+  }
+  if (alert.link)
+    router.push(alert.link)
 }
 
-const markUnRead = notificationId => {
-  notifications.value.forEach(item => {
-    notificationId.forEach(id => {
-      if (id === item.id)
-        item.isSeen = false
-    })
-  })
+const readAll = async () => {
+  await $api('/alert/read-all', { method: 'PUT' })
+  await fetchAlerts()
 }
 
-const handleNotificationClick = notification => {
-  if (!notification.isSeen)
-    markRead([notification.id])
-}
+onMounted(() => {
+  fetchAlerts()
+  timer = setInterval(fetchAlerts, 60000)
+})
+onBeforeUnmount(() => clearInterval(timer))
 </script>
 
 <template>
-  <Notifications
-    :notifications="notifications"
-    @remove="removeNotification"
-    @read="markRead"
-    @unread="markUnRead"
-    @click:notification="handleNotificationClick"
-  />
+  <IconBtn
+    id="notification-btn"
+    aria-label="Alertes"
+  >
+    <VBadge
+      :model-value="unread > 0"
+      color="error"
+      :content="unread > 99 ? '99+' : unread"
+      offset-x="2"
+      offset-y="2"
+    >
+      <VIcon
+        size="26"
+        icon="tabler-bell"
+      />
+    </VBadge>
+
+    <VMenu
+      activator="parent"
+      width="380px"
+      location="bottom end"
+      offset="14px"
+      :close-on-content-click="false"
+    >
+      <VCard class="d-flex flex-column">
+        <VCardItem class="py-3">
+          <VCardTitle class="text-lg">
+            Alertes
+          </VCardTitle>
+          <template #append>
+            <VBtn
+              v-if="unread"
+              size="small"
+              variant="text"
+              @click="readAll"
+            >
+              Tout marquer comme lu
+            </VBtn>
+          </template>
+        </VCardItem>
+
+        <VDivider />
+
+        <div class="alerts-list">
+          <VList
+            v-if="alerts.length"
+            class="py-0"
+          >
+            <template
+              v-for="(alert, index) in alerts"
+              :key="alert.id"
+            >
+              <VDivider v-if="index > 0" />
+              <VListItem
+                lines="three"
+                :class="{ 'alert-unread': !alert.read_at }"
+                @click="open(alert)"
+              >
+                <template #prepend>
+                  <VAvatar
+                    size="36"
+                    variant="tonal"
+                    :color="alert.read_at ? 'secondary' : 'primary'"
+                  >
+                    <VIcon
+                      size="20"
+                      icon="tabler-bell-ringing"
+                    />
+                  </VAvatar>
+                </template>
+                <VListItemTitle class="font-weight-medium text-wrap">
+                  {{ alert.title }}
+                </VListItemTitle>
+                <VListItemSubtitle>{{ alert.body }}</VListItemSubtitle>
+                <span class="text-xs text-disabled">{{ alert.created_at_human }}</span>
+              </VListItem>
+            </template>
+          </VList>
+
+          <div
+            v-else
+            class="text-center text-medium-emphasis pa-6"
+          >
+            <VIcon
+              icon="tabler-bell-off"
+              size="32"
+              class="mb-2"
+            />
+            <p class="mb-0">
+              Aucune alerte
+            </p>
+          </div>
+        </div>
+      </VCard>
+    </VMenu>
+  </IconBtn>
 </template>
+
+<style scoped>
+.alerts-list {
+  max-block-size: 26rem;
+  overflow-y: auto;
+}
+
+.alert-unread {
+  background: rgba(var(--v-theme-primary), 0.05);
+}
+</style>

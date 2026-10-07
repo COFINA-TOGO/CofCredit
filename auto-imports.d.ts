@@ -11,6 +11,7 @@ declare global {
   const COOKIE_MAX_AGE_1_YEAR: typeof import('./resources/js/utils/constants.js')['COOKIE_MAX_AGE_1_YEAR']
   const EffectScope: typeof import('vue')['EffectScope']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
+  const actingIds: typeof import('./resources/js/utils/permissions.js')['actingIds']
   const alphaDashValidator: typeof import('./resources/js/@core/utils/validators.js')['alphaDashValidator']
   const alphaValidator: typeof import('./resources/js/@core/utils/validators.js')['alphaValidator']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
@@ -57,6 +58,7 @@ declare global {
   const definePage: typeof import('unplugin-vue-router/runtime')['_definePage']
   const defineStore: typeof import('pinia')['defineStore']
   const downloadAuthenticatedFile: typeof import('./resources/js/utils/fileDownload.js')['downloadAuthenticatedFile']
+  const downloadListExport: typeof import('./resources/js/utils/listExport.js')['downloadListExport']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectScope: typeof import('vue')['effectScope']
   const emailValidator: typeof import('./resources/js/@core/utils/validators.js')['emailValidator']
@@ -70,6 +72,7 @@ declare global {
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const h: typeof import('vue')['h']
   const handleAuthErrors: typeof import('./resources/js/utils/authErrors.js')['handleAuthErrors']
+  const hasRole: typeof import('./resources/js/utils/permissions.js')['hasRole']
   const identityDocumentLabels: typeof import('./resources/js/utils/labels.js')['identityDocumentLabels']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']
@@ -144,11 +147,13 @@ declare global {
   const registerPlugins: typeof import('./resources/js/@core/utils/plugins.js')['registerPlugins']
   const reimbursementSourceLabels: typeof import('./resources/js/utils/labels.js')['reimbursementSourceLabels']
   const releaseTypeLabels: typeof import('./resources/js/utils/labels.js')['releaseTypeLabels']
+  const rememberListUrl: typeof import('./resources/js/utils/listExport.js')['rememberListUrl']
   const requiredValidator: typeof import('./resources/js/@core/utils/validators.js')['requiredValidator']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
   const resolveVuetifyTheme: typeof import('./resources/js/@core/utils/vuetify.js')['resolveVuetifyTheme']
+  const sessionUserData: typeof import('./resources/js/composables/useSessionRefresh.js')['sessionUserData']
   const setActivePinia: typeof import('pinia')['setActivePinia']
   const setMapStoreSuffix: typeof import('pinia')['setMapStoreSuffix']
   const shallowReactive: typeof import('vue')['shallowReactive']
@@ -319,6 +324,7 @@ declare global {
   const useScriptTag: typeof import('@vueuse/core')['useScriptTag']
   const useScroll: typeof import('@vueuse/core')['useScroll']
   const useScrollLock: typeof import('@vueuse/core')['useScrollLock']
+  const useSessionRefresh: typeof import('./resources/js/composables/useSessionRefresh.js')['useSessionRefresh']
   const useSessionStorage: typeof import('@vueuse/core')['useSessionStorage']
   const useShare: typeof import('@vueuse/core')['useShare']
   const useSkins: typeof import('./resources/js/@core/composable/useSkins.js')['useSkins']
@@ -403,6 +409,7 @@ declare module 'vue' {
     readonly COOKIE_MAX_AGE_1_YEAR: UnwrapRef<typeof import('./resources/js/utils/constants.js')['COOKIE_MAX_AGE_1_YEAR']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
+    readonly actingIds: UnwrapRef<typeof import('./resources/js/utils/permissions.js')['actingIds']>
     readonly alphaDashValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['alphaDashValidator']>
     readonly alphaValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['alphaValidator']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
@@ -449,6 +456,7 @@ declare module 'vue' {
     readonly definePage: UnwrapRef<typeof import('unplugin-vue-router/runtime')['_definePage']>
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
     readonly downloadAuthenticatedFile: UnwrapRef<typeof import('./resources/js/utils/fileDownload.js')['downloadAuthenticatedFile']>
+    readonly downloadListExport: UnwrapRef<typeof import('./resources/js/utils/listExport.js')['downloadListExport']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly emailValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['emailValidator']>
@@ -463,6 +471,7 @@ declare module 'vue' {
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly handleAuthErrors: UnwrapRef<typeof import('./resources/js/utils/authErrors.js')['handleAuthErrors']>
+    readonly hasRole: UnwrapRef<typeof import('./resources/js/utils/permissions.js')['hasRole']>
     readonly identityDocumentLabels: UnwrapRef<typeof import('./resources/js/utils/labels.js')['identityDocumentLabels']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
@@ -536,11 +545,13 @@ declare module 'vue' {
     readonly registerPlugins: UnwrapRef<typeof import('./resources/js/@core/utils/plugins.js')['registerPlugins']>
     readonly reimbursementSourceLabels: UnwrapRef<typeof import('./resources/js/utils/labels.js')['reimbursementSourceLabels']>
     readonly releaseTypeLabels: UnwrapRef<typeof import('./resources/js/utils/labels.js')['releaseTypeLabels']>
+    readonly rememberListUrl: UnwrapRef<typeof import('./resources/js/utils/listExport.js')['rememberListUrl']>
     readonly requiredValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['requiredValidator']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
     readonly resolveVuetifyTheme: UnwrapRef<typeof import('./resources/js/@core/utils/vuetify.js')['resolveVuetifyTheme']>
+    readonly sessionUserData: UnwrapRef<typeof import('./resources/js/composables/useSessionRefresh.js')['sessionUserData']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
     readonly setMapStoreSuffix: UnwrapRef<typeof import('pinia')['setMapStoreSuffix']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
@@ -711,6 +722,7 @@ declare module 'vue' {
     readonly useScriptTag: UnwrapRef<typeof import('@vueuse/core')['useScriptTag']>
     readonly useScroll: UnwrapRef<typeof import('@vueuse/core')['useScroll']>
     readonly useScrollLock: UnwrapRef<typeof import('@vueuse/core')['useScrollLock']>
+    readonly useSessionRefresh: UnwrapRef<typeof import('./resources/js/composables/useSessionRefresh.js')['useSessionRefresh']>
     readonly useSessionStorage: UnwrapRef<typeof import('@vueuse/core')['useSessionStorage']>
     readonly useShare: UnwrapRef<typeof import('@vueuse/core')['useShare']>
     readonly useSkins: UnwrapRef<typeof import('./resources/js/@core/composable/useSkins.js')['useSkins']>

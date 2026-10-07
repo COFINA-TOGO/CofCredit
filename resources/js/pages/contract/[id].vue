@@ -214,6 +214,11 @@ const conditionItems = [
         </VCard>
       </VCol>
     </VRow>
+
+    <DossierTimeline
+      :id="contract.id"
+      subject="contract"
+    />
   </section>
 </template>
 

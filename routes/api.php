@@ -16,6 +16,10 @@ use App\Http\Controllers\API\TypeOfApplicantController;
 use App\Http\Controllers\API\TypeOfCreditController;
 use App\Http\Controllers\API\TypeOfGuaranteeController;
 use App\Http\Controllers\API\VerbalTrialController;
+use App\Http\Controllers\API\ActivityController;
+use App\Http\Controllers\API\AlertController;
+use App\Http\Controllers\API\DelegationController;
+use App\Http\Controllers\API\SearchController;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
@@ -70,6 +74,19 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::post("/", [TypeOfGuaranteeController::class, "store"])->name("store");
 		Route::put("/{id}", [TypeOfGuaranteeController::class, "update"])->name("update");
 		Route::delete("/{id}", [TypeOfGuaranteeController::class, "destroy"])->name("destroy");
+	});
+	Route::get("/activity", [ActivityController::class, "index"])->name("activity.index");
+	Route::get("/search", [SearchController::class, "index"])->name("search.index");
+	Route::prefix("alert")->name("alert.")->group(function () {
+		Route::get("/", [AlertController::class, "index"])->name("index");
+		Route::put("/read-all", [AlertController::class, "read_all"])->name("read_all");
+		Route::put("/read/{id}", [AlertController::class, "read"])->name("read");
+	});
+	Route::prefix("delegation")->name("delegation.")->group(function () {
+		Route::get("/", [DelegationController::class, "index"])->name("index");
+		Route::get("/candidates", [DelegationController::class, "candidates"])->name("candidates");
+		Route::post("/", [DelegationController::class, "store"])->name("store");
+		Route::delete("/{id}", [DelegationController::class, "destroy"])->name("destroy");
 	});
 	Route::prefix("verbal-trial")->name("verbal-trial.")->group(function () {
 		Route::get("/", [VerbalTrialController::class, "index"])->name("index");

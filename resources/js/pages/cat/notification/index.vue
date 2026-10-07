@@ -367,6 +367,10 @@ const bulkItemTitle = item => item.notification?.verbal_trial?.committee_id ?? `
             Ajouter
           </VBtn>
 
+          <ExportButton
+            endpoint="/cat"
+            name="cat"
+          />
           <VBtn 
             :loading="loadings[3]" 
             :disabled="loadings[3]" 
@@ -391,6 +395,8 @@ const bulkItemTitle = item => item.notification?.verbal_trial?.committee_id ?? `
         :items="catList"
         :actions="bulkActions"
         :item-title="bulkItemTitle"
+        export-endpoint="/cat"
+        export-name="cat"
         @done="fetchItemList([4])"
       />
 

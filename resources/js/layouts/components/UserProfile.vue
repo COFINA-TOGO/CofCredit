@@ -38,11 +38,17 @@ const userProfileList = [
       params: { tab: 'account' },
     },
   },
+  {
+    type: 'navItem',
+    icon: 'tabler-user-share',
+    title: 'Mes délégations',
+    to: { name: 'delegation' },
+  },
   { type: 'divider' },
   {
     type: 'navItem',
     icon: 'tabler-logout',
-    title: 'Logout',
+    title: 'Déconnexion',
     onClick: logout,
   },
 ]
@@ -112,6 +118,23 @@ const userProfileList = [
               {{ userData.fullName || userData.username }}
             </VListItemTitle>
             <VListItemSubtitle>{{ userData.role_fr }}</VListItemSubtitle>
+          </VListItem>
+
+          <!-- Intérim en cours -->
+          <VListItem
+            v-for="delegator in userData.delegators ?? []"
+            :key="delegator.id"
+            :to="{ name: 'delegation' }"
+            density="compact"
+          >
+            <VChip
+              size="small"
+              color="info"
+              label
+              prepend-icon="tabler-user-share"
+            >
+              Intérim de {{ delegator.full_name }}
+            </VChip>
           </VListItem>
 
           <PerfectScrollbar :options="{ wheelPropagation: false }">

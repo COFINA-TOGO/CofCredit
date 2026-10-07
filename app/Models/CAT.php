@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\Concerns\RecordsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CAT extends Model
 {
-    use HasFactory;
+    use HasFactory, RecordsActivity;
 
     protected $table = "c_a_t_s";
     protected $fillable = [
@@ -117,5 +118,21 @@ class CAT extends Model
             return $this->validation_comment;
         }
         return $this->validation_comment;
+    }
+
+    /**
+     * Changements notables du CAT pour son historique
+     */
+    protected function activityEvents(): array
+    {
+        $events = [];
+        if ($this->wasChanged("validation_status") && $this->validation_status != "waiting") {
+            $events[] = [$this->validation_status, $this->validation_comment];
+        }
+        if ($this->wasChanged("unblock_status") && $this->unblock_status != "waiting") {
+            $events[] = [$this->unblock_status == "validated" ? "unblocked" : "unblock_rejected", $this->unblock_comment];
+        }
+
+        return $events;
     }
 }

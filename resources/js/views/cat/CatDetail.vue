@@ -88,5 +88,10 @@ const items = computed(() => [
         <InfoGrid :items="items" />
       </VCardText>
     </VCard>
+
+    <DossierTimeline
+      :id="cat.id"
+      subject="cat"
+    />
   </section>
 </template>

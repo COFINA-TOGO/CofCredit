@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\ControllerHelperTrait;
+use App\Exports\ListExport;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Jobs\SendEmail;
+use App\Models\Alert;
+use App\Models\Delegation;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use App\Http\Traits\CustomResponseTrait;
@@ -162,12 +168,64 @@ class Controller extends BaseController
 			"linkLabel" => $linkLabel ?? "Accéder à l'application",
 		])->render();
 
-		foreach (Arr::flatten([$receivers]) as $receiver) {
+		$receivers = Arr::flatten([$receivers]);
+		$sent = [];
+		foreach ($receivers as $receiver) {
 			$email = $receiver instanceof User ? $receiver->email : $receiver;
-			if ($email) {
+			if ($email && !in_array($email, $sent)) {
+				$sent[] = $email;
 				// Envoyé par ce même processus une fois la réponse partie : ni attente pour l'utilisateur, ni worker à lancer
 				SendEmail::dispatchAfterResponse($email, $subject, $content);
 			}
 		}
+
+		// Même message dans l'application (la cloche), pour les comptes enregistrés
+		$users = collect($receivers)->filter(fn($receiver) => $receiver instanceof User && $receiver->exists)->unique("id");
+		$body = implode(" ", $paragraphs);
+		foreach ($users as $user) {
+			Alert::create(["user_id" => $user->id, "title" => $subject, "body" => $body, "link" => $linkPath]);
+		}
+
+		// L'intérimaire reçoit aussi les messages du titulaire
+		if ($users->isNotEmpty()) {
+			$delegations = Delegation::active()->whereIn("delegator_id", $users->pluck("id"))->with(["delegate", "delegator"])->get();
+			foreach ($delegations as $delegation) {
+				$delegate = $delegation->delegate;
+				if (!$delegate?->activated || $users->contains("id", $delegate->id)) {
+					continue;
+				}
+				$title = "$subject (intérim de {$delegation->delegator->full_name})";
+				if (!in_array($delegate->email, $sent)) {
+					$sent[] = $delegate->email;
+					SendEmail::dispatchAfterResponse($delegate->email, $title, $content);
+				}
+				Alert::create(["user_id" => $delegate->id, "title" => $title, "body" => $body, "link" => $linkPath]);
+			}
+		}
+	}
+
+	/**
+	 * Export Excel d'une liste avec ses filtres, ou des seules lignes cochées (ids[])
+	 * @param	Request		$request	La requête (ids[] facultatif)
+	 * @param	Builder		$query		La requête de la liste, filtres et périmètre appliqués
+	 * @param	array		$columns	[en-tête => fn($row) => valeur]
+	 * @param	string		$name		Le début du nom du fichier
+	 */
+	public function exportList(Request $request, $query, array $columns, string $name)
+	{
+		if ($request->filled("ids")) {
+			$query->whereIn($query->getModel()->getTable() . ".id", Arr::wrap($request->ids));
+		}
+		$date = Carbon::now()->format("d-m-Y_H-i");
+
+		return Excel::download(new ListExport($query, $columns), "$name-$date.xlsx");
+	}
+
+	/**
+	 * Oui / Non pour l'export
+	 */
+	public function yesNo($value): string
+	{
+		return $value ? "Oui" : "Non";
 	}
 }

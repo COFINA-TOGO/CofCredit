@@ -1,6 +1,7 @@
 import { createFetch } from '@vueuse/core'
 import { destr } from 'destr'
 import { handleAuthErrors } from '@/utils/authErrors'
+import { rememberListUrl } from '@/utils/listExport'
 
 const parseData = data => {
   try {
@@ -25,7 +26,11 @@ const useApi = createFetch({
 
     // En cas d'erreur (4xx/5xx), data contient quand même le corps { status, errors }
     updateDataOnError: true,
-    async beforeFetch({ options }) {
+    async beforeFetch({ url, options }) {
+      // Les exports Excel reprennent la dernière requête de chaque liste
+      if ((options.method ?? 'GET') === 'GET')
+        rememberListUrl(url)
+
       const userToken = useCookie('userToken').value
       if (userToken) {
         options.headers = {

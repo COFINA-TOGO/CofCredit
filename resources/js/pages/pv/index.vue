@@ -305,6 +305,17 @@ const ACTIONS = {
 
 const currentAction = computed(() => ACTIONS[dialog.action] ?? {})
 
+// Points d'attention avant de valider (non bloquants)
+const dialogWarnings = computed(() => {
+  if (dialog.action !== 'validate' || !dialog.item)
+    return []
+
+  return [
+    !dialog.item.guarantees?.length && 'Aucune garantie n\'est enregistrée sur ce PV.',
+    !Number(dialog.item.amount) && 'Le montant du crédit est nul.',
+  ].filter(Boolean)
+})
+
 const openAction = (action, item) => {
   Object.assign(dialog, { visible: true, action, item, comment: '', loading: false })
 }
@@ -453,6 +464,10 @@ const bulkItemTitle = item => item.committee_id
         </div>
 
         <div class="d-flex gap-4">
+          <ExportButton
+            endpoint="/verbal-trial"
+            name="pv"
+          />
           <VBtn 
             :loading="loadings[3]" 
             :disabled="loadings[3]" 
@@ -477,6 +492,8 @@ const bulkItemTitle = item => item.committee_id
         :items="pvList"
         :actions="bulkActions"
         :item-title="bulkItemTitle"
+        export-endpoint="/verbal-trial"
+        export-name="pv"
         @done="fetchItemList([4])"
       />
 
@@ -662,6 +679,17 @@ const bulkItemTitle = item => item.committee_id
           <p class="mb-0">
             {{ currentAction.text }}
           </p>
+
+          <VAlert
+            v-for="warning in dialogWarnings"
+            :key="warning"
+            type="warning"
+            variant="tonal"
+            density="compact"
+            class="mt-3"
+          >
+            {{ warning }}
+          </VAlert>
 
           <AppTextarea
             v-if="currentAction.comment"

@@ -132,6 +132,19 @@ class CATController extends Controller
 				}
 			}
 
+			// Export Excel de la liste filtrée (ou des lignes cochées)
+			if ($request->boolean("export")) {
+				$status = ["waiting" => "En attente", "validated" => "Validé", "rejected" => "Rejeté"];
+				return $this->exportList($request, $catList->with(["contract.verbal_trial", "notification.verbal_trial"])->orderByDesc('created_at'), [
+					"N° comité" => fn($cat) => ($cat->contract ?? $cat->notification)?->verbal_trial?->committee_id,
+					"Client" => fn($cat) => ($cat->contract ?? $cat->notification)?->verbal_trial?->entity_name,
+					"N° de crédit" => fn($cat) => $cat->credit_number,
+					"Validation" => fn($cat) => $status[$cat->validation_status] ?? $cat->validation_status,
+					"Déblocage" => fn($cat) => $status[$cat->unblock_status] ?? $cat->unblock_status,
+					"Créé le" => fn($cat) => $cat->created_at?->format("d/m/Y H:i"),
+				], "cat");
+			}
+
 			if ($this->isPaginationDisabled($request)) {
 				$catList = $catList->orderByDesc('created_at')->get();
 				$data = ["data" => $catList, "total" => count($catList)];

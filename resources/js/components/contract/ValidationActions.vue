@@ -25,8 +25,8 @@ const router = useRouter()
 const canAdminValidate = computed(() => {
   return (
     props.contract.status === 'pending_admin_validation' &&
-    props.userRole === 'credit_admin' &&
-    props.contract.creator_id === props.userId
+    hasRole('credit_admin') &&
+    actingIds().includes(props.contract.creator_id)
   )
 })
 
@@ -36,7 +36,7 @@ const canAdminValidate = computed(() => {
 const canHeadValidate = computed(() => {
   return (
     props.contract.status === 'pending_head_validation' &&
-    props.userRole === 'head_credit'
+    hasRole('head_credit')
   )
 })
 
@@ -46,7 +46,7 @@ const canHeadValidate = computed(() => {
 const canCreateCAT = computed(() => {
   return (
     props.contract.status === 'validated' &&
-    props.userRole === 'credit_admin' &&
+    hasRole('credit_admin') &&
     !props.contract.c_a_t
   )
 })

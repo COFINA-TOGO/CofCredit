@@ -45,6 +45,9 @@ const actionFunction = ref()
 const actionComment = ref('')
 const commentPresence = ref(false)
 
+// Documents manquants qui bloquent l'envoi ou la validation du contrat choisi
+const actionBlockers = ref([])
+
 // Headers de la table
 const headers = [
   {
@@ -237,8 +240,11 @@ const handleDelete = async contractId => {
 /**
  * Ouvre le dialog de validation admin
  */
+const blockersOf = contractId => contractList.value.find(contract => contract.id === contractId)?.blockers ?? []
+
 const openAdminValidateDialog = contractId => {
   selectedItemId.value = contractId
+  actionBlockers.value = blockersOf(contractId)
   actionTitle.value = "Envoyer en validation"
   actionText.value = 
     "Envoyer ce contrat au Head Crédit pour validation ?"
@@ -259,6 +265,7 @@ const openAdminValidateDialog = contractId => {
  */
 const openHeadValidateDialog = contractId => {
   selectedItemId.value = contractId
+  actionBlockers.value = blockersOf(contractId)
   actionTitle.value = 'Valider le contrat'
   actionText.value = 'Êtes-vous sûr de vouloir valider ce contrat ?'
   actionButtonText.value = 'Valider'
@@ -278,6 +285,7 @@ const openHeadValidateDialog = contractId => {
  */
 const openHeadRejectDialog = contractId => {
   selectedItemId.value = contractId
+  actionBlockers.value = []
   actionTitle.value = 'Rejeter le contrat'
   actionText.value = 
     "Êtes-vous sûr de vouloir rejeter ce contrat ? L'admin crédit devra re-uploader les documents."
@@ -346,9 +354,9 @@ const selected = ref([])
 const ability = useAbility()
 
 const bulkActions = computed(() => bulkActionList(
-  userData.value.role === 'credit_admin' && bulkPut({ label: 'Envoyer en validation', icon: 'tabler-send', color: 'primary', eligible: item => item.status === 'pending_admin_validation' && userData.value.role === 'credit_admin' && item.creator_id === userData.value.id, url: item => `contract/admin-validate/${item.id}`, body: () => ({ comment: '' }) }),
-  userData.value.role === 'head_credit' && bulkValidate({ eligible: item => item.status === 'pending_head_validation', url: item => `contract/head-validate/${item.id}`, body: () => ({ action: 'validate', comment: '' }) }),
-  userData.value.role === 'head_credit' && bulkReject({ eligible: item => item.status === 'pending_head_validation', url: item => `contract/head-validate/${item.id}`, body: (item, comment) => ({ action: 'reject', comment }) }),
+  hasRole('credit_admin') && bulkPut({ label: 'Envoyer en validation', icon: 'tabler-send', color: 'primary', eligible: item => item.status === 'pending_admin_validation' && actingIds().includes(item.creator_id) && !item.blockers?.length, url: item => `contract/admin-validate/${item.id}`, body: () => ({ comment: '' }) }),
+  hasRole('head_credit') && bulkValidate({ eligible: item => item.status === 'pending_head_validation' && !item.blockers?.length, url: item => `contract/head-validate/${item.id}`, body: () => ({ action: 'validate', comment: '' }) }),
+  hasRole('head_credit') && bulkReject({ eligible: item => item.status === 'pending_head_validation', url: item => `contract/head-validate/${item.id}`, body: (item, comment) => ({ action: 'reject', comment }) }),
   ability.can('download', 'basic-contract') && bulkDownload('contrat non signé', item => ({ url: `/api/contract/download/${item.id}`, name: `Contrat-${item.verbal_trial.committee_id}.docx` })),
   ability.can('download', 'basic-contract') && bulkDownload('contrat signé', item => item.signed_contract_path && { url: item.signed_contract_path, name: storedFileName(item.signed_contract_path, 'Contrat') }),
   ability.can('download', 'basic-contract') && bulkDownload('billet à ordre non signé', item => ({ url: `/api/contract/promissory-note/download/${item.id}`, name: `Billet-à-ordre-${item.verbal_trial.committee_id}.docx` })),
@@ -413,6 +421,10 @@ const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Contrat ${item
             Nouveau
           </VBtn>
 
+          <ExportButton
+            endpoint="/contract"
+            name="contrats"
+          />
           <VBtn 
             :loading="loadings[3]" 
             :disabled="loadings[3]" 
@@ -449,6 +461,8 @@ const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Contrat ${item
         :items="contractList"
         :actions="bulkActions"
         :item-title="bulkItemTitle"
+        export-endpoint="/contract"
+        export-name="contrats"
         @done="fetchItemList([4])"
       />
 
@@ -622,6 +636,23 @@ const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Contrat ${item
         <VCardText>
           {{ actionText }}
 
+          <VAlert
+            v-if="actionBlockers.length"
+            type="warning"
+            variant="tonal"
+            class="mt-3"
+            title="Dossier incomplet"
+          >
+            <ul class="ps-4 mb-0">
+              <li
+                v-for="blocker in actionBlockers"
+                :key="blocker"
+              >
+                {{ blocker }}
+              </li>
+            </ul>
+          </VAlert>
+
           <AppTextarea
             v-if="commentPresence"
             v-model="actionComment"
@@ -639,7 +670,8 @@ const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Contrat ${item
           >
             Retour
           </VBtn>
-          <VBtn 
+          <VBtn
+            :disabled="actionBlockers.length > 0"
             @click="
               actionFunction(selectedItemId); 
               isActionDialogVisible = false
