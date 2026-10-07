@@ -141,6 +141,9 @@ function generer(d) {
   fermer()
 
   const accueil = ACCUEIL[slug] ?? []
+  // Profils qui ont des actions groupées sur au moins une liste
+  const agitSurLesListes = admin || ['pv', 'pv-notification', 'basic-contract', 'notification', 'cat', 'basic-cat', 'user'].some(sujet =>
+    ['validate', 'reject', 'delete', 'download', 'update', 'send', 'unblock', 'analyst_delete'].some(action => peut(action, sujet)))
   chapitre('prise-en-main', 'Prise en main', 'Cofina Crédit Digital s\'ouvre dans un navigateur. Chaque profil ne voit que les écrans et les boutons que ses droits lui ouvrent.', `  <h3 id="connexion">Connexion</h3>
   <ol>
     <li>Saisissez votre adresse e-mail et votre mot de passe.</li>
@@ -162,10 +165,35 @@ ${fig('01-menu', 'Menu du profil', '<b>Le menu</b>, groupes repliés.')}  </div>
   <ul>
     <li>Sous la barre du haut, le <b>fil d'Ariane</b> rappelle où vous êtes (par exemple <b>Contrat › Basique › Sans CAT</b>) ; un clic sur une étape y revient.</li>
     <li>Chaque page commence par un <b>en-tête</b> : son titre, une phrase qui dit à quoi elle sert, la flèche de retour à la liste et, à droite, les actions principales (<span class="btn">Enregistrer</span>, <span class="btn">Consulter</span>…).</li>
-    <li>Les <b>listes</b> se filtrent par les champs du bloc Filtres et par la recherche ; <span class="btn">Recharger</span> relit les données. Le pied de liste indique le nombre de résultats et permet de changer de page.</li>
-    <li>Dans une liste, l'icône en forme d'œil ouvre la fiche ; les trois points verticaux ouvrent le <b>menu d'actions</b> de la ligne (consulter les pièces, télécharger un document, valider…). Les actions absentes du menu sont celles que votre profil ou l'état du dossier ne permettent pas.</li>
-    <li>Les <b>fiches</b> présentent les chiffres clés en tête, puis les informations par bloc. Un dossier rejeté affiche le motif du rejet en rouge.</li>
+    <li>Les <b>listes</b> se filtrent par les champs du bloc Filtres et par la recherche ; <span class="btn">Recharger</span> relit les données et <span class="btn">Exporter</span> télécharge la liste filtrée au format Excel (toutes les pages). Le pied de liste indique le nombre de résultats, permet de changer de page et de choisir le nombre de <b>lignes par page</b> (jusqu'à 100).</li>
+    <li>Chaque liste retient ses filtres et son nombre de lignes pour votre prochaine visite, sur ce navigateur. La recherche texte, elle, repart à vide.</li>
+    <li>Dans une liste, l'icône en forme d'œil ouvre la fiche. Les autres actions de la ligne sont des icônes (modifier, valider, télécharger…), ou se trouvent dans le <b>menu d'actions</b> ouvert par les trois points verticaux. Une action absente est une action que votre profil ou l'état du dossier ne permettent pas ; une info-bulle nomme chaque icône au survol.</li>
+    <li>Les <b>fiches</b> présentent les chiffres clés en tête, puis les informations par bloc. Un dossier rejeté affiche le motif du rejet en rouge. En bas de la fiche, l'<b>historique du dossier</b> retrace chaque décision (voir plus bas).</li>
   </ul>
+${agitSurLesListes ? `  <h3 id="selection">Traiter plusieurs lignes à la fois</h3>
+  <p>Quand votre profil peut agir sur les lignes d'une liste, une case à cocher apparaît en début de ligne (la case de l'en-tête coche toute la page). Dès qu'une ligne est cochée, une barre s'affiche au-dessus du tableau :</p>
+  <ul>
+    <li>chaque action indique entre parenthèses le nombre de lignes cochées auxquelles elle s'applique (par exemple « Valider (3) ») ; à 0, elle est grisée ;</li>
+    <li>la fenêtre de confirmation liste les lignes concernées et précise celles qui sont ignorées ; un rejet ou un renvoi demande un motif, commun à toutes les lignes ;</li>
+    <li>les lignes sont traitées une par une ; à la fin, un message indique le nombre de lignes traitées, ou les échecs et leur motif. Les lignes en échec restent cochées ;</li>
+    <li><span class="btn">Télécharger</span> récupère d'un coup un document de chaque ligne, et <span class="btn">Exporter</span> les seules lignes cochées au format Excel ; <span class="btn">Tout décocher</span> referme la barre.</li>
+  </ul>
+${fig('10-pv-selection', 'Lignes cochées et barre d\'actions groupées', '<b>Plusieurs lignes cochées</b> : les actions groupées, avec le nombre de lignes concernées.')}` : ''}${a('04-recherche') ? `  <h3 id="recherche">Rechercher un dossier</h3>
+${chemin('Champ de recherche en haut de l\'écran (raccourci <b>Ctrl+K</b>)')}  <p>Tapez au moins deux caractères : un numéro de comité, le nom d'un client, un numéro de compte, ou le nom d'un utilisateur. Les résultats sont groupés par type (PV, contrats, notifications, CAT, utilisateurs) ; un clic, ou <b>Entrée</b> pour le premier, ouvre la fiche. Vous ne trouvez que ce que vos listes vous montrent déjà.</p>
+${fig('04-recherche', 'Recherche globale')}` : ''}  <h3 id="alertes">Les alertes</h3>
+${chemin('Cloche en haut à droite')}  <p>Chaque e-mail que l'application vous envoie (dossier à valider, rejet, renvoi…) s'affiche aussi sous la cloche, avec le nombre d'alertes non lues. Un clic sur une alerte la marque comme lue et ouvre l'écran concerné ; <span class="btn">Tout marquer comme lu</span> vide le compteur. La cloche se met à jour toutes les minutes.</p>
+${fig('04-alertes', 'Alertes')}
+  <h3 id="delegations">Les délégations pendant une absence</h3>
+${chemin('Menu <b>Mon compte › Délégations</b>, ou <b>Mes délégations</b> dans le menu de l\'avatar')}  <p>Avant une absence, confiez vos dossiers à un collègue : <span class="btn">Nouvelle délégation</span>, choisissez le délégataire, la période (premier et dernier jour inclus) et, si vous le souhaitez, un motif. Le délégataire est prévenu par e-mail.</p>
+  <ul>
+    <li>Pendant la période, le délégataire exerce vos droits, voit vos dossiers et reçoit vos e-mails et vos alertes, en plus des siens. Le menu de son avatar indique « Intérim de … ».</li>
+    <li>Ses décisions sont signées « en intérim de … » dans l'historique des dossiers.</li>
+    <li>La liste montre les délégations à venir, en cours et terminées, données ou reçues. Une délégation à venir s'annule et une délégation en cours s'arrête aussitôt avec le bouton d'arrêt de sa ligne.</li>
+    <li>${admin ? 'L\'administrateur voit et gère les délégations de tous, et peut en créer pour le compte d\'un collègue. Ses propres droits d\'administrateur ne se délèguent pas.' : 'Vous ne pouvez déléguer que vos propres droits ; l\'administrateur peut le faire pour vous.'}</li>
+  </ul>
+${fig('05-delegations', 'Délégations')}${fig('05-delegation-creation', 'Nouvelle délégation')}
+  <h3 id="historique">L'historique d'un dossier</h3>
+  <p>En bas de chaque fiche (PV, contrat, notification, CAT), le bloc <b>Historique du dossier</b> retrace, du plus récent au plus ancien, chaque décision prise sur le PV et sur le contrat, la notification et le CAT qui en découlent : création, envoi en validation, validation, rejet, renvoi, document signé chargé, déblocage. Chaque entrée indique son auteur, sa date et, pour un rejet ou un renvoi, le motif saisi : les motifs successifs restent tous visibles.</p>
   <h3 id="compte">Votre compte</h3>
 ${chemin('Menu de l\'avatar, en haut à droite')}  <p>Trois onglets : <b>Compte</b> (nom et adresse e-mail), <b>Sécurité</b> (changer de mot de passe : au moins 8 caractères, avec une majuscule, une minuscule, un chiffre et un caractère spécial) et <b>Signature</b> (l'image de votre signature, reprise dans les documents générés).</p>
 ${fig('02-parametres-compte', 'Paramètres du compte')}${fig('02-parametres-securite', 'Changer de mot de passe')}${fig('02-parametres-signature', 'Signature')}
@@ -177,7 +205,7 @@ ${fig('03-manuel', 'Manuel d\'utilisation')}`)
   const etapes = c => `  <ol class="circuit">\n${c.map(([qui, nom, texte]) => `    <li${qui.includes(slug) ? ' class="vous"' : ''}><b>${esc(nom)}</b><span>${texte}</span></li>`).join('\n')}\n  </ol>\n`
   const dansCircuit = CIRCUIT.some(([qui]) => qui.includes(slug))
   const dansReport = CIRCUIT_REPORT.some(([qui]) => qui.includes(slug))
-  chapitre('circuit', 'Le circuit d\'un dossier', `De la demande au décaissement, chaque dossier passe de profil en profil. ${dansCircuit || dansReport ? 'Vos étapes sont surlignées.' : admin ? 'L\'administrateur peut intervenir à chacune de ces étapes.' : 'Votre profil consulte les dossiers sans intervenir dans ce circuit.'} Chaque passage d'étape prévient par e-mail le profil suivant.`,
+  chapitre('circuit', 'Le circuit d\'un dossier', `De la demande au décaissement, chaque dossier passe de profil en profil. ${dansCircuit || dansReport ? 'Vos étapes sont surlignées.' : admin ? 'L\'administrateur peut intervenir à chacune de ces étapes.' : 'Votre profil consulte les dossiers sans intervenir dans ce circuit.'} Chaque passage d'étape prévient le profil suivant par e-mail et par une alerte dans l'application.`,
     `  <h3 id="circuit-credit">Crédit</h3>\n${etapes(CIRCUIT)}${peut('read', 'deadline-postponed') ? `  <h3 id="circuit-report">Report d'échéance</h3>\n${etapes(CIRCUIT_REPORT)}` : ''}`)
 
   // ─── 3. PV de comité et notifications de CAF ────────────────────────────
@@ -198,9 +226,11 @@ ${liste([
   a('10-pv-liste') && '<b>Sans contrat</b> : les PV en cours de validation, et les PV validés qui attendent leur contrat ou leur notification hypothécaire. Les filtres trient par type de crédit, statut et niveau de validation.',
   a('10-pv-historique') && '<b>Historique</b> : tous les PV.',
   peut('create', 'pv') && '<b>Créer</b> : saisissez le PV bloc par bloc ; les garanties s\'ajoutent une à une. À l\'enregistrement, le PV part en validation chez le Head Crédit. Tant qu\'il n\'est pas validé, il se modifie depuis son menu d\'actions ; un PV rejeté se corrige de la même façon et repart en validation.',
-  (peut('validate', 'pv') || peut('reject', 'pv')) && 'Un PV en attente de validation propose <b>Valider</b> et <b>Rejeter</b> dans son menu d\'actions ; un rejet demande un motif, envoyé par e-mail à l\'Admin Crédit.',
+  a('10-pv-liste') && 'Les actions de chaque ligne sont rangées en trois groupes : la fiche et sa modification ou suppression, puis le circuit de validation, puis les téléchargements.',
+  (peut('validate', 'pv') || peut('reject', 'pv')) && 'Un PV en attente de validation propose <b>Valider</b> et <b>Rejeter</b> ; un rejet demande un motif, envoyé par e-mail à l\'Admin Crédit. La fenêtre de validation avertit si aucune garantie n\'est enregistrée sur le PV.',
+  peut('reject', 'pv') && 'Un PV déjà validé qui n\'a encore ni contrat ni notification hypothécaire peut être <b>renvoyé à l\'Admin Crédit</b> (flèche orange) pour correction, avec un motif ; corrigé, il revient en validation.',
   peut('create', 'basic-contract') && 'Un PV validé propose <b>Créer le contrat</b>, ou <b>Créer la notification</b> s\'il comporte une hypothèque.',
-  peut('download', 'pv') && 'Le PV se télécharge depuis sa fiche ou son menu d\'actions.',
+  peut('download', 'pv') && 'Le PV, et la notification d\'un PV validé, se téléchargent depuis la fiche ou l\'icône de téléchargement de la ligne.',
 ])}${fig('10-pv-liste', 'PV sans contrat')}${fig('10-pv-historique', 'Historique des PV')}${fig('10-pv-detail', 'Fiche d\'un PV')}${fig('10-pv-creation', 'Nouveau PV de comité')}`
   }
   chapitre('pv-chapitre', 'PV de comité', '', pv)
@@ -214,8 +244,8 @@ ${liste([
   a('20-contrats-liste') && '<b>Sans CAT</b> : les contrats qui n\'ont pas encore de CAT. La colonne <b>Observations</b> signale ce qui manque (contrat signé, billet à ordre signé, cautions incomplètes) avec un bouton pour y remédier : <span class="btn">Charger</span>, <span class="btn">Cautions</span>, <span class="btn">Créer CAT</span>.',
   a('20-contrats-historique') && '<b>Historique</b> : tous les contrats.',
   peut('create', 'basic-contract') && '<b>Créer</b> : choisissez le PV validé, puis complétez les informations du contrat, du client et, s\'il y en a, des gages.',
-  peut('upload', 'contract') && 'Le menu d\'actions télécharge les documents à faire signer (contrat, billet à ordre, mention manuscrite) et permet d\'<b>ajouter le contrat signé</b> et le <b>billet à ordre signé</b>. Quand les deux sont chargés, <b>Envoyer en validation</b> transmet le contrat au Head Crédit.',
-  peut('validate', 'basic-contract') && 'Un contrat en attente de validation head propose <b>Valider le contrat</b> et <b>Rejeter le contrat</b> ; le motif d\'un rejet est envoyé à l\'Admin Crédit et affiché sur la fiche.',
+  peut('upload', 'contract') && 'Le menu d\'actions télécharge les documents à faire signer (contrat, billet à ordre, mention manuscrite) et permet d\'<b>ajouter le contrat signé</b> et le <b>billet à ordre signé</b>. Quand ces documents et ceux de chaque caution sont chargés, <b>Envoyer en validation</b> transmet le contrat au Head Crédit ; tant qu\'il en manque, la fenêtre les liste et l\'envoi reste impossible.',
+  peut('validate', 'basic-contract') && 'Un contrat en attente de validation head propose <b>Valider le contrat</b> et <b>Rejeter le contrat</b> ; le motif d\'un rejet est envoyé à l\'Admin Crédit et affiché sur la fiche. Un document signé manquant (contrat, billet à ordre ou pièce d\'une caution) bloque la validation.',
   'La fiche du contrat affiche le montant, la durée, l\'échéance, la périodicité et le différé, puis le dossier, le client, les conditions du crédit, les garanties et les gages.',
 ])}${fig('20-contrats-liste', 'Contrats sans CAT')}${fig('20-contrats-liste-actions', 'Menu d\'actions d\'un contrat', '<b>Menu d\'actions</b> d\'un contrat.')}${fig('20-contrats-historique', 'Historique des contrats')}${fig('20-contrat-detail', 'Fiche d\'un contrat')}${fig('20-contrat-creation', 'Nouveau contrat')}`
   }
@@ -241,6 +271,8 @@ ${liste([
   peut('create', 'notification') && '<b>Créer</b> : choisissez le PV validé, puis complétez la notification et les informations de la société ou de l\'entreprise individuelle.',
   peut('validate', 'notification') && 'Une notification en attente propose <b>Valider</b> et <b>Rejeter</b> dans son menu d\'actions.',
   peut('upload', 'notarized-contract') && 'Le contrat notarié se charge depuis le menu d\'actions de la notification.',
+  peut('validate', 'pv') && 'Une notification ne se valide qu\'une fois son dossier envoyé et complet : la validation est refusée tant qu\'une pièce manque.',
+  'Le filtre <b>Type de client</b> (particulier, société, entreprise individuelle) trie les notifications.',
 ])}${fig('30-notifications-sans-validation', 'Notifications sans validation head')}${fig('30-notifications-sans-contrat-notarie', 'Notifications sans contrat notarié')}${fig('30-notifications-historique', 'Historique des notifications')}${fig('30-notification-detail', 'Fiche d\'une notification')}${fig('30-notification-creation', 'Nouvelle notification hypothécaire')}`
   }
   chapitre('hypothecaire', 'Notifications hypothécaires', '', hy)
