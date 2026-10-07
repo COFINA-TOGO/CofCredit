@@ -276,7 +276,9 @@ const apiChangeStatus = async id => {
     })
     actionComment.value = ''
 
-    const statusMessage = actionStatus.value === 'validated' ? 'validé' : 'rejeté'
+    const statusMessage = actionStatus.value === 'validated'
+      ? 'validé'
+      : (actionButtonText.value === 'Renvoyer' ? 'renvoyé à l\'admin crédit' : 'rejeté')
 
     showSnackbar('success', `PV ${statusMessage} avec succès`)
     await fetchItemList()
@@ -610,6 +612,34 @@ onMounted(async () => {
                   />
                 </IconBtn>
               </span>
+            </div>
+            <div v-if="$can('reject', 'pv') && item.status == 'validated' && !item.next">
+              <VDivider />
+              <IconBtn
+                @click="
+                  selectedItemId = item.id;
+                  (actionTitle = 'Renvoyer le PV à l\'admin crédit'),
+                  (actionText =
+                    'Ce PV validé n\'a pas encore de contrat. Voulez vous vraiment le renvoyer à l\'admin crédit pour correction?'),
+                  (actionFunction = apiChangeStatus);
+                  actionButtonText = 'Renvoyer';
+                  commentPresence = true;
+                  actionStatus = 'rejected';
+                  isActionDialogVisible = true;
+                "
+              >
+                <VTooltip
+                  activator="parent"
+                  transition="scroll-x-transition"
+                  location="end"
+                >
+                  Renvoyer à l'admin crédit
+                </VTooltip>
+                <VIcon
+                  icon="tabler-arrow-back-up"
+                  color="warning"
+                />
+              </IconBtn>
             </div>
             <div v-if="$can('create', 'basic-contract') && item.status == 'validated' && !item.has_mortgage">
               <VDivider />

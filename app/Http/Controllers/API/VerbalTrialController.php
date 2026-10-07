@@ -833,7 +833,13 @@ class VerbalTrialController extends Controller
 					return $this->responseError($validator->errors(), 400);
 				} else {
 					$requestData = $validator->validated();
-					if ($verbalTrial->status != "waiting" || $verbalTrial->validation_level != "head_credit") {
+					// Un PV déjà validé peut encore être renvoyé à l'admin crédit tant qu'aucun contrat (ou notification notariée) n'en découle
+					$sendBack = $verbalTrial->status == "validated" && $requestData["status"] == "rejected";
+					if ($sendBack) {
+						if ($verbalTrial->contract()->exists() || $verbalTrial->notification()->exists()) {
+							return $this->responseError(["status" => ["Ce PV a déjà un contrat, il ne peut plus être renvoyé à l'admin crédit"]], 400);
+						}
+					} else if ($verbalTrial->status != "waiting" || $verbalTrial->validation_level != "head_credit") {
 						return $this->responseError(["status" => ["Ce PV n'est pas en attente de validation du Head Crédit"]], 400);
 					}
 					$committeeId = $verbalTrial->committee_id;
@@ -855,9 +861,9 @@ class VerbalTrialController extends Controller
 						$verbalTrial->update($requestData + ["validation_level" => "credit_admin"]);
 						$this->notifyByEmail(
 							$verbalTrial->credit_admin,
-							"Notification de rejet du PV $committeeId",
+							($sendBack ? "Renvoi du PV $committeeId" : "Notification de rejet du PV $committeeId"),
 							"Cher(e) Admin crédit,",
-							["Nous vous informons que le PV $committeeId a été rejeté par le Head Crédit. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et le corriger."],
+							["Nous vous informons que le PV $committeeId " . ($sendBack ? "validé a été renvoyé" : "a été rejeté") . " par le Head Crédit. Nous vous invitons à vous connecter à l'application Cofina Crédit Digital pour consulter les motifs de rejet et le corriger."],
 							"/pv",
 							"Voir les PV"
 						);
