@@ -215,6 +215,10 @@ const handleUploadFile = async event => {
   }
   
   const success = await uploadFile(currentContractId.value, event, uploadState.value)
+
+  // Vide le champ pour pouvoir choisir à nouveau le même fichier
+  event.target.value = ''
+
   if (success) {
     await fetchItemList()
   }
@@ -410,6 +414,18 @@ onMounted(async () => {
 
       <VDivider class="mt-4" />
 
+      <!--
+        Champ caché de l'envoi des documents signés : hors des menus de ligne, sinon
+        son clic remonte jusqu'au bouton « ⋮ » et ouvre le menu
+      -->
+      <input
+        ref="refInputEl"
+        type="file"
+        name="signed_contract"
+        hidden
+        @input="handleUploadFile($event)"
+      >
+
       <!-- Table -->
       <VDataTableServer 
         v-model:items-per-page="itemsPerPage" 
@@ -511,15 +527,7 @@ onMounted(async () => {
                   size="24"
                   icon="tabler-dots-vertical"
                 />
-                
-                <!-- Input caché pour l'upload -->
-                <input
-                  ref="refInputEl"
-                  type="file"
-                  name="signed_contract"
-                  hidden
-                  @input="handleUploadFile($event)"
-                >
+
 
                 <ContractActionsMenu
                   :contract="item"
