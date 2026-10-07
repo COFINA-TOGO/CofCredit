@@ -109,6 +109,23 @@ async function capturerProfil(session) {
     await pause(500)
   }
 
+  // Coche les deux premières lignes d'un tableau, capture la barre d'actions groupées, puis décoche
+  async function capturerSelection(nom) {
+    // Une case après l'autre, comme à la main : deux clics simultanés n'en compteraient qu'un
+    const cases = (await page.$$('table tbody tr .v-selection-control input[type=checkbox]')).slice(0, 2)
+    if (!cases.length) return
+    for (const c of cases) {
+      await c.click()
+      await pause(250)
+    }
+    await pause(800)
+    await page.evaluate(() => document.querySelector('.bulk-actions')?.scrollIntoView({ block: 'center' }))
+    await pause(400)
+    await capturer(nom, { pleinePage: false })
+    await page.evaluate(() => [...document.querySelectorAll('.bulk-actions button')].find(b => b.innerText.toLowerCase().includes('tout décocher'))?.click())
+    await pause(400)
+  }
+
   // ─── Connexion par la session du compte de démonstration ──────────────────
   await page.goto(`${BASE}/login`, { waitUntil: 'networkidle2' })
   const enc = v => encodeURIComponent(JSON.stringify(v))
@@ -146,10 +163,35 @@ async function capturerProfil(session) {
     await ouvrir('/user-guide', '03-manuel', { pleinePage: false })
   })
 
+  // ─── Outils communs : alertes, recherche, délégations ───────────────────
+  scenario('outils', true, async () => {
+    await ouvrir('/', null)
+    await page.click('#notification-btn').catch(() => {})
+    await pause(1000)
+    await capturer('04-alertes', { pleinePage: false })
+    await page.keyboard.press('Escape')
+    await pause(400)
+    if (peut('read', 'pv') || peut('read', 'contract') || peut('read', 'user')) {
+      await page.click('.navbar-search input').catch(() => {})
+      await page.keyboard.type(peut('read', 'pv') || peut('read', 'contract') ? 'CFNTG' : 'a')
+      await pause(1500)
+      await capturer('04-recherche', { pleinePage: false })
+      await page.keyboard.press('Escape')
+    }
+    if (await ouvrir('/delegation', '05-delegations', { pleinePage: false })) {
+      await page.evaluate(() => [...document.querySelectorAll('button')].find(b => b.innerText.toLowerCase().includes('nouvelle délégation'))?.click())
+      await pause(800)
+      await capturer('05-delegation-creation', { pleinePage: false })
+      await page.keyboard.press('Escape')
+    }
+  })
+
   // ─── PV de comité ───────────────────────────────────────────────────────
   scenario('pv', peut('read', 'pv') || peut('historical', 'pv'), async () => {
-    if (peut('read', 'pv') && await ouvrir('/pv', '10-pv-liste'))
+    if (peut('read', 'pv') && await ouvrir('/pv', '10-pv-liste')) {
       await capturerMenuActions('10-pv-liste-actions')
+      await capturerSelection('10-pv-selection')
+    }
     if (peut('historical', 'pv'))
       await ouvrir('/pv/historical', '10-pv-historique')
     if (ex.pv)
