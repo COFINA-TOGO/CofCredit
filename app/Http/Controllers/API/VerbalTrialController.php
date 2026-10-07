@@ -111,13 +111,14 @@ class VerbalTrialController extends Controller
 				}
 			}
 
-			if (isset($request["status"])) {
+			// Un filtre vide (?status=) ne filtre rien : filled() et non isset(), qui vaut aussi pour une valeur vide
+			if ($request->filled("status")) {
 				$statusList = ["w" => "waiting", "v" => "validated", "r" => "rejected"];
 				// Une lettre inconnue ne doit pas annuler le filtre : aucun statut valide => aucun résultat
 				$verbalTrialList->whereIn("status", collect(str_split($request["status"]))->map(fn($char) => $statusList[$char] ?? null)->filter()->all());
 			}
 
-			if (isset($request["in_validation_level"])) {
+			if ($request->filled("in_validation_level")) {
 				$verbalTrialList->where(function ($query) use ($request) {
 					foreach (str_split($request["in_validation_level"]) as $char) {
 						if (in_array($char, ['y', 'a', 'h', 'm'])) {
@@ -127,7 +128,7 @@ class VerbalTrialController extends Controller
 				});
 			}
 
-			if (isset($request["has_contract"])) {
+			if ($request->filled("has_contract")) {
 				$has_contract = (int) $request["has_contract"];
 				if ($has_contract == 1) {
 					$verbalTrialList->whereHas('contract');
@@ -136,7 +137,7 @@ class VerbalTrialController extends Controller
 				}
 			}
 
-			if (isset($request["has_notification"])) {
+			if ($request->filled("has_notification")) {
 				$has_notification = (int) $request["has_notification"];
 				if ($has_notification == 1) {
 					$verbalTrialList->whereHas('notification');
@@ -145,7 +146,7 @@ class VerbalTrialController extends Controller
 				}
 			}
 
-			if (isset($request["has_next"])) {
+			if ($request->filled("has_next")) {
 				$has_next = (int) $request["has_next"];
 				if ($has_next == 1) {
 					$verbalTrialList->where(function ($query) {
@@ -156,7 +157,7 @@ class VerbalTrialController extends Controller
 				}
 			}
 
-			if (isset($request["has_mortgage"])) {
+			if ($request->filled("has_mortgage")) {
 				$has_mortgage = (int) $request["has_mortgage"];
 				if ($has_mortgage == 1) {
 					$verbalTrialList->whereHas('guarantees', function ($query) {
