@@ -37,6 +37,14 @@ const items = computed(() => [
     >
       <template #actions>
         <VBtn
+          v-if="$can('create', 'user')"
+          variant="tonal"
+          prepend-icon="tabler-copy"
+          :to="{ name: 'user-add', query: { from: user.id } }"
+        >
+          Copier
+        </VBtn>
+        <VBtn
           v-if="$can('update', 'user')"
           prepend-icon="tabler-edit"
           :to="{ name: 'user-edit-id', params: { id: user.id } }"

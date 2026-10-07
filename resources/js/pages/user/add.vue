@@ -10,6 +10,7 @@ import AppTextField from "@/@core/components/app-form-elements/AppTextField.vue"
 import { ref } from "vue"
 
 const router = useRouter()
+const route = useRoute()
 
 const userData = ref({
   full_name: '',
@@ -19,6 +20,21 @@ const userData = ref({
   activated: true,
   password_change_required: true,
 })
+
+// Copie d'un utilisateur (?from=<id>) : profil et réglages du compte repris,
+// nom, e-mail et mot de passe propres au nouveau compte restent à saisir
+const sourceUser = ref(null)
+if (route.query.from) {
+  const res = await $api(`/user/${route.query.from}`)
+  if (res.status == 200) {
+    sourceUser.value = res.data.user
+    userData.value.profile = sourceUser.value.profile
+    userData.value.activated = !!sourceUser.value.activated
+    userData.value.password_change_required = !!sourceUser.value.password_change_required
+  } else {
+    showSnackbar('error', 'Utilisateur à copier introuvable')
+  }
+}
 
 const getResetTransferError = () => {
   return {
@@ -105,8 +121,8 @@ const isPasswordVisible = ref(false)
 <template>
   <div>
     <AppPageHeader
-      title="Nouvel utilisateur"
-      subtitle="Compte, profil et mot de passe initial"
+      :title="sourceUser ? `Copie de ${sourceUser.full_name}` : 'Nouvel utilisateur'"
+      :subtitle="sourceUser ? 'Même profil et mêmes réglages, nouveau compte' : 'Compte, profil et mot de passe initial'"
       :back="{ name: 'user' }"
     >
       <template #actions>
@@ -124,10 +140,18 @@ const isPasswordVisible = ref(false)
     >
       <VRow>
         <VCol md="12">
-          <!-- 👉 PV Information -->
+          <VAlert
+            v-if="sourceUser"
+            type="info"
+            variant="tonal"
+            class="mb-6"
+          >
+            Profil <strong>{{ sourceUser.profile_fr }}</strong>, activation et changement de mot de passe
+            repris de {{ sourceUser.full_name }}. Renseignez le nom, l'e-mail et le mot de passe du nouveau compte.
+          </VAlert>
           <VCard
             class="mb-6"
-            title="Informations du PV"
+            title="Informations de l'utilisateur"
           >
             <VCardText>
               <VRow>

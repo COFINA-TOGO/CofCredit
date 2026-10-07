@@ -385,6 +385,19 @@ onMounted(async () => {
                 <VIcon icon=" tabler-edit" />
               </IconBtn>
               <IconBtn
+                v-if="$can('create', 'user')"
+                :to="{ name: 'user-add', query: { from: item.id } }"
+              >
+                <VTooltip
+                  activator="parent"
+                  transition="scroll-x-transition"
+                  location="top"
+                >
+                  Copier
+                </VTooltip>
+                <VIcon icon="tabler-copy" />
+              </IconBtn>
+              <IconBtn
                 v-if="$can('delete', 'user')"
                 @click="
                   selectedItemId = item.id;
