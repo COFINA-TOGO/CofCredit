@@ -45,6 +45,7 @@ class VerbalTrialFactory extends Factory
 			"risk_premium_percentage" => $this->faker->numberBetween(10, 30),
 			"has_line_review_bonus" => $this->faker->boolean(),
 			"number_deferred" => $this->faker->numberBetween(0, 5),
+			"representative_phone_number" => $this->faker->numerify("+228 ########"),
 		];
 	}
 }

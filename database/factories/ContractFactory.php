@@ -34,6 +34,7 @@ class ContractFactory extends Factory
 			"type" => $this->faker->randomElement(['particular', 'company', 'individual_business']),
 			"creator_id" => User::where('profile', 'credit_admin')->inRandomOrder()->first()->id ?? 1,
 			"deferred_amount" => $this->faker->randomFloat(0, 15000, 5000000),
+			"risk_premium_percentage" => $this->faker->numberBetween(1, 5),
 		];
 	}
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,14 +13,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('contracts', function (Blueprint $table) {
-            // Modifier l'enum status pour inclure les nouveaux statuts
-            $table->enum('status', [
-                'waiting', 
-                'pending_admin_validation', 
-                'pending_head_validation', 
-                'rejected', 
-                'validated'
-            ])->default('waiting')->change();
+            // Modifier l'enum status pour inclure les nouveaux statuts (MySQL uniquement : SQLite, base des tests, ne modifie pas les colonnes)
+            if (DB::getDriverName() === 'mysql') {
+                $table->enum('status', [
+                    'waiting', 
+                    'pending_admin_validation', 
+                    'pending_head_validation', 
+                    'rejected', 
+                    'validated'
+                ])->default('waiting')->change();
+            }
             
             // Ajouter des colonnes pour tracer les validations
             $table->timestamp('admin_validated_at')->nullable()->after('status_observation');
@@ -38,7 +41,9 @@ return new class extends Migration
     {
         Schema::table('contracts', function (Blueprint $table) {
             // Restaurer l'enum original
-            $table->enum('status', ['waiting', 'rejected', 'validated'])->default('waiting')->change();
+            if (DB::getDriverName() === 'mysql') {
+                $table->enum('status', ['waiting', 'rejected', 'validated'])->default('waiting')->change();
+            }
             
             // Supprimer les nouvelles colonnes
             $table->dropForeign(['admin_validator_id']);

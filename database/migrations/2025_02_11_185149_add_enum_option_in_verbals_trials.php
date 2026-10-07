@@ -12,6 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Modification de colonne propre à MySQL ; ignorée sur SQLite (base des tests)
+        if (DB::getDriverName() !== 'mysql') {
+        	return;
+        }
         Schema::table('verbals_trials', function (Blueprint $table) {
             DB::statement("ALTER TABLE `verbals_trials` MODIFY COLUMN validation_level enum('credit_analyst', 'credit_admin','head_credit','md') default 'credit_analyst' not null;");
         });
@@ -22,6 +26,10 @@ return new class extends Migration
      */
 	public function down(): void
     {
+		// Modification de colonne propre à MySQL ; ignorée sur SQLite (base des tests)
+		if (DB::getDriverName() !== 'mysql') {
+			return;
+		}
 		Schema::table('verbals_trials', function (Blueprint $table) {
 			DB::statement("ALTER TABLE `verbals_trials` MODIFY COLUMN validation_level enum('credit_admin','head_credit','md') not null;");
         });
