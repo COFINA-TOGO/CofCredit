@@ -131,6 +131,19 @@ const lastPage = computed(() => pvData.value.last_page)
 const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('validate', 'pv') && bulkValidate({ eligible: item => item.status == 'waiting' && item.validation_level == 'head_credit', url: item => `verbal-trial/change-status/${item.id}`, body: () => ({ status: 'validated' }) }),
+  ability.can('reject', 'pv') && bulkReject({ eligible: item => item.status == 'waiting' && item.validation_level == 'head_credit', url: item => `verbal-trial/change-status/${item.id}`, body: (item, comment) => ({ status: 'rejected', comment }) }),
+  ability.can('delete', 'pv') && bulkDelete('verbal-trial', item => isAdmin() || item.status != 'validated'),
+  ability.can('download', 'pv') && bulkDownload('PV', item => ({ url: `/api/verbal-trial/download/${item.id}`, name: `PV-${item.committee_id}.docx` })),
+))
+
+const bulkItemTitle = item => item.committee_id
 </script>
 
 <template>
@@ -212,9 +225,19 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
 
       <!-- 👉 Datatable  -->
+      <BulkActions
+        v-model="selected"
+        :items="pvList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchPv"
+      />
+
       <VDataTableServer
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :headers="headers"
         :items="pvList"
         :items-length="totalPv"

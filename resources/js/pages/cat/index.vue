@@ -316,6 +316,21 @@ onMounted(async () => {
   await initializeFilters()
   await fetchItemList([4])
 })
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('download', 'basic-cat') && bulkDownload('CAT', item => ({ url: `/api/cat/download/${item.id}`, name: `CAT-${item.contract.verbal_trial.committee_id}.docx` })),
+  ability.can('validate', 'basic-cat') && bulkValidate({ eligible: item => item.validation_status == 'waiting', url: item => `cat/validate/${item.id}` }),
+  ability.can('reject_validation', 'basic-cat') && bulkReject({ eligible: item => item.validation_status == 'waiting', url: item => `cat/reject-validation/${item.id}`, body: (item, comment) => ({ comment }) }),
+  ability.can('unblock', 'basic-cat') && bulkPut({ label: 'Débloquer', icon: 'tabler-lock-open', color: 'success', eligible: item => item.unblock_status == 'waiting' && item.validation_status == 'validated', url: item => `cat/unblock/${item.id}` }),
+  ability.can('reject_unblock', 'basic-cat') && bulkPut({ label: 'Refuser le déblocage', icon: 'tabler-lock', color: 'error', comment: 'Motif du refus', eligible: item => item.unblock_status == 'waiting' && item.validation_status == 'validated', url: item => `cat/reject-unblock/${item.id}`, body: (item, comment) => ({ comment }) }),
+  ability.can('delete', 'basic-cat') && bulkDelete('cat', item => isAdmin() || item.validation_status != 'validated'),
+))
+
+const bulkItemTitle = item => item.contract?.verbal_trial?.committee_id ?? `CAT ${item.id}`
 </script>
 
 <template>
@@ -391,9 +406,19 @@ onMounted(async () => {
       <VDivider class="mt-4" />
 
       <!-- 👉 Datatable  -->
+      <BulkActions
+        v-model="selected"
+        :items="catList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchItemList([4])"
+      />
+
       <VDataTableServer 
         v-model:items-per-page="itemsPerPage" 
         v-model:page="page" 
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :loading="loadings[4]"
         :headers="headers"
         :items="catList" 

@@ -254,6 +254,18 @@ onMounted(async () => {
   await fetchNotificationData()
   await fetchItemList([4])
 })
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('download', 'guarantor') && bulkDownload('billet à ordre non signé', item => ({ url: `/api/guarantor/promissory-note/download/${item.id}`, name: `Billet-à-ordre-Caution-${item.id}.docx` })),
+  ability.can('download', 'guarantor') && bulkDownload('billet à ordre signé', item => item.signed_promissory_note_path && { url: item.signed_promissory_note_path, name: storedFileName(item.signed_promissory_note_path, 'Billet-à-ordre-Caution') }),
+  ability.can('delete', 'guarantor') && bulkDelete('guarantor'),
+))
+
+const bulkItemTitle = item => item.full_name
 </script>
 
 <template>
@@ -318,9 +330,19 @@ onMounted(async () => {
       <VDivider class="mt-4" />
 
       <!-- Table -->
+      <BulkActions
+        v-model="selected"
+        :items="guarantorList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchItemList([4])"
+      />
+
       <VDataTableServer 
         v-model:items-per-page="itemsPerPage" 
         v-model:page="page" 
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :loading="loadings[4]"
         :headers="headers"
         :items="guarantorList" 

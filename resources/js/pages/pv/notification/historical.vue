@@ -133,6 +133,16 @@ const lastPage = computed(() => pvData.value.last_page)
 const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('download', 'pv-notification') && bulkDownload('notification', item => item.status == 'validated' && { url: `/api/verbal-trial/notification/download/${item.id}`, name: `notification-${item.committee_id}.docx` }),
+))
+
+const bulkItemTitle = item => item.committee_id
 </script>
 
 <template>
@@ -209,9 +219,19 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
       <VDivider class="mt-4" />
 
       <!-- 👉 Datatable  -->
+      <BulkActions
+        v-model="selected"
+        :items="pvList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchPv"
+      />
+
       <VDataTableServer
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :headers="headers"
         :items="pvList"
         :items-length="totalPv"

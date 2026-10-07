@@ -250,6 +250,29 @@ watch(
 onMounted(async () => {
   await fetchItemList([4])
 })
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+// Le compte connecté n'est jamais désactivé ni supprimé en masse
+const currentUserId = useCookie('userData').value?.id
+
+const userBody = (item, activated) => ({
+  full_name: item.full_name,
+  email: item.email,
+  profile: item.profile,
+  password_change_required: !!item.password_change_required,
+  activated,
+})
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('update', 'user') && bulkPut({ label: 'Activer', icon: 'tabler-lock-open', color: 'success', eligible: item => !item.activated && item.id != currentUserId, url: item => `user/${item.id}`, body: item => userBody(item, true) }),
+  ability.can('update', 'user') && bulkPut({ label: 'Désactiver', icon: 'tabler-lock', color: 'warning', eligible: item => item.activated && item.id != currentUserId, url: item => `user/${item.id}`, body: item => userBody(item, false) }),
+  ability.can('delete', 'user') && bulkDelete('user', item => item.id != currentUserId),
+))
+
+const bulkItemTitle = item => item.full_name
 </script>
 
 <template>
@@ -325,9 +348,19 @@ onMounted(async () => {
       <VDivider class="mt-4" />
 
       <!-- 👉 Datatable  -->
+      <BulkActions
+        v-model="selected"
+        :items="userList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchItemList([4])"
+      />
+
       <VDataTableServer
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :loading="loadings[4]"
         :headers="headers"
         :items="userList"

@@ -251,6 +251,20 @@ watch(
 onMounted(async () => {
   await fetchItemList([4])
 })
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('download', 'deadline-postponed') && bulkDownload('demande', item => item.request_path && { url: item.request_path, name: storedFileName(item.request_path, `${item.id}-Demande`) }),
+  ability.can('download', 'deadline-postponed') && bulkDownload('mémo', item => item.memo_path && { url: item.memo_path, name: storedFileName(item.memo_path, `${item.id}-Memo`) }),
+  ability.can('validate', 'deadline-postponed') && bulkValidate({ eligible: item => item.status == 'waiting', url: item => `deadline-postponed/change-status/${item.id}`, body: () => ({ status: 'validated' }) }),
+  ability.can('reject', 'deadline-postponed') && bulkReject({ eligible: item => item.status != 'rejected', url: item => `deadline-postponed/change-status/${item.id}`, body: (item, comment) => ({ status: 'rejected', comment }) }),
+  ability.can('delete', 'deadline-postponed') && bulkDelete('deadline-postponed', item => isAdmin() || item.status != 'validated'),
+))
+
+const bulkItemTitle = item => item.beneficiary_label ?? `Report ${item.id}`
 </script>
 
 <template>
@@ -327,9 +341,19 @@ onMounted(async () => {
 
 
       <!-- 👉 Datatable  -->
+      <BulkActions
+        v-model="selected"
+        :items="deadlinePostponedList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchItemList([4])"
+      />
+
       <VDataTableServer 
         v-model:items-per-page="itemsPerPage" 
         v-model:page="page" 
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :loading="loadings[4]"
         :headers="headers"
         :items="deadlinePostponedList" 

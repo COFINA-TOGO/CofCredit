@@ -167,6 +167,20 @@ const uploadFile = async (id, event) => {
 const notificationList = computed(() => notificationData.value.data)
 const totalPv = computed(() => notificationData.value.total)
 const lastPage = computed(() => notificationData.value.last_page)
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('send', 'notification') && bulkPut({ label: 'Envoyer le dossier', icon: 'tabler-send', color: 'primary', eligible: item => item.observations.length == 0 && !item.sent, url: item => `notification/send/${item.id}` }),
+  ability.can('validate', 'pv') && bulkValidate({ eligible: item => item.sent && item.status == 'waiting' && item.observations.length == 0, url: item => `notification/change-status/${item.id}`, body: () => ({ status: 'validated' }) }),
+  ability.can('reject', 'pv') && bulkReject({ eligible: item => item.sent && item.status != 'rejected' && item.observations.length == 0, url: item => `notification/change-status/${item.id}`, body: (item, comment) => ({ status: 'rejected', comment }) }),
+  ability.can('download', 'notification') && bulkDownload('notification non signée', item => ({ url: `/api/notification/download/${item.id}`, name: `Notification-${item.verbal_trial.committee_id}.docx` })),
+  ability.can('download', 'notification') && bulkDownload('notification signée', item => item.signed_notification_path && { url: item.signed_notification_path, name: storedFileName(item.signed_notification_path, 'Notification') }),
+))
+
+const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Notification ${item.id}`
 </script>
 
 <template>
@@ -214,9 +228,19 @@ const lastPage = computed(() => notificationData.value.last_page)
       <VDivider class="mt-4" />
 
 
+      <BulkActions
+        v-model="selected"
+        :items="notificationList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchNotifications"
+      />
+
       <VDataTableServer
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :headers="headers"
         :items="notificationList"
         :items-length="totalPv"

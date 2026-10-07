@@ -259,6 +259,21 @@ const apiChangeStatus = async id => {
 onMounted(async () => {
   await fetchItemList([4])
 })
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('validate', 'notification') && bulkValidate({ eligible: item => item.head_credit_validation == 'waiting', url: item => `notification/change-head-credit-status/${item.id}`, body: () => ({ head_credit_validation: 'validated' }) }),
+  ability.can('reject', 'notification') && bulkReject({ eligible: item => item.head_credit_validation != 'rejected', url: item => `notification/change-head-credit-status/${item.id}`, body: (item, comment) => ({ head_credit_validation: 'rejected', head_credit_observation: comment }) }),
+  ability.can('delete', 'notification') && bulkDelete('notification'),
+  ability.can('download', 'notification') && bulkDownload('notification non signée', item => ({ url: `/api/notification/download/${item.id}`, name: `Notification-${item.verbal_trial.committee_id}.docx` })),
+  ability.can('download', 'notification') && bulkDownload('billet à ordre non signé', item => ({ url: `/api/notification/promissory-note/download/${item.id}`, name: `Billet-à-ordre-${item.verbal_trial.committee_id}.docx` })),
+  ability.can('download', 'notification') && bulkDownload('billet à ordre signé', item => item.signed_promissory_note_path && { url: item.signed_promissory_note_path, name: storedFileName(item.signed_promissory_note_path, 'Billet-à-ordre') }),
+))
+
+const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Notification ${item.id}`
 </script>
 
 <template>
@@ -307,9 +322,19 @@ onMounted(async () => {
 
       <VDivider class="mt-4" />
 
+      <BulkActions
+        v-model="selected"
+        :items="notificationList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchItemList([4])"
+      />
+
       <VDataTableServer 
         v-model:items-per-page="itemsPerPage" 
         v-model:page="page" 
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :loading="loadings[4]"
         :headers="headers"
         :items="notificationList" 

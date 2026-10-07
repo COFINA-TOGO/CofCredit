@@ -392,6 +392,20 @@ onMounted(async () => {
   // Charger les données initiales
   await fetchItemList([4])
 })
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('validate', 'pv') && bulkValidate({ eligible: item => item.status == 'waiting' && item.validation_level == 'head_credit', url: item => `verbal-trial/change-status/${item.id}`, body: () => ({ status: 'validated' }) }),
+  ability.can('reject', 'pv') && bulkReject({ eligible: item => item.status == 'waiting' && item.validation_level == 'head_credit', url: item => `verbal-trial/change-status/${item.id}`, body: (item, comment) => ({ status: 'rejected', comment }) }),
+  ability.can('reject', 'pv') && bulkPut({ label: 'Renvoyer à l\'admin crédit', icon: 'tabler-arrow-back-up', color: 'warning', comment: 'Motif du renvoi', eligible: item => item.status == 'validated' && !item.next, url: item => `verbal-trial/change-status/${item.id}`, body: (item, comment) => ({ status: 'rejected', comment }) }),
+  ability.can('analyst_delete', 'pv') && bulkDelete('verbal-trial/analyst', item => isAdmin() || item.status != 'validated'),
+  ability.can('download', 'pv') && bulkDownload('PV', item => ({ url: `/api/verbal-trial/download/${item.id}`, name: `PV-${item.committee_id}.docx` })),
+  ability.can('download', 'pv-notification') && bulkDownload('notification', item => item.status == 'validated' && { url: `/api/verbal-trial/notification/download/${item.id}`, name: `notification-${item.committee_id}.docx` }),
+))
+
+const bulkItemTitle = item => item.committee_id
 </script>
 
 <template>
@@ -458,9 +472,19 @@ onMounted(async () => {
       <VDivider class="mt-4" />
 
       <!-- 👉 Datatable  -->
+      <BulkActions
+        v-model="selected"
+        :items="pvList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchItemList([4])"
+      />
+
       <VDataTableServer 
         v-model:items-per-page="itemsPerPage" 
         v-model:page="page" 
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :loading="loadings[4]"
         :headers="headers"
         :items="pvList" 

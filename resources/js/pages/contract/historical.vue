@@ -219,6 +219,21 @@ onMounted(async () => {
   await initializeFilters()
   await fetchItemList([4])
 })
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('download', 'basic-contract') && bulkDownload('contrat non signé', item => ({ url: `/api/contract/download/${item.id}`, name: `Contrat-${item.verbal_trial.committee_id}.docx` })),
+  ability.can('download', 'basic-contract') && bulkDownload('contrat signé', item => item.signed_contract_path && { url: item.signed_contract_path, name: storedFileName(item.signed_contract_path, 'Contrat') }),
+  ability.can('download', 'basic-contract') && bulkDownload('billet à ordre non signé', item => ({ url: `/api/contract/promissory-note/download/${item.id}`, name: `Billet-à-ordre-${item.verbal_trial.committee_id}.docx` })),
+  ability.can('download', 'basic-contract') && bulkDownload('billet à ordre signé', item => item.signed_promissory_note_path && { url: item.signed_promissory_note_path, name: storedFileName(item.signed_promissory_note_path, 'Billet-à-ordre') }),
+  ability.can('download', 'basic-contract') && bulkDownload('mention manuscrite', item => ({ url: `/api/contract/handwritten-mention/download/${item.id}`, name: `Mention-manuscrite-${item.verbal_trial.committee_id}.docx` })),
+  ability.can('delete', 'basic-contract') && bulkDelete('contract'),
+))
+
+const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Contrat ${item.id}`
 </script>
 
 <template>
@@ -292,9 +307,19 @@ onMounted(async () => {
 
       <VDivider class="mt-4" />
 
+      <BulkActions
+        v-model="selected"
+        :items="contractList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchItemList([4])"
+      />
+
       <VDataTableServer
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :loading="loadings[4]"
         :headers="headers"
         :items="contractList"

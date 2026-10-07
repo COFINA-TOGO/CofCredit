@@ -136,6 +136,18 @@ const lastPage = computed(() => pvData.value.last_page)
 const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
 
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('validate', 'pv-notification') && bulkValidate({ eligible: item => useCookie('userData').value?.role == item.validation_level && item.status == 'waiting', url: item => `verbal-trial/change-status/${item.id}`, body: () => ({ status: 'validated' }) }),
+  ability.can('reject', 'pv-notification') && bulkReject({ eligible: item => useCookie('userData').value?.role == item.validation_level && item.status != 'rejected', url: item => `verbal-trial/change-status/${item.id}`, body: (item, comment) => ({ status: 'rejected', comment }) }),
+  ability.can('delete', 'pv-notification') && bulkDelete('verbal-trial', item => isAdmin() || item.status == 'rejected' || (item.status == 'waiting' && item.validation_level == 'credit_analyst')),
+))
+
+const bulkItemTitle = item => item.committee_id
 </script>
 
 <template>
@@ -215,9 +227,19 @@ const type_of_credit_list = computed(() => type_of_credit_list_data.value.data)
       <VDivider class="mt-4" />
 
       <!-- 👉 Datatable  -->
+      <BulkActions
+        v-model="selected"
+        :items="pvList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchPv"
+      />
+
       <VDataTableServer
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :headers="headers"
         :items="pvList"
         :items-length="totalPv"

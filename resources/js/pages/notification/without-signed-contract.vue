@@ -263,6 +263,21 @@ watch(
 onMounted(async () => {
   await fetchItemList([4])
 })
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('send', 'notification') && bulkPut({ label: 'Envoyer le dossier', icon: 'tabler-send', color: 'primary', eligible: item => item.observations.length == 0 && !item.sent, url: item => `notification/send/${item.id}` }),
+  ability.can('validate', 'pv') && bulkValidate({ eligible: item => item.sent && item.status == 'waiting' && item.observations.length == 0, url: item => `notification/change-status/${item.id}`, body: () => ({ status: 'validated' }) }),
+  ability.can('reject', 'pv') && bulkReject({ eligible: item => item.sent && item.status != 'rejected' && item.observations.length == 0, url: item => `notification/change-status/${item.id}`, body: (item, comment) => ({ status: 'rejected', comment }) }),
+  ability.can('download', 'notification') && bulkDownload('billet à ordre non signé', item => ({ url: `/api/notification/promissory-note/download/${item.id}`, name: `Billet-à-ordre-${item.verbal_trial.committee_id}.docx` })),
+  ability.can('download', 'notification') && bulkDownload('contrat signé', item => item.signed_contract_path && { url: item.signed_contract_path, name: storedFileName(item.signed_contract_path, 'Contrat') }),
+  ability.can('download', 'notification') && bulkDownload('billet à ordre signé', item => item.signed_promissory_note_path && { url: item.signed_promissory_note_path, name: storedFileName(item.signed_promissory_note_path, 'Billet-à-ordre') }),
+))
+
+const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Notification ${item.id}`
 </script>
 
 <template>
@@ -335,9 +350,19 @@ onMounted(async () => {
       <VDivider class="mt-4" />
 
       <!-- Table -->
+      <BulkActions
+        v-model="selected"
+        :items="notificationList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchItemList([4])"
+      />
+
       <VDataTableServer 
         v-model:items-per-page="itemsPerPage" 
         v-model:page="page" 
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :loading="loadings[4]"
         :headers="headers"
         :items="notificationList" 

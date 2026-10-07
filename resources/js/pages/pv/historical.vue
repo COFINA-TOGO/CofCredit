@@ -186,6 +186,18 @@ onMounted(async () => {
 })
 
 // Math.min(Math.ceil(totalPv / itemsPerPage), 5)
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('download', 'pv') && bulkDownload('PV', item => ({ url: `/api/verbal-trial/download/${item.id}`, name: `PV-${item.committee_id}.docx` })),
+  ability.can('download', 'pv-notification') && bulkDownload('notification', item => item.status == 'validated' && { url: `/api/verbal-trial/notification/download/${item.id}`, name: `notification-${item.committee_id}.docx` }),
+  ability.can('delete', 'pv') && bulkDelete('verbal-trial'),
+))
+
+const bulkItemTitle = item => item.committee_id
 </script>
 
 <template>
@@ -252,9 +264,19 @@ onMounted(async () => {
       <VDivider class="mt-4" />
 
       <!-- 👉 Datatable  -->
+      <BulkActions
+        v-model="selected"
+        :items="pvList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchItemList([4])"
+      />
+
       <VDataTableServer
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :loading="loadings[4]"
         :headers="headers"
         :items="pvList"

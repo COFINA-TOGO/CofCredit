@@ -97,7 +97,7 @@ const downloadFile = async (url, fileName) => {
 
 const apiDelete = async id => {
   try {
-    await $apiOrThrow(`contract/${id}`, { method: 'DELETE' })
+    await $apiOrThrow(`notification/${id}`, { method: 'DELETE' })
     fetchSimpleNotifications()
     showSnackbar('success', 'Suppression effectuée avec succès')
   } catch (error) {
@@ -108,6 +108,20 @@ const apiDelete = async id => {
 const notificationList = computed(() => notificationData.value.data)
 const totalPv = computed(() => notificationData.value.total)
 const lastPage = computed(() => notificationData.value.last_page)
+
+// Actions groupées sur les lignes cochées (mêmes droits et conditions que les boutons de ligne)
+const selected = ref([])
+const ability = useAbility()
+
+const bulkActions = computed(() => bulkActionList(
+  ability.can('download', 'notification') && bulkDownload('notification non signée', item => ({ url: `/api/notification/download/${item.id}`, name: `Notification-${item.verbal_trial.committee_id}.docx` })),
+  ability.can('download', 'notification') && bulkDownload('billet à ordre non signé', item => ({ url: `/api/notification/promissory-note/download/${item.id}`, name: `Billet-à-ordre-${item.verbal_trial.committee_id}.docx` })),
+  ability.can('download', 'notification') && bulkDownload('notification signée', item => item.signed_notification_path && { url: item.signed_notification_path, name: storedFileName(item.signed_notification_path, 'Notification') }),
+  ability.can('download', 'notification') && bulkDownload('billet à ordre signé', item => item.signed_promissory_note_path && { url: item.signed_promissory_note_path, name: storedFileName(item.signed_promissory_note_path, 'Billet-à-ordre') }),
+  ability.can('delete', 'notification') && bulkDelete('notification'),
+))
+
+const bulkItemTitle = item => item.verbal_trial?.committee_id ?? `Notification ${item.id}`
 </script>
 
 <template>
@@ -177,9 +191,19 @@ const lastPage = computed(() => notificationData.value.last_page)
       <VDivider class="mt-4" />
 
 
+      <BulkActions
+        v-model="selected"
+        :items="notificationList"
+        :actions="bulkActions"
+        :item-title="bulkItemTitle"
+        @done="fetchSimpleNotifications"
+      />
+
       <VDataTableServer
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
+        v-model="selected"
+        :show-select="bulkActions.length > 0"
         :headers="headers"
         :items="notificationList"
         :items-length="totalPv"
@@ -195,17 +219,17 @@ const lastPage = computed(() => notificationData.value.last_page)
         </template>
 
         <template #item.actions="{ item }">
-          <IconBtn :to="{ name: 'contract-id', params: { id: item.id } }">
+          <IconBtn :to="{ name: 'simple-notification-id', params: { id: item.id } }">
             <VIcon icon="tabler-eye" />
           </IconBtn>
           <IconBtn
-            v-if="$can('update', 'contract')"
-            :to="{ name: 'contract-edit-id', params: { id: item.id } }"
+            v-if="$can('update', 'notification')"
+            :to="{ name: 'simple-notification-edit-id', params: { id: item.id } }"
           >
             <VIcon icon="tabler-edit" />
           </IconBtn>
           <IconBtn
-            v-if="$can('delete', 'contract')"
+            v-if="$can('delete', 'notification')"
             @click="contractIdToDelete = item.id; isDialogVisible = true"
           >
             <VIcon
@@ -230,7 +254,7 @@ const lastPage = computed(() => notificationData.value.last_page)
                   inline
                   :content="item.guarantors_count"
                 >
-                  <VListItem :to="{ name: 'contract-contract_id-guarantor', params: { contract_id: item.id } }">
+                  <VListItem :to="{ name: 'simple-notification-notification_id-guarantor', params: { notification_id: item.id } }">
                     <template #prepend>
                       <VIcon icon="tabler-users" />
                     </template>
@@ -252,27 +276,27 @@ const lastPage = computed(() => notificationData.value.last_page)
                 </VListItem>
 
 
-                <div v-if="$can('download', 'contract')">
+                <div v-if="$can('download', 'notification')">
                   <VDivider />
                   <!-- Télécharger contrat non-signé -->
-                  <VListItem @click="downloadFile(`/api/contract/download/${item.id}`, `Contrat-${item.verbal_trial.committee_id}.docx`)">
+                  <VListItem @click="downloadFile(`/api/notification/download/${item.id}`, `Notification-${item.verbal_trial.committee_id}.docx`)">
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
-                    <VListItemTitle>Télécharger Contrat non-signé</VListItemTitle>
+                    <VListItemTitle>Télécharger Notification non signée</VListItemTitle>
                   </VListItem>
                   <!-- Télécharger contrat signé -->
                   <VListItem
-                    v-if="item.signed_contract_path"
-                    @click="downloadFile(item.signed_contract_path, `Contrat-${item.signed_contract_path.split('/').slice(-1)[0]}`)"
+                    v-if="item.signed_notification_path"
+                    @click="downloadFile(item.signed_notification_path, `Notification-${item.signed_notification_path.split('/').slice(-1)[0]}`)"
                   >
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
-                    <VListItemTitle>Télécharger Contrat signé</VListItemTitle>
+                    <VListItemTitle>Télécharger Notification signée</VListItemTitle>
                   </VListItem>
                   <!-- Télécharger billet à ordre non-signé -->
-                  <VListItem @click="downloadFile(`/api/contract/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
+                  <VListItem @click="downloadFile(`/api/notification/promissory-note/download/${item.id}`, `Billet-à-ordre-${item.verbal_trial.committee_id}.docx`);">
                     <template #prepend>
                       <VIcon icon="tabler-download" />
                     </template>
