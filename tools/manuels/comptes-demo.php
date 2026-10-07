@@ -22,7 +22,7 @@ $profils = [
 ];
 
 $dossier = __DIR__ . '/sessions';
-@mkdir($dossier);
+is_dir($dossier) || mkdir($dossier);
 
 foreach ($profils as $slug => $profil) {
     $email = "demo.$slug@credit.test";
