@@ -18,6 +18,12 @@ declare global {
   const avatarText: typeof import('./resources/js/@core/utils/formatters.js')['avatarText']
   const betweenValidator: typeof import('./resources/js/@core/utils/validators.js')['betweenValidator']
   const breadcrumbsFor: typeof import('./resources/js/utils/breadcrumbs.js')['breadcrumbsFor']
+  const bulkActionList: typeof import('./resources/js/utils/bulkActions.js')['bulkActionList']
+  const bulkDelete: typeof import('./resources/js/utils/bulkActions.js')['bulkDelete']
+  const bulkDownload: typeof import('./resources/js/utils/bulkActions.js')['bulkDownload']
+  const bulkPut: typeof import('./resources/js/utils/bulkActions.js')['bulkPut']
+  const bulkReject: typeof import('./resources/js/utils/bulkActions.js')['bulkReject']
+  const bulkValidate: typeof import('./resources/js/utils/bulkActions.js')['bulkValidate']
   const catUnblockStatus: typeof import('./resources/js/utils/labels.js')['catUnblockStatus']
   const catValidationStatus: typeof import('./resources/js/utils/labels.js')['catValidationStatus']
   const computed: typeof import('vue')['computed']
@@ -152,6 +158,7 @@ declare global {
   const showSnackbar: typeof import('./resources/js/utils/snackbar.js')['showSnackbar']
   const snackbarState: typeof import('./resources/js/utils/snackbar.js')['snackbarState']
   const storeToRefs: typeof import('pinia')['storeToRefs']
+  const storedFileName: typeof import('./resources/js/utils/bulkActions.js')['storedFileName']
   const syncRef: typeof import('@vueuse/core')['syncRef']
   const syncRefs: typeof import('@vueuse/core')['syncRefs']
   const templateRef: typeof import('@vueuse/core')['templateRef']
@@ -403,6 +410,12 @@ declare module 'vue' {
     readonly avatarText: UnwrapRef<typeof import('./resources/js/@core/utils/formatters.js')['avatarText']>
     readonly betweenValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['betweenValidator']>
     readonly breadcrumbsFor: UnwrapRef<typeof import('./resources/js/utils/breadcrumbs.js')['breadcrumbsFor']>
+    readonly bulkActionList: UnwrapRef<typeof import('./resources/js/utils/bulkActions.js')['bulkActionList']>
+    readonly bulkDelete: UnwrapRef<typeof import('./resources/js/utils/bulkActions.js')['bulkDelete']>
+    readonly bulkDownload: UnwrapRef<typeof import('./resources/js/utils/bulkActions.js')['bulkDownload']>
+    readonly bulkPut: UnwrapRef<typeof import('./resources/js/utils/bulkActions.js')['bulkPut']>
+    readonly bulkReject: UnwrapRef<typeof import('./resources/js/utils/bulkActions.js')['bulkReject']>
+    readonly bulkValidate: UnwrapRef<typeof import('./resources/js/utils/bulkActions.js')['bulkValidate']>
     readonly catUnblockStatus: UnwrapRef<typeof import('./resources/js/utils/labels.js')['catUnblockStatus']>
     readonly catValidationStatus: UnwrapRef<typeof import('./resources/js/utils/labels.js')['catValidationStatus']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
@@ -537,6 +550,7 @@ declare module 'vue' {
     readonly showSnackbar: UnwrapRef<typeof import('./resources/js/utils/snackbar.js')['showSnackbar']>
     readonly snackbarState: UnwrapRef<typeof import('./resources/js/utils/snackbar.js')['snackbarState']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
+    readonly storedFileName: UnwrapRef<typeof import('./resources/js/utils/bulkActions.js')['storedFileName']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>
     readonly templateRef: UnwrapRef<typeof import('@vueuse/core')['templateRef']>

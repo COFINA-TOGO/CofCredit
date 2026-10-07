@@ -384,6 +384,13 @@
     "releaseTypeLabels": true,
     "validationLevelLabels": true,
     "verbalTrialStatus": true,
-    "isAdmin": true
+    "isAdmin": true,
+    "bulkActionList": true,
+    "bulkDelete": true,
+    "bulkDownload": true,
+    "bulkPut": true,
+    "bulkReject": true,
+    "bulkValidate": true,
+    "storedFileName": true
   }
 }
