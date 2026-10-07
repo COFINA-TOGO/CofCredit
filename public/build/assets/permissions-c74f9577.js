@@ -1,0 +1,1 @@
+import{ad as n}from"./main-faf5a98f.js";const e=()=>{var o;return((o=n("userData").value)==null?void 0:o.role)==="admin"},c=o=>{const i=n("userData").value;return((i==null?void 0:i.acting_profiles)??[i==null?void 0:i.role]).includes(o)},t=()=>{const o=n("userData").value;return(o==null?void 0:o.acting_ids)??[o==null?void 0:o.id]};export{t as a,c as h,e as i};
