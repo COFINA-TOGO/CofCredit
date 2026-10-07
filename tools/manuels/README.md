@@ -13,7 +13,13 @@ générer les manuels consultables depuis l'application.
 
 ## Lancer les captures
 
-Depuis la racine du projet :
+En une commande (comptes de démonstration, captures six profils à la fois, puis suppression des comptes) :
+
+```sh
+bash tools/manuels/capturer.sh            # ou : bash tools/manuels/capturer.sh 6 admin-credit,caf contrats
+```
+
+Ou étape par étape, depuis la racine du projet (`tinker` sort toujours avec le code 1 : ne pas l'enchaîner avec `&&`) :
 
 ```sh
 # 1. Un compte de démonstration par profil, avec son jeton (sessions/<profil>.json)
