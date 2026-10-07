@@ -50,9 +50,7 @@ watch([
           />
         </IconBtn>
 
-        <NavbarSearch class="ms-lg-n2" />
-
-        <VSpacer />
+        <NavbarSearch />
 
         <NavBarI18n
           v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"

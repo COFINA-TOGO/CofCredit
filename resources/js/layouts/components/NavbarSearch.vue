@@ -18,6 +18,10 @@ const results = ref([])
 const loading = ref(false)
 const open = ref(false)
 const field = ref()
+
+// La liste des résultats prend la largeur du champ
+const { width: fieldWidth } = useElementSize(field)
+
 let timer = null
 let lastSearch = 0
 
@@ -85,7 +89,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', shortcut))
     :close-on-content-click="false"
     :open-on-click="false"
     max-height="460"
-    min-width="380"
+    :width="Math.max(fieldWidth, 380)"
   >
     <template #activator="{ props: menuProps }">
       <VTextField
@@ -140,7 +144,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', shortcut))
 
 <style scoped>
 .navbar-search {
-  max-inline-size: 420px;
+  flex: 1 1 auto;
+  margin-inline-end: 1rem;
   min-inline-size: 160px;
 }
 </style>
