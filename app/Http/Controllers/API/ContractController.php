@@ -376,6 +376,8 @@ class ContractController extends Controller
 				$data["client_name"] = $contract->type == "particular" ? $contract->verbal_trial->civility . " " . $contract->verbal_trial->applicant_full_name : $contract->verbal_trial->entity_name;
 
 				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
+				// Le modèle n'accepte que des valeurs scalaires (ex : l'attribut "blockers" est une liste)
+				$data = array_filter($data, fn($value) => !is_array($value) && !is_object($value));
 				$templateProcessor->setValues($data);
 
 				// Enregistrez les modifications dans un nouveau fichier
