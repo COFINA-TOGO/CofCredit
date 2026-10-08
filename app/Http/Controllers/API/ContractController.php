@@ -376,9 +376,7 @@ class ContractController extends Controller
 				$data["client_name"] = $contract->type == "particular" ? $contract->verbal_trial->civility . " " . $contract->verbal_trial->applicant_full_name : $contract->verbal_trial->entity_name;
 
 				$data["verbal_trial.amount"] = number_format(((float) $data["verbal_trial.amount"]), 0, ',', ' ');
-				// Le modèle n'accepte que des valeurs scalaires (ex : l'attribut "blockers" est une liste)
-				$data = array_filter($data, fn($value) => !is_array($value) && !is_object($value));
-				$templateProcessor->setValues($data);
+				$templateProcessor->setValues($this->templateValues($data));
 
 				// Enregistrez les modifications dans un nouveau fichier
 				$wordFilePath = $this->temporaryDocumentPath("generated/docx/Contrat-" . $contract->verbal_trial->committee_id . ".docx");
@@ -479,7 +477,7 @@ class ContractController extends Controller
 			unset($data["verbal_trial.next"]);
 			unset($data["verbal_trial.guarantees"]);
 			unset($data["verbal_trial.contract"]);
-			$templateProcessor->setValues($data);
+			$templateProcessor->setValues($this->templateValues($data));
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$wordFilePath = $this->temporaryDocumentPath("generated/docx/Billet-a-ordre-" . $contract->verbal_trial->committee_id . ".docx");

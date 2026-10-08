@@ -301,7 +301,7 @@ class NotificationController extends Controller
 			unset($data["verbal_trial.next"]);
 			unset($data["verbal_trial.guarantees"]);
 			unset($data["verbal_trial.notification"]);
-			$templateProcessor->setValues($data);
+			$templateProcessor->setValues($this->templateValues($data));
 
 			$bsaseName = "Contrat-" . $notification->verbal_trial->committee_id;
 			$wordFilePath = $this->temporaryDocumentPath($bsaseName . ".docx");
@@ -381,7 +381,7 @@ class NotificationController extends Controller
 				unset($data["verbal_trial.guarantees"]);
 				unset($data["verbal_trial.contract"]);
 				unset($data["verbal_trial.notification"]);
-				$templateProcessor->setValues($data);
+				$templateProcessor->setValues($this->templateValues($data));
 
 				// Enregistrez les modifications dans un nouveau fichier
 				$bsaseName = "Billet-a-ordre-" . $notification->verbal_trial->committee_id;
@@ -422,7 +422,7 @@ class NotificationController extends Controller
 				$data = $notification->toArray();
 				$data["amount"] = number_format(((float) $data["due_amount"]), 0, ',', ' ');
 				SpellNumber::value((float) $data["due_amount"])->locale('fr')->toLetters();
-				$templateProcessor->setValues($data);
+				$templateProcessor->setValues($this->templateValues($data));
 
 				// Enregistrez les modifications dans un nouveau fichier
 				$bsaseName = "HandwrittenMention-" . $notification->verbal_trial->committee_id;

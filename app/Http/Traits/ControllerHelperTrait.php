@@ -126,6 +126,16 @@ trait ControllerHelperTrait
     }
 
     /**
+     * Valeurs utilisables dans un modèle Word : les listes et objets (relations, attributs comme "blockers") sont écartés
+     * @param 	array	$data		Les données à insérer dans le modèle
+     * @return	array
+     */
+    public function templateValues(array $data)
+    {
+        return array_filter($data, fn($value) => !is_array($value) && !is_object($value));
+    }
+
+    /**
      * Enregistre un document sur le disque privé et retourne son URL (servie par la route document.show)
      * @param 	string	$key		Le chemin relatif du document (ex: upload/Contracts/signed_contracts/xxx.pdf)
      * @param 	string	$data		Le contenu du document

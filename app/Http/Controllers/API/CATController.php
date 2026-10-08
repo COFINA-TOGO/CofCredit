@@ -276,7 +276,7 @@ class CATController extends Controller
 			unset($data["notification.verbal_trial.guarantees"]);
 			unset($data["notification.verbal_trial.notification"]);
 			unset($data["observations"]);
-			$templateProcessor->setValues($data);
+			$templateProcessor->setValues($this->templateValues($data));
 			// return $data;
 
 			// Enregistrez les modifications dans un nouveau fichier

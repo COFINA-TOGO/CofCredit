@@ -320,7 +320,7 @@ class VerbalTrialController extends Controller
 			unset($data["notification"]);
 			unset($data["next"]);
 			unset($data["contract"]);
-			$templateProcessor->setValues($data);
+			$templateProcessor->setValues($this->templateValues($data));
 			// return $data;
 
 			// Enregistrez les modifications dans un nouveau fichier
@@ -418,7 +418,7 @@ class VerbalTrialController extends Controller
 			unset($data["guarantees"]);
 			unset($data["notification"]);
 			unset($data["contract"]);
-			$templateProcessor->setValues($data);
+			$templateProcessor->setValues($this->templateValues($data));
 
 			$bsaseName = "Contrat-" . $verbal_trial->committee_id;
 			$wordFilePath = $this->temporaryDocumentPath($bsaseName . ".docx");

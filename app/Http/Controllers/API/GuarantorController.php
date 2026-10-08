@@ -247,7 +247,7 @@ class GuarantorController extends Controller
 
 			$data["client_name"] = $parent->type == "particular" ? $parent->verbal_trial->civility . " " . $parent->verbal_trial->applicant_full_name : $parent->verbal_trial->entity_name;
 			$templateProcessor->cloneBlock('guaranteeList', 0, true, false, $guaranteeList);
-			$templateProcessor->setValues($data);
+			$templateProcessor->setValues($this->templateValues($data));
 
 			// Enregistrez les modifications dans un nouveau fichier
 			$bsaseName = "Contrat-caution-" . $parent->verbal_trial->committee_id;
@@ -351,7 +351,7 @@ class GuarantorController extends Controller
 			unset($data["contract.verbal_trial.guarantees"]);
 			unset($data["contract.verbal_trial.contract"]);
 			unset($data["contract.verbal_trial.notification"]);
-			$templateProcessor->setValues($data);
+			$templateProcessor->setValues($this->templateValues($data));
 
 			$bsaseName = "Billet-a-ordre-caution-" . $parent->verbal_trial->committee_id;
 			$wordFilePath = $this->temporaryDocumentPath($bsaseName . ".docx");
