@@ -8,9 +8,6 @@ return [
 	|--------------------------------------------------------------------------
 	*/
 
-	// Taux hors taxe affiché dans les documents
-	'ht_rate' => env('CREDIT_HT_RATE', '17'),
-
 	// Au-delà de ce montant, le contrat est signé par le head crédit plutôt que par le juridique
 	'signatory_threshold' => env('CREDIT_SIGNATORY_THRESHOLD', 10000000),
 

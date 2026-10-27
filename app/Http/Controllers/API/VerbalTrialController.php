@@ -398,7 +398,6 @@ class VerbalTrialController extends Controller
 			$reviewBonusList = $data["has_line_review_bonus"] ? [["key" => "Prime de révision de ligne", "value" => "1% du capital restant dû après 12 mois"]] : [];
 			$templateProcessor->cloneBlock('reviewBonus', 0, true, false, $reviewBonusList);
 
-			$data["ht_rate"] = config("credit.ht_rate");
 			$data["civility.2"] = ["Mr" => "Monsieur", "Mme" => "Madame", "Mlle" => "Madame"][$data["civility"]];
 			$data["current_date"] = Carbon::now()->translatedFormat('d F Y');
 			$data["administrative_fees_percentage.value"] = number_format((float) $data["administrative_fees_percentage"] * $data["amount"] / 100, 0, ',', ' ');

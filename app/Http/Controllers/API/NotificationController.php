@@ -265,7 +265,6 @@ class NotificationController extends Controller
 					return ['individual_business.' . $key => $value];
 				})->all());
 			}
-			$data["ht_rate"] = config("credit.ht_rate");
 			$data["verbal_trial.civility.2"] = ["Mr" => "Monsieur", "Mme" => "Madame", "Mlle" => "Madame"][$data["verbal_trial.civility"]];
 			$data["current_date"] = Carbon::now()->translatedFormat('d F Y');
 			$data["verbal_trial.administrative_fees_percentage.value"] = number_format((float) $data["verbal_trial.administrative_fees_percentage"] * $data["verbal_trial.amount"] / 100, 0, ',', ' ');
@@ -348,7 +347,6 @@ class NotificationController extends Controller
 					return ['verbal_trial.type_of_credit.type_of_applicant.' . $key => $value];
 				})->all());
 
-				// $data["ht_rate"] = config("credit.ht_rate");
 				$data["current_date"] = Carbon::now()->format("d/m/Y");
 				$data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();
 				$data["total_to_pay"] = (float) $data["total_amount_of_interest"] + (float) $data["verbal_trial.amount"];

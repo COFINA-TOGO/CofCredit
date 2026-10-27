@@ -196,7 +196,6 @@ class GuarantorController extends Controller
 				return ['company.' . $key => $value];
 			})->all());
 
-			$data["ht_rate"] = config("credit.ht_rate");
 			$data["current_date"] = Carbon::now()->format("d/m/Y");
 			$data["contract.verbal_trial.amount.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.amount"])->locale('fr')->toLetters();
 			$data["contract.total_amount_of_interest.fr"] = SpellNumber::value((float) $data["contract.total_amount_of_interest"])->locale('fr')->toLetters();
@@ -311,7 +310,6 @@ class GuarantorController extends Controller
 				return ['company.' . $key => $value];
 			})->all());
 
-			$data["ht_rate"] = config("credit.ht_rate");
 			$data["current_date"] = Carbon::now()->format("d/m/Y");
 			$data["contract.verbal_trial.amount.fr"] = SpellNumber::value((float) $data["contract.verbal_trial.amount"])->locale('fr')->toLetters();
 			$data["contract.total_amount_of_interest.fr"] = SpellNumber::value((float) $data["contract.total_amount_of_interest"])->locale('fr')->toLetters();

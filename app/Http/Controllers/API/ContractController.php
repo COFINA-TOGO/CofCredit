@@ -270,7 +270,8 @@ class ContractController extends Controller
 						return ['individual_business.' . $key => $value];
 					})->all());
 				}
-				$data["ht_rate"] = config("credit.ht_rate");
+				$tmp_rate = (float) $contract->verbal_trial->tax_fee_interest_rate;
+				$data["ht_rate"] = number_format($tmp_rate, ($tmp_rate == (int) $tmp_rate) ? 0 : 2, ',', ' ');
 				$data["day_due_amount"] = ((float) $data["due_amount"]) / 20;
 				$data["day_due_amount.fr"] = SpellNumber::value((float) $data["day_due_amount"])->locale('fr')->toLetters();
 				$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
@@ -439,7 +440,6 @@ class ContractController extends Controller
 				})->all());
 			}
 
-			$data["ht_rate"] = config("credit.ht_rate");
 			$data["current_date"] = Carbon::now()->format("d/m/Y");
 			$data["verbal_trial.amount.fr"] = SpellNumber::value((float) $data["verbal_trial.amount"])->locale('fr')->toLetters();
 			$data["total_amount_of_interest.fr"] = SpellNumber::value((float) $data["total_amount_of_interest"])->locale('fr')->toLetters();

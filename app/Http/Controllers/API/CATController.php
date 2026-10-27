@@ -234,7 +234,6 @@ class CATController extends Controller
 			];
 			$data["client_name"] = $data[$parentRelation . ".type"] == "particular" ? $data[$parentRelation . ".verbal_trial.civility"] . " " . $data[$parentRelation . ".verbal_trial.applicant_full_name"] : $data[$parentRelation . ".verbal_trial.entity_name"];
 
-			$data["ht_rate"] = config("credit.ht_rate");
 			$data["source_of_reimbursement.fr"] = $source_of_reimbursementTranslate[$data["source_of_reimbursement"]];
 			$data["date_of_approval"] = Carbon::parse($cat->$parentRelation->verbal_trial->created_at)->format("d/m/Y");
 			$data["first_deadline"] = Carbon::parse($cat->first_deadline)->format("d/m/Y");
